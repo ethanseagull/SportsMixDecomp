@@ -345,6 +345,7 @@ config.libs = [
             Object(Matching, "game/tour/CEffectCtrlTournament.cpp"),
             Object(NonMatching, "game/tour/CCockpitTournamentMenuWinTrophy.cpp"),
             Object(Matching, "game/tour/TournamentSe.cpp"),
+            Object(Matching, "game/tour/CTournamentCamera.cpp"),
         ],
     },
     {

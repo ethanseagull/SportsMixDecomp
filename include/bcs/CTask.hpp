@@ -24,6 +24,11 @@ namespace bcs {
             // (name guessed) Asks the task manager to delete this task.
             void Delete() { m_nFlag |= 1; }
 
+            // (name guessed) Replaces the word at 0x08. The CTask constructor
+            // leaves 0xFCFF there, bcs::CCamera's 0xFC00, and
+            // msw::CTournamentCamera's stores 0xFC01.
+            void SetUnk08(unsigned long value) { m_Unk08 = value; }
+
         private:
             unsigned long m_nId;         // 0x04 (name guessed)
             unsigned long m_Unk08;       // 0x08

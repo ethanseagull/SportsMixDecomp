@@ -354,6 +354,7 @@ config.libs = [
         "objects": [
             Object(Matching, "game/menu/module.cpp"),
             Object(Matching, "game/menu/CFade.cpp"),
+            Object(Matching, "game/menu/CInfoTabChange.cpp"),
         ],
     },
     {

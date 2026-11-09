@@ -320,6 +320,16 @@ config.libs = [
             Object(MatchingFor("RMKP01"), "game/msw/CStgGmkAct.cpp"),
         ],
     },
+    {
+        # Game code linked into the SystemF module.
+        "lib": "SystemF",
+        "mw_version": config.linker_version,
+        "cflags": [*cflags_rel, "-func_align 4"],
+        "progress_category": "game",
+        "objects": [
+            Object(NonMatching, "game/msw/CMainStepEx.cpp"),
+        ],
+    },
 ]
 
 

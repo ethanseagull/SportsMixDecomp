@@ -15,6 +15,7 @@ This repository does **not** contain any game assets or assembly whatsoever. An 
 
 Supported versions:
 
+- `RMKE01`: Rev 0 (USA), the default
 - `RMKP01`: Rev 0 (EU)
 
 Dependencies
@@ -62,15 +63,17 @@ Linux
 Building
 ========
 
-- Clone the repository:
+- Clone the repository.
+
+- Copy your own disc image to `orig/RMKE01/disc/` (USA). Supported formats: ISO (GCM), RVZ, WIA, WBFS, CISO, NFS, GCZ, TGC.
+
+- Unpack the files the build needs:
 
   ```sh
-  git clone https://github.com/EltyDev/MSM-decomp.git
+  python tools/setup_orig.py
   ```
 
-- Copy your game's disc image to `orig/RMKP01`.
-  - Supported formats: ISO (GCM), RVZ, WIA, WBFS, CISO, NFS, GCZ, TGC
-  - After the initial build, the disc image can be deleted to save space.
+  This extracts `main.dol` and the symbol file, decompresses the nine RSO code modules, and converts them to REL so decomp-toolkit can split and relink them.
 
 - Configure:
 
@@ -78,7 +81,7 @@ Building
   python configure.py
   ```
 
-  To use a version other than `RMKP01` (EU), specify it with `--version`.
+  The default version is `RMKE01` (USA). `RMKP01` (EU) has an older config for `main.dol` only.
 
 - Build:
 

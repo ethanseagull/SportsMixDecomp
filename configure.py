@@ -27,9 +27,10 @@ from tools.project import (
 )
 
 # Game versions
-DEFAULT_VERSION = 0
+DEFAULT_VERSION = 1
 VERSIONS = [
     "RMKP01",  # 0
+    "RMKE01",  # 1
 ]
 
 parser = argparse.ArgumentParser()
@@ -248,7 +249,7 @@ cflags_rel = [
     "-sdata2 0",
 ]
 
-config.linker_version = "GC/1.3.2"
+config.linker_version = "Wii/1.1"
 
 
 # Helper function for Dolphin libraries
@@ -297,14 +298,28 @@ config.libs = [
         ],
     },
     {
+        # Runtime code linked into each RSO module (no small data).
+        "lib": "RSO",
+        "mw_version": config.linker_version,
+        "cflags": [*cflags_runtime, "-sdata 0", "-sdata2 0", "-func_align 4"],
+        "progress_category": "sdk",
+        "objects": [
+            Object(
+                Matching,
+                "RSO/global_destructor_chain.c",
+                source="Runtime.PPCEABI.H/global_destructor_chain.c",
+            ),
+        ],
+    },
+    {
         "lib": "MSM",
         "mw_version": config.linker_version,
         "cflags": cflags_base,
         "progress_category": "game",
         "objects": [
-            Object(Matching, "game/msw/CStgGmkAct.cpp"),
+            Object(MatchingFor("RMKP01"), "game/msw/CStgGmkAct.cpp"),
         ],
-    }
+    },
 ]
 
 

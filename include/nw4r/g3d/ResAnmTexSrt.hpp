@@ -11,6 +11,8 @@ namespace nw4r {
         // this project; the member and function names are guessed.
         class ResAnmTexSrt {
             public:
+                explicit ResAnmTexSrt(ResAnmTexSrtData *pData = 0) : m_pData(pData) {}
+
                 bool IsValid() const { return m_pData != 0; }
 
             private:

@@ -11,6 +11,8 @@ namespace nw4r {
         // project; the member and function names are guessed.
         class ResAnmClr {
             public:
+                explicit ResAnmClr(ResAnmClrData *pData = 0) : m_pData(pData) {}
+
                 bool IsValid() const { return m_pData != 0; }
 
             private:

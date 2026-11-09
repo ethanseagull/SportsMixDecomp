@@ -17,7 +17,7 @@ namespace bcs {
         public:
             virtual ~CAnmObj();
             virtual void ObjProc(unsigned long, unsigned long, void *); // 0x1C
-            virtual void VFunc20();                                     // 0x20 (guessed)
+            virtual void SetFrame(float frame);                         // 0x20 (name guessed) takes a float
             virtual float GetFrame() const;                             // 0x24, reads the float at 0x1C
             virtual float VFunc28() const;                              // 0x28, reads the float at 0x24
             virtual void SetRate(float rate);                           // 0x2C, writes the float at 0x20

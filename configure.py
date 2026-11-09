@@ -343,6 +343,8 @@ config.libs = [
         "objects": [
             Object(Matching, "game/tour/module.cpp"),
             Object(Matching, "game/tour/CEffectCtrlTournament.cpp"),
+            Object(NonMatching, "game/tour/CCockpitTournamentMenuWinTrophy.cpp"),
+            Object(Matching, "game/tour/TournamentSe.cpp"),
         ],
     },
     {

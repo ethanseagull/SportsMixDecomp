@@ -184,6 +184,10 @@ if args.map:
     config.ldflags.append("-mapunused")
     # config.ldflags.append("-listclosure") # For Wii linkers
 
+# A module exports every function by name, so the module link must not remove
+# the ones nothing refers to (TournamentModuleMain and the like).
+config.rel_strip_partial = False
+
 # Use for any additional files that should cause a re-configure when modified
 config.reconfig_deps = []
 
@@ -328,6 +332,16 @@ config.libs = [
         "progress_category": "game",
         "objects": [
             Object(Matching, "game/msw/CMainStepEx.cpp"),
+        ],
+    },
+    {
+        # Game code linked into the TourF module.
+        "lib": "TourF",
+        "mw_version": config.linker_version,
+        "cflags": [*cflags_rel, "-func_align 4", "-ipa file", "-str reuse,readonly"],
+        "progress_category": "game",
+        "objects": [
+            Object(Matching, "game/tour/module.cpp"),
         ],
     },
 ]

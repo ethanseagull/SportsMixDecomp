@@ -21,6 +21,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from copies import Copies  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent.parent
 BUILD = "py -3.12 tools/decomp/build.py"
 DRAFT_OVER = 120   # bytes; smaller functions are quicker to write from the assembly
@@ -82,6 +85,18 @@ def main():
         print(f"NEXT: run the full build, there is no report yet\n  {BUILD}")
         return
     report = json.loads(report_path.read_text(encoding="utf-8"))
+    try:
+        copies = Copies(args.version, report)
+    except (OSError, ValueError):
+        copies = None
+
+    def copy_line(u, fn):
+        o = copies.origin(u.module, fn) if copies else None
+        if o:
+            kind, (_, src_fn, src) = o
+            what = "an exact copy" if kind == "exact" else "the same shape as"
+            print(f"  this is {what} of matched {src_fn} in {src}: start from that source")
+        return bool(o)
     attempts = ROOT / "notes" / "attempts"
     parked = {p.stem for p in attempts.glob("*.md")} if attempts.is_dir() else set()
     blocked_file = ROOT / "notes" / "blocked.txt"
@@ -113,12 +128,14 @@ def main():
     def finish(scope_hint):
         print(f"To hand this to a run:  /match-run {scope_hint}")
 
-    if state != "ok":
-        why = "there is no verified build" if state == "missing" else "sources or config changed after the last verified build"
-        print(f"\nNEXT: run the full build; {why}, so the numbers above may be out of date")
+    if state == "missing":
+        print("\nNEXT: run the full build; there is no verified build")
         print(f"  {BUILD}")
         print("  if it fails: fix or revert the last change before anything else")
         return
+    if state == "stale":
+        # not a blocker: with several sessions at work, someone's sources are always newer
+        print(f"Build: sources changed since the last verified build; the numbers may lag. Refresh: {BUILD}")
 
     ready = [u for u in started if not u.todo]
     if ready:
@@ -133,12 +150,16 @@ def main():
     active = [u for u in started if u.open]
     if active:
         u = max(active, key=lambda x: len(x.fns) - len(x.todo))
-        size, fn = u.open[0]
+        # copies of matched code first: they cost one attempt
+        ready = [(s, n) for s, n in u.open if copies and copies.origin(u.module, n)]
+        size, fn = (ready or u.open)[0]
         print(f"\nNEXT: continue {u.label}: {len(u.fns) - len(u.todo)} of {len(u.fns)} functions matched, "
               f"{len(u.parked)} parked")
         print(f"  source: {u.source}")
         print(f"  next function: {fn} ({size} bytes)")
-        if size > DRAFT_OVER:
+        if copy_line(u, fn):
+            pass
+        elif size > DRAFT_OVER:
             print(f"  draft:  py -3.12 tools/decomp/draft.py \"{fn}\" --module {u.module}")
         print(f"  copies: py -3.12 tools/decomp/similar.py \"{fn}\" --matched")
         print(f"  score:  py -3.12 tools/decomp/status.py unit {u.name}")
@@ -170,6 +191,11 @@ def main():
     if size > DRAFT_OVER:
         print(f"     draft: py -3.12 tools/decomp/draft.py \"{fn}\" --module {u.module}")
     print(f"  4. score: py -3.12 tools/decomp/status.py unit {u.name}")
+    if copies:
+        todo, exact, shape = copies.unit_summary(u.module, u.name)
+        if exact + shape:
+            print(f"  {exact + shape} of its {todo} bytes are copies of matched code: "
+                  f"py -3.12 tools/decomp/copies.py unit {u.name}")
     finish(u.module if u.module != "main" else "")
     if args.list:
         print(f"\nThen ({'in ' + args.module if args.module else 'any module'}):")

@@ -18,6 +18,7 @@ namespace bcs {
 }
 
 namespace msw {
+    class CEffectTableList;
 
     // Size 0x4C. The class lives in the DOL; each module derives its own
     // effect controller from it. The virtual functions are declared in the
@@ -49,6 +50,8 @@ namespace msw {
             // Looks the instance up in the task manager by s_InstanceHandle.
             static CEffectCtrl *GetInstance();
             static void AttachResource();
+            // Registers the effects of archive `pPath`, file `fileId` of CLoadData.
+            static void AttachArcResource(long fileId, const char *pPath); // return type guessed
 
         protected:
             // (name guessed) Remembers which task is the instance. Inferred
@@ -62,7 +65,12 @@ namespace msw {
             static unsigned long s_InstanceHandle;
 
         private:
-            unsigned char m_Unk34[0x18]; // 0x34: a nw4r::ut::List, then words at 0x40 and 0x44
+            unsigned char m_Unk34[0xC]; // 0x34: a nw4r::ut::List
+
+        protected:
+            // Filled in by InitializeDataTable.
+            CEffectTableList *m_pTableList;       // 0x40
+            CEffectTableList *m_pAttachTableList; // 0x44
     };
 }
 

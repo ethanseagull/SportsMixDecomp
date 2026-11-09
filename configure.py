@@ -351,12 +351,13 @@ config.libs = [
         # Game code linked into the MenuF module.
         "lib": "MenuF",
         "mw_version": config.linker_version,
-        "cflags": [*cflags_rel, "-func_align 4", "-ipa file", "-str reuse,readonly"],
+        "cflags": [*cflags_rel, "-func_align 4", "-ipa file", "-str reuse,readonly", "-use_lmw_stmw on"],
         "progress_category": "game",
         "objects": [
             Object(Matching, "game/menu/module.cpp"),
             Object(Matching, "game/menu/CFade.cpp"),
             Object(Matching, "game/menu/CInfoTabChange.cpp"),
+            Object(Matching, "game/menu/CEffectCtrlMenu.cpp"),
         ],
     },
     {

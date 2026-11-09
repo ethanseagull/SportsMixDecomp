@@ -10,45 +10,63 @@ modules:
 - object: files/Module/Final/SystemF.rel
   hash: 9a6792282849c069048adb8bdd4b0e7665018379
   name: SystemF
+  force_active:
+  - SystemModuleMain
   symbols: config/RMKE01/SystemF/symbols.txt
   splits: config/RMKE01/SystemF/splits.txt
 - object: files/Module/Final/MenuF.rel
   hash: 17f39c1d09feb6e701e20fed66de22588477679c
   name: MenuF
+  force_active:
+  - MenuModuleMain
   symbols: config/RMKE01/MenuF/symbols.txt
   splits: config/RMKE01/MenuF/splits.txt
 - object: files/Module/Final/TourF.rel
   hash: 5868426d74a2bac0405db4138350a29c9e978683
   name: TourF
+  force_active:
+  - TournamentModuleMain
   symbols: config/RMKE01/TourF/symbols.txt
   splits: config/RMKE01/TourF/splits.txt
 - object: files/Module/Final/BasketF.rel
   hash: 400ebb77264e539bfa28db6b72543368fdc5c937
   name: BasketF
+  force_active:
+  - BasketModuleMain
   symbols: config/RMKE01/BasketF/symbols.txt
   splits: config/RMKE01/BasketF/splits.txt
 - object: files/Module/Final/VolleyF.rel
   hash: f785361abfdf8cc0e10d9302cdea95ebaec14e99
   name: VolleyF
+  force_active:
+  - VolleyModuleMain
   symbols: config/RMKE01/VolleyF/symbols.txt
   splits: config/RMKE01/VolleyF/splits.txt
 - object: files/Module/Final/DodgeF.rel
   hash: a3c69f170108c1982a68273969bc632e12fa1693
   name: DodgeF
+  force_active:
+  - DodgeModuleMain
   symbols: config/RMKE01/DodgeF/symbols.txt
   splits: config/RMKE01/DodgeF/splits.txt
 - object: files/Module/Final/HockeyF.rel
   hash: f706c5a50af574ec4e02bae4b3cb75f5fd64326a
   name: HockeyF
+  force_active:
+  - HockeyModuleMain
   symbols: config/RMKE01/HockeyF/symbols.txt
   splits: config/RMKE01/HockeyF/splits.txt
 - object: files/Module/Final/BossF.rel
   hash: b7eb5c65d72bebf7522bfba95c275e85a361ebc2
   name: BossF
+  force_active:
+  - BossModuleMain
   symbols: config/RMKE01/BossF/symbols.txt
   splits: config/RMKE01/BossF/splits.txt
 - object: files/Module/Final/DebugF.rel
   hash: 1e76a5a900239f8f82f8e40bc07731f07e63eb17
   name: DebugF
+  force_active:
+  - DebugModuleMain
   symbols: config/RMKE01/DebugF/symbols.txt
   splits: config/RMKE01/DebugF/splits.txt

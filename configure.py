@@ -184,9 +184,10 @@ if args.map:
     config.ldflags.append("-mapunused")
     # config.ldflags.append("-listclosure") # For Wii linkers
 
-# A module exports every function by name, so the module link must not remove
-# the ones nothing refers to (TournamentModuleMain and the like).
-config.rel_strip_partial = False
+# The module links dead-strip, as the original did (it has none of the unused
+# weak inlines a unit emits). Exports that nothing refers to, such as
+# TournamentModuleMain, are kept by the force_active lists in config.yml.
+config.rel_strip_partial = True
 
 # Use for any additional files that should cause a re-configure when modified
 config.reconfig_deps = []

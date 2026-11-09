@@ -1,0 +1,66 @@
+#ifndef BCS_G2D_CLAYOUTBASE_HPP_
+#define BCS_G2D_CLAYOUTBASE_HPP_
+
+namespace nw4r {
+    namespace ut {
+        class Font;
+    }
+}
+
+namespace nw4r {
+    namespace lyt {
+        class ArcResourceAccessor;
+    }
+}
+
+namespace bcs {
+    namespace G2D {
+        class CLayoutDL;
+
+        // What CLytManager::AddObject takes. Lives in the DOL. The id that
+        // CLytManager::GetObject looks up is the first word; the size of 0x10
+        // is a guess that follows from CLayoutBase's vptr sitting at 0x10
+        // (the vptr could as well be this class's own).
+        class CBase {
+            public:
+                unsigned long m_nId; // 0x00
+                unsigned char m_Unk04[0xC];
+        };
+
+        // Lives in the DOL. Only the members used so far. The vtable is read
+        // from CPaneCtrl's (eight entries); none of the virtuals has a name
+        // in the game, so every name, argument list and return type below is
+        // a guess.
+        class CLayoutBase : public CBase {
+            public:
+                // vptr at 0x10
+                virtual ~CLayoutBase();
+                virtual void Unk0C();
+                virtual void Unk10();
+                virtual void Unk14();
+                // Called with (0, "<name>.brlyt").
+                virtual void BuildLayout(long nUnk, const char *pLayoutName);
+                // Called with (0, table of "<name>.brlan", entries).
+                virtual void BuildAnim(long nUnk, const char **ppAnimNames, long nNum);
+                virtual void Unk20();
+                virtual void Unk24();
+
+                // -1 to -3 on failure.
+                long AddFontRefLink(nw4r::ut::Font *pFont, const char *pName);
+                void SetSortZ(float fZ); // return type guessed (tail call)
+
+                // Added for TourF game/tour/CCockpitTournamentMenuWinTrophy.cpp.
+                // Return types of the first two are guesses.
+                void CreateLayoutObject(long nUnk);
+                void AttachArchiveResource(nw4r::lyt::ArcResourceAccessor *pAccessor);
+                CLayoutDL *GetLayout(); // the word at 0x14
+
+            private:
+                // Size 0x48: CPaneCtrl's own data starts there.
+                CLayoutDL *m_pLayout;        // 0x14
+                unsigned char m_Unk18[0x30]; // 0x18
+        };
+    }
+}
+
+#endif /* !BCS_G2D_CLAYOUTBASE_HPP_ */

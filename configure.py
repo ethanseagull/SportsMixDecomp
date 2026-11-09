@@ -360,6 +360,7 @@ config.libs = [
             Object(NonMatching, "game/menu/CMenuMdlTableSet.cpp"),
             Object(Matching, "game/menu/CInfoTabChange.cpp"),
             Object(Matching, "game/menu/CEffectCtrlMenu.cpp"),
+            Object(Matching, "game/menu/CButton0.cpp"),
         ],
     },
     {

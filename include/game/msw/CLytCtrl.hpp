@@ -1,0 +1,43 @@
+#ifndef CLYTCTRL_HPP_
+#define CLYTCTRL_HPP_
+
+#include "bcs/G2D/CLytManager.hpp"
+
+namespace nw4r {
+    namespace ut {
+        class Font;
+    }
+    namespace lyt {
+        class ArcResourceAccessor;
+    }
+}
+
+namespace msw {
+
+    // Lives in the DOL (a task found through its handle). Only the members
+    // used so far. Apart from GetInstance they are non-static, although
+    // several never read `this`.
+    class CLytCtrl {
+        public:
+            static CLytCtrl *GetInstance();
+
+            void DeleteObject(unsigned long nHandle);
+            nw4r::lyt::ArcResourceAccessor *NewArcResourceAccessor(const char *pFileName, const char *pRootFolderName);
+            nw4r::ut::Font *GetArchiveFont(long nFont);   // return type guessed (some font pointer or null)
+            const char *GetFontResourceName(long nFont);
+
+            // Not in the DOL by name: the sequence appears inline in every
+            // user (CLytManager::GetInstance, null check, GetObject). The
+            // name and its being a member here are guesses.
+            bcs::G2D::CBase *GetObject(unsigned long nHandle)
+            {
+                bcs::G2D::CLytManager *pManager = bcs::G2D::CLytManager::GetInstance();
+                if (pManager == 0) {
+                    return 0;
+                }
+                return pManager->GetObject(nHandle);
+            }
+    };
+}
+
+#endif /* !CLYTCTRL_HPP_ */

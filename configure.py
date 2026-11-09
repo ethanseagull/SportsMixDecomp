@@ -342,6 +342,7 @@ config.libs = [
         "progress_category": "game",
         "objects": [
             Object(Matching, "game/tour/module.cpp"),
+            Object(Matching, "game/tour/CEffectCtrlTournament.cpp"),
         ],
     },
     {

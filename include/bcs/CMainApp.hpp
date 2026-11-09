@@ -9,6 +9,7 @@ namespace bcs {
     class CMainApp {
         public:
             static float GetAppFrameRateF();
+            static float GetUnivSpeed();
             static void StartMasterFade(long, float);
             static int IsPlayMasterFade(); // return type guessed
     };

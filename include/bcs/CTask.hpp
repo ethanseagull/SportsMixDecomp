@@ -21,6 +21,9 @@ namespace bcs {
             // (name guessed) The value CTaskMan::GetTask looks a task up by.
             unsigned long GetId() const { return m_nId; }
 
+            // (name guessed) Asks the task manager to delete this task.
+            void Delete() { m_nFlag |= 1; }
+
         private:
             unsigned long m_nId;         // 0x04 (name guessed)
             unsigned long m_Unk08;       // 0x08

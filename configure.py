@@ -324,10 +324,10 @@ config.libs = [
         # Game code linked into the SystemF module.
         "lib": "SystemF",
         "mw_version": config.linker_version,
-        "cflags": [*cflags_rel, "-func_align 4"],
+        "cflags": [*cflags_rel, "-func_align 4", "-ipa file", "-str reuse,readonly"],
         "progress_category": "game",
         "objects": [
-            Object(NonMatching, "game/msw/CMainStepEx.cpp"),
+            Object(Matching, "game/msw/CMainStepEx.cpp"),
         ],
     },
 ]

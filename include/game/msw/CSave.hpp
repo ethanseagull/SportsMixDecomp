@@ -3,8 +3,9 @@
 
 namespace msw {
 
-    // Only the members used so far. All are called without an object, so they
-    // are static. Return types the callers ignore are guessed as void.
+    // Only the members used so far. All are static: their bodies in the DOL
+    // work on a global instance pointer and take no object. Return types the
+    // callers ignore are guessed as void.
     class CSave {
         public:
             static void Initialize();

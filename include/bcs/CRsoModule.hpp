@@ -3,11 +3,13 @@
 
 namespace bcs {
 
-    // Only the members used so far. Return types are guessed as void.
+    // Only the members used so far. All three take an object (their bodies
+    // in the DOL work on r3). Return types the callers ignore are guessed as
+    // void.
     class CRsoModule {
         public:
             void LoadAsync();
-            void Mount();
+            int Mount(); // 1 when the module is mounted, 0 on failure; type guessed
             void UnMount();
     };
 }

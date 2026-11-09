@@ -6,10 +6,15 @@
 namespace msw {
 
     // Adds no data to CMainStep; it only supplies the state functions.
+    // Lives in module SystemF.
     class CMainStepEx : public CMainStep {
         public:
+            // Creates the instance and stores it in CMainStep::g_pInstance.
             static void Initialize();
 
+            // Not inline: the original emits it after DtorStateFinalize and
+            // before the inline functions the vtable pulls in.
+            virtual ~CMainStepEx();
             virtual void CtorStateInitialize();
             virtual void LoopStateInitialize();
             virtual void DtorStateInitialize();

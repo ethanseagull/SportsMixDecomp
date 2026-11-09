@@ -3,8 +3,9 @@
 
 namespace bcs {
 
-    // Only the members used so far. All are called without an object, so they
-    // are static. Return types the callers ignore are guessed as void.
+    // Only the members used so far. All are static: their bodies in the DOL
+    // read globals and take no object. Return types the callers ignore are
+    // guessed as void.
     class CMainApp {
         public:
             static float GetAppFrameRateF();

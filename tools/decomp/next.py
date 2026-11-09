@@ -5,7 +5,7 @@ Reads the state of the checkout (last build, objdiff report, uncommitted
 files, parked functions) and prints the one next action, most urgent first:
 
   1. the full build is missing or older than the sources  -> build
-  2. a registered unit has every function at 100%         -> mark it Matching
+  2. a registered unit has every function finished        -> mark it Matching or Equivalent
   3. a registered unit is partly matched                  -> its next function
   4. otherwise                                            -> the easiest untouched unit
 
@@ -23,6 +23,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from copies import Copies  # noqa: E402
+import equivalent  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 BUILD = "py -3.12 tools/decomp/build.py"
@@ -54,14 +55,17 @@ def uncommitted():
 
 
 class UnitState:
-    def __init__(self, raw, parked):
+    def __init__(self, raw, parked, accepted=()):
         self.module, _, self.name = raw["name"].partition("/")
         meta = raw.get("metadata", {})
         self.auto = meta.get("auto_generated", False)
         self.source = meta.get("source_path")
         self.complete = meta.get("complete", False)
         self.fns = [(f["name"], int(f["size"]), f.get("fuzzy_match_percent", 0.0)) for f in raw.get("functions", [])]
-        self.todo = sorted(((s, n) for n, s, p in self.fns if p < 100.0), key=lambda x: x[0])
+        # functions accepted without an exact match (config/<version>/equivalent.txt) are finished
+        self.accepted = [n for n, _, p in self.fns if p < 100.0 and (self.module, n) in accepted]
+        self.todo = sorted(((s, n) for n, s, p in self.fns
+                            if p < 100.0 and (self.module, n) not in accepted), key=lambda x: x[0])
         self.parked = [n for _, n in self.todo if n in parked]
         self.open = [(s, n) for s, n in self.todo if n not in parked]
         self.code = sum(s for _, s, _ in self.fns)
@@ -106,7 +110,8 @@ def main():
             if ":" in line and not line.startswith("#"):
                 name, reason = line.split(":", 1)
                 blocked[name.strip()] = reason.strip()
-    units = [UnitState(u, parked) for u in report["units"]]
+    accepted = equivalent.load(args.version)
+    units = [UnitState(u, parked, accepted) for u in report["units"]]
     units = [u for u in units if u.fns and f"{u.module}/{u.name}" not in blocked]
     scope = [u for u in units if args.module in (None, u.module)]
     if not scope:
@@ -119,6 +124,11 @@ def main():
     where = args.module or "all"
     print(f"Progress: {m['matched_functions']} / {m['total_functions']} functions, "
           f"{float(m['matched_code_percent']):.3f}% of code (whole game)")
+    near = sum(v[0] == "near" for v in accepted.values())
+    if accepted:
+        print(f"Accepted without an exact match: {near} near, {len(accepted) - near} unverified")
+    done += [u for u in scope if u.source and not u.complete and not u.todo and u.accepted]
+    started = [u for u in started if u.todo or not u.accepted]
     print(f"Units ({where}): {len(done)} done, {len(started)} started, {len(fresh)} untouched; "
           f"{len(parked)} functions parked, {len(blocked)} units blocked")
     dirty = uncommitted()

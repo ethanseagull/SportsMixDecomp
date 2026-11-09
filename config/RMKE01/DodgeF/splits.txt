@@ -6,6 +6,752 @@ Sections:
 	.data       type:data align:8
 	.bss        type:bss align:8
 
+game/dodge/module.cpp:
+	.text       start:0x00000000 end:0x00000098
+
+game/dodge/CGameDodge.cpp:
+	.text       start:0x00000098 end:0x0000C434
+	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x000000E8
+	.data       start:0x00000000 end:0x000005F0
+	.bss        start:0x00000000 end:0x000001C0
+
+game/dodge/CBallDodge.cpp:
+	.text       start:0x0000C434 end:0x00019CE0
+	.ctors      start:0x00000004 end:0x00000008
+	.rodata     start:0x000000E8 end:0x00000220
+	.data       start:0x000005F0 end:0x00000C78
+	.bss        start:0x000001C0 end:0x000001C8
+
+game/dodge/CBallManDodge.cpp:
+	.text       start:0x00019CE0 end:0x0001A664
+	.rodata     start:0x00000220 end:0x00000228
+	.data       start:0x00000C78 end:0x00000D30
+
+game/dodge/CBallMarkerDodge.cpp:
+	.text       start:0x0001A664 end:0x0001A7A8
+	.data       start:0x00000D30 end:0x00000DA8
+
+game/dodge/CItemBallBaseDodge.cpp:
+	.text       start:0x0001A7A8 end:0x0001A7B0
+
+game/dodge/CItemBallBombDodge.cpp:
+	.text       start:0x0001A7B0 end:0x0001E1A0
+	.rodata     start:0x00000228 end:0x000002E8
+	.data       start:0x00000DA8 end:0x000017A0
+
+game/dodge/unit_1E1A0.cpp:
+	.text       start:0x0001E1A0 end:0x0001E1A8
+
+game/dodge/unit_1E1A8.cpp:
+	.text       start:0x0001E1A8 end:0x0001E1B0
+
+game/dodge/unit_1E1B0.cpp:
+	.text       start:0x0001E1B0 end:0x0001E1B8
+
+game/dodge/unit_1E1B8.cpp:
+	.text       start:0x0001E1B8 end:0x0001E1C0
+
+game/dodge/unit_1E1C0.cpp:
+	.text       start:0x0001E1C0 end:0x0001E1C8
+
+game/dodge/unit_1E1C8.cpp:
+	.text       start:0x0001E1C8 end:0x0001E1D0
+
+game/dodge/unit_1E1D0.cpp:
+	.text       start:0x0001E1D0 end:0x0001E1D8
+
+game/dodge/unit_1E1D8.cpp:
+	.text       start:0x0001E1D8 end:0x0001E1E0
+
+game/dodge/unit_1E1E0.cpp:
+	.text       start:0x0001E1E0 end:0x0001E1E8
+
+game/dodge/unit_1E1E8.cpp:
+	.text       start:0x0001E1E8 end:0x0001E1F0
+
+game/dodge/unit_1E1F0.cpp:
+	.text       start:0x0001E1F0 end:0x0001E1F8
+
+game/dodge/unit_1E1F8.cpp:
+	.text       start:0x0001E1F8 end:0x0001E200
+
+game/dodge/unit_1E200.cpp:
+	.text       start:0x0001E200 end:0x0001E208
+
+game/dodge/unit_1E208.cpp:
+	.text       start:0x0001E208 end:0x0001E210
+
+game/dodge/unit_1E210.cpp:
+	.text       start:0x0001E210 end:0x0001E218
+
+game/dodge/unit_1E218.cpp:
+	.text       start:0x0001E218 end:0x0001E220
+
+game/dodge/unit_1E220.cpp:
+	.text       start:0x0001E220 end:0x0001E594
+	.ctors      start:0x00000008 end:0x0000000C
+	.bss        start:0x000001C8 end:0x000001D0
+
+game/dodge/CCameraDodge.cpp:
+	.text       start:0x0001E594 end:0x0001E73C
+	.rodata     start:0x000002E8 end:0x000002F0
+	.data       start:0x000017A0 end:0x000017E8
+
+game/dodge/CC_PARAM_DODGE.cpp:
+	.text       start:0x0001E73C end:0x0002FF48
+	.ctors      start:0x0000000C end:0x00000010
+	.rodata     start:0x000002F0 end:0x00000558
+	.data       start:0x000017E8 end:0x000018F8
+	.bss        start:0x000001D0 end:0x000007F8
+
+game/dodge/unit_2FF48.cpp:
+	.text       start:0x0002FF48 end:0x00036924
+	.ctors      start:0x00000010 end:0x00000014
+	.rodata     start:0x00000558 end:0x000006A0
+	.bss        start:0x000007F8 end:0x00000800
+
+game/dodge/unit_36924.cpp:
+	.text       start:0x00036924 end:0x0003AAC8
+	.ctors      start:0x00000014 end:0x00000018
+	.rodata     start:0x000006A0 end:0x00000788
+	.bss        start:0x00000800 end:0x00000808
+
+game/dodge/unit_3AAC8.cpp:
+	.text       start:0x0003AAC8 end:0x0003DE18
+	.ctors      start:0x00000018 end:0x0000001C
+	.rodata     start:0x00000788 end:0x00000980
+	.bss        start:0x00000808 end:0x00000810
+
+game/dodge/unit_3DE18.cpp:
+	.text       start:0x0003DE18 end:0x0003F694
+	.ctors      start:0x0000001C end:0x00000020
+	.rodata     start:0x00000980 end:0x000009D0
+	.bss        start:0x00000810 end:0x00000818
+
+game/dodge/unit_3F694.cpp:
+	.text       start:0x0003F694 end:0x000429B4
+	.ctors      start:0x00000020 end:0x00000024
+	.rodata     start:0x000009D0 end:0x00000A50
+	.data       start:0x000018F8 end:0x00001920
+	.bss        start:0x00000818 end:0x00000820
+
+game/dodge/CChrCore.cpp:
+	.text       start:0x000429B4 end:0x000569F4
+	.ctors      start:0x00000024 end:0x00000028
+	.rodata     start:0x00000A50 end:0x00000C28
+	.data       start:0x00001920 end:0x00002CA0
+	.bss        start:0x00000820 end:0x00000960
+
+game/dodge/unit_569F4.cpp:
+	.text       start:0x000569F4 end:0x00056A1C
+
+game/dodge/unit_56A1C.cpp:
+	.text       start:0x00056A1C end:0x00056A84
+
+game/dodge/unit_56A84.cpp:
+	.text       start:0x00056A84 end:0x00056AA0
+
+game/dodge/unit_56AA0.cpp:
+	.text       start:0x00056AA0 end:0x00056B74
+
+game/dodge/unit_56B74.cpp:
+	.text       start:0x00056B74 end:0x00056B90
+
+game/dodge/CcDaisyFlowerGarden.cpp:
+	.text       start:0x00056B90 end:0x000592F0
+	.ctors      start:0x00000028 end:0x0000002C
+	.rodata     start:0x00000C28 end:0x00000C98
+	.data       start:0x00002CA0 end:0x00004228
+	.bss        start:0x00000960 end:0x00000968
+
+game/dodge/CChrCoreDodgeDiddy.cpp:
+	.text       start:0x000592F0 end:0x00059AF8
+	.ctors      start:0x0000002C end:0x00000030
+	.rodata     start:0x00000C98 end:0x00000CE0
+	.data       start:0x00004228 end:0x00005470
+	.bss        start:0x00000968 end:0x00000970
+
+game/dodge/CChrCoreDodgeDonkey.cpp:
+	.text       start:0x00059AF8 end:0x0005A150
+	.ctors      start:0x00000030 end:0x00000034
+	.rodata     start:0x00000CE0 end:0x00000CF8
+	.data       start:0x00005470 end:0x00006640
+	.bss        start:0x00000970 end:0x00000978
+
+game/dodge/CChrCoreDodgeKinopio.cpp:
+	.text       start:0x0005A150 end:0x0005ADA8
+	.ctors      start:0x00000034 end:0x00000038
+	.rodata     start:0x00000CF8 end:0x00000D50
+	.data       start:0x00006640 end:0x000078A0
+	.bss        start:0x00000978 end:0x00000980
+
+game/dodge/CChrCoreDodgeKoopa.cpp:
+	.text       start:0x0005ADA8 end:0x0005B200
+	.ctors      start:0x00000038 end:0x0000003C
+	.rodata     start:0x00000D50 end:0x00000D68
+	.data       start:0x000078A0 end:0x00008AA8
+	.bss        start:0x00000980 end:0x00000988
+
+game/dodge/CChrCoreDodgeKoopaJr.cpp:
+	.text       start:0x0005B200 end:0x0005BC44
+	.ctors      start:0x0000003C end:0x00000040
+	.rodata     start:0x00000D68 end:0x00000DF8
+	.data       start:0x00008AA8 end:0x00009CE0
+	.bss        start:0x00000988 end:0x00000990
+
+game/dodge/CChrCoreDodgeKuroma.cpp:
+	.text       start:0x0005BC44 end:0x0005C89C
+	.ctors      start:0x00000040 end:0x00000044
+	.rodata     start:0x00000DF8 end:0x00000E30
+	.data       start:0x00009CE0 end:0x0000AEB0
+	.bss        start:0x00000990 end:0x00000998
+
+game/dodge/CChrCoreDodgeLuigi.cpp:
+	.text       start:0x0005C89C end:0x0005D2D0
+	.ctors      start:0x00000044 end:0x00000048
+	.rodata     start:0x00000E30 end:0x00000EB0
+	.data       start:0x0000AEB0 end:0x0000D208
+	.bss        start:0x00000998 end:0x000009A0
+
+game/dodge/unit_5D2D0.cpp:
+	.text       start:0x0005D2D0 end:0x0005D394
+	.ctors      start:0x00000048 end:0x0000004C
+	.rodata     start:0x00000EB0 end:0x00000EB8
+	.bss        start:0x000009A0 end:0x000009A8
+
+game/dodge/unit_5D394.cpp:
+	.text       start:0x0005D394 end:0x000663BC
+	.ctors      start:0x0000004C end:0x00000050
+	.rodata     start:0x00000EB8 end:0x00000F68
+	.bss        start:0x000009A8 end:0x000009B0
+
+game/dodge/CChrCoreDodgeMii00.cpp:
+	.text       start:0x000663BC end:0x00066660
+	.ctors      start:0x00000050 end:0x00000054
+	.rodata     start:0x00000F68 end:0x00000F80
+	.data       start:0x0000D208 end:0x0000E3A8
+	.bss        start:0x000009B0 end:0x000009B8
+
+game/dodge/CChrCoreDodgeMii01.cpp:
+	.text       start:0x00066660 end:0x00066904
+	.ctors      start:0x00000054 end:0x00000058
+	.rodata     start:0x00000F80 end:0x00000F98
+	.data       start:0x0000E3A8 end:0x0000F548
+	.bss        start:0x000009B8 end:0x000009C0
+
+game/dodge/CChrCoreDodgeMoogle.cpp:
+	.text       start:0x00066904 end:0x00066DCC
+	.ctors      start:0x00000058 end:0x0000005C
+	.rodata     start:0x00000F98 end:0x00000FB8
+	.data       start:0x0000F548 end:0x000106E8
+	.bss        start:0x000009C0 end:0x000009C8
+
+game/dodge/CcNinjaCloneBody.cpp:
+	.text       start:0x00066DCC end:0x00069470
+	.ctors      start:0x0000005C end:0x00000060
+	.rodata     start:0x00000FB8 end:0x00001038
+	.data       start:0x000106E8 end:0x00011B30
+	.bss        start:0x000009C8 end:0x000009D0
+
+game/dodge/CChrCoreDodgePeach.cpp:
+	.text       start:0x00069470 end:0x00069AAC
+	.ctors      start:0x00000060 end:0x00000064
+	.rodata     start:0x00001038 end:0x00001070
+	.data       start:0x00011B30 end:0x00013ED0
+	.bss        start:0x000009D0 end:0x000009D8
+
+game/dodge/CChrCoreDodgeSaboten.cpp:
+	.text       start:0x00069AAC end:0x00069F10
+	.rodata     start:0x00001070 end:0x00001088
+
+game/dodge/CcSabotenNeedleDodge.cpp:
+	.text       start:0x00069F10 end:0x00069F9C
+	.ctors      start:0x00000064 end:0x00000068
+	.rodata     start:0x00001088 end:0x00001098
+	.bss        start:0x000009D8 end:0x000009E0
+
+game/dodge/CcSiromaMagicCircle.cpp:
+	.text       start:0x00069F9C end:0x0006BC54
+	.ctors      start:0x00000068 end:0x0000006C
+	.rodata     start:0x00001098 end:0x00001158
+	.data       start:0x00013ED0 end:0x000152C0
+	.bss        start:0x000009E0 end:0x000009E8
+
+game/dodge/CChrCoreDodgeSlime.cpp:
+	.text       start:0x0006BC54 end:0x0006CB00
+	.ctors      start:0x0000006C end:0x00000070
+	.rodata     start:0x00001158 end:0x000011F8
+	.data       start:0x000152C0 end:0x00016518
+	.bss        start:0x000009E8 end:0x00000A28
+
+game/dodge/CChrCoreDodgeWaluigi.cpp:
+	.text       start:0x0006CB00 end:0x0006D8F0
+	.ctors      start:0x00000070 end:0x00000074
+	.rodata     start:0x000011F8 end:0x00001250
+	.data       start:0x00016518 end:0x000176E0
+	.bss        start:0x00000A28 end:0x00000A60
+
+game/dodge/CcWarioSmokeBomb.cpp:
+	.text       start:0x0006D8F0 end:0x0006F914
+	.ctors      start:0x00000074 end:0x00000078
+	.rodata     start:0x00001250 end:0x00001300
+	.data       start:0x000176E0 end:0x00019AF0
+	.bss        start:0x00000A60 end:0x00000A68
+
+game/dodge/unit_6F914.cpp:
+	.text       start:0x0006F914 end:0x0006F960
+	.ctors      start:0x00000078 end:0x0000007C
+	.rodata     start:0x00001300 end:0x00001308
+	.bss        start:0x00000A68 end:0x00000A70
+
+game/dodge/CChrDrvPadDodge.cpp:
+	.text       start:0x0006F960 end:0x00073CD4
+	.ctors      start:0x0000007C end:0x00000080
+	.rodata     start:0x00001308 end:0x000013A0
+	.data       start:0x00019AF0 end:0x00019DE0
+	.bss        start:0x00000A70 end:0x00000AF0
+
+game/dodge/CChrDrv.cpp:
+	.text       start:0x00073CD4 end:0x00073CF0
+	.ctors      start:0x00000080 end:0x00000084
+	.rodata     start:0x000013A0 end:0x000013A8
+	.bss        start:0x00000AF0 end:0x00000AF8
+
+game/dodge/CChrManDodge.cpp:
+	.text       start:0x00073CF0 end:0x00075B0C
+	.ctors      start:0x00000084 end:0x00000088
+	.rodata     start:0x000013A8 end:0x000013E0
+	.data       start:0x00019DE0 end:0x0001A2A0
+	.bss        start:0x00000AF8 end:0x00000B00
+
+game/dodge/CChrMarkerDodge.cpp:
+	.text       start:0x00075B0C end:0x00075D88
+
+game/dodge/CChrMarkerDodgeArrow.cpp:
+	.text       start:0x00075D88 end:0x00076484
+	.ctors      start:0x00000088 end:0x0000008C
+	.rodata     start:0x000013E0 end:0x000013F0
+	.bss        start:0x00000B00 end:0x00000B50
+
+game/dodge/CCollManDodge.cpp:
+	.text       start:0x00076484 end:0x000772E0
+	.rodata     start:0x000013F0 end:0x00001410
+	.data       start:0x0001A2A0 end:0x0001A368
+
+game/dodge/CCollMan.cpp:
+	.text       start:0x000772E0 end:0x00077368
+
+game/dodge/CComDrvDodge.cpp:
+	.text       start:0x00077368 end:0x00077468
+	.ctors      start:0x0000008C end:0x00000090
+	.rodata     start:0x00001410 end:0x00001418
+	.data       start:0x0001A368 end:0x0001A460
+	.bss        start:0x00000B50 end:0x00000B58
+
+game/dodge/unit_77468.cpp:
+	.text       start:0x00077468 end:0x0007750C
+	.ctors      start:0x00000090 end:0x00000094
+	.rodata     start:0x00001418 end:0x00001420
+	.bss        start:0x00000B58 end:0x00000B60
+
+game/dodge/CChangeFieldDemo.cpp:
+	.text       start:0x0007750C end:0x00079364
+	.rodata     start:0x00001420 end:0x00001508
+	.data       start:0x0001A460 end:0x0001A4D0
+
+game/dodge/CEventDemoDodge.cpp:
+	.text       start:0x00079364 end:0x0007BAE4
+	.rodata     start:0x00001508 end:0x000015B8
+	.data       start:0x0001A4D0 end:0x0001A5A0
+	.bss        start:0x00000B60 end:0x00000B80
+
+game/dodge/CEffectCtrlDodge.cpp:
+	.text       start:0x0007BAE4 end:0x0007BC24
+	.data       start:0x0001A5A0 end:0x0001A5E0
+
+game/dodge/CItemManDodge.cpp:
+	.text       start:0x0007BC24 end:0x0007BE2C
+	.data       start:0x0001A5E0 end:0x0001B3F0
+
+game/dodge/CItemDodgeBombDD_Base.cpp:
+	.text       start:0x0007BE2C end:0x0007DC88
+	.rodata     start:0x000015B8 end:0x00001678
+
+game/dodge/CEffectCoinGet.cpp:
+	.text       start:0x0007DC88 end:0x0007E4F8
+	.ctors      start:0x00000094 end:0x00000098
+	.rodata     start:0x00001678 end:0x000016C0
+	.data       start:0x0001B3F0 end:0x0001B610
+	.bss        start:0x00000B80 end:0x00000B88
+
+game/dodge/CQPanelManDodge.cpp:
+	.text       start:0x0007E4F8 end:0x0007F04C
+	.rodata     start:0x000016C0 end:0x000046F8
+	.data       start:0x0001B610 end:0x0001B768
+
+game/dodge/CItemDodgeRShell.cpp:
+	.text       start:0x0007F04C end:0x0007F2B4
+	.rodata     start:0x000046F8 end:0x00004718
+	.data       start:0x0001B768 end:0x0001BA10
+
+game/dodge/CCockpitDodge.cpp:
+	.text       start:0x0007F2B4 end:0x00083148
+	.ctors      start:0x00000098 end:0x0000009C
+	.rodata     start:0x00004718 end:0x000047A8
+	.data       start:0x0001BA10 end:0x0001BEA0
+	.bss        start:0x00000B88 end:0x00000B90
+
+game/dodge/CCockpitDodgeCoder.cpp:
+	.text       start:0x00083148 end:0x000864B0
+	.ctors      start:0x0000009C end:0x000000A0
+	.rodata     start:0x000047A8 end:0x00005428
+	.data       start:0x0001BEA0 end:0x0001C2C8
+	.bss        start:0x00000B90 end:0x00000B98
+
+game/dodge/CStgGmk_BossPackun_Dodge_Act.cpp:
+	.text       start:0x000864B0 end:0x0008C360
+	.ctors      start:0x000000A0 end:0x000000A4
+	.rodata     start:0x00005428 end:0x000054E0
+	.data       start:0x0001C2C8 end:0x0001C9B0
+	.bss        start:0x00000B98 end:0x00000BA0
+
+game/dodge/CStgGmk_Case_Act_Dodge.cpp:
+	.text       start:0x0008C360 end:0x0008C934
+	.rodata     start:0x000054E0 end:0x00005548
+	.data       start:0x0001C9B0 end:0x0001CC40
+
+game/dodge/CStageMan.cpp:
+	.text       start:0x0008C934 end:0x0008D7DC
+	.rodata     start:0x00005548 end:0x00005560
+	.data       start:0x0001CC40 end:0x0001D0E8
+	.bss        start:0x00000BA0 end:0x00000BA8
+
+game/dodge/CStageDodge02.cpp:
+	.text       start:0x0008D7DC end:0x0008DE70
+	.rodata     start:0x00005560 end:0x00005780
+	.data       start:0x0001D0E8 end:0x0001D670
+	.bss        start:0x00000BA8 end:0x00000BB0
+
+game/dodge/CStageDodge03.cpp:
+	.text       start:0x0008DE70 end:0x0008F994
+	.rodata     start:0x00005780 end:0x00005850
+	.data       start:0x0001D670 end:0x0001DB40
+	.bss        start:0x00000BB0 end:0x00000BC8
+
+game/dodge/CStageDodge05.cpp:
+	.text       start:0x0008F994 end:0x00091EC4
+	.rodata     start:0x00005850 end:0x00005988
+	.data       start:0x0001DB40 end:0x0001E010
+	.bss        start:0x00000BC8 end:0x00000BD0
+
+game/dodge/CStageDodge07.cpp:
+	.text       start:0x00091EC4 end:0x000927B4
+	.rodata     start:0x00005988 end:0x00005AC8
+	.data       start:0x0001E010 end:0x0001E458
+	.bss        start:0x00000BD0 end:0x00000BE8
+
+game/dodge/CStageDodge09.cpp:
+	.text       start:0x000927B4 end:0x0009365C
+	.rodata     start:0x00005AC8 end:0x00005BD0
+	.data       start:0x0001E458 end:0x0001EA78
+	.bss        start:0x00000BE8 end:0x00000BF0
+
+game/dodge/CStageDodge11.cpp:
+	.text       start:0x0009365C end:0x00095AEC
+	.rodata     start:0x00005BD0 end:0x00005D80
+	.data       start:0x0001EA78 end:0x0001F160
+	.bss        start:0x00000BF0 end:0x00000BF8
+
+game/dodge/CStageDodge13.cpp:
+	.text       start:0x00095AEC end:0x00096018
+	.rodata     start:0x00005D80 end:0x00005DB8
+	.data       start:0x0001F160 end:0x0001F5D8
+	.bss        start:0x00000BF8 end:0x00000C00
+
+game/dodge/CStageDodge15.cpp:
+	.text       start:0x00096018 end:0x00096B58
+	.rodata     start:0x00005DB8 end:0x00005FD8
+	.data       start:0x0001F5D8 end:0x0001FBE0
+	.bss        start:0x00000C00 end:0x00000C08
+
+game/dodge/CStgGmk_Case_Dodge.cpp:
+	.text       start:0x00096B58 end:0x00096CBC
+	.data       start:0x0001FBE0 end:0x0001FCC8
+
+game/dodge/CStageDodge17.cpp:
+	.text       start:0x00096CBC end:0x00097EBC
+	.rodata     start:0x00005FD8 end:0x00006298
+	.data       start:0x0001FCC8 end:0x00020420
+	.bss        start:0x00000C08 end:0x00000C10
+
+game/dodge/CStageFactoryDodge.cpp:
+	.text       start:0x00097EBC end:0x0009814C
+	.data       start:0x00020420 end:0x00020508
+
+game/dodge/CStageManDodge.cpp:
+	.text       start:0x0009814C end:0x000987B0
+	.rodata     start:0x00006298 end:0x000062C8
+	.data       start:0x00020508 end:0x00020950
+
+game/dodge/CCockpitDodgeResult.cpp:
+	.text       start:0x000987B0 end:0x000995BC
+	.rodata     start:0x000062C8 end:0x00006658
+	.data       start:0x00020950 end:0x00020AB8
+
+game/dodge/CComDrvDodgeGame.cpp:
+	.text       start:0x000995BC end:0x0009D2C4
+	.rodata     start:0x00006658 end:0x00006720
+	.data       start:0x00020AB8 end:0x00020E00
+
+game/dodge/unit_9D2C4.cpp:
+	.text       start:0x0009D2C4 end:0x000A40EC
+	.ctors      start:0x000000A4 end:0x000000A8
+	.rodata     start:0x00006720 end:0x000067C0
+	.bss        start:0x00000C10 end:0x00000C18
+
+game/dodge/unit_A40EC.cpp:
+	.text       start:0x000A40EC end:0x000A4AE8
+	.ctors      start:0x000000A8 end:0x000000AC
+	.rodata     start:0x000067C0 end:0x000067D8
+	.data       start:0x00020E00 end:0x00020F38
+	.bss        start:0x00000C18 end:0x00000C20
+
+game/dodge/unit_A4AE8.cpp:
+	.text       start:0x000A4AE8 end:0x000A6CBC
+	.ctors      start:0x000000AC end:0x000000B0
+	.rodata     start:0x000067D8 end:0x00006850
+	.data       start:0x00020F38 end:0x00020F90
+	.bss        start:0x00000C20 end:0x00000C28
+
+game/dodge/CCameraDodgeGame.cpp:
+	.text       start:0x000A6CBC end:0x000AA968
+	.rodata     start:0x00006850 end:0x00006A80
+	.data       start:0x00020F90 end:0x000210C8
+
+game/dodge/CCameraDodgeBD.cpp:
+	.text       start:0x000AA968 end:0x000AB294
+	.rodata     start:0x00006A80 end:0x00006AE0
+	.data       start:0x000210C8 end:0x00021110
+
+game/dodge/CStageDodge04.cpp:
+	.text       start:0x000AB294 end:0x000AB8A4
+	.rodata     start:0x00006AE0 end:0x00006BB0
+	.data       start:0x00021110 end:0x000215E0
+	.bss        start:0x00000C28 end:0x00000C30
+
+game/dodge/CStgGmk_Pylon_Act_Dodge.cpp:
+	.text       start:0x000AB8A4 end:0x000AC36C
+	.rodata     start:0x00006BB0 end:0x00006C58
+	.data       start:0x000215E0 end:0x00021A00
+
+game/dodge/CLockCursorDodge.cpp:
+	.text       start:0x000AC36C end:0x000ADCC0
+	.ctors      start:0x000000B0 end:0x000000B4
+	.rodata     start:0x00006C58 end:0x00007230
+	.data       start:0x00021A00 end:0x00021CA8
+	.bss        start:0x00000C30 end:0x00000C38
+
+game/dodge/CCockpitDodgeTelopInOutChange.cpp:
+	.text       start:0x000ADCC0 end:0x000AF6CC
+	.ctors      start:0x000000B4 end:0x000000B8
+	.rodata     start:0x00007230 end:0x00007520
+	.data       start:0x00021CA8 end:0x00021FC8
+	.bss        start:0x00000C38 end:0x00000C40
+
+game/dodge/CChrArtsTargetMarkerDodge.cpp:
+	.text       start:0x000AF6CC end:0x000B2540
+	.ctors      start:0x000000B8 end:0x000000BC
+	.rodata     start:0x00007520 end:0x000075E8
+	.data       start:0x00021FC8 end:0x00022240
+	.bss        start:0x00000C40 end:0x00000C48
+
+game/dodge/TournamentDodge.cpp:
+	.text       start:0x000B2540 end:0x000B25C8
+
+game/dodge/CTmGameHandlerDodge.cpp:
+	.text       start:0x000B25C8 end:0x000B3190
+	.rodata     start:0x000075E8 end:0x000075F8
+	.data       start:0x00022240 end:0x000222F8
+
+game/dodge/CStgGmk_Pinball_Act_Dodge.cpp:
+	.text       start:0x000B3190 end:0x000B3BD4
+	.rodata     start:0x000075F8 end:0x00007620
+	.data       start:0x000222F8 end:0x000226F8
+
+game/dodge/CStageDodge12.cpp:
+	.text       start:0x000B3BD4 end:0x000B45B0
+	.rodata     start:0x00007620 end:0x00007758
+	.data       start:0x000226F8 end:0x00022B98
+	.bss        start:0x00000C48 end:0x00000C50
+
+game/dodge/CComManDodgeGame.cpp:
+	.text       start:0x000B45B0 end:0x000B5B44
+	.ctors      start:0x000000BC end:0x000000C0
+	.rodata     start:0x00007758 end:0x00007780
+	.bss        start:0x00000C50 end:0x00000C58
+
+game/dodge/CStgGmk_WaterWorks_Dodge_Act.cpp:
+	.text       start:0x000B5B44 end:0x000BA5F0
+	.rodata     start:0x00007780 end:0x000078F0
+	.data       start:0x00022B98 end:0x000232E0
+
+game/dodge/CStgGmk_Wave_Dodge_Act.cpp:
+	.text       start:0x000BA5F0 end:0x000BA6B0
+
+game/dodge/CStgGmk_WaveCluster_Dodge.cpp:
+	.text       start:0x000BA6B0 end:0x000BA860
+	.rodata     start:0x000078F0 end:0x000078F8
+
+game/dodge/CStgGmk_Wave.cpp:
+	.text       start:0x000BA860 end:0x000BA8CC
+
+game/dodge/CStgGmk_Wave_Dodge.cpp:
+	.text       start:0x000BA8CC end:0x000BAA78
+	.data       start:0x000232E0 end:0x00023628
+
+game/dodge/CStgGmk_Wave_Act.cpp:
+	.text       start:0x000BAA78 end:0x000BAB08
+
+game/dodge/CStgGmk_Trolley_Act_Dodge.cpp:
+	.text       start:0x000BAB08 end:0x000BAEC4
+	.rodata     start:0x000078F8 end:0x00007930
+	.data       start:0x00023628 end:0x00023900
+
+game/dodge/CStageDodge16.cpp:
+	.text       start:0x000BAEC4 end:0x000BB688
+	.rodata     start:0x00007930 end:0x00007A78
+	.data       start:0x00023900 end:0x00023E98
+	.bss        start:0x00000C58 end:0x00000C60
+
+game/dodge/unit_BB688.cpp:
+	.text       start:0x000BB688 end:0x000BD7F8
+	.ctors      start:0x000000C0 end:0x000000C4
+	.rodata     start:0x00007A78 end:0x00007AB8
+	.bss        start:0x00000C60 end:0x00000CD0
+
+game/dodge/unit_BD7F8.cpp:
+	.text       start:0x000BD7F8 end:0x000BE1FC
+	.rodata     start:0x00007AB8 end:0x00007AE8
+
+game/dodge/unit_BE1FC.cpp:
+	.text       start:0x000BE1FC end:0x000BFE78
+	.rodata     start:0x00007AE8 end:0x00007B30
+
+game/dodge/unit_BFE78.cpp:
+	.text       start:0x000BFE78 end:0x000C0BE8
+	.rodata     start:0x00007B30 end:0x00007B48
+
+game/dodge/CCockpitDodgeOrDie.cpp:
+	.text       start:0x000C0BE8 end:0x000C2634
+	.rodata     start:0x00007B48 end:0x000082B8
+	.data       start:0x00023E98 end:0x000240E8
+
+game/dodge/CCockpitDodgeCoin.cpp:
+	.text       start:0x000C2634 end:0x000C3BEC
+	.rodata     start:0x000082B8 end:0x000082C8
+	.data       start:0x000240E8 end:0x00024198
+
+game/dodge/CCockpitChrIcon2DDodge.cpp:
+	.text       start:0x000C3BEC end:0x000C3F8C
+	.rodata     start:0x000082C8 end:0x00008630
+	.data       start:0x00024198 end:0x00024588
+
+game/dodge/CGameDodgeDodgeOrDie.cpp:
+	.text       start:0x000C3F8C end:0x000CA078
+	.ctors      start:0x000000C4 end:0x000000C8
+	.rodata     start:0x00008630 end:0x00008988
+	.data       start:0x00024588 end:0x00024CA0
+	.bss        start:0x00000CD0 end:0x00000D50
+
+game/dodge/CHaikyuManDD.cpp:
+	.text       start:0x000CA078 end:0x000CA4D8
+	.ctors      start:0x000000C8 end:0x000000CC
+	.rodata     start:0x00008988 end:0x00008998
+
+game/dodge/CCockpitDodgePause.cpp:
+	.text       start:0x000CA4D8 end:0x000CABC4
+	.rodata     start:0x00008998 end:0x00008A68
+	.data       start:0x00024CA0 end:0x00024D88
+
+game/dodge/CCockpitDodgePauseResult.cpp:
+	.text       start:0x000CABC4 end:0x000CB614
+	.rodata     start:0x00008A68 end:0x00008E78
+	.data       start:0x00024D88 end:0x00024EE0
+
+game/dodge/CCockpitDodgeModelTelop.cpp:
+	.text       start:0x000CB614 end:0x000CB750
+	.rodata     start:0x00008E78 end:0x00008E98
+	.data       start:0x00024EE0 end:0x00024F40
+
+game/dodge/CComDrvDodgeDD.cpp:
+	.text       start:0x000CB750 end:0x000CB8C4
+	.ctors      start:0x000000CC end:0x000000D0
+	.rodata     start:0x00008E98 end:0x00008EA0
+	.data       start:0x00024F40 end:0x000250C0
+	.bss        start:0x00000D50 end:0x00000D58
+
+game/dodge/CDDScript.cpp:
+	.text       start:0x000CB8C4 end:0x000D2790
+	.ctors      start:0x000000D0 end:0x000000D4
+	.rodata     start:0x00008EA0 end:0x00008F30
+	.data       start:0x000250C0 end:0x00025A10
+	.bss        start:0x00000D58 end:0x00000D60
+
+game/dodge/unit_D2790.cpp:
+	.text       start:0x000D2790 end:0x000D27D4
+	.ctors      start:0x000000D4 end:0x000000D8
+	.bss        start:0x00000D60 end:0x00000D68
+
+game/dodge/CChrCoreDodgeDodgeOrDie.cpp:
+	.text       start:0x000D27D4 end:0x000D3078
+	.ctors      start:0x000000D8 end:0x000000DC
+	.rodata     start:0x00008F30 end:0x00008F60
+	.data       start:0x00025A10 end:0x00026BB0
+	.bss        start:0x00000D68 end:0x00000D70
+
+game/dodge/CStageManDodgeDodgeOrDie.cpp:
+	.text       start:0x000D3078 end:0x000D41FC
+	.rodata     start:0x00008F60 end:0x00008F78
+	.data       start:0x00026BB0 end:0x00026FF8
+
+game/dodge/CStageDodgeDOD56.cpp:
+	.text       start:0x000D41FC end:0x000D4938
+	.rodata     start:0x00008F78 end:0x00009010
+	.data       start:0x00026FF8 end:0x000275F0
+	.bss        start:0x00000D70 end:0x00000D78
+
+game/dodge/CStageDodgeDOD57.cpp:
+	.text       start:0x000D4938 end:0x000D5584
+	.rodata     start:0x00009010 end:0x00009180
+	.data       start:0x000275F0 end:0x00027D88
+	.bss        start:0x00000D78 end:0x00000D80
+
+game/dodge/CCockpitDodgeLifeGauge.cpp:
+	.text       start:0x000D5584 end:0x000D7800
+	.ctors      start:0x000000DC end:0x000000E0
+	.rodata     start:0x00009180 end:0x0000AF48
+	.data       start:0x00027D88 end:0x00028340
+	.bss        start:0x00000D80 end:0x00000D88
+
+game/dodge/unit_D7800.cpp:
+	.text       start:0x000D7800 end:0x000D8380
+	.rodata     start:0x0000AF48 end:0x0000AF78
+	.data       start:0x00028340 end:0x000284F8
+
+game/dodge/unit_D8380.cpp:
+	.text       start:0x000D8380 end:0x000D8E94
+	.ctors      start:0x000000E0 end:0x000000E4
+	.rodata     start:0x0000AF78 end:0x0000B000
+	.data       start:0x000284F8 end:0x000285C0
+	.bss        start:0x00000D88 end:0x00000D90
+
+game/dodge/CStageDodgeDOD55.cpp:
+	.text       start:0x000D8E94 end:0x000D90F4
+	.rodata     start:0x0000B000 end:0x0000B008
+	.data       start:0x000285C0 end:0x00028A58
+	.bss        start:0x00000D90 end:0x00000D98
+
 RSO/global_destructor_chain.c:
 	.text       start:0x000D90F4 end:0x000D9164
 	.dtors      start:0x00000000 end:0x00000004

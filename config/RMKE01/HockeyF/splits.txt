@@ -6,6 +6,622 @@ Sections:
 	.data       type:data align:8
 	.bss        type:bss align:8
 
+game/hockey/module.cpp:
+	.text       start:0x00000000 end:0x00000098
+
+game/hockey/CGameHockey.cpp:
+	.text       start:0x00000098 end:0x0000C6E4
+	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x00000F00
+	.data       start:0x00000000 end:0x000009F8
+	.bss        start:0x00000000 end:0x00000158
+
+game/hockey/CBallHockey.cpp:
+	.text       start:0x0000C6E4 end:0x00017CB4
+	.ctors      start:0x00000004 end:0x00000008
+	.rodata     start:0x00000F00 end:0x000010A8
+	.data       start:0x000009F8 end:0x00000FF8
+	.bss        start:0x00000158 end:0x00000390
+
+game/hockey/CBallManHockey.cpp:
+	.text       start:0x00017CB4 end:0x00017EC0
+	.rodata     start:0x000010A8 end:0x000010B8
+	.data       start:0x00000FF8 end:0x000010A8
+
+game/hockey/CCameraHockey.cpp:
+	.text       start:0x00017EC0 end:0x00018094
+	.rodata     start:0x000010B8 end:0x000010C0
+	.data       start:0x000010A8 end:0x000010F0
+
+game/hockey/CChrCoreHockey.cpp:
+	.text       start:0x00018094 end:0x000289F4
+	.ctors      start:0x00000008 end:0x0000000C
+	.rodata     start:0x000010C0 end:0x00001458
+	.data       start:0x000010F0 end:0x00001198
+
+game/hockey/unit_289F4.cpp:
+	.text       start:0x000289F4 end:0x0002E204
+	.rodata     start:0x00001458 end:0x000015E0
+	.data       start:0x00001198 end:0x000011E8
+
+game/hockey/CcAttackObj.cpp:
+	.text       start:0x0002E204 end:0x0003BC34
+	.rodata     start:0x000015E0 end:0x00001A00
+	.data       start:0x000011E8 end:0x00001398
+
+game/hockey/CChrCore.cpp:
+	.text       start:0x0003BC34 end:0x0005169C
+	.rodata     start:0x00001A00 end:0x00001D20
+	.data       start:0x00001398 end:0x000015E8
+
+game/hockey/CcDaisyFlowerGarden.cpp:
+	.text       start:0x0005169C end:0x00053C10
+	.rodata     start:0x00001D20 end:0x00001D90
+	.data       start:0x000015E8 end:0x00003470
+
+game/hockey/CChrCoreHockeyDiddy.cpp:
+	.text       start:0x00053C10 end:0x00054358
+	.rodata     start:0x00001D90 end:0x00001DF0
+	.data       start:0x00003470 end:0x00004FE8
+
+game/hockey/CChrCoreHockeyDonkey.cpp:
+	.text       start:0x00054358 end:0x0005481C
+	.rodata     start:0x00001DF0 end:0x00001E08
+
+game/hockey/CcDonkeyQuakeHockey.cpp:
+	.text       start:0x0005481C end:0x0005488C
+	.rodata     start:0x00001E08 end:0x00001E28
+
+game/hockey/CChrCoreHockeyKinopio.cpp:
+	.text       start:0x0005488C end:0x0005528C
+	.rodata     start:0x00001E28 end:0x00001E88
+	.data       start:0x00004FE8 end:0x00005DF8
+
+game/hockey/CChrCoreHockeyKoopa.cpp:
+	.text       start:0x0005528C end:0x0005588C
+	.rodata     start:0x00001E88 end:0x00001EA8
+	.data       start:0x00005DF8 end:0x00006B78
+
+game/hockey/CChrCoreHockeyKoopaJr.cpp:
+	.text       start:0x0005588C end:0x000563D4
+	.rodata     start:0x00001EA8 end:0x00001F38
+	.data       start:0x00006B78 end:0x000086E0
+
+game/hockey/CChrCoreHockeyKuroma.cpp:
+	.text       start:0x000563D4 end:0x00056C34
+	.rodata     start:0x00001F38 end:0x00001F60
+
+game/hockey/CcKuromaLockonUnit.cpp:
+	.text       start:0x00056C34 end:0x00056D84
+
+game/hockey/CChrCoreHockeyLuigi.cpp:
+	.text       start:0x00056D84 end:0x00057B8C
+	.rodata     start:0x00001F60 end:0x00001FC8
+	.data       start:0x000086E0 end:0x00009430
+
+game/hockey/CChrCoreHockeyMario.cpp:
+	.text       start:0x00057B8C end:0x00057D08
+	.data       start:0x00009430 end:0x0000A180
+
+game/hockey/unit_57D08.cpp:
+	.text       start:0x00057D08 end:0x0006461C
+	.rodata     start:0x00001FC8 end:0x00002098
+	.data       start:0x0000A180 end:0x0000A470
+
+game/hockey/CChrCoreHockeyMii00.cpp:
+	.text       start:0x0006461C end:0x00064828
+	.rodata     start:0x00002098 end:0x000020A0
+	.data       start:0x0000A470 end:0x0000B1C0
+
+game/hockey/CChrCoreHockeyMii01.cpp:
+	.text       start:0x00064828 end:0x00064A34
+	.rodata     start:0x000020A0 end:0x000020A8
+	.data       start:0x0000B1C0 end:0x0000BF10
+
+game/hockey/CChrCoreHockeyMoogle.cpp:
+	.text       start:0x00064A34 end:0x00064DA0
+	.rodata     start:0x000020A8 end:0x000020C8
+	.data       start:0x0000BF10 end:0x0000CC60
+
+game/hockey/CcNinjaCloneBody.cpp:
+	.text       start:0x00064DA0 end:0x000683C4
+	.ctors      start:0x0000000C end:0x00000010
+	.rodata     start:0x000020C8 end:0x00002160
+	.data       start:0x0000CC60 end:0x0000DDC0
+	.bss        start:0x00000390 end:0x000003B8
+
+game/hockey/CChrCoreHockeyPeach.cpp:
+	.text       start:0x000683C4 end:0x000689E0
+	.rodata     start:0x00002160 end:0x00002198
+	.data       start:0x0000DDC0 end:0x0000EB38
+
+game/hockey/CChrCoreHockeySaboten.cpp:
+	.text       start:0x000689E0 end:0x00068E74
+	.rodata     start:0x00002198 end:0x000021B0
+	.data       start:0x0000EB38 end:0x0000F8C0
+
+game/hockey/CcSiromaMagicCircle.cpp:
+	.text       start:0x00068E74 end:0x0006B890
+	.rodata     start:0x000021B0 end:0x000022E0
+	.data       start:0x0000F8C0 end:0x00010878
+
+game/hockey/CChrCoreHockeySlime.cpp:
+	.text       start:0x0006B890 end:0x0006C9E8
+	.ctors      start:0x00000010 end:0x00000014
+	.rodata     start:0x000022E0 end:0x00002390
+	.data       start:0x00010878 end:0x00011680
+	.bss        start:0x000003B8 end:0x000003F8
+
+game/hockey/CChrCoreHockeyWaluigi.cpp:
+	.text       start:0x0006C9E8 end:0x0006D8E8
+	.rodata     start:0x00002390 end:0x00002420
+	.data       start:0x00011680 end:0x000128F0
+
+game/hockey/CcWarioSmokeMgr.cpp:
+	.text       start:0x0006D8E8 end:0x0006F91C
+	.rodata     start:0x00002420 end:0x000024D0
+	.data       start:0x000128F0 end:0x00013710
+
+game/hockey/CChrCoreHockeyYoshi.cpp:
+	.text       start:0x0006F91C end:0x0006FA98
+	.data       start:0x00013710 end:0x00014460
+
+game/hockey/CChrDrvPadHockey.cpp:
+	.text       start:0x0006FA98 end:0x00072C58
+	.rodata     start:0x000024D0 end:0x00002558
+	.data       start:0x00014460 end:0x00014728
+	.bss        start:0x000003F8 end:0x00000448
+
+game/hockey/CChrManHockey.cpp:
+	.text       start:0x00072C58 end:0x0007604C
+	.rodata     start:0x00002558 end:0x00002648
+	.data       start:0x00014728 end:0x00014988
+
+game/hockey/CChrManHockeyCS.cpp:
+	.text       start:0x0007604C end:0x00076A04
+	.rodata     start:0x00002648 end:0x00002658
+
+game/hockey/CShootMarker.cpp:
+	.text       start:0x00076A04 end:0x00078490
+	.ctors      start:0x00000014 end:0x00000018
+	.rodata     start:0x00002658 end:0x000026F8
+	.data       start:0x00014988 end:0x00014B00
+	.bss        start:0x00000448 end:0x000004A0
+
+game/hockey/CCollManHockey.cpp:
+	.text       start:0x00078490 end:0x0007A7A8
+	.rodata     start:0x000026F8 end:0x00002738
+	.data       start:0x00014B00 end:0x00014BC8
+
+game/hockey/CCollMan.cpp:
+	.text       start:0x0007A7A8 end:0x0007A830
+
+game/hockey/CComDrvHockey.cpp:
+	.text       start:0x0007A830 end:0x0007B050
+	.rodata     start:0x00002738 end:0x00002750
+	.data       start:0x00014BC8 end:0x00014CC0
+
+game/hockey/CEventDemoHockey.cpp:
+	.text       start:0x0007B050 end:0x0007BA3C
+	.rodata     start:0x00002750 end:0x000027C8
+	.data       start:0x00014CC0 end:0x00014D10
+
+game/hockey/EvDemoHockey.cpp:
+	.text       start:0x0007BA3C end:0x0007BB28
+
+game/hockey/CEventDemoBase.cpp:
+	.text       start:0x0007BB28 end:0x0007BB30
+
+game/hockey/CEffectCtrlHockey.cpp:
+	.text       start:0x0007BB30 end:0x0007BCB8
+	.data       start:0x00014D10 end:0x00014D50
+
+game/hockey/CItemManHockey.cpp:
+	.text       start:0x0007BCB8 end:0x0007BEC0
+	.data       start:0x00014D50 end:0x00014F00
+
+game/hockey/CItemHockeyBanana.cpp:
+	.text       start:0x0007BEC0 end:0x0007C084
+	.rodata     start:0x000027C8 end:0x000027F0
+
+game/hockey/CGimmickManHockey.cpp:
+	.text       start:0x0007C084 end:0x0007CF08
+	.ctors      start:0x00000018 end:0x0000001C
+	.rodata     start:0x000027F0 end:0x00002880
+	.data       start:0x00014F00 end:0x00015038
+	.bss        start:0x000004A0 end:0x000004A8
+
+game/hockey/CQPanelHockey.cpp:
+	.text       start:0x0007CF08 end:0x0007D678
+	.rodata     start:0x00002880 end:0x00007540
+	.data       start:0x00015038 end:0x00015130
+
+game/hockey/CItemHockeyBomb.cpp:
+	.text       start:0x0007D678 end:0x0007D758
+	.rodata     start:0x00007540 end:0x00007568
+	.data       start:0x00015130 end:0x00015288
+
+game/hockey/CItemHockeyToadstool.cpp:
+	.text       start:0x0007D758 end:0x0007D8E8
+	.rodata     start:0x00007568 end:0x00007590
+	.data       start:0x00015288 end:0x00015518
+
+game/hockey/CItemHockeyRShell.cpp:
+	.text       start:0x0007D8E8 end:0x0007DAA8
+	.rodata     start:0x00007590 end:0x000075B0
+	.data       start:0x00015518 end:0x000157C0
+
+game/hockey/CCockpitHockey.cpp:
+	.text       start:0x0007DAA8 end:0x00081730
+	.rodata     start:0x000075B0 end:0x00007608
+	.data       start:0x000157C0 end:0x00015B78
+
+game/hockey/CCockpitHockeyCoder.cpp:
+	.text       start:0x00081730 end:0x000840CC
+	.rodata     start:0x00007608 end:0x00008010
+	.data       start:0x00015B78 end:0x00015EB8
+
+game/hockey/CGoalMdlHockey.cpp:
+	.text       start:0x000840CC end:0x000848D4
+	.rodata     start:0x00008010 end:0x00008108
+	.data       start:0x00015EB8 end:0x00016008
+
+game/hockey/CGoalObjHockey.cpp:
+	.text       start:0x000848D4 end:0x00085268
+	.rodata     start:0x00008108 end:0x00008118
+	.data       start:0x00016008 end:0x00016258
+
+game/hockey/CStageFactoryHockey.cpp:
+	.text       start:0x00085268 end:0x000855B0
+
+game/hockey/CStageMan.cpp:
+	.text       start:0x000855B0 end:0x00086940
+	.rodata     start:0x00008118 end:0x00008350
+	.data       start:0x00016258 end:0x00016810
+	.bss        start:0x000004A8 end:0x000004B0
+
+game/hockey/CStageHockey03.cpp:
+	.text       start:0x00086940 end:0x000872A4
+	.ctors      start:0x0000001C end:0x00000020
+	.rodata     start:0x00008350 end:0x00008458
+	.data       start:0x00016810 end:0x00016DB0
+	.bss        start:0x000004B0 end:0x000004C8
+
+game/hockey/CStageHockey05.cpp:
+	.text       start:0x000872A4 end:0x000876D4
+	.rodata     start:0x00008458 end:0x00008488
+	.data       start:0x00016DB0 end:0x00017258
+	.bss        start:0x000004C8 end:0x000004D0
+
+game/hockey/CStageHockey09.cpp:
+	.text       start:0x000876D4 end:0x00089210
+	.rodata     start:0x00008488 end:0x00008678
+	.data       start:0x00017258 end:0x00017A80
+	.bss        start:0x000004D0 end:0x000004D8
+
+game/hockey/CStageHockey10.cpp:
+	.text       start:0x00089210 end:0x0008AAFC
+	.ctors      start:0x00000020 end:0x00000024
+	.rodata     start:0x00008678 end:0x00009230
+	.data       start:0x00017A80 end:0x00018280
+	.bss        start:0x000004D8 end:0x000005A8
+
+game/hockey/CStageHockey13.cpp:
+	.text       start:0x0008AAFC end:0x0008B028
+	.rodata     start:0x00009230 end:0x00009268
+	.data       start:0x00018280 end:0x00018718
+	.bss        start:0x000005A8 end:0x000005B0
+
+game/hockey/CStageHockey15.cpp:
+	.text       start:0x0008B028 end:0x0008BDF8
+	.rodata     start:0x00009268 end:0x000094A0
+	.data       start:0x00018718 end:0x00018E10
+	.bss        start:0x000005B0 end:0x000005B8
+
+game/hockey/CStageHockey17.cpp:
+	.text       start:0x0008BDF8 end:0x0008D700
+	.rodata     start:0x000094A0 end:0x00009850
+	.data       start:0x00018E10 end:0x000197F8
+	.bss        start:0x000005B8 end:0x000005C0
+
+game/hockey/CStageManHockey.cpp:
+	.text       start:0x0008D700 end:0x0008E10C
+	.rodata     start:0x00009850 end:0x00009898
+	.data       start:0x000197F8 end:0x0001A280
+	.bss        start:0x000005C0 end:0x000005C8
+
+game/hockey/CStgGmk_WaterPillarCluster_Hockey.cpp:
+	.text       start:0x0008E10C end:0x0008E6B4
+	.rodata     start:0x00009898 end:0x00009900
+
+game/hockey/CStgGmk_WaterPillar.cpp:
+	.text       start:0x0008E6B4 end:0x0008E784
+
+game/hockey/CStgGmk_WaterWorks_Hockey.cpp:
+	.text       start:0x0008E784 end:0x0008E84C
+
+game/hockey/CStgDrv.cpp:
+	.text       start:0x0008E84C end:0x0008E878
+
+game/hockey/CStgGmkAct.cpp:
+	.text       start:0x0008E878 end:0x0008EA0C
+
+game/hockey/CCockpitHockeyResult.cpp:
+	.text       start:0x0008EA0C end:0x0008F478
+	.rodata     start:0x00009900 end:0x00009B78
+	.data       start:0x0001A280 end:0x0001A390
+
+game/hockey/CComManHockey.cpp:
+	.text       start:0x0008F478 end:0x0009790C
+	.rodata     start:0x00009B78 end:0x00009C08
+	.data       start:0x0001A390 end:0x0001A408
+
+game/hockey/CComDrvHockeyGame.cpp:
+	.text       start:0x0009790C end:0x000AE7E8
+	.rodata     start:0x00009C08 end:0x0000A248
+	.data       start:0x0001A408 end:0x0001A9A0
+
+game/hockey/unit_AE7E8.cpp:
+	.text       start:0x000AE7E8 end:0x000AFCA0
+	.rodata     start:0x0000A248 end:0x0000A268
+	.data       start:0x0001A9A0 end:0x0001ABA0
+
+game/hockey/unit_AFCA0.cpp:
+	.text       start:0x000AFCA0 end:0x000B0048
+	.rodata     start:0x0000A268 end:0x0000A278
+
+game/hockey/unit_B0048.cpp:
+	.text       start:0x000B0048 end:0x000B3A88
+	.rodata     start:0x0000A278 end:0x0000A288
+
+game/hockey/CComDrvHockeyKeeper.cpp:
+	.text       start:0x000B3A88 end:0x000B9834
+	.rodata     start:0x0000A288 end:0x0000A348
+	.data       start:0x0001ABA0 end:0x0001AD88
+
+game/hockey/CStgGmk_Case_Act_Hockey.cpp:
+	.text       start:0x000B9834 end:0x000B9FB0
+	.rodata     start:0x0000A348 end:0x0000A398
+	.data       start:0x0001AD88 end:0x0001B018
+
+game/hockey/CStageHockeyCrushSkate.cpp:
+	.text       start:0x000B9FB0 end:0x000BA38C
+	.rodata     start:0x0000A398 end:0x0000A3B0
+	.data       start:0x0001B018 end:0x0001B578
+	.bss        start:0x000005C8 end:0x000005D0
+
+game/hockey/CCameraHockeyGame.cpp:
+	.text       start:0x000BA38C end:0x000BE47C
+	.rodata     start:0x0000A3B0 end:0x0000A528
+	.data       start:0x0001B578 end:0x0001B818
+
+game/hockey/CCameraHockeyCS.cpp:
+	.text       start:0x000BE47C end:0x000BEB88
+	.rodata     start:0x0000A528 end:0x0000A578
+	.data       start:0x0001B818 end:0x0001B860
+
+game/hockey/CRadarIcon2DHockeyGoal.cpp:
+	.text       start:0x000BEB88 end:0x000C0EA8
+	.ctors      start:0x00000024 end:0x00000028
+	.rodata     start:0x0000A578 end:0x0000ACD8
+	.data       start:0x0001B860 end:0x0001BBA0
+	.bss        start:0x000005D0 end:0x000005E8
+
+game/hockey/CCockpitHockeyLayoutBase.cpp:
+	.text       start:0x000C0EA8 end:0x000C1140
+	.data       start:0x0001BBA0 end:0x0001BC50
+
+game/hockey/CCockpitHockeyTelopReady.cpp:
+	.text       start:0x000C1140 end:0x000C2344
+	.rodata     start:0x0000ACD8 end:0x0000AED8
+	.data       start:0x0001BC50 end:0x0001BD60
+
+game/hockey/CCockpitHockeyClash.cpp:
+	.text       start:0x000C2344 end:0x000C46E4
+	.rodata     start:0x0000AED8 end:0x0000B938
+	.data       start:0x0001BD60 end:0x0001C168
+
+game/hockey/CStgGmk_Container_Act_Hockey.cpp:
+	.text       start:0x000C46E4 end:0x000C60D4
+	.rodata     start:0x0000B938 end:0x0000B9D8
+	.data       start:0x0001C168 end:0x0001C5A8
+	.bss        start:0x000005E8 end:0x000005F0
+
+game/hockey/CComDrvHockeyCS.cpp:
+	.text       start:0x000C60D4 end:0x000CE254
+	.rodata     start:0x0000B9D8 end:0x0000BB90
+	.data       start:0x0001C5A8 end:0x0001C878
+
+game/hockey/unit_CE254.cpp:
+	.text       start:0x000CE254 end:0x000CF800
+	.rodata     start:0x0000BB90 end:0x0000BB98
+
+game/hockey/CComManHockeyCS.cpp:
+	.text       start:0x000CF800 end:0x000D007C
+	.rodata     start:0x0000BB98 end:0x0000BBC0
+
+game/hockey/CStageHockey11.cpp:
+	.text       start:0x000D007C end:0x000D24B4
+	.rodata     start:0x0000BBC0 end:0x0000BD38
+	.data       start:0x0001C878 end:0x0001CF78
+	.bss        start:0x000005F0 end:0x000005F8
+
+game/hockey/TournamentHockey.cpp:
+	.text       start:0x000D24B4 end:0x000D253C
+
+game/hockey/CTmGameHandlerHockey.cpp:
+	.text       start:0x000D253C end:0x000D32CC
+	.rodata     start:0x0000BD38 end:0x0000BD48
+	.data       start:0x0001CF78 end:0x0001D148
+
+game/hockey/CCockpitHockeyModelTelop.cpp:
+	.text       start:0x000D32CC end:0x000D3408
+	.rodata     start:0x0000BD48 end:0x0000BD78
+	.data       start:0x0001D148 end:0x0001D1A8
+
+game/hockey/CComManHockeyGame.cpp:
+	.text       start:0x000D3408 end:0x000D4058
+	.rodata     start:0x0000BD78 end:0x0000BD98
+
+game/hockey/CStageHockey01.cpp:
+	.text       start:0x000D4058 end:0x000D4698
+	.rodata     start:0x0000BD98 end:0x0000BE70
+	.data       start:0x0001D1A8 end:0x0001D6C8
+	.bss        start:0x000005F8 end:0x00000600
+
+game/hockey/CStgGmk_Pinball_Act_Hockey.cpp:
+	.text       start:0x000D4698 end:0x000D58B0
+	.rodata     start:0x0000BE70 end:0x0000BEA0
+	.data       start:0x0001D6C8 end:0x0001DAC8
+
+game/hockey/CStageHockey12.cpp:
+	.text       start:0x000D58B0 end:0x000D6300
+	.rodata     start:0x0000BEA0 end:0x0000BFE8
+	.data       start:0x0001DAC8 end:0x0001DF88
+	.bss        start:0x00000600 end:0x00000608
+
+game/hockey/CStageHockey07.cpp:
+	.text       start:0x000D6300 end:0x000D68B8
+	.rodata     start:0x0000BFE8 end:0x0000C460
+	.data       start:0x0001DF88 end:0x0001E3F0
+	.bss        start:0x00000608 end:0x00000620
+
+game/hockey/CNpcBossPackunHockeyBase.cpp:
+	.text       start:0x000D68B8 end:0x000DB518
+	.rodata     start:0x0000C460 end:0x0000C550
+	.data       start:0x0001E3F0 end:0x0001E830
+	.bss        start:0x00000620 end:0x00000628
+
+game/hockey/CItemBallHockey.cpp:
+	.text       start:0x000DB518 end:0x000DB54C
+
+game/hockey/CItemBallHockeyBomb.cpp:
+	.text       start:0x000DB54C end:0x000DC684
+	.rodata     start:0x0000C550 end:0x0000C560
+	.data       start:0x0001E830 end:0x0001EFD8
+
+game/hockey/CStgGmk_WaveCluster_Hockey.cpp:
+	.text       start:0x000DC684 end:0x000DC9D8
+	.rodata     start:0x0000C560 end:0x0000C568
+
+game/hockey/CStgGmk_Wave.cpp:
+	.text       start:0x000DC9D8 end:0x000DCA44
+
+game/hockey/CStgGmk_Wave_Hockey.cpp:
+	.text       start:0x000DCA44 end:0x000DCBF0
+
+game/hockey/CStgGmk_Wave_Act.cpp:
+	.text       start:0x000DCBF0 end:0x000DCC80
+
+game/hockey/CStgGmk_Trolley_Act_Hockey.cpp:
+	.text       start:0x000DCC80 end:0x000DD1AC
+	.rodata     start:0x0000C568 end:0x0000C5B8
+	.data       start:0x0001EFD8 end:0x0001F2B0
+
+game/hockey/CStgGmk_Pylon_Act_Hockey.cpp:
+	.text       start:0x000DD1AC end:0x000DE448
+	.rodata     start:0x0000C5B8 end:0x0000C618
+	.data       start:0x0001F2B0 end:0x0001F6D0
+
+game/hockey/CStageHockey04.cpp:
+	.text       start:0x000DE448 end:0x000DE940
+	.rodata     start:0x0000C618 end:0x0000C710
+	.data       start:0x0001F6D0 end:0x0001FBA8
+	.bss        start:0x00000628 end:0x00000630
+
+game/hockey/CCockpitHockeyCoin.cpp:
+	.text       start:0x000DE940 end:0x000DFD2C
+	.rodata     start:0x0000C710 end:0x0000C720
+	.data       start:0x0001FBA8 end:0x0001FC58
+
+game/hockey/CStageHockey16.cpp:
+	.text       start:0x000DFD2C end:0x000E0310
+	.rodata     start:0x0000C720 end:0x0000C868
+	.data       start:0x0001FC58 end:0x00020210
+	.bss        start:0x00000630 end:0x00000738
+
+game/hockey/unit_E0310.cpp:
+	.text       start:0x000E0310 end:0x000E4974
+	.rodata     start:0x0000C868 end:0x0000C880
+
+game/hockey/CCockpitHockeyMap.cpp:
+	.text       start:0x000E4974 end:0x000E5FF0
+	.rodata     start:0x0000C880 end:0x0000CB00
+	.data       start:0x00020210 end:0x00020420
+
+game/hockey/CCockpitHockeyIconFightGauge.cpp:
+	.text       start:0x000E5FF0 end:0x000E6888
+	.rodata     start:0x0000CB00 end:0x0000CC18
+	.data       start:0x00020420 end:0x000204C8
+
+game/hockey/CStgGmk_FirePillar_Hockey_Act.cpp:
+	.text       start:0x000E6888 end:0x000E731C
+	.rodata     start:0x0000CC18 end:0x0000CC28
+	.data       start:0x000204C8 end:0x00020818
+
+game/hockey/CStgGmk_IceCube_Act_Hockey.cpp:
+	.text       start:0x000E731C end:0x000E8AB8
+	.rodata     start:0x0000CC28 end:0x0000CCC0
+	.data       start:0x00020818 end:0x00020D80
+
+game/hockey/unit_E8AB8.cpp:
+	.text       start:0x000E8AB8 end:0x000EAC68
+	.rodata     start:0x0000CCC0 end:0x0000CD10
+	.data       start:0x00020D80 end:0x00020DD8
+
+game/hockey/CCockpitChrIcon2DHockey.cpp:
+	.text       start:0x000EAC68 end:0x000EAFDC
+	.rodata     start:0x0000CD10 end:0x0000D068
+	.data       start:0x00020DD8 end:0x00021618
+
+game/hockey/CStageHockeyCrushSkate87.cpp:
+	.text       start:0x000EAFDC end:0x000EB830
+	.rodata     start:0x0000D068 end:0x0000D298
+	.data       start:0x00021618 end:0x00021B50
+
+game/hockey/CStageHockeyCrushSkate85.cpp:
+	.text       start:0x000EB830 end:0x000EC334
+	.rodata     start:0x0000D298 end:0x0000D548
+	.data       start:0x00021B50 end:0x00022088
+
+game/hockey/CStageHockeyCrushSkate86.cpp:
+	.text       start:0x000EC334 end:0x000ED728
+	.rodata     start:0x0000D548 end:0x0000D7E8
+	.data       start:0x00022088 end:0x000225F8
+	.bss        start:0x00000738 end:0x00000740
+
+game/hockey/CBallMarkerHockey.cpp:
+	.text       start:0x000ED728 end:0x000EEA14
+	.ctors      start:0x00000028 end:0x0000002C
+	.rodata     start:0x0000D7E8 end:0x0000D7F8
+	.data       start:0x000225F8 end:0x00022748
+	.bss        start:0x00000740 end:0x00000788
+
+game/hockey/unit_EEA14.cpp:
+	.text       start:0x000EEA14 end:0x000F1BF4
+	.rodata     start:0x0000D7F8 end:0x0000D840
+	.data       start:0x00022748 end:0x000227B0
+
+game/hockey/CCockpitHockeyPause.cpp:
+	.text       start:0x000F1BF4 end:0x000F2314
+	.rodata     start:0x0000D840 end:0x0000D910
+	.data       start:0x000227B0 end:0x00022898
+
+game/hockey/CCockpitHockeyPauseResult.cpp:
+	.text       start:0x000F2314 end:0x000F2CA0
+	.rodata     start:0x0000D910 end:0x0000DC20
+	.data       start:0x00022898 end:0x000229D0
+
+game/hockey/CCockpitHockeySmashVS.cpp:
+	.text       start:0x000F2CA0 end:0x000F41A4
+	.rodata     start:0x0000DC20 end:0x0000E188
+	.data       start:0x000229D0 end:0x00022BE8
+
+game/hockey/CCockpitHockeyVSCount.cpp:
+	.text       start:0x000F41A4 end:0x000F5078
+	.rodata     start:0x0000E188 end:0x0000E558
+	.data       start:0x00022BE8 end:0x00022D48
+
 RSO/global_destructor_chain.c:
 	.text       start:0x000F5078 end:0x000F50E8
 	.dtors      start:0x00000000 end:0x00000004

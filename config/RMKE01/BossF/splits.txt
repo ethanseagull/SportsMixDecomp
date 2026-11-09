@@ -5,3 +5,244 @@ Sections:
 	.rodata     type:rodata align:8
 	.data       type:data align:8
 	.bss        type:bss align:8
+
+game/boss/module.cpp:
+	.text       start:0x00000000 end:0x00000098
+
+game/boss/CGameBoss.cpp:
+	.text       start:0x00000098 end:0x000063D0
+	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x000001C8
+	.data       start:0x00000000 end:0x000005B0
+	.bss        start:0x00000000 end:0x00000280
+
+game/boss/CBallManBoss.cpp:
+	.text       start:0x000063D0 end:0x0000684C
+	.rodata     start:0x000001C8 end:0x000001D0
+	.data       start:0x000005B0 end:0x00000660
+
+game/boss/CBallBoss.cpp:
+	.text       start:0x0000684C end:0x0000D240
+	.rodata     start:0x000001D0 end:0x00000308
+	.data       start:0x00000660 end:0x00000BC8
+
+game/boss/CItemBallBoss.cpp:
+	.text       start:0x0000D240 end:0x0000D2E0
+
+game/boss/CItemBallBossBomb.cpp:
+	.text       start:0x0000D2E0 end:0x0000E8AC
+	.rodata     start:0x00000308 end:0x00000338
+	.data       start:0x00000BC8 end:0x00000FD8
+
+game/boss/CBallTargetMarkerBoss.cpp:
+	.text       start:0x0000E8AC end:0x00010418
+	.rodata     start:0x00000338 end:0x000003E8
+	.data       start:0x00000FD8 end:0x00001258
+
+game/boss/CC_PARAM_BOSS.cpp:
+	.text       start:0x00010418 end:0x00018CDC
+	.rodata     start:0x000003E8 end:0x00000588
+
+game/boss/CC_PARAM_BOSS_Mii01_NORMAL_STAR.cpp:
+	.text       start:0x00018CDC end:0x00018D0C
+
+game/boss/CC_PARAM_BOSS_Mii01_NORMAL.cpp:
+	.text       start:0x00018D0C end:0x00018D3C
+
+game/boss/CC_PARAM_BOSS_Mii01_HARD_STAR.cpp:
+	.text       start:0x00018D3C end:0x00018D6C
+
+game/boss/CC_PARAM_BOSS_Mii01_HARD.cpp:
+	.text       start:0x00018D6C end:0x00018D9C
+
+game/boss/CC_PARAM_BOSS_Mii01_EXPERT_STAR.cpp:
+	.text       start:0x00018D9C end:0x00018DCC
+
+game/boss/CC_PARAM_BOSS_Mii01_EXPERT.cpp:
+	.text       start:0x00018DCC end:0x00018E08
+	.ctors      start:0x00000004 end:0x00000008
+
+game/boss/CChrCoreBoss.cpp:
+	.text       start:0x00018E08 end:0x0001EA14
+	.rodata     start:0x00000588 end:0x000007E8
+	.data       start:0x00001258 end:0x000012F0
+
+game/boss/unit_1EA14.cpp:
+	.text       start:0x0001EA14 end:0x00025E20
+	.rodata     start:0x000007E8 end:0x00000920
+
+game/boss/CChrCore.cpp:
+	.text       start:0x00025E20 end:0x0002E6C8
+	.ctors      start:0x00000008 end:0x0000000C
+	.rodata     start:0x00000920 end:0x00000A10
+	.data       start:0x000012F0 end:0x00004A18
+
+game/boss/CChrCoreBossKinopio.cpp:
+	.text       start:0x0002E6C8 end:0x0002F434
+	.rodata     start:0x00000A10 end:0x00000A40
+	.data       start:0x00004A18 end:0x00007310
+
+game/boss/CChrCoreBossKuroma.cpp:
+	.text       start:0x0002F434 end:0x00030480
+	.rodata     start:0x00000A40 end:0x00000AA0
+	.data       start:0x00007310 end:0x000080C8
+
+game/boss/CChrCoreBossLuigi.cpp:
+	.text       start:0x00030480 end:0x000307D8
+	.rodata     start:0x00000AA0 end:0x00000AB8
+	.data       start:0x000080C8 end:0x0000C4E8
+
+game/boss/unit_307D8.cpp:
+	.text       start:0x000307D8 end:0x00035098
+	.rodata     start:0x00000AB8 end:0x00000B28
+
+game/boss/CChrCoreBossNinja.cpp:
+	.text       start:0x00035098 end:0x00035344
+	.data       start:0x0000C4E8 end:0x0000EDC8
+
+game/boss/CChrCoreBossSiroma.cpp:
+	.text       start:0x00035344 end:0x00035A14
+	.rodata     start:0x00000B28 end:0x00000B58
+	.data       start:0x0000EDC8 end:0x00012448
+
+game/boss/CChrCoreBossYoshi.cpp:
+	.text       start:0x00035A14 end:0x0003605C
+	.rodata     start:0x00000B58 end:0x00000B90
+	.data       start:0x00012448 end:0x000131E8
+
+game/boss/CChrDrvPadBoss.cpp:
+	.text       start:0x0003605C end:0x00037C94
+	.rodata     start:0x00000B90 end:0x00000BC8
+	.data       start:0x000131E8 end:0x00013218
+
+game/boss/CChrManBoss.cpp:
+	.text       start:0x00037C94 end:0x000387E8
+	.rodata     start:0x00000BC8 end:0x00000BD0
+	.data       start:0x00013218 end:0x000133B8
+
+game/boss/CChrMarkerBoss.cpp:
+	.text       start:0x000387E8 end:0x00038AA0
+	.data       start:0x000133B8 end:0x00013438
+
+game/boss/CCollManBoss.cpp:
+	.text       start:0x00038AA0 end:0x00038D38
+	.rodata     start:0x00000BD0 end:0x00000BD8
+	.data       start:0x00013438 end:0x00013CE0
+
+game/boss/CItemManBoss.cpp:
+	.text       start:0x00038D38 end:0x00038F54
+
+game/boss/CItemBossRShell.cpp:
+	.text       start:0x00038F54 end:0x00039AB0
+	.rodata     start:0x00000BD8 end:0x00000C50
+
+game/boss/CEffectCoinScore.cpp:
+	.text       start:0x00039AB0 end:0x0003A818
+	.ctors      start:0x0000000C end:0x00000010
+	.rodata     start:0x00000C50 end:0x00000CD0
+	.data       start:0x00013CE0 end:0x00013E18
+	.bss        start:0x00000280 end:0x00000288
+
+game/boss/CQPanelManBoss.cpp:
+	.text       start:0x0003A818 end:0x0003B048
+	.rodata     start:0x00000CD0 end:0x00001888
+	.data       start:0x00013E18 end:0x00013F10
+
+game/boss/CEffectCtrlBoss.cpp:
+	.text       start:0x0003B048 end:0x0003B184
+	.data       start:0x00013F10 end:0x00013F50
+
+game/boss/CCockpitBoss.cpp:
+	.text       start:0x0003B184 end:0x0003CC4C
+	.rodata     start:0x00001888 end:0x00001898
+	.data       start:0x00013F50 end:0x00014298
+
+game/boss/CCockpitBossLayoutBase.cpp:
+	.text       start:0x0003CC4C end:0x0003CEB4
+	.data       start:0x00014298 end:0x00014338
+
+game/boss/CCockpitBossCoin.cpp:
+	.text       start:0x0003CEB4 end:0x0003DE94
+	.rodata     start:0x00001898 end:0x00001AB0
+	.data       start:0x00014338 end:0x00014440
+
+game/boss/CCockpitBossCoder.cpp:
+	.text       start:0x0003DE94 end:0x00040740
+	.rodata     start:0x00001AB0 end:0x00002450
+	.data       start:0x00014440 end:0x00014770
+
+game/boss/CRadarIcon2DBoss.cpp:
+	.text       start:0x00040740 end:0x00040D38
+	.rodata     start:0x00002450 end:0x00002458
+	.data       start:0x00014770 end:0x000147F0
+
+game/boss/CStageManBoss.cpp:
+	.text       start:0x00040D38 end:0x00040E40
+	.rodata     start:0x00002458 end:0x00002460
+	.data       start:0x000147F0 end:0x00014C30
+
+game/boss/CStageMan.cpp:
+	.text       start:0x00040E40 end:0x00041B6C
+	.rodata     start:0x00002460 end:0x00002468
+
+game/boss/CEvMdlCreaterGmMdlChr.cpp:
+	.text       start:0x00041B6C end:0x00041E08
+	.rodata     start:0x00002468 end:0x00002BB0
+	.data       start:0x00014C30 end:0x00014D30
+
+game/boss/CEventDemoBoss.cpp:
+	.text       start:0x00041E08 end:0x00042FFC
+	.rodata     start:0x00002BB0 end:0x00002BE8
+
+game/boss/TournamentBoss.cpp:
+	.text       start:0x00042FFC end:0x00043084
+
+game/boss/CTmGameHandlerBoss.cpp:
+	.text       start:0x00043084 end:0x000432E4
+	.rodata     start:0x00002BE8 end:0x00002BF0
+	.data       start:0x00014D30 end:0x00014D98
+
+game/boss/CCameraBoss.cpp:
+	.text       start:0x000432E4 end:0x00044AD0
+	.rodata     start:0x00002BF0 end:0x00002CC0
+	.data       start:0x00014D98 end:0x00014DE0
+
+game/boss/CCockpitBossPause.cpp:
+	.text       start:0x00044AD0 end:0x00044FA4
+	.rodata     start:0x00002CC0 end:0x00002CC8
+	.data       start:0x00014DE0 end:0x00014EC8
+
+game/boss/CNpcBehemothFiga.cpp:
+	.text       start:0x00044FA4 end:0x0004EEC8
+	.rodata     start:0x00002CC8 end:0x00003030
+	.data       start:0x00014EC8 end:0x000154D0
+
+game/boss/CNpcBase.cpp:
+	.text       start:0x0004EEC8 end:0x0004F0C4
+
+game/boss/CComDrvBoss.cpp:
+	.text       start:0x0004F0C4 end:0x000528A4
+	.rodata     start:0x00003030 end:0x00003180
+
+game/boss/CNpcBehemothBoss.cpp:
+	.text       start:0x000528A4 end:0x0005E688
+	.rodata     start:0x00003180 end:0x000032A0
+	.data       start:0x000154D0 end:0x00015AB0
+
+game/boss/CStickObj.cpp:
+	.text       start:0x0005E688 end:0x0005FF80
+	.rodata     start:0x000032A0 end:0x000032F0
+	.data       start:0x00015AB0 end:0x00015C88
+
+game/boss/unit_5FF80.cpp:
+	.text       start:0x0005FF80 end:0x000636D4
+	.ctors      start:0x00000010 end:0x00000014
+	.rodata     start:0x000032F0 end:0x000033D8
+	.data       start:0x00015C88 end:0x00015CA8
+	.bss        start:0x00000288 end:0x00000290
+
+game/boss/unit_636D4.cpp:
+	.text       start:0x000636D4 end:0x0006435C
+	.ctors      start:0x00000014 end:0x00000018
+	.rodata     start:0x000033D8 end:0x00003448
+	.bss        start:0x00000290 end:0x00000294

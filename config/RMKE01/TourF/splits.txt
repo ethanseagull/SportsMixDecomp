@@ -5,3 +5,94 @@ Sections:
 	.rodata     type:rodata align:8
 	.data       type:data align:8
 	.bss        type:bss align:8
+
+game/tour/module.cpp:
+	.text       start:0x00000000 end:0x00000098
+
+game/tour/CCockpitTournament.cpp:
+	.text       start:0x00000098 end:0x00000C50
+	.rodata     start:0x00000000 end:0x00000008
+	.data       start:0x00000000 end:0x000001F8
+
+game/tour/CTournamentStep.cpp:
+	.text       start:0x00000C50 end:0x000158D8
+	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000008 end:0x00000918
+	.data       start:0x000001F8 end:0x000009B0
+	.bss        start:0x00000000 end:0x00000158
+
+game/tour/CTournamentCamera.cpp:
+	.text       start:0x000158D8 end:0x00016408
+	.rodata     start:0x00000918 end:0x00000940
+	.data       start:0x000009B0 end:0x00000A38
+
+game/tour/TournamentData.cpp:
+	.text       start:0x00016408 end:0x0001739C
+	.rodata     start:0x00000940 end:0x00000CB0
+	.data       start:0x00000A38 end:0x00000A50
+
+game/tour/CTournamentMan.cpp:
+	.text       start:0x0001739C end:0x0001D064
+	.rodata     start:0x00000CB0 end:0x00000D70
+	.data       start:0x00000A50 end:0x00000A68
+	.bss        start:0x00000158 end:0x00000170
+
+game/tour/CTournamentRouteMan.cpp:
+	.text       start:0x0001D064 end:0x00027FB0
+	.rodata     start:0x00000D70 end:0x000012A0
+	.data       start:0x00000A68 end:0x00000EB0
+	.bss        start:0x00000170 end:0x00000178
+
+game/tour/CTournamentChip.cpp:
+	.text       start:0x00027FB0 end:0x00029024
+	.rodata     start:0x000012A0 end:0x000012D8
+	.data       start:0x00000EB0 end:0x00001048
+
+game/tour/CEffectCtrlTournament.cpp:
+	.text       start:0x00029024 end:0x000291A4
+	.data       start:0x00001048 end:0x00001088
+
+game/tour/CCockpitTournamentTelopLogo.cpp:
+	.text       start:0x000291A4 end:0x00029AF4
+	.rodata     start:0x000012D8 end:0x00001660
+	.data       start:0x00001088 end:0x00001178
+
+game/tour/CTmScript.cpp:
+	.text       start:0x00029AF4 end:0x0002FB04
+	.rodata     start:0x00001660 end:0x00001838
+	.data       start:0x00001178 end:0x000015D0
+
+game/tour/TournamentRule.cpp:
+	.text       start:0x0002FB04 end:0x00031E30
+	.rodata     start:0x00001838 end:0x00001930
+	.data       start:0x000015D0 end:0x00001D18
+
+game/tour/CTournamentRouteMan_Stage31.cpp:
+	.text       start:0x00031E30 end:0x00032CC4
+	.ctors      start:0x00000004 end:0x00000008
+	.rodata     start:0x00001930 end:0x00001B38
+	.data       start:0x00001D18 end:0x00001DA8
+	.bss        start:0x00000178 end:0x000001A8
+
+game/tour/CTournamentRouteMan_Stage32.cpp:
+	.text       start:0x00032CC4 end:0x00035838
+	.ctors      start:0x00000008 end:0x0000000C
+	.rodata     start:0x00001B38 end:0x00001E70
+	.data       start:0x00001DA8 end:0x00001ED0
+	.bss        start:0x000001A8 end:0x000001D0
+
+game/tour/CTournamentRouteMan_Stage33.cpp:
+	.text       start:0x00035838 end:0x0003A55C
+	.ctors      start:0x0000000C end:0x00000010
+	.rodata     start:0x00001E70 end:0x00002E58
+	.data       start:0x00001ED0 end:0x00001FB8
+	.bss        start:0x000001D0 end:0x000001DC
+
+game/tour/CCockpitTournamentMenuWinTrophy.cpp:
+	.text       start:0x0003A55C end:0x0003AC1C
+	.rodata     start:0x00002E58 end:0x000035D8
+	.data       start:0x00001FB8 end:0x000020A0
+
+game/tour/TournamentSe.cpp:
+	.text       start:0x0003AC1C end:0x0003AC30
+	.data       start:0x000020A0 end:0x00002104

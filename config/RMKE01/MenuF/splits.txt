@@ -6,6 +6,379 @@ Sections:
 	.data       type:data align:8
 	.bss        type:bss align:8
 
+game/menu/CMenu.cpp:
+	.text       start:0x00000000 end:0x00001178
+	.rodata     start:0x00000000 end:0x00000008
+	.data       start:0x00000000 end:0x00000238
+
+game/menu/CChrMenuCtrl.cpp:
+	.text       start:0x00001178 end:0x00001BD0
+	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000008 end:0x00000018
+	.data       start:0x00000238 end:0x00000288
+	.bss        start:0x00000000 end:0x00000F20
+
+game/menu/CEffectCtrlMenu.cpp:
+	.text       start:0x00001BD0 end:0x0000202C
+	.rodata     start:0x00000018 end:0x00000038
+	.data       start:0x00000288 end:0x000002C8
+
+game/menu/module.cpp:
+	.text       start:0x0000202C end:0x000020C4
+
+game/menu/CGamePadCheck.cpp:
+	.text       start:0x000020C4 end:0x0000E5F8
+	.rodata     start:0x00000038 end:0x00002760
+	.data       start:0x000002C8 end:0x00000DD0
+	.bss        start:0x00000F20 end:0x00000F28
+
+game/menu/CBackIcon.cpp:
+	.text       start:0x0000E5F8 end:0x00010220
+	.rodata     start:0x00002760 end:0x00002BA8
+	.data       start:0x00000DD0 end:0x000013D8
+
+game/menu/CBackground.cpp:
+	.text       start:0x00010220 end:0x0001186C
+	.rodata     start:0x00002BA8 end:0x00003148
+	.data       start:0x000013D8 end:0x000015D0
+	.bss        start:0x00000F28 end:0x00001328
+
+game/menu/CGameSelect.cpp:
+	.text       start:0x0001186C end:0x0001271C
+	.rodata     start:0x00003148 end:0x00003488
+	.data       start:0x000015D0 end:0x000016E8
+
+game/menu/CSelectMenuLayoutBase.cpp:
+	.text       start:0x0001271C end:0x00012D30
+
+game/menu/CMenuPartButton.cpp:
+	.text       start:0x00012D30 end:0x00013EC8
+	.rodata     start:0x00003488 end:0x000034A0
+	.data       start:0x000016E8 end:0x00001820
+
+game/menu/CInfoTabChange.cpp:
+	.text       start:0x00013EC8 end:0x00013F04
+
+game/menu/CMenuPartBase.cpp:
+	.text       start:0x00013F04 end:0x00014204
+
+game/menu/CTournamentLoad.cpp:
+	.text       start:0x00014204 end:0x000172F8
+	.rodata     start:0x000034A0 end:0x00003AE8
+	.data       start:0x00001820 end:0x00001A38
+
+game/menu/CPlayMode.cpp:
+	.text       start:0x000172F8 end:0x000187C0
+	.rodata     start:0x00003AE8 end:0x00004158
+	.data       start:0x00001A38 end:0x00001D28
+
+game/menu/CTeam.cpp:
+	.text       start:0x000187C0 end:0x00019C6C
+	.rodata     start:0x00004158 end:0x00004308
+	.data       start:0x00001D28 end:0x00002000
+
+game/menu/CPlayerSelect.cpp:
+	.text       start:0x00019C6C end:0x0001AE98
+	.ctors      start:0x00000004 end:0x00000008
+	.rodata     start:0x00004308 end:0x00004C58
+	.data       start:0x00002000 end:0x000021A0
+	.bss        start:0x00001328 end:0x00001338
+
+game/menu/CPlayerInfo.cpp:
+	.text       start:0x0001AE98 end:0x0001B9DC
+	.data       start:0x000021A0 end:0x000022E0
+
+game/menu/CCockpitMenu.cpp:
+	.text       start:0x0001B9DC end:0x0001C138
+	.data       start:0x000022E0 end:0x00002450
+
+game/menu/CCameraAnimMenu.cpp:
+	.text       start:0x0001C138 end:0x0001C190
+
+game/menu/CCameraMenuBG.cpp:
+	.text       start:0x0001C190 end:0x0001C938
+	.rodata     start:0x00004C58 end:0x00004C60
+
+game/menu/unit_1C938.cpp:
+	.text       start:0x0001C938 end:0x0001C9A8
+	.ctors      start:0x00000008 end:0x0000000C
+	.bss        start:0x00001338 end:0x00001370
+
+game/menu/CTopMenuChrObj.cpp:
+	.text       start:0x0001C9A8 end:0x0002044C
+	.ctors      start:0x0000000C end:0x00000010
+	.rodata     start:0x00004C60 end:0x00004D68
+	.data       start:0x00002450 end:0x00002EA0
+	.bss        start:0x00001370 end:0x00001378
+
+game/menu/CTableSetMdlObj.cpp:
+	.text       start:0x0002044C end:0x000208D4
+
+game/menu/CMenuMdlTableSet.cpp:
+	.text       start:0x000208D4 end:0x00021158
+	.rodata     start:0x00004D68 end:0x00004D78
+	.data       start:0x00002EA0 end:0x00002F08
+
+game/menu/CBgChr.cpp:
+	.text       start:0x00021158 end:0x00023F10
+	.ctors      start:0x00000010 end:0x00000014
+	.rodata     start:0x00004D78 end:0x000056B0
+	.data       start:0x00002F08 end:0x00003040
+	.bss        start:0x00001378 end:0x00001380
+
+game/menu/CDepthOfFieldValue.cpp:
+	.text       start:0x00023F10 end:0x00024138
+	.ctors      start:0x00000014 end:0x00000018
+	.rodata     start:0x000056B0 end:0x000056C0
+	.data       start:0x00003040 end:0x00003050
+	.bss        start:0x00001380 end:0x000013D0
+
+game/menu/CCourtChr.cpp:
+	.text       start:0x00024138 end:0x00026D80
+	.ctors      start:0x00000018 end:0x0000001C
+	.rodata     start:0x000056C0 end:0x00005F10
+	.data       start:0x00003050 end:0x00003328
+	.bss        start:0x000013D0 end:0x000013E8
+
+game/menu/CChrCaption.cpp:
+	.text       start:0x00026D80 end:0x00027974
+	.ctors      start:0x0000001C end:0x00000020
+	.rodata     start:0x00005F10 end:0x00006258
+	.data       start:0x00003328 end:0x000034A8
+	.bss        start:0x000013E8 end:0x00001420
+
+game/menu/CBgDisplay.cpp:
+	.text       start:0x00027974 end:0x0002C994
+	.rodata     start:0x00006258 end:0x00006A40
+	.data       start:0x000034A8 end:0x00003FF8
+	.bss        start:0x00001420 end:0x00001448
+
+game/menu/CFade.cpp:
+	.text       start:0x0002C994 end:0x0002CB38
+	.data       start:0x00003FF8 end:0x00004070
+
+game/menu/CButton0.cpp:
+	.text       start:0x0002CB38 end:0x0002CF88
+	.rodata     start:0x00006A40 end:0x00006B08
+	.data       start:0x00004070 end:0x00004100
+
+game/menu/CButton1.cpp:
+	.text       start:0x0002CF88 end:0x0002D804
+	.rodata     start:0x00006B08 end:0x00006CE0
+	.data       start:0x00004100 end:0x000041C0
+
+game/menu/CButton1Code.cpp:
+	.text       start:0x0002D804 end:0x0002DE10
+	.rodata     start:0x00006CE0 end:0x00006EE8
+	.data       start:0x000041C0 end:0x00004288
+
+game/menu/CButton2.cpp:
+	.text       start:0x0002DE10 end:0x0002E5A8
+	.rodata     start:0x00006EE8 end:0x000070E8
+	.data       start:0x00004288 end:0x00004358
+
+game/menu/CButtonA.cpp:
+	.text       start:0x0002E5A8 end:0x0002ED8C
+	.rodata     start:0x000070E8 end:0x00007238
+	.data       start:0x00004358 end:0x00004408
+
+game/menu/CButtonACode.cpp:
+	.text       start:0x0002ED8C end:0x0002F844
+	.rodata     start:0x00007238 end:0x000074E8
+	.data       start:0x00004408 end:0x00004588
+
+game/menu/CCharaMdl.cpp:
+	.text       start:0x0002F844 end:0x0002FB3C
+	.ctors      start:0x00000020 end:0x00000024
+	.rodata     start:0x000074E8 end:0x00007738
+	.data       start:0x00004588 end:0x00004590
+	.bss        start:0x00001448 end:0x00001460
+
+game/menu/CCharaName.cpp:
+	.text       start:0x0002FB3C end:0x0002FCA4
+	.ctors      start:0x00000024 end:0x00000028
+	.rodata     start:0x00007738 end:0x00007748
+	.data       start:0x00004590 end:0x000045C8
+	.bss        start:0x00001460 end:0x00001468
+
+game/menu/CCharaLevelStar.cpp:
+	.text       start:0x0002FCA4 end:0x00031E60
+	.rodata     start:0x00007748 end:0x00007A90
+	.data       start:0x000045C8 end:0x000047C0
+
+game/menu/CEntryExplain.cpp:
+	.text       start:0x00031E60 end:0x00032618
+	.rodata     start:0x00007A90 end:0x00007BD0
+	.data       start:0x000047C0 end:0x00004878
+
+game/menu/CEntry.cpp:
+	.text       start:0x00032618 end:0x000356AC
+	.rodata     start:0x00007BD0 end:0x00007C80
+	.data       start:0x00004878 end:0x000049C8
+
+game/menu/CFriendCode.cpp:
+	.text       start:0x000356AC end:0x000376B4
+	.rodata     start:0x00007C80 end:0x00007DA8
+	.data       start:0x000049C8 end:0x00004AD8
+
+game/menu/CFriendInfo.cpp:
+	.text       start:0x000376B4 end:0x0003CC04
+	.rodata     start:0x00007DA8 end:0x00008070
+	.data       start:0x00004AD8 end:0x00004D38
+
+game/menu/CFriendList.cpp:
+	.text       start:0x0003CC04 end:0x0003FDE4
+	.rodata     start:0x00008070 end:0x000081B0
+	.data       start:0x00004D38 end:0x00004F08
+
+game/menu/CPartySelect.cpp:
+	.text       start:0x0003FDE4 end:0x00040FA4
+	.rodata     start:0x000081B0 end:0x00008288
+	.data       start:0x00004F08 end:0x00004FA0
+
+game/menu/CPartyMEHelpBossPackun.cpp:
+	.text       start:0x00040FA4 end:0x00043398
+	.rodata     start:0x00008288 end:0x000083E0
+	.data       start:0x00004FA0 end:0x00005170
+
+game/menu/CPartyInfo.cpp:
+	.text       start:0x00043398 end:0x00045B50
+	.rodata     start:0x000083E0 end:0x000086D8
+	.data       start:0x00005170 end:0x00005280
+
+game/menu/CWiFiTopA.cpp:
+	.text       start:0x00045B50 end:0x00049FD4
+	.rodata     start:0x000086D8 end:0x00008C88
+	.data       start:0x00005280 end:0x000056D8
+
+game/menu/CWiFiGame.cpp:
+	.text       start:0x00049FD4 end:0x0004BB48
+	.rodata     start:0x00008C88 end:0x00008DE8
+	.data       start:0x000056D8 end:0x00005770
+
+game/menu/unit_4BB48.cpp:
+	.text       start:0x0004BB48 end:0x0004E890
+	.rodata     start:0x00008DE8 end:0x00008EC0
+	.data       start:0x00005770 end:0x000057F0
+
+game/menu/unit_4E890.cpp:
+	.text       start:0x0004E890 end:0x00052A4C
+	.rodata     start:0x00008EC0 end:0x00009EB8
+	.data       start:0x000057F0 end:0x00005D20
+
+game/menu/CCourtTab.cpp:
+	.text       start:0x00052A4C end:0x0005522C
+	.rodata     start:0x00009EB8 end:0x0000AD40
+	.data       start:0x00005D20 end:0x00006310
+
+game/menu/CCharaStatus.cpp:
+	.text       start:0x0005522C end:0x000566AC
+	.rodata     start:0x0000AD40 end:0x0000B6B0
+	.data       start:0x00006310 end:0x00007410
+
+game/menu/CButtonEntry.cpp:
+	.text       start:0x000566AC end:0x00056C40
+	.rodata     start:0x0000B6B0 end:0x0000B6D0
+
+game/menu/CSaveSelect.cpp:
+	.text       start:0x00056C40 end:0x0005B400
+	.rodata     start:0x0000B6D0 end:0x0000C798
+	.data       start:0x00007410 end:0x000075F8
+
+game/menu/CCourtTableSetObj.cpp:
+	.text       start:0x0005B400 end:0x0005B494
+
+game/menu/CCourtCharaObj.cpp:
+	.text       start:0x0005B494 end:0x0005C48C
+	.rodata     start:0x0000C798 end:0x0000C7B8
+
+game/menu/CTitle.cpp:
+	.text       start:0x0005C48C end:0x0005DBE0
+	.rodata     start:0x0000C7B8 end:0x0000C9D8
+	.data       start:0x000075F8 end:0x000078D8
+
+game/menu/CWiFiFrindVS.cpp:
+	.text       start:0x0005DBE0 end:0x0005EDA0
+	.rodata     start:0x0000C9D8 end:0x0000CA98
+	.data       start:0x000078D8 end:0x00007970
+
+game/menu/CCupSelectTab.cpp:
+	.text       start:0x0005EDA0 end:0x00061C00
+	.rodata     start:0x0000CA98 end:0x0000CCE8
+	.data       start:0x00007970 end:0x00007B58
+
+game/menu/unit_61C00.cpp:
+	.text       start:0x00061C00 end:0x00063634
+	.data       start:0x00007B58 end:0x00007C00
+
+game/menu/CCupChr.cpp:
+	.text       start:0x00063634 end:0x0006451C
+	.ctors      start:0x00000028 end:0x0000002C
+	.rodata     start:0x0000CCE8 end:0x0000D040
+	.data       start:0x00007C00 end:0x00007C80
+	.bss        start:0x00001468 end:0x00001488
+
+game/menu/CScoreBook.cpp:
+	.text       start:0x0006451C end:0x00068470
+	.rodata     start:0x0000D040 end:0x0000D390
+	.data       start:0x00007C80 end:0x00007E18
+
+game/menu/CScoreTop.cpp:
+	.text       start:0x00068470 end:0x00069104
+	.rodata     start:0x0000D390 end:0x0000D420
+	.data       start:0x00007E18 end:0x00007EA8
+
+game/menu/CCharSel.cpp:
+	.text       start:0x00069104 end:0x0006E1BC
+	.rodata     start:0x0000D420 end:0x0000DA88
+	.data       start:0x00007EA8 end:0x000088D8
+
+game/menu/CPlusMinus.cpp:
+	.text       start:0x0006E1BC end:0x0006EE84
+	.rodata     start:0x0000DA88 end:0x0000DAD8
+	.data       start:0x000088D8 end:0x00008970
+
+game/menu/unit_6EE84.cpp:
+	.text       start:0x0006EE84 end:0x00072694
+	.rodata     start:0x0000DAD8 end:0x0000DB48
+	.data       start:0x00008970 end:0x000089C8
+
+game/menu/CTopMenu.cpp:
+	.text       start:0x00072694 end:0x00074CFC
+	.rodata     start:0x0000DB48 end:0x0000DED0
+	.data       start:0x000089C8 end:0x00008A90
+
+game/menu/CRuleSel.cpp:
+	.text       start:0x00074CFC end:0x00077E78
+	.rodata     start:0x0000DED0 end:0x0000DF90
+	.data       start:0x00008A90 end:0x00008F38
+
+game/menu/CMiiSel.cpp:
+	.text       start:0x00077E78 end:0x0007B61C
+	.rodata     start:0x0000DF90 end:0x0000E1F0
+	.data       start:0x00008F38 end:0x00009178
+
+game/menu/CChrSign.cpp:
+	.text       start:0x0007B61C end:0x0007C044
+	.rodata     start:0x0000E1F0 end:0x0000E338
+	.data       start:0x00009178 end:0x00009240
+
+game/menu/CRuleInfo.cpp:
+	.text       start:0x0007C044 end:0x0007E220
+	.rodata     start:0x0000E338 end:0x0000E5E0
+	.data       start:0x00009240 end:0x00009610
+	.bss        start:0x00001488 end:0x00001498
+
+game/menu/CInitGuide.cpp:
+	.text       start:0x0007E220 end:0x0007E874
+	.rodata     start:0x0000E5E0 end:0x0000E6E0
+	.data       start:0x00009610 end:0x000096B0
+
+game/menu/CHowTo.cpp:
+	.text       start:0x0007E874 end:0x0007F724
+	.rodata     start:0x0000E6E0 end:0x0000EBA4
+	.data       start:0x000096B0 end:0x00009828
+
 RSO/global_destructor_chain.c:
 	.text       start:0x0007F724 end:0x0007F794
 	.dtors      start:0x00000000 end:0x00000004

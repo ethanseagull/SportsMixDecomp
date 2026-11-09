@@ -6,6 +6,576 @@ Sections:
 	.data       type:data align:8
 	.bss        type:bss align:8
 
+game/volley/module.cpp:
+	.text       start:0x00000000 end:0x00000098
+
+game/volley/CGameVolley.cpp:
+	.text       start:0x00000098 end:0x00008930
+	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x00000100
+	.data       start:0x00000000 end:0x000005E0
+	.bss        start:0x00000000 end:0x00000070
+
+game/volley/CBallManVolley.cpp:
+	.text       start:0x00008930 end:0x00008CFC
+
+game/volley/CBallManVolleyVsBoss.cpp:
+	.text       start:0x00008CFC end:0x00009404
+	.rodata     start:0x00000100 end:0x00000108
+
+game/volley/CBallTargetMarker.cpp:
+	.text       start:0x00009404 end:0x0000E4E0
+	.ctors      start:0x00000004 end:0x00000008
+	.rodata     start:0x00000108 end:0x00000248
+	.data       start:0x000005E0 end:0x00000B48
+	.bss        start:0x00000070 end:0x00000100
+
+game/volley/CChrParasiteBanana.cpp:
+	.text       start:0x0000E4E0 end:0x0000E620
+
+game/volley/CBallVolley.cpp:
+	.text       start:0x0000E620 end:0x000200FC
+	.ctors      start:0x00000008 end:0x0000000C
+	.rodata     start:0x00000248 end:0x000014B0
+	.data       start:0x00000B48 end:0x00001C00
+	.bss        start:0x00000100 end:0x00000530
+
+game/volley/CItemBallVolley.cpp:
+	.text       start:0x000200FC end:0x0002019C
+
+game/volley/CItemBallVolleyBomb.cpp:
+	.text       start:0x0002019C end:0x00021DC0
+	.rodata     start:0x000014B0 end:0x00001570
+	.data       start:0x00001C00 end:0x00002010
+
+game/volley/CCameraVolley.cpp:
+	.text       start:0x00021DC0 end:0x00021F94
+	.rodata     start:0x00001570 end:0x00001578
+	.data       start:0x00002010 end:0x00002058
+
+game/volley/CC_PARAM_VOLLEY_Yoshi.cpp:
+	.text       start:0x00021F94 end:0x00033214
+	.rodata     start:0x00001578 end:0x000017C0
+
+game/volley/CC_PARAM_VOLLEY_Mii01_HARD_STAR.cpp:
+	.text       start:0x00033214 end:0x00033244
+
+game/volley/CC_PARAM_VOLLEY_Mii01_HARD.cpp:
+	.text       start:0x00033244 end:0x00033274
+
+game/volley/CC_PARAM_VOLLEY_Mii01_EXPERT_STAR.cpp:
+	.text       start:0x00033274 end:0x000332A4
+
+game/volley/CC_PARAM_VOLLEY_Mii01_EXPERT.cpp:
+	.text       start:0x000332A4 end:0x000332E0
+	.ctors      start:0x0000000C end:0x00000010
+
+game/volley/CChrCoreVolley.cpp:
+	.text       start:0x000332E0 end:0x0003B628
+	.rodata     start:0x000017C0 end:0x00001A20
+	.data       start:0x00002058 end:0x000020E0
+
+game/volley/unit_3B628.cpp:
+	.text       start:0x0003B628 end:0x0004377C
+	.rodata     start:0x00001A20 end:0x00001B48
+	.data       start:0x000020E0 end:0x00002130
+
+game/volley/unit_4377C.cpp:
+	.text       start:0x0004377C end:0x000478B8
+	.rodata     start:0x00001B48 end:0x00001BD8
+
+game/volley/CChrCore.cpp:
+	.text       start:0x000478B8 end:0x0005A190
+	.ctors      start:0x00000010 end:0x00000014
+	.rodata     start:0x00001BD8 end:0x00001D70
+	.data       start:0x00002130 end:0x00003068
+
+game/volley/CcDaisyFlowerGarden.cpp:
+	.text       start:0x0005A190 end:0x0005B88C
+	.rodata     start:0x00001D70 end:0x00001DC8
+	.data       start:0x00003068 end:0x00004028
+
+game/volley/CChrCoreVolleyDiddy.cpp:
+	.text       start:0x0005B88C end:0x0005C080
+	.rodata     start:0x00001DC8 end:0x00001E10
+	.data       start:0x00004028 end:0x00004E58
+
+game/volley/CChrCoreVolleyDonkey.cpp:
+	.text       start:0x0005C080 end:0x0005C7D4
+	.rodata     start:0x00001E10 end:0x00001E30
+	.data       start:0x00004E58 end:0x00005C18
+
+game/volley/CChrCoreVolleyKinopio.cpp:
+	.text       start:0x0005C7D4 end:0x0005E8B0
+	.rodata     start:0x00001E30 end:0x00001EB0
+	.data       start:0x00005C18 end:0x00006A80
+
+game/volley/CChrCoreVolleyKoopa.cpp:
+	.text       start:0x0005E8B0 end:0x0005EFA8
+	.rodata     start:0x00001EB0 end:0x00001EC0
+	.data       start:0x00006A80 end:0x00007878
+
+game/volley/CChrCoreVolleyKoopaJr.cpp:
+	.text       start:0x0005EFA8 end:0x000601F8
+	.rodata     start:0x00001EC0 end:0x00001F58
+	.data       start:0x00007878 end:0x00008698
+
+game/volley/CChrCoreVolleyKuroma.cpp:
+	.text       start:0x000601F8 end:0x000623B4
+	.rodata     start:0x00001F58 end:0x00001FD8
+	.data       start:0x00008698 end:0x00009470
+
+game/volley/CChrCoreVolleyLuigi.cpp:
+	.text       start:0x000623B4 end:0x00063104
+	.rodata     start:0x00001FD8 end:0x00002040
+	.data       start:0x00009470 end:0x0000A200
+
+game/volley/CChrCoreVolleyMario.cpp:
+	.text       start:0x00063104 end:0x00063388
+	.data       start:0x0000A200 end:0x0000AF90
+
+game/volley/unit_63388.cpp:
+	.text       start:0x00063388 end:0x00067E3C
+	.rodata     start:0x00002040 end:0x000020B0
+	.data       start:0x0000AF90 end:0x0000AFA0
+
+game/volley/CChrCoreVolleyMii00.cpp:
+	.text       start:0x00067E3C end:0x00068100
+	.rodata     start:0x000020B0 end:0x000020C0
+	.data       start:0x0000AFA0 end:0x0000BD30
+
+game/volley/CChrCoreVolleyMii01.cpp:
+	.text       start:0x00068100 end:0x00068390
+	.rodata     start:0x000020C0 end:0x000020D0
+	.data       start:0x0000BD30 end:0x0000CAC0
+
+game/volley/CChrCoreVolleyMoogle.cpp:
+	.text       start:0x00068390 end:0x00068D88
+	.rodata     start:0x000020D0 end:0x00002100
+	.data       start:0x0000CAC0 end:0x0000D850
+
+game/volley/CcNinjaCloneBody.cpp:
+	.text       start:0x00068D88 end:0x0006D050
+	.rodata     start:0x00002100 end:0x00002180
+	.data       start:0x0000D850 end:0x0000EAD8
+
+game/volley/CChrCoreVolleyPeach.cpp:
+	.text       start:0x0006D050 end:0x0006D810
+	.rodata     start:0x00002180 end:0x000021B8
+	.data       start:0x0000EAD8 end:0x0000F888
+
+game/volley/CChrCoreVolleySaboten.cpp:
+	.text       start:0x0006D810 end:0x0006DFF4
+	.rodata     start:0x000021B8 end:0x000021F0
+	.data       start:0x0000F888 end:0x00010648
+
+game/volley/CChrCoreVolleySiroma.cpp:
+	.text       start:0x0006DFF4 end:0x00070D84
+	.rodata     start:0x000021F0 end:0x00002310
+	.data       start:0x00010648 end:0x00011660
+
+game/volley/CChrCoreVolleySlime.cpp:
+	.text       start:0x00070D84 end:0x00071CBC
+	.ctors      start:0x00000014 end:0x00000018
+	.rodata     start:0x00002310 end:0x000023A8
+	.data       start:0x00011660 end:0x000124A0
+	.bss        start:0x00000530 end:0x00000570
+
+game/volley/CChrCoreVolleyWaluigi.cpp:
+	.text       start:0x00071CBC end:0x00072EC8
+	.rodata     start:0x000023A8 end:0x00002440
+	.data       start:0x000124A0 end:0x00013770
+
+game/volley/CChrCoreVolleyWario.cpp:
+	.text       start:0x00072EC8 end:0x000750E8
+	.rodata     start:0x00002440 end:0x00002500
+	.data       start:0x00013770 end:0x000145D0
+
+game/volley/CChrCoreVolleyYoshi.cpp:
+	.text       start:0x000750E8 end:0x000759C4
+	.rodata     start:0x00002500 end:0x00002540
+	.data       start:0x000145D0 end:0x00015360
+
+game/volley/CChrDrvPadVolley.cpp:
+	.text       start:0x000759C4 end:0x00077750
+	.rodata     start:0x00002540 end:0x00002570
+	.data       start:0x00015360 end:0x000153B8
+
+game/volley/CChrManVolley.cpp:
+	.text       start:0x00077750 end:0x00078B8C
+	.rodata     start:0x00002570 end:0x00002588
+	.data       start:0x000153B8 end:0x00015700
+
+game/volley/CChrMarkerVolleyJump.cpp:
+	.text       start:0x00078B8C end:0x000792B0
+	.rodata     start:0x00002588 end:0x000025B0
+	.data       start:0x00015700 end:0x000157F8
+
+game/volley/CChrTargetMarkerVolley.cpp:
+	.text       start:0x000792B0 end:0x0007BB18
+	.ctors      start:0x00000018 end:0x0000001C
+	.rodata     start:0x000025B0 end:0x00002678
+	.data       start:0x000157F8 end:0x000159B0
+	.bss        start:0x00000570 end:0x00000578
+
+game/volley/CCollManVolley.cpp:
+	.text       start:0x0007BB18 end:0x0007C100
+	.rodata     start:0x00002678 end:0x00002680
+	.data       start:0x000159B0 end:0x00015A78
+
+game/volley/CCollMan.cpp:
+	.text       start:0x0007C100 end:0x0007C188
+
+game/volley/CComDrvVolley.cpp:
+	.text       start:0x0007C188 end:0x0007C688
+	.rodata     start:0x00002680 end:0x00002688
+	.data       start:0x00015A78 end:0x00015B78
+
+game/volley/CEventDemoVolley.cpp:
+	.text       start:0x0007C688 end:0x0007D1CC
+	.rodata     start:0x00002688 end:0x00002708
+	.data       start:0x00015B78 end:0x00015BC8
+
+game/volley/CEffectCtrlVolley.cpp:
+	.text       start:0x0007D1CC end:0x0007D308
+	.data       start:0x00015BC8 end:0x00015C08
+
+game/volley/CGimmickManVolley.cpp:
+	.text       start:0x0007D308 end:0x0007E2BC
+	.ctors      start:0x0000001C end:0x00000020
+	.rodata     start:0x00002708 end:0x00002788
+	.data       start:0x00015C08 end:0x00015D40
+	.bss        start:0x00000578 end:0x00000580
+
+game/volley/CCockpitVolley.cpp:
+	.text       start:0x0007E2BC end:0x00082A38
+	.rodata     start:0x00002788 end:0x00004660
+	.data       start:0x00015D40 end:0x000162D0
+
+game/volley/CCockpitVolleyCoder.cpp:
+	.text       start:0x00082A38 end:0x00084E68
+	.ctors      start:0x00000020 end:0x00000024
+	.rodata     start:0x00004660 end:0x00005718
+	.data       start:0x000162D0 end:0x00016738
+	.bss        start:0x00000580 end:0x00000590
+
+game/volley/CStgGmk_Case_Act_Volley.cpp:
+	.text       start:0x00084E68 end:0x000851C8
+	.data       start:0x00016738 end:0x000169C8
+
+game/volley/CStgSeSlot.cpp:
+	.text       start:0x000851C8 end:0x000859B4
+	.rodata     start:0x00005718 end:0x00005738
+
+game/volley/CStgGmk_WaterWorks_Volley_Act.cpp:
+	.text       start:0x000859B4 end:0x00089B6C
+	.rodata     start:0x00005738 end:0x00005890
+	.data       start:0x000169C8 end:0x00016F78
+
+game/volley/CCreator.cpp:
+	.text       start:0x00089B6C end:0x00089D4C
+	.data       start:0x00016F78 end:0x00016FE0
+
+game/volley/CStageFactoryVolley.cpp:
+	.text       start:0x00089D4C end:0x00089FA0
+	.data       start:0x00016FE0 end:0x00017090
+
+game/volley/CStageMan.cpp:
+	.text       start:0x00089FA0 end:0x0008B1D8
+	.rodata     start:0x00005890 end:0x000058D8
+	.data       start:0x00017090 end:0x000174F0
+
+game/volley/CStageNetVolley.cpp:
+	.text       start:0x0008B1D8 end:0x0008BC60
+	.rodata     start:0x000058D8 end:0x00006018
+	.data       start:0x000174F0 end:0x000179F0
+
+game/volley/CStgEffectSlot.cpp:
+	.text       start:0x0008BC60 end:0x0008BD50
+
+game/volley/CStageVolley02.cpp:
+	.text       start:0x0008BD50 end:0x0008C3E0
+	.rodata     start:0x00006018 end:0x00006230
+	.data       start:0x000179F0 end:0x00017F90
+	.bss        start:0x00000590 end:0x00000598
+
+game/volley/CStageVolley03.cpp:
+	.text       start:0x0008C3E0 end:0x0008D960
+	.rodata     start:0x00006230 end:0x00006310
+	.data       start:0x00017F90 end:0x00018400
+	.bss        start:0x00000598 end:0x000005B0
+
+game/volley/CStageVolley05.cpp:
+	.text       start:0x0008D960 end:0x0008FDE8
+	.rodata     start:0x00006310 end:0x00006498
+	.data       start:0x00018400 end:0x000188C8
+	.bss        start:0x000005B0 end:0x000005B8
+
+game/volley/CStageVolley06.cpp:
+	.text       start:0x0008FDE8 end:0x00090398
+	.rodata     start:0x00006498 end:0x00006540
+	.data       start:0x000188C8 end:0x00018DD8
+	.bss        start:0x000005B8 end:0x000005C0
+
+game/volley/CStageVolley09.cpp:
+	.text       start:0x00090398 end:0x00090F8C
+	.rodata     start:0x00006540 end:0x00006638
+	.data       start:0x00018DD8 end:0x00019460
+	.bss        start:0x000005C0 end:0x000005C8
+
+game/volley/CStageVolley10.cpp:
+	.text       start:0x00090F8C end:0x000950DC
+	.rodata     start:0x00006638 end:0x00006880
+	.data       start:0x00019460 end:0x00019A00
+	.bss        start:0x000005C8 end:0x000005D0
+
+game/volley/CStageVolley11.cpp:
+	.text       start:0x000950DC end:0x000978A4
+	.rodata     start:0x00006880 end:0x00006A18
+	.data       start:0x00019A00 end:0x0001A1B0
+	.bss        start:0x000005D0 end:0x000005D8
+
+game/volley/CStageVolley13.cpp:
+	.text       start:0x000978A4 end:0x00097DD0
+	.rodata     start:0x00006A18 end:0x00006A50
+	.data       start:0x0001A1B0 end:0x0001A628
+	.bss        start:0x000005D8 end:0x000005E0
+
+game/volley/CStageVolley15.cpp:
+	.text       start:0x00097DD0 end:0x00098888
+	.rodata     start:0x00006A50 end:0x00006C58
+	.data       start:0x0001A628 end:0x0001AC30
+	.bss        start:0x000005E0 end:0x000005E8
+
+game/volley/CStgGmk_Case_Volley.cpp:
+	.text       start:0x00098888 end:0x000989EC
+	.data       start:0x0001AC30 end:0x0001AD18
+
+game/volley/CStageVolley17.cpp:
+	.text       start:0x000989EC end:0x00099CA4
+	.rodata     start:0x00006C58 end:0x00006EF8
+	.data       start:0x0001AD18 end:0x0001B500
+	.bss        start:0x000005E8 end:0x000005F0
+
+game/volley/CCockpitVolleyResult.cpp:
+	.text       start:0x00099CA4 end:0x0009AC04
+	.rodata     start:0x00006EF8 end:0x00007328
+	.data       start:0x0001B500 end:0x0001B690
+
+game/volley/CCockpitVolleyBoss.cpp:
+	.text       start:0x0009AC04 end:0x0009C690
+	.rodata     start:0x00007328 end:0x00007980
+	.data       start:0x0001B690 end:0x0001B930
+
+game/volley/CCockpitVolleyRhythmA.cpp:
+	.text       start:0x0009C690 end:0x0009F56C
+	.rodata     start:0x00007980 end:0x00008128
+	.data       start:0x0001B930 end:0x0001BCE0
+
+game/volley/CPerfectDemoVolley.cpp:
+	.text       start:0x0009F56C end:0x0009FF44
+	.rodata     start:0x00008128 end:0x00008158
+	.data       start:0x0001BCE0 end:0x0001BD28
+
+game/volley/CComDrvVolleyGame.cpp:
+	.text       start:0x0009FF44 end:0x000AB1D8
+	.rodata     start:0x00008158 end:0x000082C0
+	.data       start:0x0001BD28 end:0x0001C168
+
+game/volley/unit_AB1D8.cpp:
+	.text       start:0x000AB1D8 end:0x000ABAE0
+	.rodata     start:0x000082C0 end:0x000082D8
+
+game/volley/CComManVolley.cpp:
+	.text       start:0x000ABAE0 end:0x000ABD4C
+
+game/volley/CCameraVolleyGame.cpp:
+	.text       start:0x000ABD4C end:0x000AF314
+	.rodata     start:0x000082D8 end:0x00008528
+	.data       start:0x0001C168 end:0x0001C1B0
+
+game/volley/CCameraVolleyBoss.cpp:
+	.text       start:0x000AF314 end:0x000AFFC4
+	.rodata     start:0x00008528 end:0x00008588
+	.data       start:0x0001C1B0 end:0x0001C1F8
+
+game/volley/CCameraVolleyRR.cpp:
+	.text       start:0x000AFFC4 end:0x000B0780
+	.rodata     start:0x00008588 end:0x000085E8
+	.data       start:0x0001C1F8 end:0x0001C240
+
+game/volley/CComDrvVolleyRR.cpp:
+	.text       start:0x000B0780 end:0x000B19F0
+	.rodata     start:0x000085E8 end:0x00008668
+	.data       start:0x0001C240 end:0x0001C3E0
+
+game/volley/CComManVolleyRR.cpp:
+	.text       start:0x000B19F0 end:0x000B1EEC
+	.rodata     start:0x00008668 end:0x00008680
+
+game/volley/CCockpitVolleyMarkerIcon2D.cpp:
+	.text       start:0x000B1EEC end:0x000B27D0
+	.rodata     start:0x00008680 end:0x00008770
+	.data       start:0x0001C3E0 end:0x0001C4D8
+
+game/volley/CCockpitVolleyTelopServe.cpp:
+	.text       start:0x000B27D0 end:0x000B32BC
+	.rodata     start:0x00008770 end:0x000089C8
+	.data       start:0x0001C4D8 end:0x0001C5B0
+
+game/volley/CCockpitVolleyLayoutBase.cpp:
+	.text       start:0x000B32BC end:0x000B34B4
+	.data       start:0x0001C5B0 end:0x0001C660
+
+game/volley/CRhythmReceiveMan.cpp:
+	.text       start:0x000B34B4 end:0x000B9BA8
+	.ctors      start:0x00000024 end:0x00000028
+	.rodata     start:0x000089C8 end:0x00008AF8
+	.data       start:0x0001C660 end:0x0001CB08
+	.bss        start:0x000005F0 end:0x00000670
+
+game/volley/CGameVolleyVsBoss.cpp:
+	.text       start:0x000B9BA8 end:0x000BB7D8
+	.ctors      start:0x00000028 end:0x0000002C
+	.rodata     start:0x00008AF8 end:0x00008B50
+	.data       start:0x0001CB08 end:0x0001CDE0
+	.bss        start:0x00000670 end:0x000006B8
+
+game/volley/TournamentVolley.cpp:
+	.text       start:0x000BB7D8 end:0x000BB860
+
+game/volley/CTmGameHandlerVolley.cpp:
+	.text       start:0x000BB860 end:0x000BC460
+	.rodata     start:0x00008B50 end:0x00008B60
+	.data       start:0x0001CDE0 end:0x0001CF48
+
+game/volley/CStageVolley42.cpp:
+	.text       start:0x000BC460 end:0x000BC5F4
+	.rodata     start:0x00008B60 end:0x00008B78
+	.data       start:0x0001CF48 end:0x0001D390
+
+game/volley/CReadyStartDemoVolley.cpp:
+	.text       start:0x000BC5F4 end:0x000BD648
+	.ctors      start:0x0000002C end:0x00000030
+	.rodata     start:0x00008B78 end:0x00008C08
+	.data       start:0x0001D390 end:0x0001D3F0
+	.bss        start:0x000006B8 end:0x00000910
+
+game/volley/CStageVolley01.cpp:
+	.text       start:0x000BD648 end:0x000BDA5C
+	.rodata     start:0x00008C08 end:0x00008C60
+	.data       start:0x0001D3F0 end:0x0001D898
+	.bss        start:0x00000910 end:0x00000918
+
+game/volley/CComManVolleyGame.cpp:
+	.text       start:0x000BDA5C end:0x000BDBCC
+	.rodata     start:0x00008C60 end:0x00008C68
+	.data       start:0x0001D898 end:0x0001D8B0
+
+game/volley/CStgGmk_Pinball_Act_Volley.cpp:
+	.text       start:0x000BDBCC end:0x000BE558
+	.rodata     start:0x00008C68 end:0x00008C98
+	.data       start:0x0001D8B0 end:0x0001DCB0
+
+game/volley/CStageVolley12.cpp:
+	.text       start:0x000BE558 end:0x000BEF84
+	.rodata     start:0x00008C98 end:0x00008DD0
+	.data       start:0x0001DCB0 end:0x0001E150
+	.bss        start:0x00000918 end:0x00000920
+
+game/volley/unit_BEF84.cpp:
+	.text       start:0x000BEF84 end:0x000BF960
+	.rodata     start:0x00008DD0 end:0x00008DF8
+
+game/volley/unit_BF960.cpp:
+	.text       start:0x000BF960 end:0x000C0918
+	.rodata     start:0x00008DF8 end:0x00008E48
+
+game/volley/unit_C0918.cpp:
+	.text       start:0x000C0918 end:0x000C1F20
+	.rodata     start:0x00008E48 end:0x00008E90
+	.data       start:0x0001E150 end:0x0001E390
+
+game/volley/CStgGmk_Wave_Volley_Act.cpp:
+	.text       start:0x000C1F20 end:0x000C1FE0
+
+game/volley/CStgGmk_WaveCluster_Volley.cpp:
+	.text       start:0x000C1FE0 end:0x000C2190
+	.rodata     start:0x00008E90 end:0x00008E98
+
+game/volley/CStgGmk_Wave.cpp:
+	.text       start:0x000C2190 end:0x000C21FC
+
+game/volley/CStgGmk_Wave_Volley.cpp:
+	.text       start:0x000C21FC end:0x000C23A8
+	.data       start:0x0001E390 end:0x0001E6D8
+
+game/volley/CStgGmk_Wave_Act.cpp:
+	.text       start:0x000C23A8 end:0x000C2438
+
+game/volley/CStgGmk_Trolley_Act_Volley.cpp:
+	.text       start:0x000C2438 end:0x000C2EC0
+	.rodata     start:0x00008E98 end:0x00008F00
+	.data       start:0x0001E6D8 end:0x0001EB08
+
+game/volley/CItemManVolley.cpp:
+	.text       start:0x000C2EC0 end:0x000C30C8
+	.data       start:0x0001EB08 end:0x0001F690
+
+game/volley/CItemVolleyBananaRR.cpp:
+	.text       start:0x000C30C8 end:0x000C3AD0
+	.rodata     start:0x00008F00 end:0x00008F78
+
+game/volley/CCockpitVolleySPGauge.cpp:
+	.text       start:0x000C3AD0 end:0x000C4808
+	.rodata     start:0x00008F78 end:0x00009478
+	.data       start:0x0001F690 end:0x0001F7C8
+
+game/volley/CCockpitVolleyCoin.cpp:
+	.text       start:0x000C4808 end:0x000C5F64
+	.rodata     start:0x00009478 end:0x00009498
+	.data       start:0x0001F7C8 end:0x0001F878
+
+game/volley/unit_C5F64.cpp:
+	.text       start:0x000C5F64 end:0x000C6258
+
+game/volley/unit_C6258.cpp:
+	.text       start:0x000C6258 end:0x000C625C
+
+game/volley/unit_C625C.cpp:
+	.text       start:0x000C625C end:0x000C62C0
+
+game/volley/CNpcGhostVolley.cpp:
+	.text       start:0x000C62C0 end:0x000C9B6C
+	.rodata     start:0x00009498 end:0x00009528
+	.data       start:0x0001F878 end:0x0001FA40
+
+game/volley/CStageVolley16.cpp:
+	.text       start:0x000C9B6C end:0x000CA124
+	.rodata     start:0x00009528 end:0x00009670
+	.data       start:0x0001FA40 end:0x000202E0
+	.bss        start:0x00000920 end:0x00000978
+
+game/volley/CCockpitChrIcon2DVolley.cpp:
+	.text       start:0x000CA124 end:0x000CAAE0
+	.rodata     start:0x00009670 end:0x00009A88
+	.data       start:0x000202E0 end:0x00020408
+
+game/volley/CCockpitVolleyPause.cpp:
+	.text       start:0x000CAAE0 end:0x000CB1E0
+	.rodata     start:0x00009A88 end:0x00009B50
+	.data       start:0x00020408 end:0x000204F0
+
+game/volley/CCockpitVolleyPauseResult.cpp:
+	.text       start:0x000CB1E0 end:0x000CBDE0
+	.rodata     start:0x00009B50 end:0x00009FC8
+	.data       start:0x000204F0 end:0x00020660
+
+game/volley/CCockpitVolleyModelTelop.cpp:
+	.text       start:0x000CBDE0 end:0x000CBF1C
+	.rodata     start:0x00009FC8 end:0x00009FF0
+	.data       start:0x00020660 end:0x000206BC
+
 RSO/global_destructor_chain.c:
 	.text       start:0x000CBF1C end:0x000CBF8C
 	.dtors      start:0x00000000 end:0x00000004

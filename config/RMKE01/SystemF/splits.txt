@@ -9,3 +9,10 @@ game/msw/CMainStepEx.cpp:
 	.text       start:0x00000000 end:0x00000A28
 	.rodata     start:0x00000000 end:0x00000018
 	.data       start:0x00000000 end:0x000000B8
+
+game/system/module.cpp:
+	.text       start:0x00000A28 end:0x00000AC0
+
+game/system/CSystemTest.cpp:
+	.text       start:0x00000AC0 end:0x00000B68
+	.data       start:0x000000B8 end:0x000000D0

@@ -111,11 +111,8 @@ game/menu/CTopMenuChrObj.cpp:
 	.data       start:0x00002450 end:0x00002EA0
 	.bss        start:0x00001370 end:0x00001378
 
-game/menu/CTableSetMdlObj.cpp:
-	.text       start:0x0002044C end:0x000208D4
-
 game/menu/CMenuMdlTableSet.cpp:
-	.text       start:0x000208D4 end:0x00021158
+	.text       start:0x0002044C end:0x00021158
 	.rodata     start:0x00004D68 end:0x00004D78
 	.data       start:0x00002EA0 end:0x00002F08
 

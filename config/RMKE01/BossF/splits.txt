@@ -127,10 +127,11 @@ game/boss/CChrMarkerBoss.cpp:
 game/boss/CCollManBoss.cpp:
 	.text       start:0x00038AA0 end:0x00038D38
 	.rodata     start:0x00000BD0 end:0x00000BD8
-	.data       start:0x00013438 end:0x00013CE0
+	.data       start:0x00013438 end:0x000134A0
 
 game/boss/CItemManBoss.cpp:
 	.text       start:0x00038D38 end:0x00038F54
+	.data       start:0x000134A0 end:0x00013CE0
 
 game/boss/CItemBossRShell.cpp:
 	.text       start:0x00038F54 end:0x00039AB0

@@ -209,12 +209,9 @@ game/boss/CCockpitBossPause.cpp:
 	.data       start:0x00014DE0 end:0x00014EC8
 
 game/boss/CNpcBehemothFiga.cpp:
-	.text       start:0x00044FA4 end:0x0004EEC8
+	.text       start:0x00044FA4 end:0x0004F0C4
 	.rodata     start:0x00002CC8 end:0x00003030
 	.data       start:0x00014EC8 end:0x000154D0
-
-game/boss/CNpcBase.cpp:
-	.text       start:0x0004EEC8 end:0x0004F0C4
 
 game/boss/CComDrvBoss.cpp:
 	.text       start:0x0004F0C4 end:0x000528A4

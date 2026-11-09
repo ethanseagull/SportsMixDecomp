@@ -365,11 +365,12 @@ config.libs = [
         # Game code linked into the BossF module.
         "lib": "BossF",
         "mw_version": config.linker_version,
-        "cflags": [*cflags_rel, "-func_align 4", "-ipa file", "-str reuse,readonly"],
+        "cflags": [*cflags_rel, "-func_align 4", "-ipa file", "-str reuse,readonly", "-use_lmw_stmw on"],
         "progress_category": "game",
         "objects": [
             Object(Matching, "game/boss/module.cpp"),
             Object(Matching, "game/boss/CItemBallBoss.cpp"),
+            Object(NonMatching, "game/boss/CStageManBoss.cpp"),
         ],
     },
 ]

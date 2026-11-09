@@ -177,13 +177,9 @@ game/boss/CRadarIcon2DBoss.cpp:
 	.data       start:0x00014770 end:0x000147F0
 
 game/boss/CStageManBoss.cpp:
-	.text       start:0x00040D38 end:0x00040E40
-	.rodata     start:0x00002458 end:0x00002460
+	.text       start:0x00040D38 end:0x00041B6C
+	.rodata     start:0x00002458 end:0x00002468
 	.data       start:0x000147F0 end:0x00014C30
-
-game/boss/CStageMan.cpp:
-	.text       start:0x00040E40 end:0x00041B6C
-	.rodata     start:0x00002460 end:0x00002468
 
 game/boss/CEvMdlCreaterGmMdlChr.cpp:
 	.text       start:0x00041B6C end:0x00041E08

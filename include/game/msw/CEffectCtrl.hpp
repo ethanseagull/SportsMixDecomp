@@ -71,6 +71,11 @@ namespace msw {
             // Filled in by InitializeDataTable.
             CEffectTableList *m_pTableList;       // 0x40
             CEffectTableList *m_pAttachTableList; // 0x44
+
+        private:
+            // Not set by the constructor. The class is 0x4C bytes: every
+            // module's CreateInstance allocates that much.
+            unsigned long m_Unk48; // 0x48
     };
 }
 

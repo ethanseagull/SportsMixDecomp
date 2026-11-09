@@ -352,6 +352,7 @@ config.libs = [
         "progress_category": "game",
         "objects": [
             Object(Matching, "game/menu/module.cpp"),
+            Object(Matching, "game/menu/CFade.cpp"),
         ],
     },
     {

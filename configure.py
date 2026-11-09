@@ -379,6 +379,7 @@ config.libs = [
             Object(Matching, "game/boss/TournamentBoss.cpp"),
             Object(Matching, "game/boss/CCockpitBossLayoutBase.cpp"),
             Object(Matching, "game/boss/CCollManBoss.cpp"),
+            Object(Matching, "game/boss/CChrMarkerBoss.cpp"),
         ],
     },
 ]

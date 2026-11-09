@@ -365,6 +365,7 @@ config.libs = [
         "progress_category": "game",
         "objects": [
             Object(Matching, "game/boss/module.cpp"),
+            Object(Matching, "game/boss/CItemBallBoss.cpp"),
         ],
     },
 ]

@@ -325,8 +325,8 @@ namespace msw {
             virtual const bcs::FVEC3 &Get3PointAreaPos(long goal) const { return GetGoalPos(goal); }
             // (return type guessed: zero)
             virtual bool Is3PointArea(long, const bcs::FVEC3 &, float) const { return false; }
-            // Needs the copy constructor of bcs::FVEC3 to compile to the
-            // original's three float copies.
+            // The by-value return goes through bcs::FVEC3's copy constructor:
+            // three float copies, as in the original.
             virtual bcs::FVEC3 GetGoalAssumedPos(long goal, float) const { return GetGoalPos(goal); }
             virtual void GoalCrush(long goal);
             virtual void GoalRepairAll();

@@ -9,6 +9,8 @@ namespace bcs {
         public:
             static void SetViewFovy(long view, float fovy);
             static float GetViewFovy(long view);
+            // How many views the screen is split into. Return type guessed.
+            static long GetViewSplitNum();
 
             // 1 selects the second set of camera data in the tournament
             // (msw::CTournamentCamera::GetDataMode). Type guessed.

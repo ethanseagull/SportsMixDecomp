@@ -17,6 +17,15 @@ namespace msw {
     // it). Member names are guesses.
     class CCockpitFrameOutBase {
         public:
+            // (inline; added for BasketF game/basket/CCockpitBasketBonusTime.cpp,
+            // whose constructor stores -1 and 1.0f here before its own
+            // vptrs) The float differs per derived class.
+            CCockpitFrameOutBase(float fUnk04)
+                : m_nWaitFrameOut(-1)
+                , m_fUnk04(fUnk04)
+            {
+            }
+
             // 0 when pPaneCtrl is null or animation nAnim has ended,
             // otherwise whether its frame count passes a limit.
             int IsWaitAnim(bcs::G2D::CPaneCtrl *pPaneCtrl, long nAnim);

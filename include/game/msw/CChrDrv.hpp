@@ -23,6 +23,15 @@ namespace msw {
             // Inline: DodgeF emits it as a weak function (0x73CD4).
             virtual long GetPadType() const { return 1; }
     };
+
+    // The arguments of a message. Only the first two words are known, read
+    // as longs by BasketF's CComDrvBasketHB::OnGameMsgProc (a character
+    // index, a ball index or a value, depending on the message); the size
+    // is not known. (member names guessed)
+    struct CChrDrv::_CHR_MSG {
+        long m_nParam0; // 0x00
+        long m_nParam1; // 0x04
+    };
 }
 
 #endif /* !MSW_CCHRDRV_HPP_ */

@@ -70,7 +70,10 @@ namespace msw {
             virtual void OnDisconnect(_CHR_MSG *pMsg);
             virtual void OnInit(_CHR_MSG *pMsg);
             virtual void OnDamage(_CHR_MSG *pMsg);
-            virtual void OnGameMsgProc(MSG_ID id, _CHR_MSG *pMsg);
+            // Returns the answer to the message (BasketF's CComDrvBasketHB
+            // returns this function's result for the messages it does not
+            // answer itself).
+            virtual long OnGameMsgProc(MSG_ID id, _CHR_MSG *pMsg);
             virtual void OnAlarm0(long) {}
             virtual void OnAlarm1(long) {}
             virtual void OnAlarm2(long) {}
@@ -82,6 +85,9 @@ namespace msw {
             // turned into a world position; passes the long on to
             // CComMan::Local2World.
             bcs::FVEC3 Local2World(const bcs::FVEC3 &pos, long) const;
+            // DOL. A random number below nMax. (range guessed from the name;
+            // BasketF tests RandMaxI(999) < 20)
+            long RandMaxI(long nMax) const;
 
         protected:
             unsigned char m_Unk04[0x64];

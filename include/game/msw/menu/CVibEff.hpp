@@ -4,9 +4,9 @@
 namespace msw {
     namespace menu {
 
-        // Lives in the DOL. Size 0x2C (s_Instance in .bss). Controller
-        // rumble in the menus. Only the members used so far; argument names
-        // and the return types are guesses.
+        // Lives in the DOL (game/msw/menu/CVibEff.cpp, with CSndEff and
+        // CSndBGM). Size 0x1C (s_Instance in .bss), vptr at 0x18.
+        // Controller rumble in the menus. Argument names are guesses.
         class CVibEff {
             public:
                 void Initialize();
@@ -25,7 +25,11 @@ namespace msw {
                 int m_bEnable;           // 0x00: Initialize sets 1, Finalize 0
                 float m_fWait[4];        // 0x04: per pad, frames before Play may start again
                 float m_fInterval;       // 0x14: the wait Play sets (15)
-                unsigned char m_Unk18[0x2C - 0x18];
+
+            public:
+                // Declared after the data: the vptr is at 0x18. Empty, but
+                // defined in the .cpp: __sinit registers it for s_Instance.
+                virtual ~CVibEff();
         };
     }
 }

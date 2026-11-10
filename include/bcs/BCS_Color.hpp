@@ -17,7 +17,21 @@ namespace bcs {
         unsigned char b;
         unsigned char a;
 
+        // The empty destructor is what makes the compiler return a colour
+        // through a hidden pointer, as msw::CChrMarker::GetColor_ does
+        // (VolleyF CChrMarkerVolleyJump); without it a four-byte struct
+        // comes back in r3.
+        ~BCS_Color() {}
+
         BCS_Color() { SetWhite(); }
+
+        // A copy moves the colour as one word (VolleyF CChrMarkerVolleyJump
+        // passes GetColor_'s result on that way); the implicit copy would
+        // move the four bytes one by one.
+        BCS_Color(const BCS_Color &c)
+        {
+            *reinterpret_cast<unsigned long *>(this) = *reinterpret_cast<const unsigned long *>(&c);
+        }
 
         BCS_Color(unsigned char cr, unsigned char cg, unsigned char cb, unsigned char ca)
         {

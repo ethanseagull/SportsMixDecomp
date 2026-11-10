@@ -9,8 +9,8 @@ namespace bcs {
     class CAnmObj;
 
     // A model in the scene. A DOL class, size 0x1C8 (the constructor writes
-    // 0x1C4; msw::SelectMenu::CCourtBallMdlObj's members start at 0x1C8).
-    // Only what the modules use so far is declared.
+    // 0x1C4; msw::SelectMenu::CCourtBallMdlObj's and bcs::CMultViewAlphaMdlObj's
+    // members start at 0x1C8). Only what the modules use so far is declared.
     class CMdlObj : public CScnObj {
         public:
             // Selects one of the five animation slots. The values are the
@@ -26,7 +26,6 @@ namespace bcs {
 
             CMdlObj();
             virtual ~CMdlObj();
-
             // The overrides, named by the vtable of
             // msw::SelectMenu::CCourtBallMdlObj in MenuF. Return types guessed.
             virtual long GetObjType() const;                                                // 0x0C
@@ -105,7 +104,15 @@ namespace bcs {
             CAnmObj *m_pAnmObj3;          // 0x154
             CAnmObj *m_pAnmObjTexSrt;     // 0x158
             CAnmObj *m_pAnmObj5;          // 0x15C
-            unsigned char m_Unk160[0x68]; // 0x160
+            unsigned char m_Unk160[0x4C]; // 0x160
+
+        protected:
+            // (name guessed) White after construction; msw::CFgMdl passes it
+            // to CStgMdlObjImpl::PatchMaterial_.
+            BCS_Color m_BaseColor;        // 0x1AC
+
+        private:
+            unsigned char m_Unk1B0[0x18]; // 0x1B0, an object at 0x1B0 and a word at 0x1C4
     };
 }
 

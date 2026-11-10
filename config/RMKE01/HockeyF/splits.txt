@@ -202,27 +202,18 @@ game/hockey/CComDrvHockey.cpp:
 	.data       start:0x00014BC8 end:0x00014CC0
 
 game/hockey/CEventDemoHockey.cpp:
-	.text       start:0x0007B050 end:0x0007BA3C
+	.text       start:0x0007B050 end:0x0007BB30
 	.rodata     start:0x00002750 end:0x000027C8
 	.data       start:0x00014CC0 end:0x00014D10
-
-game/hockey/EvDemoHockey.cpp:
-	.text       start:0x0007BA3C end:0x0007BB28
-
-game/hockey/CEventDemoBase.cpp:
-	.text       start:0x0007BB28 end:0x0007BB30
 
 game/hockey/CEffectCtrlHockey.cpp:
 	.text       start:0x0007BB30 end:0x0007BCB8
 	.data       start:0x00014D10 end:0x00014D50
 
 game/hockey/CItemManHockey.cpp:
-	.text       start:0x0007BCB8 end:0x0007BEC0
-	.data       start:0x00014D50 end:0x00014F00
-
-game/hockey/CItemHockeyBanana.cpp:
-	.text       start:0x0007BEC0 end:0x0007C084
+	.text       start:0x0007BCB8 end:0x0007C084
 	.rodata     start:0x000027C8 end:0x000027F0
+	.data       start:0x00014D50 end:0x00014F00
 
 game/hockey/CGimmickManHockey.cpp:
 	.text       start:0x0007C084 end:0x0007CF08
@@ -327,24 +318,13 @@ game/hockey/CStageHockey17.cpp:
 game/hockey/CStageManHockey.cpp:
 	.text       start:0x0008D700 end:0x0008E10C
 	.rodata     start:0x00009850 end:0x00009898
-	.data       start:0x000197F8 end:0x0001A280
+	.data       start:0x000197F8 end:0x00019C88
 	.bss        start:0x000005C0 end:0x000005C8
 
-game/hockey/CStgGmk_WaterPillarCluster_Hockey.cpp:
-	.text       start:0x0008E10C end:0x0008E6B4
-	.rodata     start:0x00009898 end:0x00009900
-
-game/hockey/CStgGmk_WaterPillar.cpp:
-	.text       start:0x0008E6B4 end:0x0008E784
-
 game/hockey/CStgGmk_WaterWorks_Hockey.cpp:
-	.text       start:0x0008E784 end:0x0008E84C
-
-game/hockey/CStgDrv.cpp:
-	.text       start:0x0008E84C end:0x0008E878
-
-game/hockey/CStgGmkAct.cpp:
-	.text       start:0x0008E878 end:0x0008EA0C
+	.text       start:0x0008E10C end:0x0008EA0C
+	.rodata     start:0x00009898 end:0x00009900
+	.data       start:0x00019C88 end:0x0001A280
 
 game/hockey/CCockpitHockeyResult.cpp:
 	.text       start:0x0008EA0C end:0x0008F478
@@ -447,10 +427,7 @@ game/hockey/CStageHockey11.cpp:
 	.bss        start:0x000005F0 end:0x000005F8
 
 game/hockey/TournamentHockey.cpp:
-	.text       start:0x000D24B4 end:0x000D253C
-
-game/hockey/CTmGameHandlerHockey.cpp:
-	.text       start:0x000D253C end:0x000D32CC
+	.text       start:0x000D24B4 end:0x000D32CC
 	.rodata     start:0x0000BD38 end:0x0000BD48
 	.data       start:0x0001CF78 end:0x0001D148
 

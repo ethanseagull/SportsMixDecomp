@@ -55,10 +55,17 @@ namespace bcs {
                 void AttachArchiveResource(nw4r::lyt::ArcResourceAccessor *pAccessor);
                 CLayoutDL *GetLayout(); // the word at 0x14
 
+                // (name guessed; inline, no symbol) How many animations
+                // BuildAnim made. GetAnimFrameMax checks its index against it.
+                unsigned long GetAnimNum() const { return m_nAnimNum; }
+
             private:
                 // Size 0x48: CPaneCtrl's own data starts there.
                 CLayoutDL *m_pLayout;        // 0x14
-                unsigned char m_Unk18[0x30]; // 0x18
+                unsigned char m_Unk18[0x24]; // 0x18
+                void *m_pAnim;               // 0x3C: 0x10 bytes per animation (name guessed)
+                unsigned long m_nAnimNum;    // 0x40: entries of m_pAnim (name guessed)
+                unsigned char m_Unk44[0x4];  // 0x44
         };
     }
 }

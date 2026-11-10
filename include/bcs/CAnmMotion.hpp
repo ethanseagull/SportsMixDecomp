@@ -1,17 +1,19 @@
 #ifndef BCS_CANMMOTION_HPP_
 #define BCS_CANMMOTION_HPP_
 
-#include "bcs/CAnmObj.hpp"
+#include "bcs/CAnmObjMotBase.hpp"
 #include "nw4r/g3d/ResAnmChr.hpp"
+#include "nw4r/g3d/ResFile.hpp"
 
 namespace bcs {
 
+    class CMdlObj;
+
     // Skeletal animation, the object in a model's first animation slot. A
-    // DOL class, larger than bcs::CAnmObj (its constructor writes up to
-    // 0x48) and probably derived through bcs::CAnmObjMotBase, which is not
-    // modelled. Only what the modules call is declared, so the class must
-    // not be created from a module yet.
-    class CAnmMotion : public CAnmObj {
+    // DOL class, size 0x4C (the constructor writes up to 0x48; the volley
+    // stage allocates 0x4C), probably derived through bcs::CAnmObjMotBase.
+    // Only what the modules call is declared.
+    class CAnmMotion : public CAnmObjMotBase {
         public:
             CAnmMotion();
             virtual ~CAnmMotion();
@@ -45,14 +47,21 @@ namespace bcs {
             virtual void VFunc90();
             virtual void VFunc94();
             virtual int VFunc98(long, unsigned long);   // 0x98, tested for nonzero by the caller
+            // Binds the motions of `file` to pMdl. (meanings of the last two
+            // arguments not known)
+            void Create(const CMdlObj *pMdl, nw4r::g3d::ResFile file, const NODE_EX_INFO *pInfo, unsigned long,
+                        long);
 
             // The three floats are passed on unchanged in the DOL; their
             // names are guessed from msw::CMenuMdlTableSet::PlayImpl.
             void Play(nw4r::g3d::ResAnmChr res, unsigned long flag, float rate, float blend, float frame);
-            // The same for an animation already loaded, by index.
+            // The same for motion number idx of the file given to Create.
             void Play(long idx, unsigned long flag, float rate, float blend, float frame);
             // Clears bit 0 of the word at 0x18.
             void Stop();
+
+        private:
+            unsigned char m_Unk34[0x18]; // 0x34
     };
 }
 

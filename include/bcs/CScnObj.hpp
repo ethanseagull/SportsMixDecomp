@@ -38,6 +38,11 @@ namespace bcs {
                 FLAG_HIDE_80 = 0x80
             };
 
+            // How a model follows the one it is attached to (the type of the
+            // last parameter of msw::CStgMdl::AttachToMdl). Values not known.
+            enum AttachMode {
+            };
+
             CScnObj();
             virtual ~CScnObj();
             virtual void ObjProc(unsigned long, unsigned long, void *);    // 0x1C
@@ -76,6 +81,10 @@ namespace bcs {
             virtual void SetMatTevColorRGB(const char *, _GXTevRegID, BCS_Color);           // 0x88
             virtual void SetMatTevColorA(_GXTevRegID, unsigned char);                       // 0x8C
             virtual void SetMatTevColorA(const char *, _GXTevRegID, unsigned char);         // 0x90
+            // 0x94 to 0x10C: names and parameters from the slots of the
+            // vtable of msw::CFgMdl in the DOL (bcs::CMdlObj's functions;
+            // UpdateFrame is null in bcs::CScnObj's vtable). Return types
+            // guessed.
             virtual void RestoreMatTevColor(_GXTevRegID);                                   // 0x94
             virtual void RestoreMatTevColor(const char *, _GXTevRegID);                     // 0x98
             virtual void SetMatTevKColor(_GXTevKColorID, BCS_Color);                        // 0x9C
@@ -121,24 +130,45 @@ namespace bcs {
             // (names guessed) Inline in the modules.
             void OnFlag(unsigned long flag) { m_nFlag |= flag; }
             void OffFlag(unsigned long flag) { m_nFlag &= ~flag; }
+            // (name guessed) Inline in the modules: msw::CChrMarkerDodgeArrow
+            // stores a yaw in radians to 0xB4, brought into [0, 2 pi] after
+            // the model pointer is loaded, so the wrapping is taken to be
+            // part of the setter.
+            void SetRotY(float fRotY)
+            {
+                while (fRotY > 6.2831855f) {
+                    fRotY -= 6.2831855f;
+                }
+                while (fRotY < 0.0f) {
+                    fRotY += 6.2831855f;
+                }
+                m_fRotY = fRotY;
+            }
 
         private:
             unsigned char m_Unk08[0x90];  // 0x08
 
         public:
-            // (names guessed) Read by CalcRootMtx in the DOL; the modules
-            // write them directly (msw::SelectMenu::CCourtBallMdlObj::Main
-            // in MenuF).
-            FVEC3 m_Pos;                  // 0x98
+            // (name guessed) The translation CalcRootMtx reads.
+            FVEC3 m_vTrans;               // 0x98
 
         private:
-            unsigned char m_UnkA4[0xC];   // 0xA4
+            unsigned char m_UnkA4[0x0C];  // 0xA4
 
         public:
-            FVEC3 m_Rot;                  // 0xB0, radians
+            // (names guessed) The rotation about the three axes in radians,
+            // as CalcRootMtx reads it. msw::CChrMarkerVolleyJump::MainFunc
+            // turns the Y one directly.
+            float m_fRotX;                // 0xB0
+            float m_fRotY;                // 0xB4
+            float m_fRotZ;                // 0xB8
+
+            // (name guessed) Set with the translation and rotation by the
+            // volley stage's figures before CalcRootMtx.
+            FVEC3 m_vScale;               // 0xBC
 
         private:
-            unsigned char m_UnkBC[0x40];  // 0xBC
+            unsigned char m_UnkC8[0x34];  // 0xC8
             unsigned long m_nFlag;        // 0xFC (name guessed)
             unsigned char m_Unk100[0x18]; // 0x100
     };

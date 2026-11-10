@@ -13,6 +13,7 @@ namespace bcs {
 }
 
 namespace msw {
+    class CCockpit;
     class CMenuPaneAccessor;
     class CMenuPartList;
 
@@ -54,8 +55,18 @@ namespace msw {
             // pBtnKindId has four entries.
             void SetDefaultBtnKindId(const unsigned short *pBtnKindId);
             long CheckButtonAnim(); // returns 0
+            // Deletes m_pPaneAccessor, if any (return type guessed).
+            void DeletePaneAccessor();
 
         protected:
+            // The owner as a CCockpit (CMenuLinkBase::m_Unk10), as
+            // CSelectMenuLayoutBase::GetSelectMenu does for the menus. No such
+            // function has a name in the game.
+            CCockpit *GetCockpit() const
+            {
+                return (CCockpit *)m_Unk10;
+            }
+
             // (name guessed; no symbol) Makes a CPaneCtrl on archive
             // pAccessor and hands it to the layout manager. Null when either
             // is missing.

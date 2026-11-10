@@ -32,14 +32,14 @@ void msw::CEffectCtrlHockey::Disp()
 {
 }
 
-int msw::CEffectCtrlHockey::InitPatch(long, bcs::EF::CEffect *)
-{
-    return 0;
-}
-
 // Passes everything on, then 3 and three zeros.
 unsigned long msw::CEffectCtrlHockey::CreateAttachEffect(long id, const bcs::CScnObj *pObj, const bcs::FVEC3 *pPos,
                                                          unsigned long flags, int a, int b, unsigned long c)
 {
     return CEffectCtrl::CreateAttachEffect(id, pObj, pPos, flags, a, b, c, 3, 0, 0, 0);
+}
+
+int msw::CEffectCtrlHockey::InitPatch(long, bcs::EF::CEffect *)
+{
+    return 0;
 }

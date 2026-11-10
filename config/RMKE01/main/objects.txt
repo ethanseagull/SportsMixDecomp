@@ -26,3 +26,15 @@ NonMatching game/msw/CStage17Base/CTurnTable.cpp
 Matching game/msw/CCockpitPartMove.cpp
 Matching game/msw/CMenuLinkList.cpp
 Matching game/msw/CStgGmkAct.cpp
+Matching game/bcs/CWifiPadBase.cpp
+NonMatching game/msw/CGameBGM.cpp
+NonMatching game/bcs/CGDLObj.cpp
+NonMatching game/msw/cockpit/CSPGauge.cpp
+Matching game/msw/CEvDemoRes/_CHR_INFO.cpp
+NonMatching game/msw/CItemShellCmn.cpp
+Matching game/msw/vm/CVMCpu.cpp
+NonMatching game/msw/menu/CVibEff.cpp
+NonMatching game/msw/CEventDemoBase.cpp
+NonMatching game/msw/CStgGmk_Pylon_Mdl.cpp
+NonMatching game/msw/CItemBallChangeEffect.cpp
+NonMatching game/msw/CEffectTable.cpp

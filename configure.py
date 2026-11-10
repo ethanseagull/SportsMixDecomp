@@ -317,6 +317,7 @@ GAME_MODULES = [
     ("VolleyF", cflags_game),
     ("DodgeF", cflags_game),
     ("HockeyF", cflags_game),
+    ("DebugF", cflags_game),
 ]
 OBJECT_STATES = {"Matching": Matching, "Equivalent": Equivalent, "NonMatching": NonMatching}
 

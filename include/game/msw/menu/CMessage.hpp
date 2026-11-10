@@ -14,10 +14,21 @@ namespace msw {
                 long AttachResource(const void *pData); // return type guessed
                 // Added for MenuF game/menu/CEntryExplain.cpp. The index of
                 // the message file named pName, or -1 (return type guessed).
-                long GetFileIndex(const char *pName);
+                // Returns short: the BasketF/DodgeF/HockeyF/VolleyF pause
+                // result pages extend the result as a short (extsh) before
+                // passing it on to GetTextByLabel.
+                short GetFileIndex(const char *pName);
                 // The text of label pLabel in file nFile; null when nFile is
                 // negative or pLabel null.
                 const wchar_t *GetTextByLabel(short nFile, const char *pLabel);
+
+                // (no symbol; a guess) The callers test the address of
+                // s_Instance against null, so they reach it through an
+                // inline function.
+                static CMessage *GetInstance()
+                {
+                    return &s_Instance;
+                }
 
                 static CMessage s_Instance;
 

@@ -19,3 +19,7 @@ Matching game/hockey/CCockpitHockeyModelTelop.cpp
 Matching game/hockey/CStgGmk_Wave_Hockey.cpp
 Matching game/hockey/CCockpitChrIcon2DHockey.cpp
 Matching game/hockey/CStageFactoryHockey.cpp
+Equivalent game/hockey/CCockpitHockeyCoin.cpp
+Equivalent game/hockey/CCockpitHockeyPause.cpp
+Equivalent game/hockey/CStageHockey13.cpp
+Equivalent game/hockey/CCockpitHockeyPauseResult.cpp

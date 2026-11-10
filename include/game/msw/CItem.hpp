@@ -137,6 +137,16 @@ namespace msw {
             void CollAtkSetHitDropCoinNumAll(long min, long max);
             // Turns every body collision of the item on or off.
             void CollBodySetEnableAll(int enable);
+            // (name guessed; the DOL's fn_80128D04) Turns attack collision
+            // `index` on or off.
+            void CollAtkSetEnable(long index, int enable);
+            // (name guessed; the DOL's fn_80128D44) The float at 0xA0 of
+            // attack collision `index` (CAtkCollision::GetUnkA0); the shells
+            // bounce away along it when they break.
+            float CollAtkGetUnkA0(long index);
+            // (name guessed; the DOL's fn_801295C8; SetRotY proper is at 0x80129608) Sets the Y rotation of
+            // the item's model to `rad`, wrapped into [-pi, pi].
+            void SetRotYWrapped(float rad);
             // Clears target flags of body collision `index` (DOL).
             void CollBodyResetTargetFlag(long index, unsigned long flag);
             // Turns the item about the Y axis by `rad` (DOL).
@@ -192,7 +202,9 @@ namespace msw {
             unsigned char m_Unk160[0x170 - 0x160];
             CAtkCollision m_AtkColl;        // 0x170
             CBodyCollision m_BodyColl;      // 0x17C
-            unsigned char m_Unk188[0x1AA - 0x188];
+            unsigned char m_Unk188[0x190 - 0x188];
+            float m_fUnk190;                // 0x190, the shells set 30 when they break (meaning unknown)
+            unsigned char m_Unk194[0x1AA - 0x194];
             short m_nUnk1AA;                // 0x1AA, passed to SearchTarget_
     };
 }

@@ -186,7 +186,7 @@ int msw::SelectMenu::CEntryExplain::Set()
             pPaneCtrl->BuildAnim(0, s_AnimNames, ANIM_NUM);
             SetPaneAccessor(pPaneCtrl, s_PaneNames, PANE_NUM);
 
-            long nFile = menu::CMessage::s_Instance.GetFileIndex(s_MessageFile);
+            short nFile = menu::CMessage::s_Instance.GetFileIndex(s_MessageFile);
             const wchar_t *pText = menu::CMessage::s_Instance.GetTextByLabel(nFile, s_MessageLabel);
             m_pPaneAccessor->SetTextBoxString(PANE_T_MES00, pText, wcslen(pText));
 

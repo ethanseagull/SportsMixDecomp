@@ -24,8 +24,8 @@ namespace msw {
                 // Bit 1 of the flags.
                 int IsCreate() const;
                 void SetCreate(int bCreate);
-                // The model's shadow size: a table entry chosen by bits 3-5
-                // of the byte at 0x16.
+                // The model's shadow size: a table entry chosen by the low
+                // three bits of the byte at 0x16 (-1: none).
                 short GetShadowSize() const;
                 // Bit 2 of the flags. (meaning not known)
                 void SetRelease(int bRelease);
@@ -33,6 +33,9 @@ namespace msw {
                 // data and the motion selection (nMotSel). (parameter names
                 // guessed)
                 void SetChrInit(long nChr, long nColor, void *pMii, long nMotSel);
+                // An object (kind 2): its number, its init data and the
+                // motion selection. (parameter names guessed)
+                void SetObjInit(long nObj, void *pInit, long nMotSel);
                 void SetTeam(long nTeam, long nNo);
                 // bDisp sets bit 0x80 of the third value.
                 void SetDispInfo(int bDisp, long nDrawLayer, long nLightSelector, long nDispInfo);
@@ -62,7 +65,18 @@ namespace msw {
                 signed char nDrawLayer;
                 signed char nLightSelector;
                 unsigned char nDispInfo; // 0x16: bit 0x80 is IsDisp
-                unsigned char nFlag;     // 0x17
+                // 0x17. Written through bit-fields: clearing a bit shows as
+                // a rotate-and-mask without the byte mask a plain `&= ~n`
+                // gives.
+                union {
+                    unsigned char nFlag;
+                    struct {
+                        unsigned char m_Unk17 : 5;
+                        unsigned char bRelease : 1;
+                        unsigned char bCreate : 1;
+                        unsigned char bBind : 1;
+                    } m_Flag;
+                };
             };
 
             // The three functions the class's own vtable holds (DOL).
@@ -71,6 +85,10 @@ namespace msw {
             virtual void Disp();
 
             static CEvDemoRes *GetInstance();
+            // Called by CEventDemoBase::_Init (DOL), which passes 0x100.
+            // (parameter name and return type guessed)
+            static CEvDemoRes *CreateInstance(bcs::CTask *pParent);
+            void Setup(long nSize);
 
             // (name guessed) The half-word at 0x6A.
             unsigned short GetFlag() const { return m_nFlag; }
@@ -98,6 +116,10 @@ namespace msw {
             void SetUnk62(short n) { m_nUnk62 = n; }
             void SetUnk64(short n) { m_nUnk64 = n; }
             void SetFlag(unsigned short nFlag) { m_nFlag = nFlag; }
+            // (names guessed) CEventDemoBase::_Init copies the stage and the
+            // game mode of CGame::g_GameWork into 0x66/0x68.
+            void SetStage(short nStage) { m_nStage = nStage; }
+            void SetGameMode(short nGameMode) { m_nGameMode = nGameMode; }
 
         private:
             // 0x34 (name guessed): what makes the models of each kind
@@ -109,7 +131,8 @@ namespace msw {
             unsigned char m_Unk50[0x12];
             short m_nUnk62;              // 0x62: BossF sets 0
             short m_nUnk64;              // 0x64: BossF sets 1
-            unsigned char m_Unk66[0x04];
+            short m_nStage;              // 0x66 (name guessed)
+            short m_nGameMode;           // 0x68 (name guessed)
             union {
                 unsigned short m_nFlag;  // 0x6A (name guessed)
                 struct {

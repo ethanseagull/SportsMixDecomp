@@ -140,7 +140,7 @@ game/bcs/dwc/CDwcFriend.cpp:
 	.text       start:0x800B4BAC end:0x800B4F08
 
 game/bcs/CWifiPadBase.cpp:
-	.text       start:0x800C1558 end:0x800C1614
+	.text       start:0x800C1558 end:0x800C16C0
 
 game/bcs/CWifiPad.cpp:
 	.text       start:0x800C16C0 end:0x800C256C
@@ -646,6 +646,7 @@ game/msw/CEvNodeData.cpp:
 
 game/msw/CEvDemoRes/_CHR_INFO.cpp:
 	.text       start:0x801FEDD8 end:0x801FEEF4
+	.rodata     start:0x80444078 end:0x80444084
 
 game/msw/CEvDemoRes.cpp:
 	.text       start:0x801FEF0C end:0x801FFE78

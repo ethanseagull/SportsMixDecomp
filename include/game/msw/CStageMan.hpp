@@ -546,6 +546,16 @@ namespace msw {
             unsigned char m_Unk15C[0xA0];       // 0x15C
     };
 
+    // A node of CStageMan's model pool, 0x2C bytes (see m_MdlPtrPool). Only
+    // what bcs::CPool::Handle reads is mapped (BasketF CStageBasket13).
+    class CStageMan::CMdlPtrPoolNode {
+        public:
+            unsigned char m_Unk00[0x10]; // 0x00
+            unsigned long m_nHandleId;   // 0x10, the id of the handle that refers to this node
+            CStageMdl *m_Data;           // 0x14
+            unsigned char m_Unk18[0x14]; // 0x18
+    };
+
     namespace STAGE {
 
         // (member names guessed) One entry of a stage's model table, size

@@ -90,7 +90,11 @@ namespace msw {
                 long m_Unk160;
                 unsigned char m_Unk164[0x1C8 - 0x164];
                 unsigned long m_nUnk1C8;   // 0x1C8
-                unsigned char m_Unk1CC[0x638 - 0x1CC];
+                // 0x1CC: screen split; msw::cockpit::GetViewSplitNum gives 1
+                // view for 0, 4 for 3, else 2 (name guessed). The volley coin
+                // cockpit places its counters only for 0.
+                long m_nViewSplit;
+                unsigned char m_Unk1D0[0x638 - 0x1D0];
             };
 
             CGame(bcs::CTask *pParent, GAME_MODE mode);
@@ -327,6 +331,9 @@ namespace msw {
 
             // Not zero when team nTeam may still take an item. (DOL)
             static int CanbeTeamItemPush(long nTeam);
+            // DOL, static. CItemBallChangeEffect's constructor passes 60.0,
+            // 16.0 and 0. (parameter meanings not known)
+            static void StartStopEffect(float, float, long);
             // DOL, static (DodgeF CEventDemoDodge; return types and parameter
             // names guessed). The full life of a character of team nTeam;
             // the slow-motion effect (start with four parameters, stop, and

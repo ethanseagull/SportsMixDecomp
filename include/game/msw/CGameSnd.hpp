@@ -17,6 +17,10 @@ namespace msw {
             // caller seen ends in this call)
             static void Play(long nSe, const bcs::FVEC3 *pPos, unsigned long nArg2, long nArg3, float fArg4,
                              float fArg5, float fArg6);
+            // The same with the position by reference (a second function in
+            // the DOL). (return type guessed)
+            static void Play(long nSe, const bcs::FVEC3 &rPos, unsigned long nArg2, long nArg3, float fArg4,
+                             float fArg5, float fArg6);
     };
 }
 

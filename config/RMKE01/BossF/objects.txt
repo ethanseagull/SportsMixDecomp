@@ -14,3 +14,4 @@ Matching game/boss/CBallManBoss.cpp
 Equivalent game/boss/CRadarIcon2DBoss.cpp
 Matching game/boss/CCockpitBossPause.cpp
 Matching game/boss/CC_PARAM_BOSS.cpp
+Matching game/boss/CItemManBoss.cpp

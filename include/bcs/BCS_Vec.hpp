@@ -11,6 +11,11 @@ namespace bcs {
     // DOL.
     void BCS_Vec_Slerp(FVEC3 &rOut, const FVEC3 &rFrom, const FVEC3 &rTo, float t);
 
+    // (argument names guessed) rOut = (sin(rotY), 0, cos(rotY)) * len: a
+    // vector of length len along +Z turned by rotY (radians) about Y. In the
+    // DOL.
+    void BCS_VecZ_RotY(FVEC3 &rOut, float len, float rotY);
+
     // The three routines below are inline in the modules and written in
     // paired-single assembly in the original (x and y as a pair, z alone; the
     // compiler does not produce these instructions from float code). They are

@@ -37,7 +37,9 @@ namespace {
         "IB03.brres",
     };
 
-    // The model file of an item ball kind.
+    // The model file of an item ball kind. (guessed to be an inline helper
+    // in the original too: the archive handle takes the lowest stack slot,
+    // after CreateMdl_'s own locals)
     inline nw4r::g3d::ResFile GetItemBallFile(long type)
     {
         nw4r::g3d::ResFile archive = msw::CLoadData::GetRes(0x23);

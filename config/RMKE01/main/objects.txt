@@ -36,5 +36,5 @@ Matching game/msw/vm/CVMCpu.cpp
 Matching game/msw/menu/CVibEff.cpp
 NonMatching game/msw/CEventDemoBase.cpp
 NonMatching game/msw/CStgGmk_Pylon_Mdl.cpp
-NonMatching game/msw/CItemBall.cpp
+Equivalent game/msw/CItemBall.cpp
 NonMatching game/msw/CEffectTable.cpp

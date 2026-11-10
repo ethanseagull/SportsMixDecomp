@@ -38,6 +38,10 @@ namespace bcs {
             // Static: the body in the DOL reads the data block through r3.
             static void LoadQuakeData(const void *pData);
 
+            // Makes this the active camera of `view` (added for MenuF
+            // game/menu/CCameraMenuBG.cpp; return type guessed).
+            void SetActive(long view);
+
         protected:
             VIEW_DATA m_Data;            // 0x34 (name guessed)
             VIEW_DATA m_DataSave;        // 0x84: a copy of m_Data made by the constructor;

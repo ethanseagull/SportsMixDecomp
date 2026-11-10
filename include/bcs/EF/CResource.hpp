@@ -1,6 +1,12 @@
 #ifndef BCS_EF_CRESOURCE_HPP_
 #define BCS_EF_CRESOURCE_HPP_
 
+namespace nw4r {
+    namespace g3d {
+        class ResFile;
+    }
+}
+
 namespace bcs {
     class CArcFileAccessor;
 
@@ -26,6 +32,9 @@ namespace bcs {
                 void AddArchive(const char *pPath);
                 void RelocateCommand();
                 void InvalidateCache();
+                // The g3d file `pName` of the loaded archives (a null handle
+                // when there is none).
+                nw4r::g3d::ResFile GetG3DResFile(const char *pName);
         };
     }
 }

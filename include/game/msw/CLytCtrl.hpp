@@ -26,6 +26,10 @@ namespace msw {
     class CLytCtrl {
         public:
             static CLytCtrl *GetInstance();
+            // Static: its body reads nothing through r3. Bit 0 of the
+            // layout manager's word at 0x44, or 0 without a manager (return
+            // type guessed; the caller in CCameraMenuBG.cpp turns it into 0 or 1).
+            static unsigned long IsLocationAdjust();
 
             void DeleteObject(unsigned long nHandle);
             nw4r::lyt::ArcResourceAccessor *NewArcResourceAccessor(const char *pFileName, const char *pRootFolderName);

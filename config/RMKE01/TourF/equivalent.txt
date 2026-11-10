@@ -1,4 +1,5 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
+TourF CreateModel__Q23msw17CTournamentTrophyFliill near 98.8 stack slots only: nIndex and the three by-value ResFile copies are allocated in the opposite order (0x8..0x14); same code otherwise
 TourF CreateModel__Q23msw21CEvMdlCreaterTmMdlChrFRQ33msw10CEvDemoRes9_CHR_INFO near 99.1 register choice only: r29 and r30 are swapped between rInfo and nChr (later nAnim); same instructions otherwise
 TourF SendEvent__Q23msw27CCockpitTournamentTelopLogoFlPv near 99.6 99.6%, schedule only: r29/r31 swapped between the text-pane index and the text pointer
 TourF Set__Q23msw27CCockpitTournamentTelopLogoFv near 99.1 99.1%, schedule only: saved registers for the pane-link pointer, child count and parent pane in the reparenting loop are assigned differently; same instructions otherwise

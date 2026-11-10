@@ -44,6 +44,12 @@ namespace msw {
             // Colour of the crystal on the map (cup model).
             static void SetCrystalColor(long nColor);
 
+            // Called by msw::CTournamentChip::UpdateFrame once a chip has
+            // been shown for two frames, with the values the route manager
+            // left in the chip. (parameter names and return types guessed)
+            void SetupStagePoint(long nPoint, int);
+            void SetupStageChip(long nChip, long, long);
+
         protected:
             void _CreateTimer(long nNum);
             // Queues timer event nEvent to run at time fTime.

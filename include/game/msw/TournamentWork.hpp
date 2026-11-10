@@ -13,7 +13,21 @@ namespace msw {
         // member used so far is mapped; msw::CTmGameHandler also reads and
         // writes bytes up to 0xFBB, and the object goes on past 0x1060.
         struct TOURNAMENT_INFO {
-            unsigned char m_Unk0000[0x1060];
+            // One mission (rule) of the match, 0x14 bytes. Read by the
+            // modules' tournament handlers (VolleyF CTmGameHandlerVolley);
+            // the meaning of the members is inferred from those uses.
+            struct MISSION {
+                signed char nType;    // 0x00, what the mission counts (0x13 to 0x3F seen)
+                unsigned char nFlags; // 0x01, 0x40 seen tested: the mission is shown in an extra match
+                short nTarget;        // 0x02, the count to reach
+                short nCount;         // 0x04, the count so far
+                short nUnk06;         // 0x06, passed with nCount to the count-up display
+                unsigned char m_Unk08[0x14 - 0x08];
+            };
+
+            unsigned char m_Unk0000[0xA20];
+            MISSION aMission[16]; // 0xA20
+            unsigned char m_Unk0B60[0x1060 - 0xB60];
             // The word msw::CTournament::SetDemoType stores (DOL): the demo
             // the tournament map is showing.
             short nDemoType; // 0x1060

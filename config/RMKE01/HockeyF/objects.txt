@@ -5,6 +5,7 @@
 Equivalent game/hockey/CEffectCtrlHockey.cpp
 Matching game/hockey/module.cpp
 Matching game/hockey/CItemBallHockey.cpp
+Equivalent game/hockey/TournamentHockey.cpp
 Matching game/hockey/CCockpitHockeyLayoutBase.cpp
 Matching game/hockey/CBallManHockey.cpp
 Matching game/hockey/CCameraHockey.cpp

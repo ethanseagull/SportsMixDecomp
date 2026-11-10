@@ -23,11 +23,18 @@ namespace msw {
                 // Callers compare the byte as a signed int, hence a getter
                 // that widens it.
                 long GetGameType() const { return m_nGameType; }
+                // Compared as a signed int as well (VolleyF
+                // CTmGameHandlerVolley::_SendMessage).
+                long GetPeriod() const { return m_nPeriod; }
 
                 unsigned char m_Unk00[4];
                 unsigned char m_nGameMode; // 0x04, the GAME_MODE of the running game
                 unsigned char m_nGameType; // 0x05, 2 selects the sport's party game
-                unsigned char m_Unk06[0x632];
+                unsigned char m_Unk06[6];
+                unsigned char m_nPeriod;   // 0x0C, the period being played; 0 is the first (guess)
+                unsigned char m_Unk0D[0x160 - 0x0D];
+                long m_Unk160;             // 0x160, counted by tournament mission 0x3E (coins?)
+                unsigned char m_Unk164[0x638 - 0x164];
             };
 
             CGame(bcs::CTask *pParent, GAME_MODE mode);
@@ -51,6 +58,20 @@ namespace msw {
             // CTmGameHandler::_SetBattleWin takes it and _IsBattleWin tests
             // for 1.
             static long GetTeamResult(long nTeam);
+            // The score of team nTeam in period nPeriod; the coins of team
+            // nTeam. (DOL, static; return types guessed)
+            static long GetTeamPeriodScore(long nTeam, long nPeriod);
+            static long GetTeamCoin(long nTeam);
+            // Sends a message to the running game (static in the DOL: the
+            // first argument goes in r3). Ends in the game's tournament
+            // handler, CTmGameHandler::_SendMessage.
+            static void SendMessage(long, long, long, long);
+            // The score of team nTeam in the running game (a DOL table of
+            // its own, not g_GameWork); whether player nPlayer's character is
+            // the hockey keeper (bit 1 of the byte at g_GameWork + 0x58 +
+            // nPlayer). (DOL, static; return types guessed)
+            static long GetTeamScore(long nTeam);
+            static int IsCharEx_HockeyKeeper(long nPlayer);
 
             static GameWork g_GameWork;
             static CGame *m_pInstance;

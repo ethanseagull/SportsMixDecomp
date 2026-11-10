@@ -7,6 +7,8 @@
 namespace nw4r {
     namespace lyt {
 
+        class Material;
+
         // Width and height of a pane.
         struct Size {
             float width;  // 0x00
@@ -54,7 +56,9 @@ namespace nw4r {
                 virtual void Unk5C();
                 virtual void Unk60();
                 virtual void Unk64();
-                virtual void Unk68();
+                // 0x68 (VolleyF game/volley/CCockpitChrIcon2DVolley.cpp: a
+                // picture pane's material). Constness guessed.
+                virtual Material *GetMaterial() const;
                 virtual void Unk6C();
 
                 void SetSize(const Size &rSize) { mSize = rSize; }
@@ -64,6 +68,8 @@ namespace nw4r {
                 const char *GetName() const { return mName; }
                 // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp.
                 void SetTranslate(const math::VEC3 &rTranslate) { mTranslate = rTranslate; }
+                // Added for VolleyF game/volley/CCockpitChrIcon2DVolley.cpp.
+                void SetRotate(const math::VEC3 &rRotate) { mRotate = rRotate; }
                 // Bit 0 of the flags.
                 void SetVisible(bool bVisible)
                 {
@@ -73,7 +79,8 @@ namespace nw4r {
             private:
                 unsigned char m_Unk04[0x28];
                 math::VEC3 mTranslate;       // 0x2C
-                unsigned char m_Unk38[0x14];
+                math::VEC3 mRotate;          // 0x38, in degrees
+                unsigned char m_Unk44[0x8];  // 0x44, the scale
                 Size mSize;                  // 0x4C
                 unsigned char m_Unk54[0x30];
                 math::MTX34 mGlbMtx;         // 0x84

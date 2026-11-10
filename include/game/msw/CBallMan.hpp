@@ -86,6 +86,7 @@ namespace msw {
             static CBall *GetBallPtr(long nBall);
             static CBall *GetNearPosBall(const bcs::FVEC3 &rPos);
             static void DelBall(long nBall);
+            static CBall *AddBall(CBall *pBall);
 
             static CBallMan *GetInstance();
             // Not zero when there is an instance.

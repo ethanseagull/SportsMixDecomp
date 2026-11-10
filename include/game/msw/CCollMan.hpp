@@ -7,6 +7,17 @@
 
 namespace msw {
 
+    // DOL collision routines outside CCollMan (Q23msw4COLL: a namespace or a
+    // class of statics). Added for HockeyF game/hockey/CCollManHockey.cpp.
+    namespace COLL {
+        // Non-zero when a sphere of radius fRadius moving from rFrom to rTo
+        // hits the box at rCenter with half-sizes rSize turned by rotY about
+        // Y; rHit gets where. (meaning of the arguments read from the caller)
+        int DetectHitPos_CapsuleCuboid(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius,
+                                       const bcs::FVEC3 &rCenter, const bcs::FVEC3 &rSize, float rotY,
+                                       bcs::FVEC3 &rHit);
+    }
+
     // Collision of the ball and the characters with the court. A DOL class,
     // size 0x7C: bcs::CTask at 0x00, own members from 0x34 (read from the
     // constructor and the small virtual functions in the DOL). Each game
@@ -66,6 +77,31 @@ namespace msw {
                                     const bcs::FVEC3 &rTo, float fRadius, long, unsigned long);
             static int CheckMapInner(const bcs::FVEC3 &rPos, float fRadius, unsigned long);
             static void SetArtsExColl(long n);
+
+            // DOL geometry helpers (static: they never read `this`).
+            // Added for HockeyF game/hockey/CCollManHockey.cpp; parameter
+            // names and the meaning of the returns are read from its use.
+            // The closest points of segments rA0-rA1 and rB0-rB1 (rClosestA,
+            // rClosestB, at parameters rT and rS); returns the square of
+            // their distance.
+            static float GetClosestP_SegmentSegment(const bcs::FVEC3 &rA0, const bcs::FVEC3 &rA1,
+                                                    const bcs::FVEC3 &rB0, const bcs::FVEC3 &rB1, float &rT,
+                                                    float &rS, bcs::FVEC3 &rClosestA, bcs::FVEC3 &rClosestB);
+            // The point of segment r0-r1 closest to rPoint; returns the
+            // square of the distance.
+            static float GetClosestP_PointSegment(const bcs::FVEC3 &rPoint, const bcs::FVEC3 &r0,
+                                                  const bcs::FVEC3 &r1, float &rT, bcs::FVEC3 &rClosest);
+            // Where segment rFrom-rTo crosses the plane through rPoint with
+            // normal rNormal from its front side (rHit), as a fraction of the
+            // segment.
+            static float GetIntersectionTimeOfFrontPlaneAndLine(bcs::FVEC3 &rHit, const bcs::FVEC3 &rNormal,
+                                                                const bcs::FVEC3 &rPoint, const bcs::FVEC3 &rFrom,
+                                                                const bcs::FVEC3 &rTo);
+            // Where segment rFrom-rTo first touches the sphere around
+            // rCenter (rHit), as a fraction of the segment.
+            static float GetIntersectionTimeOfSegmentSphere(bcs::FVEC3 &rHit, const bcs::FVEC3 &rFrom,
+                                                            const bcs::FVEC3 &rTo, const bcs::FVEC3 &rCenter,
+                                                            float fRadius);
 
             static CCollMan *m_pInstance;
 

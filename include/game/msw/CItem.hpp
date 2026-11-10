@@ -153,6 +153,9 @@ namespace msw {
             void AddRotY(float rad);
             // Plays sound `id` at the item's position (DOL).
             void PlaySePos(long id);
+            // Sets the map collision code the item tests against (DOL;
+            // DodgeF's shells pass 0 before their DOL DoThrowInit).
+            void SetMapDetectCode(long code);
 
             // DOL. (return types guessed from CComManVolleyRR::IsExistItemBall,
             // which tests the first and third and compares the second with a

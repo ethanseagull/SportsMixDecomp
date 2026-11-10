@@ -15,6 +15,7 @@ namespace nw4r {
 
 namespace bcs {
     class CMdlObj;
+    class CScnObj;
     struct BCS_Color;
 }
 
@@ -420,11 +421,23 @@ namespace msw {
             void SetBallNo(long nBallNo) { m_nBallNo = nBallNo; }
             // DOL.
             void SetPos(const bcs::FVEC3 *pPos);
+            // DOL. The model the ball is attached to, or null.
+            bcs::CScnObj *GetAttachMdlObj() const;
+            // (name guessed) The ball's own model.
+            bcs::CScnObj *GetMdlObj() const { return m_pMdlObj; }
+            // (names guessed) Two more bits of m_nFlag that the basket and
+            // hockey ball markers read; what they stand for is not known.
+            int IsFlag4() const { return m_nFlag & 0x4; }
+            int IsFlag100000() const { return m_nFlag & 0x100000; }
 
         protected:
             unsigned long m_nFlag;         // 0x94
             long m_nBallNo;                // 0x98, the ball's place in CBallMan's table
-            unsigned char m_Unk9C[0x5C];   // 0x9C
+            unsigned char m_Unk9C[0x14];   // 0x9C
+            // 0xB0 (name guessed): the ball's model, made by CreateMdlObj_ and
+            // deleted by DestroyMdlObj.
+            bcs::CScnObj *m_pMdlObj;
+            unsigned char m_UnkB4[0x44];   // 0xB4
             bcs::FVEC3 m_Pos;              // 0xF8
             unsigned char m_Unk104[0x30];  // 0x104
             // 0x134 (name guessed from CBall::ClearOffsetPos, which writes it)

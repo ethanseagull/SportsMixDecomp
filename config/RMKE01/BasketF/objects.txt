@@ -25,3 +25,6 @@ Equivalent game/basket/CCockpitBasketPause.cpp
 Equivalent game/basket/CStageBasket13.cpp
 Equivalent game/basket/CCockpitBasketPauseResult.cpp
 Equivalent game/basket/CCockpitBasketCoin.cpp
+Equivalent game/basket/CBallManBasket.cpp
+Matching game/basket/CComDrvBasket.cpp
+Equivalent game/basket/CBallMarkerBasket.cpp

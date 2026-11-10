@@ -6,4 +6,5 @@ Matching game/basket/CEffectCtrlBasket.cpp
 Matching game/basket/module.cpp
 Matching game/basket/TournamentBasket.cpp
 Matching game/basket/CCockpitBasketLayoutBase.cpp
+Equivalent game/basket/CCollManBasket.cpp
 Matching game/basket/CCameraBasket.cpp

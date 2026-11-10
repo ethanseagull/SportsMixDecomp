@@ -14,6 +14,8 @@ namespace bcs {
 
 namespace msw {
 
+    class CEventNodeBase;
+
     // A model placed by an event: the characters and objects of the demos
     // and of the tournament map. A DOL class, vptr at 0x00. The constructor
     // in the DOL writes members up to 0xAC; msw::CEvDemoMdlChr, 0xE0 bytes,
@@ -101,6 +103,18 @@ namespace msw {
             void SetMotionReverse(int bReverse);
             void SetEnableFootSe(int bEnable);
 
+            // (DOL functions; names from the symbols, parameter names
+            // guessed) Whether the model is shown; attach a node path to the
+            // model (pNode is the model's from then on); start node path
+            // nNode at frame fFrame.
+            int IsDisp() const;
+            void SetLinkNode(CEventNodeBase *pNode, int b);
+            void SetNode(long nNode, float fFrame);
+
+            // (names guessed) Read directly by the modules.
+            const bcs::FVEC3 &GetPos() const { return m_vPos; }
+            const bcs::FVEC3 &GetRot() const { return m_vRot; }
+
             // (names guessed) Inline in the modules, which write these
             // members directly.
             void SetVoiceTable(const long *pTable) { m_pVoiceTable = pTable; }
@@ -132,7 +146,9 @@ namespace msw {
             }
 
         private:
-            unsigned char m_Unk04[0x30];  // 0x04
+            bcs::FVEC3 m_vPos;            // 0x04 (name guessed)
+            bcs::FVEC3 m_vRot;            // 0x10 (name guessed) radians
+            unsigned char m_Unk1C[0x18];  // 0x1C
             unsigned long m_nFlag;        // 0x34 (name guessed)
             short m_nIndex;               // 0x38
             short m_nType;                // 0x3A

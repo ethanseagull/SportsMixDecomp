@@ -1,2 +1,5 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
+main ChgDemoDisp__Q23msw9CItemBallFi near 98.2 98.2%: diff.py class schedule; the null test and flag set/clear blocks are laid out in the opposite branch order with registers renumbered; same loads, stores and calls
+main Main__Q23msw19CItemBallShellWreckFv near 96.3 96.3%: float register numbering and instruction order in the paired-single motion block and the fade branch; same operations, constants and branches
+main __ct__Q23msw21CItemBallChangeEffectFPQ23bcs5CTaskUl near 87.9 87.9%: the rlwinm clearing bit 0x4 of the word at 0x08 is scheduled two instructions early; nothing else differs
 main __ct__Q33msw4menu13CDispTaskLinkFv unverified 96.1 96.1%: the original reads the id counter twice before incrementing it, ours once; nothing writes in between, so both reads give the same value

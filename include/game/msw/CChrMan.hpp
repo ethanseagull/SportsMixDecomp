@@ -28,6 +28,10 @@ namespace msw {
             // The one instance. Static. (BasketF casts it to its
             // CChrManBasket)
             static CChrMan *GetInstance();
+            // (name guessed; fn_800EC2E4, unnamed in the DOL) Not zero when
+            // a character that is not disabled has bit 0x20000 of the word
+            // at 0xE8 set (taken to be the star state). Static.
+            static int IsExistStarChr();
     };
 }
 

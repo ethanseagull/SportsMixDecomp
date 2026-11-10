@@ -1,8 +1,10 @@
 #ifndef NW4R_G3D_RESFILE_HPP_
 #define NW4R_G3D_RESFILE_HPP_
 
+#include "nw4r/db/Panic.hpp"
 #include "nw4r/g3d/ResAnmChr.hpp"
 #include "nw4r/g3d/ResAnmClr.hpp"
+#include "nw4r/g3d/ResAnmTexPat.hpp"
 #include "nw4r/g3d/ResAnmTexSrt.hpp"
 #include "nw4r/g3d/ResMdl.hpp"
 
@@ -33,6 +35,33 @@ namespace nw4r {
                 bool CheckRevision() const;
                 void Init();
                 bool Bind(ResFile file);
+
+                // DOL functions, from msw::CItemBall's model loading. The
+                // int forms take the index of the resource. Return types of
+                // the Has functions guessed (the caller tests a full word).
+                void *GetExternalData(const char *pName) const;
+                ResMdl GetResMdl(int index) const;
+                ResAnmClr GetResAnmClr(int index) const;
+                ResAnmTexSrt GetResAnmTexSrt(int index) const;
+                ResAnmTexPat GetResAnmTexPat(int index) const;
+                int HasResAnmChr() const;
+                int HasResAnmClr() const;
+                int HasResAnmTexSrt() const;
+                int HasResAnmTexPat() const;
+                int HasResAnmShp() const;
+
+                // (name written for this project) A handle to file data that
+                // must be 32-byte aligned, with the check NW4R's constructor
+                // makes (g3d_resfile_ac.h, line 60; the strings are the ones
+                // in the DOL). A function, not a second constructor, so that
+                // ResFile(0) stays unambiguous.
+                static ResFile FromAligned(void *p)
+                {
+                    if ((unsigned long)p & 0x1F) {
+                        db::Panic("g3d_resfile_ac.h", 60, "NW4R:Failed assertion !((u32)p & 0x1f)");
+                    }
+                    return ResFile(static_cast<ResFileData *>(p));
+                }
 
             private:
                 ResFileData *m_pData; // 0x00

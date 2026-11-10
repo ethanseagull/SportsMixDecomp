@@ -6,6 +6,7 @@
 namespace msw {
 
     class CEventModel;
+    class CEffectCluster;
 
     // The tournament map's manager (module TourF). Only the members used so
     // far.
@@ -38,6 +39,25 @@ namespace msw {
                         unsigned long ulFlag);
             void StopSe(float fFade, long nFirst, long nLast);
             int IsPlaySe(long nSlot);
+
+            // Map effects, kept in the slots nFirst..nLast: a free slot, and
+            // effect nEff started in slot nSlot (0 when it did not start).
+            // (names and return types guessed)
+            long GetEffectSlot(long nFirst, long nLast);
+            CEffectCluster *SetEffect(long nSlot, long nEff, long n, unsigned long ul1, unsigned long ul2);
+
+            // Where the tournament camera is now.
+            void GetCameraPos(bcs::FVEC3 &pos);
+
+            // (name guessed) Map object nIndex (see SetupObjModel), 0 when
+            // there is none.
+            CEventModel *GetObjModel(long nIndex) const { return m_apObjModel[nIndex]; }
+
+        private:
+            // The base class (bcs::CTask, vptr at 0x00) and the members
+            // before 0xDA8 are not declared yet.
+            unsigned char m_Unk0000[0xDA8];
+            CEventModel *m_apObjModel[128]; // 0xDA8 (count not known)
     };
 }
 

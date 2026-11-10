@@ -8,3 +8,4 @@ Matching game/basket/TournamentBasket.cpp
 Matching game/basket/CCockpitBasketLayoutBase.cpp
 Equivalent game/basket/CCollManBasket.cpp
 Matching game/basket/CCameraBasket.cpp
+Equivalent game/basket/CRadarIcon2DBasket.cpp

@@ -11,4 +11,13 @@ typedef enum _GXTevRegID {
     GX_MAX_TEVREG
 } GXTevRegID;
 
+// Named in msw::CBall::Eff_SetMdlKColorReg's mangled name.
+typedef enum _GXTevKColorID {
+    GX_KCOLOR0,
+    GX_KCOLOR1,
+    GX_KCOLOR2,
+    GX_KCOLOR3,
+    GX_MAX_KCOLOR
+} GXTevKColorID;
+
 #endif /* !REVOLUTION_GX_GXENUM_H_ */

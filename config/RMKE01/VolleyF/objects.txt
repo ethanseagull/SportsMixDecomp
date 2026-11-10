@@ -15,3 +15,5 @@ NonMatching game/volley/CComManVolley.cpp
 NonMatching game/volley/CComManVolleyRR.cpp
 NonMatching game/volley/CItemManVolley.cpp
 Matching game/volley/CCockpitVolleyModelTelop.cpp
+Matching game/volley/CStgGmk_Wave_Volley.cpp
+Matching game/volley/CEventDemoVolley.cpp

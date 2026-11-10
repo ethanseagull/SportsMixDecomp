@@ -12,6 +12,11 @@ namespace msw {
             static void SetMissionCountNum(long, long nCount, long nTarget);
             static void SetMissionCountUpNum(long, long, long);
             static void SetMissionCountActiveColor(int);
+            // Used by CEventDemoVolley (static: the object id goes in r3;
+            // return types guessed). Hides CCockpit::CreateObj.
+            static long CreateObj(long nObjId, long nParam);
+            static void SetPartMove(long nPart, long nMove, long);
+            static void SetRadarIconDisp(int bDisp);
     };
 }
 

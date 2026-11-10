@@ -3,6 +3,7 @@ MenuF Main__Q23msw18CDepthOfFieldValueFv unverified 81.8 same operations and con
 MenuF Main__Q33msw10SelectMenu16CCourtBallMdlObjFv near 98.0 paired-single FVEC3Lerp float registers numbered in reverse and one stfs 0xb4 scheduled one instruction later; same operations
 MenuF SetUpButton__Q23msw12CButtonEntryFPQ23msw15CMenuPartButtonli near 99.8 operand order of one commutative add (index*0x68 + data vs data + index*0x68); same instructions otherwise
 MenuF Set__Q33msw10SelectMenu12CButton1CodeFv near 99.8 register choice only: r27 and r30 are swapped between the CSelectMenu pointer and the new CMenuPartList; same instructions otherwise
+MenuF Set__Q33msw10SelectMenu13CEntryExplainFv near 97.6 register choice only: the part list and this swap r31/r30 (ours r24/r31), loop registers shift with them, plus the order of one mr; same instructions otherwise
 MenuF Set__Q33msw10SelectMenu8CButton1Fv near 99.8 register choice only: r27 and r30 are swapped between the CSelectMenu pointer and the new CMenuPartList; same instructions otherwise
 MenuF Set__Q33msw10SelectMenu8CButton2Fv near 99.2 register choice only: r23/r24/r25 are permuted between the new CMenuPartList, the ButtonParam pointer and the new CMenuPartButton in the button loop; same instructions otherwise
 MenuF StateCharaChange__Q33msw10SelectMenu14CCourtCharaObjFv near 96.3 original reloads m_hNextMdl (0xC) after the store to 0x8 inside the inlined SetNextMdlHandle(0), ours reuses the register; no store can change 0xC in between, so behaviour is the same

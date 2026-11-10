@@ -192,6 +192,7 @@ msw::CCockpitTournamentTelopLogo::~CCockpitTournamentTelopLogo()
 
 int msw::CCockpitTournamentTelopLogo::Set()
 {
+    long nType;
     if (m_pPaneAccessor != 0) {
         return 0;
     }
@@ -203,7 +204,7 @@ int msw::CCockpitTournamentTelopLogo::Set()
         return -1;
     }
 
-    long nType = m_nType;
+    nType = m_nType;
     const char *pArchiveName = pCockpit->GetArchiveFileName(s_LogoLayoutInfo[nType].nArchive);
     nw4r::lyt::ArcResourceAccessor *pAccessor =
         pLytCtrl->NewArcResourceAccessor(pArchiveName, pCockpit->GetArchiveRootFolderName(0));

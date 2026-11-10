@@ -47,12 +47,13 @@ namespace msw {
             // the same with a number (what nArg selects is not known; the
             // caller passes 0). Return type guessed.
             void SetTextBoxString(long nPane, unsigned long nValue, unsigned long nArg);
-            // Added for HockeyF game/hockey/CCockpitHockeyCoin.cpp. Shows or
-            // hides the pane called pName (return type guessed).
+            // Added for MenuF game/menu/CEntryExplain.cpp. Shows or hides
+            // the pane named pName; nothing when it is not found.
             void SetDisp(const char *pName, int bDisp);
-            // (no symbol; a guess like the overloads below) The same by
-            // index, without an index check.
-            void SetDisp(long nPane, int bDisp)
+
+            // (no symbol; name guessed) The same by index. Inline in the
+            // modules.
+            void SetPaneDisp(long nPane, int bDisp)
             {
                 SetDisp(GetPaneName(nPane), bDisp);
             }

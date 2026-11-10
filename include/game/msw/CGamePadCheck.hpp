@@ -9,6 +9,9 @@ namespace msw {
             static void Initialize();
             static void Finalize();
             static CGamePadCheck *GetInstance();
+            // Added for MenuF game/menu/CInitGuide.cpp; static (the body
+            // reads the instance from a global).
+            static void CleanUp();
 
             unsigned char m_Unk00[0xAC];
             long m_UnkAC; // 0xAC, set to 1 once at start-up

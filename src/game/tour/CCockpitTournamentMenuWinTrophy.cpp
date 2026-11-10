@@ -103,13 +103,14 @@ int msw::CCockpitTournamentMenuWinTrophy::Set()
         return -1;
     }
 
+    const char *pArchiveName;
     CLytCtrl *pLytCtrl = CLytCtrl::GetInstance();
 
     if (pLytCtrl == 0) {
         return -2;
     }
 
-    const char *pArchiveName = pCockpit->GetArchiveFileName(1);
+    pArchiveName = pCockpit->GetArchiveFileName(1);
     nw4r::lyt::ArcResourceAccessor *pAccessor =
         pLytCtrl->NewArcResourceAccessor(pArchiveName, pCockpit->GetArchiveRootFolderName(0));
 

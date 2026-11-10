@@ -347,8 +347,8 @@ void msw::CCockpitBossCoin::AddCoinValue(long nTeam, long nOld, long nNew)
 // read to a constant, which the original did not).
 void msw::CCockpitBossCoin::SetCoinDisp(int bDisp)
 {
-    m_pPaneAccessor->SetDisp(sCoinDispPane[0], bDisp);
-    m_pPaneAccessor->SetDisp(sCoinDispPane[1], bDisp);
+    m_pPaneAccessor->SetPaneDisp(sCoinDispPane[0], bDisp);
+    m_pPaneAccessor->SetPaneDisp(sCoinDispPane[1], bDisp);
 }
 
 void msw::CCockpitBossCoin::SetCoinState(long nTeam, long nState)

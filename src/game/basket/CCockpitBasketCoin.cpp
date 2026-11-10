@@ -334,8 +334,8 @@ void msw::CCockpitBasketCoin::AddCoinValue(long nTeam, long nOld, long nNew)
 // inline here; the original has no out-of-line copy.
 inline void msw::CCockpitBasketCoin::SetCoinDisp(int bDisp)
 {
-    m_pPaneAccessor->SetDisp(CoinRes::GetCoinDispPane(0), bDisp);
-    m_pPaneAccessor->SetDisp(CoinRes::GetCoinDispPane(1), bDisp);
+    m_pPaneAccessor->SetPaneDisp(CoinRes::GetCoinDispPane(0), bDisp);
+    m_pPaneAccessor->SetPaneDisp(CoinRes::GetCoinDispPane(1), bDisp);
 }
 
 void msw::CCockpitBasketCoin::SetCoinState(long nTeam, long nState)

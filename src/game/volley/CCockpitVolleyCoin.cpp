@@ -361,8 +361,8 @@ void msw::CCockpitVolleyCoin::AddCoinValue(long nTeam, long nOld, long nNew)
 
 void msw::CCockpitVolleyCoin::SetCoinDisp(int bDisp)
 {
-    m_pPaneAccessor->SetDisp(CoinRes::GetCoinDispPane(0), bDisp);
-    m_pPaneAccessor->SetDisp(CoinRes::GetCoinDispPane(1), bDisp);
+    m_pPaneAccessor->SetPaneDisp(CoinRes::GetCoinDispPane(0), bDisp);
+    m_pPaneAccessor->SetPaneDisp(CoinRes::GetCoinDispPane(1), bDisp);
 }
 
 void msw::CCockpitVolleyCoin::SetCoinState(long nTeam, long nState)

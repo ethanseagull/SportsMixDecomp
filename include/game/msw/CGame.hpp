@@ -331,6 +331,9 @@ namespace msw {
 
             // Not zero when team nTeam may still take an item. (DOL)
             static int CanbeTeamItemPush(long nTeam);
+            // DOL, static. CItemBallChangeEffect's constructor passes 60.0,
+            // 16.0 and 0. (parameter meanings not known)
+            static void StartStopEffect(float, float, long);
             // DOL, static (DodgeF CEventDemoDodge; return types and parameter
             // names guessed). The full life of a character of team nTeam;
             // the slow-motion effect (start with four parameters, stop, and

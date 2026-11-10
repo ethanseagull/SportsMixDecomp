@@ -47,6 +47,9 @@ namespace msw {
             // parameter names guessed)
             static CEvDemoMdlObj *CreateModel(const _SETUP &rSetup, int);
             static CEvDemoMdlObj *CreateModel(_SETUP &rSetup, long nArc, const char *pSub, const char *pName);
+            // (parameter names guessed) A model from file pFile of the
+            // effect resources (msw::CTournamentMan, TourF).
+            static CEvDemoMdlObj *CreateModelEffRes(_SETUP &rSetup, const char *pFile, const char *pName);
     };
 }
 

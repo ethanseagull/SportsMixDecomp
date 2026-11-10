@@ -13,13 +13,13 @@ namespace msw {
         public:
             // Plays sound nSe, at *pPos when pPos is not null. What the other
             // arguments mean is not known; the callers seen so far pass
-            // (nSe, 0, 1, -1, 0.0f, 1.0f, 0.0f). (return type guessed: every
-            // caller seen ends in this call)
-            static void Play(long nSe, const bcs::FVEC3 *pPos, unsigned long nArg2, long nArg3, float fArg4,
+            // (nSe, 0, 1, -1, 0.0f, 1.0f, 0.0f). Returns the handle of the
+            // sound task (0: none), which msw::CTournamentMan (TourF) keeps.
+            static unsigned long Play(long nSe, const bcs::FVEC3 *pPos, unsigned long nArg2, long nArg3, float fArg4,
                              float fArg5, float fArg6);
             // The same with the position by reference (a second function in
-            // the DOL). (return type guessed)
-            static void Play(long nSe, const bcs::FVEC3 &rPos, unsigned long nArg2, long nArg3, float fArg4,
+            // the DOL).
+            static unsigned long Play(long nSe, const bcs::FVEC3 &rPos, unsigned long nArg2, long nArg3, float fArg4,
                              float fArg5, float fArg6);
     };
 }

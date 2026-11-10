@@ -51,6 +51,8 @@ namespace msw {
             // Looks the task up in the task manager by s_TaskHandle; null
             // when there is none.
             static CCockpit *GetTask();
+            // (return type guessed) Removes the cockpit task, if there is one.
+            static void Remove();
 
             // All static: each loads the task from s_TaskHandle itself.
             static long CreateObj(long nObjId, long nParam); // -1 without a task

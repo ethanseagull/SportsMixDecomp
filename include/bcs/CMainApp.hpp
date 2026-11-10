@@ -11,6 +11,7 @@ namespace bcs {
             static float GetAppFrameRateF();
             static float GetUnivSpeed();
             static void StartMasterFade(long, float);
+            static void Start3DFade(long, float);
             static int IsPlayMasterFade(); // return type guessed
     };
 }

@@ -38,10 +38,20 @@ namespace msw {
 
             // What the camera of a route does. Only the members the stage
             // route managers use. (names guessed)
+            //
+            // msw::CTournamentMan (TourF) queues a character's routes as an
+            // array of these, ended by one with no route.
             struct _PUSH_INFO {
-                unsigned char m_Unk00[0xC];
+                CRouteBase *pRoute;   // 0x00 (name guessed)
+                // 0x04, 0x08: msw::CTournamentMan passes them to PushRoute
+                // as its last two arguments, 0x08 first. (names guessed)
+                float fUnk04;
+                float fUnk08;
                 float fFrame;         // 0x0C: frame of the route move the camera starts at
-                unsigned char m_Unk10[3];
+                // 0x10: bit 0 for a route run backwards (names guessed)
+                unsigned char nFlag;
+                unsigned char nStart; // 0x11: the map point the route starts at
+                unsigned char nEnd;   // 0x12: and ends at
                 unsigned char nType;  // 0x13
             };
 
@@ -50,8 +60,12 @@ namespace msw {
             struct _PUSH_PARAM {
                 CRouteMove *pMove;    // 0x00
                 CEventModel *pModel;  // 0x04
-                unsigned char m_Unk08[4];
+                // 0x08: the route queued before this one (CRouteShipMove of
+                // Stage33 reads its id and length); may be 0, and may point
+                // at 0.
+                CRouteBase **ppPrev;
                 _PUSH_INFO *pInfo;    // 0x0C
+                _PUSH_INFO *pNext;    // 0x10: the route queued after this one, or 0 (name guessed)
             };
 
             struct _RESULT;
@@ -87,6 +101,11 @@ namespace msw {
             // Out of line in TourF (weak copies of these inline functions).
             float GetNumFrame() const { return m_fNumFrame; }
             void SetRouteId(long nId) { m_nRouteId = nId; }
+            // (name guessed) Inline in Stage33's CRouteShipMove::PushRoute.
+            long GetRouteId() const { return m_nRouteId; }
+            // (name guessed) The halfword at 0x20; msw::CTournamentMan
+            // skips a route after one with 0x10 and before one with 0x08.
+            unsigned short GetPushFlag() const { return m_nUnk20; }
 
         protected:
             // Inline: the constructors of the derived classes set these

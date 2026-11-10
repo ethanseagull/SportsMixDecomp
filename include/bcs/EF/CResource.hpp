@@ -16,6 +16,14 @@ namespace bcs {
         class CManager {
             public:
                 static CManager *GetInstance();
+
+                // (name guessed) The byte at 0x95; msw::CTournamentMan
+                // (TourF) clears it once the map is loaded.
+                void SetUnk95(bool b) { m_bUnk95 = b; }
+
+            private:
+                unsigned char m_Unk00[0x95];
+                bool m_bUnk95; // 0x95
         };
 
         // The effect archives known to the effect system. Lives in the DOL;

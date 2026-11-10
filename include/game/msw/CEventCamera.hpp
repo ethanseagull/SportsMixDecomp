@@ -1,7 +1,12 @@
 #ifndef CEVENTCAMERA_HPP_
 #define CEVENTCAMERA_HPP_
 
+#include "bcs/CScnObj.hpp"
 #include "bcs/CTask.hpp"
+
+namespace bcs {
+    class CCamera;
+}
 
 namespace msw {
 
@@ -14,6 +19,21 @@ namespace msw {
         public:
             // fn_80246DC0 (name guessed). CEventDemoBase::_Init passes itself.
             static CEventCamera *CreateInstance(bcs::CTask *pParent);
+    };
+
+    // A scene object that only passes a camera on (DOL class, 0x11C bytes;
+    // msw::CTournamentMan in TourF keeps one in the render list and points
+    // it at the camera in use). Only the members used so far.
+    class CEventCameraNull : public bcs::CScnObj {
+        public:
+            CEventCameraNull();
+            virtual void UpdateFrame(float);
+
+            // (name guessed) The camera passed on.
+            void SetCamera(bcs::CCamera *pCamera) { m_pCamera = pCamera; }
+
+        private:
+            bcs::CCamera *m_pCamera; // 0x118
     };
 }
 

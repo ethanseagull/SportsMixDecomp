@@ -4,6 +4,7 @@
 #include "bcs/CUnivTask.hpp"
 
 namespace bcs {
+    class CMdlObj;
     class CScnObj;
     struct FMTX34;
     struct FVEC3;
@@ -18,6 +19,7 @@ namespace bcs {
 }
 
 namespace msw {
+    class CEffectCluster;
     class CEffectTableList;
 
     // Size 0x4C. The class lives in the DOL; each module derives its own
@@ -55,6 +57,22 @@ namespace msw {
             static unsigned long CreateAttachEffect(long, const bcs::CScnObj *, const bcs::FVEC3 *, unsigned long, int,
                                                     int, int, unsigned long, unsigned long, unsigned long,
                                                     unsigned long);
+
+            // (parameter names and return types guessed) DOL. Starts effect
+            // nEff on the model, placed by the effect's own attach data;
+            // returns a handle as CreateAttachEffect does. Static like
+            // CreateAttachEffect (TourF's Stage33 passes the id in r3).
+            static unsigned long CreateAttachEffectAuto(long nEff, const bcs::CMdlObj *pMdl, unsigned long ul);
+            // (return type guessed) The cluster of an effect handle, 0 when
+            // it has ended.
+            CEffectCluster *FindList(unsigned long hEffect);
+            // (parameter names and return types guessed) DOL, static like
+            // CreateAttachEffect (msw::CTournamentMan in TourF passes the
+            // first argument in r3). Starts effect nEff unattached and
+            // returns its handle; stops or erases the effect of a handle.
+            static unsigned long CreateEffect(long nEff, unsigned long, unsigned long, unsigned long, unsigned long);
+            static void StopAttachEffect(unsigned long hEffect);
+            static void EraseAttachEffect(unsigned long hEffect);
 
             // Looks the instance up in the task manager by s_InstanceHandle.
             static CEffectCtrl *GetInstance();

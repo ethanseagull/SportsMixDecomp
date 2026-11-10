@@ -24,6 +24,11 @@ namespace bcs {
                 // once animation nAnim has ended.
                 void StopAnimation(long nAnim, int nArg);
                 int IsAnimEnd(long nAnim);
+                // Added for MenuF game/menu/CChrSign.cpp (return types
+                // guessed): whether animation nAnim is playing; changes its
+                // speed (-1.0f plays it backwards).
+                int IsAnimPlay(long nAnim);
+                void SetAnimSpeed(long nAnim, float fSpeed);
 
                 nw4r::lyt::Pane *GetPane() const { return m_pPane; }
 

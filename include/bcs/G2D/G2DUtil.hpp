@@ -18,6 +18,8 @@ namespace nw4r {
 }
 
 namespace bcs {
+    struct FVEC3;
+
     namespace G2D {
         class CPaneCtrl;
         class CPaneObj;
@@ -44,6 +46,11 @@ namespace bcs {
         // pPane under pParent. Return type and the names of the last two
         // arguments are guesses (called with 1, 0).
         void SetPaneParent(nw4r::lyt::Pane *pPane, nw4r::lyt::Pane *pParent, int bUnk, nw4r::lyt::Pane *pUnk);
+
+        // Added for MenuF game/menu/CChrSign.cpp. The screen position of the
+        // world point rPos seen through camera nCamera, into rOut (return
+        // type and argument names guessed).
+        void GetWorldScreenPosition(const FVEC3 &rPos, long nCamera, FVEC3 &rOut);
 
         // Added for MenuF game/menu/CSelectMenuLayoutBase.cpp: releases a
         // font made from a layout archive (return type guessed).

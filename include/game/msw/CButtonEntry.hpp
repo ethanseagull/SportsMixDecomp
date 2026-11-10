@@ -14,8 +14,10 @@ namespace msw {
     // with the CCharaStatus unit's data).
     extern long ButtonEntrySETable[];
 
-    // Size 0x5A0, no vtable. Lives in MenuF, embedded in the SelectMenu
-    // screens (CEntry has one at 0x5C). Reads the button descriptions of a
+    // Size 0x544, no vtable: CScoreTop (0x5A0 bytes) has it at 0x5C and
+    // nothing after it, CTeam (0x5A4) its own word at 0x5A0. Lives in
+    // MenuF, embedded in the SelectMenu screens (CEntry has one at 0x5C
+    // too). Reads the button descriptions of a
     // screen from "menu/bin/General_pack.bin" and fills CMenuPartButtons from
     // them. All names are guesses.
     class CButtonEntry {
@@ -89,7 +91,6 @@ namespace msw {
             unsigned char m_Unk144[0x2FC];  // 0x144, not touched by this unit
             const char *m_pAnimName[ANIM_MAX]; // 0x440
             long m_nNameNum;                // 0x540
-            unsigned char m_Unk544[0x5C];   // 0x544
     };
 }
 

@@ -22,6 +22,11 @@ namespace msw {
                 // Ids are handed out from 1 and never 0. (name guessed)
                 static unsigned long s_nNextId;
 
+            public:
+                // Public: MenuF's CChrSign::SetSign and CChrCaption::SetCaption
+                // fill the fields of the tasks they create directly. The
+                // SelectMenu sign and caption tasks keep a pane index in
+                // m_Unk18 and their step in m_Unk1C.
                 nw4r::ut::Link m_Link;  // 0x00
                 unsigned long m_nKind;  // 0x08
                 unsigned long m_nId;    // 0x0C
@@ -51,6 +56,14 @@ namespace msw {
                 // CDispTaskLink above; return types guessed).
                 void StatusCheck(CMenuPaneAccessor *pAccessor);
                 void DispLoop(CMenuPaneAccessor *pAccessor, long nArg);
+
+                // Added for MenuF game/menu/CChrSign.cpp (return types
+                // guessed). Appends pLink; deletes every task; the first task
+                // after pPrev (from the start when null) whose kind is nKind,
+                // or null.
+                void PushBack(CDispTaskLink *pLink);
+                void RemoveAll();
+                CDispTaskLink *FindNextKindObj(unsigned long nKind, CDispTaskLink *pPrev);
         };
     }
 }

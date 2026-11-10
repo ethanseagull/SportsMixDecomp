@@ -24,6 +24,15 @@ namespace nw4r {
                 z = fz;
             }
         };
+
+        // A 3x4 matrix, row by row; column 3 is the translation. Added for
+        // HockeyF game/hockey/CCockpitHockeyCoin.cpp (a pane's global
+        // matrix, copied as words).
+        struct MTX34 {
+            float _00, _01, _02, _03;
+            float _10, _11, _12, _13;
+            float _20, _21, _22, _23;
+        };
     }
 }
 

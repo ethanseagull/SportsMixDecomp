@@ -37,6 +37,11 @@ namespace msw {
                 STATE_OUT = 5      // waiting for the closing animation
             };
 
+            // Default length and overlap of the closing animation (30.0f,
+            // 4.0f in .rodata; nothing in this module reads them).
+            static const float s_DefaultOutAnimFrameSize;
+            static const float s_DefaultOutAnimOverTime;
+
             CSelectMenuLayoutBase(long nId);
             virtual ~CSelectMenuLayoutBase();
             virtual void Main();

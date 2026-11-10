@@ -7,6 +7,7 @@ extern "C" {
 
 // Only what is used so far.
 int sprintf(char *s, const char *format, ...);
+int sscanf(const char *s, const char *format, ...);
 
 #ifdef __cplusplus
 }

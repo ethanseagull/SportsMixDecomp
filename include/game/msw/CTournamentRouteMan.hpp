@@ -50,10 +50,18 @@ namespace msw {
             void SetupStagePoint(long nPoint, int);
             void SetupStageChip(long nChip, long, long);
 
+            // Queues timer event nEvent for the route event nId: it runs
+            // fTime frames after that event, with nParam, fParam and
+            // ulParam. Called by the routes' PushRoute. (parameter names
+            // guessed)
+            void _PushTimer(long nEvent, long nId, float fTime, long nParam, float fParam, unsigned long ulParam);
+
         protected:
             void _CreateTimer(long nNum);
             // Queues timer event nEvent to run at time fTime.
             void _AddTimer(long nEvent, long nGroup, float fTime, long nParam, float fParam, unsigned long ulParam);
+            // Removes the queued timers of event nEvent with parameter nParam.
+            void _RemoveTimer(long nEvent, long nParam);
 
             // The default handling of the events the stages do not handle.
             void _DefTimerEvent(long nEvent, long nParam, float fParam, unsigned long ulParam, int b);
@@ -66,6 +74,11 @@ namespace msw {
             void _StageAnimEnd(const char *pAnim, long nParam, float fParam, unsigned long ulParam,
                                unsigned long ulFlag, int b, long n);
             void _StageSe(long nSe, long nParam, float fParam, unsigned long ulParam, long nSlot);
+            // Puts map object nParam at pos (and plays pAnim on it, when not 0).
+            void _StageSet(const bcs::FVEC3 &pos, long nParam, float fParam, const char *pAnim, float fFrame,
+                           unsigned long ulFlag, int b);
+            // Shakes the camera.
+            void _StageQuake(const bcs::FVEC3 &power, float fFrame);
             void _StageEff(long nEff, long nParam, float fParam, unsigned long ulParam, long n,
                            unsigned long ul1, unsigned long ul2);
             void _StageEffAttach(long nEff, const char *pNode, long nParam, float fParam, unsigned long ulParam,

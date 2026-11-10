@@ -20,3 +20,7 @@ Matching game/menu/CCockpitMenu.cpp
 Matching game/menu/CInitGuide.cpp
 Equivalent game/menu/CEntryExplain.cpp
 Matching game/menu/CHowTo.cpp
+Equivalent game/menu/CButtonA.cpp
+Equivalent game/menu/CButtonACode.cpp
+Matching game/menu/CScoreTop.cpp
+Equivalent game/menu/CGameSelect.cpp

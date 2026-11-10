@@ -19,3 +19,7 @@ Matching game/volley/CStgGmk_Wave_Volley.cpp
 Matching game/volley/CEventDemoVolley.cpp
 Matching game/volley/CStageFactoryVolley.cpp
 Matching game/volley/CCameraVolley.cpp
+Equivalent game/volley/CCockpitVolleyPause.cpp
+Equivalent game/volley/CStageVolley13.cpp
+Equivalent game/volley/CCockpitVolleyCoin.cpp
+Equivalent game/volley/CCockpitVolleyPauseResult.cpp

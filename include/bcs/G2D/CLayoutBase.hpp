@@ -38,8 +38,9 @@ namespace bcs {
                 virtual void Unk0C();
                 virtual void Unk10();
                 virtual void Unk14();
-                // Called with (0, "<name>.brlyt").
-                virtual void BuildLayout(long nUnk, const char *pLayoutName);
+                // Called with (0, "<name>.brlyt"). Negative on failure
+                // (msw::CCockpitTournamentTelopLogo::Set tests it).
+                virtual long BuildLayout(long nUnk, const char *pLayoutName);
                 // Called with (0, table of "<name>.brlan", entries).
                 virtual void BuildAnim(long nUnk, const char **ppAnimNames, long nNum);
                 virtual void Unk20();
@@ -54,6 +55,9 @@ namespace bcs {
                 void CreateLayoutObject(long nUnk);
                 void AttachArchiveResource(nw4r::lyt::ArcResourceAccessor *pAccessor);
                 CLayoutDL *GetLayout(); // the word at 0x14
+                // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp.
+                // Nonzero when animation nAnim has ended (return type guessed).
+                int IsAnimEnd(long nAnim);
 
             private:
                 // Size 0x48: CPaneCtrl's own data starts there.

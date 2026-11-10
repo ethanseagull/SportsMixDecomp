@@ -1,3 +1,5 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
 TourF CreateModel__Q23msw21CEvMdlCreaterTmMdlChrFRQ33msw10CEvDemoRes9_CHR_INFO near 99.1 register choice only: r29 and r30 are swapped between rInfo and nChr (later nAnim); same instructions otherwise
+TourF SendEvent__Q23msw27CCockpitTournamentTelopLogoFlPv near 99.6 99.6%, schedule only: r29/r31 swapped between the text-pane index and the text pointer
+TourF Set__Q23msw27CCockpitTournamentTelopLogoFv near 99.1 99.1%, schedule only: saved registers for the pane-link pointer, child count and parent pane in the reparenting loop are assigned differently; same instructions otherwise
 TourF Set__Q23msw31CCockpitTournamentMenuWinTrophyFv near 98.1 98.1%. Instruction for instruction the same as the original once the saved registers r24-r31 are masked: only which saved register holds which value differs (original: part r31, CLytCtrl/list r30, this r29; ours: list r31, this r30, part and CLytCtrl r26). No effect on behaviour.

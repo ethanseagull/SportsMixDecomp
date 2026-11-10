@@ -30,6 +30,10 @@ namespace bcs {
         // last two are for is not known; their names are guesses)
         CPaneObj *DuplicatePaneObj(CPaneCtrl *pPaneCtrl, const char *pSrcName, const char *pName,
                                    const char *pLayoutName, int nArg);
+        // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp. Moves
+        // pPane under pParent. Return type and the names of the last two
+        // arguments are guesses (called with 1, 0).
+        void SetPaneParent(nw4r::lyt::Pane *pPane, nw4r::lyt::Pane *pParent, int bUnk, nw4r::lyt::Pane *pUnk);
 
         // (name guessed; no symbol) The object that drives pPane, made by
         // pPaneCtrl; null when either is missing. Inline in the game: the

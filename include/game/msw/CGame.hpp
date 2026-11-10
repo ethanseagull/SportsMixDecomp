@@ -23,11 +23,16 @@ namespace msw {
                 // Callers compare the byte as a signed int, hence a getter
                 // that widens it.
                 long GetGameType() const { return m_nGameType; }
+                // (name guessed) msw::CCockpitTournament::CreateObjImpl turns
+                // 2 and 3 into the logo telop's table values 1 and 2.
+                long GetUnk07() const { return m_nUnk07; }
 
                 unsigned char m_Unk00[4];
                 unsigned char m_nGameMode; // 0x04, the GAME_MODE of the running game
                 unsigned char m_nGameType; // 0x05, 2 selects the sport's party game
-                unsigned char m_Unk06[0x632];
+                unsigned char m_Unk06;
+                unsigned char m_nUnk07;    // 0x07, read signed through GetUnk07
+                unsigned char m_Unk08[0x630];
             };
 
             CGame(bcs::CTask *pParent, GAME_MODE mode);

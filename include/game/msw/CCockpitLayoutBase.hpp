@@ -54,6 +54,10 @@ namespace msw {
             // pBtnKindId has four entries.
             void SetDefaultBtnKindId(const unsigned short *pBtnKindId);
             long CheckButtonAnim(); // returns 0
+            // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp. Fills
+            // the layout's text boxes from the message data (through
+            // CLytCtrl). Return type guessed.
+            void SetTextBoxFromMessage(bcs::G2D::CLayoutBase *pLayout);
 
         protected:
             // (name guessed; no symbol) Makes a CPaneCtrl on archive

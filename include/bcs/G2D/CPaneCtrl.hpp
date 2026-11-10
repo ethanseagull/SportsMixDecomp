@@ -34,6 +34,10 @@ namespace bcs {
                 CPaneObj *CreatePaneObj(nw4r::lyt::Pane *pPane);
                 // Hangs pPaneObj's pane under rParent's.
                 void AppendPaneObj(CPaneObj *pPaneObj, CPaneObj &rParent);
+                // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp.
+                // The pane called pName under pRoot (the root pane when null),
+                // or null. Argument names are guesses.
+                nw4r::lyt::Pane *FindPaneByName(const char *pName, int bRecursive, nw4r::lyt::Pane *pRoot);
 
             private:
                 // Brings the size to the 0x54 that `new` is asked for. The

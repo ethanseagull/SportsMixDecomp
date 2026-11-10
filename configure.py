@@ -306,7 +306,7 @@ config.precompiled_headers = [
 cflags_game_nolmw = [*cflags_rel, "-func_align 4", "-ipa file", "-str reuse,readonly"]
 GAME_MODULES = [
     ("SystemF", cflags_game_nolmw),
-    ("TourF", cflags_game_nolmw),
+    ("TourF", cflags_game),
     ("MenuF", cflags_game),
     ("BossF", cflags_game),
     ("BasketF", cflags_game),

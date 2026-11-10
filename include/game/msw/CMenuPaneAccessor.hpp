@@ -39,6 +39,10 @@ namespace msw {
             // Both are null when pName or the layout is.
             nw4r::lyt::Pane *GetPane(const char *pName, int bRecursive, nw4r::lyt::Pane *pRoot);
             bcs::G2D::CPaneObj *GetPaneObj(const char *pName);
+            // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp.
+            // Puts nLen characters of pText into text box pane nPane.
+            // Return type guessed.
+            void SetTextBoxString(long nPane, const wchar_t *pText, unsigned short nLen);
 
             // (no symbols; the overloads are a guess) The same by index,
             // null when the index is outside the name table. Inline in the

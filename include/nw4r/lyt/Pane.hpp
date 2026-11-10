@@ -1,6 +1,8 @@
 #ifndef NW4R_LYT_PANE_HPP_
 #define NW4R_LYT_PANE_HPP_
 
+#include "nw4r/math/types.h"
+
 namespace nw4r {
     namespace lyt {
 
@@ -24,11 +26,21 @@ namespace nw4r {
             public:
                 void SetSize(const Size &rSize) { mSize = rSize; }
                 const char *GetName() const { return mName; }
+                // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp.
+                void SetTranslate(const math::VEC3 &rTranslate) { mTranslate = rTranslate; }
+                // Bit 0 of the flags.
+                void SetVisible(bool bVisible)
+                {
+                    mFlag = (unsigned char)((mFlag & 0xFE) | (bVisible ? 1 : 0));
+                }
 
             private:
-                unsigned char m_Unk00[0x4C];
+                unsigned char m_Unk00[0x2C];
+                math::VEC3 mTranslate;       // 0x2C
+                unsigned char m_Unk38[0x14];
                 Size mSize;                  // 0x4C
-                unsigned char m_Unk54[0x68];
+                unsigned char m_Unk54[0x67];
+                unsigned char mFlag;         // 0xBB, bit 0: visible
                 char mName[17];              // 0xBC
         };
     }

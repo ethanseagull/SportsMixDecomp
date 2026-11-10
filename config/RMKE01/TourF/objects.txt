@@ -8,4 +8,5 @@ Equivalent game/tour/CCockpitTournamentMenuWinTrophy.cpp
 Matching game/tour/TournamentSe.cpp
 Matching game/tour/CTournamentCamera.cpp
 Equivalent game/tour/TournamentData.cpp
-NonMatching game/tour/CCockpitTournamentTelopLogo.cpp
+Equivalent game/tour/CCockpitTournamentTelopLogo.cpp
+Matching game/tour/CCockpitTournament.cpp

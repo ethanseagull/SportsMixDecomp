@@ -29,6 +29,11 @@ namespace bcs {
                 FLAG_HIDE_80 = 0x80
             };
 
+            // How a model follows the one it is attached to (the type of the
+            // last parameter of msw::CStgMdl::AttachToMdl). Values not known.
+            enum AttachMode {
+            };
+
             CScnObj();
             virtual ~CScnObj();
             virtual void ObjProc(unsigned long, unsigned long, void *);    // 0x1C

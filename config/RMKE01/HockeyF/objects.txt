@@ -11,3 +11,4 @@ Matching game/hockey/CBallManHockey.cpp
 Matching game/hockey/CCameraHockey.cpp
 Matching game/hockey/CItemManHockey.cpp
 Matching game/hockey/CEventDemoHockey.cpp
+Matching game/hockey/CStgGmk_WaterWorks_Hockey.cpp

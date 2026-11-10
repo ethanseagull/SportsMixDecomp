@@ -7,7 +7,7 @@ A git worktree gives each its own files, index, branch and build directory.
 The untracked parts the rules live in are linked in, so the hook, skills and
 notes work the same there:
 
-  linked (shared with the main checkout): .claude/, notes/, orig/,
+  linked (shared with the main checkout): .claude/, notes/, orig/<version>/,
                                           build/compilers, build/tools
   copied: CLAUDE.md
   own:    everything tracked, build/RMKE01, the git index, branch wt/<name>
@@ -32,7 +32,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 BASE = ROOT.parent / (ROOT.name + "-wt")
-LINKS = [".claude", "notes", "orig", "build/compilers", "build/tools"]
+BASE_LINKS = [".claude", "notes", "build/compilers", "build/tools"]
+
+
+def links():
+    """Paths linked into a worktree. orig/ itself is not linked because the repo
+    tracks a placeholder in it (orig/RMKP01/.gitkeep); each version folder is."""
+    out = list(BASE_LINKS)
+    if (ROOT / "orig").is_dir():
+        out += [f"orig/{d.name}" for d in sorted((ROOT / "orig").iterdir()) if d.is_dir()]
+    return out
 COPIES = ["CLAUDE.md"]
 
 
@@ -45,9 +54,18 @@ def run(*cmd, cwd=ROOT, check=True, quiet=False):
     return r
 
 
+def is_link(p: Path) -> bool:
+    try:
+        return p.is_symlink() or bool(os.readlink(p))
+    except OSError:
+        return False
+
+
 def link(src: Path, dst: Path):
     dst.parent.mkdir(parents=True, exist_ok=True)
     if dst.exists() or dst.is_symlink():
+        if not is_link(dst):
+            sys.exit(f"{dst} exists and is not a link; refusing to continue")
         return
     if os.name == "nt":
         # a directory junction needs no admin rights
@@ -58,9 +76,9 @@ def link(src: Path, dst: Path):
 
 def unlink_links(wt: Path):
     """Remove the links only (never what they point at) before deleting a worktree."""
-    for rel in LINKS:
+    for rel in links():
         p = wt / rel
-        if os.name == "nt" and p.exists():
+        if os.name == "nt" and p.exists() and is_link(p):
             run("cmd", "/c", "rmdir", str(p), check=False, quiet=True)  # removes the junction itself
         elif p.is_symlink():
             p.unlink()
@@ -75,13 +93,18 @@ def cmd_new(name, build):
     branch = f"wt/{name}"
     if wt.exists():
         sys.exit(f"{wt} exists")
-    if ROOT != Path(run("git", "rev-parse", "--show-toplevel", quiet=True).stdout.strip()).resolve():
-        sys.exit("run this from the main checkout")
+    # (not rev-parse --show-toplevel: the git on PATH may print MSYS paths like /c/...)
+    if not (ROOT / ".git").is_dir():
+        sys.exit("run this from the main checkout, not from a worktree")
     BASE.mkdir(parents=True, exist_ok=True)
     run("git", "worktree", "add", "-b", branch, str(wt), "HEAD")
-    for rel in LINKS:
-        if (ROOT / rel).exists():
-            link(ROOT / rel, wt / rel)
+    for rel in links():
+        dst = wt / rel
+        if dst.is_dir() and not any(f.name != ".gitkeep" for f in dst.rglob("*")):
+            for f in dst.rglob(".gitkeep"):
+                f.unlink()
+            dst.rmdir()  # only a tracked placeholder was there
+        link(ROOT / rel, dst)
     for rel in COPIES:
         shutil.copy2(ROOT / rel, wt / rel)
     print(f"worktree {wt} on {branch}")
@@ -138,7 +161,7 @@ def cmd_remove(name):
     if branch not in merged:
         sys.exit(f"{branch} is not merged into {main_branch()}; merge it first (or delete by hand)")
     unlink_links(wt)
-    left = [rel for rel in LINKS if (wt / rel).exists() or (wt / rel).is_symlink()]
+    left = [rel for rel in links() if is_link(wt / rel)]
     if left:
         # never let a recursive delete follow a link into orig/ or the shared toolchain
         sys.exit(f"could not remove the links {left} in {wt}; remove them by hand (rmdir, not rm -r), then retry")

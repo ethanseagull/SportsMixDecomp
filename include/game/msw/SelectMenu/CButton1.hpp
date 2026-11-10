@@ -7,7 +7,7 @@ namespace msw {
     namespace SelectMenu {
 
         // Size 0x5C. A text window ("main_pmake_01") with one button.
-        // CButton1Code overrides its two cursor virtuals.
+        // CButton1Code derives from it and keeps its two cursor virtuals.
         class CButton1 : public CSelectMenuLayoutBase {
             public:
                 CButton1(long nId);

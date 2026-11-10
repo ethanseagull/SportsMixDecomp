@@ -34,6 +34,9 @@ namespace bcs {
                 CPaneObj *CreatePaneObj(nw4r::lyt::Pane *pPane);
                 // Hangs pPaneObj's pane under rParent's.
                 void AppendPaneObj(CPaneObj *pPaneObj, CPaneObj &rParent);
+                // Added for MenuF game/menu/CGameSelect.cpp (called with a
+                // null name; the argument name is a guess).
+                void AppendPaneObj(CPaneObj *pPaneObj, const char *pParentName);
                 // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp.
                 // The pane called pName under pRoot (the root pane when null),
                 // or null. Argument names are guesses.

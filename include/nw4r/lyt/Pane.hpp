@@ -25,6 +25,8 @@ namespace nw4r {
         class Pane {
             public:
                 void SetSize(const Size &rSize) { mSize = rSize; }
+                // Added for MenuF game/menu/CGameSelect.cpp.
+                const Size &GetSize() const { return mSize; }
                 const char *GetName() const { return mName; }
                 // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp.
                 void SetTranslate(const math::VEC3 &rTranslate) { mTranslate = rTranslate; }

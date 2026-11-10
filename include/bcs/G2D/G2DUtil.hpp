@@ -27,6 +27,13 @@ namespace bcs {
         nw4r::lyt::Pane *CreateNullPane(const char *pName);
         // A new picture pane called pName showing rTexMap; null on failure.
         nw4r::lyt::Pane *CreatePicturePane(const char *pName, CTexMap &rTexMap);
+        // Added for MenuF game/menu/CGameSelect.cpp. The same without a
+        // texture map; what the byte is (called with 3) is not known.
+        nw4r::lyt::Pane *CreatePicturePane(const char *pName, unsigned char nArg);
+        // Added for MenuF game/menu/CGameSelect.cpp. Makes pPaneObj's
+        // picture pane show the movie, in the place of pFrame (return type
+        // and argument names guessed).
+        void SetupMoviePane(CPaneObj *pPaneObj, CPaneObj *pFrame);
         // A copy, called pName, of pPaneCtrl's pane pSrcName, as an object of
         // pPaneCtrl; null on failure. The radar icons pass their layout's
         // file name as the fourth argument and 0 as the fifth. (what the

@@ -57,6 +57,16 @@ namespace msw {
             void HowTo_LoopStep0();
             void HowTo_Out();
 
+            // Added for MenuF game/menu/CScoreTop.cpp (return types guessed
+            // where the callers drop the result).
+            void SetNextMode(long nMode, CSelectMenuLayoutBase *pObj);
+            void PlayMenuBGM(long nBgm);
+            void SetWhiteFadeOut(float fFadeTime);
+            // The steps of the score book's first page (SelectMenu::CScoreTop).
+            void ScoreTop_In();
+            void ScoreTop_Loop();
+            void ScoreTop_Out();
+
             // Data, added for the same unit. The class is 0xAB8 bytes (the
             // size layout.py finds); only two members are named so far.
             // The second polymorphic part mentioned above (a `@68@` thunk)
@@ -111,7 +121,14 @@ namespace msw {
             // screen and is passed to CTournament::Tutorial.
             long m_nGameKind;
         private:
-            unsigned char m_Unk25C[0x1F];    // 0x25C
+            unsigned char m_Unk25C[0x8];     // 0x25C
+        public:
+            // 0x264. (name guessed; added for game/menu/CScoreTop.cpp) A
+            // saved m_nGameKind: the score book keeps the game kind it was
+            // entered with here and puts it back on leaving.
+            long m_nSavedGameKind;
+        private:
+            unsigned char m_Unk268[0x13];    // 0x268
         public:
             unsigned char m_Unk27B;          // 0x27B
         private:

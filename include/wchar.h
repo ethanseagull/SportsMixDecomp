@@ -9,6 +9,7 @@ extern "C" {
 typedef unsigned long size_t;
 
 size_t wcslen(const wchar_t *pStr);
+int swprintf(wchar_t *s, size_t n, const wchar_t *format, ...);
 
 #ifdef __cplusplus
 }

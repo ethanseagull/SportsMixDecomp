@@ -25,6 +25,11 @@ namespace msw {
             // nTutorial (0 or 1) of game nGameKind (CSelectMenu::m_nGameKind)
             // with pad style nPadStyle. Argument names guessed.
             static void Tutorial(long nGameKind, int nPadStyle, int nTutorial);
+            // Added for MenuF game/menu/CScoreTop.cpp. Whether cup nCup has
+            // been won; the third argument passes through to the save data
+            // and nPlayer goes to CSave::GetPlayerData. Names and return
+            // type guessed.
+            static int IsCupClear(long nUnk, long nCup, long nUnk2, long nPlayer);
     };
 }
 

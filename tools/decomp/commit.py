@@ -58,10 +58,22 @@ def main():
         if not stamp.exists():
             sys.exit("no hash-check stamp: run py -3.12 tools/decomp/build.py first")
         t = stamp.stat().st_mtime
-        for p in args.paths:
-            for f in ([ROOT / p] if (ROOT / p).is_file() else (ROOT / p).rglob("*")):
-                if f.is_file() and f.stat().st_mtime > t:
-                    sys.exit(f"{f.relative_to(ROOT)} changed after the last passing build; build again")
+        stale = [f for p in args.paths
+                 for f in ([ROOT / p] if (ROOT / p).is_file() else (ROOT / p).rglob("*"))
+                 if f.is_file() and f.stat().st_mtime > t]
+        if stale:
+            # ninja does not touch the stamp when the relinked binaries come
+            # out unchanged, so build and check the hashes here instead.
+            print(f"{stale[0].relative_to(ROOT)} is newer than the hash-check stamp; building and checking")
+            py = sys.executable
+            if subprocess.call([py, "tools/decomp/build.py"], cwd=ROOT, stdout=subprocess.DEVNULL):
+                sys.exit("the full build fails; nothing committed")
+            dtk = ROOT / "build" / "tools" / ("dtk.exe" if os.name == "nt" else "dtk")
+            r = subprocess.run([str(dtk), "shasum", "-c", f"config/{args.version}/build.sha1"],
+                               cwd=ROOT, capture_output=True, text=True)
+            if r.returncode:
+                sys.exit("hash check fails; nothing committed\n" + r.stdout + r.stderr)
+            print("hash check: all OK")
 
     old = git("rev-parse", "HEAD")
     fd, index = tempfile.mkstemp(prefix="decomp-index-")

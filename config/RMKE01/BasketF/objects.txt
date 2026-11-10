@@ -21,3 +21,5 @@ Matching game/basket/CCockpitBasketModelTelop.cpp
 Matching game/basket/CEventDemoBasket.cpp
 Matching game/basket/CCockpitChrIcon2DBasket.cpp
 Matching game/basket/CStageFactoryBasket.cpp
+Equivalent game/basket/CCockpitBasketPause.cpp
+Equivalent game/basket/CStageBasket13.cpp

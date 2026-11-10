@@ -30,6 +30,18 @@ def main():
     wts = [l for l in run("git", "branch", "--list", "wt/*", "--no-merged", "HEAD").splitlines() if l.strip()]
     if wts and not worktree:
         print("unmerged worktree branches: " + ", ".join(w.strip(" *+") for w in wts))
+    if worktree:
+        main = run(sys.executable, "-c",
+                   "import sys; sys.path.insert(0, 'tools/decomp'); import worktree as w; "
+                   "print(w.main_branch(w.main_checkout()))")
+        if main:
+            behind = run("git", "rev-list", "--count", f"HEAD..{main}")
+            ahead = run("git", "rev-list", "--count", f"{main}..HEAD")
+            print(f"{main} has {behind or '?'} commit(s) this branch lacks; this branch has {ahead or '?'} not landed."
+                  " Land after every committed unit: py -3.12 tools/decomp/worktree.py land")
+    overlap = run(sys.executable, "tools/decomp/worktree.py", "overlap", "--quiet-if-none")
+    if overlap:
+        print(overlap)
     out = run(sys.executable, "tools/decomp/next.py")
     lines = [l for l in out.splitlines() if l.strip()]
     print("\n".join(lines[:14]))

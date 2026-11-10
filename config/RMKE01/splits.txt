@@ -252,6 +252,7 @@ game/msw/CEffectCluster.cpp:
 
 game/msw/CEffectTableList.cpp:
 	.text       start:0x8012444C end:0x801244C0
+	.data       start:0x8046F8C8 end:0x8046F8D8
 
 game/msw/CEffectTable.cpp:
 	.text       start:0x80124604 end:0x801247E0
@@ -339,6 +340,7 @@ game/msw/CMenuPad.cpp:
 
 game/msw/CMenuPadInfo.cpp:
 	.text       start:0x80142130 end:0x80142164
+	.sbss       start:0x805C0C40 end:0x805C0C48
 
 game/msw/CNowLoading.cpp:
 	.text       start:0x80142FB4 end:0x80142FD0
@@ -387,6 +389,7 @@ game/msw/CStgAct.cpp:
 
 game/msw/CStgDrv.cpp:
 	.text       start:0x8016FF0C end:0x8016FF68
+	.data       start:0x80474BC0 end:0x80474BE8
 
 game/msw/CStgGmk.cpp:
 	.text       start:0x8016FF7C end:0x80170054
@@ -432,6 +435,7 @@ game/msw/CStgGmk_WaterPillar_Act.cpp:
 
 game/msw/CStgGmk_WaterPillar_Drv.cpp:
 	.text       start:0x80194370 end:0x80194404
+	.data       start:0x8047F718 end:0x8047F740
 
 game/msw/CStgGmk_WaterPillar.cpp:
 	.text       start:0x80194408 end:0x801949CC
@@ -666,6 +670,7 @@ game/msw/CStage02Base/CSplashEff.cpp:
 
 game/msw/CStage01Base.cpp:
 	.text       start:0x80217A9C end:0x80217AF0
+	.data       start:0x80488818 end:0x80488828
 
 game/msw/CStgGmk_Pylon_Mdl.cpp:
 	.text       start:0x80217F10 end:0x80218098
@@ -777,6 +782,7 @@ game/msw/CStage06Base.cpp:
 
 game/msw/CCockpitResultTime.cpp:
 	.text       start:0x80265CBC end:0x80265CF0
+	.sdata2     start:0x805C6418 end:0x805C6428
 
 game/msw/CGameGuideMan.cpp:
 	.text       start:0x80269E04 end:0x8026A8F4

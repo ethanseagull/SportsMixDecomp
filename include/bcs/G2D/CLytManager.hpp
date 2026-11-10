@@ -9,6 +9,9 @@ namespace bcs {
         class CLytManager {
             public:
                 static CLytManager *GetInstance();
+                // (name guessed; the DOL's fn_8003F418) Creates the instance
+                // kept in the DOL's sbss when there is none and returns it.
+                static CLytManager *CreateInstance();
                 // Null when no object has that id. The return type is a
                 // guess (the function reads a pointer out of a list node).
                 CBase *GetObject(unsigned long nId);

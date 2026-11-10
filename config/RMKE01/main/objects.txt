@@ -4,3 +4,25 @@
 # adding a line (port_unit.py and autopilot.py do it themselves).
 Matching game/msw/cockpit/CSPGaugeInputDisp.cpp
 Matching game/msw/CDataWork.cpp
+Matching game/msw/CGameAccInput.cpp
+Matching game/msw/LayoutTask.cpp
+Matching game/msw/CCollDefUnit.cpp
+NonMatching game/msw/CNowLoading.cpp
+Matching game/msw/CMenuPadInfo.cpp
+Matching game/msw/CStageNet.cpp
+Matching game/msw/CStage01Base.cpp
+Matching game/msw/CStgDrv.cpp
+Matching game/bcs/G2D/CTexMap.cpp
+Matching game/msw/CDropCoin.cpp
+NonMatching game/msw/CGameSpeedCtrl.cpp
+NonMatching game/msw/menu/CStateSave.cpp
+Matching game/msw/CCockpitResultTime.cpp
+Matching game/msw/CEffectTableList.cpp
+NonMatching game/msw/CEffectCoinGetBase.cpp
+NonMatching game/msw/menu/CDispTaskLink.cpp
+NonMatching game/msw/CArrowSignalBase.cpp
+Matching game/msw/CStgGmk_WaterPillar_Drv.cpp
+NonMatching game/msw/CStage17Base/CTurnTable.cpp
+Matching game/msw/CCockpitPartMove.cpp
+Matching game/msw/CMenuLinkList.cpp
+Matching game/msw/CStgGmkAct.cpp

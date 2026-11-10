@@ -58,6 +58,9 @@ namespace bcs {
                 // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp.
                 // Nonzero when animation nAnim has ended (return type guessed).
                 int IsAnimEnd(long nAnim);
+                // Number of frames of animation nAnim; 0 when there is no
+                // such animation (main.dol msw::cockpit::CSPGauge::SetParam).
+                float GetAnimFrameMax(long nAnim);
 
                 // (name guessed; inline, no symbol) How many animations
                 // BuildAnim made. GetAnimFrameMax checks its index against it.

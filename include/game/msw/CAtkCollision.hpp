@@ -16,6 +16,13 @@ namespace msw {
     // words are not mapped.
     class CAtkCollision {
         public:
+            // The radius of unit `index`.
+            float GetRadius(long index) const;
+            // (name guessed; the DOL's fn_80109170) The float at 0xA0 of
+            // unit `index` (units are 0xAC bytes); 0 for an index out of
+            // range.
+            float GetUnkA0(long index);
+
             // Sets the attack power of every unit.
             void SetAtkPowerAll(float power);
 

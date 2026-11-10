@@ -4,6 +4,7 @@
 #include "bcs/CTask.hpp"
 
 namespace msw {
+    class CEventCamera;
 
     // Base of each sport's event-demo task (DOL, size 0x40, vptr at 0).
     // One instance at a time, kept in m_pInstance. The virtuals are declared
@@ -43,6 +44,15 @@ namespace msw {
             static CEventDemoBase *GetInstance();
             static CEventDemoBase *GetPtr();
 
+            // (names guessed; no exported name in the DOL, fn_8011162C and
+            // fn_80111668, both just after Main in the same file)
+            // Passes a camera event to the running demo, if any. Called by
+            // the event camera.
+            static void SendCameraEvent(const char *pName, long nArg1, long nArg2, float fArg);
+            // Queues pFunc to be called once the master fade that is playing
+            // ends (Main); CEventDemo::Cleanup queues its cleanup this way.
+            static void AddFadeEndFunc(void (*pFunc)());
+
         protected:
             // Called by each sport's CreateInstance once the object is made:
             // creates msw::CEvDemoRes and copies two bytes of
@@ -54,9 +64,15 @@ namespace msw {
             static CEventDemoBase *m_pInstance;
 
         private:
-            void *m_Unk34;  // 0x34: set by _Init from a DOL function
-            void *m_pList;  // 0x38: singly linked list freed by _Destroy and Main
-            int m_Unk3C;    // 0x3C: last IsPlayMasterFade result (Main)
+            // An entry of the list at 0x38 (8 bytes, AddFadeEndFunc).
+            struct FadeEndFunc {
+                FadeEndFunc *pNext;
+                void (*pFunc)();
+            };
+
+            CEventCamera *m_pCamera;    // 0x34: made by _Init (name guessed)
+            FadeEndFunc *m_pList;       // 0x38: newest first; freed by _Destroy and Main
+            int m_bFade;                // 0x3C: last IsPlayMasterFade result (Main)
     };
 }
 

@@ -22,6 +22,7 @@ namespace msw {
 
     class CChrCore;
     class CCollAtkUnit;
+    class CItemBall;
     class CCollBodyUnit;
 
     // Arguments of the volleyball shots. (that BALL and VOLLEY are
@@ -72,6 +73,10 @@ namespace msw {
             };
 
             CBall(bcs::CTask *pParent, long nBallNo);
+            // (DOL) The item behaviour attached to the ball (the task whose id
+            // is at 0xD0), or null when there is none or it is being
+            // deleted.
+            CItemBall *GetItemEffect_() const;
             virtual ~CBall();                                                   // 0x08 DOL
             virtual void Main();                                                // 0x0C DOL
             virtual void Disp();                                                // 0x10 DOL

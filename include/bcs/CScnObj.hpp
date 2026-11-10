@@ -135,6 +135,22 @@ namespace bcs {
             // Rebuilds the matrix at 0x08 from the rotation and the
             // translation members.
             void CalcRootMtx();
+            // fn_800424A0, unnamed in the binary (name guessed). Concatenates
+            // pViewMtx with the matrix at 0x38 into the one at 0x68, then
+            // calls fn_800424F0. ObjProc runs it for task 4.
+            void CalcViewMtx(const FMTX34 *pViewMtx);
+
+            // (name guessed) Whether task nTask of ObjProc is switched off:
+            // bit 0 of the flags switches off tasks 0 to 8, bit n task n.
+            bool IsProcDisabled(unsigned long nTask) const
+            {
+                if (nTask < 9 && (((1 << nTask) | 1) & m_nFlag)) {
+                    return true;
+                }
+                return false;
+            }
+            // (name guessed)
+            unsigned long GetFlag() const { return m_nFlag; }
 
             // (names guessed) Inline in the modules.
             void OnFlag(unsigned long flag) { m_nFlag |= flag; }

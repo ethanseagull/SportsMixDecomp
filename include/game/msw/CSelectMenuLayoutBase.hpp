@@ -51,16 +51,23 @@ namespace msw {
             virtual void CallbackButtonAnimCancel(long);
             virtual void CallbackButtonAnimMultiIn(long, long);
             virtual void CallbackButtonAnimMultiOut(long, long);
-            virtual void HitCheck(bcs::FVEC3 *);
-            virtual void SetCursorMarkerPosition(long, long);
-            virtual void ClearCursorMarkerPosition(long, long);
-            virtual void SetCursorMarkerVisible(long, int);
-            virtual void StickMoveCheck(long, long);
-            virtual void SetDefaultMoveCursor(long, long);
-            virtual void GetOutAnimFrameSize();
-            virtual void PushButton(long, long);
-            virtual void IsMarkerOnPointer(long, long);
-            virtual void IsButtonKindOfStickMode(long);
+            // The return types from here to IsButtonKindOfStickMode are
+            // read from the base bodies (all return a constant), from
+            // CButton1's overrides and from how CSelectMenu uses the
+            // results; `long` against `int` is a guess. The argument names
+            // are CButton1's.
+            // The kind id of the button under *pPos, or an event result.
+            virtual long HitCheck(bcs::FVEC3 *pPos);
+            virtual long SetCursorMarkerPosition(long, long);
+            virtual long ClearCursorMarkerPosition(long, long);
+            virtual long SetCursorMarkerVisible(long, int);
+            // The kind id the stick of pad nPad moves to from nBtnKindId.
+            virtual unsigned short StickMoveCheck(long nPad, long nBtnKindId);
+            virtual long SetDefaultMoveCursor(long nPad, long nBtnKindId);
+            virtual float GetOutAnimFrameSize();
+            virtual long PushButton(long nPad, long nBtnKindId);
+            virtual int IsMarkerOnPointer(long, long);
+            virtual int IsButtonKindOfStickMode(long nBtnKindId);
 
             // Non-virtual helpers defined in CSelectMenuLayoutBase.cpp; the
             // argument lists are the game's.
@@ -69,6 +76,7 @@ namespace msw {
             void DeletePaneAccessor();
             void DeleteArcFont();
             void ClearPushButtonId();
+            void DeleteMenuPartList();
             // Creates a CPaneCtrl, registers it and appends its handle; null
             // on failure. The two longs go to CLytManager::AddObject /
             // CLayoutBase::CreateLayoutObject and CLayoutDL::SetGDLMemArea.

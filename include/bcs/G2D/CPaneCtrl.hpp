@@ -3,8 +3,15 @@
 
 #include "bcs/G2D/CLayoutBase.hpp"
 
+namespace nw4r {
+    namespace lyt {
+        class Pane;
+    }
+}
+
 namespace bcs {
     namespace G2D {
+        class CPaneObj;
 
         // Lives in the DOL. Size 0x54 (the size passed to operator new in
         // msw::CSelectMenuLayoutBase::CreateLytObj). CLayoutBase is at 0:
@@ -18,6 +25,15 @@ namespace bcs {
                 // Added for TourF game/tour/CCockpitTournamentMenuWinTrophy.cpp,
                 // which creates one with `new (0)`.
                 CPaneCtrl();
+
+                // Return types are guesses except where the caller uses the
+                // result.
+                // The object of the pane called pName, or null.
+                CPaneObj *GetChildPaneObj(const char *pName);
+                // Makes the object that drives pPane; null on failure.
+                CPaneObj *CreatePaneObj(nw4r::lyt::Pane *pPane);
+                // Hangs pPaneObj's pane under rParent's.
+                void AppendPaneObj(CPaneObj *pPaneObj, CPaneObj &rParent);
 
             private:
                 // Brings the size to the 0x54 that `new` is asked for. The

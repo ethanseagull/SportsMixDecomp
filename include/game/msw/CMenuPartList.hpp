@@ -1,6 +1,10 @@
 #ifndef CMENUPARTLIST_HPP_
 #define CMENUPARTLIST_HPP_
 
+namespace bcs {
+    struct FVEC3;
+}
+
 namespace msw {
     class CMenuPaneAccessor;
     class CMenuPartBase;
@@ -18,6 +22,22 @@ namespace msw {
             void Add(CMenuPartBase *pPart);
             void StateCheck();
             int IsPushButtonAnimEnd();
+
+            // The part whose current kind id is nBtnKindId, or null.
+            CMenuPartBase *FindObjectByCurrentBtnKindId(unsigned short nBtnKindId);
+            // The current kind id of the button under *pPos, or 0. The
+            // return type is a guess (the function loads a 16-bit member).
+            long CheckHitButton(bcs::FVEC3 *pPos);
+            // The kind id the stick moves to from nBtnKindId (nBtnKindId
+            // itself when there is none). The name of the last argument is
+            // a guess: callers pass CMenuPad::GetInput(nPad).
+            long CheckStckMoveButton(long nPad, unsigned short nBtnKindId, unsigned long nInput);
+            // Returns 0 on the path read; the return type and the argument
+            // names are guesses.
+            long CheckButtonAnim(const unsigned short *pPushButtonId, unsigned long *pUnk);
+            // -1 when no part has that kind id, -2 when it is disabled,
+            // else the part's id.
+            long SetPushButtonAnim(unsigned short nBtnKindId, long nPad);
 
         private:
             unsigned char m_Unk00[0xC]; // 0x00: a nw4r::ut::List of CMenuPartBase

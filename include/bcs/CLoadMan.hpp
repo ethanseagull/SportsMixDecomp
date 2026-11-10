@@ -8,6 +8,10 @@ namespace bcs {
     // guessed as void.
     class CLoadMan {
         public:
+            // What a file is loaded from: msw::CLoadData keeps a table of
+            // these, 0x110 bytes each, starting with the path. Not mapped.
+            struct FILE_INPUT;
+
             static void SetRawDataBufferMem(long);
             static int IsComplete(); // return type guessed
             // Data of a loaded file. What the second argument selects is

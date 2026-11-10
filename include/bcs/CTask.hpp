@@ -24,6 +24,11 @@ namespace bcs {
             // (name guessed) Asks the task manager to delete this task.
             void Delete() { m_nFlag |= 1; }
 
+            // (name guessed) Not zero once Delete was called. msw::CBallMan's
+            // functions in the DOL and msw::CBallManBoss::MainFunc_ in BossF
+            // test the bit on every task they get from CTaskMan::GetTask.
+            int IsDelete() const { return m_nFlag & 1; }
+
             // (name guessed) Replaces the word at 0x08. The CTask constructor
             // leaves 0xFCFF there, bcs::CCamera's 0xFC00, and
             // msw::CTournamentCamera's stores 0xFC01.

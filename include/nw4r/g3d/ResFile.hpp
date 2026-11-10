@@ -24,6 +24,14 @@ namespace nw4r {
                 ResAnmClr GetResAnmClr(const char *pName) const;
                 ResAnmTexSrt GetResAnmTexSrt(const char *pName) const;
 
+                // DOL functions; the three calls a file needs before use,
+                // in this order. Bind resolves the file's references against
+                // the file given (itself, for a file that is complete).
+                // Return types guessed: the callers in the modules ignore them.
+                bool CheckRevision() const;
+                void Init();
+                bool Bind(ResFile file);
+
             private:
                 ResFileData *m_pData; // 0x00
         };

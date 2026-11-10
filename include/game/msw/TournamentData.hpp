@@ -4,6 +4,7 @@
 #include "bcs/FVEC3.hpp"
 
 namespace msw {
+    class CEventModel;
 
     // Whether TournamentData is a namespace or a class is not known; the
     // mangled names are the same.
@@ -18,6 +19,49 @@ namespace msw {
             float dist;     // 0x18
             float fovy;     // 0x1C
         };
+
+        // (name guessed) Size 0x8. Two factors per character; what they
+        // scale is not mapped yet (msw::CTournamentStep multiplies a
+        // placement offset by a term made from the first).
+        struct CHAR_INFO {
+            float fUnk00; // 0x00
+            float fUnk04; // 0x04
+        };
+
+        // The functions below set the pose of a character on the tournament
+        // map (game/tour/TournamentData.cpp). All do nothing for a null
+        // model. fFrame is the frame the motion starts at. Where there is
+        // an nSide, 0 plays the motion as it is, 1 its mirror image and any
+        // other value the idle motion. (parameter names guessed)
+
+        // Gives the model the animations of msw::CLoadData entry `nRes`,
+        // the victory scene's, and starts the idle motion.
+        void SetVictoryRes(CEventModel *pModel, long nRes);
+        void SetIdlePause(CEventModel *pModel, float fFrame);
+        void SetGyaGyaPause(CEventModel *pModel, float fFrame);
+        // These four return how many frames of the first motion are left,
+        // 0 for a null model.
+        float SetBattlePause(CEventModel *pModel, long nSide, float fFrame);
+        float SetSecretOpenPause(CEventModel *pModel, long nSide, float fFrame);
+        float SetLosePause(CEventModel *pModel, long nSide, float fFrame);
+        float SetWinPause(CEventModel *pModel, long nSide, float fFrame);
+        // These two return the length of the motion, 0 for a null model.
+        float SetJumpPause(CEventModel *pModel, float fFrame);
+        float SetBigGunPause(CEventModel *pModel, float fFrame);
+        void SetVicotoryCupUpPause(CEventModel *pModel, float fFrame);
+        void SetVicotorySupport1Pause(CEventModel *pModel, long nSide, float fFrame);
+        void SetVicotorySupport2Pause(CEventModel *pModel, long nSide, float fFrame);
+
+        // Timing of the jump motion: rUp receives the frame of the motion's
+        // first trigger and rDown the number of frames from its second
+        // trigger to its end; the result is the number of frames between
+        // the two triggers. A null model gives the values of a 61-frame
+        // motion with triggers at 11 and 51. (parameter names guessed)
+        float GetJumpFrame(CEventModel *pModel, float &rUp, float &rDown);
+
+        // Entry `nChr` of the table of 25; the first entry for a number
+        // outside it. (reference or pointer is a guess)
+        const CHAR_INFO &GetCharInfo(long nChr);
     }
 }
 

@@ -1,0 +1,142 @@
+#ifndef CEVENTMODEL_HPP_
+#define CEVENTMODEL_HPP_
+
+#include "bcs/FVEC3.hpp"
+#include "nw4r/g3d/ResFile.hpp"
+#include "revolution/gx/GXEnum.h"
+
+namespace bcs {
+    struct BCS_Color;
+    struct FMTX34;
+    class CScnGroup;
+    class CScnObj;
+}
+
+namespace msw {
+
+    // A model placed by an event: the characters and objects of the demos
+    // and of the tournament map. A DOL class, vptr at 0x00. The constructor
+    // in the DOL writes members up to 0xAC; msw::CEvDemoMdlChr, 0xE0 bytes,
+    // has its own from 0xD0. Only the members named below are mapped.
+    //
+    // The virtual functions are in the order of the slots of
+    // __vt__Q23msw15CTournamentChip (TourF), which also gives their names
+    // and parameters. A body given here is the one the modules emit as a
+    // weak function, or the body the DOL's own vtable points at for the
+    // functions no module emits (marked "DOL body"). Return types are not
+    // part of the mangled names: they are read from those bodies ("void" for
+    // an empty one), and the pointer types are guesses.
+    class CEventModel {
+        public:
+            // One step of a motion sequence. A sequence ends with an entry
+            // whose nMot is 0. (member names guessed)
+            struct MOT_DATA {
+                short nMot;   // 0x00: motion number; negative for the mirrored motion
+                short nFlag;  // 0x02: second argument of the virtual AnimPlay
+                float fBlend; // 0x04: third argument
+                float fFrame; // 0x08: added to the frame the sequence starts at
+            };
+
+            CEventModel(const short *pMotTable);
+            virtual ~CEventModel();
+            virtual void _SetPos(const bcs::FVEC3 &) {}                 // 0x0C (DOL body)
+            virtual void _SetRot(const bcs::FVEC3 &) {}                 // 0x10 (DOL body)
+            virtual void _SetScale(const bcs::FVEC3 &) {}               // 0x14 (DOL body)
+            virtual void SetDisp(int) {}                                // 0x18 (DOL body)
+            virtual void SetShadowDisp(int) {}                          // 0x1C
+            virtual void UpdateFrame(float) {}                          // 0x20 (DOL body)
+            virtual void SetDrawLayer(long) {}                          // 0x24 (DOL body)
+            virtual void SetDrawPriority(long) {}                       // 0x28 (DOL body)
+            virtual void AppendChild(bcs::CScnGroup *) {}               // 0x2C (DOL body)
+            virtual void SetLightSelector(long) {}                      // 0x30 (DOL body)
+            virtual void ResetLightSelector() {}                        // 0x34 (DOL body)
+            virtual bcs::CScnObj *GetScnObj() { return 0; }             // 0x38 (DOL body)
+            virtual const bcs::CScnObj *GetScnObj() const { return 0; } // 0x3C (DOL body)
+            virtual const bcs::FMTX34 *GetNodeWorldMtxPtr(unsigned long) const { return 0; } // 0x40 (DOL body)
+            virtual long GetNodeId(const char *) const { return -1; }   // 0x44 (DOL body)
+            // The next three are empty weak functions in the modules too;
+            // their bodies wait for a definition of bcs::BCS_Color.
+            virtual void SetMatTevColor(const char *, bcs::BCS_Color, _GXTevRegID); // 0x48
+            virtual void SetBaseColor(bcs::BCS_Color);                  // 0x4C
+            virtual void SetColorScale(bcs::BCS_Color);                 // 0x50
+            virtual void SetCameraView(long) {}                         // 0x54
+            // Takes the animations from another resource file.
+            virtual void ChangeAnimFile(nw4r::g3d::ResFile) {}          // 0x58
+            virtual void SetAnimFrame(float, int) {}                    // 0x5C
+            virtual void SetAnimSpeed(float) {}                         // 0x60
+            virtual int IsAnimResLoopType(long) const { return 0; }     // 0x64
+            // The length in frames of motion `nMot`.
+            virtual float AnimResFrame(long nMot) const { return 0.0f; } // 0x68
+            // The frame at which motion `nMot` fires a trigger; negative
+            // when it has none. (meaning of the last two arguments guessed
+            // from the callers in msw::TournamentData)
+            virtual float AnimResTrgFrame(long nMot, unsigned long nTrg, float) const { return 0.0f; } // 0x6C
+            // Plays motion `nMot`, a number looked up in the motion table.
+            // msw::CEvDemoMdlChr's override passes fBlend and fFrame on to
+            // bcs::CAnmMotion::Play.
+            virtual float AnimPlay(long nMot, unsigned long nFlag, float fBlend, float fFrame, int) { return 0.0f; } // 0x70
+            virtual float AnimResTrgFrame(const char *, unsigned long, unsigned long, float) const { return 0.0f; } // 0x74
+            virtual float AnimPlay(const char *, unsigned long, float, float, int) { return 0.0f; } // 0x78
+            virtual float AnimPlay(nw4r::g3d::ResFile, const char *, unsigned long, float, float, int) { return 0.0f; } // 0x7C
+            virtual float GetNowAlpha() const { return 0.0f; }          // 0x80
+            virtual void _UpdateFlags() {}                              // 0x84
+            virtual long GetSeMax() const { return -1; }                // 0x88
+            virtual void *GetSndTaskSe(long) { return 0; }              // 0x8C
+            virtual void SetSndTaskSe(long, unsigned long) {}           // 0x90
+            virtual long GetEffMax() const { return -1; }               // 0x94
+            virtual unsigned long GetEffcetHandle(long) const { return 0; } // 0x98
+            virtual void SetEffectHandle(unsigned long, long) {}        // 0x9C
+            virtual long GetEffcetId(long) const { return -1; }         // 0xA0
+            virtual void SetEffectId(long, long) {}                     // 0xA4
+            virtual void Create() {}                                    // 0xA8
+            virtual void Destroy() {}                                   // 0xAC (DOL body)
+            virtual int IsObj() const { return 0; }                     // 0xB0
+
+            // Plays the sequence `pData` from entry `nIndex` on; fFrame is
+            // the frame to start at. (meaning of the last argument, kept at
+            // 0x56, not known; callers pass -1)
+            void AnimPlay(const MOT_DATA *pData, long nIndex, float fFrame, long);
+
+            // Sets or clears bit 0x2000 of the flags: the sequences then
+            // play the mirrored motions.
+            void SetMotionReverse(int bReverse);
+            void SetEnableFootSe(int bEnable);
+
+            // (names guessed) Inline in the modules, which write these
+            // members directly.
+            void SetVoiceTable(const long *pTable) { m_pVoiceTable = pTable; }
+            void SetFootSeTable(const long *pTable) { m_pFootSeTable = pTable; }
+            void SetMotTable(const short *pTable) { m_pMotTable = pTable; }
+            // (name guessed) The animation playing now, -1 for none: the
+            // motion table's entry for the motion last played.
+            long GetAnimNo() const { return m_nAnim; }
+
+            // Weak functions in TourF.
+            long GetIndex() const { return m_nIndex; }
+            long GetType() const { return m_nType; }
+            long GetVoiceId(long n) const
+            {
+                if (m_pVoiceTable != 0) {
+                    return m_pVoiceTable[n];
+                }
+                return -1;
+            }
+
+        private:
+            unsigned char m_Unk04[0x30];  // 0x04
+            unsigned long m_nFlag;        // 0x34 (name guessed)
+            short m_nIndex;               // 0x38
+            short m_nType;                // 0x3A
+            const long *m_pVoiceTable;    // 0x3C (name guessed) sound numbers
+            const long *m_pFootSeTable;   // 0x40 (name guessed) sound numbers
+            const short *m_pMotTable;     // 0x44 (name guessed) motion number to animation number
+            long m_nAnim;                 // 0x48 (name guessed)
+            const MOT_DATA *m_pMotData;   // 0x4C (name guessed) the sequence playing
+            unsigned char m_Unk50[4];     // 0x50
+            short m_nMotIndex;            // 0x54 (name guessed) entry of the sequence
+            short m_nUnk56;               // 0x56
+            // Not mapped from here on.
+    };
+}
+
+#endif /* !CEVENTMODEL_HPP_ */

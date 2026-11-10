@@ -2,7 +2,7 @@
 #include "game/msw/CCollManBoss.hpp"
 
 #include "bcs/New.hpp"
-#include "bcs/pending/BCS_VecNormalize.hpp"
+#include "bcs/BCS_Vec.hpp"
 #include "game/msw/CStageMan.hpp"
 
 msw::CCollMan *msw::CCollManBoss::CreateInstance(bcs::CTask *pParent)

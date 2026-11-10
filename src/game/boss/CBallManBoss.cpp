@@ -1,7 +1,7 @@
 // msw::CBallManBoss: the ball manager of the boss game.
 
 // Must come first: it stands in for bcs/CTask.hpp (see the file).
-#include "bcs/pending/CTask.hpp"
+#include "bcs/CTask.hpp"
 
 #include "game/msw/CBallManBoss.hpp"
 

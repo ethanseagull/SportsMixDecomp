@@ -4,8 +4,16 @@
 namespace msw {
 
     // Size 0x1C. Base of every menu class made by newMenuClass<T>(long).
-    // The class has no vtable symbol of its own in the game, so every virtual
-    // is pure or inline. Member names are guesses.
+    // Member names are guesses. Main and SendEvent are pure; the four after
+    // them are inline with empty bodies:
+    //  - DodgeF and HockeyF have __vt__Q23msw13CMenuLinkBase: destructor,
+    //    two null entries (Main, SendEvent), then Disp, Set, Remove,
+    //    SetVisible.
+    //  - BossF, BasketF, DodgeF, HockeyF and VolleyF emit SetVisible,
+    //    Remove and Set (in that order, the reverse of their declaration)
+    //    at the end of their CRadarIcon2D<Game> unit, for that class's vtable.
+    // Classes whose vtables have null entries for Set and Remove
+    // (CCockpitLayoutBase and its family) declare the two pure again.
     class CMenuLinkBase {
         public:
             CMenuLinkBase(long nId)
@@ -27,10 +35,10 @@ namespace msw {
             virtual ~CMenuLinkBase() {}
             virtual void Main() = 0;
             virtual long SendEvent(long nEvent, void *pParam) = 0;
-            virtual void Disp() = 0;
-            virtual int Set() = 0;     // return type guessed
-            virtual void Remove() = 0;
-            virtual void SetVisible(int bVisible) = 0;
+            virtual void Disp() {}
+            virtual int Set() { return 0; } // return type guessed
+            virtual void Remove() {}
+            virtual void SetVisible(int bVisible) {}
     };
 }
 

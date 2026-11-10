@@ -36,6 +36,22 @@ namespace msw {
 
             static void SetDefaultParam();
 
+            // The three below are static in the DOL: their bodies index
+            // g_GameWork with the argument. (return types guessed)
+            // Which character player nPlayer has: the byte at
+            // g_GameWork + 0x48 + nPlayer, read signed. The radar treats 0x13
+            // and above differently (most likely the Mii characters; not
+            // checked).
+            static long GetCharType(long nPlayer);
+            // The colour of team nTeam: the byte at g_GameWork + 0x80 +
+            // nTeam, read unsigned. The radar uses it as an index of four.
+            static long GetTeamColorIdx(long nTeam);
+            // The result of team nTeam: the byte at g_GameWork + 0xFC + nTeam,
+            // read unsigned. What the values mean is not known;
+            // CTmGameHandler::_SetBattleWin takes it and _IsBattleWin tests
+            // for 1.
+            static long GetTeamResult(long nTeam);
+
             static GameWork g_GameWork;
             static CGame *m_pInstance;
 

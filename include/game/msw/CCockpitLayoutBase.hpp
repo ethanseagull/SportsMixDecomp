@@ -29,6 +29,10 @@ namespace msw {
             virtual void Main();
             virtual long SendEvent(long nEvent, void *pParam);
             virtual void Disp();
+            // Pure again here: the vtables of this family have null entries
+            // for the two, where CMenuLinkBase has inline bodies.
+            virtual int Set() = 0;
+            virtual void Remove() = 0;
             virtual void SetVisible(int bVisible);
 
             virtual void CancelMenuImpl();

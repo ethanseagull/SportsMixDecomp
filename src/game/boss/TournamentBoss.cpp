@@ -2,7 +2,7 @@
 #include "game/msw/TournamentBoss.hpp"
 
 #include "game/msw/TournamentWork.hpp"
-#include "game/msw/pending/CGame.hpp"
+#include "game/msw/CGame.hpp"
 
 msw::CTmGameHandler *msw::TournamentBoss::CreateInstance(bcs::CTask *pParent)
 {

@@ -1,6 +1,12 @@
 #ifndef BCS_G2D_CPANEOBJ_HPP_
 #define BCS_G2D_CPANEOBJ_HPP_
 
+namespace nw4r {
+    namespace lyt {
+        class Pane;
+    }
+}
+
 namespace bcs {
     namespace G2D {
 
@@ -9,6 +15,12 @@ namespace bcs {
         class CPaneObj {
             public:
                 void PlayAnimation(long nAnim, float fSpeed, float fFrame, int nArg0, int nArg1, int nArg2);
+
+                nw4r::lyt::Pane *GetPane() const { return m_pPane; }
+
+            private:
+                unsigned char m_Unk00[8];
+                nw4r::lyt::Pane *m_pPane; // 0x08
         };
     }
 }

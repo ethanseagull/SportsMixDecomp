@@ -43,8 +43,8 @@ void msw::SelectMenu::CButton0::Main()
             break;
         case STATE_CLOSE: {
             // The game has both of these as symbols, `recursive` numbered
-            // before `reset` but stored after it. This compiler stores
-            // local statics in the order they are declared, so the order
+            // before `reset` but stored after it. static-order swap
+            // (notes/decisions.md): this compiler stores local statics in the order they are declared, so the order
             // here gives the original bytes and swaps the two symbol names
             // (see notes/toolchain.md).
             static const int reset = 1;

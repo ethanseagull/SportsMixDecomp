@@ -4,6 +4,8 @@
 #include "bcs/CFsmQueue.hpp"
 #include "bcs/FVEC3.hpp"
 
+struct _GXTexObj;
+
 namespace msw {
 
     class CChrDrv;
@@ -13,7 +15,7 @@ namespace msw {
     // 0x00 and the two share the vptr at 0x5C; own members start at 0x60.
     //
     // INCOMPLETE: only what game/boss/CChrMarkerBoss.cpp needs is here.
-    //  - The members stop at 0x175. The constructor in the DOL writes up to
+    //  - The members stop at 0x179. The constructor in the DOL writes up to
     //    0x570, so the class must not be instantiated, embedded or derived
     //    from until the rest is added.
     //  - The virtual functions stop at slot 0xEC of about 800. Their order
@@ -103,6 +105,16 @@ namespace msw {
             long GetChrId() const { return m_nChrId; }
             unsigned long GetStatusFlag() const { return m_nStatusFlag; }
 
+            // The texture of the character's radar icon; null when
+            // IsDisable() is true. In the DOL. (that the pointer is to a
+            // GXTexObj is read from the caller, which makes a
+            // bcs::G2D::CTexMap from it; const guessed)
+            const _GXTexObj *GetRadarIconTexObj() const;
+            // (names guessed) Inline in the original; the modules read the
+            // bytes directly, as signed values.
+            long GetPlayerNo() const { return m_nPlayerNo; }
+            long GetTeamNo() const { return m_nTeamNo; }
+
         protected:
             unsigned long m_Unk60;
             CChrDrv *m_pDriver[2];       // 0x64 (count guessed from the index's place)
@@ -111,6 +123,12 @@ namespace msw {
             unsigned long m_nStatusFlag; // 0xE8, meaning of the bits not known
             unsigned char m_UnkEC[0x88];
             unsigned char m_nChrId;      // 0x174, a character number (meaning guessed)
+            unsigned char m_Unk175;
+            // (names guessed) What CRadarIcon2D<Game>::CreateCharaIcon passes
+            // to CGame::GetCharType and to CGame::GetTeamColorIdx.
+            signed char m_nPlayerNo;     // 0x176
+            unsigned char m_Unk177;
+            signed char m_nTeamNo;       // 0x178
     };
 }
 

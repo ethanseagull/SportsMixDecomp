@@ -46,6 +46,10 @@ namespace msw {
             virtual void CreateAttachClusterAuto(const char *, const char *, const bcs::CScnObj *, const char *,
                                                  unsigned long);
             virtual int InitPatch(long, bcs::EF::CEffect *); // returns 0; type guessed
+            // DOL CreateAttachEffect__Q23msw11CEffectCtrlFlPCQ23bcs7CScnObjPCQ23bcs5FVEC3UliiiUlUlUlUl;
+            // return type not known.
+            void CreateAttachEffect(long, const bcs::CScnObj *, const bcs::FVEC3 *, unsigned long, int, int, int,
+                                    unsigned long, unsigned long, unsigned long, unsigned long);
 
             // Looks the instance up in the task manager by s_InstanceHandle.
             static CEffectCtrl *GetInstance();

@@ -1,6 +1,8 @@
 #ifndef CLOADDATA_HPP_
 #define CLOADDATA_HPP_
 
+#include "nw4r/g3d/ResFile.hpp"
+
 namespace msw {
 
     // Only the members used so far.
@@ -13,6 +15,27 @@ namespace msw {
             static unsigned long GetSize(long index); // return type guessed
             // Non-zero once the entry has been read.
             static int IsComplete(long index); // return type guessed
+
+            // The ones below are static in the DOL too: their bodies index
+            // the table of files with the first argument.
+
+            // Entry `index` as a model resource file (it passes the entry
+            // on to bcs::CLoadMan::GetRes). The callers keep the result in a
+            // nw4r::g3d::ResFile; whether that or the bare pointer is the
+            // declared return type cannot be told from the code.
+            static nw4r::g3d::ResFile GetRes(long index);
+            // A character's model file inside archive `index`. (meaning of
+            // the last argument not known: the callers pass the high byte of
+            // msw::CEvDemoRes::_CHR_INFO's word at 0x08)
+            static nw4r::g3d::ResFile GetChrMdlRes(long index, long nChr, long);
+            // A character's motion file inside archive `index`.
+            static nw4r::g3d::ResFile GetChrMotRes(long index, long nChr);
+            // Makes entry `index` the event motion file of character `nChr`
+            // and returns `index`. With bShare set it first looks for an
+            // entry that already is that file and returns that one instead.
+            // The DOL body does not read the third argument. (parameter
+            // names guessed)
+            static long LoadEventMotion(long index, long nChr, long, int bShare);
     };
 }
 

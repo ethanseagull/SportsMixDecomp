@@ -45,12 +45,27 @@ namespace bcs {
             // Queues the object to be deleted later.
             static void AppendDelayDeleteObject(CScnObj *pObj);
 
+            // Rebuilds the matrix at 0x08 from the rotation and the
+            // translation members.
+            void CalcRootMtx();
+
             // (names guessed) Inline in the modules.
             void OnFlag(unsigned long flag) { m_nFlag |= flag; }
             void OffFlag(unsigned long flag) { m_nFlag &= ~flag; }
 
         private:
-            unsigned char m_Unk08[0xF4];  // 0x08
+            unsigned char m_Unk08[0xA8];  // 0x08
+
+        public:
+            // (names guessed) The rotation about the three axes in radians,
+            // as CalcRootMtx reads it. msw::CChrMarkerVolleyJump::MainFunc
+            // turns the Y one directly.
+            float m_fRotX;                // 0xB0
+            float m_fRotY;                // 0xB4
+            float m_fRotZ;                // 0xB8
+
+        private:
+            unsigned char m_UnkBC[0x40];  // 0xBC
             unsigned long m_nFlag;        // 0xFC (name guessed)
             unsigned char m_Unk100[0x18]; // 0x100
     };

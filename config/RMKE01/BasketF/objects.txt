@@ -9,10 +9,12 @@ Matching game/basket/CCockpitBasketLayoutBase.cpp
 Equivalent game/basket/CCollManBasket.cpp
 Matching game/basket/CCameraBasket.cpp
 Equivalent game/basket/CRadarIcon2DBasket.cpp
+Matching game/basket/CStageBasket01.cpp
 Equivalent game/basket/CCameraBasketHB.cpp
 Matching game/basket/CStgGmk_Wave_Basket.cpp
 Matching game/basket/CItemBasketBomb.cpp
 Matching game/basket/CItemBasketToadstool.cpp
 Matching game/basket/CItemBasketRShell.cpp
 Matching game/basket/CItemManBasket.cpp
+Matching game/basket/CStageManBasket.cpp
 Matching game/basket/CCockpitBasketModelTelop.cpp

@@ -27,7 +27,12 @@ namespace msw {
                 unsigned char m_Unk00[4];
                 unsigned char m_nGameMode; // 0x04, the GAME_MODE of the running game
                 unsigned char m_nGameType; // 0x05, 2 selects the sport's party game
-                unsigned char m_Unk06[0x160 - 0x06];
+                unsigned char m_Unk06[0x18 - 0x06];
+                // 0x18: flag bits (name guessed). BasketF's
+                // CStageManBasket::Main_ skips the change-of-offense sound
+                // while any of 0x4306 is set.
+                unsigned long m_nFlag18;
+                unsigned char m_Unk1C[0x160 - 0x1C];
                 // 0x160: BasketF's tournament handler passes it to the coin
                 // mission (0x4E) check after a basket; meaning not known.
                 long m_Unk160;
@@ -63,6 +68,9 @@ namespace msw {
             // Passes a message to the running game's virtual at vtable
             // offset 0x3C, if there is a game.
             static void SendMessage(long nMsg, long, long, long);
+            // The goal team nTeam attacks: the byte at g_GameWork + 0x88 +
+            // nTeam, read unsigned. (return type guessed)
+            static long GetTargetGoalIdx(long nTeam);
 
             static GameWork g_GameWork;
             static CGame *m_pInstance;

@@ -17,6 +17,11 @@ namespace msw {
             CStgGmk(bcs::CTask *pParent, unsigned long arg);
             virtual ~CStgGmk();
 
+            // DOL bodies (BasketF's __vt__Q23msw14CGoalObjBasket keeps these
+            // two of CStgGmk).
+            virtual CStgAct *NewAct(long heap);
+            virtual CStgDrv *NewDrv(long heap);
+
             virtual void OnPreCreate() {}
             virtual void OnPostCreate();
             virtual void OnSceneEntry();

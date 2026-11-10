@@ -1,0 +1,2 @@
+# <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
+HockeyF CreateAttachEffect__Q23msw17CEffectCtrlHockeyFlPCQ23bcs7CScnObjPCQ23bcs5FVEC3UliiUl unverified 92.3 original stores only three of the four stack arguments (0x8-0x10) for the base CreateAttachEffect; the fourth (0x14) is left as whatever is in the slot, ours passes 0. Unknown source form (uninitialised value or a different last parameter type); only matters if the base reads that argument

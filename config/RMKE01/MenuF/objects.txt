@@ -1,0 +1,12 @@
+# Units of this module compiled from source, one per line:
+#   <Matching|Equivalent|NonMatching> <source path under src/> [pch=<name>]
+# Read by configure.py. Set a status with tools/decomp/mark.py; add a unit by
+# adding a line (port_unit.py and autopilot.py do it themselves).
+Matching game/menu/module.cpp
+Matching game/menu/CFade.cpp
+Matching game/menu/CMenuMdlTableSet.cpp pch=MenuF_g3d
+Matching game/menu/CInfoTabChange.cpp
+Matching game/menu/CEffectCtrlMenu.cpp
+Equivalent game/menu/CDepthOfFieldValue.cpp
+Matching game/menu/CButton0.cpp
+Equivalent game/menu/CButton1.cpp

@@ -40,7 +40,7 @@ def build_state(version):
     ok = ROOT / "build" / version / "ok"
     if not ok.exists():
         return "missing"
-    inputs = [ROOT / "configure.py"]
+    inputs = [ROOT / "configure.py"] + list((ROOT / "config" / version).glob("*/objects.txt"))
     for d in ("src", "include"):
         inputs += list((ROOT / d).rglob("*"))
     inputs += list((ROOT / "config" / version).rglob("*.txt")) + list((ROOT / "config" / version).rglob("*.yml"))
@@ -154,7 +154,7 @@ def main():
         u = ready[0]
         print(f"\nNEXT: integrate {u.label}: every function is at 100% but the unit is not marked Matching")
         print(f"  1. py -3.12 tools/decomp/mark.py {u.name} Matching")
-        print(f"  2. py -3.12 configure.py, then {BUILD}")
+        print(f"  2. {BUILD}  (re-runs configure by itself)")
         print("  3. hash check passes: commit the unit. Fails: set it back to NonMatching and log why")
         finish(f"finish {u.name}")
         return
@@ -219,9 +219,9 @@ def main():
     size, fn = u.open[0] if u.open else u.todo[0]
     lib = u.module
     print(f"\nNEXT: start {u.label}: {len(u.fns)} functions, {u.code} bytes, largest {u.largest}")
-    print(f"  1. add  Object(NonMatching, \"{u.name}.cpp\")  to the {lib} lib in configure.py, "
+    print(f"  1. add  NonMatching {u.name}.cpp  to config/RMKE01/{lib}/objects.txt, "
           f"create src/{u.name}.cpp")
-    print(f"  2. py -3.12 configure.py, then {BUILD}  (must still pass)")
+    print(f"  2. {BUILD}  (must still pass; then tools/decomp/boundaries.py {u.name} once it compiles)")
     print(f"  3. first function: {fn} ({size} bytes)")
     if size > DRAFT_OVER:
         print(f"     draft: py -3.12 tools/decomp/draft.py \"{fn}\" --module {u.module}")

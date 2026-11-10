@@ -1,0 +1,14 @@
+# Units of this module compiled from source, one per line:
+#   <Matching|Equivalent|NonMatching> <source path under src/> [pch=<name>]
+# Read by configure.py. Set a status with tools/decomp/mark.py; add a unit by
+# adding a line (port_unit.py and autopilot.py do it themselves).
+Matching game/boss/module.cpp
+Matching game/boss/CItemBallBoss.cpp
+Matching game/boss/CStageManBoss.cpp
+Matching game/boss/CEffectCtrlBoss.cpp
+Matching game/boss/TournamentBoss.cpp
+Matching game/boss/CCockpitBossLayoutBase.cpp
+Matching game/boss/CCollManBoss.cpp
+Matching game/boss/CChrMarkerBoss.cpp
+Matching game/boss/CBallManBoss.cpp
+Equivalent game/boss/CRadarIcon2DBoss.cpp

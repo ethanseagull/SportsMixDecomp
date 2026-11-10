@@ -300,7 +300,51 @@ config.precompiled_headers = [
         "cflags": [*cflags_game],
     },
 ]
-pch_menu_g3d = ["-prefix pch/MenuF_g3d.mch"]
+
+# Game libraries, one per RSO module. Flags are set here; the units each one
+# compiles are listed in config/<version>/<module>/objects.txt.
+cflags_game_nolmw = [*cflags_rel, "-func_align 4", "-ipa file", "-str reuse,readonly"]
+GAME_MODULES = [
+    ("SystemF", cflags_game_nolmw),
+    ("TourF", cflags_game_nolmw),
+    ("MenuF", cflags_game),
+    ("BossF", cflags_game),
+    ("BasketF", cflags_game),
+    ("VolleyF", cflags_game),
+    ("DodgeF", cflags_game),
+    ("HockeyF", cflags_game),
+]
+OBJECT_STATES = {"Matching": Matching, "Equivalent": Equivalent, "NonMatching": NonMatching}
+
+
+def objects_path(module: str) -> Path:
+    return Path("config") / config.version / module / "objects.txt"
+
+
+def module_objects(module: str) -> List[Object]:
+    path = objects_path(module)
+    objects = []
+    if not path.exists():
+        return objects
+    for n, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        line = line.split("#", 1)[0].strip()
+        if not line:
+            continue
+        status, src, *opts = line.split()
+        if status not in OBJECT_STATES:
+            sys.exit(f"{path}:{n}: unknown status {status!r}")
+        kwargs: Dict[str, Any] = {}
+        for opt in opts:
+            key, _, value = opt.partition("=")
+            if key == "pch":
+                kwargs["extra_cflags"] = [f"-prefix pch/{value}.mch"]
+            else:
+                sys.exit(f"{path}:{n}: unknown option {opt!r}")
+        objects.append(Object(OBJECT_STATES[status], src, **kwargs))
+    return objects
+
+
+config.reconfig_deps.extend(objects_path(module) for module, _ in GAME_MODULES)
 
 config.warn_missing_config = True
 config.warn_missing_source = False
@@ -338,108 +382,19 @@ config.libs = [
             Object(MatchingFor("RMKP01"), "game/msw/CStgGmkAct.cpp"),
         ],
     },
-    {
-        # Game code linked into the SystemF module.
-        "lib": "SystemF",
-        "mw_version": config.linker_version,
-        "cflags": [*cflags_rel, "-func_align 4", "-ipa file", "-str reuse,readonly"],
-        "progress_category": "game",
-        "objects": [
-            Object(Matching, "game/msw/CMainStepEx.cpp"),
-        ],
-    },
-    {
-        # Game code linked into the TourF module.
-        "lib": "TourF",
-        "mw_version": config.linker_version,
-        "cflags": [*cflags_rel, "-func_align 4", "-ipa file", "-str reuse,readonly"],
-        "progress_category": "game",
-        "objects": [
-            Object(Matching, "game/tour/module.cpp"),
-            Object(Matching, "game/tour/CEffectCtrlTournament.cpp"),
-            Object(Equivalent, "game/tour/CCockpitTournamentMenuWinTrophy.cpp"),
-            Object(Matching, "game/tour/TournamentSe.cpp"),
-            Object(Matching, "game/tour/CTournamentCamera.cpp"),
-            Object(Equivalent, "game/tour/TournamentData.cpp"),
-            Object(NonMatching, "game/tour/CCockpitTournamentTelopLogo.cpp"),
-        ],
-    },
-    {
-        # Game code linked into the MenuF module.
-        "lib": "MenuF",
-        "mw_version": config.linker_version,
-        "cflags": [*cflags_rel, "-func_align 4", "-ipa file", "-str reuse,readonly", "-use_lmw_stmw on"],
-        "progress_category": "game",
-        "objects": [
-            Object(Matching, "game/menu/module.cpp"),
-            Object(Matching, "game/menu/CFade.cpp"),
-            Object(Matching, "game/menu/CMenuMdlTableSet.cpp", extra_cflags=pch_menu_g3d),
-            Object(Matching, "game/menu/CInfoTabChange.cpp"),
-            Object(Matching, "game/menu/CEffectCtrlMenu.cpp"),
-            Object(Equivalent, "game/menu/CDepthOfFieldValue.cpp"),
-            Object(Matching, "game/menu/CButton0.cpp"),
-            Object(Equivalent, "game/menu/CButton1.cpp"),
-        ],
-    },
-    {
-        # Game code linked into the BossF module.
-        "lib": "BossF",
-        "mw_version": config.linker_version,
-        "cflags": [*cflags_rel, "-func_align 4", "-ipa file", "-str reuse,readonly", "-use_lmw_stmw on"],
-        "progress_category": "game",
-        "objects": [
-            Object(Matching, "game/boss/module.cpp"),
-            Object(Matching, "game/boss/CItemBallBoss.cpp"),
-            Object(Matching, "game/boss/CStageManBoss.cpp"),
-            Object(Matching, "game/boss/CEffectCtrlBoss.cpp"),
-            Object(Matching, "game/boss/TournamentBoss.cpp"),
-            Object(Matching, "game/boss/CCockpitBossLayoutBase.cpp"),
-            Object(Matching, "game/boss/CCollManBoss.cpp"),
-            Object(Matching, "game/boss/CChrMarkerBoss.cpp"),
-            Object(Matching, "game/boss/CBallManBoss.cpp"),
-            Object(Equivalent, "game/boss/CRadarIcon2DBoss.cpp"),
-        ],
-    },
-    {
-        # Game code linked into the BasketF module.
-        "lib": "BasketF",
-        "mw_version": config.linker_version,
-        "cflags": cflags_game,
-        "progress_category": "game",
-        "objects": [
-            Object(Matching, "game/basket/CEffectCtrlBasket.cpp"),
-        ],
-    },
-    {
-        # Game code linked into the VolleyF module.
-        "lib": "VolleyF",
-        "mw_version": config.linker_version,
-        "cflags": cflags_game,
-        "progress_category": "game",
-        "objects": [
-            Object(Matching, "game/volley/CEffectCtrlVolley.cpp"),
-        ],
-    },
-    {
-        # Game code linked into the DodgeF module.
-        "lib": "DodgeF",
-        "mw_version": config.linker_version,
-        "cflags": cflags_game,
-        "progress_category": "game",
-        "objects": [
-            Object(Matching, "game/dodge/CEffectCtrlDodge.cpp"),
-        ],
-    },
-    {
-        # Game code linked into the HockeyF module.
-        "lib": "HockeyF",
-        "mw_version": config.linker_version,
-        "cflags": cflags_game,
-        "progress_category": "game",
-        "objects": [
-            Object(Equivalent, "game/hockey/CEffectCtrlHockey.cpp"),
-        ],
-    },
+    *[
+        {
+            # Game code linked into this module. The object list is
+            # config/<version>/<module>/objects.txt, one file per module, so
+            # sessions working in different modules never edit the same file.
+            "lib": module,
+            "mw_version": config.linker_version,
+            "cflags": cflags,
+            "progress_category": "game",
+            "objects": module_objects(module),
+        }
+        for module, cflags in GAME_MODULES
+    ],
 ]
 
 

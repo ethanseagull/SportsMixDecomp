@@ -10,7 +10,8 @@ in objdiff can still be finished, in one of two classes:
   unverified  written and compiling, but further from the original or with a
               difference nobody has explained. Needs a behaviour test later.
 
-The list is config/<version>/equivalent.txt, one function per line:
+The lists are config/<version>/<module>/equivalent.txt, one per module (so
+sessions in different modules never edit the same file), one function per line:
     <module> <function> <class> <score> <reason>
 
 Usage:
@@ -28,15 +29,14 @@ NEAR_MIN = 85.0
 UNVERIFIED_MIN = 40.0
 
 
-def path(version):
-    return ROOT / "config" / version / "equivalent.txt"
+def path(version, module):
+    return ROOT / "config" / version / module / "equivalent.txt"
 
 
 def load(version="RMKE01"):
-    """{(module, function): (class, score, reason)}"""
+    """{(module, function): (class, score, reason)}, from every module's list."""
     out = {}
-    p = path(version)
-    if p.exists():
+    for p in sorted((ROOT / "config" / version).glob("*/equivalent.txt")):
         for line in p.read_text(encoding="utf-8").splitlines():
             parts = line.split(None, 4)
             if len(parts) >= 4 and not line.startswith("#"):
@@ -44,11 +44,19 @@ def load(version="RMKE01"):
     return out
 
 
-def save(version, entries):
-    lines = ["# <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>"]
-    for (module, fn), (cls, score, reason) in sorted(entries.items()):
-        lines.append(f"{module} {fn} {cls} {score:.1f} {reason}")
-    path(version).write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+def save(version, entries, modules=None):
+    """Write the lists of `modules` (default: every module that has entries)."""
+    by_module = {}
+    for (module, fn), v in entries.items():
+        by_module.setdefault(module, {})[fn] = v
+    for module in (modules or by_module):
+        rows = by_module.get(module, {})
+        lines = ["# <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>"]
+        for fn, (cls, score, reason) in sorted(rows.items()):
+            lines.append(f"{module} {fn} {cls} {score:.1f} {reason}")
+        p = path(version, module)
+        if rows or p.exists():
+            p.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 
 
 def scores(version):
@@ -85,7 +93,7 @@ def main():
             sys.exit(f"{args.module} {args.function} is not in the report (rebuild it first)")
         score, has_source = got
         if not has_source:
-            sys.exit("its unit has no source registered in configure.py")
+            sys.exit("its unit has no source registered in its module's objects.txt")
         if score >= 100.0:
             sys.exit("it matches exactly; nothing to record")
         if len(args.reason.strip()) < 15:
@@ -96,7 +104,7 @@ def main():
             hint = "" if args.unverified else f"; below {NEAR_MIN:.0f}% use --unverified"
             sys.exit(f"score is {score:.1f}%, under the {floor:.0f}% floor for '{cls}'{hint}")
         entries[(args.module, args.function)] = (cls, score, args.reason.strip())
-        save(args.version, entries)
+        save(args.version, entries, [args.module])
         print(f"recorded {args.module} {args.function} as {cls} at {score:.1f}%")
     elif args.cmd == "list":
         for (module, fn), (cls, score, reason) in sorted(entries.items()):
@@ -108,7 +116,7 @@ def main():
         now = scores(args.version)
         keep = {k: v for k, v in entries.items() if now.get(k, (0.0, False))[0] < 100.0}
         if len(keep) != len(entries):
-            save(args.version, keep)
+            save(args.version, keep, sorted({m for m, _ in entries}))
         print(f"{len(entries) - len(keep)} entries now match exactly and were dropped; {len(keep)} remain")
 
 

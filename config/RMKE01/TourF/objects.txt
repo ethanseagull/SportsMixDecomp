@@ -1,0 +1,11 @@
+# Units of this module compiled from source, one per line:
+#   <Matching|Equivalent|NonMatching> <source path under src/> [pch=<name>]
+# Read by configure.py. Set a status with tools/decomp/mark.py; add a unit by
+# adding a line (port_unit.py and autopilot.py do it themselves).
+Matching game/tour/module.cpp
+Matching game/tour/CEffectCtrlTournament.cpp
+Equivalent game/tour/CCockpitTournamentMenuWinTrophy.cpp
+Matching game/tour/TournamentSe.cpp
+Matching game/tour/CTournamentCamera.cpp
+Equivalent game/tour/TournamentData.cpp
+NonMatching game/tour/CCockpitTournamentTelopLogo.cpp

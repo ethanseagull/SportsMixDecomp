@@ -1,0 +1,5 @@
+# Units of this module compiled from source, one per line:
+#   <Matching|Equivalent|NonMatching> <source path under src/> [pch=<name>]
+# Read by configure.py. Set a status with tools/decomp/mark.py; add a unit by
+# adding a line (port_unit.py and autopilot.py do it themselves).
+Matching game/msw/CMainStepEx.cpp

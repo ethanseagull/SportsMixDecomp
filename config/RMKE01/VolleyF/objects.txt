@@ -1,0 +1,7 @@
+# Units of this module compiled from source, one per line:
+#   <Matching|Equivalent|NonMatching> <source path under src/> [pch=<name>]
+# Read by configure.py. Set a status with tools/decomp/mark.py; add a unit by
+# adding a line (port_unit.py and autopilot.py do it themselves).
+Matching game/volley/CEffectCtrlVolley.cpp
+Matching game/volley/CItemBallVolley.cpp
+Matching game/volley/module.cpp

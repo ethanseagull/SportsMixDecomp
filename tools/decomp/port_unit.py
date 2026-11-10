@@ -9,8 +9,8 @@ Once one of them has source, the others start from it.
   list                 untouched units with a sibling that has source, best first
   <unit>               show the sibling it would copy and the expected overlap
   <unit> --write       write the renamed .cpp (and any missing per-mode headers),
-                       register it NonMatching in configure.py, build it and
-                       print the per-function scores
+                       register it NonMatching in its module's objects.txt, build
+                       it and print tools/decomp/diff.py's verdict per function
 
 Renaming: the mode word (Tournament, Menu, Boss, Basket, Volley, Dodge, Hockey)
 is replaced where it is part of a longer identifier or path (CEffectCtrlBoss,
@@ -30,6 +30,9 @@ import subprocess
 import sys
 from collections import defaultdict
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import objects  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 MODES = {  # module -> (source directory, mode word)
@@ -52,6 +55,9 @@ def stem(name):
 
 def rename(text, src_word, dst_word, src_dir, dst_dir):
     text = re.sub(r"(?<=[A-Za-z0-9_])" + src_word + r"(?=[A-Z_0-9]|\b)", dst_word, text)
+    # A mode word at the start of an identifier is left alone (TournamentWork is a
+    # shared DOL namespace), except the module entry point.
+    text = re.sub(r"\b" + src_word + r"ModuleMain\b", dst_word + "ModuleMain", text)
     # include guards and other all-caps macros: CEFFECTCTRLTOURNAMENT_HPP_
     text = re.sub(r"\b[A-Z0-9_]*" + src_word.upper() + r"[A-Z0-9_]*\b",
                   lambda m: m.group(0).replace(src_word.upper(), dst_word.upper()), text)
@@ -114,7 +120,7 @@ def cmd_list(us, args):
     print(f"\n{len(rows)} units, {sum(r[0] for r in rows)} bytes of functions whose sibling is matched")
 
 
-def header_closure(path_text, src_word, dst_word, src_dir, dst_dir, written):
+def header_closure(path_text, src_word, dst_word, src_dir, dst_dir, written, log=print):
     """Write renamed copies of per-mode headers the renamed source includes but lacks."""
     for inc in re.findall(r'#include "([^"]+)"', path_text):
         if (ROOT / "include" / inc).exists() or inc in written:
@@ -122,7 +128,7 @@ def header_closure(path_text, src_word, dst_word, src_dir, dst_dir, written):
         orig = rename(inc, dst_word, src_word, dst_dir, src_dir)
         src = ROOT / "include" / orig
         if orig == inc or not src.exists():
-            print(f"  missing header {inc} (no sibling header {orig})")
+            log(f"  missing header {inc} (no sibling header {orig})")
             continue
         text = rename(src.read_text(encoding="utf-8"), src_word, dst_word, src_dir, dst_dir)
         guard_src = re.sub(r"[^A-Za-z0-9]", "_", orig).upper()
@@ -132,40 +138,62 @@ def header_closure(path_text, src_word, dst_word, src_dir, dst_dir, written):
         dst.parent.mkdir(parents=True, exist_ok=True)
         dst.write_text(text, encoding="utf-8", newline="\n")
         written.add(inc)
-        print(f"  wrote include/{inc}  (from {orig})")
-        header_closure(text, src_word, dst_word, src_dir, dst_dir, written)
+        log(f"  wrote include/{inc}  (from {orig})")
+        header_closure(text, src_word, dst_word, src_dir, dst_dir, written, log)
 
 
-def register(module, unit_path):
-    """Add Object(NonMatching, unit) to the module's library, creating it if needed."""
-    cfg = ROOT / "configure.py"
-    text = cfg.read_text(encoding="utf-8")
-    entry = f'Object(NonMatching, "{unit_path}")'
-    if f'"{unit_path}"' in text:
-        return False
-    m = re.search(r'"lib": "' + module + r'",.*?"objects": \[\n(.*?)\n        \],', text, re.S)
-    if m:
-        text = text[:m.end(1)] + f"\n            {entry}," + text[m.end(1):]
-    else:
-        block = (f'    {{\n        # Game code linked into the {module} module.\n'
-                 f'        "lib": "{module}",\n        "mw_version": config.linker_version,\n'
-                 f'        "cflags": cflags_game,\n        "progress_category": "game",\n'
-                 f'        "objects": [\n            {entry},\n        ],\n    }},\n')
-        anchor = "\n]\n\n\n# Optional callback"
-        if anchor not in text:
-            sys.exit("could not find the end of config.libs in configure.py")
-        text = text.replace(anchor, "\n" + block.rstrip("\n") + anchor, 1)
-    cfg.write_text(text, encoding="utf-8", newline="\n")
-    return True
+def resolve(us, unit):
+    """Unit key (Module/game/...) for a unit name or key."""
+    if unit in us.units:
+        return unit
+    hits = [k for k in us.units if k.endswith("/" + unit) or k.split("/", 1)[1] == unit]
+    if len(hits) != 1:
+        sys.exit(f"unit {unit!r}: {len(hits)} matches {hits[:5]}")
+    return hits[0]
+
+
+def write_port(us, key, src_key, log=print):
+    """Write the renamed source and missing per-mode headers and register the unit.
+
+    Returns {"files": [paths written], "registered": bool, "extra": [...], "missing": [...]}
+    so a caller can undo it.
+    """
+    t, s = us.units[key], us.units[src_key]
+    src_dir, src_word = MODES[s["module"]]
+    dst_dir, dst_word = MODES[t["module"]]
+    text = (ROOT / s["source"]).read_text(encoding="utf-8")
+    text = rename(text, src_word, dst_word, src_dir, dst_dir)
+    text = re.sub(r"\b" + s["module"] + r"\b", t["module"], text)  # "the TourF module" in comments
+    text = (f"// Written from {s['source']} by tools/decomp/port_unit.py "
+            f"({src_word} -> {dst_word}); check against {t['module']}.\n") + text
+    dst = ROOT / "src" / (t["name"] + ".cpp")
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    dst.write_text(text, encoding="utf-8", newline="\n")
+    log(f"  wrote {dst.relative_to(ROOT)}")
+    headers = set()
+    header_closure(text, src_word, dst_word, src_dir, dst_dir, headers)
+    registered = objects.add(t["name"] + ".cpp", "NonMatching", t["module"])
+    if registered:
+        log(f"  registered {t['name']}.cpp NonMatching in config/{us.version}/{t['module']}/objects.txt")
+    have = {stem(n) for n, _, _ in t["fns"]}
+    # weak inlines of shared base classes (bcs::CUnivTask::GetFrameRateF) are kept
+    # by whichever unit comes first; only the mode class's own functions matter
+    extra = [n for n, _, _ in s["fns"] if stem(n) not in have and src_word in n]
+    missing = [n for n, _, _ in t["fns"] if stem(n) not in {stem(m) for m, _, _ in s["fns"]}]
+    return {"files": [dst] + [ROOT / "include" / h for h in sorted(headers)],
+            "registered": registered, "extra": extra, "missing": missing}
+
+
+def undo_port(result, unit_name):
+    for f in result["files"]:
+        if f.exists():
+            f.unlink()
+    if result["registered"]:
+        objects.remove(unit_name + ".cpp")
 
 
 def cmd_port(us, args):
-    key = args.unit if "/" in args.unit.split("game/")[0] else None
-    if key is None:
-        hits = [k for k in us.units if k.endswith("/" + args.unit) or k.split("/", 1)[1] == args.unit]
-        if len(hits) != 1:
-            sys.exit(f"unit {args.unit!r}: {len(hits)} matches {hits[:5]}")
-        key = hits[0]
+    key = resolve(us, args.unit)
     t = us.units[key]
     sib = us.siblings(key)
     if args.source:
@@ -187,39 +215,22 @@ def cmd_port(us, args):
     if not args.write:
         print("  (dry run; --write to create it)")
         return
-
-    src_dir, src_word = MODES[s["module"]]
-    dst_dir, dst_word = MODES[t["module"]]
-    text = (ROOT / s["source"]).read_text(encoding="utf-8")
-    text = rename(text, src_word, dst_word, src_dir, dst_dir)
-    text = (f"// Written from {s['source']} by tools/decomp/port_unit.py "
-            f"({src_word} -> {dst_word}); check against {t['module']}.\n") + text
-    dst = ROOT / "src" / (t["name"] + ".cpp")
-    dst.parent.mkdir(parents=True, exist_ok=True)
-    dst.write_text(text, encoding="utf-8", newline="\n")
-    print(f"  wrote {dst.relative_to(ROOT)}")
-    header_closure(text, src_word, dst_word, src_dir, dst_dir, set())
-    if register(t["module"], t["name"] + ".cpp"):
-        print(f"  registered {t['name']}.cpp NonMatching in configure.py")
-    have = {stem(n) for n, _, _ in t["fns"]}
-    extra = [n for n, _, _ in s["fns"] if stem(n) not in have]
-    missing = [n for n, _, _ in t["fns"] if stem(n) not in {stem(m) for m, _, _ in s["fns"]}]
-    for n in extra:
+    res = write_port(us, key, src_key)
+    for n in res["extra"]:
         print(f"  CHECK: the sibling defines {n}; the target unit has no such function "
               f"(remove it and its declaration unless the target's vtable names it)")
-    for n in missing:
+    for n in res["missing"]:
         print(f"  TODO: {n} is not in the sibling; write it")
     if args.no_build:
         return
     py = sys.executable
-    subprocess.call([py, "configure.py"], cwd=ROOT, stdout=subprocess.DEVNULL)
     obj = f"build/{us.version}/src/{t['name']}.o"
     if subprocess.call([py, "tools/decomp/build.py", obj], cwd=ROOT):
         print("  compile failed: fix the source or headers, then build the object again")
         return
     subprocess.call([py, "tools/decomp/build.py", f"build/{us.version}/report.json"], cwd=ROOT,
                     stdout=subprocess.DEVNULL)
-    subprocess.call([py, "tools/decomp/status.py", "unit", t["name"]], cwd=ROOT)
+    subprocess.call([py, "tools/decomp/diff.py", t["name"], "--all"], cwd=ROOT)
 
 
 def main():

@@ -43,6 +43,19 @@ namespace msw {
             // Puts nLen characters of pText into text box pane nPane.
             // Return type guessed.
             void SetTextBoxString(long nPane, const wchar_t *pText, unsigned short nLen);
+            // Added for BasketF game/basket/CCockpitBasketPauseResult.cpp:
+            // the same with a number (what nArg selects is not known; the
+            // caller passes 0). Return type guessed.
+            void SetTextBoxString(long nPane, unsigned long nValue, unsigned long nArg);
+            // Added for HockeyF game/hockey/CCockpitHockeyCoin.cpp. Shows or
+            // hides the pane called pName (return type guessed).
+            void SetDisp(const char *pName, int bDisp);
+            // (no symbol; a guess like the overloads below) The same by
+            // index, without an index check.
+            void SetDisp(long nPane, int bDisp)
+            {
+                SetDisp(GetPaneName(nPane), bDisp);
+            }
 
             // (no symbols; the overloads are a guess) The same by index,
             // null when the index is outside the name table. Inline in the

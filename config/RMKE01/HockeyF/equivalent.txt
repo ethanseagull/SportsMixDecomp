@@ -1,2 +1,12 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
+HockeyF AddCoinValue__Q23msw18CCockpitHockeyCoinFlll near 99.0 register allocation only: the original gives the two GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
+HockeyF Main__Q23msw18CCockpitHockeyCoinFv near 98.8 register choice only: the loop counters and the pane-accessor temporary sit in r27/r28, the original's first loop counter in r30; same instructions otherwise
+HockeyF ScoreBoard_Loop__Q23msw19CCockpitHockeyPauseFv near 98.0 register allocation only (as CCockpitBasketPause::ScoreBoard_Loop): the original reuses the table-pointer register for the third result page, ours takes one more saved register (stmw/lmw); same loads, stores, calls and branches
+HockeyF ScoreInWait__Q23msw18CCockpitHockeyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
+HockeyF ScoreIn__Q23msw18CCockpitHockeyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
+HockeyF ScoreOutWait__Q23msw18CCockpitHockeyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
+HockeyF ScoreOut__Q23msw18CCockpitHockeyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
+HockeyF SetCoinValue__Q23msw18CCockpitHockeyCoinFll near 98.9 register allocation only: the original gives the two GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
+HockeyF Set__Q23msw18CCockpitHockeyCoinFv near 99.3 register choice only: loop counter and game-mode local swap r26/r27, telop pane r29 vs r28, two lis swap r3/r4
+HockeyF UpdateMdl__Q23msw14CStageHockey13FUlf near 98.1 register choice and common-subexpression reuse only (as CStageBasket13::UpdateMdl): in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls
 HockeyF _SendMessage__Q23msw20CTmGameHandlerHockeyFllll near 99.8 99.8%: in the closing m_aScore[i] = CGame::GetTeamScore(i) loop the loop pointer and counter take each other's saved registers (r29/r30); same instructions otherwise

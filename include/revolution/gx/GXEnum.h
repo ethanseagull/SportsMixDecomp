@@ -11,4 +11,26 @@ typedef enum _GXTevRegID {
     GX_MAX_TEVREG
 } GXTevRegID;
 
+// Named in the mangled names of bcs::CScnObj's material colour setters.
+typedef enum _GXTevKColorID {
+    GX_KCOLOR0,
+    GX_KCOLOR1,
+    GX_KCOLOR2,
+    GX_KCOLOR3,
+    GX_MAX_KCOLOR
+} GXTevKColorID;
+
+typedef enum _GXChannelID {
+    GX_COLOR0,
+    GX_COLOR1,
+    GX_ALPHA0,
+    GX_ALPHA1,
+    GX_COLOR0A0,
+    GX_COLOR1A1,
+    GX_COLOR_ZERO,
+    GX_ALPHA_BUMP,
+    GX_ALPHA_BUMPN,
+    GX_COLOR_NULL = 0xFF
+} GXChannelID;
+
 #endif /* !REVOLUTION_GX_GXENUM_H_ */

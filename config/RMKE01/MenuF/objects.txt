@@ -14,4 +14,5 @@ Equivalent game/menu/CButtonEntry.cpp
 Equivalent game/menu/CSelectMenuLayoutBase.cpp
 Equivalent game/menu/CButton1Code.cpp
 Matching game/menu/CCameraMenuBG.cpp
+NonMatching game/menu/CCourtCharaObj.cpp
 Equivalent game/menu/CButton2.cpp

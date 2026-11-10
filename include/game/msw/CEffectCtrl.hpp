@@ -4,6 +4,7 @@
 #include "bcs/CUnivTask.hpp"
 
 namespace bcs {
+    class CMdlObj;
     class CScnObj;
     struct FMTX34;
     struct FVEC3;
@@ -56,6 +57,17 @@ namespace msw {
             static unsigned long CreateAttachEffect(long, const bcs::CScnObj *, const bcs::FVEC3 *, unsigned long, int,
                                                     int, int, unsigned long, unsigned long, unsigned long,
                                                     unsigned long);
+
+            // (parameter names and return types guessed) DOL. Starts effect
+            // nEff on the model, placed by the effect's own attach data;
+            // returns a handle as CreateAttachEffect does. Static like
+            // CreateAttachEffect (TourF's Stage33 passes the id in r3).
+            static unsigned long CreateAttachEffectAuto(long nEff, const bcs::CMdlObj *pMdl, unsigned long ul);
+            // (parameter names and return types guessed) DOL, static like
+            // CreateAttachEffect (msw::CTournamentMan in TourF passes the
+            // first argument in r3). Starts effect nEff unattached and
+            // returns its handle.
+            static unsigned long CreateEffect(long nEff, unsigned long, unsigned long, unsigned long, unsigned long);
 
             // (DOL) Plays effect nId once at rPos. (meanings of the three
             // words not known; msw::CDropCoin passes 3, 0, 0; return type

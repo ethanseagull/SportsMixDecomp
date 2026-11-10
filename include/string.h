@@ -10,6 +10,7 @@ typedef unsigned long size_t;
 
 size_t strlen(const char *s);
 int strcmp(const char *s1, const char *s2);
+void *memcpy(void *dst, const void *src, size_t n);
 void *memset(void *pDst, int c, size_t n);
 
 #ifdef __cplusplus

@@ -36,7 +36,10 @@ namespace bcs {
             // last parameter of msw::CStgMdl::AttachToMdl). Values not known;
             // msw::CTournamentChip::Destroy passes 0 with no parent.
             enum AttachMode {
-                ATTACHMODE_0
+                ATTACHMODE_0,
+                ATTACHMODE_1, // msw::CTournamentMan (TourF) attaches its markers with 1 and 3
+                ATTACHMODE_2,
+                ATTACHMODE_3
             };
 
             // Which matrix GetMtx copies. (enumerator names guessed) 0 is the

@@ -93,8 +93,10 @@ namespace msw {
             bcs::G2D::CPaneCtrl *CreateLytObj(nw4r::lyt::ArcResourceAccessor *pAccessor, long nUnk, long nGDLMemArea);
             void SetTextBoxFromMessage(bcs::G2D::CLayoutBase *pLayout);
             // The kind id of the button pad nPad has selected on the owner's
-            // current screen; 0 without an owner.
-            unsigned short GetCurrentButtonKindId(long nPad);
+            // current screen; 0 without an owner. Returns a long, not the
+            // unsigned short it reads: CPlayMode::StateControl and
+            // CCharSel's callers use the result without extending it.
+            long GetCurrentButtonKindId(long nPad);
             // Sound and rumble, each only when enabled by m_bSeEnable /
             // m_bVibEnable. The argument names are guesses.
             unsigned long SE_Play(long nSe, long nUnk);

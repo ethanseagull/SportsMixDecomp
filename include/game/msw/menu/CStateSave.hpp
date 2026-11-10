@@ -30,8 +30,9 @@ namespace msw {
                 unsigned char m_Unk002[0xBAA];
 
             public:
-                // vptr at 0xBAC; the vtable has only the destructor.
-                virtual ~CStateSave() {}
+                // vptr at 0xBAC; the vtable has only the destructor. Empty,
+                // but out of line: the static initialiser registers it.
+                virtual ~CStateSave();
         };
     }
 }

@@ -373,6 +373,9 @@ namespace msw {
             static void StartSlowEffect(float, float, float, float);
             static void StopSlowEffect();
             static int IsNowSlowEffect();
+            // (fn_8017D558, unnamed in the DOL) IsNowBonusTime_ on the
+            // running game, zero without one.
+            static int IsNowBonusTime();
             // Adds nCoin coins to team nTeam. (DOL)
             static void AddTeamCoin(long nTeam, long nCoin);
 

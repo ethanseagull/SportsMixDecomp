@@ -65,6 +65,10 @@ namespace msw {
             static void PlayEndAnim(long nObjId);                 // return type guessed
             // CMenuTask::SendObjEventTrigger on the task; -1 without a task.
             static long SendObjEventTrigger(long nObjId, long nEvent, void *pParam);
+            // (added for MenuF game/menu/CWiFiFrindVS.cpp) The task's result
+            // word (m_Result); static like the above. The friend match
+            // screen waits for 1000.
+            static long GetResult();
 
             // Id of the cockpit task, set by the constructor; 0 when there
             // is none.

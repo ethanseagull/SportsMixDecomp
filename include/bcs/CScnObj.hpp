@@ -173,6 +173,18 @@ namespace bcs {
                 }
                 m_fRotY = fRotY;
             }
+            // (name guessed) The same for the X angle (0xB0), as
+            // msw::CItemBallShellWreck::Main stores it.
+            void SetRotX(float fRotX)
+            {
+                while (fRotX > 6.2831855f) {
+                    fRotX -= 6.2831855f;
+                }
+                while (fRotX < 0.0f) {
+                    fRotX += 6.2831855f;
+                }
+                m_fRotX = fRotX;
+            }
 
         private:
             unsigned char m_Unk08[0x90];  // 0x08

@@ -24,3 +24,12 @@ Equivalent game/menu/CButtonA.cpp
 Equivalent game/menu/CButtonACode.cpp
 Matching game/menu/CScoreTop.cpp
 Equivalent game/menu/CGameSelect.cpp
+Equivalent game/menu/CChrSign.cpp
+Equivalent game/menu/CChrCaption.cpp
+Equivalent game/menu/CPlusMinus.cpp
+Equivalent game/menu/CPlayMode.cpp
+Equivalent game/menu/CTeam.cpp
+NonMatching game/menu/CPlayerInfo.cpp
+Equivalent game/menu/CPartySelect.cpp
+NonMatching game/menu/CPlayerSelect.cpp
+NonMatching game/menu/CWiFiFrindVS.cpp

@@ -420,13 +420,25 @@ namespace msw {
             void SetBallNo(long nBallNo) { m_nBallNo = nBallNo; }
             // DOL.
             void SetPos(const bcs::FVEC3 *pPos);
+            // (names guessed) msw::CItemBall attaches its model to the
+            // ball's; msw::CItemBallShellWreck sends the wreck off along the
+            // velocity.
+            bcs::CMdlObj *GetMdlObj() const { return m_pMdlObj; }
+            const bcs::FVEC3 &GetVelocity() const { return m_Velocity; }
+            // (fn_800C7660, name guessed) Calls UpdateDisp_; msw::CItemBall
+            // calls it when the item shows or hides its demo display.
+            void UpdateDisp();
 
         protected:
             unsigned long m_nFlag;         // 0x94
             long m_nBallNo;                // 0x98, the ball's place in CBallMan's table
-            unsigned char m_Unk9C[0x5C];   // 0x9C
+            unsigned char m_Unk9C[0x14];   // 0x9C
+            bcs::CMdlObj *m_pMdlObj;       // 0xB0, the ball's model (name guessed)
+            unsigned char m_UnkB4[0x44];   // 0xB4
             bcs::FVEC3 m_Pos;              // 0xF8
-            unsigned char m_Unk104[0x30];  // 0x104
+            unsigned char m_Unk104[0x0C];  // 0x104
+            bcs::FVEC3 m_Velocity;         // 0x110 (name guessed)
+            unsigned char m_Unk11C[0x18];  // 0x11C
             // 0x134 (name guessed from CBall::ClearOffsetPos, which writes it)
             bcs::FVEC3 m_OffsetPos;
             unsigned char m_Unk140[0x1D8]; // 0x140

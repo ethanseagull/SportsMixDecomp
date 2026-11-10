@@ -11,6 +11,9 @@ namespace bcs {
     class CMdlShadow : public CMdlObj {
         public:
             CMdlShadow();
+            // Builds the shadow of pMdl at once. (meanings of the last three
+            // arguments not known; msw::CItemBall passes 0x20, 0, 0)
+            CMdlShadow(const CMdlObj *pMdl, nw4r::g3d::ResMdl mdl, long, unsigned long, long);
             virtual ~CMdlShadow();
 
             // (meanings of the last three arguments not known)

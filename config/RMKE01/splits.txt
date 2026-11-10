@@ -161,10 +161,10 @@ game/msw/CBallMarker.cpp:
 	.text       start:0x800CD6DC end:0x800CE904
 
 game/msw/CItemBall.cpp:
-	.text       start:0x800CEAE0 end:0x800CF4CC
-
-game/msw/CItemBallChangeEffect.cpp:
-	.text       start:0x800CF9C0 end:0x800CFB70
+	.text       start:0x800CEAE0 end:0x800CFCF8
+	.rodata     start:0x80435A20 end:0x80435A68
+	.data       start:0x8046B6A0 end:0x8046B7B8
+	.sdata2     start:0x805C2520 end:0x805C2560
 
 game/msw/CGameCamera.cpp:
 	.text       start:0x800CFCF8 end:0x800D28C8
@@ -352,7 +352,9 @@ game/msw/CGameSnd.cpp:
 	.text       start:0x80146600 end:0x801488E8
 
 game/msw/CGameBGM.cpp:
-	.text       start:0x80148A3C end:0x80148B00
+	.text       start:0x801488EC end:0x8014A618
+	.data       start:0x804718A8 end:0x80471C98
+	.sbss       start:0x805C0C6C end:0x805C0C70
 
 game/msw/CStgGmk_Case_Mdl.cpp:
 	.text       start:0x8014BE64 end:0x8014C400
@@ -500,14 +502,13 @@ game/msw/CMenuPartBase.cpp:
 game/msw/CMenuPartList.cpp:
 	.text       start:0x801B6630 end:0x801B7740
 
-game/msw/menu/CSndEff.cpp:
-	.text       start:0x801B78A4 end:0x801B7AFC
-
-game/msw/menu/CSndBGM.cpp:
-	.text       start:0x801B7BE8 end:0x801B7E14
-
 game/msw/menu/CVibEff.cpp:
-	.text       start:0x801B7F80 end:0x801B80C0
+	.text       start:0x801B7864 end:0x801B8374
+	.ctors      start:0x8042D230 end:0x8042D234
+	.data       start:0x80481D60 end:0x80481DA0
+	.bss        start:0x804D7398 end:0x804D7410
+	.sbss       start:0x805C0D68 end:0x805C0D70
+	.sdata2     start:0x805C4770 end:0x805C4780
 
 game/msw/CNpcGhost.cpp:
 	.text       start:0x801B8374 end:0x801B9EE8
@@ -686,7 +687,10 @@ game/msw/CStgGmk_PylonCluster.cpp:
 	.text       start:0x8021BB6C end:0x8021C3CC
 
 game/msw/menu/CStateSave.cpp:
-	.text       start:0x8021C96C end:0x8021C9CC
+	.text       start:0x8021C96C end:0x8021CA0C
+	.ctors      start:0x8042D25C end:0x8042D260
+	.data       start:0x804890C8 end:0x804890D8
+	.bss        start:0x804D7A38 end:0x804D85F8
 
 game/msw/EvDemoVs.cpp:
 	.text       start:0x8021FEDC end:0x802201D0
@@ -710,7 +714,10 @@ game/msw/CStage17Base/CTurnTable.cpp:
 	.text       start:0x80228674 end:0x8022870C
 
 game/msw/menu/CDispTaskLink.cpp:
-	.text       start:0x802294CC end:0x8022953C
+	.text       start:0x802294CC end:0x80229584
+	.data       start:0x8048A2D4 end:0x8048A2E8
+	.sdata      start:0x805BFED8 end:0x805BFEDC
+	.sdata2     start:0x805C5340 end:0x805C5348
 
 game/msw/menu/CDispTaskList.cpp:
 	.text       start:0x80229584 end:0x80229930

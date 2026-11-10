@@ -8,14 +8,19 @@ namespace msw {
     // INCOMPLETE: the hockey game's items (HockeyF), one per DOL item kind.
     // Their constructors are inline (CItemManHockey::CreateItem calls the
     // DOL constructor and stores the two vtable pointers itself) and add no
-    // members: each class has the size of its DOL base. The destructors and
-    // vtables are defined in the CItemHockey*.cpp units, so the destructor
-    // is the first virtual and is only declared here.
+    // members: each class has the size of its DOL base.
+    //
+    // Destructors: CItemHockeyBomb's and CItemHockeyBanana's are defined in
+    // their units. The mushroom, toadstool and both shells have theirs inline
+    // in the class (as in BasketF's CItemBasket.hpp), so the key function is
+    // ExParamUpdate_ and each destructor is emitted at the head of its
+    // vtable's group of inline functions at the end of the unit.
 
     class CItemHockeyMushroom : public CItemMushroom {
         public:
             CItemHockeyMushroom(CItemMan *pMan) : CItemMushroom(pMan) {}
-            virtual ~CItemHockeyMushroom();
+            // Inline: see the note at the top of this file.
+            virtual ~CItemHockeyMushroom() {}
 
             virtual void ExParamUpdate_();
     };
@@ -23,7 +28,8 @@ namespace msw {
     class CItemHockeyToadstool : public CItemToadstool {
         public:
             CItemHockeyToadstool(CItemMan *pMan) : CItemToadstool(pMan) {}
-            virtual ~CItemHockeyToadstool();
+            // Inline: see the note at the top of this file.
+            virtual ~CItemHockeyToadstool() {}
 
             virtual void ExParamUpdate_();
             virtual long GetParamThrowType() const;
@@ -46,7 +52,8 @@ namespace msw {
     class CItemHockeyGShell : public CItemGShell {
         public:
             CItemHockeyGShell(CItemMan *pMan) : CItemGShell(pMan) {}
-            virtual ~CItemHockeyGShell();
+            // Inline: see the note at the top of this file.
+            virtual ~CItemHockeyGShell() {}
 
             virtual void ExParamUpdate_();
             virtual long GetParamThrowType() const;
@@ -57,7 +64,8 @@ namespace msw {
     class CItemHockeyRShell : public CItemRShell {
         public:
             CItemHockeyRShell(CItemMan *pMan) : CItemRShell(pMan) {}
-            virtual ~CItemHockeyRShell();
+            // Inline: see the note at the top of this file.
+            virtual ~CItemHockeyRShell() {}
 
             virtual void ExParamUpdate_();
             virtual long GetParamThrowType() const;

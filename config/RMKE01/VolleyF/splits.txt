@@ -509,18 +509,13 @@ game/volley/CCockpitVolleySPGauge.cpp:
 	.data       start:0x0001F610 end:0x0001F7C8
 
 game/volley/CCockpitVolleyCoin.cpp:
-	.text       start:0x000C4808 end:0x000C5F64
-	.rodata     start:0x00009478 end:0x00009498
+	.text       start:0x000C4808 end:0x000C5D08
+	.rodata     start:0x00009478 end:0x00009488
 	.data       start:0x0001F7C8 end:0x0001F878
 
-game/volley/unit_C5F64.cpp:
-	.text       start:0x000C5F64 end:0x000C6258
-
-game/volley/unit_C6258.cpp:
-	.text       start:0x000C6258 end:0x000C625C
-
-game/volley/unit_C625C.cpp:
-	.text       start:0x000C625C end:0x000C62C0
+game/volley/unit_C5D08.cpp:
+	.text       start:0x000C5D08 end:0x000C62C0
+	.rodata     start:0x00009488 end:0x00009498
 
 game/volley/CNpcGhostVolley.cpp:
 	.text       start:0x000C62C0 end:0x000C9B6C

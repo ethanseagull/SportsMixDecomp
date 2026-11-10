@@ -46,6 +46,11 @@ namespace msw {
             public:
                 CDispTaskList();
                 virtual ~CDispTaskList();
+
+                // Added for HockeyF game/hockey/CCockpitHockeyCoin.cpp (see
+                // CDispTaskLink above; return types guessed).
+                void StatusCheck(CMenuPaneAccessor *pAccessor);
+                void DispLoop(CMenuPaneAccessor *pAccessor, long nArg);
         };
     }
 }

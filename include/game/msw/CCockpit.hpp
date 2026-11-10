@@ -96,8 +96,22 @@ namespace msw {
             long m_Unk70;
             long m_Result; // 0x74
 
+        public:
+            // 0x78 to 0xBF: the score of each period of the match (names
+            // guessed). GetResultData sums the period scores of each team;
+            // the pause score boards (BasketF CCockpitBasketPause::
+            // ScoreBoard_Loop) read all three members.
+            long m_nPeriod;            // 0x78, the period being played (guess)
+            long m_nPeriodNum;         // 0x7C, the number of periods (at most 8)
+            long m_aPeriodScore[2][8]; // 0x80, per team, per period
+            // 0xC0 and 0x100: two more per-team, per-period tables, read
+            // only by the pause score boards (DodgeF and VolleyF
+            // SetCountPoint, VolleyF SetPerfectIcon). Names guessed.
+            long m_aPeriodPoint[2][8];   // 0xC0
+            long m_aPeriodPerfect[2][8]; // 0x100
+
         private:
-            unsigned char m_Unk78[0x1D4 - 0x78];
+            unsigned char m_Unk140[0x1D4 - 0x140];
     };
 }
 

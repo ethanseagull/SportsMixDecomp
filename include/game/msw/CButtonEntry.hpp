@@ -65,6 +65,13 @@ namespace msw {
             void ReFineButtonID(CMenuPartButton *pButton, unsigned short nId0, unsigned short nId1,
                                 unsigned short nId2, unsigned short nId4, unsigned short nId3);
 
+            // Added for MenuF game/menu/CScoreTop.cpp (names guessed; inline,
+            // no symbols). The number of buttons in the file, and the pane
+            // name table ArchiveBuildLoader fills with its length.
+            unsigned short GetButtonNum() const { return m_pData->m_nButtonNum; }
+            const char **GetNameTable() { return m_pName; }
+            long GetNameNum() const { return m_nNameNum; }
+
         private:
             // Button nIndex of the file. Inline in the game (name guessed).
             Button *GetButton(long nIndex)

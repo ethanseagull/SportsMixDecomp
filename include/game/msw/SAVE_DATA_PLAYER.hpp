@@ -11,7 +11,9 @@ namespace msw {
         // (meaning and return type guessed)
         int IsFirstPlay(long nMode, long nGameMode);
 
-        unsigned char m_Unk0000[0x5C95];
+        unsigned char m_Unk0000[0x5C50];
+        unsigned char m_nFlags5C50; // 0x5C50; bit 0x08 picks the second camera table in CSelectMenu::HowTo_In (MenuF)
+        unsigned char m_Unk5C51[0x5C95 - 0x5C51];
         // 0x5C95, 0x5CB5, 0x5CD5, 0x5CF5: one byte per sport (basketball,
         // volleyball, dodgeball, hockey); while it is 0 the tournament sets
         // rule option 0x200.

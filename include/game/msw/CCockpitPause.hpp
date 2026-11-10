@@ -5,6 +5,8 @@
 #include "game/msw/CMenuTask.hpp"
 
 namespace msw {
+    class CCockpitPauseResult;
+    class CCockpitPauseResultChr;
 
     // The pause menu of the sports games. Lives in the DOL; each game module
     // derives its own (CCockpitBossPause in BossF and so on). Size 0xAC:
@@ -76,12 +78,22 @@ namespace msw {
             void CloseMenu(long nObjId);
             // Message nMsg of message group nGroup (group meaning guessed).
             static const wchar_t *GetMessageText(long nGroup, long nMsg);
+            // Fill the score board pages from the game; pTotal receives the
+            // two teams' total points (two words). Return types guessed.
+            void SetPauseResultParameter(CCockpitPauseResult *pResult, long *pTotal);
+            void SetPauseResultChrParameter(CCockpitPauseResultChr *pResult);
 
             // Id of the live pause task in the task manager.
             static unsigned long s_TaskHandle;
 
         protected:
-            long m_bGameInfoSet;                 // 0x8C, set once GameInfo_Init has filled the page (name guessed)
+            union {
+                long m_bGameInfoSet;             // 0x8C, set once GameInfo_Init has filled the page (name guessed)
+                // 0x8C as the score board pages use it: ScoreBoard_In sets
+                // 1, ScoreBoard_Loop waits one frame (1 -> 0), fills the
+                // pages and sets 2 (BasketF; name guessed).
+                long m_nScoreBoardStep;
+            };
             long m_nTab;                         // 0x90, current tab (CheckChangeTab)
             const TabParamInfo *m_pTabParamInfo; // 0x94
             long m_nTabParamNum;                 // 0x98

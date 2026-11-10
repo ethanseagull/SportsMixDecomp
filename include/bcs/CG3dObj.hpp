@@ -22,6 +22,12 @@ namespace bcs {
             // Tells the parent to drop this object. Returns the old parent.
             CG3dObj *DetachFromParent();
 
+        protected:
+            // (name guessed) Inline: bcs::CGDLObj::ObjProc stores the parent
+            // directly when it is attached (task 0x10002) or detached
+            // (0x10003).
+            void SetParent(CG3dObj *pParent) { m_pParent = pParent; }
+
         private:
             CG3dObj *m_pParent; // 0x04 (name guessed)
     };

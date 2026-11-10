@@ -37,6 +37,11 @@ namespace msw {
                 STATE_OUT = 5      // waiting for the closing animation
             };
 
+            // Default length and overlap of the closing animation (30.0f,
+            // 4.0f in .rodata; nothing in this module reads them).
+            static const float s_DefaultOutAnimFrameSize;
+            static const float s_DefaultOutAnimOverTime;
+
             CSelectMenuLayoutBase(long nId);
             virtual ~CSelectMenuLayoutBase();
             virtual void Main();
@@ -67,7 +72,7 @@ namespace msw {
             virtual long ClearCursorMarkerPosition(long, long);
             virtual long SetCursorMarkerVisible(long, int);
             // The kind id the stick of pad nPad moves to from nBtnKindId.
-            virtual unsigned short StickMoveCheck(long nPad, long nBtnKindId);
+            virtual long StickMoveCheck(long nPad, long nBtnKindId);
             virtual long SetDefaultMoveCursor(long nPad, long nBtnKindId);
             virtual float GetOutAnimFrameSize();
             virtual long PushButton(long nPad, long nBtnKindId);
@@ -102,6 +107,10 @@ namespace msw {
             int IsBackFrameOut(long nPad);
 
         protected:
+            // CSelectMenu's screen steps read m_Unk30 and write
+            // m_nPushButtonId of their menu objects (game/menu/CHowTo.cpp).
+            friend class CSelectMenu;
+
             // The owner as a CSelectMenu: the base's helpers call
             // CSelectMenu members on CMenuLinkBase::m_Unk10. No such
             // function has a name in the game.

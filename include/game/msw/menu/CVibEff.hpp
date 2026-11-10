@@ -11,14 +11,21 @@ namespace msw {
             public:
                 void Initialize();
                 void Finalize();
-                void Play(long nPad, long nPattern, unsigned long nUnk);
-                void Stop(unsigned long nPad);
+                // Starts CGameVib pattern nPattern of table 0 on every pad
+                // of the bit mask nPadMask whose wait time has run out.
+                void Play(long nPattern, long nUnk, unsigned long nPadMask);
+                // Stops the rumble on every pad of the bit mask.
+                void Stop(unsigned long nPadMask);
+                // Counts the wait times down by the frame time.
                 void MainLoop();
 
                 static CVibEff s_Instance;
 
             private:
-                unsigned char m_Unk00[0x2C];
+                int m_bEnable;           // 0x00: Initialize sets 1, Finalize 0
+                float m_fWait[4];        // 0x04: per pad, frames before Play may start again
+                float m_fInterval;       // 0x14: the wait Play sets (15)
+                unsigned char m_Unk18[0x2C - 0x18];
         };
     }
 }

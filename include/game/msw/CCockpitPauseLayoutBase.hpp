@@ -47,6 +47,34 @@ namespace msw {
         private:
             unsigned char m_Unk60[0x4]; // 0x60
     };
+
+    // The score board page of the pause menu: the teams' points. Size 0x64
+    // (BasketF allocates it). Lives in the DOL; filled by
+    // CCockpitPause::SetPauseResultParameter.
+    class CCockpitPauseResult : public CCockpitPauseLayoutBase {
+        public:
+            CCockpitPauseResult(long nId, long nKind, float fSortZ);
+            virtual ~CCockpitPauseResult();
+            virtual int Set();
+            virtual void Remove();
+
+        private:
+            unsigned char m_Unk60[0x4]; // 0x60, a byte set by the constructor
+    };
+
+    // The score board page of the pause menu with the characters. Size 0x64
+    // (BasketF allocates it). Lives in the DOL; filled by
+    // CCockpitPause::SetPauseResultChrParameter.
+    class CCockpitPauseResultChr : public CCockpitPauseLayoutBase {
+        public:
+            CCockpitPauseResultChr(long nId, long nKind, float fSortZ);
+            virtual ~CCockpitPauseResultChr();
+            virtual int Set();
+            virtual void Remove();
+
+        private:
+            unsigned char m_Unk60[0x4]; // 0x60, a byte set by the constructor
+    };
 }
 
 #endif /* !CCOCKPITPAUSELAYOUTBASE_HPP_ */

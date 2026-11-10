@@ -13,9 +13,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 STATES = ("Matching", "Equivalent", "NonMatching")
-MODULES = ("main", "SystemF", "TourF", "MenuF", "BossF", "BasketF", "VolleyF", "DodgeF", "HockeyF")
+MODULES = ("main", "SystemF", "TourF", "MenuF", "BossF", "BasketF", "VolleyF", "DodgeF", "HockeyF", "DebugF")
 DIRS = {"tour": "TourF", "menu": "MenuF", "boss": "BossF", "basket": "BasketF",
-        "volley": "VolleyF", "dodge": "DodgeF", "hockey": "HockeyF", "msw": "SystemF"}
+        "volley": "VolleyF", "dodge": "DodgeF", "hockey": "HockeyF", "msw": "SystemF",
+        "debug": "DebugF"}
 
 
 def path(module, version="RMKE01"):

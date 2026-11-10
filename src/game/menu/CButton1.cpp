@@ -268,11 +268,12 @@ long msw::SelectMenu::CButton1::SetCursorMarkerVisible(long, int)
     return 0;
 }
 
-unsigned short msw::SelectMenu::CButton1::StickMoveCheck(long nPad, long nBtnKindId)
+long msw::SelectMenu::CButton1::StickMoveCheck(long nPad, long nBtnKindId)
 {
     // The result is not used.
     IsButtonKindOfStickMode(nBtnKindId);
-    return m_pMenuPartList->CheckStckMoveButton(nPad, nBtnKindId, CMenuPad::s_Instance.GetInput(nPad));
+    // The game truncates the result to 16 bits before returning it as a long.
+    return (unsigned short)m_pMenuPartList->CheckStckMoveButton(nPad, nBtnKindId, CMenuPad::s_Instance.GetInput(nPad));
 }
 
 long msw::SelectMenu::CButton1::SetDefaultMoveCursor(long nPad, long nBtnKindId)

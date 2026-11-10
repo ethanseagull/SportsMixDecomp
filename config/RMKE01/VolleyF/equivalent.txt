@@ -1,2 +1,4 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
+VolleyF DetectMapHit___Q23msw14CCollManVolleyFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 91.0 schedule only: the original loads the 0.0f constant earlier and computes extrwi after the first store, so registers renumber; same instructions, constants, calls and branches
+VolleyF DetectMapHit___Q33msw28@unnamed@CCollManVolley_cpp@19CCollManVolleyPartyFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 90.9 schedule only: same reordering as CCollManVolley::DetectMapHit_ (0.0f load, extrwi) plus the two fabs in the other order; same operations and calls
 VolleyF _SendMessage__Q23msw20CTmGameHandlerVolleyFllll near 99.9 r28/r29 swapped in cases 0x12/0x54 (score temp, score pointer, period byte); instructions, constants, calls and branches otherwise identical

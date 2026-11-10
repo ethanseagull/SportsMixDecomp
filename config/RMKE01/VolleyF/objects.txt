@@ -8,3 +8,4 @@ Matching game/volley/module.cpp
 Equivalent game/volley/TournamentVolley.cpp
 Matching game/volley/CBallManVolley.cpp
 Matching game/volley/CCockpitVolleyLayoutBase.cpp
+Equivalent game/volley/CCollManVolley.cpp

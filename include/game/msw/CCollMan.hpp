@@ -3,6 +3,7 @@
 
 #include "bcs/CTask.hpp"
 #include "bcs/FVEC3.hpp"
+#include "bcs/FVEC4.hpp"
 
 namespace msw {
 
@@ -69,6 +70,14 @@ namespace msw {
             static CCollMan *m_pInstance;
 
         protected:
+            // (DOL; return type and the meaning of the unnamed float guessed)
+            // DetectMapHit_ against the rectangle rRgn (left, right, front,
+            // back in x, y, z, w). The VolleyF manager passes 0.0f for the
+            // float and only the top bit of its flags.
+            int DetectMapHitInnerRgn_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, float &rTime, const bcs::FVEC4 &rRgn,
+                                      float, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius,
+                                      unsigned long);
+
             int m_bEnableViewColl;       // 0x34
             long m_Unk38;                // 0x38, zero from ResetViewColl_
             long m_nViewCollTargetDir;   // 0x3C, -1 from ResetViewColl_

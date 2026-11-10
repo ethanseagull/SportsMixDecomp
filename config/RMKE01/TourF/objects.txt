@@ -11,4 +11,4 @@ Equivalent game/tour/TournamentData.cpp
 Equivalent game/tour/CCockpitTournamentTelopLogo.cpp
 Matching game/tour/CCockpitTournament.cpp
 Equivalent game/tour/CTournamentChip.cpp
-NonMatching game/tour/CTournamentRouteMan_Stage31.cpp
+Equivalent game/tour/CTournamentRouteMan_Stage31.cpp

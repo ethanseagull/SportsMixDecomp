@@ -13,3 +13,5 @@ Equivalent game/volley/CChrMarkerVolleyJump.cpp
 Equivalent game/volley/CStageMan.cpp
 NonMatching game/volley/CComManVolley.cpp
 NonMatching game/volley/CComManVolleyRR.cpp
+NonMatching game/volley/CItemManVolley.cpp
+NonMatching game/volley/CCockpitVolleyModelTelop.cpp

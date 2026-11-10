@@ -12,3 +12,4 @@ Matching game/boss/CCollManBoss.cpp
 Matching game/boss/CChrMarkerBoss.cpp
 Matching game/boss/CBallManBoss.cpp
 Equivalent game/boss/CRadarIcon2DBoss.cpp
+Matching game/boss/CCockpitBossPause.cpp

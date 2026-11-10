@@ -14,10 +14,18 @@ namespace bcs {
             // One entry per state, 0x2C bytes: a vptr, the owner and three
             // pointers to member functions (constructor, loop, destructor of
             // the state). The original is a class template of its own
-            // (bcs::CStateTemplate<bcs::CFsm<T> >); it is opaque here until
-            // a unit needs its members.
+            // (bcs::CStateTemplate<bcs::CFsm<T> >); only its virtual
+            // functions are written here. The vtable (msw::CCockpitPause's
+            // null state, lbl_80480528 in the DOL) is the destructor and
+            // then the three below, which FsmUpdate calls; their names are
+            // guesses after CMainStep's CtorState/LoopState/DtorState.
             struct State {
-                unsigned char m_Unk00[0x2C];
+                virtual ~State();
+                virtual void Ctor(); // entering the state
+                virtual void Loop(); // once per frame while no change is pending
+                virtual void Dtor(); // leaving the state
+
+                unsigned char m_Unk04[0x28]; // owner, three member pointers
             };
 
         protected:
@@ -48,6 +56,26 @@ namespace bcs {
             // next. Empty here: the DOL has the body CFsm<msw::CMainStep>
             // would use, a single blr.
             virtual void ChangeStateProc() {}
+
+        protected:
+            // (name guessed; inline, no symbol) Carries out a pending change
+            // (leave the old state, ChangeStateProc, enter the new one), then
+            // runs the current state's loop unless another change is pending.
+            // msw::CMainStep::Main in the DOL is exactly this;
+            // msw::CCockpitBossPause::Main (BossF) ends with it.
+            void FsmUpdate()
+            {
+                if (m_pNextState) {
+                    m_pState->Dtor();
+                    ChangeStateProc();
+                    m_pState = m_pNextState;
+                    m_pNextState = 0;
+                    m_pState->Ctor();
+                }
+                if (!m_pNextState) {
+                    m_pState->Loop();
+                }
+            }
     };
 }
 

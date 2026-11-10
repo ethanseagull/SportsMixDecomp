@@ -4,6 +4,7 @@
 #include "bcs/CFsmQueue.hpp"
 #include "bcs/FVEC3.hpp"
 #include "bcs/CTask.hpp"
+#include "revolution/rfl.h"
 
 namespace msw {
 
@@ -33,6 +34,27 @@ namespace msw {
                 GAME_MODE_HOCKEY,
                 GAME_MODE_BOSS
             };
+            // The parameter types of the static setters below. Only the
+            // values passed so far are known; every enumerator name is a
+            // guess.
+            enum GAME_TYPE {
+                GAME_TYPE_NORMAL = 0,
+                GAME_TYPE_PARTY = 2   // see GameWork::m_nGameType
+            };
+            enum GAME_CUP {};
+            enum GAME_PLAY_TYPE {};
+            enum SPORTS_MODE {
+                SPORTS_MODE_SINGLE = 0,
+                SPORTS_MODE_MIX = 1   // passed for a mixed-sports tournament
+            };
+            enum GAME_TOURNAMENT_LEVEL {};
+            enum GAME_LEVEL {
+                GAME_LEVEL_EASY,
+                GAME_LEVEL_NORMAL,
+                GAME_LEVEL_HARD,
+                GAME_LEVEL_EXPERT
+            };
+            enum QPANEL_LEVEL {};
 
             // Settings of the game being set up or played, 0x638 bytes.
             // (type and member names guessed)
@@ -40,6 +62,10 @@ namespace msw {
                 // Callers compare the byte as a signed int, hence a getter
                 // that widens it.
                 long GetGameType() const { return m_nGameType; }
+                // Widened the same way (TourF TournamentRule::SetupGame
+                // compares both as signed ints). (names guessed)
+                long GetGameMode() const { return m_nGameMode; }
+                long GetUnk06() const { return m_nUnk06; }
                 // (name guessed) msw::CCockpitTournament::CreateObjImpl turns
                 // 2 and 3 into the logo telop's table values 1 and 2.
                 long GetUnk07() const { return m_nUnk07; }
@@ -56,7 +82,9 @@ namespace msw {
                 unsigned char m_Unk00[4];
                 unsigned char m_nGameMode; // 0x04, the GAME_MODE of the running game
                 unsigned char m_nGameType; // 0x05, 2 selects the sport's party game
-                unsigned char m_Unk06;
+                // 0x06 (meaning not known): with 11 to 13 here the tournament
+                // leaves team 0 to the computer as well.
+                unsigned char m_nUnk06;
                 unsigned char m_nUnk07;    // 0x07, read signed through GetUnk07
                 unsigned char m_Unk08[2];
                 // 0x0A, the stage being played (name guessed; the DOL's
@@ -77,7 +105,10 @@ namespace msw {
                 // while any of 0x4306 is set; with 0x8000 set the dodge
                 // game's question panels stay off (guess).
                 unsigned long m_nFlag18;
-                unsigned char m_Unk1C[0x40 - 0x1C];
+                // 0x1C, copied from the tournament's work by
+                // TournamentRule::SetupGame (meaning not known)
+                long m_nUnk1C;
+                unsigned char m_Unk20[0x40 - 0x20];
                 // 0x40, flag words whose bit 0 the boss game's "?" panels test
                 // (game/boss/CQPanelManBoss.cpp): with bit 0 of 0x40 set a coin
                 // panel gives no coin; with bit 0 of 0x1C8 set the panels pop up
@@ -337,6 +368,48 @@ namespace msw {
             static int IsNowSlowEffect();
             // Adds nCoin coins to team nTeam. (DOL)
             static void AddTeamCoin(long nTeam, long nCoin);
+
+            // Setters of g_GameWork, all static in the DOL (TourF
+            // TournamentRule sets a whole game up with them). Parameter
+            // names guessed; the return types are void as no caller reads
+            // them.
+            static void SetGameMode(GAME_MODE mode);
+            static void SetGameType(GAME_TYPE type);
+            static void SetSportsMode(SPORTS_MODE mode);
+            static void SetCup(GAME_CUP cup);
+            static void SetTournamentLevel(GAME_TOURNAMENT_LEVEL level);
+            static void SetGameLevel(GAME_LEVEL level);
+            static void SetQPanelLevel(QPANEL_LEVEL level);
+            static void SetPlayType(GAME_PLAY_TYPE type);
+            static void SetStage(long nStage);
+            static void SetStageParam(long nParam);
+            static void SetRound(long nRound);
+            static void SetReturnStep(long nStep);
+            static void SetParamSemiAuto();
+            static void SetGimmickParamIdx(long nIdx);
+            static void SetMaxTime(float fTime);
+            static void SetMaxShotTime(float fTime);
+            static void SetMaxPeriod(long nPeriod);
+            static void SetWinPoint(long nPoint);
+            static void SetPartyGameParam(long nIndex, long nValue);
+            static void EnableRuleOptionFlag(unsigned long nFlag, int bEnable);
+            static void SetCharType(long nChr, long nType);
+            static void SetCharColor(long nChr, long nColor);
+            static void SetCharExFlag(long nChr, unsigned long nFlag);
+            static void ResetCharExFlag(long nChr, unsigned long nMask);
+            static void SetCharAssignPlayerNo(long nChr, long nPlayer);
+            static void SetCharAssignPadNo(long nChr, long nPad);
+            static void SetCharName(long nChr, const wchar_t *pName, long nLen);
+            static void SetMiiStoreData(long nChr, const RFLStoreData &data);
+            static void SetTeamCtrlType(long nTeam, long nType);
+            static void SetTeamChrChangeCtrlType(long nTeam, long nType);
+            static void SetTeamComLevel(long nTeam, float fLevel);
+            static void SetGoalIdx(long nTeam, long nGoal);
+            static void SetPeriodStartScore(long nTeam, long nScore);
+            static void SetPeriodStartCoin(long nTeam, long nCoin);
+            static void SetTeamInitLife(long nTeam, long nLife);
+            static void SetTeamMaxLife(long nTeam, long nLife);
+            static void SetTeamRebirthLife(long nTeam, long nLife);
 
             static GameWork g_GameWork;
             static CGame *m_pInstance;

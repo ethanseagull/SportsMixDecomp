@@ -16,6 +16,10 @@ namespace bcs {
     // DOL.
     void BCS_VecZ_RotY(FVEC3 &rOut, float len, float rotY);
 
+    // (argument names guessed) rOut = rIn turned by rotY (radians) about Y.
+    // In the DOL.
+    void BCS_Vec_RotY(FVEC3 &rOut, const FVEC3 &rIn, float rotY);
+
     // The three routines below are inline in the modules and written in
     // paired-single assembly in the original (x and y as a pair, z alone; the
     // compiler does not produce these instructions from float code). They are

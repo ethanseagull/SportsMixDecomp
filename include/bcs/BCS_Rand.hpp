@@ -13,6 +13,9 @@ namespace bcs {
     // In the DOL. A random integer up to max (whether max itself can come
     // out is not checked; DodgeF calls it with 99 for a percentage).
     long BCS_RandMax(long max);
+    // In the DOL. A random integer over the generator's whole range
+    // (return type guessed; TournamentRule passes it on as a long).
+    long BCS_Rand();
 }
 
 #endif /* !BCS_BCS_RAND_HPP_ */

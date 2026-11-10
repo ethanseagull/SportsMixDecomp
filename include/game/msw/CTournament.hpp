@@ -21,6 +21,16 @@ namespace msw {
             // BasketF), 0 without a handler. Which mission rule the match
             // starts with; 1 and 2 are tested. (return type guessed)
             static long GetMissionStartMode();
+            // The tournament's level (TOURNAMENT_INFO::nLevel).
+            static long GetLevel();
+            // Members per team for the tournament's play type. (return type
+            // guessed)
+            static long GetTeamMax();
+            // The CGame::GAME_PLAY_TYPE for sport nGameMode with nPlayerMax
+            // players (TOURNAMENT_INFO::nPlayerMax), for a normal game and
+            // for a party game. (return types and parameter names guessed)
+            static long GetPlayerType(long nGameMode, long nPlayerMax);
+            static long GetPlayerTypeParty(long nGameMode, long nPlayerMax);
     };
 }
 

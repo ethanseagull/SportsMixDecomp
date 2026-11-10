@@ -33,8 +33,8 @@ NonMatching game/msw/cockpit/CSPGauge.cpp
 Matching game/msw/CEvDemoRes/_CHR_INFO.cpp
 NonMatching game/msw/CItemShellCmn.cpp
 Matching game/msw/vm/CVMCpu.cpp
-NonMatching game/msw/menu/CVibEff.cpp
+Matching game/msw/menu/CVibEff.cpp
 NonMatching game/msw/CEventDemoBase.cpp
 NonMatching game/msw/CStgGmk_Pylon_Mdl.cpp
-NonMatching game/msw/CItemBallChangeEffect.cpp
+NonMatching game/msw/CItemBall.cpp
 NonMatching game/msw/CEffectTable.cpp

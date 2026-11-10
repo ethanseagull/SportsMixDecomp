@@ -25,6 +25,10 @@ namespace msw {
             static long GetChrCoreNum();
             // Shows or hides the markers over the characters. Static.
             static void SetChrMarkerDisp(int bDisp);
+            // (name guessed; fn_800EC2E4, unnamed in the DOL) Not zero when
+            // a character that is not disabled has bit 0x20000 of the word
+            // at 0xE8 set (taken to be the star state). Static.
+            static int IsExistStarChr();
     };
 }
 

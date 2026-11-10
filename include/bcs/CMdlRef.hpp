@@ -12,6 +12,9 @@ namespace bcs {
     class CMdlRef : public CMdlCopyBase {
         public:
             CMdlRef();
+            // Builds the model linked to pMdl at once. (meanings of the last
+            // three arguments not known; msw::CItemBall passes 0 for all)
+            CMdlRef(const CMdlObj *pMdl, nw4r::g3d::ResMdl mdl, unsigned long, unsigned long, long);
             virtual ~CMdlRef();
 
             // (meanings of the last two arguments not known)

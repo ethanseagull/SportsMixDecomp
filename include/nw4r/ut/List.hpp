@@ -25,6 +25,8 @@ namespace nw4r {
         void List_Remove(List *pList, void *pObj);
         // The first object when pObj is null.
         void *List_GetNext(const List *pList, const void *pObj);
+        // The last object when pObj is null.
+        void *List_GetPrev(const List *pList, const void *pObj);
     }
 }
 

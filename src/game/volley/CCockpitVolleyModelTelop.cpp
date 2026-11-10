@@ -1,5 +1,4 @@
-// Written from src/game/dodge/CCockpitDodgeModelTelop.cpp by tools/decomp/port_unit.py (Dodge -> Volley); check against VolleyF.
-// msw::CCockpitVolleyModelTelop: the dodgeball telops drawn as effects.
+// msw::CCockpitVolleyModelTelop: the volleyball telops drawn as effects.
 #include "game/msw/CCockpitVolleyModelTelop.hpp"
 #include "game/msw/CGameSnd.hpp"
 
@@ -10,10 +9,11 @@ namespace {
         long nSe;       // sound played with it, -1 for none
     };
 
-    const TelopData s_TelopData[3] = {
-        { 0x684, -1 },
-        { 0x685, -1 },
-        { 0x686, -1 },
+    const TelopData s_TelopData[4] = {
+        { 0x6CF, -1 },
+        { 0x6D0, -1 },
+        { 0x6CD, -1 },
+        { 0x6CE, -1 },
     };
 }
 
@@ -26,7 +26,7 @@ msw::CCockpitVolleyModelTelop::~CCockpitVolleyModelTelop() {}
 
 int msw::CCockpitVolleyModelTelop::Set()
 {
-    if (m_nType >= 0 && m_nType < 3) {
+    if (m_nType >= 0 && m_nType < 4) {
         const TelopData &rData = s_TelopData[m_nType];
 
         SetEffect(0, rData.nEffectId);

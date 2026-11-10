@@ -2,6 +2,7 @@
 #define BCS_CSCNOBJ_HPP_
 
 #include "bcs/CG3dObj.hpp"
+#include "bcs/FVEC3.hpp"
 
 namespace bcs {
 
@@ -40,6 +41,12 @@ namespace bcs {
             virtual void GetNodeLocalMtx(unsigned long, FMTX34 &) const;   // 0x34 (return type guessed)
             virtual const FMTX34 *GetNodeLocalMtxPtr(unsigned long) const; // 0x38 (const result guessed)
             virtual void GetNodeWorldMtx(unsigned long, FMTX34 &) const;   // 0x3C (return type guessed)
+            // 0x40-0x50 from the vtable of bcs::CMdlObj (return types guessed).
+            virtual const FMTX34 *GetNodeWorldMtxPtr(unsigned long) const;  // 0x40
+            virtual void SetNodeLocalMtx(unsigned long, const FMTX34 &);    // 0x44
+            virtual void SetNodeWorldMtx(unsigned long, const FMTX34 &);    // 0x48
+            virtual void SetAlphaRate(unsigned char);                       // 0x4C
+            virtual void SetAlphaRateF(float);                              // 0x50
             // More virtual functions follow; none is needed yet.
 
             // Queues the object to be deleted later.
@@ -50,7 +57,23 @@ namespace bcs {
             void OffFlag(unsigned long flag) { m_nFlag &= ~flag; }
 
         private:
-            unsigned char m_Unk08[0xF4];  // 0x08
+            unsigned char m_Unk08[0x90];  // 0x08
+
+        public:
+            // (names guessed) Read by bcs::CScnObj::CalcRootMtx in the DOL;
+            // the modules write them directly (msw::GIMMICK_BOSS::
+            // CEffectCoinGet::Main in BossF).
+            FVEC3 m_Pos;                  // 0x98
+
+        private:
+            unsigned char m_UnkA4[0xC];   // 0xA4
+
+        public:
+            FVEC3 m_Rot;                  // 0xB0, radians
+            FVEC3 m_Scale;                // 0xBC
+
+        private:
+            unsigned char m_UnkC8[0x34];  // 0xC8
             unsigned long m_nFlag;        // 0xFC (name guessed)
             unsigned char m_Unk100[0x18]; // 0x100
     };

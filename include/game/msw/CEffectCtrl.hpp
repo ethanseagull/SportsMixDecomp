@@ -46,10 +46,15 @@ namespace msw {
             virtual void CreateAttachClusterAuto(const char *, const char *, const bcs::CScnObj *, const char *,
                                                  unsigned long);
             virtual int InitPatch(long, bcs::EF::CEffect *); // returns 0; type guessed
-            // DOL CreateAttachEffect__Q23msw11CEffectCtrlFlPCQ23bcs7CScnObjPCQ23bcs5FVEC3UliiiUlUlUlUl;
-            // return type not known.
-            void CreateAttachEffect(long, const bcs::CScnObj *, const bcs::FVEC3 *, unsigned long, int, int, int,
-                                    unsigned long, unsigned long, unsigned long, unsigned long);
+            // DOL CreateAttachEffect__Q23msw11CEffectCtrlFlPCQ23bcs7CScnObjPCQ23bcs5FVEC3UliiiUlUlUlUl.
+            // Static: the body takes the id in r3 and finds the instance through
+            // s_InstanceHandle itself, and msw::CGimmickManBoss::EffectCoinGetCreate_
+            // (BossF) passes the id in r3. Returns what the instance's virtual at
+            // 0x2C returns, 0 without an instance; the caller keeps it as a handle
+            // for StopAttachEffect (type guessed).
+            static unsigned long CreateAttachEffect(long, const bcs::CScnObj *, const bcs::FVEC3 *, unsigned long, int,
+                                                    int, int, unsigned long, unsigned long, unsigned long,
+                                                    unsigned long);
 
             // Looks the instance up in the task manager by s_InstanceHandle.
             static CEffectCtrl *GetInstance();

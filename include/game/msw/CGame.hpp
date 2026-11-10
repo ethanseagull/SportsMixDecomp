@@ -29,7 +29,15 @@ namespace msw {
                 unsigned char m_nGameType; // 0x05, 2 selects the sport's party game
                 unsigned char m_Unk06[0xA];
                 long m_nGameLevel;         // 0x10, 0-3 (EASY, NORMAL, HARD, EXPERT; names guessed)
-                unsigned char m_Unk14[0x624];
+                unsigned char m_Unk14[0x2C];
+                // 0x40, flag words whose bit 0 the boss game's "?" panels test
+                // (game/boss/CQPanelManBoss.cpp): with bit 0 of 0x40 set a coin
+                // panel gives no coin; with bit 0 of 0x1C8 set the panels pop up
+                // again without waiting. (meanings and names guessed)
+                unsigned long m_nUnk40;    // 0x40
+                unsigned char m_Unk44[0x184];
+                unsigned long m_nUnk1C8;   // 0x1C8
+                unsigned char m_Unk1CC[0x46C];
             };
 
             CGame(bcs::CTask *pParent, GAME_MODE mode);
@@ -59,6 +67,13 @@ namespace msw {
             // The difficulty of the game (see GameWork::m_nGameLevel).
             // Inline; the parameter files emit it.
             static long GetGameLevel() { return g_GameWork.m_nGameLevel; }
+
+            // (DOL; return types guessed) Team nTeam's score.
+            static long GetTeamScore(long nTeam);
+            // Not zero when team nTeam may still take an item.
+            static int CanbeTeamItemPush(long nTeam);
+            // Adds nCoin coins to team nTeam.
+            static void AddTeamCoin(long nTeam, long nCoin);
 
             static GameWork g_GameWork;
             static CGame *m_pInstance;

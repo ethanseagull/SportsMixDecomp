@@ -18,6 +18,7 @@ namespace bcs {
 namespace msw {
 
     class CChrCore;
+    class CCollAtkUnit;
 
     // Arguments of the volleyball shots. (that BALL and VOLLEY are
     // namespaces and not classes is a guess, see notes/toolchain.md)
@@ -29,6 +30,10 @@ namespace msw {
             struct PASS_SHOT_ARG;
             struct ENDURE_PRM;
         }
+        namespace BOSS {
+            struct SPIKE_SHOT_ARG;
+            struct PASS_SHOT_ARG;
+        }
     }
 
     // The ball (or puck) of a game. A DOL class, size 0x318: bcs::CUnivTask
@@ -38,7 +43,7 @@ namespace msw {
     // game module derives its own ball from it.
     //
     // INCOMPLETE: only what game/boss/CBallManBoss.cpp needs is here.
-    //  - The virtual functions stop at slot 0x170 of 0x4F0, so a class
+    //  - The virtual functions stop at slot 0x2B4 of 0x4F0, so a class
     //    derived from this one cannot declare new virtual functions yet.
     //    Their order and names are the slots of __vt__Q23msw9CBallBoss
     //    (BossF), read with the class name set back to CBall.
@@ -151,12 +156,98 @@ namespace msw {
             virtual int IsVolleyFakeBall() const;                               // 0x168
             virtual int IsVolleyReqDelete() const { return 0; }                 // 0x16C
             virtual int IsVolleyVanish() const { return 0; }                    // 0x170
-            // Slots 0x174 to 0x4F0 are not declared yet.
+            // 0x174 to 0x2B4: names from __vt__Q23msw9CBallBoss (BossF); the
+            // return types are guesses (game/boss/CQPanelManBoss.cpp calls
+            // SetJumpBallMode).
+            virtual int IsVolleyChanceBallMode() const;                             // 0x174
+            virtual int IsVolleyPowerSpike() const;                                 // 0x178
+            virtual int IsVolleyCurveSpike() const;                                 // 0x17C
+            virtual int IsVolleyFeintSpike() const;                                 // 0x180
+            virtual int IsVolleyTimingSpike() const;                                // 0x184
+            virtual int IsVolleyNetHit() const;                                     // 0x188
+            virtual int IsVolleyEnemySpike() const;                                 // 0x18C
+            virtual void PlayVolleySpReceiveSuccessSe(unsigned long);               // 0x190
+            virtual float GetVolleyChargePower() const;                             // 0x194
+            virtual void SetVolleyChargePower(float);                               // 0x198
+            virtual void ClearVolleyChargePower();                                  // 0x19C
+            virtual long GetVolleyTouchNum(long) const;                             // 0x1A0
+            virtual long GetVolleyTrueTouchNum(long) const;                         // 0x1A4
+            virtual long GetVolleyCanbeTouchKind(long, long);                       // 0x1A8
+            virtual long GetVolleyBallTypeRR() const;                               // 0x1AC
+            virtual long GetVolleyBallColorTypeRR() const;                          // 0x1B0
+            virtual int IsVolleyComBallRR() const;                                  // 0x1B4
+            virtual int IsVolleyChargeBall() const;                                 // 0x1B8
+            virtual int IsVolleyTargetPosInnerCourt(long, float);                   // 0x1BC
+            virtual void GetVolleySpikeJumpTargetPos(bcs::FVEC3 &) const;           // 0x1C0
+            virtual void GetVolleyTouchDownPos(bcs::FVEC3 &, int) const;            // 0x1C4
+            virtual int IsVolleyObstacleBallRR() const;                             // 0x1C8
+            virtual int IsVolleyInCatchableArea(long) const;                        // 0x1CC
+            virtual int IsVolleyThroughUnderNet() const;                            // 0x1D0
+            virtual void DoVolleyItemBallDirectSpike(long, long);                   // 0x1D4
+            virtual void SetHockeyChargeShootMode(const bcs::FVEC3 &, float, long, float, long, float, float, float, int, int, int);// 0x1D8
+            virtual void SetHockeyShootMode(const bcs::FVEC3 &, float, long, float, long, int, long);// 0x1DC
+            virtual void SetHockeyArtsMode(const bcs::FVEC3 &, float, long, long, int, long);// 0x1E0
+            virtual void SetHockeyItemShootMode(const bcs::FVEC3 &, float, long, float, int, long);// 0x1E4
+            virtual void SetHockeyBodyGoalMode(long, long, long);                   // 0x1E8
+            virtual void SetHockeySnatch(const CCollAtkUnit *, const bcs::FVEC3 &); // 0x1EC
+            virtual void TrgGoalIn(const bcs::FVEC3 &, long, long, long, long, long);// 0x1F0
+            virtual void SetHockeyDropMode(const bcs::FVEC3 &, float, long, long);  // 0x1F4
+            virtual void SetHockeyArtsDropMode(const bcs::FVEC3 &, float, long, long);// 0x1F8
+            virtual long GetArtsType() const;                                       // 0x1FC
+            virtual void TrgHockeyArtsEnd(long);                                    // 0x200
+            virtual int IsHockeyArtsEnd() const;                                    // 0x204
+            virtual void SetHockeyArtsStart();                                      // 0x208
+            virtual void SetHockeyShootTargetPos(const bcs::FVEC3 &);               // 0x20C
+            virtual void SetHockeyShootTargetMove(float, float);                    // 0x210
+            virtual long GetHockeyNoChgLeaderCount();                               // 0x214
+            virtual long GetHockeyPassTgtChrIdx();                                  // 0x218
+            virtual void GetPassCatchPos(bcs::FVEC3 &, long);                       // 0x21C
+            virtual long GetHockeyHaveTeamIdx();                                    // 0x220
+            virtual float GetHockeySnatchFrame();                                   // 0x224
+            virtual void SetHockeySnatchFrame(float);                               // 0x228
+            virtual long GetHockeyFaceOffMode();                                    // 0x22C
+            virtual long GetHockeyCatchChrIdx();                                    // 0x230
+            virtual int IsHockeyShootGoalDir();                                     // 0x234
+            virtual void SetHockeyScaleSpeed(float);                                // 0x238
+            virtual long GetHockeyReBoundType() const;                              // 0x23C
+            virtual long GetHockeyItemBallType() const;                             // 0x240
+            virtual float GetHokeyBombExplodeRadius() const;                        // 0x244
+            virtual float GetHokeyBombShootDist() const;                            // 0x248
+            virtual int IsHockeyAttackMode() const;                                 // 0x24C
+            virtual void GetHokeyCurveShootData(float &, bcs::FVEC3 &);             // 0x250
+            virtual float GetFaceOffGuideDispFrm();                                 // 0x254
+            virtual void SettHockeyReflectMode(float);                              // 0x258
+            virtual int IsShootExceptionalStart();                                  // 0x25C
+            virtual int IsDummyShootBall();                                         // 0x260
+            virtual float GetHockeyPassSpeed();                                     // 0x264
+            virtual long GetVsBossBallMode() const;                                 // 0x268
+            virtual void SetVsBossTossUpMode(const bcs::FVEC3 &, long, unsigned long);// 0x26C
+            virtual void SetVsBossSpikeShotMode(BALL::BOSS::SPIKE_SHOT_ARG &);      // 0x270
+            virtual void SetVsBossPassShotMode(BALL::BOSS::PASS_SHOT_ARG &);        // 0x274
+            virtual void SetVsBossPassMode(const bcs::FVEC3 &, long, long, long, long, long, unsigned long);// 0x278
+            virtual void SetVsBossShootMode(const bcs::FVEC3 &, long, float);       // 0x27C
+            virtual void SetVsBossDunkShotMode(const bcs::FVEC3 &, long);           // 0x280
+            virtual void SetVsBossArtsDunkMode(const bcs::FVEC3 &, long, int);      // 0x284
+            virtual int CanbeVsBossReceive() const;                                 // 0x288
+            virtual int CanbeVsBossReflect() const;                                 // 0x28C
+            virtual int CanbeVsBossAirTrick() const;                                // 0x290
+            virtual void SetVsBossReflectCheckEnd();                                // 0x294
+            virtual void SetVsBossCoinPower(long);                                  // 0x298
+            virtual void AddVsBossCoinPower(long);                                  // 0x29C
+            virtual long GetVsBossCoinPower() const;                                // 0x2A0
+            virtual void ClearVsBossCoinPower();                                    // 0x2A4
+            virtual void TrgVsBossArtsAttach(long, long, long, int);                // 0x2A8
+            virtual void SetSleepMode();                                            // 0x2AC
+            virtual void SetJumpBallAttach();                                       // 0x2B0
+            virtual void SetJumpBallMode();                                         // 0x2B4
+            // Slots 0x2B8 to 0x4F0 are not declared yet.
 
             // Loads the ball's model and builds the ball. A negative
             // `nModel` takes the ball's own number. (what the second
             // argument selects is not known; the boss game passes 0x40)
             void Create(long nModel, long);
+            // (DOL) Moves the ball to rPos. (return type guessed)
+            void SetPos(const bcs::FVEC3 &rPos);
 
             // (name guessed) Not zero for a ball that is out of play.
             int IsSleep() const { return m_nFlag & FLAG_SLEEP; }

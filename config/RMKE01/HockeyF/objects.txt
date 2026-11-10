@@ -9,3 +9,4 @@ Equivalent game/hockey/TournamentHockey.cpp
 Matching game/hockey/CCockpitHockeyLayoutBase.cpp
 Matching game/hockey/CBallManHockey.cpp
 Matching game/hockey/CCameraHockey.cpp
+Matching game/hockey/CItemManHockey.cpp

@@ -217,12 +217,9 @@ game/hockey/CEffectCtrlHockey.cpp:
 	.data       start:0x00014D10 end:0x00014D50
 
 game/hockey/CItemManHockey.cpp:
-	.text       start:0x0007BCB8 end:0x0007BEC0
-	.data       start:0x00014D50 end:0x00014F00
-
-game/hockey/CItemHockeyBanana.cpp:
-	.text       start:0x0007BEC0 end:0x0007C084
+	.text       start:0x0007BCB8 end:0x0007C084
 	.rodata     start:0x000027C8 end:0x000027F0
+	.data       start:0x00014D50 end:0x00014F00
 
 game/hockey/CGimmickManHockey.cpp:
 	.text       start:0x0007C084 end:0x0007CF08

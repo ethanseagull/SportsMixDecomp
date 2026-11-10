@@ -17,6 +17,10 @@ namespace msw {
         // frame that follows the gauge's fill rate. Only the members its
         // functions touch are known; the field names follow SetParam's
         // argument order and are guesses.
+        //
+        // Lives in the DOL, in game/msw/cockpit/CMissionCount.cpp. Size
+        // 0x18, vptr at 0x14 (its vtable and inline destructor are emitted
+        // by the modules).
         class CSPGauge {
             public:
                 void Initialize();
@@ -40,6 +44,10 @@ namespace msw {
                 unsigned char m_nSubMaxAnim; // 0x09, "full" animation of m_nSubPane
                 float m_fFrameMax;         // 0x0C, frames of animation m_nAnim
                 float m_fRate;             // 0x10, last rate given to SetGaugeAnim
+
+            public:
+                // vptr at 0x14: declared after the data.
+                virtual ~CSPGauge() {}
         };
     }
 }

@@ -181,6 +181,30 @@ namespace bcs {
         return work;
     }
 
+    // (name guessed) The dot product of two vectors. Paired-single assembly
+    // in the original like FVEC3LenSq (y and z as a pair, x alone); most
+    // likely NW4R's VEC3Dot. Written from what msw::CDropCoin's bounce
+    // (game/msw/CDropCoinMan.cpp) shows after inlining.
+    inline float FVEC3Dot(register const FVEC3 *p1, register const FVEC3 *p2)
+    {
+        register float yz1;
+        register float yz2;
+        register float x1;
+        register float x2;
+        register float work;
+
+        asm {
+            psq_l yz1, 4(p1), 0, 0
+            psq_l yz2, 4(p2), 0, 0
+            ps_mul yz1, yz1, yz2
+            psq_l x1, 0(p1), 1, 0
+            psq_l x2, 0(p2), 1, 0
+            ps_madd x2, x1, x2, yz1
+            ps_sum0 work, x2, yz1, yz1
+        }
+        return work;
+    }
+
     // (name guessed) rOut = rIn scaled to length 1, or zero when rIn is zero.
     inline void BCS_Vec_Normalize(FVEC3 &rOut, const FVEC3 &rIn)
     {

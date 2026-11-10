@@ -16,7 +16,7 @@ namespace msw {
             virtual void SetUp_();
             virtual void AllReset_();
             virtual long QPanelCheck_(const bcs::FVEC3 &, long, int, int, int, long *, CItem **);
-            virtual CDropCoin *CreateDropCoin_(const bcs::FVEC3 &, long);
+            virtual long CreateDropCoin_(const bcs::FVEC3 &, long); // returns the number of coins made
             virtual void EffectCoinGetCreate_(const bcs::FVEC3 &, DROP_COIN::CoinType);
             virtual void EffectCoinScoreCreate_(const bcs::FVEC3 &, const bcs::FVEC3 &, long);
             virtual long QPanelChoicePopupCoin_(long);

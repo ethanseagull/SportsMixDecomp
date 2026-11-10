@@ -40,6 +40,15 @@ namespace msw {
             // and nPlayer goes to CSave::GetPlayerData. Names and return
             // type guessed.
             static int IsCupClear(long nUnk, long nCup, long nUnk2, long nPlayer);
+            // Added for game/msw/CGameSnd.cpp (names and return types
+            // guessed). fn_8017AC10: with GameWork byte 7 at 1 to 3, whether
+            // the tournament's stage number (the short at 0x1060 of its
+            // work) is none of 50, 60 and 70; otherwise whether it is 1000
+            // or more, in one game mode only.
+            static int IsSndStage();
+            // fn_8017AE5C: the stage number, with 0x51 read as 0x50 and
+            // 0x5B, 0x64 and 0x65 as 0x5A.
+            static long GetSndStage();
     };
 }
 

@@ -12,10 +12,15 @@ namespace bcs {
 
     namespace EF {
 
+        class CEffect;
+
         // The effect system. Lives in the DOL; only the member used so far.
         class CManager {
             public:
                 static CManager *GetInstance();
+                // Added for game/msw/cockpit/CMissionCount.cpp: the effect
+                // with handle hEffect, null when it is gone.
+                CEffect *GetEffect(unsigned long hEffect);
 
                 // (name guessed) The byte at 0x95; msw::CTournamentMan
                 // (TourF) clears it once the map is loaded.

@@ -98,6 +98,10 @@ namespace msw {
             // CChrMarkerBoss only shows markers for type 1 (most likely the
             // human players; not checked).
             long DriverGetType() const;
+            // Not zero when a pad drives the character. (meaning guessed from
+            // the name; CChrMarkerVolley::AppearCheck asks it outside the
+            // party game) In the DOL.
+            int IsPadCtrl() const;
 
             // (names guessed) Inline in the original; the module reads the
             // members directly (CChrMarkerBoss::AppearCheck loads the byte

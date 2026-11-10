@@ -5,7 +5,7 @@
 
 namespace msw {
 
-    // The item manager of the volley game (HockeyF). It overrides only
+    // The item manager of the volley game (VolleyF). It overrides only
     // CreateItem, to create the volley item classes, and ExParamInitialize_.
     // No allocation of it was found, so whether it adds members is not known.
     class CItemManVolley : public CItemMan {

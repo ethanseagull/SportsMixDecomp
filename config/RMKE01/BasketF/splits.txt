@@ -695,7 +695,10 @@ game/basket/CStageBasket16.cpp:
 game/basket/CCockpitChrIcon2DBasket.cpp:
 	.text       start:0x000EA8E4 end:0x000EAC58
 	.rodata     start:0x00009C48 end:0x00009D98
-	.data       start:0x000218A8 end:0x000220C8
+	.data       start:0x000218A8 end:0x00021910
+
+game/basket/BasketPrm.cpp:
+	.data       start:0x00021910 end:0x000220C8
 
 game/basket/CStageBasketHungryBossPackun72.cpp:
 	.text       start:0x000EAC58 end:0x000EB758

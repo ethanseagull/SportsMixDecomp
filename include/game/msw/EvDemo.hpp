@@ -29,6 +29,10 @@ namespace msw {
         // number (-1 when not found). Read from the DOL function; parameter
         // names guessed.
         void *GetArcResDataMdl(long &nIndex, long nArc, const char *pName, const char *pSub);
+        // Sets up the model resources of a loaded archive (pArc may be
+        // null; a null pSub picks the default sub-folder). Return type and
+        // parameter names guessed.
+        void InitArcResData(void *pArc, const char *pSub);
     }
 }
 

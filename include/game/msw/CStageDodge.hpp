@@ -122,6 +122,10 @@ namespace msw {
             CStageDodge17(bcs::CTask *pParent);
             virtual ~CStageDodge17();
 
+            // Static: CEventDemoDodge::CameraEvent leaves r3 unset. Stage
+            // 0x11 (GameWork::GetStage) is the one with the trolley.
+            static void TrolleyForceReset();
+
         private:
             unsigned char m_Unk244[0x5C]; // size 0x2A0
     };

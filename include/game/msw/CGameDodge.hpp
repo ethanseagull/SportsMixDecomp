@@ -16,6 +16,11 @@ namespace msw {
             // CGame::m_pInstance). CChrMarkerDodge shows no marker in the
             // party game for a character with none left.
             static long GetChrRestLife(long nChr);
+            // (static, DodgeF; meaning guessed from the names) The share of
+            // its life character nChr has left, and whether an arts shot is
+            // being played.
+            static float GetChrRestLifeRate(long nChr);
+            static int IsNowArtsShootMode();
 
             // The dodgeball game's own virtual functions from slot 0x2A8 (after
             // CGame's), in the order of __vt__Q23msw10CGameDodge; only as far

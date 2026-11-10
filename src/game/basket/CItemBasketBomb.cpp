@@ -1,0 +1,49 @@
+#include "game/msw/CItemBasket.hpp"
+
+namespace msw {
+
+void CItemBasketBomb::ExParamUpdate_() {
+    m_fParamScale = 1.5f;
+    m_fParamA4 = 80.0f;
+    m_fParamA8 = 1.0f;
+    m_nParamAC = 1;
+    m_nParamB0 = 30;
+    m_fParamB8 = 6.5f;
+    m_fParamBC = 3.8f;
+    m_fParamC0 = 40.0f;
+    m_fExplosionCollSize = 3.5f;
+}
+
+long CItemBasketBomb::GetParamThrowType() const {
+    return 1;
+}
+
+float CItemBasketBomb::GetParamThrowSearchDirRangeMax() const {
+    return 0.0f;
+}
+
+float CItemBasketBomb::GetParamThrowSearchDistRangeMax() const {
+    return 0.0f;
+}
+
+float CItemBasketBomb::GetExplosionCollSize() const {
+    return m_fExplosionCollSize;
+}
+
+void CItemBasketBomb::DoThrowInit(const bcs::FVEC3 &pos, int) {
+    SetVelParabola_(pos, m_fParamB8, m_fParamBC, m_fParamC0);
+}
+
+void CItemBasketBomb::GetExplosionParam(float &a, float &size, float &c, long &d, long &e, unsigned long &f) {
+    a = m_fParamA4;
+    size = m_fExplosionCollSize;
+    c = m_fParamA8;
+    d = m_nParamAC;
+    e = m_nParamB0;
+    f = 0;
+}
+
+CItemBasketBomb::~CItemBasketBomb() {
+}
+
+} // namespace msw

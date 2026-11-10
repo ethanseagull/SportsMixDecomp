@@ -87,7 +87,17 @@ namespace msw {
             // eight archive paths (CLoadData::GetFilePath), 0x6C a short,
             // 0x1CC and 0x1D0 words. The size is where
             // CCockpitTournament's bcs::CFsm base starts.
-            unsigned char m_Unk4C[0x1D4 - 0x4C];
+            unsigned char m_Unk4C[0x70 - 0x4C];
+
+        protected:
+            // 0x70 and 0x74: the result words. ClearResult(n) sets both to
+            // n, GetResult returns 0x74, an unnamed DOL getter returns 0x70.
+            // msw::CCockpitMenu's constructor sets both to 0x10000.
+            long m_Unk70;
+            long m_Result; // 0x74
+
+        private:
+            unsigned char m_Unk78[0x1D4 - 0x78];
     };
 }
 

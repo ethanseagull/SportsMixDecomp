@@ -43,6 +43,16 @@ namespace msw {
             // Puts nLen characters of pText into text box pane nPane.
             // Return type guessed.
             void SetTextBoxString(long nPane, const wchar_t *pText, unsigned short nLen);
+            // Added for MenuF game/menu/CEntryExplain.cpp. Shows or hides
+            // the pane named pName; nothing when it is not found.
+            void SetDisp(const char *pName, int bDisp);
+
+            // (no symbol; name guessed) The same by index. Inline in the
+            // modules.
+            void SetPaneDisp(long nPane, int bDisp)
+            {
+                SetDisp(GetPaneName(nPane), bDisp);
+            }
 
             // (no symbols; the overloads are a guess) The same by index,
             // null when the index is outside the name table. Inline in the

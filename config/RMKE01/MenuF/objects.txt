@@ -17,3 +17,6 @@ Matching game/menu/CCameraMenuBG.cpp
 Equivalent game/menu/CCourtCharaObj.cpp
 Equivalent game/menu/CButton2.cpp
 Matching game/menu/CCockpitMenu.cpp
+Matching game/menu/CInitGuide.cpp
+Equivalent game/menu/CEntryExplain.cpp
+Matching game/menu/CHowTo.cpp

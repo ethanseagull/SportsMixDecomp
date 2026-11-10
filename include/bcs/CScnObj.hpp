@@ -28,7 +28,8 @@ namespace bcs {
             // Named in the mangled name of SetAlphaMode; the values are not
             // known yet.
             enum AlphaMode {
-                ALPHAMODE_0
+                ALPHAMODE_0,
+                ALPHAMODE_1 // msw::CTournamentChip sets it on its model
             };
 
             // How a model follows the one it is attached to (the type of the

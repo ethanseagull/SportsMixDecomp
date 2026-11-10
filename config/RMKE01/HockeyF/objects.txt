@@ -7,3 +7,4 @@ Matching game/hockey/module.cpp
 Matching game/hockey/CItemBallHockey.cpp
 Matching game/hockey/CCockpitHockeyLayoutBase.cpp
 Matching game/hockey/CBallManHockey.cpp
+Matching game/hockey/CCameraHockey.cpp

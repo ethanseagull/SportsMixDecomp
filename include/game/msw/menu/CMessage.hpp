@@ -12,6 +12,12 @@ namespace msw {
                 void Finalize();
                 // Returns -1 when pData is null.
                 long AttachResource(const void *pData); // return type guessed
+                // Added for MenuF game/menu/CEntryExplain.cpp. The index of
+                // the message file named pName, or -1 (return type guessed).
+                long GetFileIndex(const char *pName);
+                // The text of label pLabel in file nFile; null when nFile is
+                // negative or pLabel null.
+                const wchar_t *GetTextByLabel(short nFile, const char *pLabel);
 
                 static CMessage s_Instance;
 

@@ -20,7 +20,7 @@ namespace msw {
                 virtual long HitCheck(bcs::FVEC3 *pPos);
                 virtual long SetCursorMarkerPosition(long, long);
                 virtual long SetCursorMarkerVisible(long, int);
-                virtual unsigned short StickMoveCheck(long nPad, long nBtnKindId);
+                virtual long StickMoveCheck(long nPad, long nBtnKindId);
                 virtual long SetDefaultMoveCursor(long nPad, long nBtnKindId);
                 virtual long PushButton(long nPad, long nBtnKindId);
                 virtual int IsButtonKindOfStickMode(long nBtnKindId);

@@ -21,6 +21,10 @@ namespace msw {
             // BasketF), 0 without a handler. Which mission rule the match
             // starts with; 1 and 2 are tested. (return type guessed)
             static long GetMissionStartMode();
+            // Added for MenuF game/menu/CHowTo.cpp. Starts tutorial
+            // nTutorial (0 or 1) of game nGameKind (CSelectMenu::m_nGameKind)
+            // with pad style nPadStyle. Argument names guessed.
+            static void Tutorial(long nGameKind, int nPadStyle, int nTutorial);
     };
 }
 

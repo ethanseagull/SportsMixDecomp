@@ -65,6 +65,8 @@ namespace nw4r {
                 const char *GetName() const { return mName; }
                 // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp.
                 void SetTranslate(const math::VEC3 &rTranslate) { mTranslate = rTranslate; }
+                // Added for MenuF game/menu/CChrCaption.cpp.
+                void SetAlpha(unsigned char nAlpha) { mAlpha = nAlpha; }
                 // Bit 0 of the flags.
                 void SetVisible(bool bVisible)
                 {
@@ -73,7 +75,6 @@ namespace nw4r {
                 // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp.
                 void SetRotate(const math::VEC3 &rRotate) { mRotate = rRotate; }
                 void SetScale(const math::VEC2 &rScale) { mScale = rScale; }
-                void SetAlpha(unsigned char nAlpha) { mAlpha = nAlpha; }
                 // Bit 2 of the flags (name from the ogws description).
                 void SetLocationAdjust(bool bAdjust)
                 {

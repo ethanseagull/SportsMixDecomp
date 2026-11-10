@@ -22,6 +22,9 @@ namespace bcs {
             // Non-zero on success; the argument is called with 0.
             int Start(unsigned long nArg);
             void Stop();
+            // Added for MenuF game/menu/CPartySelect.cpp. Non-zero once a
+            // frame of the movie can be shown.
+            int CanbeDraw() const;
     };
 }
 

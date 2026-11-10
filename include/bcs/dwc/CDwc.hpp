@@ -23,6 +23,17 @@ namespace bcs {
                 long GetAIDFromOnlinePadID(long id) const;
                 // fn_800B1D9C: signed byte table at 0x7FE. Unnamed.
                 long GetLocalPadIDFromOnlinePadID(long id) const;
+
+                // Added for MenuF game/menu/CWiFiFrindVS.cpp (return types
+                // guessed where the result is not used; argument names are
+                // guesses). The connection state (4 and 10 are tested).
+                long GetStat() const;
+                // Accept or refuse the match friend nIndex asked for.
+                int EntryFriendMatch(long nIndex, long nPlayerNum);
+                int RefuseFriendMatch(long nIndex);
+                void SetReadyFromMatchEnd();
+                int IsMatchPlay() const;
+                void CloseMatching();
         };
     }
 }

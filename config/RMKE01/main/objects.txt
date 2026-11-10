@@ -15,7 +15,7 @@ Matching game/msw/CStgDrv.cpp
 Matching game/bcs/G2D/CTexMap.cpp
 Matching game/msw/CDropCoin.cpp
 NonMatching game/msw/CGameSpeedCtrl.cpp
-NonMatching game/msw/menu/CStateSave.cpp
+Matching game/msw/menu/CStateSave.cpp
 Matching game/msw/CCockpitResultTime.cpp
 Matching game/msw/CEffectTableList.cpp
 NonMatching game/msw/CEffectCoinGetBase.cpp

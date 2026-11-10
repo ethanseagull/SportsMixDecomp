@@ -24,6 +24,11 @@ namespace msw {
                 return m_nInput[nPad];
             }
 
+            // Added for MenuF game/menu/CWiFiFrindVS.cpp (return types and
+            // argument names guessed).
+            int IsInputPointerMode(long nPad);
+            void ChangeInputStickModeForce(long nPad);
+
             static CMenuPad s_Instance;
 
         private:

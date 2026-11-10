@@ -1,6 +1,8 @@
 #ifndef SAVE_DATA_PLAYER_HPP_
 #define SAVE_DATA_PLAYER_HPP_
 
+#include "revolution/rfl.h"
+
 namespace msw {
 
     // One player's save data (DOL). Only the members used so far; the
@@ -10,8 +12,19 @@ namespace msw {
         // Not zero while sport nGameMode has not been played in mode nMode.
         // (meaning and return type guessed)
         int IsFirstPlay(long nMode, long nGameMode);
+        // (added for MenuF game/menu/CPlayMode.cpp) Forgets the Mii chosen
+        // on the character select screen.
+        void ClearSelectMii();
 
-        unsigned char m_Unk0000[0x5C50];
+        unsigned char m_Unk0000[0x18];
+        // 0x18 to 0x2B. (names guessed; added for MenuF
+        // game/menu/CPlusMinus.cpp) The player's own Mii, passed to
+        // CSelectMenu::Mii_SelectParam.
+        unsigned char m_nMiiUnk;         // 0x18
+        long m_nMiiIndex;                // 0x1C
+        RFLDataSource m_MiiSource;       // 0x20
+        RFLCreateID m_MiiCreateId;       // 0x24
+        unsigned char m_Unk002C[0x5C50 - 0x2C];
         unsigned char m_nFlags5C50; // 0x5C50; bit 0x08 picks the second camera table in CSelectMenu::HowTo_In (MenuF)
         unsigned char m_Unk5C51[0x5C95 - 0x5C51];
         // 0x5C95, 0x5CB5, 0x5CD5, 0x5CF5: one byte per sport (basketball,

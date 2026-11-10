@@ -7,7 +7,7 @@
 namespace msw {
     namespace SelectMenu {
 
-        // Size 0x5FC. The first page of the score book ("me_scorebook_A"):
+        // Size 0x5A0. The first page of the score book ("me_scorebook_A"):
         // one button per game kind, its buttons and animation names read
         // from "me_scorebook_A.btn" by the CButtonEntry part at 0x5C. Menu
         // object 0x43 of CSelectMenu; CSelectMenu::ScoreTop_* drive it.

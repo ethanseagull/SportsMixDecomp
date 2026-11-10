@@ -18,3 +18,6 @@ Matching game/basket/CItemBasketRShell.cpp
 Matching game/basket/CItemManBasket.cpp
 Matching game/basket/CStageManBasket.cpp
 Matching game/basket/CCockpitBasketModelTelop.cpp
+Matching game/basket/CEventDemoBasket.cpp
+Matching game/basket/CCockpitChrIcon2DBasket.cpp
+Matching game/basket/CStageFactoryBasket.cpp

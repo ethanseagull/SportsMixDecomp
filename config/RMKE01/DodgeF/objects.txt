@@ -20,3 +20,4 @@ Matching game/dodge/CComDrvDodge.cpp
 Matching game/dodge/unit_77468.cpp
 Matching game/dodge/CStageDodge01.cpp
 Matching game/dodge/CStageFactoryDodge.cpp
+Equivalent game/dodge/CEventDemoDodge.cpp

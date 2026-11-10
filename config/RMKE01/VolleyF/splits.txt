@@ -486,24 +486,12 @@ game/volley/unit_BF960.cpp:
 game/volley/unit_C0918.cpp:
 	.text       start:0x000C0918 end:0x000C1F20
 	.rodata     start:0x00008E48 end:0x00008E90
-	.data       start:0x0001E150 end:0x0001E390
-
-game/volley/CStgGmk_Wave_Volley_Act.cpp:
-	.text       start:0x000C1F20 end:0x000C1FE0
-
-game/volley/CStgGmk_WaveCluster_Volley.cpp:
-	.text       start:0x000C1FE0 end:0x000C2190
-	.rodata     start:0x00008E90 end:0x00008E98
-
-game/volley/CStgGmk_Wave.cpp:
-	.text       start:0x000C2190 end:0x000C21FC
+	.data       start:0x0001E150 end:0x0001E2E0
 
 game/volley/CStgGmk_Wave_Volley.cpp:
-	.text       start:0x000C21FC end:0x000C23A8
-	.data       start:0x0001E390 end:0x0001E6D8
-
-game/volley/CStgGmk_Wave_Act.cpp:
-	.text       start:0x000C23A8 end:0x000C2438
+	.text       start:0x000C1F20 end:0x000C2438
+	.rodata     start:0x00008E90 end:0x00008E98
+	.data       start:0x0001E2E0 end:0x0001E6D8
 
 game/volley/CStgGmk_Trolley_Act_Volley.cpp:
 	.text       start:0x000C2438 end:0x000C2EC0
@@ -511,17 +499,14 @@ game/volley/CStgGmk_Trolley_Act_Volley.cpp:
 	.data       start:0x0001E6D8 end:0x0001EB08
 
 game/volley/CItemManVolley.cpp:
-	.text       start:0x000C2EC0 end:0x000C30C8
-	.data       start:0x0001EB08 end:0x0001F690
-
-game/volley/CItemVolleyBananaRR.cpp:
-	.text       start:0x000C30C8 end:0x000C3AD0
+	.text       start:0x000C2EC0 end:0x000C3AD0
 	.rodata     start:0x00008F00 end:0x00008F78
+	.data       start:0x0001EB08 end:0x0001F610
 
 game/volley/CCockpitVolleySPGauge.cpp:
 	.text       start:0x000C3AD0 end:0x000C4808
 	.rodata     start:0x00008F78 end:0x00009478
-	.data       start:0x0001F690 end:0x0001F7C8
+	.data       start:0x0001F610 end:0x0001F7C8
 
 game/volley/CCockpitVolleyCoin.cpp:
 	.text       start:0x000C4808 end:0x000C5F64

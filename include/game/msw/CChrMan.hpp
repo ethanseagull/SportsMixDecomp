@@ -23,6 +23,8 @@ namespace msw {
             // The number of characters: the word at 0x50 of the instance,
             // zero when there is none. Static, like GetChrCore.
             static long GetChrCoreNum();
+            // Shows or hides the markers over the characters. Static.
+            static void SetChrMarkerDisp(int bDisp);
     };
 }
 

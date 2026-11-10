@@ -594,12 +594,18 @@ namespace msw {
             long GetChrId() const { return m_nChrId; }
             unsigned long GetStatusFlag() const { return m_nStatusFlag; }
             unsigned long GetDispFlag() const { return m_nDispFlag; }
+            // (name guessed) BossF's CEventDemoBoss::CreateDemo sets bit 2
+            // (no drawing) on each character the demo replaces by a model.
+            void OnDispFlag(unsigned long nBit) { m_nDispFlag |= nBit; }
 
             // The texture of the character's radar icon; null when
             // IsDisable() is true. In the DOL. (that the pointer is to a
             // GXTexObj is read from the caller, which makes a
             // bcs::G2D::CTexMap from it; const guessed)
             const _GXTexObj *GetRadarIconTexObj() const;
+            // In the DOL (return type guessed). Writes the character's
+            // position to rPos (DodgeF's damage demo aims the camera there).
+            void GetCompPos(bcs::FVEC3 &rPos) const;
             // (names guessed) Inline in the original; the modules read the
             // bytes directly, as signed values.
             long GetPlayerNo() const { return m_nPlayerNo; }

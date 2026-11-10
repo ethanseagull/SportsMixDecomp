@@ -29,11 +29,10 @@ namespace msw {
         // number (-1 when not found). Read from the DOL function; parameter
         // names guessed.
         void *GetArcResDataMdl(long &nIndex, long nArc, const char *pName, const char *pSub);
-        // Prepares the model files of a loaded event archive (its
-        // nw4r::g3d::ResFile entries get CheckRevision, Init and Bind).
-        // (meaning of the second argument not known; msw::CEvMdlCreaterTmMdlObj
-        // passes 0. Return type guessed)
-        void InitArcResData(void *pData, const char *);
+        // Sets up the model resources of a loaded archive (pArc may be
+        // null; a null pSub picks the default sub-folder). Return type and
+        // parameter names guessed.
+        void InitArcResData(void *pArc, const char *pSub);
     }
 }
 

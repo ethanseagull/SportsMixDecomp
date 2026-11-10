@@ -1,0 +1,2 @@
+# <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
+main __ct__Q33msw4menu13CDispTaskLinkFv unverified 96.1 96.1%: the original reads the id counter twice before incrementing it, ours once; nothing writes in between, so both reads give the same value

@@ -33,6 +33,9 @@ namespace bcs {
             // leaves 0xFCFF there, bcs::CCamera's 0xFC00, and
             // msw::CTournamentCamera's stores 0xFC01.
             void SetUnk08(unsigned long value) { m_Unk08 = value; }
+            // (name guessed) Clears bits of the word at 0x08 (DodgeF's
+            // CTelopVoice, CTelopOut and CLifeGaugeTask clear 0x4).
+            void ClearUnk08(unsigned long bits) { m_Unk08 &= ~bits; }
 
         private:
             unsigned long m_nId;         // 0x04 (name guessed)

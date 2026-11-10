@@ -407,6 +407,8 @@ namespace msw {
             // (name guessed)
             const bcs::FVEC3 &GetPos() const { return m_Pos; }
             // (name guessed)
+            const bcs::FVEC3 &GetOffsetPos() const { return m_OffsetPos; }
+            // (name guessed)
             int IsScored() const { return m_nFlag & FLAG_SCORED; }
             // (names guessed) The ball's place in CBallMan's table.
             long GetBallNo() const { return m_nBallNo; }
@@ -419,7 +421,10 @@ namespace msw {
             long m_nBallNo;                // 0x98, the ball's place in CBallMan's table
             unsigned char m_Unk9C[0x5C];   // 0x9C
             bcs::FVEC3 m_Pos;              // 0xF8
-            unsigned char m_Unk104[0x214]; // 0x104
+            unsigned char m_Unk104[0x30];  // 0x104
+            // 0x134 (name guessed from CBall::ClearOffsetPos, which writes it)
+            bcs::FVEC3 m_OffsetPos;
+            unsigned char m_Unk140[0x1D8]; // 0x140
     };
 }
 

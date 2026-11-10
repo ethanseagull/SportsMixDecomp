@@ -3,11 +3,20 @@
 
 namespace msw {
 
-    // Only the member used so far.
+    // Only the members used so far. The one instance is kept in the DOL's
+    // sbss (lbl_805C0C48); SetType and SetDisp do nothing without it.
     class CNowLoading {
         public:
-            // Static: the body in the DOL stores into a global instance.
+            // Static: the body in the DOL stores into the global instance.
             static void SetType(long);
+
+        private:
+            static CNowLoading *s_pInstance; // (name guessed) lbl_805C0C48
+
+            unsigned char m_Unk00[0x3C]; // 0x00
+            long m_nType;                // 0x3C (name guessed)
+            unsigned char m_Unk40[4];    // 0x40
+            float m_fTime;               // 0x44 (name guessed) SetType clears it
     };
 }
 

@@ -5,21 +5,23 @@
 
 namespace msw {
 
-    // INCOMPLETE: the volley game's items (HockeyF), one per DOL item kind.
-    // Their constructors are inline (CItemManVolley::CreateItem calls the
-    // DOL constructor and stores the two vtable pointers itself) and add no
-    // members: each class has the size of its DOL base.
+    // The volley game's items (VolleyF), one per DOL item kind; the RR
+    // game's are in CItemVolleyRR.hpp. All are written in
+    // game/volley/CItemManVolley.cpp.
     //
-    // Destructors: CItemVolleyBomb's and CItemVolleyBanana's are defined in
-    // their units. The mushroom, toadstool and both shells have theirs inline
-    // in the class (as in BasketF's CItemBasket.hpp), so the key function is
-    // ExParamUpdate_ and each destructor is emitted at the head of its
-    // vtable's group of inline functions at the end of the unit.
+    // Their constructors are inline (the item managers call the DOL
+    // constructor and store the two vtable pointers themselves).
+    //
+    // Destructors are all inline in the class: the key function is
+    // ExParamUpdate_, and each destructor is emitted at the head of its
+    // vtable's group of inline functions at the end of the unit. The
+    // toadstool's and the banana's come earlier, right after
+    // CItemManVolleyRR::CreateThrowItem, because the RR classes derived from
+    // them are constructed there.
 
     class CItemVolleyMushroom : public CItemMushroom {
         public:
             CItemVolleyMushroom(CItemMan *pMan) : CItemMushroom(pMan) {}
-            // Inline: see the note at the top of this file.
             virtual ~CItemVolleyMushroom() {}
 
             virtual void ExParamUpdate_();
@@ -28,31 +30,18 @@ namespace msw {
     class CItemVolleyToadstool : public CItemToadstool {
         public:
             CItemVolleyToadstool(CItemMan *pMan) : CItemToadstool(pMan) {}
-            // Inline: see the note at the top of this file.
             virtual ~CItemVolleyToadstool() {}
 
             virtual void ExParamUpdate_();
             virtual long GetParamThrowType() const;
             virtual float GetParamThrowSearchDirRangeMax() const;
             virtual float GetParamThrowSearchDistRangeMax() const;
-    };
-
-    class CItemVolleyBomb : public CItemBomb {
-        public:
-            CItemVolleyBomb(CItemMan *pMan) : CItemBomb(pMan) {}
-            virtual ~CItemVolleyBomb();
-
-            virtual void ExParamUpdate_();
-            virtual long GetParamThrowType() const;
-            virtual float GetParamThrowSearchDirRangeMax() const;
-            virtual float GetParamThrowSearchDistRangeMax() const;
-            virtual void GetExplosionParam(float &, float &, float &, long &, long &, unsigned long &);
+            virtual void DoThrowInit(const bcs::FVEC3 &rDir, int arg);
     };
 
     class CItemVolleyGShell : public CItemGShell {
         public:
             CItemVolleyGShell(CItemMan *pMan) : CItemGShell(pMan) {}
-            // Inline: see the note at the top of this file.
             virtual ~CItemVolleyGShell() {}
 
             virtual void ExParamUpdate_();
@@ -64,8 +53,18 @@ namespace msw {
     class CItemVolleyRShell : public CItemRShell {
         public:
             CItemVolleyRShell(CItemMan *pMan) : CItemRShell(pMan) {}
-            // Inline: see the note at the top of this file.
             virtual ~CItemVolleyRShell() {}
+
+            virtual void ExParamUpdate_();
+            virtual long GetParamThrowType() const;
+            virtual float GetParamThrowSearchDirRangeMax() const;
+            virtual float GetParamThrowSearchDistRangeMax() const;
+    };
+
+    class CItemVolleyBomb : public CItemBomb {
+        public:
+            CItemVolleyBomb(CItemMan *pMan) : CItemBomb(pMan) {}
+            virtual ~CItemVolleyBomb() {}
 
             virtual void ExParamUpdate_();
             virtual long GetParamThrowType() const;
@@ -76,7 +75,7 @@ namespace msw {
     class CItemVolleyBanana : public CItemBanana {
         public:
             CItemVolleyBanana(CItemMan *pMan) : CItemBanana(pMan) {}
-            virtual ~CItemVolleyBanana();
+            virtual ~CItemVolleyBanana() {}
 
             virtual void ExParamUpdate_();
             virtual long GetParamThrowType() const;

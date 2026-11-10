@@ -10,6 +10,9 @@ namespace bcs {
     // draw from different generators; which is which is not known.
     float BCS_RandMax(float max);
     float BCS_OrgRandMax(float max);
+    // In the DOL. A random integer up to max (whether max itself can come
+    // out is not checked; DodgeF calls it with 99 for a percentage).
+    long BCS_RandMax(long max);
 }
 
 #endif /* !BCS_BCS_RAND_HPP_ */

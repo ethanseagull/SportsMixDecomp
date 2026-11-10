@@ -27,6 +27,15 @@ namespace msw {
                 // The model's shadow size: a table entry chosen by bits 3-5
                 // of the byte at 0x16.
                 short GetShadowSize() const;
+                // Bit 2 of the flags. (meaning not known)
+                void SetRelease(int bRelease);
+                // A player character: the character, its colour, its Mii
+                // data and the motion selection (nMotSel). (parameter names
+                // guessed)
+                void SetChrInit(long nChr, long nColor, void *pMii, long nMotSel);
+                void SetTeam(long nTeam, long nNo);
+                // bDisp sets bit 0x80 of the third value.
+                void SetDispInfo(int bDisp, long nDrawLayer, long nLightSelector, long nDispInfo);
 
                 CEventModel *pModel;     // 0x00
                 void *pInit;             // 0x04: third argument of SetChrInit
@@ -65,9 +74,30 @@ namespace msw {
 
             // (name guessed) The half-word at 0x6A.
             unsigned short GetFlag() const { return m_nFlag; }
+            // (name guessed) Bit 2 of that half-word: the models play their
+            // motions mirrored (the creaters pass it to
+            // CEventModel::SetMotionReverse). Read as a bit-field: BossF's
+            // CEvMdlCreaterGmMdlChr::CreateModel extracts the bit right
+            // after the load, where `(GetFlag() >> 2) & 1` defers it.
+            int IsReverse() const { return m_Flag.bReverse; }
             // (name guessed) The pointer at 0x4C: the demo's name, the file
             // name under "event/demos" the objects are loaded from.
             const char *GetDemoName() const { return m_pDemoName; }
+
+            // The entry of model nIndex of kind nKind; a new entry when
+            // there is none yet. Never null in the DOL body.
+            _CHR_INFO &FindIndexNew(long nIndex, long nKind);
+            // Gives the entry the two numbers at 0x66/0x68 and its index.
+            void SetInit(_CHR_INFO &rInfo, long nIndex);
+            // Makes the entry's model with the creater of its kind.
+            void _CreateRes(_CHR_INFO &rInfo);
+
+            // (names guessed) Inline in BossF's CEventDemoBoss constructor,
+            // which writes the members directly.
+            void SetCreater(long nKind, IEvMdlCreater *pCreater) { m_pCreater[nKind] = pCreater; }
+            void SetUnk62(short n) { m_nUnk62 = n; }
+            void SetUnk64(short n) { m_nUnk64 = n; }
+            void SetFlag(unsigned short nFlag) { m_nFlag = nFlag; }
 
         private:
             // 0x34 (name guessed): what makes the models of each kind
@@ -76,8 +106,18 @@ namespace msw {
             IEvMdlCreater *m_pCreater[4];
             unsigned char m_Unk44[0x08];
             const char *m_pDemoName;     // 0x4C (name guessed)
-            unsigned char m_Unk50[0x1A];
-            unsigned short m_nFlag;      // 0x6A (name guessed)
+            unsigned char m_Unk50[0x12];
+            short m_nUnk62;              // 0x62: BossF sets 0
+            short m_nUnk64;              // 0x64: BossF sets 1
+            unsigned char m_Unk66[0x04];
+            union {
+                unsigned short m_nFlag;  // 0x6A (name guessed)
+                struct {
+                    unsigned short m_Unk6A : 13;
+                    unsigned short bReverse : 1;
+                    unsigned short m_Unk6A_2 : 2;
+                } m_Flag;
+            };
             unsigned char m_Unk6C[0x18];
     };
 }

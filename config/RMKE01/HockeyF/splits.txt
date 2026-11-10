@@ -475,20 +475,12 @@ game/hockey/CItemBallHockey.cpp:
 game/hockey/CItemBallHockeyBomb.cpp:
 	.text       start:0x000DB54C end:0x000DC684
 	.rodata     start:0x0000C550 end:0x0000C560
-	.data       start:0x0001E830 end:0x0001EFD8
-
-game/hockey/CStgGmk_WaveCluster_Hockey.cpp:
-	.text       start:0x000DC684 end:0x000DC9D8
-	.rodata     start:0x0000C560 end:0x0000C568
-
-game/hockey/CStgGmk_Wave.cpp:
-	.text       start:0x000DC9D8 end:0x000DCA44
+	.data       start:0x0001E830 end:0x0001EBE0
 
 game/hockey/CStgGmk_Wave_Hockey.cpp:
-	.text       start:0x000DCA44 end:0x000DCBF0
-
-game/hockey/CStgGmk_Wave_Act.cpp:
-	.text       start:0x000DCBF0 end:0x000DCC80
+	.text       start:0x000DC684 end:0x000DCC80
+	.rodata     start:0x0000C560 end:0x0000C568
+	.data       start:0x0001EBE0 end:0x0001EFD8
 
 game/hockey/CStgGmk_Trolley_Act_Hockey.cpp:
 	.text       start:0x000DCC80 end:0x000DD1AC
@@ -549,7 +541,10 @@ game/hockey/unit_E8AB8.cpp:
 game/hockey/CCockpitChrIcon2DHockey.cpp:
 	.text       start:0x000EAC68 end:0x000EAFDC
 	.rodata     start:0x0000CD10 end:0x0000D068
-	.data       start:0x00020DD8 end:0x00021618
+	.data       start:0x00020DD8 end:0x00020E40
+
+game/hockey/HockeyPrm.cpp:
+	.data       start:0x00020E40 end:0x00021618
 
 game/hockey/CStageHockeyCrushSkate87.cpp:
 	.text       start:0x000EAFDC end:0x000EB830

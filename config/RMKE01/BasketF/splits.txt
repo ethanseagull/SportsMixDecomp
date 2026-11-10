@@ -321,15 +321,9 @@ game/basket/unit_7E8FC.cpp:
 	.bss        start:0x00000368 end:0x00000370
 
 game/basket/CEventDemoBasket.cpp:
-	.text       start:0x0007EF94 end:0x0007F980
+	.text       start:0x0007EF94 end:0x0007FA74
 	.rodata     start:0x00001E78 end:0x00001EF0
 	.data       start:0x00014E30 end:0x00014E80
-
-game/basket/EvDemoBasket.cpp:
-	.text       start:0x0007F980 end:0x0007FA6C
-
-game/basket/CEventDemoBase.cpp:
-	.text       start:0x0007FA6C end:0x0007FA74
 
 game/basket/CEffectCtrlBasket.cpp:
 	.text       start:0x0007FA74 end:0x0007FBB8
@@ -701,7 +695,10 @@ game/basket/CStageBasket16.cpp:
 game/basket/CCockpitChrIcon2DBasket.cpp:
 	.text       start:0x000EA8E4 end:0x000EAC58
 	.rodata     start:0x00009C48 end:0x00009D98
-	.data       start:0x000218A8 end:0x000220C8
+	.data       start:0x000218A8 end:0x00021910
+
+game/basket/BasketPrm.cpp:
+	.data       start:0x00021910 end:0x000220C8
 
 game/basket/CStageBasketHungryBossPackun72.cpp:
 	.text       start:0x000EAC58 end:0x000EB758

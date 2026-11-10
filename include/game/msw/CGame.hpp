@@ -289,6 +289,16 @@ namespace msw {
             // The type of NPC slot nSlot: the byte at g_GameWork + 0x70 +
             // nSlot, read signed. (meaning guessed from the name)
             static long GetNpcType(long nSlot);
+            // Static in the DOL too (BossF CEventDemoBoss; names from the
+            // symbols, return types and parameter names guessed). The colour
+            // of player nPlayer's character (byte at g_GameWork + 0x50 +
+            // nPlayer); its Mii data (g_GameWork + 0x1D0 + nPlayer * 0x4C);
+            // word nIndex of the party game parameters (g_GameWork + 0x1B8);
+            // the word at g_GameWork + 0x1B4.
+            static long GetCharColor(long nPlayer);
+            static void *GetMiiStoreData(long nPlayer);
+            static long GetPartyGameParam(long nIndex);
+            static void SetStartFadeType(long nType);
             // The difficulty of the game (see GameWork::m_nGameLevel).
             // Inline; the parameter files emit it.
             static long GetGameLevel() { return g_GameWork.m_nGameLevel; }
@@ -317,6 +327,14 @@ namespace msw {
 
             // Not zero when team nTeam may still take an item. (DOL)
             static int CanbeTeamItemPush(long nTeam);
+            // DOL, static (DodgeF CEventDemoDodge; return types and parameter
+            // names guessed). The full life of a character of team nTeam;
+            // the slow-motion effect (start with four parameters, stop, and
+            // whether one is running).
+            static long GetTeamMaxLife(long nTeam);
+            static void StartSlowEffect(float, float, float, float);
+            static void StopSlowEffect();
+            static int IsNowSlowEffect();
             // Adds nCoin coins to team nTeam. (DOL)
             static void AddTeamCoin(long nTeam, long nCoin);
 

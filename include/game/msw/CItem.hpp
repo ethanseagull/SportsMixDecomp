@@ -137,6 +137,12 @@ namespace msw {
             void CollAtkSetHitDropCoinNumAll(long min, long max);
             // Turns every body collision of the item on or off.
             void CollBodySetEnableAll(int enable);
+            // Clears target flags of body collision `index` (DOL).
+            void CollBodyResetTargetFlag(long index, unsigned long flag);
+            // Turns the item about the Y axis by `rad` (DOL).
+            void AddRotY(float rad);
+            // Plays sound `id` at the item's position (DOL).
+            void PlaySePos(long id);
 
             // DOL. (return types guessed from CComManVolleyRR::IsExistItemBall,
             // which tests the first and third and compares the second with a
@@ -172,7 +178,11 @@ namespace msw {
             float m_fParamBC;               // 0xBC, (meaning unknown)
             float m_fParamC0;               // 0xC0, (meaning unknown)
             float m_fExplosionCollSize;     // 0xC4
-            unsigned char m_UnkC8[0xF8 - 0xC8];
+            unsigned char m_UnkC8[0xD8 - 0xC8];
+            // 0xD8, state bits. 0x100: has touched the ground (IsTouchDown
+            // returns it for a thrown item; VolleyF's banana stops spinning).
+            unsigned long m_nFlag;
+            unsigned char m_UnkDC[0xF8 - 0xDC];
             bcs::FVEC3 m_vPos;              // 0xF8, read through GetPos
             unsigned char m_Unk104[0x11C - 0x104];
             bcs::FVEC3 m_vMove;             // 0x11C, copy of m_vVelocity at the throw (name guessed)

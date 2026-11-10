@@ -2,7 +2,7 @@
 #   <Matching|Equivalent|NonMatching> <source path under src/> [pch=<name>]
 # Read by configure.py. Set a status with tools/decomp/mark.py; add a unit by
 # adding a line (port_unit.py and autopilot.py do it themselves).
-Equivalent game/hockey/CEffectCtrlHockey.cpp
+Matching game/hockey/CEffectCtrlHockey.cpp
 Matching game/hockey/module.cpp
 Matching game/hockey/CItemBallHockey.cpp
 Equivalent game/hockey/TournamentHockey.cpp
@@ -15,4 +15,7 @@ Matching game/hockey/CStgGmk_WaterWorks_Hockey.cpp
 Matching game/hockey/CItemHockeyBomb.cpp
 Matching game/hockey/CItemHockeyToadstool.cpp
 Matching game/hockey/CItemHockeyRShell.cpp
-NonMatching game/hockey/CCockpitHockeyModelTelop.cpp
+Matching game/hockey/CCockpitHockeyModelTelop.cpp
+Matching game/hockey/CStgGmk_Wave_Hockey.cpp
+Matching game/hockey/CCockpitChrIcon2DHockey.cpp
+Matching game/hockey/CStageFactoryHockey.cpp

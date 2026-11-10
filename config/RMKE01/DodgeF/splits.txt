@@ -322,25 +322,20 @@ game/dodge/CChrManDodge.cpp:
 	.text       start:0x00073CF0 end:0x00075B0C
 	.ctors      start:0x00000084 end:0x00000088
 	.rodata     start:0x000013A8 end:0x000013E0
-	.data       start:0x00019DE0 end:0x0001A2A0
+	.data       start:0x00019DE0 end:0x0001A0B0
 	.bss        start:0x00000AF8 end:0x00000B00
 
 game/dodge/CChrMarkerDodge.cpp:
-	.text       start:0x00075B0C end:0x00075D88
-
-game/dodge/CChrMarkerDodgeArrow.cpp:
-	.text       start:0x00075D88 end:0x00076484
+	.text       start:0x00075B0C end:0x00076484
 	.ctors      start:0x00000088 end:0x0000008C
 	.rodata     start:0x000013E0 end:0x000013F0
+	.data       start:0x0001A0B0 end:0x0001A2A0
 	.bss        start:0x00000B00 end:0x00000B50
 
 game/dodge/CCollManDodge.cpp:
-	.text       start:0x00076484 end:0x000772E0
+	.text       start:0x00076484 end:0x00077368
 	.rodata     start:0x000013F0 end:0x00001410
 	.data       start:0x0001A2A0 end:0x0001A368
-
-game/dodge/CCollMan.cpp:
-	.text       start:0x000772E0 end:0x00077368
 
 game/dodge/CComDrvDodge.cpp:
 	.text       start:0x00077368 end:0x00077468
@@ -594,24 +589,12 @@ game/dodge/CComManDodgeGame.cpp:
 game/dodge/CStgGmk_WaterWorks_Dodge_Act.cpp:
 	.text       start:0x000B5B44 end:0x000BA5F0
 	.rodata     start:0x00007780 end:0x000078F0
-	.data       start:0x00022B98 end:0x000232E0
-
-game/dodge/CStgGmk_Wave_Dodge_Act.cpp:
-	.text       start:0x000BA5F0 end:0x000BA6B0
-
-game/dodge/CStgGmk_WaveCluster_Dodge.cpp:
-	.text       start:0x000BA6B0 end:0x000BA860
-	.rodata     start:0x000078F0 end:0x000078F8
-
-game/dodge/CStgGmk_Wave.cpp:
-	.text       start:0x000BA860 end:0x000BA8CC
+	.data       start:0x00022B98 end:0x00023230
 
 game/dodge/CStgGmk_Wave_Dodge.cpp:
-	.text       start:0x000BA8CC end:0x000BAA78
-	.data       start:0x000232E0 end:0x00023628
-
-game/dodge/CStgGmk_Wave_Act.cpp:
-	.text       start:0x000BAA78 end:0x000BAB08
+	.text       start:0x000BA5F0 end:0x000BAB08
+	.rodata     start:0x000078F0 end:0x000078F8
+	.data       start:0x00023230 end:0x00023628
 
 game/dodge/CStgGmk_Trolley_Act_Dodge.cpp:
 	.text       start:0x000BAB08 end:0x000BAEC4

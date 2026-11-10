@@ -4,6 +4,10 @@
 #include "bcs/CFsm.hpp"
 #include "bcs/CTask.hpp"
 
+namespace bcs {
+    class CMdlObj;
+}
+
 namespace msw {
 
     // The marker shown above a character. A DOL class, size 0x9C:
@@ -57,7 +61,9 @@ namespace msw {
 
         protected:
             unsigned long m_nFlag; // 0x7C, bit 1: view check enabled
-            void *m_Unk80;         // 0x80, an object with virtual functions
+            // 0x80, the marker's model (Initialize creates it with
+            // new bcs::CMdlObj; null before that)
+            bcs::CMdlObj *m_pMdl;
             void *m_Unk84;         // 0x84, another of the same kind
             long m_nChr;           // 0x88, index for CChrMan::GetChrCore; negative for none
             long m_nType;          // 0x8C, third constructor argument (name guessed)

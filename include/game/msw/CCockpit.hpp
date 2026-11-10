@@ -40,6 +40,9 @@ namespace msw {
             static long RemoveObj(long nObjId);               // -1 without a task
             static long IsEndObj(long nObjId);                // 1 without a task
             static void SetAnimEndClose(long nObjId, int bClose); // return type guessed
+            // The word at 0x4C + 4 * nFile of the task (nFile 0 to 7); null
+            // without a task or for another nFile.
+            static const char *GetResourceFileName(long nFile);
     };
 }
 

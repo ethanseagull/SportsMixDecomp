@@ -2,6 +2,7 @@
 #define BCS_CSCNOBJ_HPP_
 
 #include "bcs/CG3dObj.hpp"
+#include "bcs/FVEC3.hpp"
 
 namespace bcs {
 
@@ -48,9 +49,29 @@ namespace bcs {
             // (names guessed) Inline in the modules.
             void OnFlag(unsigned long flag) { m_nFlag |= flag; }
             void OffFlag(unsigned long flag) { m_nFlag &= ~flag; }
+            // (name guessed) Inline in the modules: msw::CChrMarkerDodgeArrow
+            // stores a yaw in radians to 0xB4, brought into [0, 2 pi] after
+            // the model pointer is loaded, so the wrapping is taken to be
+            // part of the setter.
+            void SetRotY(float fRotY)
+            {
+                while (fRotY > 6.2831855f) {
+                    fRotY -= 6.2831855f;
+                }
+                while (fRotY < 0.0f) {
+                    fRotY += 6.2831855f;
+                }
+                m_Rot.y = fRotY;
+            }
 
         private:
-            unsigned char m_Unk08[0xF4];  // 0x08
+            unsigned char m_Unk08[0xA8];  // 0x08
+            // 0xB0 (name guessed): the constructor clears the vectors at
+            // 0x98, 0xA4 and 0xB0 and sets the one at 0xBC to one value
+            // (most likely translation, ?, rotation and scale; not checked
+            // beyond the yaw written by CChrMarkerDodgeArrow).
+            FVEC3 m_Rot;
+            unsigned char m_UnkBC[0x40];  // 0xBC
             unsigned long m_nFlag;        // 0xFC (name guessed)
             unsigned char m_Unk100[0x18]; // 0x100
     };

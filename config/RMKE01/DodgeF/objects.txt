@@ -4,3 +4,13 @@
 # adding a line (port_unit.py and autopilot.py do it themselves).
 Matching game/dodge/CEffectCtrlDodge.cpp
 Matching game/dodge/module.cpp
+NonMatching game/dodge/CChrMarkerDodge.cpp
+Equivalent game/dodge/CCollManDodge.cpp
+Matching game/dodge/TournamentDodge.cpp
+Matching game/dodge/CTmGameHandlerDodge.cpp
+Equivalent game/dodge/CBallManDodge.cpp
+Matching game/dodge/CBallMarkerDodge.cpp
+NonMatching game/dodge/CCameraDodge.cpp
+Matching game/dodge/CStgGmk_Wave_Dodge.cpp
+NonMatching game/dodge/CCockpitDodgeModelTelop.cpp
+NonMatching game/dodge/CCockpitChrIcon2DDodge.cpp

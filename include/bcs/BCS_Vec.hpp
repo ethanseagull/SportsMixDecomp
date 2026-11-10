@@ -70,6 +70,33 @@ namespace bcs {
         return pOut;
     }
 
+    // (name guessed) pOut = p1 - p2. Written from what
+    // msw::CBallManDodge::GetNearPosBall_ (DodgeF) shows after inlining.
+    inline FVEC3 *FVEC3Sub(register FVEC3 *pOut, register const FVEC3 *p1, register const FVEC3 *p2)
+    {
+        register float a;
+        register float b;
+        register float work;
+
+        asm {
+            psq_l a, 0(p1), 0, 0
+            psq_l b, 0(p2), 0, 0
+            ps_sub work, a, b
+            psq_st work, 0(pOut), 0, 0
+            psq_l a, 8(p1), 1, 0
+            psq_l b, 8(p2), 1, 0
+            ps_sub work, a, b
+            psq_st work, 8(pOut), 1, 0
+        }
+        return pOut;
+    }
+
+    // (name guessed) The length of a vector.
+    inline float FVEC3Len(const FVEC3 *p)
+    {
+        return PSVECMag((const Vec *)p);
+    }
+
     // (name guessed) pOut = pIn * scale.
     inline FVEC3 *FVEC3Scale(register FVEC3 *pOut, register const FVEC3 *pIn, register float scale)
     {

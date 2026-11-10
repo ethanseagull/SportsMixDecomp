@@ -51,6 +51,18 @@ namespace msw {
             // Decides whether the match is over; `n` is kept at 0x3B.
             void _CheckEndMessage(int n);
 
+            // DOL members used by the modules' handlers. nType is a mission
+            // type (TournamentWork::TOURNAMENT_INFO::MISSION::nType); the
+            // meaning of the other arguments is not known. (return types
+            // guessed)
+            void _SetupPanel();
+            void _SetupItemParams();
+            int _IsMissionTeam(long nTeam);
+            long _GetCount(long nType) const;
+            void _SetCount(long nType, long n, int, float);
+            void _CountUp(long nType, long n, int, float);
+            void _CheckPoint(long nType, long n, int, float);
+
             // The battle result kept in the tournament's data. Neither takes
             // an object. (return type of the second guessed: whether the
             // stored value is 1)

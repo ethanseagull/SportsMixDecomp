@@ -2,3 +2,5 @@
 #   <Matching|Equivalent|NonMatching> <source path under src/> [pch=<name>]
 # Read by configure.py. Set a status with tools/decomp/mark.py; add a unit by
 # adding a line (port_unit.py and autopilot.py do it themselves).
+Matching game/msw/cockpit/CSPGaugeInputDisp.cpp
+Matching game/msw/CDataWork.cpp

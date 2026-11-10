@@ -25,6 +25,9 @@ namespace msw {
             static long GetChrCoreNum();
             // Shows or hides the markers over the characters. Static.
             static void SetChrMarkerDisp(int bDisp);
+            // The one instance. Static. (BasketF casts it to its
+            // CChrManBasket)
+            static CChrMan *GetInstance();
     };
 }
 

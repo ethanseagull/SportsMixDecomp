@@ -261,13 +261,10 @@ game/msw/CEffectAttachTable.cpp:
 	.text       start:0x801248FC end:0x80124B1C
 
 game/msw/CDropCoinMan.cpp:
-	.text       start:0x80124C20 end:0x80124DC0
-
-game/msw/CDropCoin.cpp:
-	.text       start:0x80126694 end:0x801266D0
-
-game/msw/CEffectCoinGetBase.cpp:
-	.text       start:0x80126868 end:0x801268E0
+	.text       start:0x80124C20 end:0x80126AE8
+	.rodata     start:0x80439C40 end:0x80439D08
+	.data       start:0x8046F8D8 end:0x8046F928
+	.sdata2     start:0x805C2B78 end:0x805C2C08
 
 game/msw/CItemMan.cpp:
 	.text       start:0x80126AE8 end:0x80127814
@@ -349,12 +346,12 @@ game/msw/dwc/CGameDwc.cpp:
 	.text       start:0x80143614 end:0x80145B40
 
 game/msw/CGameSnd.cpp:
-	.text       start:0x80146600 end:0x801488E8
-
-game/msw/CGameBGM.cpp:
-	.text       start:0x801488EC end:0x8014A618
-	.data       start:0x804718A8 end:0x80471C98
-	.sbss       start:0x805C0C6C end:0x805C0C70
+	.text       start:0x80146548 end:0x8014A618
+	.rodata     start:0x8043B5B0 end:0x8043BAE0
+	.data       start:0x804717E0 end:0x80471C98
+	.bss        start:0x804D4CB8 end:0x804D4D48
+	.sbss       start:0x805C0C60 end:0x805C0C70
+	.sdata2     start:0x805C31C8 end:0x805C31F0
 
 game/msw/CStgGmk_Case_Mdl.cpp:
 	.text       start:0x8014BE64 end:0x8014C400
@@ -519,23 +516,11 @@ game/msw/CCockpitLayoutBase.cpp:
 game/msw/CCockpitPartMove.cpp:
 	.text       start:0x801BA9EC end:0x801BAA6C
 
-game/msw/cockpit/CSPGauge.cpp:
-	.text       start:0x801BC03C end:0x801BC144
-
-game/msw/cockpit/CSPGaugeInputDisp.cpp:
-	.text       start:0x801BC244 end:0x801BC274
-
-game/msw/cockpit/CTimeCount.cpp:
-	.text       start:0x801BC434 end:0x801BC814
-
 game/msw/cockpit/CMissionCount.cpp:
-	.text       start:0x801BC90C end:0x801BD178
-
-game/msw/cockpit/C3DCoin.cpp:
-	.text       start:0x801BD17C end:0x801BD56C
-
-game/msw/cockpit/CEffectSet.cpp:
-	.text       start:0x801BD574 end:0x801BD85C
+	.text       start:0x801BBF24 end:0x801BD93C
+	.data       start:0x80482370 end:0x80482408
+	.sdata      start:0x805BFE08 end:0x805BFE20
+	.sdata2     start:0x805C4800 end:0x805C4818
 
 game/msw/CSave.cpp:
 	.text       start:0x801BDA44 end:0x801C11EC

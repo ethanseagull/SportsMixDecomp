@@ -616,11 +616,14 @@ namespace msw {
             // read unsigned) passed to menu::GetCockpitFaceIconScale, and the
             // pad of a human player (0 to 3; the cockpit labels "1P" to "4P").
             long GetChrIdS() const { return (signed char)m_nChrId; }
-            long GetPadNo() const { return m_nPadNo; }
             // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp (name
             // guessed): the character's face icon texture for the cockpit;
             // null when there is none. In the DOL.
             const _GXTexObj *GetCockpitIconTexObj() const;
+            // (name guessed) The pad driving the character, read signed
+            // (msw::cockpit::CSPGaugeInputDisp::SetDispAnim in the DOL passes
+            // it to CGame::GetPadDefaultType and CMenuPad::IsNunchakuStyle).
+            long GetPadNo() const { return m_nPadNo; }
             // Not zero for the star player of a team (names guessed). The
             // parameter files of the sports modules call it, so it is inline
             // and emitted there.

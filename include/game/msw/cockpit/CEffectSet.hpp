@@ -10,25 +10,34 @@ namespace bcs {
 namespace msw {
     namespace cockpit {
 
-        // Size 0x44, vptr at 0x40. Lives in the DOL. Effects a cockpit
-        // attaches to its panes: sixteen words, all cleared by the
-        // constructor and by Initialize. Member and argument names and the
-        // return types are guesses.
+        // Effects attached to cockpit panes, two groups of eight handles.
+        // Lives in the DOL (game/msw/cockpit/CMissionCount.cpp). Size 0x44,
+        // vptr at 0x40.
         class CEffectSet {
             public:
                 CEffectSet();
-                virtual ~CEffectSet();
 
                 void Initialize();
                 void Finalize();
-                // Starts effect nEffect in slot (nGroup, nSlot) on pPaneObj.
-                void SetEffect(long nGroup, long nSlot, long nEffect, bcs::G2D::CPaneObj *pPaneObj);
-                void RemoveEffect(long nGroup, long nSlot);
-                // Shows or hides every effect.
+                // Starts effect nEffect on pObj in slot nIdx of group nGroup,
+                // unless the slot is taken. A negative nIdx starts one that
+                // is not kept.
+                void SetEffect(long nGroup, long nIdx, long nEffect, bcs::G2D::CPaneObj *pObj);
+                void RemoveEffect(long nGroup, long nIdx);
+                // Shows or hides every kept effect.
                 void SetDispFlag(int bDisp);
 
             private:
-                void *m_Unk00[16]; // 0x00
+                enum {
+                    GROUP_NUM = 2,
+                    SLOT_NUM = 8
+                };
+
+                unsigned long m_hEffect[GROUP_NUM][SLOT_NUM]; // 0x00
+
+            public:
+                // vptr at 0x40: declared after the data.
+                virtual ~CEffectSet();
         };
     }
 }

@@ -18,6 +18,7 @@ namespace bcs {
 }
 
 namespace msw {
+    class CEffectCluster;
     class CEffectTableList;
 
     // Size 0x4C. The class lives in the DOL; each module derives its own
@@ -55,6 +56,29 @@ namespace msw {
             static unsigned long CreateAttachEffect(long, const bcs::CScnObj *, const bcs::FVEC3 *, unsigned long, int,
                                                     int, int, unsigned long, unsigned long, unsigned long,
                                                     unsigned long);
+
+            // (DOL) Plays effect nId once at rPos. (meanings of the three
+            // words not known; msw::CDropCoin passes 3, 0, 0; return type
+            // guessed)
+            static void SimpleEffect(long nId, const bcs::FVEC3 &rPos, unsigned long, unsigned long, unsigned long);
+
+            // Added for game/msw/cockpit/CMissionCount.cpp: the same for an
+            // effect attached to a layout pane object (static as well; the
+            // cockpit passes no position, -1, three zeros, then 4, 0, 0).
+            static unsigned long CreateAttachEffect(long, bcs::G2D::CPaneObj *, const bcs::FVEC3 *, long, int, int,
+                                                    int, unsigned long, unsigned long, unsigned long);
+            // Static (the handle is in r3). Return types guessed. Erase
+            // removes the effect at once; Stop lets it end.
+            static void EraseAttachEffect(unsigned long hEffect);
+            static void StopAttachEffect(unsigned long hEffect);
+
+            // The cluster with handle hEffect, null when there is none.
+            CEffectCluster *FindList(unsigned long hEffect);
+            // The same through the instance. Static and inline, yet emitted
+            // out of line (BasketF exports GetObject__Q23msw11CEffectCtrlFUl,
+            // and the DOL's copy at 0x801BB088 is called, not inlined, by the
+            // cockpit), and its callers go through GetInstance() first.
+            static CEffectCluster *GetObject(unsigned long hEffect) { return GetInstance()->FindList(hEffect); }
 
             // Looks the instance up in the task manager by s_InstanceHandle.
             static CEffectCtrl *GetInstance();

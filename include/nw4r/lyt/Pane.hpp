@@ -80,9 +80,18 @@ namespace nw4r {
                 {
                     mFlag = (unsigned char)((mFlag & 0xFB) | (bAdjust ? 4 : 0));
                 }
+                // Added for game/msw/cockpit/CMissionCount.cpp (C3DCoin::AttachPane).
+                bool IsVisible() const { return mFlag & 1; }
+                // Bit 2 of the flags: the pane's position is adjusted to the
+                // screen's aspect ratio (C3DCoin::AttachPane scales x then).
+                bool IsLocationAdjust() const { return (mFlag & 4) != 0; }
+                const math::VEC3 &GetTranslate() const { return mTranslate; }
+                Pane *GetParent() const { return mpParent; }
 
             private:
-                unsigned char m_Unk04[0x28];
+                unsigned char m_Unk04[0x8];
+                Pane *mpParent;              // 0x0C, null at the root
+                unsigned char m_Unk10[0x1C];
                 math::VEC3 mTranslate;       // 0x2C
                 math::VEC3 mRotate;          // 0x38
                 math::VEC2 mScale;           // 0x44

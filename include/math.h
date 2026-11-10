@@ -7,6 +7,7 @@ extern "C" {
 
 // Only what is used so far.
 double pow(double x, double y);
+double ceil(double x);
 double fmod(double x, double y);
 
 #ifdef __cplusplus

@@ -305,6 +305,9 @@ namespace msw {
             // (meaning guessed) The task new objects of the running game are
             // created under (BossF's bomb explosions).
             static bcs::CTask *GetTempParent();
+            // (DOL; meaning of the argument not known, CDropCoinMan passes
+            // 1) Non-zero while the game is in its main loop state.
+            static int IsMainLoopState(int);
 
             // The three below are static in the DOL: their bodies index
             // g_GameWork with the argument. (return types guessed)
@@ -365,6 +368,11 @@ namespace msw {
             // Whether player nPlayer's character is the hockey keeper (bit 1
             // of the byte at g_GameWork + 0x58 + nPlayer). (return type guessed)
             static int IsCharEx_HockeyKeeper(long nPlayer);
+            // (name guessed; the DOL's fn_8018C300, after SetPadDefaultType)
+            // The byte at g_GameWork + 0x198 + nPad, read signed. The
+            // cockpit's special-shot input prompt reads 1 as a nunchaku, 0 as
+            // a remote alone and -1 as "ask CMenuPad".
+            static long GetPadDefaultType(long nPad);
 
             // Not zero when team nTeam may still take an item. (DOL)
             static int CanbeTeamItemPush(long nTeam);

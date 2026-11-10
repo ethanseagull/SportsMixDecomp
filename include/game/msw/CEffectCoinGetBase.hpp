@@ -15,7 +15,7 @@ namespace msw {
     // supplies Main. The members are read from the constructor and
     // destructor in the DOL and from the modules' Main; their names are
     // guesses.
-    class CEffectCoinGetBase : public bcs::CUnivTask {
+    class CEffectCoinGetBase : public bcs::CUnivTaskEx {
         public:
             CEffectCoinGetBase(bcs::CTask *pParent);
             virtual ~CEffectCoinGetBase();

@@ -6,49 +6,36 @@
 
 namespace msw {
 
-    class CChrCore;
     class CItem;
+    class CChrCore;
 
+    // INCOMPLETE: data members are not mapped. Size 0x344 (CItemManBoss is
+    // allocated with that size and adds nothing). Return types are guesses
+    // unless a body is given.
+    //
     // Creates and owns the items of a game. A DOL class; each game module
-    // derives its own (CItemManBoss, CItemManBasket, ...), which supplies
-    // CreateItem and ExParamInitialize_ (no base version exists anywhere).
-    //
-    // The virtual functions are in the order of the slots of
-    // __vt__Q23msw12CItemManBoss (BossF). MainFunc and CreateThrowItem are
-    // inline: the modules emit them. Return types not seen in a body are
-    // guesses.
-    //
-    // INCOMPLETE: the members are not mapped. Size 0x344 (CItemManBoss is
-    // allocated with that size and adds nothing).
+    // derives its own (CItemManHockey in HockeyF) to create its own item
+    // classes. The virtual functions are in the order of the DOL's vtable
+    // (lbl_8046FC58); the bodies given here are those of the DOL's unnamed
+    // functions in that vtable, which HockeyF also emits as weak functions.
     class CItemMan : public bcs::CUnivTask {
         public:
-            // Item types, the values GetItemType returns. 4 is not used in
-            // BossF.
-            enum {
-                ITEM_GSHELL = 0,
-                ITEM_RSHELL = 1,
-                ITEM_TOADSTOOL = 2,
-                ITEM_BOMB = 3,
-                ITEM_BANANA = 5,
-                ITEM_MUSHROOM = 6
-            };
-
             CItemMan(bcs::CTask *pParent);
             virtual ~CItemMan();
             virtual void Main();
 
             virtual long SendMessage(long, long, long, long);
-            // Creates an item of `type` at rPos; null if out of memory.
-            virtual CItem *CreateItem(long type, const bcs::FVEC3 &rPos) = 0;
-            virtual CItem *CreateStockItem(long type, CChrCore *pChr);
-            virtual CItem *CreateThrowItem(long, const bcs::FVEC3 &) { return 0; }
-            virtual CItem *CreateDriftItem(long type, const bcs::FVEC3 &rPos, float, float);
-            virtual void EffectItemGetCreate(long type, const bcs::FVEC3 &rPos, float);
+            // Creates an item of the given kind (CItem::KIND_*) at pos.
+            virtual CItem *CreateItem(long kind, const bcs::FVEC3 &pos) { return 0; }
+            virtual CItem *CreateStockItem(long kind, CChrCore *pChr);
+            virtual CItem *CreateThrowItem(long kind, const bcs::FVEC3 &pos) { return 0; }
+            virtual CItem *CreateDriftItem(long kind, const bcs::FVEC3 &pos, float, float);
+            virtual void EffectItemGetCreate(long kind, const bcs::FVEC3 &pos, float);
             virtual void MainFunc() {}
-            virtual void ExParamInitialize_() = 0;
+            virtual void ExParamInitialize_() {}
 
         protected:
-            unsigned char m_Unk34[0x344 - 0x34];
+            unsigned char m_Unk34[0x344 - 0x34]; // 0x34
     };
 }
 

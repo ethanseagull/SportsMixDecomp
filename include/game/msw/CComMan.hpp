@@ -1,0 +1,53 @@
+#ifndef MSW_CCOMMAN_HPP_
+#define MSW_CCOMMAN_HPP_
+
+#include "bcs/FVEC3.hpp"
+
+namespace msw {
+
+    class CBall;
+    class CChrCore;
+    class CItem;
+
+    // The computer players' manager. A DOL class; each game module derives
+    // its own (CComManVolleyGame, CComManBasketGame, CComManHockey, ...) and
+    // creates the one instance with CreateInstance.
+    //
+    // INCOMPLETE: only what the VolleyF CComManVolley units call is here.
+    //  - The object is the vptr alone (CComManVolleyGame is allocated with
+    //    4 bytes). The DOL has no vtable of this class, so its two virtual
+    //    functions are taken as pure; the destructor is inline and empty
+    //    (the derived destructors call nothing).
+    //  - Nearly everything else is static: the DOL bodies take no `this`.
+    //    Return types are guesses except where a caller shows them.
+    class CComMan {
+        public:
+            virtual ~CComMan() {}
+            virtual void Clear() = 0;
+            virtual void Main(float fFrame) = 0;
+
+            // (DOL) Reads entry nId of the computer parameter table for
+            // level nLevel. (meaning of the arguments guessed)
+            static float GetDatF(long nId, long nLevel);
+            // (DOL) Number of the pad-driven characters of team nTeam.
+            static long GetExistPadDrvNum(long nTeam);
+            // (DOL) Index of the ball in play; negative for none.
+            static long GetActiveBallIdx();
+
+            // (DOL) Conversions between world positions and the court's
+            // own frame; nCourt -1 selects the default. (meaning of the
+            // argument guessed)
+            static bcs::FVEC3 World2Local(const bcs::FVEC3 &rPos, long nCourt);
+            static bcs::FVEC3 Local2World(const bcs::FVEC3 &rPos, long nCourt);
+            // (DOL) Distance between two points in the XZ plane.
+            static float GetDisXZ(const bcs::FVEC3 &rPos0, const bcs::FVEC3 &rPos1);
+
+            // (DOL) Walks the items that have been thrown.
+            static CItem *ThrowItem_GetFirst();
+            static CItem *ThrowItem_GetNext(CItem *pItem);
+
+            static CComMan *g_pInstance;
+    };
+}
+
+#endif /* !MSW_CCOMMAN_HPP_ */

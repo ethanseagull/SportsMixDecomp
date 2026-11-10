@@ -4,21 +4,25 @@
 #include "bcs/CFsmQueue.hpp"
 #include "bcs/CUnivTask.hpp"
 #include "bcs/FVEC3.hpp"
+#include "revolution/gx/GXEnum.h"
 
 namespace nw4r {
     namespace g3d {
         class ResFile;
+        class ResMdl;
     }
 }
 
 namespace bcs {
     class CMdlObj;
+    struct BCS_Color;
 }
 
 namespace msw {
 
     class CChrCore;
     class CCollAtkUnit;
+    class CCollBodyUnit;
 
     // Arguments of the volleyball shots. (that BALL and VOLLEY are
     // namespaces and not classes is a guess, see notes/toolchain.md)
@@ -43,10 +47,10 @@ namespace msw {
     // game module derives its own ball from it.
     //
     // INCOMPLETE: only what game/boss/CBallManBoss.cpp needs is here.
-    //  - The virtual functions stop at slot 0x2B4 of 0x4F0, so a class
-    //    derived from this one cannot declare new virtual functions yet.
-    //    Their order and names are the slots of __vt__Q23msw9CBallBoss
-    //    (BossF), read with the class name set back to CBall.
+    //  - All virtual functions up to slot 0x4F0 are declared. Their order
+    //    and names are the slots of __vt__Q23msw9CBallBoss (BossF) and
+    //    __vt__Q23msw10CBallDodge (DodgeF), read with the class name set
+    //    back to CBall.
     //  - Of the functions without a body, the ones marked "DOL" are DOL
     //    functions; the others are inline in the original (the modules emit
     //    them) and their bodies are not written yet, so a unit that has to
@@ -58,6 +62,8 @@ namespace msw {
         public:
             // Bits of m_nFlag.
             enum {
+                // (name guessed) Read by CBallManDodge::IsBallScored_.
+                FLAG_SCORED = 0x00000001,
                 // (name guessed) Set by SetSleepMode; a ball with this bit
                 // is skipped by everything that looks for a ball in play.
                 FLAG_SLEEP = 0x00000002,
@@ -83,7 +89,7 @@ namespace msw {
             virtual void ChangeState(long);                                     // 0x4C DOL
             virtual void *GetRadarIconTexObj() const;                           // 0x50 DOL
             virtual void *GetMinimapIconTexObj() const;                         // 0x54 DOL
-            virtual void GetTargetPos(bcs::FVEC3 &) const;                      // 0x58 DOL
+            virtual int GetTargetPos(bcs::FVEC3 &) const;                       // 0x58 DOL (int: CComManVolley tests it)
             virtual void AttachItemEffect(long);                                // 0x5C DOL
             virtual void DetachItemEffect();                                    // 0x60 DOL
             virtual void SetPassMode(const bcs::FVEC3 &, long, float, long, long, int, int, unsigned long); // 0x64 DOL
@@ -156,91 +162,233 @@ namespace msw {
             virtual int IsVolleyFakeBall() const;                               // 0x168
             virtual int IsVolleyReqDelete() const { return 0; }                 // 0x16C
             virtual int IsVolleyVanish() const { return 0; }                    // 0x170
-            // 0x174 to 0x2B4: names from __vt__Q23msw9CBallBoss (BossF); the
-            // return types are guesses (game/boss/CQPanelManBoss.cpp calls
-            // SetJumpBallMode).
-            virtual int IsVolleyChanceBallMode() const;                             // 0x174
-            virtual int IsVolleyPowerSpike() const;                                 // 0x178
-            virtual int IsVolleyCurveSpike() const;                                 // 0x17C
-            virtual int IsVolleyFeintSpike() const;                                 // 0x180
-            virtual int IsVolleyTimingSpike() const;                                // 0x184
-            virtual int IsVolleyNetHit() const;                                     // 0x188
-            virtual int IsVolleyEnemySpike() const;                                 // 0x18C
-            virtual void PlayVolleySpReceiveSuccessSe(unsigned long);               // 0x190
-            virtual float GetVolleyChargePower() const;                             // 0x194
-            virtual void SetVolleyChargePower(float);                               // 0x198
-            virtual void ClearVolleyChargePower();                                  // 0x19C
-            virtual long GetVolleyTouchNum(long) const;                             // 0x1A0
-            virtual long GetVolleyTrueTouchNum(long) const;                         // 0x1A4
-            virtual long GetVolleyCanbeTouchKind(long, long);                       // 0x1A8
-            virtual long GetVolleyBallTypeRR() const;                               // 0x1AC
-            virtual long GetVolleyBallColorTypeRR() const;                          // 0x1B0
-            virtual int IsVolleyComBallRR() const;                                  // 0x1B4
-            virtual int IsVolleyChargeBall() const;                                 // 0x1B8
-            virtual int IsVolleyTargetPosInnerCourt(long, float);                   // 0x1BC
-            virtual void GetVolleySpikeJumpTargetPos(bcs::FVEC3 &) const;           // 0x1C0
-            virtual void GetVolleyTouchDownPos(bcs::FVEC3 &, int) const;            // 0x1C4
-            virtual int IsVolleyObstacleBallRR() const;                             // 0x1C8
-            virtual int IsVolleyInCatchableArea(long) const;                        // 0x1CC
-            virtual int IsVolleyThroughUnderNet() const;                            // 0x1D0
-            virtual void DoVolleyItemBallDirectSpike(long, long);                   // 0x1D4
+            // Slots 0x174 to 0x4F0 added for game/dodge/CBallManDodge.cpp from the
+            // slots of __vt__Q23msw10CBallDodge (DodgeF); return types guessed
+            // from the names except where a caller shows them.
+            virtual int IsVolleyChanceBallMode() const;                                             // 0x174
+            virtual int IsVolleyPowerSpike() const;                                                 // 0x178
+            virtual int IsVolleyCurveSpike() const;                                                 // 0x17C
+            virtual int IsVolleyFeintSpike() const;                                                 // 0x180
+            virtual int IsVolleyTimingSpike() const;                                                // 0x184
+            virtual int IsVolleyNetHit() const;                                                     // 0x188
+            virtual int IsVolleyEnemySpike() const;                                                 // 0x18C
+            virtual void PlayVolleySpReceiveSuccessSe(unsigned long);                               // 0x190
+            virtual float GetVolleyChargePower() const;                                             // 0x194
+            virtual void SetVolleyChargePower(float);                                               // 0x198
+            virtual void ClearVolleyChargePower();                                                  // 0x19C
+            virtual long GetVolleyTouchNum(long) const;                                             // 0x1A0
+            virtual long GetVolleyTrueTouchNum(long) const;                                         // 0x1A4
+            virtual long GetVolleyCanbeTouchKind(long, long);                                       // 0x1A8
+            virtual long GetVolleyBallTypeRR() const;                                               // 0x1AC
+            virtual long GetVolleyBallColorTypeRR() const;                                          // 0x1B0
+            virtual int IsVolleyComBallRR() const;                                                  // 0x1B4
+            virtual int IsVolleyChargeBall() const;                                                 // 0x1B8
+            virtual int IsVolleyTargetPosInnerCourt(long, float);                                   // 0x1BC
+            virtual int GetVolleySpikeJumpTargetPos(bcs::FVEC3 &) const;                            // 0x1C0 (int: CComManVolley tests it)
+            virtual void GetVolleyTouchDownPos(bcs::FVEC3 &, int) const;                            // 0x1C4
+            virtual int IsVolleyObstacleBallRR() const;                                             // 0x1C8
+            virtual int IsVolleyInCatchableArea(long) const;                                        // 0x1CC
+            virtual int IsVolleyThroughUnderNet() const;                                            // 0x1D0
+            virtual void DoVolleyItemBallDirectSpike(long, long);                                   // 0x1D4
             virtual void SetHockeyChargeShootMode(const bcs::FVEC3 &, float, long, float, long, float, float, float, int, int, int);// 0x1D8
             virtual void SetHockeyShootMode(const bcs::FVEC3 &, float, long, float, long, int, long);// 0x1DC
-            virtual void SetHockeyArtsMode(const bcs::FVEC3 &, float, long, long, int, long);// 0x1E0
-            virtual void SetHockeyItemShootMode(const bcs::FVEC3 &, float, long, float, int, long);// 0x1E4
-            virtual void SetHockeyBodyGoalMode(long, long, long);                   // 0x1E8
-            virtual void SetHockeySnatch(const CCollAtkUnit *, const bcs::FVEC3 &); // 0x1EC
-            virtual void TrgGoalIn(const bcs::FVEC3 &, long, long, long, long, long);// 0x1F0
-            virtual void SetHockeyDropMode(const bcs::FVEC3 &, float, long, long);  // 0x1F4
-            virtual void SetHockeyArtsDropMode(const bcs::FVEC3 &, float, long, long);// 0x1F8
-            virtual long GetArtsType() const;                                       // 0x1FC
-            virtual void TrgHockeyArtsEnd(long);                                    // 0x200
-            virtual int IsHockeyArtsEnd() const;                                    // 0x204
-            virtual void SetHockeyArtsStart();                                      // 0x208
-            virtual void SetHockeyShootTargetPos(const bcs::FVEC3 &);               // 0x20C
-            virtual void SetHockeyShootTargetMove(float, float);                    // 0x210
-            virtual long GetHockeyNoChgLeaderCount();                               // 0x214
-            virtual long GetHockeyPassTgtChrIdx();                                  // 0x218
-            virtual void GetPassCatchPos(bcs::FVEC3 &, long);                       // 0x21C
-            virtual long GetHockeyHaveTeamIdx();                                    // 0x220
-            virtual float GetHockeySnatchFrame();                                   // 0x224
-            virtual void SetHockeySnatchFrame(float);                               // 0x228
-            virtual long GetHockeyFaceOffMode();                                    // 0x22C
-            virtual long GetHockeyCatchChrIdx();                                    // 0x230
-            virtual int IsHockeyShootGoalDir();                                     // 0x234
-            virtual void SetHockeyScaleSpeed(float);                                // 0x238
-            virtual long GetHockeyReBoundType() const;                              // 0x23C
-            virtual long GetHockeyItemBallType() const;                             // 0x240
-            virtual float GetHokeyBombExplodeRadius() const;                        // 0x244
-            virtual float GetHokeyBombShootDist() const;                            // 0x248
-            virtual int IsHockeyAttackMode() const;                                 // 0x24C
-            virtual void GetHokeyCurveShootData(float &, bcs::FVEC3 &);             // 0x250
-            virtual float GetFaceOffGuideDispFrm();                                 // 0x254
-            virtual void SettHockeyReflectMode(float);                              // 0x258
-            virtual int IsShootExceptionalStart();                                  // 0x25C
-            virtual int IsDummyShootBall();                                         // 0x260
-            virtual float GetHockeyPassSpeed();                                     // 0x264
-            virtual long GetVsBossBallMode() const;                                 // 0x268
-            virtual void SetVsBossTossUpMode(const bcs::FVEC3 &, long, unsigned long);// 0x26C
-            virtual void SetVsBossSpikeShotMode(BALL::BOSS::SPIKE_SHOT_ARG &);      // 0x270
-            virtual void SetVsBossPassShotMode(BALL::BOSS::PASS_SHOT_ARG &);        // 0x274
+            virtual void SetHockeyArtsMode(const bcs::FVEC3 &, float, long, long, int, long);       // 0x1E0
+            virtual void SetHockeyItemShootMode(const bcs::FVEC3 &, float, long, float, int, long); // 0x1E4
+            virtual void SetHockeyBodyGoalMode(long, long, long);                                   // 0x1E8
+            virtual void SetHockeySnatch(const CCollAtkUnit *, const bcs::FVEC3 &);                 // 0x1EC
+            virtual void TrgGoalIn(const bcs::FVEC3 &, long, long, long, long, long);               // 0x1F0
+            virtual void SetHockeyDropMode(const bcs::FVEC3 &, float, long, long);                  // 0x1F4
+            virtual void SetHockeyArtsDropMode(const bcs::FVEC3 &, float, long, long);              // 0x1F8
+            virtual long GetArtsType() const;                                                       // 0x1FC
+            virtual void TrgHockeyArtsEnd(long);                                                    // 0x200
+            virtual int IsHockeyArtsEnd() const;                                                    // 0x204
+            virtual void SetHockeyArtsStart();                                                      // 0x208
+            virtual void SetHockeyShootTargetPos(const bcs::FVEC3 &);                               // 0x20C
+            virtual void SetHockeyShootTargetMove(float, float);                                    // 0x210
+            virtual long GetHockeyNoChgLeaderCount();                                               // 0x214
+            virtual long GetHockeyPassTgtChrIdx();                                                  // 0x218
+            virtual void GetPassCatchPos(bcs::FVEC3 &, long);                                       // 0x21C
+            virtual long GetHockeyHaveTeamIdx();                                                    // 0x220
+            virtual float GetHockeySnatchFrame();                                                   // 0x224
+            virtual void SetHockeySnatchFrame(float);                                               // 0x228
+            virtual long GetHockeyFaceOffMode();                                                    // 0x22C
+            virtual long GetHockeyCatchChrIdx();                                                    // 0x230
+            virtual int IsHockeyShootGoalDir();                                                     // 0x234
+            virtual void SetHockeyScaleSpeed(float);                                                // 0x238
+            virtual long GetHockeyReBoundType() const;                                              // 0x23C
+            virtual long GetHockeyItemBallType() const;                                             // 0x240
+            virtual float GetHokeyBombExplodeRadius() const;                                        // 0x244
+            virtual float GetHokeyBombShootDist() const;                                            // 0x248
+            virtual int IsHockeyAttackMode() const;                                                 // 0x24C
+            virtual void GetHokeyCurveShootData(float &, bcs::FVEC3 &);                             // 0x250
+            virtual float GetFaceOffGuideDispFrm();                                                 // 0x254
+            virtual void SettHockeyReflectMode(float);                                              // 0x258
+            virtual int IsShootExceptionalStart();                                                  // 0x25C
+            virtual int IsDummyShootBall();                                                         // 0x260
+            virtual float GetHockeyPassSpeed();                                                     // 0x264
+            virtual long GetVsBossBallMode() const;                                                 // 0x268
+            virtual void SetVsBossTossUpMode(const bcs::FVEC3 &, long, unsigned long);              // 0x26C
+            virtual void SetVsBossSpikeShotMode(BALL::BOSS::SPIKE_SHOT_ARG &);                      // 0x270
+            virtual void SetVsBossPassShotMode(BALL::BOSS::PASS_SHOT_ARG &);                        // 0x274
             virtual void SetVsBossPassMode(const bcs::FVEC3 &, long, long, long, long, long, unsigned long);// 0x278
-            virtual void SetVsBossShootMode(const bcs::FVEC3 &, long, float);       // 0x27C
-            virtual void SetVsBossDunkShotMode(const bcs::FVEC3 &, long);           // 0x280
-            virtual void SetVsBossArtsDunkMode(const bcs::FVEC3 &, long, int);      // 0x284
-            virtual int CanbeVsBossReceive() const;                                 // 0x288
-            virtual int CanbeVsBossReflect() const;                                 // 0x28C
-            virtual int CanbeVsBossAirTrick() const;                                // 0x290
-            virtual void SetVsBossReflectCheckEnd();                                // 0x294
-            virtual void SetVsBossCoinPower(long);                                  // 0x298
-            virtual void AddVsBossCoinPower(long);                                  // 0x29C
-            virtual long GetVsBossCoinPower() const;                                // 0x2A0
-            virtual void ClearVsBossCoinPower();                                    // 0x2A4
-            virtual void TrgVsBossArtsAttach(long, long, long, int);                // 0x2A8
-            virtual void SetSleepMode();                                            // 0x2AC
-            virtual void SetJumpBallAttach();                                       // 0x2B0
-            virtual void SetJumpBallMode();                                         // 0x2B4
-            // Slots 0x2B8 to 0x4F0 are not declared yet.
+            virtual void SetVsBossShootMode(const bcs::FVEC3 &, long, float);                       // 0x27C
+            virtual void SetVsBossDunkShotMode(const bcs::FVEC3 &, long);                           // 0x280
+            virtual void SetVsBossArtsDunkMode(const bcs::FVEC3 &, long, int);                      // 0x284
+            virtual int CanbeVsBossReceive() const;                                                 // 0x288
+            virtual int CanbeVsBossReflect() const;                                                 // 0x28C
+            virtual int CanbeVsBossAirTrick() const;                                                // 0x290
+            virtual void SetVsBossReflectCheckEnd();                                                // 0x294
+            virtual void SetVsBossCoinPower(long);                                                  // 0x298
+            virtual void AddVsBossCoinPower(long);                                                  // 0x29C
+            virtual long GetVsBossCoinPower() const;                                                // 0x2A0
+            virtual void ClearVsBossCoinPower();                                                    // 0x2A4
+            virtual void TrgVsBossArtsAttach(long, long, long, int);                                // 0x2A8
+            virtual void SetSleepMode();                                                            // 0x2AC
+            virtual void SetJumpBallAttach();                                                       // 0x2B0
+            virtual void SetJumpBallMode();                                                         // 0x2B4
+            virtual void SetChrReflectMode(long, float);                                            // 0x2B8
+            virtual void JumpBallFrameSet(int);                                                     // 0x2BC
+            virtual int IsActive() const;                                                           // 0x2C0
+            virtual int IsSleepMode() const;                                                        // 0x2C4
+            virtual int IsFreeMoveMode() const;                                                     // 0x2C8
+            virtual int IsPassMode() const;                                                         // 0x2CC
+            virtual int IsAlleyoopPassMode() const;                                                 // 0x2D0
+            virtual int IsShootMode() const;                                                        // 0x2D4
+            virtual int IsArtsShootMode() const;                                                    // 0x2D8
+            virtual int IsChrNeedBlockMode(long) const;                                             // 0x2DC
+            virtual int IsCanbeTurnOver() const;                                                    // 0x2E0
+            virtual int IsNowRebound() const;                                                       // 0x2E4
+            virtual int IsInvincible() const;                                                       // 0x2E8
+            virtual int IsOffensive() const;                                                        // 0x2EC
+            virtual int CanbeCatch() const;                                                         // 0x2F0
+            virtual void SetNoCatchCount(long);                                                     // 0x2F4
+            virtual long GetNoCatchCount() const;                                                   // 0x2F8
+            virtual float GetGoalInRate() const;                                                    // 0x2FC
+            virtual long GetDefCounter() const;                                                     // 0x300
+            virtual void SetShotChrIdx(long);                                                       // 0x304
+            virtual long GetShotChrIdx() const;                                                     // 0x308
+            virtual void SetPassChrIdx(long);                                                       // 0x30C
+            virtual long GetPassChrIdx() const;                                                     // 0x310
+            virtual void SetShotTeamIdx(long);                                                      // 0x314
+            virtual long GetShotTeamIdx() const;                                                    // 0x318
+            virtual void SetShotArea(long);                                                         // 0x31C
+            virtual long GetShotArea() const;                                                       // 0x320
+            virtual void SetTargetGoalIdx(long);                                                    // 0x324
+            virtual long GetTargetGoalIdx() const;                                                  // 0x328
+            virtual void SetChargePower(float);                                                     // 0x32C
+            virtual float GetChargePower() const;                                                   // 0x330
+            virtual long GetTouchNum() const;                                                       // 0x334
+            virtual long GetTargetCourtIdx() const;                                                 // 0x338
+            virtual int IsTargetCourt(long) const;                                                  // 0x33C
+            virtual void SetReboundDisable();                                                       // 0x340
+            virtual void TrgBound(unsigned long);                                                   // 0x344
+            virtual void TrgGoalIn(long, long, long, long, long);                                   // 0x348
+            virtual void TrgTouch(long);                                                            // 0x34C
+            virtual void TrgScore(long);                                                            // 0x350
+            virtual void ClearTouch();                                                              // 0x354
+            virtual long GetRallyNum() const;                                                       // 0x358
+            virtual void AddRallyNum(long);                                                         // 0x35C
+            virtual unsigned long SIDtoSeID_(long);                                                 // 0x360
+            virtual void PlayBoundSe();                                                             // 0x364
+            virtual void PlayFloorHitSe(unsigned long);                                             // 0x368
+            virtual void PlayWallHitSe(unsigned long);                                              // 0x36C
+            virtual float GetPassFlyFrame(const bcs::FVEC3 &, const bcs::FVEC3 &, long) const;      // 0x370
+            virtual float GetShootFlyFrame(const bcs::FVEC3 &, const bcs::FVEC3 &, long) const;     // 0x374
+            virtual float GetTouchDownFrame(float) const;                                           // 0x378
+            virtual float GetTouchDownFrame2(float, float) const;                                   // 0x37C
+            virtual void GetPosAfterFrame(bcs::FVEC3 &, float) const;                               // 0x380
+            virtual void GetVelAfterFrame(bcs::FVEC3 &, float) const;                               // 0x384
+            virtual float GetHeightPassFrame(float, int) const;                                     // 0x388
+            virtual void Eff_CreateAttach(long, long, const bcs::FVEC3 *, unsigned long, unsigned long);// 0x38C
+            virtual void Eff_SetSpeed(long, float);                                                 // 0x390
+            virtual void Eff_SetDefaultSpeed(long);                                                 // 0x394
+            virtual void Eff_SetColor(long, bcs::BCS_Color);                                        // 0x398
+            virtual void Eff_SetAmbientLightColor(long, bcs::BCS_Color);                            // 0x39C
+            virtual void Eff_SetPointLightColor(long, bcs::BCS_Color, bcs::BCS_Color);              // 0x3A0
+            virtual void Eff_SetMdlKColorReg(long, _GXTevKColorID, bcs::BCS_Color);                 // 0x3A4
+            virtual void Eff_SetMdlKColorReg(long, const char *, _GXTevKColorID, bcs::BCS_Color);   // 0x3A8
+            virtual void Eff_SetMdlColorReg(long, _GXTevRegID, bcs::BCS_Color);                     // 0x3AC
+            virtual void Eff_SetMdlColorReg(long, const char *, _GXTevRegID, bcs::BCS_Color);       // 0x3B0
+            virtual void Eff_SetMiiColor(long, long);                                               // 0x3B4
+            virtual unsigned long Eff_GetHandle(long) const;                                        // 0x3B8
+            virtual void * Eff_GetCluster(long);                                                    // 0x3BC
+            virtual long Eff_GetEffectID(long) const;                                               // 0x3C0
+            virtual int Eff_IsAlive(long) const;                                                    // 0x3C4
+            virtual void Eff_Stop(long);                                                            // 0x3C8
+            virtual void Eff_Erase(long);                                                           // 0x3CC
+            virtual void Eff_StopGroup(long);                                                       // 0x3D0
+            virtual void Eff_EraseGroup(long);                                                      // 0x3D4
+            virtual void Eff_StopAll();                                                             // 0x3D8
+            virtual void Eff_EraseAll();                                                            // 0x3DC
+            virtual void Eff_AliveCheckAll_();                                                      // 0x3E0
+            virtual void Eff_GetGroupSlotMinMax_(long, long &, long &);                             // 0x3E4
+            virtual void ResetParam_();                                                             // 0x3E8
+            virtual void ResetOnAttach_();                                                          // 0x3EC
+            virtual void ResetOnDetach_();                                                          // 0x3F0
+            virtual void UpdateColor_();                                                            // 0x3F4
+            virtual void SetHighlight_();                                                           // 0x3F8
+            virtual void UpdateRainbow_();                                                          // 0x3FC
+            virtual void UpdateCollAtk_();                                                          // 0x400
+            virtual void UpdateCollBody_();                                                         // 0x404
+            virtual void CheckCollision_();                                                         // 0x408
+            virtual void UpdateFrame_();                                                            // 0x40C
+            virtual void UpdateDisp_();                                                             // 0x410
+            virtual void RotNormal_();                                                              // 0x414
+            virtual void DispFunc_();                                                               // 0x418
+            virtual void UpdateColorReg_();                                                         // 0x41C
+            virtual void CreateMdlObj_(nw4r::g3d::ResFile, nw4r::g3d::ResMdl, nw4r::g3d::ResMdl, nw4r::g3d::ResMdl, long);// 0x420
+            virtual void CreateRadarIcon_(nw4r::g3d::ResFile);                                      // 0x424
+            virtual void DestroyMdlObj();                                                           // 0x428
+            virtual void CreateCollBody_();                                                         // 0x42C
+            virtual void CreateCollAttack_();                                                       // 0x430
+            virtual unsigned long GetQueueWorkSize() const;                                         // 0x434
+            virtual unsigned long GetQueueStackSize() const;                                        // 0x438
+            virtual void CtorStateSleep();                                                          // 0x43C
+            virtual void LoopStateSleep();                                                          // 0x440
+            virtual void DtorStateSleep();                                                          // 0x444
+            virtual void CtorStateFreeMove();                                                       // 0x448
+            virtual void LoopStateFreeMove();                                                       // 0x44C
+            virtual void DtorStateFreeMove();                                                       // 0x450
+            virtual void CtorStateAttach();                                                         // 0x454
+            virtual void LoopStateAttach();                                                         // 0x458
+            virtual void DtorStateAttach();                                                         // 0x45C
+            virtual void CtorStatePass();                                                           // 0x460
+            virtual void LoopStatePass();                                                           // 0x464
+            virtual void DtorStatePass();                                                           // 0x468
+            virtual void CtorStatePassmeet();                                                       // 0x46C
+            virtual void LoopStatePassmeet();                                                       // 0x470
+            virtual void DtorStatePassmeet();                                                       // 0x474
+            virtual void CtorStateAlleyoop();                                                       // 0x478
+            virtual void LoopStateAlleyoop();                                                       // 0x47C
+            virtual void DtorStateAlleyoop();                                                       // 0x480
+            virtual void CtorStateNormalShoot();                                                    // 0x484
+            virtual void LoopStateNormalShoot();                                                    // 0x488
+            virtual void DtorStateNormalShoot();                                                    // 0x48C
+            virtual void CtorStateChargeShoot();                                                    // 0x490
+            virtual void LoopStateChargeShoot();                                                    // 0x494
+            virtual void DtorStateChargeShoot();                                                    // 0x498
+            virtual void CtorStateLayupShoot();                                                     // 0x49C
+            virtual void LoopStateLayupShoot();                                                     // 0x4A0
+            virtual void DtorStateLayupShoot();                                                     // 0x4A4
+            virtual void CtorStateArtsShoot();                                                      // 0x4A8
+            virtual void LoopStateArtsShoot();                                                      // 0x4AC
+            virtual void DtorStateArtsShoot();                                                      // 0x4B0
+            virtual void CtorStateItemShoot();                                                      // 0x4B4
+            virtual void LoopStateItemShoot();                                                      // 0x4B8
+            virtual void DtorStateItemShoot();                                                      // 0x4BC
+            virtual void CtorStateJumpBall();                                                       // 0x4C0
+            virtual void LoopStateJumpBall();                                                       // 0x4C4
+            virtual void DtorStateJumpBall();                                                       // 0x4C8
+            virtual void CtorStateTouchDown();                                                      // 0x4CC
+            virtual void LoopStateTouchDown();                                                      // 0x4D0
+            virtual void DtorStateTouchDown();                                                      // 0x4D4
+            virtual void CtorStateGoal();                                                           // 0x4D8
+            virtual void LoopStateGoal();                                                           // 0x4DC
+            virtual void DtorStateGoal();                                                           // 0x4E0
+            virtual void CallbackAttackHit_(const CCollAtkUnit *, const CCollBodyUnit *, const bcs::FVEC3 &, unsigned long);// 0x4E4
+            virtual void CallbackBodyDamage_(const CCollAtkUnit *, const bcs::FVEC3 &);             // 0x4E8
+            virtual void CallbackBodyPush_(CCollBodyUnit *, CCollBodyUnit *, bcs::FVEC3 *);         // 0x4EC
+            virtual void SetBound_(const bcs::FVEC3 &);                                             // 0x4F0
 
             // Loads the ball's model and builds the ball. A negative
             // `nModel` takes the ball's own number. (what the second
@@ -248,6 +396,9 @@ namespace msw {
             void Create(long nModel, long);
             // (DOL) Moves the ball to rPos. (return type guessed)
             void SetPos(const bcs::FVEC3 &rPos);
+            // DOL. Not zero while the ball is attached to something (most
+            // likely held by a character; not checked).
+            int IsAttach() const;
 
             // (name guessed) Not zero for a ball that is out of play.
             int IsSleep() const { return m_nFlag & FLAG_SLEEP; }
@@ -255,6 +406,13 @@ namespace msw {
             int IsDestroyOnReset() const { return m_nFlag & FLAG_DESTROY_ON_RESET; }
             // (name guessed)
             const bcs::FVEC3 &GetPos() const { return m_Pos; }
+            // (name guessed)
+            int IsScored() const { return m_nFlag & FLAG_SCORED; }
+            // (names guessed) The ball's place in CBallMan's table.
+            long GetBallNo() const { return m_nBallNo; }
+            void SetBallNo(long nBallNo) { m_nBallNo = nBallNo; }
+            // DOL.
+            void SetPos(const bcs::FVEC3 *pPos);
 
         protected:
             unsigned long m_nFlag;         // 0x94

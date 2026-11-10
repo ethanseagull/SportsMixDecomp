@@ -4,6 +4,11 @@
 #include "bcs/CFsm.hpp"
 #include "bcs/CTask.hpp"
 
+namespace bcs {
+    class CMdlObj;
+    struct BCS_Color;
+}
+
 namespace msw {
 
     // The marker shown above a character. A DOL class, size 0x9C:
@@ -55,9 +60,16 @@ namespace msw {
             // field of the two objects at 0x80 and 0x84.
             void EnableViewCheck(int bEnable);
 
+            // The colour of entry nIdx of a table in the DOL (m_Unk90 is
+            // passed for it). A member function, though it does not use
+            // this.
+            bcs::BCS_Color GetColor_(long nIdx);
+
         protected:
             unsigned long m_nFlag; // 0x7C, bit 1: view check enabled
-            void *m_Unk80;         // 0x80, an object with virtual functions
+            // 0x80, the marker's model (Initialize creates it with
+            // new bcs::CMdlObj; null before that)
+            bcs::CMdlObj *m_pMdl;
             void *m_Unk84;         // 0x84, another of the same kind
             long m_nChr;           // 0x88, index for CChrMan::GetChrCore; negative for none
             long m_nType;          // 0x8C, third constructor argument (name guessed)

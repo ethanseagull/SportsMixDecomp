@@ -185,7 +185,7 @@ void msw::GIMMICK_BOSS::CEffectCoinGet::Main()
                       : (m_fRotSpeed < s_CoinGetRotSpeedEnd ? s_CoinGetRotSpeedEnd : m_fRotSpeed);
 
     if (m_pMdl != 0) {
-        bcs::FVEC3 pos = m_pMdl->m_Pos;
+        bcs::FVEC3 pos = m_pMdl->m_vTrans;
 
         switch (m_nState) {
             case 0: {
@@ -228,10 +228,10 @@ void msw::GIMMICK_BOSS::CEffectCoinGet::Main()
             pos.y = floorY;
             m_Vel.y *= -0.5f;
         }
-        m_pMdl->m_Pos = pos;
-        m_pMdl->m_Rot.y = NormalizeRad(m_pMdl->m_Rot.y + m_fRotSpeed * rate);
+        m_pMdl->m_vTrans = pos;
+        m_pMdl->m_fRotY = NormalizeRad(m_pMdl->m_fRotY + m_fRotSpeed * rate);
         float scale = 1.9f * m_fScale;
-        m_pMdl->m_Scale.Set(scale, scale, scale);
+        m_pMdl->m_vScale.Set(scale, scale, scale);
         if (m_fLife < 4.0f) {
             m_pMdl->SetAlphaRateF(0.25f * m_fLife);
         }
@@ -254,9 +254,9 @@ msw::GIMMICK_BOSS::CEffectCoinScore::CEffectCoinScore(bcs::CTask *pParent, const
     m_fScaleSpeed = 0.0625f;
     if (m_pMdl != 0) {
         m_pMdl->OnFlag(bcs::CScnObj::FLAG_HIDE_40 | bcs::CScnObj::FLAG_HIDE_80);
-        m_pMdl->m_Rot.y = NormalizeRad(bcs::BCS_OrgRandMax(2.0f * 3.14159265f));
+        m_pMdl->m_fRotY = NormalizeRad(bcs::BCS_OrgRandMax(2.0f * 3.14159265f));
         float scale = 1.1f * m_fScale;
-        m_pMdl->m_Scale.Set(scale, scale, scale);
+        m_pMdl->m_vScale.Set(scale, scale, scale);
     }
     m_fDelay = nIdx;
     bcs::BCS_VecZ_RotY(m_Vel, PerFrame(2.0f), NormalizeRad(fRotY));
@@ -295,7 +295,7 @@ void msw::GIMMICK_BOSS::CEffectCoinScore::Main()
     m_fRotSpeed += bcs::DEG_TO_RAD(0.0f) * rate;
 
     if (m_pMdl != 0) {
-        bcs::FVEC3 pos = m_pMdl->m_Pos;
+        bcs::FVEC3 pos = m_pMdl->m_vTrans;
         float dv = m_fGravity * rate;
         bcs::FVEC3 move;
 
@@ -309,10 +309,10 @@ void msw::GIMMICK_BOSS::CEffectCoinScore::Main()
             pos.y = floorY;
             m_Vel.y *= -0.5f;
         }
-        m_pMdl->m_Pos = pos;
-        m_pMdl->m_Rot.y = NormalizeRad(m_pMdl->m_Rot.y + m_fRotSpeed * rate);
+        m_pMdl->m_vTrans = pos;
+        m_pMdl->m_fRotY = NormalizeRad(m_pMdl->m_fRotY + m_fRotSpeed * rate);
         float scale = 1.1f * m_fScale;
-        m_pMdl->m_Scale.Set(scale, scale, scale);
+        m_pMdl->m_vScale.Set(scale, scale, scale);
         if (m_fLife < 8.0f) {
             m_pMdl->SetAlphaRateF(0.125f * m_fLife);
         }

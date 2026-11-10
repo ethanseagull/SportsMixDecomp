@@ -336,12 +336,9 @@ game/basket/CEffectCtrlBasket.cpp:
 	.data       start:0x00014E80 end:0x00014EC0
 
 game/basket/CItemManBasket.cpp:
-	.text       start:0x0007FBB8 end:0x0007FDC0
-	.data       start:0x00014EC0 end:0x00015070
-
-game/basket/CItemBasketBanana.cpp:
-	.text       start:0x0007FDC0 end:0x0007FF88
+	.text       start:0x0007FBB8 end:0x0007FF88
 	.rodata     start:0x00001EF0 end:0x00001F18
+	.data       start:0x00014EC0 end:0x00015070
 
 game/basket/CGimmickManBasket.cpp:
 	.text       start:0x0007FF88 end:0x00080D94
@@ -401,13 +398,13 @@ game/basket/CGoalMdlBasket.cpp:
 game/basket/CGoalObjBasket.cpp:
 	.text       start:0x00088C1C end:0x000899FC
 	.ctors      start:0x000000AC end:0x000000B0
-	.rodata     start:0x000056D0 end:0x000057C0
+	.rodata     start:0x000056D0 end:0x00005770
 	.data       start:0x000167F8 end:0x00016E28
 	.bss        start:0x00000380 end:0x00000388
 
-game/basket/CStageMan.cpp:
+game/basket/CStageBasket01.cpp:
 	.text       start:0x000899FC end:0x0008A664
-	.rodata     start:0x000057C0 end:0x000057C8
+	.rodata     start:0x00005770 end:0x000057C8
 	.data       start:0x00016E28 end:0x000172F8
 	.bss        start:0x00000388 end:0x00000390
 
@@ -578,13 +575,13 @@ game/basket/CNpcGhostBasketBase.cpp:
 game/basket/unit_C94F0.cpp:
 	.text       start:0x000C94F0 end:0x000C9514
 	.ctors      start:0x000000E0 end:0x000000E4
-	.rodata     start:0x00008640 end:0x000086A0
+	.rodata     start:0x00008640 end:0x00008648
 	.bss        start:0x00000538 end:0x00000540
 
 game/basket/CRadarIcon2DBasket.cpp:
 	.text       start:0x000C9514 end:0x000C9B20
 	.ctors      start:0x000000E4 end:0x000000E8
-	.rodata     start:0x000086A0 end:0x00008748
+	.rodata     start:0x00008648 end:0x000086A8
 	.data       start:0x0001DC20 end:0x0001DCA0
 	.bss        start:0x00000540 end:0x00000548
 
@@ -594,7 +591,7 @@ game/basket/CCockpitBasketLayoutBase.cpp:
 
 game/basket/CCockpitBasketBonusTime.cpp:
 	.text       start:0x000C9DB8 end:0x000CA5AC
-	.rodata     start:0x00008748 end:0x00008770
+	.rodata     start:0x000086A8 end:0x00008770
 	.data       start:0x0001DD50 end:0x0001DDD8
 
 game/basket/CCockpitBasketHarapeko.cpp:
@@ -603,10 +600,7 @@ game/basket/CCockpitBasketHarapeko.cpp:
 	.data       start:0x0001DDD8 end:0x0001E2B8
 
 game/basket/TournamentBasket.cpp:
-	.text       start:0x000CCD58 end:0x000CCDE0
-
-game/basket/CTmGameHandlerBasket.cpp:
-	.text       start:0x000CCDE0 end:0x000CDF80
+	.text       start:0x000CCD58 end:0x000CDF80
 	.rodata     start:0x00009508 end:0x00009518
 	.data       start:0x0001E2B8 end:0x0001E6F0
 
@@ -659,22 +653,10 @@ game/basket/unit_DA2CC.cpp:
 	.rodata     start:0x000097B8 end:0x000097D8
 	.bss        start:0x00000570 end:0x00000578
 
-game/basket/CStgGmk_Wave_Basket_Act.cpp:
-	.text       start:0x000DA300 end:0x000DA3C0
-
-game/basket/CStgGmk_WaveCluster_Basket.cpp:
-	.text       start:0x000DA3C0 end:0x000DA570
-	.rodata     start:0x000097D8 end:0x000097E0
-
-game/basket/CStgGmk_Wave.cpp:
-	.text       start:0x000DA570 end:0x000DA5DC
-
 game/basket/CStgGmk_Wave_Basket.cpp:
-	.text       start:0x000DA5DC end:0x000DA788
+	.text       start:0x000DA300 end:0x000DA818
+	.rodata     start:0x000097D8 end:0x000097E0
 	.data       start:0x0001FA90 end:0x0001FE88
-
-game/basket/CStgGmk_Wave_Act.cpp:
-	.text       start:0x000DA788 end:0x000DA818
 
 game/basket/CStgGmk_Trolley_Act_Basket.cpp:
 	.text       start:0x000DA818 end:0x000DAAD8

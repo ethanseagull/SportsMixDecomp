@@ -17,22 +17,22 @@ msw::CItem *msw::CItemManBoss::CreateItem(long type, const bcs::FVEC3 &rPos)
     CItem *pItem;
 
     switch (type) {
-    case ITEM_MUSHROOM:
+    case CItem::KIND_MUSHROOM:
         pItem = new (0x100) CItemBossMushroom(this);
         break;
-    case ITEM_TOADSTOOL:
+    case CItem::KIND_TOADSTOOL:
         pItem = new (0x100) CItemBossToadstool(this);
         break;
-    case ITEM_BOMB:
+    case CItem::KIND_BOMB:
         pItem = new (0x100) CItemBossBomb(this);
         break;
-    case ITEM_GSHELL:
+    case CItem::KIND_GSHELL:
         pItem = new (0x100) CItemBossGShell(this);
         break;
-    case ITEM_RSHELL:
+    case CItem::KIND_RSHELL:
         pItem = new (0x100) CItemBossRShell(this);
         break;
-    case ITEM_BANANA:
+    case CItem::KIND_BANANA:
         pItem = new (0x100) CItemBossBanana(this);
         break;
     default:

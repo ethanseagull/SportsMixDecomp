@@ -1,11 +1,7 @@
 #ifndef MSW_CITEMBOSS_HPP_
 #define MSW_CITEMBOSS_HPP_
 
-#include "game/msw/CItemBanana.hpp"
-#include "game/msw/CItemBomb.hpp"
-#include "game/msw/CItemMushroom.hpp"
-#include "game/msw/CItemShell.hpp"
-#include "game/msw/CItemToadstool.hpp"
+#include "game/msw/CItemKinds.hpp"
 
 namespace msw {
 

@@ -13,15 +13,13 @@ game/volley/CGameVolley.cpp:
 	.text       start:0x00000098 end:0x00008930
 	.ctors      start:0x00000000 end:0x00000004
 	.rodata     start:0x00000000 end:0x00000100
-	.data       start:0x00000000 end:0x000005E0
+	.data       start:0x00000000 end:0x000003D0
 	.bss        start:0x00000000 end:0x00000070
 
 game/volley/CBallManVolley.cpp:
-	.text       start:0x00008930 end:0x00008CFC
-
-game/volley/CBallManVolleyVsBoss.cpp:
-	.text       start:0x00008CFC end:0x00009404
+	.text       start:0x00008930 end:0x00009404
 	.rodata     start:0x00000100 end:0x00000108
+	.data       start:0x000003D0 end:0x000005E0
 
 game/volley/CBallTargetMarker.cpp:
 	.text       start:0x00009404 end:0x0000E4E0
@@ -219,12 +217,9 @@ game/volley/CChrTargetMarkerVolley.cpp:
 	.bss        start:0x00000570 end:0x00000578
 
 game/volley/CCollManVolley.cpp:
-	.text       start:0x0007BB18 end:0x0007C100
+	.text       start:0x0007BB18 end:0x0007C188
 	.rodata     start:0x00002678 end:0x00002680
 	.data       start:0x000159B0 end:0x00015A78
-
-game/volley/CCollMan.cpp:
-	.text       start:0x0007C100 end:0x0007C188
 
 game/volley/CComDrvVolley.cpp:
 	.text       start:0x0007C188 end:0x0007C688
@@ -442,10 +437,7 @@ game/volley/CGameVolleyVsBoss.cpp:
 	.bss        start:0x00000670 end:0x000006B8
 
 game/volley/TournamentVolley.cpp:
-	.text       start:0x000BB7D8 end:0x000BB860
-
-game/volley/CTmGameHandlerVolley.cpp:
-	.text       start:0x000BB860 end:0x000BC460
+	.text       start:0x000BB7D8 end:0x000BC460
 	.rodata     start:0x00008B50 end:0x00008B60
 	.data       start:0x0001CDE0 end:0x0001CF48
 

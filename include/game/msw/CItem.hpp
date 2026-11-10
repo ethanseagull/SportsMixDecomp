@@ -13,38 +13,51 @@ namespace bcs {
 
 namespace msw {
 
-    class CChrCore;
-    class CCollAtkUnit;
-    class CCollBodyUnit;
     class CItemMan;
+    class CChrCore;
+    class CCollBodyUnit;
+    class CCollAtkUnit;
 
-    // An item on the court (shells, banana, bomb, mushrooms). A DOL class;
-    // every game module derives its own items from the DOL's CItemGShell,
-    // CItemRShell, ... (BossF: CItemBossGShell and so on).
+    // INCOMPLETE: most data members are not mapped; return types of the
+    // virtual functions are guesses unless a body is given.
     //
-    // CFsm<CItem> is at 0x34, so its vptr is at 0x78; overrides of its
-    // virtuals get @52@ thunks.
+    // An item on the field (shell, banana, bomb, mushroom). A DOL class.
+    // bcs::CUnivTask at 0x00, bcs::CFsm<CItem> at 0x34 (its vptr at 0x78),
+    // own members from 0x7C. Size 0x1AC: CItemBanana is allocated with that
+    // size and adds nothing, CItemMushroom's own members start there, and
+    // the boss red shell passes the short at 0x1AA to SearchTarget_.
     //
-    // The virtual functions are in the order of the slots of
-    // __vt__Q23msw15CItemBossRShell (BossF), with the slot offset of the
-    // first ones noted. Return types are not part of the mangled names: the
-    // ones of the inline bodies come from the copies the modules emit, the
-    // others are guesses, as are all member names.
-    //
-    // INCOMPLETE: only the members module code uses are named. Size 0x1AC:
-    // CItemBanana is allocated with that size, and CItemMushroom's own
-    // members start there.
+    // The virtual functions are declared in the order of the slots of the
+    // vtables the modules emit (HockeyF, __vt__Q23msw17CItemHockeyBanana):
+    // Create is at 0x2C, after CFsm's part. Bodies given here are the ones
+    // HockeyF emits as weak functions after the CItemHockeyBanana code, so
+    // they are inline in the original.
     class CItem : public bcs::CUnivTask, public bcs::CFsm<CItem> {
         public:
+            // Item kinds, as CItemMan::CreateItem and GetItemType use them.
+            // Names follow the class each kind creates; 4 is not created by
+            // the hockey game, 7 to 11 create a bomb too (their meaning is
+            // not known).
+            enum {
+                KIND_GSHELL = 0,
+                KIND_RSHELL = 1,
+                KIND_TOADSTOOL = 2,
+                KIND_BOMB = 3,
+                KIND_BANANA = 5,
+                KIND_MUSHROOM = 6
+            };
+
+            // The DOL's constructor has no exported name (fn_801278BC).
+            CItem(CItemMan *pMan);
             virtual ~CItem();
             virtual void Main();
 
-            virtual void Create(const bcs::FVEC3 &rPos); // 0x2C
+            virtual void Create(const bcs::FVEC3 &pos);
             virtual void SetStock(CChrCore *pChr);
             virtual bool CanbePickup() const;
-            virtual bool CheckPickup(const bcs::FVEC3 &rPos, float, float);
+            virtual bool CheckPickup(const bcs::FVEC3 &pos, float, float);
             virtual bool CheckPickup(CCollBodyUnit *pBody);
-            virtual long GetItemType() const = 0; // 0x40 (pure: guessed)
+            virtual long GetItemType() const;
             virtual long GetMotType() const { return 0; }
             virtual void DoExecute(CChrCore *pChr);
             virtual void DoAttach(bcs::CMdlObj *pMdl, unsigned long, float, int);
@@ -57,7 +70,7 @@ namespace msw {
             virtual void DoDestroy();
             virtual void SetSubParam(long) {}
             virtual void DoDrift(const bcs::FVEC3 &, float, float);
-            virtual float GetBodyCollRadius() const; // 0x74
+            virtual float GetBodyCollRadius() const;
             virtual float GetPickupRadius() const;
             virtual float GetAtkCollRadius() const;
             virtual float GetExplosionCollSize() const { return m_fExplosionCollSize; }
@@ -72,16 +85,18 @@ namespace msw {
             virtual float GetParamGravity() const { return -0.025f; }
             virtual float GetParamHeight() const;
             virtual float GetParamAttachHeight() const;
-            virtual float GetParamScale() const { return m_fParamScale; } // 0xB0
+            virtual float GetParamScale() const { return m_fParamScale; }
             virtual long GetParamReboundNum() const { return m_nParamReboundNum; }
             virtual long GetParamThrowTrackType() const { return 0; }
+            // Inline: BasketF emits these three after CItemBasketMushroom,
+            // which does not override them.
             virtual long GetParamThrowType() const { return 0; }
             virtual float GetParamThrowSearchDirRangeMax() const { return 0.0f; }
             virtual float GetParamThrowSearchDistRangeMax() const { return 0.0f; }
             virtual void DoThrowInit(const bcs::FVEC3 &, int);
             virtual void DoTouchDown();
 
-            // One constructor, loop and destructor per state.
+            // One Ctor/Loop/Dtor triple per state, in state order.
             virtual void CtorStateStock();
             virtual void LoopStateStock();
             virtual void DtorStateStock();
@@ -123,6 +138,21 @@ namespace msw {
             // Turns every body collision of the item on or off.
             void CollBodySetEnableAll(int enable);
 
+            // DOL. (return types guessed from CComManVolleyRR::IsExistItemBall,
+            // which tests the first and third and compares the second with a
+            // frame count)
+            int IsTouchDown() const;
+            float GetTouchDownFrame() const;
+            int GetThrowTargetPos(bcs::FVEC3 &rPos) const;
+
+            // (name guessed) Inline in the original; the modules read the
+            // member directly.
+            const bcs::FVEC3 &GetPos() const { return m_vPos; }
+            // Starts a parabolic flight towards pos; the three floats are
+            // the per-game parameters at 0xB8 to 0xC0 (BasketF's bomb passes
+            // them from its DoThrowInit). Meaning of each is not known.
+            void SetVelParabola_(const bcs::FVEC3 &pos, float, float, float);
+
         protected:
             // The parameters from 0x90 to 0xC4 are what ExParamUpdate_
             // sets for each kind of item; the names of the ones no getter
@@ -132,7 +162,7 @@ namespace msw {
             float m_fParamDropLife;         // 0x94
             float m_fParamScale;            // 0x98
             float m_fParamThrowSpeed;       // 0x9C, per second (scaled by 1/60)
-            unsigned char m_UnkA0[4];
+            float m_fParamA0;               // 0xA0, set only by the shells' ExParamUpdate_ (BasketF)
             float m_fParamHitEffectFrame;   // 0xA4
             float m_fParamHitDropCoinRate;  // 0xA8
             long m_nParamHitDropCoinNumMin; // 0xAC
@@ -143,7 +173,7 @@ namespace msw {
             float m_fParamC0;               // 0xC0, (meaning unknown)
             float m_fExplosionCollSize;     // 0xC4
             unsigned char m_UnkC8[0xF8 - 0xC8];
-            bcs::FVEC3 m_vPos;              // 0xF8
+            bcs::FVEC3 m_vPos;              // 0xF8, read through GetPos
             unsigned char m_Unk104[0x11C - 0x104];
             bcs::FVEC3 m_vMove;             // 0x11C, copy of m_vVelocity at the throw (name guessed)
             bcs::FVEC3 m_vVelocity;         // 0x128

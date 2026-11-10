@@ -75,8 +75,8 @@ int msw::CCollManVolley::DetectMapHit_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, fl
                                        const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius, long,
                                        unsigned long flags)
 {
-    bcs::FVEC4 rgn;
     float fOuterFront;
+    bcs::FVEC4 rgn;
     float fOuterBack;
 
     float fZero = 0.0f;

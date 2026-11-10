@@ -289,6 +289,19 @@ def MatchingFor(*versions):
     return config.version in versions
 
 
+# Precompiled headers. The game's units were compiled with a prefix file (see
+# notes/toolchain.md, "The original was built with the NW4R headers
+# precompiled"); only the part one unit proves is reproduced so far.
+cflags_game = [*cflags_rel, "-func_align 4", "-ipa file", "-str reuse,readonly", "-use_lmw_stmw on"]
+config.precompiled_headers = [
+    {
+        "source": "pch/MenuF_g3d.pch++",
+        "mw_version": config.linker_version,
+        "cflags": [*cflags_game],
+    },
+]
+pch_menu_g3d = ["-prefix pch/MenuF_g3d.mch"]
+
 config.warn_missing_config = True
 config.warn_missing_source = False
 config.libs = [
@@ -347,7 +360,8 @@ config.libs = [
             Object(Equivalent, "game/tour/CCockpitTournamentMenuWinTrophy.cpp"),
             Object(Matching, "game/tour/TournamentSe.cpp"),
             Object(Matching, "game/tour/CTournamentCamera.cpp"),
-            Object(NonMatching, "game/tour/TournamentData.cpp"),
+            Object(Equivalent, "game/tour/TournamentData.cpp"),
+            Object(NonMatching, "game/tour/CCockpitTournamentTelopLogo.cpp"),
         ],
     },
     {
@@ -359,10 +373,12 @@ config.libs = [
         "objects": [
             Object(Matching, "game/menu/module.cpp"),
             Object(Matching, "game/menu/CFade.cpp"),
-            Object(NonMatching, "game/menu/CMenuMdlTableSet.cpp"),
+            Object(Matching, "game/menu/CMenuMdlTableSet.cpp", extra_cflags=pch_menu_g3d),
             Object(Matching, "game/menu/CInfoTabChange.cpp"),
             Object(Matching, "game/menu/CEffectCtrlMenu.cpp"),
+            Object(Equivalent, "game/menu/CDepthOfFieldValue.cpp"),
             Object(Matching, "game/menu/CButton0.cpp"),
+            Object(Equivalent, "game/menu/CButton1.cpp"),
         ],
     },
     {
@@ -381,6 +397,47 @@ config.libs = [
             Object(Matching, "game/boss/CCollManBoss.cpp"),
             Object(Matching, "game/boss/CChrMarkerBoss.cpp"),
             Object(Matching, "game/boss/CBallManBoss.cpp"),
+            Object(Equivalent, "game/boss/CRadarIcon2DBoss.cpp"),
+        ],
+    },
+    {
+        # Game code linked into the BasketF module.
+        "lib": "BasketF",
+        "mw_version": config.linker_version,
+        "cflags": cflags_game,
+        "progress_category": "game",
+        "objects": [
+            Object(Matching, "game/basket/CEffectCtrlBasket.cpp"),
+        ],
+    },
+    {
+        # Game code linked into the VolleyF module.
+        "lib": "VolleyF",
+        "mw_version": config.linker_version,
+        "cflags": cflags_game,
+        "progress_category": "game",
+        "objects": [
+            Object(Matching, "game/volley/CEffectCtrlVolley.cpp"),
+        ],
+    },
+    {
+        # Game code linked into the DodgeF module.
+        "lib": "DodgeF",
+        "mw_version": config.linker_version,
+        "cflags": cflags_game,
+        "progress_category": "game",
+        "objects": [
+            Object(Matching, "game/dodge/CEffectCtrlDodge.cpp"),
+        ],
+    },
+    {
+        # Game code linked into the HockeyF module.
+        "lib": "HockeyF",
+        "mw_version": config.linker_version,
+        "cflags": cflags_game,
+        "progress_category": "game",
+        "objects": [
+            Object(Equivalent, "game/hockey/CEffectCtrlHockey.cpp"),
         ],
     },
 ]

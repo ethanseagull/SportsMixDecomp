@@ -1,0 +1,10 @@
+// Precompiled header for MenuF units that use the NW4R g3d resource classes.
+//
+// Evidence (notes/toolchain.md, "The original was built with the NW4R headers
+// precompiled"): in game/menu/CMenuMdlTableSet.cpp the __FUNCTION__ object of
+// the inline nw4r::g3d::ResAnmChr::ref() is the last object of .data. Compiled
+// normally it comes first; with these headers precompiled the whole object
+// equals the original. Which headers the original's prefix file held is only
+// known from that unit, so this holds just the two it needs.
+#include "nw4r/g3d/ResFile.hpp"
+#include "nw4r/ut/List.hpp"

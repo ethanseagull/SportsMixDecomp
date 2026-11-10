@@ -13,3 +13,4 @@ Equivalent game/basket/CCameraBasketHB.cpp
 Matching game/basket/CStgGmk_Wave_Basket.cpp
 Matching game/basket/CItemBasketBomb.cpp
 Matching game/basket/CItemManBasket.cpp
+Matching game/basket/CCockpitBasketModelTelop.cpp

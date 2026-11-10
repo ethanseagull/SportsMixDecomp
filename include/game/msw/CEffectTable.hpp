@@ -40,14 +40,22 @@ namespace msw {
             unsigned char m_Unk08[0x14];
     };
 
-    // Size 0x18 (what the callers allocate).
+    // Size 0x18 (what the callers allocate): up to four tables, their
+    // count, then the vptr at 0x14 (the vtable has only the destructor).
+    // Member names are guesses.
     class CEffectTableList {
         public:
             CEffectTableList();
-            void Add(CTableBase *pTable);
+            // Appends pTable and sets its first index after the previous
+            // table's range. -1 for a null table, -2 when full.
+            long Add(CTableBase *pTable);
 
         private:
-            unsigned char m_Unk00[0x18];
+            CTableBase *m_apTable[4]; // 0x00
+            long m_nNum;              // 0x10
+
+        public:
+            virtual ~CEffectTableList();
     };
 }
 

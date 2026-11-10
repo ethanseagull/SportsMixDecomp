@@ -181,7 +181,7 @@ def disasm_ours(version, unit):
 
 def analyse(version, unit, module, wanted=None):
     """[(function, class, hints, original insns, our insns)]"""
-    orig = parse((ROOT / "build" / version / module / "asm" / (unit + ".s")).read_text(encoding="utf-8", errors="replace"))
+    orig = parse((ROOT / "build" / version / ("" if module == "main" else module) / "asm" / (unit + ".s")).read_text(encoding="utf-8", errors="replace"))
     ours = parse(disasm_ours(version, unit))
     rows = []
     for fn, insns in orig.items():

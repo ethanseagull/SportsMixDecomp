@@ -1,58 +1,50 @@
 #include "game/msw/CStgGmkAct.hpp"
 
-msw::CStgGmkAct::CStgGmkAct()
-{
-}
+#include "game/msw/CAtkCollision.hpp"
+#include "game/msw/CBodyCollision.hpp"
 
-msw::CStgGmkAct::~CStgGmkAct()
-{
-}
+namespace msw {
 
-void msw::CStgGmkAct::OnBallAtkHit(CBall *ball)
-{
-    (void)ball;
-}
+    void CStgGmkAct::OnBallAtkHit(CBall *pBall)
+    {
+    }
 
-void msw::CStgGmkAct::OnBallDamage(CBall *ball)
-{
-    (void)ball;
-}
+    unsigned long CStgGmkAct::OnBallDamage(CBall *pBall)
+    {
+        return 1;
+    }
 
-void msw::CStgGmkAct::OnBallCatch(CCollBodyUnit* body, CBall *ball)
-{
-    (void)body;
-    (void)ball;
-}
+    void CStgGmkAct::OnBallCatch(CCollBodyUnit *pBody, CBall *pBall)
+    {
+    }
 
-void msw::CStgGmkAct::OnBallReflect(const CCollDefUnit* def, const CBall *ball, bcs::FVEC3& vec1, bcs::FVEC3& vec2)
-{
-    (void)def;
-    (void)ball;
-    (void)vec1;
-    (void)vec2;
-}
+    unsigned long CStgGmkAct::OnBallReflect(const CCollDefUnit *pDef, const CBall *pBall, bcs::FVEC3 &rPos,
+                                            bcs::FVEC3 &rVel)
+    {
+        return 1;
+    }
 
-void msw::CStgGmkAct::OnBallPush(CBall *ball)
-{
-    (void)ball;
-}
+    void CStgGmkAct::OnBallPush(CBall *pBall)
+    {
+    }
 
-void msw::CStgGmkAct::RegistAttackHitCallback(CAtkCollision* atk)
-{
-    (void)atk;
-}
+    void CStgGmkAct::RegistAttackHitCallback(CAtkCollision *pColl)
+    {
+        pColl->SetAttackHitCallbackAll(AttackHitCallback_, this);
+    }
 
-void msw::CStgGmkAct::RegistBodyPushCallback(CBodyCollision* body)
-{
-    (void)body;
-}
+    void CStgGmkAct::RegistBodyPushCallback(CBodyCollision *pColl)
+    {
+        pColl->SetBodyPushCallbackAll(BodyPushCallback_, this);
+    }
 
-void msw::CStgGmkAct::RegistBodyDamageCallback(CBodyCollision* body)
-{
-    (void)body;
-}
+    void CStgGmkAct::RegistBodyDamageCallback(CBodyCollision *pColl)
+    {
+        pColl->SetBodyDamageCallbackAll(BodyDamageCallback_, this);
+    }
 
-void msw::CStgGmkAct::RegistBallCatchCallback(CBodyCollision* body)
-{
-    (void)body;
+    void CStgGmkAct::RegistBallCatchCallback(CBodyCollision *pColl)
+    {
+        pColl->SetBallCatchCallbackAll(BallCatchCallback_, this);
+    }
 }

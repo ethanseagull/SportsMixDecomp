@@ -42,6 +42,12 @@ namespace bcs {
             a = ca;
         }
 
+        // (guessed, after nw4r::ut::Color) A colour given as one word,
+        // 0xRRGGBBAA, and stored as a word:
+        // msw::SelectMenu::CCourtBallMdlObj::SetGoldColor (MenuF) builds its
+        // colours with one store each.
+        explicit BCS_Color(unsigned long rgba) { *reinterpret_cast<unsigned long *>(this) = rgba; }
+
         void SetWhite() { *reinterpret_cast<unsigned long *>(this) = 0xFFFFFFFF; }
     };
 }

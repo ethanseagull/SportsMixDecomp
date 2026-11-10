@@ -36,8 +36,7 @@ namespace msw {
     // game/hockey/CStgGmk_WaterWorks_Hockey.cpp).
     //
     // This header replaces a stub inherited from the EU project (no base,
-    // no virtual functions); src/game/msw/CStgGmkAct.cpp was written against
-    // that stub and is not built for RMKE01.
+    // no virtual functions).
     class CStgGmkAct : public CStgAct {
         public:
             CStgGmkAct(CStgObj *pParent);
@@ -63,9 +62,11 @@ namespace msw {
                 }
             }
             virtual void OnBallAtkHit(CBall *pBall);
-            virtual void OnBallDamage(CBall *pBall);
-            virtual void OnBallReflect(const CCollDefUnit *pDef, const CBall *pBall, bcs::FVEC3 &rPos,
-                                       bcs::FVEC3 &rVel);
+            // Both return 1 in the DOL (return type guessed from the
+            // collision callbacks, which return an unsigned long).
+            virtual unsigned long OnBallDamage(CBall *pBall);
+            virtual unsigned long OnBallReflect(const CCollDefUnit *pDef, const CBall *pBall, bcs::FVEC3 &rPos,
+                                                bcs::FVEC3 &rVel);
             virtual void OnBallPush(CBall *pBall);
 
             // Overrides declared after the new functions: the modules emit
@@ -84,6 +85,23 @@ namespace msw {
             virtual void RegistReflectHitCallback(CDefCollision *pColl);
 
         private:
+            // The collision callbacks the pointer forms of the Regist*
+            // functions install, with the actor as pArg. Each passes the
+            // event to the ball proxy when there is one (for a body of kind 2
+            // where a body is involved), otherwise to the actor's own
+            // OnAttackHit, OnBodyPush, OnBodyDamage or OnBallCatch. In the
+            // DOL they follow RegistReflectHitCallback without exported
+            // names (fn_80170188, fn_80170200, fn_80170260, fn_801702D4);
+            // whether they are static members or file-local is not known,
+            // and their names are guesses.
+            static void AttackHitCallback_(const CCollAtkUnit *pAtk, const CCollBodyUnit *pBody,
+                                           const bcs::FVEC3 &rPos, unsigned long flag, void *pArg);
+            static void BodyPushCallback_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, void *pArg,
+                                          bcs::FVEC3 *pPush);
+            static unsigned long BodyDamageCallback_(CCollBodyUnit *pBody, const CCollAtkUnit *pAtk,
+                                                     const bcs::FVEC3 &rPos, void *pArg);
+            static void BallCatchCallback_(CCollBodyUnit *pBody, CBall *pBall, void *pArg);
+
             CStgGmkActBallCollProxy *m_pBallCollProxy; // 0x170
     };
 }

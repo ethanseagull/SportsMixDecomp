@@ -26,13 +26,21 @@ namespace msw {
                 // Compared as a signed int as well (VolleyF
                 // CTmGameHandlerVolley::_SendMessage).
                 long GetPeriod() const { return m_nPeriod; }
+                // (name guessed) m_nUserTeam, with no team read as team 0;
+                // the modules inline it (extsb, then srawi/andc).
+                long GetUserTeam() const { return m_nUserTeam < 0 ? 0 : m_nUserTeam; }
 
                 unsigned char m_Unk00[4];
                 unsigned char m_nGameMode; // 0x04, the GAME_MODE of the running game
                 unsigned char m_nGameType; // 0x05, 2 selects the sport's party game
                 unsigned char m_Unk06[6];
                 unsigned char m_nPeriod;   // 0x0C, the period being played; 0 is the first (guess)
-                unsigned char m_Unk0D[0x160 - 0x0D];
+                unsigned char m_Unk0D[2];
+                // 0x0F (name guessed): a team number, -1 for none; read
+                // through GetUserTeam (CComManVolley::CanbeTouch, and the
+                // same read in BasketF's CComManBasketGame).
+                signed char m_nUserTeam;
+                unsigned char m_Unk10[0x160 - 0x10];
                 long m_Unk160;             // 0x160, counted by tournament mission 0x3E (coins?)
                 unsigned char m_Unk164[0x638 - 0x164];
             };

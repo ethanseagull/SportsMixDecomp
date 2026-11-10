@@ -15,10 +15,10 @@ namespace msw {
     // 0x00 and the two share the vptr at 0x5C; own members start at 0x60.
     //
     // INCOMPLETE: only what game/boss/CChrMarkerBoss.cpp needs is here.
-    //  - The members stop at 0x179. The constructor in the DOL writes up to
+    //  - The members stop at 0x234. The constructor in the DOL writes up to
     //    0x570, so the class must not be instantiated, embedded or derived
     //    from until the rest is added.
-    //  - The virtual functions stop at slot 0xEC of about 800. Their order
+    //  - The virtual functions stop at slot 0x844 of about 1,100. Their order
     //    and names are the slots of __vt__Q23msw12CChrCoreBoss (BossF), read
     //    with the class name set back to CChrCore. All of them except the
     //    destructor, GetMainOrderValue and IsNowFallOut are unnamed inline
@@ -88,7 +88,485 @@ namespace msw {
             virtual int IsVolleyBlockFall() const;                   // 0xE4
             virtual int IsVolleyBlockSuccess() const;                // 0xE8
             virtual int IsVolleyDispSpikeJumpMarker() const;         // 0xEC
-            // ... the vtable goes on from here (see above).
+            // 0xF0-0x250: names from __vt__Q23msw13CChrCoreDodge (DodgeF);
+            // return types from the weak CChrCore bodies the modules emit.
+            virtual int GetVolleySpikeFeintTargetPos(float, bcs::FVEC3 &, bcs::FVEC3 &, bcs::FVEC3 &); // 0xF0
+            virtual int GetVolleyBallShotCollPos(long, bcs::FVEC3 &, float &) const; // 0xF4
+            virtual void GetVolleySpikeOffsetPos(long, bcs::FVEC3 &) const; // 0xF8
+            virtual void *GetVolleyTargetBall() const;               // 0xFC
+            virtual int IsVolleySuperSpikeCurveType() const;         // 0x100
+            virtual float GetVolleySuperSpikeCurveRate() const;      // 0x104
+            virtual float GetVolleySuperSpikeCurveMaxDist() const;   // 0x108
+            virtual float GetVolleySuperSpikeCurveMinDist() const;   // 0x10C
+            virtual float GetVolleyBlockJumpDelayFrame() const;      // 0x110
+            virtual int IsVolleyEnableDiveReceive() const;           // 0x114
+            virtual int IsVolleyCombinationMode() const;             // 0x118
+            virtual long GetVolleyCombinationRole() const;           // 0x11C
+            virtual long GetVolleyCombinationStep() const;           // 0x120
+            virtual void SetVolleyCombinationRoleDown();             // 0x124
+            virtual int IsVolleyDispExIcon(long) const;              // 0x128
+            virtual long CheckVolleyLineMsgDisp();                   // 0x12C
+            virtual int IsVolleyCombinationReceiver() const;         // 0x130
+            virtual int IsVolleyCombinationAttacker() const;         // 0x134
+            virtual int IsVolleyArtsKoopaShotFire() const;           // 0x138
+            virtual int IsVolleyArtsKoopaFireEnd() const;            // 0x13C
+            virtual long GetVolleyArtsExInput();                     // 0x140
+            virtual int IsHockeyChgArrowMarker();                    // 0x144
+            virtual float GetHockeyArrowMarkerRotY() const;          // 0x148
+            virtual int IsHockeyTackleMarker() const;                // 0x14C
+            virtual int IsHockeyTgtArrowMarker() const;              // 0x150
+            virtual void GetHockeyShootGoalTgtPos(bcs::FVEC3 &, float &); // 0x154
+            virtual int IsHockeyDispShootMarker();                   // 0x158
+            virtual void SetHockeyNoChargeCutFrame(float);           // 0x15C
+            virtual float GetHockeyNoChargeCutFrame();               // 0x160
+            virtual float GetShootChargeFrameMax() const;            // 0x164
+            virtual int GetHockeyKeeperTgtPos(bcs::FVEC3 &);         // 0x168
+            virtual int IsKeeper() const;                            // 0x16C
+            virtual void SetKeeper(int);                             // 0x170
+            virtual void SetMaxSkateSpeed(float);                    // 0x174
+            virtual float GetMaxSkateSpeed() const;                  // 0x178
+            virtual float GetHockeyVelXZ() const;                    // 0x17C
+            virtual float GetBallScramblePoint() const;              // 0x180
+            virtual float GetBallScrambleNowPoint() const;           // 0x184
+            virtual float GetBallScrambleWinPoint() const;           // 0x188
+            virtual float GetBallScrambleMaxPoint() const;           // 0x18C
+            virtual int GetBodyContactSkate() const;                 // 0x190
+            virtual void SetBodyContactSkate(int);                   // 0x194
+            virtual void SetPackNotCatchFrame(float);                // 0x198
+            virtual int IsHockeyBodyNoPush() const;                  // 0x19C
+            virtual long GetHockeyMaxShootCourseDirPercent();        // 0x1A0
+            virtual int GetHockeyShootGoalTgtPos(bcs::FVEC3 &);      // 0x1A4
+            virtual int MethdHockeyKeeperQuickMove(const bcs::FVEC3 &); // 0x1A8
+            virtual int IsHockeyDamage() const;                      // 0x1AC
+            virtual int IsHockeyBallHit();                           // 0x1B0
+            virtual int IsHockeyAttack() const;                      // 0x1B4
+            virtual int IsHockeyFighting() const;                    // 0x1B8
+            virtual void HockeyChrReflect(bcs::FVEC3 &, CChrCore *); // 0x1BC
+            virtual long Get1on1AttackHitType() const;               // 0x1C0
+            virtual long GetNow1on1AttackNum() const;                // 0x1C4
+            virtual float Get1on1AttackWaitTimeMax() const;          // 0x1C8
+            virtual void SetUseShootMarker(int);                     // 0x1CC
+            virtual int IsUseShootMarker() const;                    // 0x1D0
+            virtual int MethdHockeySetMoveRevise(float, float);      // 0x1D4
+            virtual void HockeyArtsEnd();                            // 0x1D8
+            virtual int CanbeKeeperDivingCatch();                    // 0x1DC
+            virtual int MethdKeeperDivingCatch();                    // 0x1E0
+            virtual float GetAttackPower(int);                       // 0x1E4
+            virtual long GetDamageCollKind() const;                  // 0x1E8
+            virtual float GetHockeyBodyCollRadiusNow() const;        // 0x1EC
+            virtual float GetHockeyMass() const;                     // 0x1F0
+            virtual float GetFaceOffChargeMaxFrame() const;          // 0x1F4
+            virtual long GetTackleCount(long) const;                 // 0x1F8
+            virtual void SetAddTackleCount(long);                    // 0x1FC
+            virtual void ReSetTackleCount(long);                     // 0x200
+            virtual int CanbeHockeyComBlockAttack();                 // 0x204
+            virtual int IsHockeyInvisible() const;                   // 0x208
+            virtual void SetHockeyAttackObjNull(long);               // 0x20C
+            virtual int GetHockeyAttackObjInfo(long, bcs::FVEC3 &, float &, bcs::FVEC3 &); // 0x210
+            virtual long GetHockeyAttackObjMax();                    // 0x214
+            virtual void SetKeeperCatchMode();                       // 0x218
+            virtual float GetHockeyPassSpeed();                      // 0x21C
+            virtual float GetHockeyKeeperPassSpeed();                // 0x220
+            virtual int IsHockeyStatePaintTumble() const;            // 0x224
+            virtual void SetDodgeArrangeArea(long);                  // 0x228
+            virtual long GetDdogeArrangeArea() const;                // 0x22C (sic)
+            virtual int IsDodgeInfield() const;                      // 0x230
+            virtual int IsDodgeCloseRange() const;                   // 0x234
+            virtual float GetDodgeCatchCollRadius() const;           // 0x238
+            virtual long GetDodgeLockTargetChrIdx() const;           // 0x23C
+            virtual void SwitchAutoAimTarget();                      // 0x240
+            virtual int IsDodgeTargetMarkerActive();                 // 0x244
+            virtual long GetDodgeTargetMarkerType() const;           // 0x248
+            virtual long GetDodgeTargetMarkerFixedType() const;      // 0x24C
+            // Not zero when it wrote the marker's position to the vector.
+            virtual int GetDodgeTargetMarkerPos(bcs::FVEC3 &);       // 0x250
+            // 0x254 to 0x844: names and parameters from the slots of
+            // __vt__Q23msw13CChrCoreDodge (DodgeF), class name set back to
+            // CChrCore. Return types guessed by a script from the body each
+            // slot points at (f1 set: float; r3 set: int, long for Get*;
+            // otherwise void or a guess from the name).
+            virtual void DodgeForceUpdateAreaCode();                  // 0x254
+            virtual int IsDodgeOnBallJump() const;                    // 0x258
+            virtual int IsDodgeOnBallJumpFall() const;                // 0x25C
+            virtual int IsDodgeJumpBallChr() const;                   // 0x260
+            virtual void SetDodgeJumpBallChr(int);                    // 0x264
+            virtual float GetDodgeDivingCatchDist() const;            // 0x268
+            virtual int IsDodgeArtsTargetMarkerActive() const;        // 0x26C
+            virtual long GetDodgeArtsTargetMarkerType() const;         // 0x270
+            virtual long GetDodgeArtsTargetMarkerPos(bcs::FVEC3 &, long); // 0x274
+            virtual long GetDodgeArtsTargetMarkerNum() const;          // 0x278
+            virtual void GetDodgeArtsTargetMarkerDefaultPos(bcs::FVEC3 &, long); // 0x27C
+            virtual long GetDodgeArtsTargetMarkerMoved(bcs::FVEC3 &);   // 0x280
+            virtual void SetDodgeArtsTargetMarkerPosClip(bcs::FVEC3 &); // 0x284
+            virtual int MoveDodgeArtsTargetMarkerPos(float);          // 0x288
+            virtual int CanbeMoveDodgeArtsTargetMarkerPos();          // 0x28C
+            virtual void SetDodgeArtsTargetMarkerDisable();           // 0x290
+            virtual void GetVel(bcs::FVEC3 &) const;                   // 0x294
+            virtual void SetVel(bcs::FVEC3 &, float);                  // 0x298
+            virtual void SetSwitch(int);                              // 0x29C
+            virtual int IsSwitch() const;                             // 0x2A0
+            virtual void SetNoReflectFrame(float);                    // 0x2A4
+            virtual float GetNoReflectFrame() const;                  // 0x2A8
+            virtual void SetReflectNoMoveFrame(float);                // 0x2AC
+            virtual float GetReflectNoMoveFrame() const;              // 0x2B0
+            virtual void SetAutoBrakeStartTime(float);                // 0x2B4
+            virtual float GetAutoBrakeStartTime() const;              // 0x2B8
+            virtual float GetKeeperDivingCatchSpeed(int) const;       // 0x2BC
+            virtual float GetHockeyKeeperDivingSteeleDist(int) const; // 0x2C0
+            virtual float GetHockeyKeeperDivingSteeleGoalFrame(int) const; // 0x2C4
+            virtual void SetHockeySkateWork(float, float, float, float); // 0x2C8
+            virtual int IsHockeyNowCombinationMode() const;           // 0x2CC
+            virtual int IsCombinationShootStance() const;             // 0x2D0
+            virtual void GetForceInfo(bcs::FVEC3 &, float &);           // 0x2D4
+            virtual void CrashSkateMissionSetReady(int);              // 0x2D8
+            virtual int IsHockeyNowKeeperMoveMode() const;            // 0x2DC
+            virtual int IsHockeyTackleSteal() const;                  // 0x2E0
+            virtual int IsVsBossDead() const;                         // 0x2E4
+            virtual long GetVsBossMaxHP() const;                       // 0x2E8
+            virtual long GetVsBossNowHP() const;                       // 0x2EC
+            virtual float GetVsBossHPRate() const;                    // 0x2F0
+            virtual void PlayRunSe(unsigned long);                    // 0x2F4
+            virtual void PlayWalkSe(unsigned long);                   // 0x2F8
+            virtual void PlaySkateSe(unsigned long);                  // 0x2FC
+            virtual void PlayTurnSe(unsigned long);                   // 0x300
+            virtual void PlayBrakeSe(unsigned long);                  // 0x304
+            virtual void PlayLandSe(unsigned long);                   // 0x308
+            virtual void PlayJumpSe(unsigned long);                   // 0x30C
+            virtual void PlayFtSe_(long, unsigned long);              // 0x310
+            virtual void PlayFsSe_(long, unsigned long);              // 0x314
+            virtual void SE_PlayArtsJumpSE(long);                     // 0x318
+            virtual void SE_PlayArtsShootSE(const bcs::FVEC3 &);       // 0x31C
+            virtual int SE_PlayArtsLoopSE();                          // 0x320
+            virtual void SE_PlayArtsLandSE();                         // 0x324
+            virtual float GetTargetGoalXLength() const;               // 0x328
+            virtual float GetTargetGoalZLength() const;               // 0x32C
+            virtual float GetGuardGoalXLength() const;                // 0x330
+            virtual float GetGuardGoalZLength() const;                // 0x334
+            virtual void CheckMapHit(bcs::FVEC3 &, const bcs::FVEC3 &, const bcs::FVEC3 &); // 0x338
+            virtual float GetCollSize_BodyDamage() const;             // 0x33C (float: CComManVolleyRR::IsExistItemBall)
+            virtual float GetCollSize_BodyPush() const;               // 0x340
+            virtual void GetAlleyoopPassTargetPos(bcs::FVEC3 &, bcs::FVEC3 &, bcs::FVEC3 &) const; // 0x344
+            virtual int Util_GetIdleMotID();                          // 0x348
+            virtual int Util_GetRunMotID();                           // 0x34C
+            virtual int Util_GetWalkMotID();                          // 0x350
+            virtual int Util_GetLandMotID(long);                      // 0x354
+            virtual int Util_GetJumpUpMotID(int);                     // 0x358
+            virtual void Util_GetJumpLandMotID(int);                  // 0x35C
+            virtual int Util_GetDamageMotID(long, long, long);        // 0x360
+            virtual void Util_SetOffenseLeaderFirstState(long);       // 0x364
+            virtual void Util_SetDefenseLeaderFirstState();           // 0x368
+            virtual void Util_AddCoin(long);                          // 0x36C
+            virtual void CreateMdl_();                                // 0x370
+            virtual void CreateColl_();                               // 0x374
+            virtual void Create_();                                   // 0x378
+            virtual void MainFunc_();                                 // 0x37C
+            virtual void UpdateFunc_();                               // 0x380
+            virtual void Reset_();                                    // 0x384
+            virtual void ResetCmn_();                                 // 0x388
+            virtual float GetPrmMoveSpeed() const;                    // 0x38C
+            virtual long GetPrmBodySize() const;                      // 0x390
+            virtual void SendMessage_(long, long, long, long);        // 0x394
+            virtual void SetScoreBookCountTeamKind_();                // 0x398
+            virtual int IsScoreBookCountMode_() const;                // 0x39C
+            virtual int IsScoreBookCountChr_() const;                 // 0x3A0
+            virtual int IsScoreBookCountKindMyTeam_() const;          // 0x3A4
+            virtual int IsScoreBookCountKindEnTeam_() const;          // 0x3A8
+            virtual void AddScoreBookCount_(long, long, long);        // 0x3AC
+            virtual void CtorStateDefault();                          // 0x3B0
+            virtual void LoopStateDefault();                          // 0x3B4
+            virtual void DtorStateDefault();                          // 0x3B8
+            virtual void CtorStateNeutral();                          // 0x3BC
+            virtual void LoopStateNeutral();                          // 0x3C0
+            virtual void DtorStateNeutral();                          // 0x3C4
+            virtual void CtorStateBlockWork();                        // 0x3C8
+            virtual void LoopStateBlockWork();                        // 0x3CC
+            virtual void DtorStateBlockWork();                        // 0x3D0
+            virtual void CtorStateAutoBlockWork();                    // 0x3D4
+            virtual void LoopStateAutoBlockWork();                    // 0x3D8
+            virtual void DtorStateAutoBlockWork();                    // 0x3DC
+            virtual void CtorStateRun();                              // 0x3E0
+            virtual void LoopStateRun();                              // 0x3E4
+            virtual void DtorStateRun();                              // 0x3E8
+            virtual void CtorStateJump();                             // 0x3EC
+            virtual void LoopStateJump();                             // 0x3F0
+            virtual void DtorStateJump();                             // 0x3F4
+            virtual void CtorStateDamage();                           // 0x3F8
+            virtual void LoopStateDamage();                           // 0x3FC
+            virtual void DtorStateDamage();                           // 0x400
+            virtual void CtorStateSideStep();                         // 0x404
+            virtual void LoopStateSideStep();                         // 0x408
+            virtual void DtorStateSideStep();                         // 0x40C
+            virtual void CtorStateItemShoot();                        // 0x410
+            virtual void LoopStateItemShoot();                        // 0x414
+            virtual void DtorStateItemShoot();                        // 0x418
+            virtual void CtorStateBlockCut();                         // 0x41C
+            virtual void LoopStateBlockCut();                         // 0x420
+            virtual void DtorStateBlockCut();                         // 0x424
+            virtual void CtorStateChargeCut();                        // 0x428
+            virtual void LoopStateChargeCut();                        // 0x42C
+            virtual void DtorStateChargeCut();                        // 0x430
+            virtual void CtorStateJumpUpper();                        // 0x434
+            virtual void LoopStateJumpUpper();                        // 0x438
+            virtual void DtorStateJumpUpper();                        // 0x43C
+            virtual void CtorStateDropCut();                          // 0x440
+            virtual void LoopStateDropCut();                          // 0x444
+            virtual void DtorStateDropCut();                          // 0x448
+            virtual void CtorStateMotPlay();                          // 0x44C
+            virtual void LoopStateMotPlay();                          // 0x450
+            virtual void DtorStateMotPlay();                          // 0x454
+            virtual void CtorStateSizeChange();                       // 0x458
+            virtual void LoopStateSizeChange();                       // 0x45C
+            virtual void DtorStateSizeChange();                       // 0x460
+            virtual void CtorStateFreeze();                           // 0x464
+            virtual void LoopStateFreeze();                           // 0x468
+            virtual void DtorStateFreeze();                           // 0x46C
+            virtual void CtorStateDizzy();                            // 0x470
+            virtual void LoopStateDizzy();                            // 0x474
+            virtual void DtorStateDizzy();                            // 0x478
+            virtual void CtorStateSliding();                          // 0x47C
+            virtual void LoopStateSliding();                          // 0x480
+            virtual void DtorStateSliding();                          // 0x484
+            virtual void CtorStateParalyze();                         // 0x488
+            virtual void LoopStateParalyze();                         // 0x48C
+            virtual void DtorStateParalyze();                         // 0x490
+            virtual void CtorStateMameChange();                       // 0x494
+            virtual void LoopStateMameChange();                       // 0x498
+            virtual void DtorStateMameChange();                       // 0x49C
+            virtual void CtorStateEventDoll();                        // 0x4A0
+            virtual void LoopStateEventDoll();                        // 0x4A4
+            virtual void DtorStateEventDoll();                        // 0x4A8
+            virtual void CtorStatePass();                             // 0x4AC
+            virtual void LoopStatePass();                             // 0x4B0
+            virtual void DtorStatePass();                             // 0x4B4
+            virtual void CtorStateAerialPass();                       // 0x4B8
+            virtual void LoopStateAerialPass();                       // 0x4BC
+            virtual void DtorStateAerialPass();                       // 0x4C0
+            virtual void CtorStatePassCatch();                        // 0x4C4
+            virtual void LoopStatePassCatch();                        // 0x4C8
+            virtual void DtorStatePassCatch();                        // 0x4CC
+            virtual void CtorStateArtsPass();                         // 0x4D0
+            virtual void LoopStateArtsPass();                         // 0x4D4
+            virtual void DtorStateArtsPass();                         // 0x4D8
+            virtual void CtorStateSDB();                              // 0x4DC
+            virtual void LoopStateSDB();                              // 0x4E0
+            virtual void DtorStateSDB();                              // 0x4E4
+            virtual void CtorStateSDB_Chain();                        // 0x4E8
+            virtual void LoopStateSDB_Chain();                        // 0x4EC
+            virtual void DtorStateSDB_Chain();                        // 0x4F0
+            virtual void CtorStateRDB();                              // 0x4F4
+            virtual void LoopStateRDB();                              // 0x4F8
+            virtual void DtorStateRDB();                              // 0x4FC
+            virtual void CtorStateRDB_Chain();                        // 0x500
+            virtual void LoopStateRDB_Chain();                        // 0x504
+            virtual void DtorStateRDB_Chain();                        // 0x508
+            virtual void CtorStateQuickTurn();                        // 0x50C
+            virtual void LoopStateQuickTurn();                        // 0x510
+            virtual void DtorStateQuickTurn();                        // 0x514
+            virtual void CtorStateTrickMove();                        // 0x518
+            virtual void LoopStateTrickMove();                        // 0x51C
+            virtual void DtorStateTrickMove();                        // 0x520
+            virtual void CtorStateTrickDance();                       // 0x524
+            virtual void LoopStateTrickDance();                       // 0x528
+            virtual void DtorStateTrickDance();                       // 0x52C
+            virtual void CtorStateCatch();                            // 0x530
+            virtual void LoopStateCatch();                            // 0x534
+            virtual void DtorStateCatch();                            // 0x538
+            virtual void CtorStateSDB_Catch();                        // 0x53C
+            virtual void LoopStateSDB_Catch();                        // 0x540
+            virtual void DtorStateSDB_Catch();                        // 0x544
+            virtual void CtorStateJumpShoot();                        // 0x548
+            virtual void LoopStateJumpShoot();                        // 0x54C
+            virtual void DtorStateJumpShoot();                        // 0x550
+            virtual void CtorStateAerialShoot();                      // 0x554
+            virtual void LoopStateAerialShoot();                      // 0x558
+            virtual void DtorStateAerialShoot();                      // 0x55C
+            virtual void CtorStateReboundDunk();                      // 0x560
+            virtual void LoopStateReboundDunk();                      // 0x564
+            virtual void DtorStateReboundDunk();                      // 0x568
+            virtual void CtorStateLayUp();                            // 0x56C
+            virtual void LoopStateLayUp();                            // 0x570
+            virtual void DtorStateLayUp();                            // 0x574
+            virtual void CtorStateAlleyoop();                         // 0x578
+            virtual void LoopStateAlleyoop();                         // 0x57C
+            virtual void DtorStateAlleyoop();                         // 0x580
+            virtual void CtorStateAirTrick();                         // 0x584
+            virtual void LoopStateAirTrick();                         // 0x588
+            virtual void DtorStateAirTrick();                         // 0x58C
+            virtual void CtorStateDunk();                             // 0x590
+            virtual void LoopStateDunk();                             // 0x594
+            virtual void DtorStateDunk();                             // 0x598
+            virtual void CtorStateItemBallAttack();                   // 0x59C
+            virtual void LoopStateItemBallAttack();                   // 0x5A0
+            virtual void DtorStateItemBallAttack();                   // 0x5A4
+            virtual void CtorStateBigDunk();                          // 0x5A8
+            virtual void LoopStateBigDunk();                          // 0x5AC
+            virtual void DtorStateBigDunk();                          // 0x5B0
+            virtual void CtorStateServe();                            // 0x5B4
+            virtual void LoopStateServe();                            // 0x5B8
+            virtual void DtorStateServe();                            // 0x5BC
+            virtual void CtorStateReceive();                          // 0x5C0
+            virtual void LoopStateReceive();                          // 0x5C4
+            virtual void DtorStateReceive();                          // 0x5C8
+            virtual void CtorStateSpike();                            // 0x5CC
+            virtual void LoopStateSpike();                            // 0x5D0
+            virtual void DtorStateSpike();                            // 0x5D4
+            virtual void CtorStateBlockWorkLose();                    // 0x5D8
+            virtual void LoopStateBlockWorkLose();                    // 0x5DC
+            virtual void DtorStateBlockWorkLose();                    // 0x5E0
+            virtual void CtorStateAutoDribblePosture();               // 0x5E4
+            virtual void LoopStateAutoDribblePosture();               // 0x5E8
+            virtual void DtorStateAutoDribblePosture();               // 0x5EC
+            virtual void CtorStateJumpBlock();                        // 0x5F0
+            virtual void LoopStateJumpBlock();                        // 0x5F4
+            virtual void DtorStateJumpBlock();                        // 0x5F8
+            virtual void CtorStateSwatIt();                           // 0x5FC
+            virtual void LoopStateSwatIt();                           // 0x600
+            virtual void DtorStateSwatIt();                           // 0x604
+            virtual void CtorStateSmashCut();                         // 0x608
+            virtual void LoopStateSmashCut();                         // 0x60C
+            virtual void DtorStateSmashCut();                         // 0x610
+            virtual void CtorStateArtsShotCatch();                    // 0x614
+            virtual void LoopStateArtsShotCatch();                    // 0x618
+            virtual void DtorStateArtsShotCatch();                    // 0x61C
+            virtual void CtorStateDash();                             // 0x620
+            virtual void LoopStateDash();                             // 0x624
+            virtual void DtorStateDash();                             // 0x628
+            virtual void CtorStateJumpPass();                         // 0x62C
+            virtual void LoopStateJumpPass();                         // 0x630
+            virtual void DtorStateJumpPass();                         // 0x634
+            virtual void CtorStateJumpCatch();                        // 0x638
+            virtual void LoopStateJumpCatch();                        // 0x63C
+            virtual void DtorStateJumpCatch();                        // 0x640
+            virtual void CtorStateDribbleMiss();                      // 0x644
+            virtual void LoopStateDribbleMiss();                      // 0x648
+            virtual void DtorStateDribbleMiss();                      // 0x64C
+            virtual void CtorStateBallCatch();                        // 0x650
+            virtual void LoopStateBallCatch();                        // 0x654
+            virtual void DtorStateBallCatch();                        // 0x658
+            virtual void CtorStateBallCatchBack();                    // 0x65C
+            virtual void LoopStateBallCatchBack();                    // 0x660
+            virtual void DtorStateBallCatchBack();                    // 0x664
+            virtual void CtorStateStagger();                          // 0x668
+            virtual void LoopStateStagger();                          // 0x66C
+            virtual void DtorStateStagger();                          // 0x670
+            virtual void CtorStateImpact();                           // 0x674
+            virtual void LoopStateImpact();                           // 0x678
+            virtual void DtorStateImpact();                           // 0x67C
+            virtual void CtorStateTurn();                             // 0x680
+            virtual void LoopStateTurn();                             // 0x684
+            virtual void DtorStateTurn();                             // 0x688
+            virtual void CtorStateSpinStagger();                      // 0x68C
+            virtual void LoopStateSpinStagger();                      // 0x690
+            virtual void DtorStateSpinStagger();                      // 0x694
+            virtual void CtorStateArtsOut();                          // 0x698
+            virtual void LoopStateArtsOut();                          // 0x69C
+            virtual void DtorStateArtsOut();                          // 0x6A0
+            virtual void CtorStateLineOver();                         // 0x6A4
+            virtual void LoopStateLineOver();                         // 0x6A8
+            virtual void DtorStateLineOver();                         // 0x6AC
+            virtual void CtorStateCrouch();                           // 0x6B0
+            virtual void LoopStateCrouch();                           // 0x6B4
+            virtual void DtorStateCrouch();                           // 0x6B8
+            virtual void CtorStateDivingCatch();                      // 0x6BC
+            virtual void LoopStateDivingCatch();                      // 0x6C0
+            virtual void DtorStateDivingCatch();                      // 0x6C4
+            virtual void CtorStateSpinAttack();                       // 0x6C8
+            virtual void LoopStateSpinAttack();                       // 0x6CC
+            virtual void DtorStateSpinAttack();                       // 0x6D0
+            virtual void CtorStateSkate();                            // 0x6D4
+            virtual void LoopStateSkate();                            // 0x6D8
+            virtual void DtorStateSkate();                            // 0x6DC
+            virtual void CtorStateStealStance();                      // 0x6E0
+            virtual void LoopStateStealStance();                      // 0x6E4
+            virtual void DtorStateStealStance();                      // 0x6E8
+            virtual void CtorStateShootStance();                      // 0x6EC
+            virtual void LoopStateShootStance();                      // 0x6F0
+            virtual void DtorStateShootStance();                      // 0x6F4
+            virtual void CtorStateBrake();                            // 0x6F8
+            virtual void LoopStateBrake();                            // 0x6FC
+            virtual void DtorStateBrake();                            // 0x700
+            virtual void CtorStateSwitch();                           // 0x704
+            virtual void LoopStateSwitch();                           // 0x708
+            virtual void DtorStateSwitch();                           // 0x70C
+            virtual void CtorStateBlockStance();                      // 0x710
+            virtual void LoopStateBlockStance();                      // 0x714
+            virtual void DtorStateBlockStance();                      // 0x718
+            virtual void CtorStateChangeStance();                     // 0x71C
+            virtual void LoopStateChangeStance();                     // 0x720
+            virtual void DtorStateChangeStance();                     // 0x724
+            virtual void CtorStateAutoChangeStance();                 // 0x728
+            virtual void LoopStateAutoChangeStance();                 // 0x72C
+            virtual void DtorStateAutoChangeStance();                 // 0x730
+            virtual void CtorStateDirectShootStance();                // 0x734
+            virtual void LoopStateDirectShootStance();                // 0x738
+            virtual void DtorStateDirectShootStance();                // 0x73C
+            virtual void CtorStateDirectPassStance();                 // 0x740
+            virtual void LoopStateDirectPassStance();                 // 0x744
+            virtual void DtorStateDirectPassStance();                 // 0x748
+            virtual void CtorStateTackleGuard();                      // 0x74C
+            virtual void LoopStateTackleGuard();                      // 0x750
+            virtual void DtorStateTackleGuard();                      // 0x754
+            virtual void CtorStateFallOut();                          // 0x758
+            virtual void LoopStateFallOut();                          // 0x75C
+            virtual void DtorStateFallOut();                          // 0x760
+            virtual void CtorStateFallSafe();                         // 0x764
+            virtual void LoopStateFallSafe();                         // 0x768
+            virtual void DtorStateFallSafe();                         // 0x76C
+            virtual void CtorStateSmashAttack();                      // 0x770
+            virtual void LoopStateSmashAttack();                      // 0x774
+            virtual void DtorStateSmashAttack();                      // 0x778
+            virtual void CtorStateBallScramble();                     // 0x77C
+            virtual void LoopStateBallScramble();                     // 0x780
+            virtual void DtorStateBallScramble();                     // 0x784
+            virtual void CtorStateFaceOff();                          // 0x788
+            virtual void LoopStateFaceOff();                          // 0x78C
+            virtual void DtorStateFaceOff();                          // 0x790
+            virtual void CtorStateDivingSteal();                      // 0x794
+            virtual void LoopStateDivingSteal();                      // 0x798
+            virtual void DtorStateDivingSteal();                      // 0x79C
+            virtual void CtorStateBodyContact();                      // 0x7A0
+            virtual void LoopStateBodyContact();                      // 0x7A4
+            virtual void DtorStateBodyContact();                      // 0x7A8
+            virtual void CtorStateOffBallStance();                    // 0x7AC
+            virtual void LoopStateOffBallStance();                    // 0x7B0
+            virtual void DtorStateOffBallStance();                    // 0x7B4
+            virtual void CtorStateAttackFight();                      // 0x7B8
+            virtual void LoopStateAttackFight();                      // 0x7BC
+            virtual void DtorStateAttackFight();                      // 0x7C0
+            virtual void CtorStateKeeperCatchAction();                // 0x7C4
+            virtual void LoopStateKeeperCatchAction();                // 0x7C8
+            virtual void DtorStateKeeperCatchAction();                // 0x7CC
+            virtual void CtorStateFall();                             // 0x7D0
+            virtual void LoopStateFall();                             // 0x7D4
+            virtual void DtorStateFall();                             // 0x7D8
+            virtual void CtorStateRebirth();                          // 0x7DC
+            virtual void LoopStateRebirth();                          // 0x7E0
+            virtual void DtorStateRebirth();                          // 0x7E4
+            virtual int CanbeRun();                                   // 0x7E8
+            virtual int MethdRun(float);                              // 0x7EC
+            virtual int MethdRun(float, float);                       // 0x7F0
+            virtual int CanbeBlockWork();                             // 0x7F4
+            virtual int MethdBlockWork(float);                        // 0x7F8
+            virtual int MethdBlockWork(float, float);                 // 0x7FC
+            virtual int CanbeJump();                                  // 0x800
+            virtual int MethdJump();                                  // 0x804
+            virtual int CanbeSliding();                               // 0x808
+            virtual int MethdSliding(float);                          // 0x80C
+            virtual int CanbeSizeChange(long);                        // 0x810
+            virtual int MethdSizeChange(long, float);                 // 0x814
+            virtual int MethdChgStarState();                          // 0x818
+            virtual int CanbeChgStarState();                          // 0x81C
+            virtual int MethdChgStarState(float);                     // 0x820
+            virtual int CanbeChgSpeedUpState();                       // 0x824
+            virtual int MethdChgSpeedUpState(float, float);           // 0x828
+            virtual int CanbeChgSpeedDownState();                     // 0x82C
+            virtual int MethdChgSpeedDownState(float, float);         // 0x830
+            virtual int CanbeJumpUpper() const;                       // 0x834
+            virtual int CanbeNowJumpUpper() const;                    // 0x838
+            virtual int MethdJumpUpper();                             // 0x83C
+            virtual int CanbeSideStep(float, float);                  // 0x840
+            virtual int MethdSideStep(float, float);                  // 0x844
+            // ... the vtable goes on from here (about 1,100 slots in all).
 
             // Not zero when the character takes no part in the game: it has
             // no model yet (the word at 0x90 is zero) or bit 30 of the word
@@ -102,12 +580,16 @@ namespace msw {
             // the name; CChrMarkerVolley::AppearCheck asks it outside the
             // party game) In the DOL.
             int IsPadCtrl() const;
+            // DOL. The yaw (radians) from the character towards a point,
+            // in the XZ plane.
+            float GetRotY_ToPosXZ(const bcs::FVEC3 &pos) const;
 
             // (names guessed) Inline in the original; the module reads the
             // members directly (CChrMarkerBoss::AppearCheck loads the byte
             // unsigned).
             long GetChrId() const { return m_nChrId; }
             unsigned long GetStatusFlag() const { return m_nStatusFlag; }
+            unsigned long GetDispFlag() const { return m_nDispFlag; }
 
             // The texture of the character's radar icon; null when
             // IsDisable() is true. In the DOL. (that the pointer is to a
@@ -125,7 +607,11 @@ namespace msw {
             long m_nDriver;              // 0x6C, index of the driver in use, negative for none
             unsigned char m_Unk70[0x78];
             unsigned long m_nStatusFlag; // 0xE8, meaning of the bits not known
-            unsigned char m_UnkEC[0x88];
+            unsigned long m_UnkEC;
+            // 0xF0 (name guessed): CChrCore::UpdateDisp_ draws nothing while
+            // bit 2 is set, and CChrMarkerDodge shows no marker then.
+            unsigned long m_nDispFlag;
+            unsigned char m_UnkF4[0x80];
             unsigned char m_nChrId;      // 0x174, a character number (meaning guessed)
             unsigned char m_Unk175;
             // (names guessed) What CRadarIcon2D<Game>::CreateCharaIcon passes
@@ -133,6 +619,10 @@ namespace msw {
             signed char m_nPlayerNo;     // 0x176
             unsigned char m_Unk177;
             signed char m_nTeamNo;       // 0x178
+            unsigned char m_Unk179[0x230 - 0x179];
+            // 0x230 (name guessed): the level CComMan::GetDatF reads the
+            // computer's parameters for (CComManVolleyGame::GetConditionHandicapDis).
+            long m_nComLevel;
     };
 }
 

@@ -304,7 +304,11 @@ config.precompiled_headers = [
 # Game libraries, one per RSO module. Flags are set here; the units each one
 # compiles are listed in config/<version>/<module>/objects.txt.
 cflags_game_nolmw = [*cflags_rel, "-func_align 4", "-ipa file", "-str reuse,readonly"]
+# Game and engine code in main.dol keeps small data. Flags are a first guess
+# (the modules' game flags without -sdata 0) until a DOL unit pins them.
+cflags_game_dol = [*cflags_base, "-func_align 4", "-ipa file", "-str reuse,readonly", "-use_lmw_stmw on"]
 GAME_MODULES = [
+    ("main", cflags_game_dol),
     ("SystemF", cflags_game_nolmw),
     ("TourF", cflags_game),
     ("MenuF", cflags_game),
@@ -371,15 +375,6 @@ config.libs = [
                 "RSO/global_destructor_chain.c",
                 source="Runtime.PPCEABI.H/global_destructor_chain.c",
             ),
-        ],
-    },
-    {
-        "lib": "MSM",
-        "mw_version": config.linker_version,
-        "cflags": cflags_base,
-        "progress_category": "game",
-        "objects": [
-            Object(MatchingFor("RMKP01"), "game/msw/CStgGmkAct.cpp"),
         ],
     },
     *[

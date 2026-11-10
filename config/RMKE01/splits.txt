@@ -13,6 +13,777 @@ Sections:
 	.sdata2     type:rodata align:8
 	.sbss2      type:bss align:4
 
+game/bcs/CAnmMotion.cpp:
+	.text       start:0x80008824 end:0x80009B54
+
+game/bcs/CAnmBlendMotion.cpp:
+	.text       start:0x8000A5B4 end:0x8000D044
+
+game/bcs/CAnmTexSrt.cpp:
+	.text       start:0x8000D22C end:0x8000D414
+
+game/bcs/CAnmTexPat.cpp:
+	.text       start:0x8000DD28 end:0x8000DF1C
+
+game/bcs/CAnmMatClr.cpp:
+	.text       start:0x8000F670 end:0x8000F7D4
+
+game/bcs/CCameraMan.cpp:
+	.text       start:0x80011720 end:0x800117E4
+
+game/bcs/CCamera.cpp:
+	.text       start:0x80011818 end:0x80012B48
+
+game/bcs/CCameraAnm.cpp:
+	.text       start:0x80012CD8 end:0x800140BC
+
+game/bcs/CCameraAnmCalc.cpp:
+	.text       start:0x80014440 end:0x80014560
+
+game/bcs/EF/CEffect.cpp:
+	.text       start:0x8001E510 end:0x8001FEE8
+
+game/bcs/EF/CResource.cpp:
+	.text       start:0x80020720 end:0x800212EC
+
+game/bcs/EF/CManager.cpp:
+	.text       start:0x80022A14 end:0x80022F78
+
+game/bcs/G2D/CTexMap.cpp:
+	.text       start:0x8002B7E4 end:0x8002B844
+
+game/bcs/G2D/CTextBoxDL.cpp:
+	.text       start:0x80036934 end:0x80037514
+
+game/bcs/G2D/CPaneCtrl.cpp:
+	.text       start:0x8003B7B0 end:0x8003CE1C
+
+game/bcs/G2D/CPaneObj.cpp:
+	.text       start:0x8003D030 end:0x8003ECE0
+
+game/bcs/G2D/CLytManager.cpp:
+	.text       start:0x8003F554 end:0x8003FE74
+
+game/bcs/G2D/CLytResource.cpp:
+	.text       start:0x800401A0 end:0x80040B70
+
+game/bcs/CScnObj.cpp:
+	.text       start:0x800419CC end:0x80042A48
+
+game/bcs/CScnGroup.cpp:
+	.text       start:0x80042D9C end:0x800430AC
+
+game/bcs/CGDLObj.cpp:
+	.text       start:0x80044B00 end:0x80044BD4
+
+game/bcs/CHBMenu.cpp:
+	.text       start:0x80045AAC end:0x80046D40
+
+game/bcs/CListNodeBase.cpp:
+	.text       start:0x8004BE1C end:0x8004BF88
+
+game/bcs/CLoadMan.cpp:
+	.text       start:0x8004C094 end:0x8004DC9C
+
+game/bcs/CMainApp.cpp:
+	.text       start:0x80051B5C end:0x80052818
+
+game/bcs/CMdlObj.cpp:
+	.text       start:0x80054FDC end:0x8005A9AC
+
+game/bcs/CMdlObj/CopiedMatAccess.cpp:
+	.text       start:0x8005AC80 end:0x8005B500
+
+game/bcs/CMdlRef.cpp:
+	.text       start:0x8005F380 end:0x8005F648
+
+game/bcs/CMdlShadow.cpp:
+	.text       start:0x8005FFA0 end:0x80060304
+
+game/bcs/CMiiMan.cpp:
+	.text       start:0x80068954 end:0x80068D44
+
+game/bcs/CMovie.cpp:
+	.text       start:0x80069604 end:0x8006A15C
+
+game/bcs/CPadWI.cpp:
+	.text       start:0x800708F0 end:0x8007109C
+
+game/bcs/CRenderMan.cpp:
+	.text       start:0x80073DAC end:0x8007852C
+
+game/bcs/CRsoModule.cpp:
+	.text       start:0x80078814 end:0x80078928
+
+game/bcs/CSndTask.cpp:
+	.text       start:0x8007A560 end:0x8007A790
+
+game/bcs/CTask.cpp:
+	.text       start:0x8007B2FC end:0x8007B5B0
+
+game/bcs/CWorldEnv.cpp:
+	.text       start:0x8007DF9C end:0x8007EB64
+
+game/bcs/G2D/CLayoutBase.cpp:
+	.text       start:0x800A26F0 end:0x800A31B4
+
+game/bcs/G2D.cpp:
+	.text       start:0x800AA14C end:0x800ADA84
+
+game/bcs/dwc/CDwc.cpp:
+	.text       start:0x800B10A0 end:0x800B1EB8
+
+game/bcs/dwc/CDwcFriendList.cpp:
+	.text       start:0x800B3E14 end:0x800B4AC0
+
+game/bcs/dwc/CDwcFriend.cpp:
+	.text       start:0x800B4BAC end:0x800B4F08
+
+game/bcs/CWifiPadBase.cpp:
+	.text       start:0x800C1558 end:0x800C1614
+
+game/bcs/CWifiPad.cpp:
+	.text       start:0x800C16C0 end:0x800C256C
+
+game/bcs/CXmlReader.cpp:
+	.text       start:0x800C2618 end:0x800C33DC
+
+game/msw/CMainStep.cpp:
+	.text       start:0x800C3824 end:0x800C45D4
+
+game/msw/CBall.cpp:
+	.text       start:0x800C4938 end:0x800CBEA8
+
+game/msw/CBallMan.cpp:
+	.text       start:0x800CC6C0 end:0x800CD674
+
+game/msw/CBallMarker.cpp:
+	.text       start:0x800CD6DC end:0x800CE904
+
+game/msw/CItemBall.cpp:
+	.text       start:0x800CEAE0 end:0x800CF4CC
+
+game/msw/CItemBallChangeEffect.cpp:
+	.text       start:0x800CF9C0 end:0x800CFB70
+
+game/msw/CGameCamera.cpp:
+	.text       start:0x800CFCF8 end:0x800D28C8
+
+game/msw/CC_DATA.cpp:
+	.text       start:0x800D2C4C end:0x800D2F58
+
+game/msw/CChrOptMdlObj.cpp:
+	.text       start:0x800D339C end:0x800D3A3C
+
+game/msw/CChrCore.cpp:
+	.text       start:0x800D5140 end:0x800E96FC
+
+game/msw/CChrDrvPad.cpp:
+	.text       start:0x800EAC8C end:0x800EBB04
+
+game/msw/CChrMan.cpp:
+	.text       start:0x800EBBA4 end:0x800EF44C
+
+game/msw/CChrMarker.cpp:
+	.text       start:0x800EFFDC end:0x800F1408
+
+game/msw/CArrowSignalBase.cpp:
+	.text       start:0x800F1410 end:0x800F14A0
+
+game/msw/CChr1on1MarkerBase.cpp:
+	.text       start:0x800F16DC end:0x800F260C
+
+game/msw/CChrMdlObj.cpp:
+	.text       start:0x800F29D8 end:0x800F5B9C
+
+game/msw/CCollMan.cpp:
+	.text       start:0x800F6744 end:0x800FA63C
+
+game/msw/CCollUnit.cpp:
+	.text       start:0x801067E4 end:0x80106EA4
+
+game/msw/CCollDefUnit.cpp:
+	.text       start:0x80107294 end:0x801072A0
+
+game/msw/CBodyCollision.cpp:
+	.text       start:0x801072C0 end:0x801084B0
+
+game/msw/CAtkCollision.cpp:
+	.text       start:0x80108510 end:0x801093A8
+
+game/msw/CDefCollision.cpp:
+	.text       start:0x8010943C end:0x80109990
+
+game/msw/CComDrv.cpp:
+	.text       start:0x80109A0C end:0x8010CE1C
+
+game/msw/CEventDemoBase.cpp:
+	.text       start:0x8011141C end:0x8011158C
+
+game/msw/CEventModel.cpp:
+	.text       start:0x80111CCC end:0x801143EC
+
+game/msw/CEventMoveAction.cpp:
+	.text       start:0x80114AB8 end:0x80114B58
+
+game/msw/CEventMove.cpp:
+	.text       start:0x80114BF4 end:0x80114D94
+
+game/msw/CEventChrCore.cpp:
+	.text       start:0x8011722C end:0x80117758
+
+game/msw/CEventScene.cpp:
+	.text       start:0x801177F4 end:0x8011970C
+
+game/msw/CSceneCalc.cpp:
+	.text       start:0x8011979C end:0x80119AC4
+
+game/msw/CEventDemo.cpp:
+	.text       start:0x80119B00 end:0x80119FAC
+
+game/msw/EvDemo.cpp:
+	.text       start:0x8011D564 end:0x8011D800
+
+game/msw/CEffectCtrl.cpp:
+	.text       start:0x8011D850 end:0x80122334
+
+game/msw/CEffectCluster.cpp:
+	.text       start:0x801227AC end:0x80123568
+
+game/msw/CEffectTableList.cpp:
+	.text       start:0x8012444C end:0x801244C0
+
+game/msw/CEffectTable.cpp:
+	.text       start:0x80124604 end:0x801247E0
+
+game/msw/CEffectAttachTable.cpp:
+	.text       start:0x801248FC end:0x80124B1C
+
+game/msw/CDropCoinMan.cpp:
+	.text       start:0x80124C20 end:0x80124DC0
+
+game/msw/CDropCoin.cpp:
+	.text       start:0x80126694 end:0x801266D0
+
+game/msw/CEffectCoinGetBase.cpp:
+	.text       start:0x80126868 end:0x801268E0
+
+game/msw/CItemMan.cpp:
+	.text       start:0x80126AE8 end:0x80127814
+
+game/msw/CItem.cpp:
+	.text       start:0x8012830C end:0x8012C1F0
+
+game/msw/CGimmickMan.cpp:
+	.text       start:0x8012CC80 end:0x8012E0AC
+
+game/msw/CQPanelMan.cpp:
+	.text       start:0x8012E240 end:0x80130054
+
+game/msw/CQPanel.cpp:
+	.text       start:0x80130634 end:0x80132E30
+
+game/msw/CItemBanana.cpp:
+	.text       start:0x8013331C end:0x8013385C
+
+game/msw/CItemBomb.cpp:
+	.text       start:0x8013394C end:0x80134204
+
+game/msw/CBombExplosion.cpp:
+	.text       start:0x8013443C end:0x80134978
+
+game/msw/CItemMushroom.cpp:
+	.text       start:0x80134A50 end:0x80134F0C
+
+game/msw/CItemToadstool.cpp:
+	.text       start:0x80135114 end:0x80135648
+
+game/msw/CItemShellCmn.cpp:
+	.text       start:0x80135AE4 end:0x80135C00
+
+game/msw/CItemGShell.cpp:
+	.text       start:0x80135E90 end:0x801362CC
+
+game/msw/CItemRShell.cpp:
+	.text       start:0x80136304 end:0x80136E68
+
+game/msw/CGameAccInput.cpp:
+	.text       start:0x801373DC end:0x801373E0
+
+game/msw/CCockpit.cpp:
+	.text       start:0x801373E8 end:0x8013ABF4
+
+game/msw/CCockpitTelopSwitchColor.cpp:
+	.text       start:0x8013AC4C end:0x8013B88C
+
+game/msw/CCockpitTelopStageIntro.cpp:
+	.text       start:0x8013B974 end:0x8013BA38
+
+game/msw/CLytCtrl.cpp:
+	.text       start:0x8013EADC end:0x8013F5F0
+
+game/msw/LayoutTask.cpp:
+	.text       start:0x8013F65C end:0x8013F660
+
+game/msw/CMenuLinkList.cpp:
+	.text       start:0x8013F72C end:0x8013F7C8
+
+game/msw/CMenuPaneAccessor.cpp:
+	.text       start:0x8013F838 end:0x8013FD74
+
+game/msw/CMenuTask.cpp:
+	.text       start:0x8013FDA0 end:0x801403FC
+
+game/msw/CMenuPad.cpp:
+	.text       start:0x801413A0 end:0x80141830
+
+game/msw/CMenuPadInfo.cpp:
+	.text       start:0x80142130 end:0x80142164
+
+game/msw/CNowLoading.cpp:
+	.text       start:0x80142FB4 end:0x80142FD0
+
+game/msw/dwc/CGameDwc.cpp:
+	.text       start:0x80143614 end:0x80145B40
+
+game/msw/CGameSnd.cpp:
+	.text       start:0x80146600 end:0x801488E8
+
+game/msw/CGameBGM.cpp:
+	.text       start:0x80148A3C end:0x80148B00
+
+game/msw/CStgGmk_Case_Mdl.cpp:
+	.text       start:0x8014BE64 end:0x8014C400
+
+game/msw/CStgGmk_Case_Act.cpp:
+	.text       start:0x8014C95C end:0x80150084
+
+game/msw/CStgGmk_Case.cpp:
+	.text       start:0x80150120 end:0x80150708
+
+game/msw/CGoalMdl.cpp:
+	.text       start:0x80150D88 end:0x80151A24
+
+game/msw/CStage10Base.cpp:
+	.text       start:0x801553A4 end:0x80157C70
+
+game/msw/CStage10Base/CPanelInfoBase.cpp:
+	.text       start:0x80157DF4 end:0x8015A738
+
+game/msw/CStage10Base/CTelopDispBase.cpp:
+	.text       start:0x8015A7BC end:0x8015AA48
+
+game/msw/CStageMan.cpp:
+	.text       start:0x8015FFB0 end:0x80165134
+
+game/msw/CStageNet.cpp:
+	.text       start:0x8016AC7C end:0x8016ACB8
+
+game/msw/CStageScroll.cpp:
+	.text       start:0x8016B778 end:0x8016C17C
+
+game/msw/CStgAct.cpp:
+	.text       start:0x8016F538 end:0x8016FE58
+
+game/msw/CStgDrv.cpp:
+	.text       start:0x8016FF0C end:0x8016FF68
+
+game/msw/CStgGmk.cpp:
+	.text       start:0x8016FF7C end:0x80170054
+
+game/msw/CStgGmkAct.cpp:
+	.text       start:0x80170108 end:0x80170174
+
+game/msw/CStgGmkMan.cpp:
+	.text       start:0x801704E8 end:0x8017080C
+
+game/msw/CStgMdl.cpp:
+	.text       start:0x80170CCC end:0x80171F04
+
+game/msw/CStgObj.cpp:
+	.text       start:0x80174014 end:0x801744F0
+
+game/msw/CStgSrt.cpp:
+	.text       start:0x80174760 end:0x80174D3C
+
+game/msw/TournamentWork.cpp:
+	.text       start:0x80176058 end:0x801768E0
+
+game/msw/CTournament.cpp:
+	.text       start:0x801768EC end:0x8017B85C
+
+game/msw/CGame.cpp:
+	.text       start:0x8017C3AC end:0x80187D70
+
+game/msw/CGameSpeedCtrl.cpp:
+	.text       start:0x8018952C end:0x8018957C
+
+game/msw/CGameVib.cpp:
+	.text       start:0x8018DD88 end:0x8018DEF4
+
+game/msw/CLoadData.cpp:
+	.text       start:0x8018E808 end:0x801902CC
+
+game/msw/CStgGmk_WaterPillar_Mdl.cpp:
+	.text       start:0x80190CF8 end:0x80190F08
+
+game/msw/CStgGmk_WaterPillar_Act.cpp:
+	.text       start:0x80191024 end:0x80193DE8
+
+game/msw/CStgGmk_WaterPillar_Drv.cpp:
+	.text       start:0x80194370 end:0x80194404
+
+game/msw/CStgGmk_WaterPillar.cpp:
+	.text       start:0x80194408 end:0x801949CC
+
+game/msw/CStgGmk_WaterPillarCluster.cpp:
+	.text       start:0x801949D0 end:0x80195CD8
+
+game/bcs/CMusicData.cpp:
+	.text       start:0x801960B4 end:0x80196424
+
+game/msw/CCockpitPause.cpp:
+	.text       start:0x80198108 end:0x8019A004
+
+game/msw/CCockpitResult.cpp:
+	.text       start:0x8019AECC end:0x8019B19C
+
+game/msw/menu.cpp:
+	.text       start:0x8019B2C4 end:0x8019BBF4
+
+game/msw/CTrophyObj.cpp:
+	.text       start:0x8019BEF0 end:0x8019CAE0
+
+game/msw/CCockpitModelTelop.cpp:
+	.text       start:0x8019CC80 end:0x8019D0FC
+
+game/msw/CCockpitModelTelopHold.cpp:
+	.text       start:0x8019D1E4 end:0x8019DAB0
+
+game/msw/CRadarIcon2D.cpp:
+	.text       start:0x8019DC9C end:0x8019FF6C
+
+game/msw/CCockpitMarkerIcon2D.cpp:
+	.text       start:0x801A1434 end:0x801A18BC
+
+game/msw/CSignBoard.cpp:
+	.text       start:0x801A2800 end:0x801A2F70
+
+game/msw/CComMan.cpp:
+	.text       start:0x801A380C end:0x801AC8E8
+
+game/msw/CComOSG.cpp:
+	.text       start:0x801AC94C end:0x801AD690
+
+game/msw/CStage15Base.cpp:
+	.text       start:0x801ADB14 end:0x801AEC18
+
+game/msw/CNpcBase.cpp:
+	.text       start:0x801AED44 end:0x801B0250
+
+game/msw/menu/CMessage.cpp:
+	.text       start:0x801B0370 end:0x801B0920
+
+game/msw/CNpcBossPackun.cpp:
+	.text       start:0x801B267C end:0x801B4108
+
+game/msw/CNpcBossPackun/CMudBomb.cpp:
+	.text       start:0x801B418C end:0x801B5A10
+
+game/msw/CMenuPartBase.cpp:
+	.text       start:0x801B5DD8 end:0x801B65EC
+
+game/msw/CMenuPartList.cpp:
+	.text       start:0x801B6630 end:0x801B7740
+
+game/msw/menu/CSndEff.cpp:
+	.text       start:0x801B78A4 end:0x801B7AFC
+
+game/msw/menu/CSndBGM.cpp:
+	.text       start:0x801B7BE8 end:0x801B7E14
+
+game/msw/menu/CVibEff.cpp:
+	.text       start:0x801B7F80 end:0x801B80C0
+
+game/msw/CNpcGhost.cpp:
+	.text       start:0x801B8374 end:0x801B9EE8
+
+game/msw/CCockpitLayoutBase.cpp:
+	.text       start:0x801BA114 end:0x801BA86C
+
+game/msw/CCockpitPartMove.cpp:
+	.text       start:0x801BA9EC end:0x801BAA6C
+
+game/msw/cockpit/CSPGauge.cpp:
+	.text       start:0x801BC03C end:0x801BC144
+
+game/msw/cockpit/CSPGaugeInputDisp.cpp:
+	.text       start:0x801BC244 end:0x801BC274
+
+game/msw/cockpit/CTimeCount.cpp:
+	.text       start:0x801BC434 end:0x801BC814
+
+game/msw/cockpit/CMissionCount.cpp:
+	.text       start:0x801BC90C end:0x801BD178
+
+game/msw/cockpit/C3DCoin.cpp:
+	.text       start:0x801BD17C end:0x801BD56C
+
+game/msw/cockpit/CEffectSet.cpp:
+	.text       start:0x801BD574 end:0x801BD85C
+
+game/msw/CSave.cpp:
+	.text       start:0x801BDA44 end:0x801C11EC
+
+game/msw/SAVE_DATA_PLAYER.cpp:
+	.text       start:0x801C1F50 end:0x801C39D4
+
+game/msw/CC_CMN/CMdlEffect.cpp:
+	.text       start:0x801C4CFC end:0x801C5174
+
+game/msw/CC_CMN/CGrdMdlEffect.cpp:
+	.text       start:0x801C5214 end:0x801C5398
+
+game/msw/CC_CMN/CChrParasite.cpp:
+	.text       start:0x801C568C end:0x801C574C
+
+game/msw/CC_CMN/LUIGI/CcOvacuumForce.cpp:
+	.text       start:0x801C5880 end:0x801C5CF8
+
+game/msw/CC_CMN/DONKEY/CcEarthQuake.cpp:
+	.text       start:0x801C7244 end:0x801C73A8
+
+game/msw/CC_CMN/DIDDY/CcBoomerang.cpp:
+	.text       start:0x801C7490 end:0x801C82DC
+
+game/msw/CC_CMN/KINOPIO/CcBoundMushroom.cpp:
+	.text       start:0x801C8300 end:0x801C8DD8
+
+game/msw/CC_CMN/KOOPA/CcFireBall.cpp:
+	.text       start:0x801C9574 end:0x801CA1C4
+
+game/msw/CC_CMN/KOOPAJR/CcPaintBall.cpp:
+	.text       start:0x801CA1E0 end:0x801CBAD0
+
+game/msw/CC_CMN/SABOTEN/CcNeedle.cpp:
+	.text       start:0x801CBAD4 end:0x801CBCB0
+
+game/msw/CC_CMN/SLIME/CcSquadFactory.cpp:
+	.text       start:0x801CBE54 end:0x801CC0D4
+
+game/msw/CC_CMN/SLIME/CcSlimeSquad.cpp:
+	.text       start:0x801CC13C end:0x801CDB30
+
+game/msw/CCockpit3dSetCount.cpp:
+	.text       start:0x801D5FCC end:0x801D761C
+
+game/msw/CCockpit3dScoreCount.cpp:
+	.text       start:0x801D8354 end:0x801DC880
+
+game/msw/CStage11Base.cpp:
+	.text       start:0x801DDA34 end:0x801DF228
+
+game/msw/cockpit.cpp:
+	.text       start:0x801DF710 end:0x801E00F8
+
+game/msw/CStgGmk_Pinball_Act.cpp:
+	.text       start:0x801E14E4 end:0x801E5388
+
+game/msw/CStgGmk_Pinball.cpp:
+	.text       start:0x801E5424 end:0x801E5878
+
+game/msw/CPinballMan.cpp:
+	.text       start:0x801E587C end:0x801E628C
+
+game/msw/CStgEffectSlot.cpp:
+	.text       start:0x801E78D0 end:0x801E82B8
+
+game/msw/CStgSeSlot.cpp:
+	.text       start:0x801E874C end:0x801E918C
+
+game/msw/CTmGameHandler.cpp:
+	.text       start:0x801E9F48 end:0x801EAD84
+
+game/msw/CStage09Base.cpp:
+	.text       start:0x801EB004 end:0x801EC050
+
+game/msw/CStage09Base/CConveyor.cpp:
+	.text       start:0x801EC07C end:0x801EC7E0
+
+game/bcs/G2D/CLineStripDL.cpp:
+	.text       start:0x801EC8D4 end:0x801ECC84
+
+game/msw/CCockpitButtonInfo.cpp:
+	.text       start:0x801ECF8C end:0x801ED254
+
+game/msw/CCockpitWindowInfo.cpp:
+	.text       start:0x801ED65C end:0x801ED918
+
+game/msw/CCockpitMenuBase.cpp:
+	.text       start:0x801EDF8C end:0x801EEA0C
+
+game/msw/CCockpitMenuBaseButtonA.cpp:
+	.text       start:0x801EEB28 end:0x801EF30C
+
+game/msw/vm/CVMData.cpp:
+	.text       start:0x801F702C end:0x801F75E4
+
+game/msw/vm/CVMCpu.cpp:
+	.text       start:0x801FADC4 end:0x801FAEFC
+
+game/msw/vm/CVMScript.cpp:
+	.text       start:0x801FAF78 end:0x801FB3FC
+
+game/msw/CEventNodeBase.cpp:
+	.text       start:0x801FC05C end:0x801FC65C
+
+game/msw/CEvNodeData.cpp:
+	.text       start:0x801FD384 end:0x801FD678
+
+game/msw/CEvDemoRes/_CHR_INFO.cpp:
+	.text       start:0x801FEDD8 end:0x801FEEF4
+
+game/msw/CEvDemoRes.cpp:
+	.text       start:0x801FEF0C end:0x801FFE78
+
+game/msw/ArchiveFont.cpp:
+	.text       start:0x802113AC end:0x802114F4
+
+game/msw/CStgGmk_Wave_Act.cpp:
+	.text       start:0x80211834 end:0x80213544
+
+game/msw/CStgGmk_Wave.cpp:
+	.text       start:0x802135F8 end:0x80213B88
+
+game/msw/CStgGmk_WaveCluster.cpp:
+	.text       start:0x80213BF0 end:0x80215280
+
+game/msw/CStage02Base.cpp:
+	.text       start:0x80215608 end:0x80215FD0
+
+game/msw/CStage02Base/CSplashEff.cpp:
+	.text       start:0x80216080 end:0x80216460
+
+game/msw/CStage01Base.cpp:
+	.text       start:0x80217A9C end:0x80217AF0
+
+game/msw/CStgGmk_Pylon_Mdl.cpp:
+	.text       start:0x80217F10 end:0x80218098
+
+game/msw/CStgGmk_Pylon_Act.cpp:
+	.text       start:0x80218248 end:0x8021B670
+
+game/msw/CStgGmk_Pylon.cpp:
+	.text       start:0x8021B70C end:0x8021BB68
+
+game/msw/CStgGmk_PylonCluster.cpp:
+	.text       start:0x8021BB6C end:0x8021C3CC
+
+game/msw/menu/CStateSave.cpp:
+	.text       start:0x8021C96C end:0x8021C9CC
+
+game/msw/EvDemoVs.cpp:
+	.text       start:0x8021FEDC end:0x802201D0
+
+game/msw/CEvDemoMdlObj.cpp:
+	.text       start:0x80221708 end:0x80221974
+
+game/msw/CStgGmk_Trolley_Mdl.cpp:
+	.text       start:0x802219F0 end:0x8022218C
+
+game/msw/CStgGmk_Trolley_Act.cpp:
+	.text       start:0x80222630 end:0x80225F18
+
+game/msw/CStgGmk_Trolley.cpp:
+	.text       start:0x80225FB4 end:0x802263B0
+
+game/msw/CStage17Base.cpp:
+	.text       start:0x80226894 end:0x80228618
+
+game/msw/CStage17Base/CTurnTable.cpp:
+	.text       start:0x80228674 end:0x8022870C
+
+game/msw/menu/CDispTaskLink.cpp:
+	.text       start:0x802294CC end:0x8022953C
+
+game/msw/menu/CDispTaskList.cpp:
+	.text       start:0x80229584 end:0x80229930
+
+game/msw/CStgGmkClusterImpl.cpp:
+	.text       start:0x8022AA68 end:0x8022AE60
+
+game/msw/CChrObstacle.cpp:
+	.text       start:0x8022C900 end:0x8022C9C8
+
+game/msw/CMenuOption.cpp:
+	.text       start:0x80230A28 end:0x802319E0
+
+game/msw/menu/CMovieScnObj.cpp:
+	.text       start:0x80236454 end:0x802366C8
+
+game/msw/CNpcString.cpp:
+	.text       start:0x802380A4 end:0x80239480
+
+game/msw/CCockpitResultPartyTeam.cpp:
+	.text       start:0x8023BC3C end:0x8023C2B8
+
+game/msw/CCockpitResultPartyVS.cpp:
+	.text       start:0x8023CD30 end:0x8023D6C4
+
+game/msw/CStage16Base.cpp:
+	.text       start:0x8023D970 end:0x8023EB38
+
+game/msw/CoinRes.cpp:
+	.text       start:0x80249E30 end:0x80249FE4
+
+game/msw/CUnlockFlags.cpp:
+	.text       start:0x8024A008 end:0x8024D3C0
+
+game/msw/Unlock.cpp:
+	.text       start:0x80250028 end:0x80250FE0
+
+game/msw/CGameExDemoBase.cpp:
+	.text       start:0x80254F88 end:0x80255190
+
+game/msw/CNpcBombCannon.cpp:
+	.text       start:0x8025599C end:0x80256614
+
+game/msw/CNameMesg.cpp:
+	.text       start:0x802567D8 end:0x80258548
+
+game/msw/CCockpitChrIcon2D.cpp:
+	.text       start:0x80258E04 end:0x80259130
+
+game/msw/CCockpitPauseLayoutBase.cpp:
+	.text       start:0x8025C344 end:0x8025C3F4
+
+game/msw/CCockpitPauseRuleInfo.cpp:
+	.text       start:0x8025F47C end:0x8025FB4C
+
+game/msw/CGamePadCheck.cpp:
+	.text       start:0x8025FBCC end:0x802616DC
+
+game/msw/CCokcpitMenuDataList.cpp:
+	.text       start:0x802619A4 end:0x80261C48
+
+game/msw/CStage04Base.cpp:
+	.text       start:0x80261D14 end:0x80262098
+
+game/msw/CStageRotBase.cpp:
+	.text       start:0x80262D10 end:0x80263688
+
+game/msw/CStage06Base.cpp:
+	.text       start:0x8026368C end:0x802646BC
+
+game/msw/CCockpitResultTime.cpp:
+	.text       start:0x80265CBC end:0x80265CF0
+
+game/msw/CGameGuideMan.cpp:
+	.text       start:0x80269E04 end:0x8026A8F4
+
+game/msw/CDataWork.cpp:
+	.text       start:0x8026F110 end:0x8026F114
+
 Runtime.PPCEABI.H/global_destructor_chain.c:
 	.text       start:0x8029D314 end:0x8029D374
 	.sbss       start:0x805C1368 end:0x805C1370

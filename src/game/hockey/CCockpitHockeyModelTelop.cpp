@@ -1,5 +1,4 @@
-// Written from src/game/dodge/CCockpitDodgeModelTelop.cpp by tools/decomp/port_unit.py (Dodge -> Hockey); check against HockeyF.
-// msw::CCockpitHockeyModelTelop: the dodgeball telops drawn as effects.
+// msw::CCockpitHockeyModelTelop: the hockey telops drawn as effects.
 #include "game/msw/CCockpitHockeyModelTelop.hpp"
 #include "game/msw/CGameSnd.hpp"
 
@@ -10,10 +9,12 @@ namespace {
         long nSe;       // sound played with it, -1 for none
     };
 
-    const TelopData s_TelopData[3] = {
-        { 0x684, -1 },
-        { 0x685, -1 },
-        { 0x686, -1 },
+    const TelopData s_TelopData[5] = {
+        { 0x711, 0xC00 },
+        { 0x70E, -1 },
+        { 0x70F, -1 },
+        { 0x710, -1 },
+        { 0x712, -1 },
     };
 }
 
@@ -26,7 +27,7 @@ msw::CCockpitHockeyModelTelop::~CCockpitHockeyModelTelop() {}
 
 int msw::CCockpitHockeyModelTelop::Set()
 {
-    if (m_nType >= 0 && m_nType < 3) {
+    if (m_nType >= 0 && m_nType < 5) {
         const TelopData &rData = s_TelopData[m_nType];
 
         SetEffect(0, rData.nEffectId);

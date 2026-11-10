@@ -27,7 +27,9 @@ namespace msw {
                 unsigned char m_Unk00[4];
                 unsigned char m_nGameMode; // 0x04, the GAME_MODE of the running game
                 unsigned char m_nGameType; // 0x05, 2 selects the sport's party game
-                unsigned char m_Unk06[0x632];
+                unsigned char m_Unk06[0xA];
+                long m_nGameLevel;         // 0x10, 0-3 (EASY, NORMAL, HARD, EXPERT; names guessed)
+                unsigned char m_Unk14[0x624];
             };
 
             CGame(bcs::CTask *pParent, GAME_MODE mode);
@@ -35,6 +37,9 @@ namespace msw {
             virtual void Main();
 
             static void SetDefaultParam();
+            // (meaning guessed) The task new objects of the running game are
+            // created under (BossF's bomb explosions).
+            static bcs::CTask *GetTempParent();
 
             // The three below are static in the DOL: their bodies index
             // g_GameWork with the argument. (return types guessed)
@@ -51,6 +56,9 @@ namespace msw {
             // CTmGameHandler::_SetBattleWin takes it and _IsBattleWin tests
             // for 1.
             static long GetTeamResult(long nTeam);
+            // The difficulty of the game (see GameWork::m_nGameLevel).
+            // Inline; the parameter files emit it.
+            static long GetGameLevel() { return g_GameWork.m_nGameLevel; }
 
             static GameWork g_GameWork;
             static CGame *m_pInstance;

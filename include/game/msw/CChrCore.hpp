@@ -114,6 +114,10 @@ namespace msw {
             // bytes directly, as signed values.
             long GetPlayerNo() const { return m_nPlayerNo; }
             long GetTeamNo() const { return m_nTeamNo; }
+            // Not zero for the star player of a team (names guessed). The
+            // parameter files of the sports modules call it, so it is inline
+            // and emitted there.
+            int IsStarPlayer() const { return m_bStarPlayer; }
 
         protected:
             unsigned long m_Unk60;
@@ -121,7 +125,9 @@ namespace msw {
             long m_nDriver;              // 0x6C, index of the driver in use, negative for none
             unsigned char m_Unk70[0x78];
             unsigned long m_nStatusFlag; // 0xE8, meaning of the bits not known
-            unsigned char m_UnkEC[0x88];
+            unsigned char m_UnkEC[0xC];
+            int m_bStarPlayer;           // 0xF8, see IsStarPlayer
+            unsigned char m_UnkFC[0x78];
             unsigned char m_nChrId;      // 0x174, a character number (meaning guessed)
             unsigned char m_Unk175;
             // (names guessed) What CRadarIcon2D<Game>::CreateCharaIcon passes

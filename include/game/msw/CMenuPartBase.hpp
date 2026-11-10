@@ -31,12 +31,20 @@ namespace msw {
             unsigned char m_nAnim[12];          // 0x26
             long m_nSeCode[3];                  // 0x34
             // 0x40: sixteen flag bits; the constructor leaves only 0x0002 set.
-            unsigned short m_Unk40_FFC0 : 10;
-            unsigned short m_bUnk40_0020 : 1;
-            unsigned short m_Unk40_0018 : 2;
-            unsigned short m_bUnk40_0004 : 1;
-            unsigned short m_bUnk40_0002 : 1;
-            unsigned short m_bUnk40_0001 : 1;
+            // m_nFlags40 is the same word whole: CButtonEntry::SetUpButton
+            // sets 0x0004 with a ternary on it, which the bit-fields do not
+            // compile to.
+            union {
+                struct {
+                    unsigned short m_Unk40_FFC0 : 10;
+                    unsigned short m_bUnk40_0020 : 1;
+                    unsigned short m_Unk40_0018 : 2;
+                    unsigned short m_bUnk40_0004 : 1;
+                    unsigned short m_bUnk40_0002 : 1;
+                    unsigned short m_bUnk40_0001 : 1;
+                };
+                unsigned short m_nFlags40;
+            };
             // 0x42: the constructor clears the low four bits.
             unsigned char m_Unk42_F0 : 4;
             unsigned char m_Unk42_0F : 4;

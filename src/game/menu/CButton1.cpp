@@ -121,7 +121,8 @@ void msw::SelectMenu::CButton1::Main()
                 // numbered before `reset` but stored after it. This
                 // compiler stores local statics in the order they are
                 // declared, so the order here gives the original bytes and
-                // swaps the two symbol names (see notes/toolchain.md).
+                // swaps the two symbol names: static-order swap (see
+                // notes/decisions.md).
                 static const int reset = 1;
                 static const int recursive = 0;
                 m_pPaneAccessor->PlayAnimation(PANE_TW, ANIM_TEXWIN_3, 1.0f, 0.0f, recursive, reset);

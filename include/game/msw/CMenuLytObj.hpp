@@ -6,17 +6,30 @@
 namespace msw {
 
     // Size 0xC + 4 * N. Owns up to N layout objects of type T registered
-    // with CLytCtrl, by handle. Member and function names are guesses; the
-    // destructor body is not written yet (it does what DeleteLytObj does).
+    // with CLytCtrl, by handle. Member and function names are guesses.
+    // The constructor and destructor are inline (read from
+    // CSelectMenuLayoutBase's; MenuF emits the destructor weak).
     template <class T, int N>
     class CMenuLytObj {
         public:
+            CMenuLytObj()
+                : m_nMax(N)
+                , m_nNum(0)
+            {
+                for (int i = 0; i < N; i++) {
+                    m_nHandle[i] = 0;
+                }
+            }
+
             unsigned long m_nHandle[N]; // 0x00, CLytCtrl object handles
-            long m_nMax;                // set to N by the owner's constructor
+            long m_nMax;                // N
             long m_nNum;                // handles in use (CSelectMenuLayoutBase::CreateLytObj appends)
 
             // vptr after the data
-            virtual ~CMenuLytObj();
+            virtual ~CMenuLytObj()
+            {
+                DeleteLytObj();
+            }
 
             // The object behind handle nIndex, or null. Inline in the game.
             T *GetLytObj(int nIndex = 0)

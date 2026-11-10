@@ -10,8 +10,8 @@ namespace bcs {
     class CAnmObj;
 
     // A model in the scene. A DOL class, size 0x1C8 (the constructor writes
-    // 0x1C4; bcs::CMultViewAlphaMdlObj's members start at 0x1C8). Only what
-    // the modules use so far is declared.
+    // 0x1C4; msw::SelectMenu::CCourtBallMdlObj's and bcs::CMultViewAlphaMdlObj's
+    // members start at 0x1C8). Only what the modules use so far is declared.
     class CMdlObj : public CScnObj {
         public:
             // Selects one of the five animation slots. The values are the
@@ -27,9 +27,62 @@ namespace bcs {
 
             CMdlObj();
             virtual ~CMdlObj();
-            virtual void UpdateFrame(float);           // 0x10C
-            virtual void SetLightSelector(long);       // 0x110 (return type guessed)
-            virtual void ResetLightSelector();         // 0x114 (return type guessed)
+            // The overrides, named by the vtable of
+            // msw::SelectMenu::CCourtBallMdlObj in MenuF. Return types guessed.
+            virtual long GetObjType() const;                                                // 0x0C
+            virtual void ObjProc(unsigned long, unsigned long, void *);                     // 0x1C
+            virtual void CalcBoundingVolume();                                              // 0x2C
+            virtual void GetNodeLocalMtx(unsigned long, FMTX34 &) const;                    // 0x34
+            virtual const FMTX34 *GetNodeLocalMtxPtr(unsigned long) const;                  // 0x38
+            virtual void GetNodeWorldMtx(unsigned long, FMTX34 &) const;                    // 0x3C
+            virtual const FMTX34 *GetNodeWorldMtxPtr(unsigned long) const;                  // 0x40
+            virtual void SetNodeLocalMtx(unsigned long, const FMTX34 &);                    // 0x44
+            virtual void SetNodeWorldMtx(unsigned long, const FMTX34 &);                    // 0x48
+            virtual void SetAlphaMode(AlphaMode);                                           // 0x54
+            virtual void SetExBlendMode(int);                                               // 0x64
+            virtual void ExEffectDraw(int, unsigned long, void *);                          // 0x6C
+            virtual void DrawJointObjOpa(void *);                                           // 0x70
+            virtual void DrawJointObjXluExOpa(void *);                                      // 0x74
+            virtual void DrawJointObjXluExXlu(void *);                                      // 0x78
+            virtual void SetMatTevColor(_GXTevRegID, BCS_Color);                            // 0x7C
+            virtual void SetMatTevColor(const char *, _GXTevRegID, BCS_Color);              // 0x80
+            virtual void SetMatTevColorRGB(_GXTevRegID, BCS_Color);                         // 0x84
+            virtual void SetMatTevColorRGB(const char *, _GXTevRegID, BCS_Color);           // 0x88
+            virtual void SetMatTevColorA(_GXTevRegID, unsigned char);                       // 0x8C
+            virtual void SetMatTevColorA(const char *, _GXTevRegID, unsigned char);         // 0x90
+            virtual void RestoreMatTevColor(_GXTevRegID);                                   // 0x94
+            virtual void RestoreMatTevColor(const char *, _GXTevRegID);                     // 0x98
+            virtual void SetMatTevKColor(_GXTevKColorID, BCS_Color);                        // 0x9C
+            virtual void SetMatTevKColor(const char *, _GXTevKColorID, BCS_Color);          // 0xA0
+            virtual void SetMatTevKColorRGB(_GXTevKColorID, BCS_Color);                     // 0xA4
+            virtual void SetMatTevKColorRGB(const char *, _GXTevKColorID, BCS_Color);       // 0xA8
+            virtual void SetMatTevKColorA(_GXTevKColorID, unsigned char);                   // 0xAC
+            virtual void SetMatTevKColorA(const char *, _GXTevKColorID, unsigned char);     // 0xB0
+            virtual void RestoreMatTevKColor(_GXTevKColorID);                               // 0xB4
+            virtual void RestoreMatTevKColor(const char *, _GXTevKColorID);                 // 0xB8
+            virtual void SetMatPixDstAlpha(unsigned char, unsigned char);                   // 0xBC
+            virtual void SetMatPixDstAlpha(const char *, unsigned char, unsigned char);     // 0xC0
+            virtual void SetMatFogIdx(long);                                                // 0xC4
+            virtual void SetMatFogIdx(const char *, long);                                  // 0xC8
+            virtual void SetMatChanMatColor(_GXChannelID, BCS_Color);                       // 0xCC
+            virtual void SetMatChanMatColor(const char *, _GXChannelID, BCS_Color);         // 0xD0
+            virtual void SetMatChanMatColorRGB(_GXChannelID, BCS_Color);                    // 0xD4
+            virtual void SetMatChanMatColorRGB(const char *, _GXChannelID, BCS_Color);      // 0xD8
+            virtual void SetMatChanMatColorA(_GXChannelID, unsigned char);                  // 0xDC
+            virtual void SetMatChanMatColorA(const char *, _GXChannelID, unsigned char);    // 0xE0
+            virtual void RestoreMatChanMatColor(_GXChannelID);                              // 0xE4
+            virtual void RestoreMatChanMatColor(const char *, _GXChannelID);                // 0xE8
+            virtual void SetMatChanAmbColor(_GXChannelID, BCS_Color);                       // 0xEC
+            virtual void SetMatChanAmbColor(const char *, _GXChannelID, BCS_Color);         // 0xF0
+            virtual void SetMatChanAmbColorRGB(_GXChannelID, BCS_Color);                    // 0xF4
+            virtual void SetMatChanAmbColorRGB(const char *, _GXChannelID, BCS_Color);      // 0xF8
+            virtual void SetMatChanAmbColorA(_GXChannelID, unsigned char);                  // 0xFC
+            virtual void SetMatChanAmbColorA(const char *, _GXChannelID, unsigned char);    // 0x100
+            virtual void RestoreMatChanAmbColor(_GXChannelID);                              // 0x104
+            virtual void RestoreMatChanAmbColor(const char *, _GXChannelID);                // 0x108
+            virtual void UpdateFrame(float);                                                // 0x10C
+            virtual void SetLightSelector(long);                                            // 0x110
+            virtual void ResetLightSelector();                                              // 0x114
 
             // Builds the model from mdl. (meaning of the last two arguments
             // not known; msw::CTournamentChip passes 0 and 1)

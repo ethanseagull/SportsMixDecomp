@@ -4,4 +4,14 @@
 # adding a line (port_unit.py and autopilot.py do it themselves).
 Equivalent game/hockey/CEffectCtrlHockey.cpp
 Matching game/hockey/module.cpp
-NonMatching game/hockey/CItemBallHockey.cpp
+Matching game/hockey/CItemBallHockey.cpp
+Equivalent game/hockey/TournamentHockey.cpp
+Matching game/hockey/CCockpitHockeyLayoutBase.cpp
+Matching game/hockey/CBallManHockey.cpp
+Matching game/hockey/CCameraHockey.cpp
+Matching game/hockey/CItemManHockey.cpp
+Matching game/hockey/CEventDemoHockey.cpp
+Matching game/hockey/CStgGmk_WaterWorks_Hockey.cpp
+Matching game/hockey/CItemHockeyBomb.cpp
+Matching game/hockey/CItemHockeyToadstool.cpp
+Matching game/hockey/CItemHockeyRShell.cpp

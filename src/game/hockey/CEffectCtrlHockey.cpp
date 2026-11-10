@@ -37,10 +37,9 @@ int msw::CEffectCtrlHockey::InitPatch(long, bcs::EF::CEffect *)
     return 0;
 }
 
-// The last parameter is not passed on: the base gets 3 and four zeros instead
-// (only three of the zeros are visible as stores; see the asm).
-void msw::CEffectCtrlHockey::CreateAttachEffect(long id, const bcs::CScnObj *pObj, const bcs::FVEC3 *pPos,
-                                                unsigned long flags, int a, int b, unsigned long)
+// Passes everything on, then 3 and three zeros.
+unsigned long msw::CEffectCtrlHockey::CreateAttachEffect(long id, const bcs::CScnObj *pObj, const bcs::FVEC3 *pPos,
+                                                         unsigned long flags, int a, int b, unsigned long c)
 {
-    CEffectCtrl::CreateAttachEffect(id, pObj, pPos, flags, a, b, 3, 0, 0, 0, 0);
+    return CEffectCtrl::CreateAttachEffect(id, pObj, pPos, flags, a, b, c, 3, 0, 0, 0);
 }

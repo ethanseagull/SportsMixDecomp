@@ -11,9 +11,9 @@ namespace bcs {
     struct FMTX34;
 
     // An object in the 3D scene. Size 0x118 (the members of bcs::CMdlObj
-    // start there). A DOL class. Only the virtual functions up to slot 0x3C
-    // are declared, in the order of the vtable of bcs::CMdlObj. Return types
-    // are read from the DOL bodies unless marked.
+    // start there). A DOL class. The virtual functions are declared in the
+    // order of the vtable of bcs::CMdlObj. Return types are read from the DOL
+    // bodies unless marked.
     class CScnObj : public CG3dObj {
         public:
             // (enumerator names guessed) ForEach returns whether the
@@ -56,31 +56,33 @@ namespace bcs {
             virtual void GetNodeLocalMtx(unsigned long, FMTX34 &) const;   // 0x34 (return type guessed)
             virtual const FMTX34 *GetNodeLocalMtxPtr(unsigned long) const; // 0x38 (const result guessed)
             virtual void GetNodeWorldMtx(unsigned long, FMTX34 &) const;   // 0x3C (return type guessed)
-            // 0x40 to 0x90 are read from the vtables of bcs::CScnObj and
-            // bcs::CMdlObj in the DOL; the unnamed ones are one-line bodies
-            // there (names guessed from their neighbours). Return types of
-            // the setters are guessed.
-            virtual const FMTX34 *GetNodeWorldMtxPtr(unsigned long) const; // 0x40 (const result guessed)
-            virtual void SetNodeLocalMtx(unsigned long, const FMTX34 &);   // 0x44
-            virtual void SetNodeWorldMtx(unsigned long, const FMTX34 &);   // 0x48
-            virtual void SetAlphaRate(unsigned char);                      // 0x4C
-            virtual void SetAlphaRateF(float);                             // 0x50
-            virtual void SetAlphaMode(AlphaMode);                          // 0x54
-            virtual unsigned char GetAlphaRate() const;                    // 0x58 (name guessed) the byte at 0x102
-            virtual float GetAlphaRateF() const;                           // 0x5C
-            virtual unsigned char GetAlphaMode() const;                    // 0x60 (name guessed) the byte at 0x103
-            virtual void SetExBlendMode(int);                              // 0x64
-            virtual int GetExBlendMode() const;                            // 0x68 (name guessed) returns 0 here
-            virtual void ExEffectDraw(int, unsigned long, void *);         // 0x6C
-            virtual void DrawJointObjOpa(void *);                          // 0x70
-            virtual void DrawJointObjXluExOpa(void *);                     // 0x74
-            virtual void DrawJointObjXluExXlu(void *);                     // 0x78
-            virtual void SetMatTevColor(_GXTevRegID, BCS_Color);           // 0x7C
-            virtual void SetMatTevColor(const char *, _GXTevRegID, BCS_Color); // 0x80
-            virtual void SetMatTevColorRGB(_GXTevRegID, BCS_Color);        // 0x84
-            virtual void SetMatTevColorRGB(const char *, _GXTevRegID, BCS_Color); // 0x88
-            virtual void SetMatTevColorA(_GXTevRegID, unsigned char);      // 0x8C
-            virtual void SetMatTevColorA(const char *, _GXTevRegID, unsigned char); // 0x90
+            // 0x10 and 0x40 to 0x10C: names from the vtables of bcs::CScnObj
+            // in the DOL and of msw::SelectMenu::CCourtBallMdlObj in MenuF
+            // (which names bcs::CMdlObj's overrides). The ones from 0x54 on
+            // without a DOL name are one-line bodies there; the material
+            // setters are empty in bcs::CScnObj. Return types guessed.
+            virtual int IsScnObj() const;                                                   // 0x10
+            virtual const FMTX34 *GetNodeWorldMtxPtr(unsigned long) const;                  // 0x40
+            virtual void SetNodeLocalMtx(unsigned long, const FMTX34 &);                    // 0x44
+            virtual void SetNodeWorldMtx(unsigned long, const FMTX34 &);                    // 0x48
+            virtual void SetAlphaRate(unsigned char);                                       // 0x4C
+            virtual void SetAlphaRateF(float);                                              // 0x50
+            virtual void SetAlphaMode(AlphaMode);                                           // 0x54
+            virtual unsigned char GetAlphaRate() const;                                     // 0x58
+            virtual float GetAlphaRateF() const;                                            // 0x5C
+            virtual AlphaMode GetAlphaMode() const;                                         // 0x60
+            virtual void SetExBlendMode(int);                                               // 0x64
+            virtual long GetEffectRootNodeIdx() const;                                      // 0x68
+            virtual void ExEffectDraw(int, unsigned long, void *);                          // 0x6C
+            virtual void DrawJointObjOpa(void *);                                           // 0x70
+            virtual void DrawJointObjXluExOpa(void *);                                      // 0x74
+            virtual void DrawJointObjXluExXlu(void *);                                      // 0x78
+            virtual void SetMatTevColor(_GXTevRegID, BCS_Color);                            // 0x7C
+            virtual void SetMatTevColor(const char *, _GXTevRegID, BCS_Color);              // 0x80
+            virtual void SetMatTevColorRGB(_GXTevRegID, BCS_Color);                         // 0x84
+            virtual void SetMatTevColorRGB(const char *, _GXTevRegID, BCS_Color);           // 0x88
+            virtual void SetMatTevColorA(_GXTevRegID, unsigned char);                       // 0x8C
+            virtual void SetMatTevColorA(const char *, _GXTevRegID, unsigned char);         // 0x90
             // 0x94 to 0x10C: names and parameters from the slots of the
             // vtable of msw::CFgMdl in the DOL (bcs::CMdlObj's functions;
             // UpdateFrame is null in bcs::CScnObj's vtable). Return types
@@ -115,7 +117,10 @@ namespace bcs {
             virtual void SetMatChanAmbColorA(const char *, _GXChannelID, unsigned char);    // 0x100
             virtual void RestoreMatChanAmbColor(_GXChannelID);                              // 0x104
             virtual void RestoreMatChanAmbColor(const char *, _GXChannelID);                // 0x108
-            virtual void UpdateFrame(float) = 0;                                            // 0x10C
+            virtual void UpdateFrame(float) = 0;                                            // 0x10C, null in the DOL vtable
+
+            // The object registered under a handle, or null.
+            static CScnObj *GetScnObj(unsigned long handle);
 
             // Queues the object to be deleted later.
             static void AppendDelayDeleteObject(CScnObj *pObj);
@@ -134,6 +139,20 @@ namespace bcs {
             // (names guessed) Inline in the modules.
             void OnFlag(unsigned long flag) { m_nFlag |= flag; }
             void OffFlag(unsigned long flag) { m_nFlag &= ~flag; }
+            // (name guessed) Inline in the modules: msw::CChrMarkerDodgeArrow
+            // stores a yaw in radians to 0xB4, brought into [0, 2 pi] after
+            // the model pointer is loaded, so the wrapping is taken to be
+            // part of the setter.
+            void SetRotY(float fRotY)
+            {
+                while (fRotY > 6.2831855f) {
+                    fRotY -= 6.2831855f;
+                }
+                while (fRotY < 0.0f) {
+                    fRotY += 6.2831855f;
+                }
+                m_fRotY = fRotY;
+            }
 
         private:
             unsigned char m_Unk08[0x90];  // 0x08

@@ -25,9 +25,11 @@ namespace msw {
             // Returns the instance, creating it if there is none yet.
             static CEffectCtrl *CreateInstance(bcs::CTask *pParent);
 
-            // Attaches an effect with the base's fixed extra arguments.
-            void CreateAttachEffect(long id, const bcs::CScnObj *pObj, const bcs::FVEC3 *pPos, unsigned long flags,
-                                    int a, int b, unsigned long c);
+            // Attaches an effect with the base's fixed extra arguments. Static,
+            // like CEffectCtrl::CreateAttachEffect: the body passes r3 to r9 on
+            // unchanged.
+            static unsigned long CreateAttachEffect(long id, const bcs::CScnObj *pObj, const bcs::FVEC3 *pPos,
+                                                    unsigned long flags, int a, int b, unsigned long c);
 
         private:
             unsigned long m_Unk4C; // 0x4C

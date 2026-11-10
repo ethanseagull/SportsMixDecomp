@@ -57,6 +57,10 @@ namespace msw {
             static long RemoveObj(long nObjId);               // -1 without a task
             static long IsEndObj(long nObjId);                // 1 without a task
             static void SetAnimEndClose(long nObjId, int bClose); // return type guessed
+            // The word at 0x4C + 4 * nFile of the task (nFile 0 to 7); null
+            // without a task or for another nFile.
+            static const char *GetResourceFileName(long nFile);
+            static void PlayEndAnim(long nObjId);                 // return type guessed
             // CMenuTask::SendObjEventTrigger on the task; -1 without a task.
             static long SendObjEventTrigger(long nObjId, long nEvent, void *pParam);
 
@@ -71,7 +75,14 @@ namespace msw {
             // unknown nObjId.
             CMenuLinkBase *CreateObjCommonImpl(long nObjId, long nParam);
 
+        protected:
+            // 0x44: CMenuTask ends here (0x44 bytes). msw::CCockpitTournament's
+            // constructor clears this word.
+            unsigned long m_Unk44;
+
         private:
+            unsigned char m_Unk48[4]; // 0x48
+
             // Not mapped. From the constructor in the DOL: 0x4C holds the
             // eight archive paths (CLoadData::GetFilePath), 0x6C a short,
             // 0x1CC and 0x1D0 words. The size is where

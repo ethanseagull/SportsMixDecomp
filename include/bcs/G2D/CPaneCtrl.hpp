@@ -39,6 +39,13 @@ namespace bcs {
                 // or null. Argument names are guesses.
                 nw4r::lyt::Pane *FindPaneByName(const char *pName, int bRecursive, nw4r::lyt::Pane *pRoot);
 
+                // Added for MenuF game/menu/CSelectMenuLayoutBase.cpp.
+                void SetVisible(int bVisible);
+
+                // Added for MenuF game/menu/CButton2.cpp. The argument name
+                // and the return type are guesses.
+                void SetPaneZSort(int bZSort);
+
             private:
                 // Brings the size to the 0x54 that `new` is asked for. The
                 // constructor sets up a nw4r::ut::List here.

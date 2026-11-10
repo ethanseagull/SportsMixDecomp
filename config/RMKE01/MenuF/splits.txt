@@ -90,18 +90,13 @@ game/menu/CPlayerInfo.cpp:
 
 game/menu/CCockpitMenu.cpp:
 	.text       start:0x0001B9DC end:0x0001C138
-	.data       start:0x000022E0 end:0x00002450
-
-game/menu/CCameraAnimMenu.cpp:
-	.text       start:0x0001C138 end:0x0001C190
+	.data       start:0x000022E0 end:0x00002410
 
 game/menu/CCameraMenuBG.cpp:
-	.text       start:0x0001C190 end:0x0001C938
-	.rodata     start:0x00004C58 end:0x00004C60
-
-game/menu/unit_1C938.cpp:
-	.text       start:0x0001C938 end:0x0001C9A8
+	.text       start:0x0001C138 end:0x0001C9A8
 	.ctors      start:0x00000008 end:0x0000000C
+	.rodata     start:0x00004C58 end:0x00004C60
+	.data       start:0x00002410 end:0x00002450
 	.bss        start:0x00001338 end:0x00001370
 
 game/menu/CTopMenuChrObj.cpp:
@@ -282,17 +277,15 @@ game/menu/CSaveSelect.cpp:
 	.rodata     start:0x0000B6D0 end:0x0000C798
 	.data       start:0x00007410 end:0x000075F8
 
-game/menu/CCourtTableSetObj.cpp:
-	.text       start:0x0005B400 end:0x0005B494
-
 game/menu/CCourtCharaObj.cpp:
-	.text       start:0x0005B494 end:0x0005C48C
+	.text       start:0x0005B400 end:0x0005C48C
 	.rodata     start:0x0000C798 end:0x0000C7B8
+	.data       start:0x000075F8 end:0x00007730
 
 game/menu/CTitle.cpp:
 	.text       start:0x0005C48C end:0x0005DBE0
 	.rodata     start:0x0000C7B8 end:0x0000C9D8
-	.data       start:0x000075F8 end:0x000078D8
+	.data       start:0x00007730 end:0x000078D8
 
 game/menu/CWiFiFrindVS.cpp:
 	.text       start:0x0005DBE0 end:0x0005EDA0

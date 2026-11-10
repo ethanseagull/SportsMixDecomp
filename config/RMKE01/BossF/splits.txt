@@ -14,7 +14,7 @@ game/boss/CGameBoss.cpp:
 	.ctors      start:0x00000000 end:0x00000004
 	.rodata     start:0x00000000 end:0x000001C8
 	.data       start:0x00000000 end:0x000005B0
-	.bss        start:0x00000000 end:0x00000280
+	.bss        start:0x00000000 end:0x00000048
 
 game/boss/CBallManBoss.cpp:
 	.text       start:0x000063D0 end:0x0000684C
@@ -40,27 +40,10 @@ game/boss/CBallTargetMarkerBoss.cpp:
 	.data       start:0x00000FD8 end:0x00001258
 
 game/boss/CC_PARAM_BOSS.cpp:
-	.text       start:0x00010418 end:0x00018CDC
-	.rodata     start:0x000003E8 end:0x00000588
-
-game/boss/CC_PARAM_BOSS_Mii01_NORMAL_STAR.cpp:
-	.text       start:0x00018CDC end:0x00018D0C
-
-game/boss/CC_PARAM_BOSS_Mii01_NORMAL.cpp:
-	.text       start:0x00018D0C end:0x00018D3C
-
-game/boss/CC_PARAM_BOSS_Mii01_HARD_STAR.cpp:
-	.text       start:0x00018D3C end:0x00018D6C
-
-game/boss/CC_PARAM_BOSS_Mii01_HARD.cpp:
-	.text       start:0x00018D6C end:0x00018D9C
-
-game/boss/CC_PARAM_BOSS_Mii01_EXPERT_STAR.cpp:
-	.text       start:0x00018D9C end:0x00018DCC
-
-game/boss/CC_PARAM_BOSS_Mii01_EXPERT.cpp:
-	.text       start:0x00018DCC end:0x00018E08
+	.text       start:0x00010418 end:0x00018E08
 	.ctors      start:0x00000004 end:0x00000008
+	.rodata     start:0x000003E8 end:0x00000588
+	.bss        start:0x00000048 end:0x00000280
 
 game/boss/CChrCoreBoss.cpp:
 	.text       start:0x00018E08 end:0x0001EA14
@@ -130,12 +113,9 @@ game/boss/CCollManBoss.cpp:
 	.data       start:0x00013438 end:0x000134A0
 
 game/boss/CItemManBoss.cpp:
-	.text       start:0x00038D38 end:0x00038F54
-	.data       start:0x000134A0 end:0x00013CE0
-
-game/boss/CItemBossRShell.cpp:
-	.text       start:0x00038F54 end:0x00039AB0
+	.text       start:0x00038D38 end:0x00039AB0
 	.rodata     start:0x00000BD8 end:0x00000C50
+	.data       start:0x000134A0 end:0x00013CE0
 
 game/boss/CEffectCoinScore.cpp:
 	.text       start:0x00039AB0 end:0x0003A818
@@ -194,12 +174,12 @@ game/boss/TournamentBoss.cpp:
 
 game/boss/CCameraBoss.cpp:
 	.text       start:0x000432E4 end:0x00044AD0
-	.rodata     start:0x00002BF0 end:0x00002CC0
+	.rodata     start:0x00002BF0 end:0x00002C88
 	.data       start:0x00014D98 end:0x00014DE0
 
 game/boss/CCockpitBossPause.cpp:
 	.text       start:0x00044AD0 end:0x00044FA4
-	.rodata     start:0x00002CC0 end:0x00002CC8
+	.rodata     start:0x00002C88 end:0x00002CC8
 	.data       start:0x00014DE0 end:0x00014EC8
 
 game/boss/CNpcBehemothFiga.cpp:

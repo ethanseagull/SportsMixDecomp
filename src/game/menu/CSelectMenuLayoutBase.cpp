@@ -115,7 +115,7 @@ void msw::CSelectMenuLayoutBase::ClearPushButtonId()
     }
 }
 
-unsigned short msw::CSelectMenuLayoutBase::GetCurrentButtonKindId(long nPad)
+long msw::CSelectMenuLayoutBase::GetCurrentButtonKindId(long nPad)
 {
     CSelectMenu *pMenu = GetSelectMenu();
     if (pMenu == 0) {

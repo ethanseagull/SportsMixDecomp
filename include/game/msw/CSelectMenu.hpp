@@ -3,9 +3,15 @@
 
 #include "game/msw/CMenuTask.hpp"
 #include "game/msw/CSave.hpp"
+#include "revolution/rfl.h"
 
 namespace msw {
     class CSelectMenuLayoutBase;
+
+    namespace dwc {
+        class CGameDwc;
+        class CFriend;
+    }
 
     // The task behind the SelectMenu screens (MenuF). Its constructor calls
     // CMenuTask's. Only the members used so far; the two name getters are
@@ -67,6 +73,69 @@ namespace msw {
             void ScoreTop_Loop();
             void ScoreTop_Out();
 
+            // Added for MenuF game/menu/CPlayMode.cpp (return types guessed
+            // where the callers drop the result).
+            float GetCameraSpeed(long nAnim);
+            void InitCharaSelectParam();
+            // The steps of the play mode screen (SelectMenu::CPlayMode).
+            void PlayMode_In();
+            void PlayMode_Loop();
+            void PlayMode_Loop0();
+            void PlayMode_ChangeStateInit(long nMode);
+            void PlayMode_Loop1();
+            void PlayMode_Out();
+
+            // Added for MenuF game/menu/CTeam.cpp (return types guessed).
+            void ChangeTeamCharaSelectParam();
+            // The steps of the team screen (SelectMenu::CTeam).
+            void Team_In();
+            void Team_Loop();
+            void Team_Loop0();
+            void Team_ChangeStateInit(long nMode);
+            void Team_Loop1();
+            void Team_Out();
+
+            // Added for MenuF game/menu/CPlayerSelect.cpp. The steps of the
+            // Wi-Fi player selection screen (SelectMenu::CPlayerSelect).
+            void WifiPlayerSelect_In();
+            void WifiPlayerSelect_Loop();
+            void WifiPlayerSelect_Out();
+
+            // Added for MenuF game/menu/CPlayerInfo.cpp. The steps of the
+            // Wi-Fi player information window (SelectMenu::CPlayerInfo).
+            void WifiPlayerInfo_In();
+            void WifiPlayerInfo_Loop();
+            void WifiPlayerInfo_Out();
+
+            // Added for MenuF game/menu/CPartySelect.cpp. The steps of the
+            // party game selection screen (SelectMenu::CPartySelect).
+            void PartySelect_In();
+            void PartySelect_Loop();
+            void PartySelect_Loop0();
+            void PartySelect_ChangeStateInit(long nMode);
+            void PartySelect_Loop1();
+            void PartySelect_Out();
+
+            // Added for MenuF game/menu/CWiFiFrindVS.cpp (return types
+            // guessed). The steps of the friend match screen
+            // (SelectMenu::CWiFiFrindVS), and what they call.
+            void FriendVS_In();
+            void FriendVS_Loop();
+            void FriendVS_Out();
+            void CancelVsFriend();
+            void FriendVSWait_SendSetStep(long nStep);
+
+            // Added for MenuF game/menu/CPlusMinus.cpp (defined there; the
+            // return types and argument names are guesses). Whether pad
+            // nPad uses a cursor (either of two flags of CMenuPadInfo).
+            int _GetUsedCursol(long nPad);
+            // Gives player nPad the Mii of the star mode, or the default
+            // character outside it.
+            void _SetStarMii(long nPad);
+            void Mii_SelectParam(long nPad, unsigned char nUnk, long nIndex, RFLDataSource source,
+                                 RFLCreateID createId);
+            void Chara_SetSelectChara(long nPad, long nChara, long nUnk, int bUnk);
+
             // Data, added for the same unit. The class is 0xAB8 bytes (the
             // size layout.py finds); only two members are named so far.
             // The second polymorphic part mentioned above (a `@68@` thunk)
@@ -98,9 +167,10 @@ namespace msw {
             unsigned char m_Unk9A;           // 0x9A
         public:
             unsigned char m_Unk9B;           // 0x9B
-        private:
-            unsigned char m_Unk9C;           // 0x9C
         public:
+            // 0x9C. (added for game/menu/CPartySelect.cpp) Set to 1, 3, 5
+            // or 7 when one of the four party games is chosen.
+            unsigned char m_Unk9C;
             unsigned char m_Unk9D;           // 0x9D, compared with 4
 
         public:
@@ -127,25 +197,90 @@ namespace msw {
             // saved m_nGameKind: the score book keeps the game kind it was
             // entered with here and puts it back on leaving.
             long m_nSavedGameKind;
-        private:
-            unsigned char m_Unk268[0x13];    // 0x268
+        public:
+            // (names guessed; added for game/menu/CPlayMode.cpp)
+            unsigned char m_nPlayerNum;      // 0x268, 1 to 4
+            unsigned char m_Unk269;          // 0x269
+            unsigned char m_nPlayMode;       // 0x26A, from _GetPlayModeFromButtonId
+            unsigned char m_Unk26B;          // 0x26B
+            unsigned char m_Unk26C;          // 0x26C, cleared when going to mode 0xD
+                                             // (game/menu/CTeam.cpp: the index of
+                                             // m_nPlayMode in its team group)
+            unsigned char m_Unk26D[0xE];     // 0x26D
         public:
             unsigned char m_Unk27B;          // 0x27B
         private:
-            unsigned char m_Unk27C[0x494];   // 0x27C
+            unsigned char m_Unk27C[0x427];   // 0x27C
+        public:
+            // 0x6A3 to 0x6B3. (names guessed; added for
+            // game/menu/CPlusMinus.cpp) The Mii _SetStarMii gives the
+            // other pads, passed to Mii_SelectParam.
+            unsigned char m_nStarMiiUnk;     // 0x6A3
+            long m_nStarMiiIndex;            // 0x6A4
+            RFLDataSource m_StarMiiSource;   // 0x6A8
+            RFLCreateID m_StarMiiCreateId;   // 0x6AC
+        private:
+            unsigned char m_Unk6B4[0x48];    // 0x6B4
+        public:
+            // 0x6FC to 0x707. (names guessed; added for
+            // game/menu/CWiFiFrindVS.cpp) The Wi-Fi connection, the friend
+            // the friend match is with, and a copy of it kept by
+            // FriendVS_In.
+            dwc::CGameDwc *m_pGameDwc;       // 0x6FC
+            dwc::CFriend *m_pVsFriend;       // 0x700
+            dwc::CFriend *m_pVsFriendSaved;  // 0x704
+        private:
+            unsigned char m_Unk708[0x8];     // 0x708
         public:
             CSave::PlayerData *m_pPlayerData; // 0x710, CSave::GetPlayerData(-1)
         private:
-            unsigned char m_Unk714[0x2EC];   // 0x714
+            unsigned char m_Unk714[0x48];    // 0x714
+        public:
+            // 0x75C. (added for game/menu/CWiFiFrindVS.cpp) 0x1EC bytes
+            // FriendVS_Loop clears before the friend match starts.
+            unsigned char m_FriendVSWaitWork[0x1EC];
+        private:
+            unsigned char m_Unk948[0x14];    // 0x948
+        public:
+            // 0x95C. (name guessed; added for game/menu/CTeam.cpp) Frames
+            // left before the team screen takes stick input again.
+            float m_fInputWait;
+        private:
+            unsigned char m_Unk960[0x28];    // 0x960
+        public:
+            // 0x988. (name guessed; added for game/menu/CPlusMinus.cpp)
+            // Non-zero when _SetStarMii gives Miis.
+            long m_bStarMii;
+        private:
+            unsigned char m_Unk98C[0x74];    // 0x98C
         public:
             long m_UnkA00;                   // 0xA00
         private:
-            unsigned char m_UnkA04[0xAB8 - 0xA04]; // 0xA04
+            unsigned char m_UnkA04[0x74];    // 0xA04
+        public:
+            // 0xA78. (added for game/menu/CWiFiFrindVS.cpp) Set by
+            // FriendVS_Loop to whether m_Unk23E is 1 when a friend match
+            // is accepted.
+            long m_UnkA78;
+        private:
+            unsigned char m_UnkA7C[0xAB8 - 0xA7C]; // 0xA7C
     };
 
     // Defined in the same MenuF file as CSelectMenu. The text of message
     // pLabel in message group pGroup. Added for game/menu/CInitGuide.cpp.
     const wchar_t *GetMessageLabelString(const char *pGroup, const char *pLabel);
+    // (added for game/menu/CPlayerSelect.cpp) The text of message nIndex
+    // in message group pGroup.
+    const wchar_t *GetMessageString(const char *pGroup, long nIndex);
+
+    // (added for game/menu/CTeam.cpp) Returns
+    // CSelectMenuLayoutBase::s_DefaultOutAnimOverTime.
+    float _GetModeChangeWaitTime();
+
+    // Defined in another MenuF file (added for game/menu/CPlayMode.cpp; the
+    // argument names are guesses). The play mode of button nBtnKindId of
+    // the play mode screen for nPlayerNum players, or a negative value.
+    long _GetPlayModeFromButtonId(long nBtnKindId, long nPlayerNum);
 }
 
 #endif /* !CSELECTMENU_HPP_ */

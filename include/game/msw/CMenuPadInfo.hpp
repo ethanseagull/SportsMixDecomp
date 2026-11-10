@@ -19,11 +19,25 @@ namespace msw {
             // it to CMenuPartList::CheckButtonAnim).
             const unsigned short *GetPadStates();
 
+            // (name guessed; inline, no symbol; added for
+            // game/menu/CPlusMinus.cpp) Either of the two low flags of pad
+            // nPad's entry.
+            int IsUsedCursor(long nPad) const
+            {
+                return m_aPad[nPad].m_bUnk06_02 | m_aPad[nPad].m_bUnk06_01;
+            }
+
             static CMenuPadInfo s_Instance;
 
         private:
             struct PAD {
-                unsigned char m_Unk00[0x0A]; // 0x00
+                unsigned char m_Unk00[6];    // 0x00
+                // 0x06. (names guessed; added for game/menu/CPlusMinus.cpp)
+                // CSelectMenu::_GetUsedCursol tests the low two bits.
+                unsigned char m_Unk06_FC : 6;
+                unsigned char m_bUnk06_02 : 1;
+                unsigned char m_bUnk06_01 : 1;
+                unsigned char m_Unk07[3];    // 0x07
                 unsigned short m_nState;     // 0x0A (name guessed)
                 unsigned char m_Unk0C[4];    // 0x0C
             };

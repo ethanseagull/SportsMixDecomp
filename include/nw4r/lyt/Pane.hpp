@@ -65,6 +65,8 @@ namespace nw4r {
                 const char *GetName() const { return mName; }
                 // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp.
                 void SetTranslate(const math::VEC3 &rTranslate) { mTranslate = rTranslate; }
+                // Added for MenuF game/menu/CChrCaption.cpp.
+                void SetAlpha(unsigned char nAlpha) { mAlpha = nAlpha; }
                 // Bit 0 of the flags.
                 void SetVisible(bool bVisible)
                 {
@@ -87,7 +89,9 @@ namespace nw4r {
                 Size mSize;                  // 0x4C
                 unsigned char m_Unk54[0x30];
                 math::MTX34 mGlbMtx;         // 0x84
-                unsigned char m_UnkB4[0x7];
+                unsigned char m_UnkB4[0x4];
+                unsigned char mAlpha;        // 0xB8
+                unsigned char m_UnkB9[0x2];
                 unsigned char mFlag;         // 0xBB, bit 0: visible
                 char mName[17];              // 0xBC
                 unsigned char m_UnkCD[0xB];  // size 0xD8

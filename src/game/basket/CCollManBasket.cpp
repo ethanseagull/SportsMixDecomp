@@ -80,6 +80,7 @@ inline void msw::CCollManBasket::ClipRectByViewColl_(bcs::FVEC4 &rRect, long mod
 int msw::CCollManBasket::DetectMapHit_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, float &rTime, const bcs::FVEC3 &rFrom,
                                        const bcs::FVEC3 &rTo, float fRadius, long mode, unsigned long flags)
 {
+    long team;
     bcs::FVEC4 court[2];
     bcs::FVEC4 rect;
     unsigned long passFlags;
@@ -100,7 +101,7 @@ int msw::CCollManBasket::DetectMapHit_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, fl
         break;
     case 3: {
         long field = (unsigned char)(flags >> 8);
-        long team = (unsigned char)flags;
+        team = (unsigned char)flags;
 
         CStageMan::GetInstance()->GetTeamOuterFieldRect(team, &rect.x, &rect.y, &rect.z, &rect.w, field);
         if (field == 0) {

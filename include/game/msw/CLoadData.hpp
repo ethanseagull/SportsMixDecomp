@@ -36,6 +36,11 @@ namespace msw {
             // The DOL body does not read the third argument. (parameter
             // names guessed)
             static long LoadEventMotion(long index, long nChr, long, int bShare);
+            // Makes entry `index` a file of the event data under pDir/pName
+            // and returns `index`, or with bShare set the entry that already
+            // has it. (the two numbers select the file; their meaning and all
+            // parameter names are guessed)
+            static long LoadEventData(long index, const char *pDir, const char *pName, long nNo, int bShare, long nKind);
     };
 }
 

@@ -56,6 +56,9 @@ namespace msw {
             // CTmGameHandler::_SetBattleWin takes it and _IsBattleWin tests
             // for 1.
             static long GetTeamResult(long nTeam);
+            // The type of NPC slot nSlot: the byte at g_GameWork + 0x70 +
+            // nSlot, read signed. (meaning guessed from the name)
+            static long GetNpcType(long nSlot);
 
             static GameWork g_GameWork;
             static CGame *m_pInstance;

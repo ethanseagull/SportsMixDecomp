@@ -1,12 +1,12 @@
 #ifndef CEVENTMODEL_HPP_
 #define CEVENTMODEL_HPP_
 
+#include "bcs/BCS_Color.hpp"
 #include "bcs/FVEC3.hpp"
 #include "nw4r/g3d/ResFile.hpp"
 #include "revolution/gx/GXEnum.h"
 
 namespace bcs {
-    struct BCS_Color;
     struct FMTX34;
     class CScnGroup;
     class CScnObj;
@@ -54,11 +54,10 @@ namespace msw {
             virtual const bcs::CScnObj *GetScnObj() const { return 0; } // 0x3C (DOL body)
             virtual const bcs::FMTX34 *GetNodeWorldMtxPtr(unsigned long) const { return 0; } // 0x40 (DOL body)
             virtual long GetNodeId(const char *) const { return -1; }   // 0x44 (DOL body)
-            // The next three are empty weak functions in the modules too;
-            // their bodies wait for a definition of bcs::BCS_Color.
-            virtual void SetMatTevColor(const char *, bcs::BCS_Color, _GXTevRegID); // 0x48
-            virtual void SetBaseColor(bcs::BCS_Color);                  // 0x4C
-            virtual void SetColorScale(bcs::BCS_Color);                 // 0x50
+            // The next three are empty weak functions in the modules too.
+            virtual void SetMatTevColor(const char *, bcs::BCS_Color, _GXTevRegID) {} // 0x48
+            virtual void SetBaseColor(bcs::BCS_Color) {}                // 0x4C
+            virtual void SetColorScale(bcs::BCS_Color) {}               // 0x50
             virtual void SetCameraView(long) {}                         // 0x54
             // Takes the animations from another resource file.
             virtual void ChangeAnimFile(nw4r::g3d::ResFile) {}          // 0x58
@@ -114,6 +113,16 @@ namespace msw {
             // Weak functions in TourF.
             long GetIndex() const { return m_nIndex; }
             long GetType() const { return m_nType; }
+            // (name guessed) Inline in msw::CTournamentChip's constructor.
+            void SetType(long nType) { m_nType = nType; }
+
+        protected:
+            // Moves the alpha at 0x5C towards its target by the speed at
+            // 0x64 times fFrame. (description read from the DOL body)
+            void _UpdateAlpha(float fFrame);
+
+            // (name guessed) The model's alpha now, 0 to 1.
+            float GetAlpha() const { return m_fAlpha; }
             long GetVoiceId(long n) const
             {
                 if (m_pVoiceTable != 0) {
@@ -135,7 +144,14 @@ namespace msw {
             unsigned char m_Unk50[4];     // 0x50
             short m_nMotIndex;            // 0x54 (name guessed) entry of the sequence
             short m_nUnk56;               // 0x56
-            // Not mapped from here on.
+            unsigned char m_Unk58[4];     // 0x58
+            float m_fAlpha;               // 0x5C (name guessed) see _UpdateAlpha
+            float m_fAlphaTarget;         // 0x60 (name guessed)
+            float m_fAlphaSpeed;          // 0x64 (name guessed)
+            // 0x68 to 0xB0 are not mapped. The class is 0xB0 bytes:
+            // msw::CTournamentChip and msw::CTournamentTrophy (TourF) have
+            // their own members from 0xB0.
+            unsigned char m_Unk68[0x48];  // 0x68
     };
 }
 

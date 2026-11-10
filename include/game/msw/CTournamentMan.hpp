@@ -13,6 +13,8 @@ namespace msw {
             // `nIndex`; with bDestroy set it also has msw::CEvDemoRes
             // destroy the character's model. (parameter names guessed)
             void CleanChrModel(long nIndex, int bDestroy);
+            // The same for object `nIndex`. (parameter names guessed)
+            void CleanObjModel(long nIndex, int bDestroy);
     };
 }
 

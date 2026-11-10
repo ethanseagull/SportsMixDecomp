@@ -15,4 +15,4 @@ Matching game/hockey/CStgGmk_WaterWorks_Hockey.cpp
 Matching game/hockey/CItemHockeyBomb.cpp
 Matching game/hockey/CItemHockeyToadstool.cpp
 Matching game/hockey/CItemHockeyRShell.cpp
-NonMatching game/hockey/CCockpitHockeyModelTelop.cpp
+Matching game/hockey/CCockpitHockeyModelTelop.cpp

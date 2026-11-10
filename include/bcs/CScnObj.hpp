@@ -39,6 +39,15 @@ namespace bcs {
                 ATTACHMODE_0
             };
 
+            // Which matrix GetMtx copies. (enumerator names guessed) 0 is the
+            // one at 0x08 that CalcRootMtx builds, 1 the one at 0x38, 2 the
+            // one at 0x68 that CalcViewMtx builds.
+            enum ScnObjMtxType {
+                SCNOBJMTXTYPE_ROOT,
+                SCNOBJMTXTYPE_1,
+                SCNOBJMTXTYPE_VIEW
+            };
+
             // Bits of m_nFlag. (names guessed) msw::CTableSetMdlObj::SetVisible
             // sets both to hide a model and clears both to show it.
             enum {
@@ -136,6 +145,8 @@ namespace bcs {
             // Rebuilds the matrix at 0x08 from the rotation and the
             // translation members.
             void CalcRootMtx();
+            // In the DOL. Copies the matrix `type` to rMtx.
+            void GetMtx(ScnObjMtxType type, FMTX34 &rMtx) const;
             // fn_800424A0, unnamed in the binary (name guessed). Concatenates
             // pViewMtx with the matrix at 0x38 into the one at 0x68, then
             // calls fn_800424F0. ObjProc runs it for task 4.

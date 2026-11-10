@@ -20,7 +20,7 @@ namespace nw4r {
         //
         // Offsets are what the game's own code shows (msw::CRadarIcon2D in
         // the DOL and its classes in the modules): translation at 0x2C,
-        // scale at 0x44, size at 0x4C, global matrix at 0x84, alpha at 0xB8,
+        // rotation at 0x38, scale at 0x44, size at 0x4C, global matrix at 0x84, alpha at 0xB8,
         // flags at 0xBB, name at 0xBC; TextBox's members start at 0xD8.
         // Member and function names follow the public ogws decompilation's
         // description of nw4r::lyt::Pane (from memory, no code copied).
@@ -70,15 +70,27 @@ namespace nw4r {
                 {
                     mFlag = (unsigned char)((mFlag & 0xFE) | (bVisible ? 1 : 0));
                 }
+                // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp.
+                void SetRotate(const math::VEC3 &rRotate) { mRotate = rRotate; }
+                void SetScale(const math::VEC2 &rScale) { mScale = rScale; }
+                void SetAlpha(unsigned char nAlpha) { mAlpha = nAlpha; }
+                // Bit 2 of the flags (name from the ogws description).
+                void SetLocationAdjust(bool bAdjust)
+                {
+                    mFlag = (unsigned char)((mFlag & 0xFB) | (bAdjust ? 4 : 0));
+                }
 
             private:
                 unsigned char m_Unk04[0x28];
                 math::VEC3 mTranslate;       // 0x2C
-                unsigned char m_Unk38[0x14];
+                math::VEC3 mRotate;          // 0x38
+                math::VEC2 mScale;           // 0x44
                 Size mSize;                  // 0x4C
                 unsigned char m_Unk54[0x30];
                 math::MTX34 mGlbMtx;         // 0x84
-                unsigned char m_UnkB4[0x7];
+                unsigned char m_UnkB4[0x4];
+                unsigned char mAlpha;        // 0xB8
+                unsigned char m_UnkB9[0x2];
                 unsigned char mFlag;         // 0xBB, bit 0: visible
                 char mName[17];              // 0xBC
                 unsigned char m_UnkCD[0xB];  // size 0xD8

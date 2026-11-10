@@ -24,6 +24,11 @@ namespace bcs {
                 // once animation nAnim has ended.
                 void StopAnimation(long nAnim, int nArg);
                 int IsAnimEnd(long nAnim);
+                // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp
+                // (return types guessed): not zero while animation nAnim
+                // plays; stops every animation.
+                int IsAnimPlay(long nAnim);
+                void StopAllAnimation(int nArg);
 
                 nw4r::lyt::Pane *GetPane() const { return m_pPane; }
 

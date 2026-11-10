@@ -32,6 +32,10 @@ namespace msw {
             // a character that is not disabled has bit 0x20000 of the word
             // at 0xE8 set (taken to be the star state). Static.
             static int IsExistStarChr();
+            // (DOL, static; return type and argument meanings not known)
+            // Passes a message to the NPCs. BasketF's CBallBasketFruit sends
+            // (0xB, 0, -1, ball number, 0) when a fruit on a string explodes.
+            static void NpcSendMessage(long nMsg, long, long, long, long);
     };
 }
 

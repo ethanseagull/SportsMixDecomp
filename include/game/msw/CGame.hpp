@@ -356,6 +356,12 @@ namespace msw {
             // The goal team nTeam attacks: the byte at g_GameWork + 0x88 +
             // nTeam, read unsigned. (return type guessed)
             static long GetTargetGoalIdx(long nTeam);
+            // (DOL, static) The position of goal nGoal. (return type guessed)
+            static const bcs::FVEC3 &GetGoalPos(long nGoal);
+            // (DOL, static; argument meanings guessed from BasketF's
+            // CBallBasketFruit::TrgGoalIn_: shooter, team, shoot type, ball
+            // kind, a float, the goal's position)
+            static void TrgGoalIn(long nChr, long nTeam, long nShootType, long nKind, float, const bcs::FVEC3 &rGoalPos);
             // Whether player nPlayer's character is the hockey keeper (bit 1
             // of the byte at g_GameWork + 0x58 + nPlayer). (return type guessed)
             static int IsCharEx_HockeyKeeper(long nPlayer);

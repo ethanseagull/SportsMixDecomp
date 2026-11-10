@@ -40,6 +40,19 @@ namespace bcs {
         // last two are for is not known; their names are guesses)
         CPaneObj *DuplicatePaneObj(CPaneCtrl *pPaneCtrl, const char *pSrcName, const char *pName,
                                    const char *pLayoutName, int nArg);
+        // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp: the same
+        // from a pane (the last argument is 1 where the game's local static
+        // `animUse` is passed).
+        CPaneObj *DuplicatePaneObj(CPaneCtrl *pPaneCtrl, nw4r::lyt::Pane *pSrcPane, const char *pName,
+                                   const char *pLayoutName, int bAnimUse);
+        // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp: a copy,
+        // called pName, of pPaneCtrl's pane pSrcPane, without an object.
+        nw4r::lyt::Pane *DuplicatePane(CPaneCtrl *pPaneCtrl, nw4r::lyt::Pane *pSrcPane, const char *pName,
+                                       const char *pLayoutName, int bAnimUse);
+        // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp: gives
+        // pPane its parent's size (return type guessed).
+        void SetPaneSizeFromParent(nw4r::lyt::Pane *pPane);
+
         // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp. Moves
         // pPane under pParent. Return type and the names of the last two
         // arguments are guesses (called with 1, 0).

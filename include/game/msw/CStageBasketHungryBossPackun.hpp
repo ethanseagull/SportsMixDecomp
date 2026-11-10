@@ -55,10 +55,10 @@ namespace msw {
             // the centre line on this stage's court depth.
             virtual void UpdateCourtSize_();
 
-        private:
+        protected:
             CNpcBossPackun *m_apNpc[4];              // 0x218, only [0] is made
             CGoalObjBasket_BossPackun *m_apGoal[4];  // 0x228, CreateGoal makes the first two
-            CStageMdlListNode *m_pBgNode;            // 0x238, the "stage<n>_bg" model
+            CStageMdlListNode *m_pBgNode;            // 0x238, the "stage<n>_bg" model (stage 71 places its floors by it)
     };
 }
 

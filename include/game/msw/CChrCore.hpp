@@ -610,6 +610,17 @@ namespace msw {
             // bytes directly, as signed values.
             long GetPlayerNo() const { return m_nPlayerNo; }
             long GetTeamNo() const { return m_nTeamNo; }
+            // (names guessed) Added for BasketF
+            // game/basket/CCockpitBasketHarapeko.cpp, which reads both bytes
+            // signed: the character number (as GetChrId, which other modules
+            // read unsigned) passed to menu::GetCockpitFaceIconScale, and the
+            // pad of a human player (0 to 3; the cockpit labels "1P" to "4P").
+            long GetChrIdS() const { return (signed char)m_nChrId; }
+            long GetPadNo() const { return m_nPadNo; }
+            // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp (name
+            // guessed): the character's face icon texture for the cockpit;
+            // null when there is none. In the DOL.
+            const _GXTexObj *GetCockpitIconTexObj() const;
             // Not zero for the star player of a team (names guessed). The
             // parameter files of the sports modules call it, so it is inline
             // and emitted there.
@@ -633,7 +644,7 @@ namespace msw {
             // (names guessed) What CRadarIcon2D<Game>::CreateCharaIcon passes
             // to CGame::GetCharType and to CGame::GetTeamColorIdx.
             signed char m_nPlayerNo;     // 0x176
-            unsigned char m_Unk177;
+            signed char m_nPadNo;        // 0x177, see GetPadNo
             signed char m_nTeamNo;       // 0x178
             unsigned char m_Unk179[0x230 - 0x179];
             // 0x230 (name guessed): the level CComMan::GetDatF reads the

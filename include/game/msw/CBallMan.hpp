@@ -87,6 +87,9 @@ namespace msw {
             static CBall *GetNearPosBall(const bcs::FVEC3 &rPos);
             static void DelBall(long nBall);
             static CBall *AddBall(CBall *pBall);
+            // (fn_800CD520, unnamed in the DOL) IsExistStarBall_ on the
+            // instance, zero without one.
+            static int IsExistStarBall();
 
             static CBallMan *GetInstance();
             // Not zero when there is an instance.

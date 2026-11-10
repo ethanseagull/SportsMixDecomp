@@ -6,24 +6,49 @@
 
 namespace msw {
 
-    // A character that is not a player (the bosses and the stage's
-    // creatures). A DOL class derived from bcs::CTask; its constructor
-    // writes members up to 0x184, so it is taken to be 0x188 bytes (BasketF's
-    // CNpcBossPackunBasketBase has a second base there).
-    //
-    // INCOMPLETE: only the position at 0x60 (BossF CCameraBoss::MainCamera
-    // reads it) is mapped; no virtual function of the class is declared, so
-    // it must not be instantiated or derived from in a unit that emits a
-    // vtable.
+    // INCOMPLETE: a non-player character on the court (the boss Packun,
+    // ...). A DOL class and a task (its constructor
+    // __ct__Q23msw8CNpcBaseFPQ23msw7CChrManl calls bcs::CTask's). Size
+    // 0x188: the constructor's last store is to 0x184, and
+    // msw::CNpcBossPackun's state queue starts at 0x188. Only part of its
+    // virtual functions (below) and of its members are declared, so it must
+    // not be instantiated or derived from with a vtable emitted yet.
+    class CBall;
+
     class CNpcBase : public bcs::CTask {
         public:
-            // (name guessed) Where the character stands.
-            const bcs::FVEC3 &GetPos() const { return m_Pos; }
+            // Virtual functions 0x18 to 0x50, in the order and with the names
+            // of the slots of __vt__Q23msw16CNpcStringBasket (BasketF), for
+            // BasketF's CBallBasketFruit, which calls CanbeCatch. Return
+            // types guessed. (the class's destructor and later slots are not
+            // declared yet)
+            virtual void Create();                                     // 0x18
+            virtual long GetNpcType() const;                           // 0x1C
+            virtual void Reset();                                      // 0x20
+            virtual void SendMessage(long, long, long, long, long);    // 0x24
+            virtual long GetThinkLevel() const;                        // 0x28
+            virtual void AnimPlay(long, int, float, float);            // 0x2C
+            virtual void AnimStop();                                   // 0x30
+            virtual void AnimSetSpeed(float);                          // 0x34
+            virtual void AnimSetFrame(float);                          // 0x38
+            virtual void AttachBall(CBall *);                          // 0x3C
+            virtual void AttachBall(CBall *, long, float, unsigned long); // 0x40
+            virtual void DetachBall();                                 // 0x44
+            virtual int IsHaveBall() const;                            // 0x48
+            virtual int IsHoldBall() const;                            // 0x4C
+            virtual int CanbeCatch() const;                            // 0x50
 
-        private:
+            // (names guessed) Read by CStageBasketHungryBossPackun::Main_ in
+            // BasketF to make the goal follow the boss.
+            const bcs::FVEC3 &GetPos() const { return m_vPos; }
+            const bcs::FVEC3 &GetRot() const { return m_vRot; }
+
+        protected:
             unsigned char m_Unk34[0x60 - 0x34];
-            bcs::FVEC3 m_Pos;                    // 0x60
-            unsigned char m_Unk6C[0x188 - 0x6C];
+            bcs::FVEC3 m_vPos;   // 0x60
+            bcs::FVEC3 m_vRot;   // 0x6C, written by RotateYRate
+            bcs::FVEC3 m_vScale; // 0x78, written by SetScale
+            unsigned char m_Unk84[0x188 - 0x84];
     };
 }
 

@@ -45,11 +45,12 @@ game/menu/CBackground.cpp:
 
 game/menu/CGameSelect.cpp:
 	.text       start:0x0001186C end:0x0001271C
-	.rodata     start:0x00003148 end:0x00003488
+	.rodata     start:0x00003148 end:0x00003480
 	.data       start:0x000015D0 end:0x000016E8
 
 game/menu/CSelectMenuLayoutBase.cpp:
 	.text       start:0x0001271C end:0x00012D30
+	.rodata     start:0x00003480 end:0x00003488
 
 game/menu/CMenuPartButton.cpp:
 	.text       start:0x00012D30 end:0x00013EC8

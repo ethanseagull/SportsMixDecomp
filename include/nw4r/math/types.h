@@ -8,11 +8,21 @@
 namespace nw4r {
     namespace math {
 
-        // Added for VolleyF game/volley/CCockpitChrIcon2DVolley.cpp (a
-        // texture SRT's translation and scale, copied as words).
+        // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp (a pane's
+        // scale).
         struct VEC2 {
             float x; // 0x00
             float y; // 0x04
+
+            VEC2()
+            {
+            }
+
+            VEC2(float fx, float fy)
+            {
+                x = fx;
+                y = fy;
+            }
         };
 
         struct VEC3 {

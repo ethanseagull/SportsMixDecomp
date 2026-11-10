@@ -1,17 +1,17 @@
 #ifndef MSW_CNPCBOSSPACKUNBASKETBASE_HPP_
 #define MSW_CNPCBOSSPACKUNBASKETBASE_HPP_
 
-#include "bcs/CFsmQueue.hpp"
-#include "game/msw/CNpcBase.hpp"
+#include "game/msw/CNpcBossPackun.hpp"
 
 namespace msw {
 
     // The boss Piranha Plant of the basket game (BasketF), the one
-    // CChrManBasket::GetBossPackun_ finds. bcs::CFsmQueue at 0x188 (read
-    // from CBallManBasket::GetJustShotTiming*_, which takes its state).
+    // CChrManBasket::GetBossPackun_ finds, derived from the DOL's
+    // msw::CNpcBossPackun (whose bcs::CFsmQueue at 0x188 the
+    // CBallManBasket::GetJustShotTiming*_ functions read).
     //
     // INCOMPLETE: only the state queue is placed; nothing else is declared.
-    class CNpcBossPackunBasketBase : public CNpcBase, public bcs::CFsmQueue<CNpcBossPackunBasketBase> {
+    class CNpcBossPackunBasketBase : public CNpcBossPackun {
     };
 }
 

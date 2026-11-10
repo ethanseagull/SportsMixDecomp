@@ -4,6 +4,7 @@
 #include "game/msw/CBallMarkerHockey.hpp"
 
 #include "bcs/BCS_Color.hpp"
+#include "bcs/CMdlObj.hpp"
 #include "bcs/CScnObj.hpp"
 #include "bcs/CTaskMan.hpp"
 #include "game/msw/CBall.hpp"

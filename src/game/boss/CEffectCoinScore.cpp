@@ -131,7 +131,7 @@ long msw::CGimmickManBoss::QPanelChoicePopupCoin_(long nPlayer)
     return -1;
 }
 
-msw::CDropCoin *msw::CGimmickManBoss::CreateDropCoin_(const bcs::FVEC3 &rPos, long nNum)
+long msw::CGimmickManBoss::CreateDropCoin_(const bcs::FVEC3 &rPos, long nNum)
 {
     if (m_pDropCoinMan != 0) {
         return m_pDropCoinMan->CreateCoin(rPos, nNum, 3.0f, 1.0f);

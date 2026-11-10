@@ -1,6 +1,8 @@
 #ifndef CSAVE_HPP_
 #define CSAVE_HPP_
 
+#include "game/msw/SAVE_DATA_PLAYER.hpp"
+
 namespace msw {
 
     // Only the members used so far. All are static: their bodies in the DOL
@@ -12,16 +14,13 @@ namespace msw {
             static int CanbeWrite(); // return type guessed
             static void SaveDataInit();
 
-            // Added for MenuF game/menu/CHowTo.cpp. (name guessed) The save
-            // data of one player; only the member used so far.
-            struct PlayerData {
-                unsigned char m_Unk0000[0x5C50];
-                unsigned char m_nFlags5C50; // 0x5C50; bit 0x08 picks the second camera table in CSelectMenu::HowTo_In
-            };
+            // The save data of one player (msw::SAVE_DATA_PLAYER); MenuF's
+            // sources call it PlayerData.
+            typedef SAVE_DATA_PLAYER PlayerData;
 
-            // The player data of player nPlayer; -1 for the current one
-            // (description guessed).
-            static PlayerData *GetPlayerData(long nPlayer);
+            // The save data of player nPlayer (-1: the current one); null
+            // when there is none. (parameter meaning guessed)
+            static SAVE_DATA_PLAYER *GetPlayerData(long nPlayer);
     };
 }
 

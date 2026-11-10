@@ -16,6 +16,11 @@ namespace msw {
             CBallManBasketHungryBossPackun(bcs::CTask *pParent);
             virtual ~CBallManBasketHungryBossPackun();
 
+            // The radius of a fruit bomb's blast: BASKET_PRM_HB_BOMB_EXPLODE_R.
+            // Static, out of line in the original. (used by
+            // game/basket/CBallBasketFruit.cpp)
+            static float GetBombExplodeR();
+
         private:
             unsigned char m_Unk60[0x84 - 0x60];
     };

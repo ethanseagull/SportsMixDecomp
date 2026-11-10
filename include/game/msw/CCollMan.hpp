@@ -77,6 +77,12 @@ namespace msw {
                                     const bcs::FVEC3 &rTo, float fRadius, long, unsigned long);
             static int CheckMapInner(const bcs::FVEC3 &rPos, float fRadius, unsigned long);
             static void SetArtsExColl(long n);
+            // (DOL) The ground attribute under rPos (the stage's
+            // GetFloorAttribute) into rAttr and the floor's flow there (its
+            // GetFloorFlow) into rFlow. 8 is a hole (msw::CDropCoin).
+            static void GetGrdAttr(const bcs::FVEC3 &rPos, unsigned long &rAttr, bcs::FVEC3 &rFlow);
+            // (DOL) Bit 1 of a ground attribute: the floor moves things.
+            static int IsGrdAttrFlow(unsigned long attr);
 
             // DOL geometry helpers (static: they never read `this`).
             // Added for HockeyF game/hockey/CCollManHockey.cpp; parameter

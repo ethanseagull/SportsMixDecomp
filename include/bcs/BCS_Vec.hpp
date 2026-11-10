@@ -196,10 +196,9 @@ namespace bcs {
     }
 
     // (name guessed) The dot product of two vectors. Paired-single assembly
-    // like FVEC3LenSq above (y and z as a pair, x alone), most likely
-    // NW4R's VEC3Dot; written from what msw::CCameraBoss::GetLenHosei and
-    // GetFirstLookInfo_MultiPlay (BossF) show after inlining. A port needs
-    // a plain C version (p1->x * p2->x + p1->y * p2->y + p1->z * p2->z).
+    // in the original like FVEC3LenSq (y and z as a pair, x alone); most
+    // likely NW4R's VEC3Dot. Written from what msw::CDropCoin's bounce
+    // (game/msw/CDropCoinMan.cpp) shows after inlining.
     inline float FVEC3Dot(register const FVEC3 *p1, register const FVEC3 *p2)
     {
         register float yz1;
@@ -211,8 +210,8 @@ namespace bcs {
         asm {
             psq_l yz1, 4(p1), 0, 0
             psq_l yz2, 4(p2), 0, 0
-            psq_l x1, 0(p1), 1, 0
             ps_mul yz1, yz1, yz2
+            psq_l x1, 0(p1), 1, 0
             psq_l x2, 0(p2), 1, 0
             ps_madd x2, x1, x2, yz1
             ps_sum0 work, x2, yz1, yz1

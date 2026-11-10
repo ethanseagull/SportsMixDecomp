@@ -22,6 +22,9 @@ namespace msw {
             // no object. Return type guessed.
             static int GetDataMode();
 
+            // (name guessed) Inline in msw::CTournamentMan::SetCameraTarget.
+            void SetTarget(const bcs::FVEC3 *pTarget) { m_pTarget = pTarget; }
+
         private:
             unsigned char m_Unk184[0x8]; // 0x184
             bcs::FVEC3 m_Offset;         // 0x18C: added to *m_pTarget (name guessed)

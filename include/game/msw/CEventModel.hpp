@@ -2,6 +2,8 @@
 #define CEVENTMODEL_HPP_
 
 #include "bcs/BCS_Color.hpp"
+#include "bcs/BCS_Vec.hpp"
+#include "bcs/CScnObj.hpp"
 #include "bcs/FVEC3.hpp"
 #include "nw4r/g3d/ResFile.hpp"
 #include "revolution/gx/GXEnum.h"
@@ -9,10 +11,13 @@
 namespace bcs {
     struct FMTX34;
     class CScnGroup;
-    class CScnObj;
 }
 
 namespace msw {
+
+    class CEventMove;
+    class CEventMoveAction;
+    class CEventNodeBase;
 
     // A model placed by an event: the characters and objects of the demos
     // and of the tournament map. A DOL class, vptr at 0x00. The constructor
@@ -101,6 +106,86 @@ namespace msw {
             void SetMotionReverse(int bReverse);
             void SetEnableFootSe(int bEnable);
 
+            // (DOL functions; names from the symbols, parameter names
+            // guessed) Whether the model is shown; attach a node path to the
+            // model (pNode is the model's from then on); start node path
+            // nNode at frame fFrame.
+            int IsDisp() const;
+            void SetLinkNode(CEventNodeBase *pNode, int b);
+            void SetNode(long nNode, float fFrame);
+
+            // (DOL functions; parameter names guessed) Used by TourF's
+            // Stage33: show or hide the model's group; stop, erase or force
+            // off the effects in the slots nFirst..nLast; the offset,
+            // rotation and mirroring applied to the node path; whether the
+            // node path moves the model.
+            void SetGroupDisp(int bDisp);
+            void StopEffect(long nFirst, long nLast);
+            void StopEffectForce(long nFirst, long nLast);
+            void EraseEffect(long nFirst, long nLast);
+            void SetMoveOffset(const bcs::FVEC3 &vOffset);
+            void SetMoveOffsetRot(const bcs::FVEC3 &vRot);
+            void SetMoveFlip(long nFlip);
+            void SetUpdateMove(int bUpdate);
+
+            // (DOL functions used by msw::CTournamentMan in TourF; return
+            // types and parameter names guessed) Advances the model's move by
+            // fFrame; links a move action or a move to the model; the frame
+            // of the move; the star effect of a character; attaches the
+            // model to node pNode of pParent.
+            void UpdateMove(float fFrame);
+            void SetLinkAction(CEventMoveAction *pAction, int b);
+            void SetLinkMove(CEventMove *pMove, int b);
+            float GetMoveFrame() const;
+            void SetStarEffect(int bStar);
+            void AttachToObject(const CEventModel *pParent, const char *pNode, bcs::CScnObj::AttachMode mode);
+
+            // (names guessed) Inline in TourF: the position (moved by the
+            // offset at 0x28) and the rotation, kept and handed to the
+            // virtual setters.
+            void SetPosition(const bcs::FVEC3 &vPos)
+            {
+                m_vPos = vPos;
+                bcs::FVEC3 vWork;
+                bcs::FVEC3Sum(vWork, vPos, m_vPosOffset);
+                _SetPos(vWork);
+            }
+            void SetRotation(const bcs::FVEC3 &vRot)
+            {
+                m_vRot = vRot;
+                _SetRot(vRot);
+            }
+
+            // (name guessed) Inline in TourF: fades the alpha to fAlpha at
+            // fSpeed per frame (at once for a speed of 0 or less); nMode
+            // goes to bits 8 to 10 of the flags.
+            void SetFade(unsigned long nMode, float fAlpha, float fSpeed)
+            {
+                m_nFlag = (m_nFlag & ~0x700) | (nMode << 8);
+                if (fSpeed <= 0.0f) {
+                    m_fAlpha = fAlpha;
+                    m_fAlphaTarget = fAlpha;
+                    m_fAlphaSpeed = 0.0f;
+                } else {
+                    m_fAlphaTarget = fAlpha;
+                    m_fAlphaSpeed = fSpeed;
+                }
+            }
+
+            // (names guessed) Inline in TourF: the scale is kept and handed
+            // to the virtual _SetScale; the model's resource file is copied
+            // out.
+            void SetScale(const bcs::FVEC3 &vScale)
+            {
+                m_vScale = vScale;
+                _SetScale(vScale);
+            }
+            nw4r::g3d::ResFile GetResFile() const { return m_resFile; }
+
+            // (names guessed) Read directly by the modules.
+            const bcs::FVEC3 &GetPos() const { return m_vPos; }
+            const bcs::FVEC3 &GetRot() const { return m_vRot; }
+
             // (names guessed) Inline in the modules, which write these
             // members directly.
             void SetVoiceTable(const long *pTable) { m_pVoiceTable = pTable; }
@@ -132,7 +217,10 @@ namespace msw {
             }
 
         private:
-            unsigned char m_Unk04[0x30];  // 0x04
+            bcs::FVEC3 m_vPos;            // 0x04 (name guessed)
+            bcs::FVEC3 m_vRot;            // 0x10 (name guessed) radians
+            bcs::FVEC3 m_vScale;          // 0x1C (name guessed) see SetScale
+            bcs::FVEC3 m_vPosOffset;      // 0x28 (name guessed) added by SetPosition
             unsigned long m_nFlag;        // 0x34 (name guessed)
             short m_nIndex;               // 0x38
             short m_nType;                // 0x3A
@@ -151,7 +239,9 @@ namespace msw {
             // 0x68 to 0xB0 are not mapped. The class is 0xB0 bytes:
             // msw::CTournamentChip and msw::CTournamentTrophy (TourF) have
             // their own members from 0xB0.
-            unsigned char m_Unk68[0x48];  // 0x68
+            unsigned char m_Unk68[0x3C];  // 0x68
+            nw4r::g3d::ResFile m_resFile; // 0xA4 (name guessed) see GetResFile
+            unsigned char m_UnkA8[0x8];   // 0xA8
     };
 }
 

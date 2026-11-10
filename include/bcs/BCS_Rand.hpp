@@ -13,9 +13,17 @@ namespace bcs {
     // In the DOL. A random integer up to max (whether max itself can come
     // out is not checked; DodgeF calls it with 99 for a percentage).
     long BCS_RandMax(long max);
+    // In the DOL. A random integer over the generator's whole range
+    // (return type guessed; TournamentRule passes it on as a long).
+    long BCS_Rand();
     // In the DOL. A random float, taken to be in [0, 1) (BasketF
     // CStageBasket13 scales a period by it to get a start time).
     float BCS_RandF();
+    // In the DOL. A random number between min and max (whether max itself
+    // can come out is not checked). BasketF's CBallBasketFruit sorts the
+    // two longs before the call.
+    float BCS_RandRange(float min, float max);
+    long BCS_RandRange(long min, long max);
 }
 
 #endif /* !BCS_BCS_RAND_HPP_ */

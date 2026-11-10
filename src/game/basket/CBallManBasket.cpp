@@ -11,7 +11,7 @@
 #include "game/msw/CBallMarkerBasket.hpp"
 #include "game/msw/CChrManBasket.hpp"
 #include "game/msw/CGame.hpp"
-#include "game/msw/CNpcBossPackunBasketBase.hpp"
+#include "game/msw/CNpcBossPackun.hpp"
 #include "game/msw/CStageMan.hpp"
 
 // Set by the file's static initialiser and used by nothing in the file:
@@ -275,7 +275,7 @@ long msw::CBallManBasket::GetJustShotTimingMin_(const bcs::FVEC3 &rFrom, const b
         return 0;
     }
     // No timing while the boss Piranha Plant is in state 0.
-    CNpcBossPackunBasketBase *pBoss = CChrManBasket::GetInstance()->GetBossPackun_(0);
+    CNpcBossPackun *pBoss = CChrManBasket::GetInstance()->GetBossPackun_(0);
     if (pBoss != 0 && pBoss->GetState() == 0) {
         return 0;
     }
@@ -295,7 +295,7 @@ long msw::CBallManBasket::GetJustShotTimingMax_(const bcs::FVEC3 &rFrom, const b
         return 0;
     }
     // No timing while the boss Piranha Plant is in state 0.
-    CNpcBossPackunBasketBase *pBoss = CChrManBasket::GetInstance()->GetBossPackun_(0);
+    CNpcBossPackun *pBoss = CChrManBasket::GetInstance()->GetBossPackun_(0);
     if (pBoss != 0 && pBoss->GetState() == 0) {
         return 0;
     }

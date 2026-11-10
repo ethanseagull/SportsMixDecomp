@@ -11,6 +11,9 @@
 #include "game/msw/menu/CSndEff.hpp"
 #include "game/msw/menu/CVibEff.hpp"
 
+const float msw::CSelectMenuLayoutBase::s_DefaultOutAnimFrameSize = 30.0f;
+const float msw::CSelectMenuLayoutBase::s_DefaultOutAnimOverTime = 4.0f;
+
 namespace {
     // (name guessed; no symbol) Makes a CPaneCtrl on archive pAccessor and
     // hands it to the layout manager; null when either is missing. Inline in
@@ -112,7 +115,7 @@ void msw::CSelectMenuLayoutBase::ClearPushButtonId()
     }
 }
 
-unsigned short msw::CSelectMenuLayoutBase::GetCurrentButtonKindId(long nPad)
+long msw::CSelectMenuLayoutBase::GetCurrentButtonKindId(long nPad)
 {
     CSelectMenu *pMenu = GetSelectMenu();
     if (pMenu == 0) {

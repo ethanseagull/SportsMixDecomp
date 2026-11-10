@@ -4,6 +4,9 @@
 #include "game/msw/CStageBasket01.hpp"
 #include "game/msw/CStageBasket13.hpp"
 #include "game/msw/CStageBasket17.hpp"
+#include "game/msw/CStageBasketHungryBossPackun70.hpp"
+#include "game/msw/CStageBasketHungryBossPackun71.hpp"
+#include "game/msw/CStageBasketHungryBossPackun72.hpp"
 #include "game/msw/CStageManBasket.hpp"
 
 namespace msw {
@@ -17,7 +20,7 @@ namespace msw {
     // The destructors are declared so that they are the key functions: this
     // header must not make a unit emit the vtables.
 
-    // Stages 01, 13 and 17 have their own headers.
+    // Stages 01, 13, 17 and 70 to 72 have their own headers.
 
     class CStageBasket02 : public CStageManBasket {
         public:
@@ -120,34 +123,6 @@ namespace msw {
 
         private:
             unsigned char m_Unk218[0x4]; // size 0x21C
-    };
-
-    // The Hungry Boss Packun stages (70 to 72).
-    class CStageBasketHungryBossPackun70 : public CStageManBasket {
-        public:
-            CStageBasketHungryBossPackun70(bcs::CTask *pParent);
-            virtual ~CStageBasketHungryBossPackun70();
-
-        private:
-            unsigned char m_Unk218[0x24]; // size 0x23C
-    };
-
-    class CStageBasketHungryBossPackun71 : public CStageManBasket {
-        public:
-            CStageBasketHungryBossPackun71(bcs::CTask *pParent);
-            virtual ~CStageBasketHungryBossPackun71();
-
-        private:
-            unsigned char m_Unk218[0x6C]; // size 0x284
-    };
-
-    class CStageBasketHungryBossPackun72 : public CStageManBasket {
-        public:
-            CStageBasketHungryBossPackun72(bcs::CTask *pParent);
-            virtual ~CStageBasketHungryBossPackun72();
-
-        private:
-            unsigned char m_Unk218[0x54]; // size 0x26C
     };
 }
 

@@ -11,6 +11,12 @@ namespace bcs {
     class CMdlObj;
 }
 
+namespace nw4r {
+    namespace g3d {
+        class ResFile;
+    }
+}
+
 namespace msw {
 
     class CItemMan;
@@ -46,6 +52,10 @@ namespace msw {
                 KIND_BANANA = 5,
                 KIND_MUSHROOM = 6
             };
+
+            // (DOL) The resource file of an item kind's models.
+            // msw::CItemBallShellWreck takes model 0 of it.
+            static nw4r::g3d::ResFile GetItemRsrcFile(long kind);
 
             // The DOL's constructor has no exported name (fn_801278BC).
             CItem(CItemMan *pMan);

@@ -6,6 +6,7 @@
 namespace msw {
 
     class CEventModel;
+    class CRouteMove;
 
     // One stretch of route on the tournament map (module TourF): how a
     // character moves from one map point to the next. vptr at 0x00. The
@@ -35,14 +36,47 @@ namespace msw {
                 }
             };
 
-            struct _PUSH_PARAM;
-            struct _PUSH_INFO;
+            // What the camera of a route does. Only the members the stage
+            // route managers use. (names guessed)
+            //
+            // msw::CTournamentMan (TourF) queues a character's routes as an
+            // array of these, ended by one with no route.
+            struct _PUSH_INFO {
+                CRouteBase *pRoute;   // 0x00 (name guessed)
+                // 0x04, 0x08: msw::CTournamentMan passes them to PushRoute
+                // as its last two arguments, 0x08 first. (names guessed)
+                float fUnk04;
+                float fUnk08;
+                float fFrame;         // 0x0C: frame of the route move the camera starts at
+                // 0x10: bit 0 for a route run backwards (names guessed)
+                unsigned char nFlag;
+                unsigned char nStart; // 0x11: the map point the route starts at
+                unsigned char nEnd;   // 0x12: and ends at
+                unsigned char nType;  // 0x13
+            };
+
+            // What PushRoute gets: the route move to queue the routes on and
+            // the model that runs them. (names guessed)
+            struct _PUSH_PARAM {
+                CRouteMove *pMove;    // 0x00
+                CEventModel *pModel;  // 0x04
+                // 0x08: the route queued before this one (CRouteShipMove of
+                // Stage33 reads its id and length); may be 0, and may point
+                // at 0.
+                CRouteBase **ppPrev;
+                _PUSH_INFO *pInfo;    // 0x0C
+                _PUSH_INFO *pNext;    // 0x10: the route queued after this one, or 0 (name guessed)
+            };
+
             struct _RESULT;
 
-            virtual ~CRouteBase();
+            // Empty and inline: the derived destructors call nothing.
+            virtual ~CRouteBase() {}
             virtual void PushRoute(_PUSH_PARAM &param, unsigned long flag, float f1, float f2);
             virtual void CalcFrame();
-            virtual void GetCameraDirect(bcs::FVEC3 &dir, float &f, long n, float rate);
+            // Returns the camera kind of the route (CRouteDokan and
+            // CRouteBigGunOut return byte 5 of the route's ROUTE_INFO).
+            virtual long GetCameraDirect(bcs::FVEC3 &dir, float &f, long n, float rate);
             virtual void GetResult(_RESULT &result, float frame, int b);
             virtual void GetResultPos(bcs::FVEC3 &pos, float frame, int b);
             virtual void GetResultRot(bcs::FVEC3 &rot, float frame, int b);
@@ -64,7 +98,26 @@ namespace msw {
             static void _SetParam(_PARAM &param, long nFrom, long nTo, int b);
             static void _SetParam(_PARAM &param, const bcs::FVEC3 &start, const bcs::FVEC3 &end, int b);
 
+            // Out of line in TourF (weak copies of these inline functions).
+            float GetNumFrame() const { return m_fNumFrame; }
+            void SetRouteId(long nId) { m_nRouteId = nId; }
+            // (name guessed) Inline in Stage33's CRouteShipMove::PushRoute.
+            long GetRouteId() const { return m_nRouteId; }
+            // (name guessed) The halfword at 0x20; msw::CTournamentMan
+            // skips a route after one with 0x10 and before one with 0x08.
+            unsigned short GetPushFlag() const { return m_nUnk20; }
+
         protected:
+            // Inline: the constructors of the derived classes set these
+            // members themselves (CRouteJumpPoints, CRouteWait, and the
+            // inlined CRouteBigGunIn/Out of Stage32). n goes to the halfword
+            // at 0x22 (-1 for most routes).
+            CRouteBase(const bcs::FVEC3 &vStart, const bcs::FVEC3 &vEnd, long n)
+                : m_vStart(vStart), m_vEnd(vEnd), m_fNumFrame(0.0f), m_nUnk20(6), m_nUnk22(n), m_nRouteId(-1),
+                  m_fRate(1.0f)
+            {
+            }
+
             bcs::FVEC3 m_vStart; // 0x04
             bcs::FVEC3 m_vEnd;   // 0x10
             float m_fNumFrame;   // 0x1C

@@ -12,6 +12,14 @@ namespace bcs {
     // __ct__Q23bcs10CCameraAnmFlsPQ23bcs5CTask, vtable slots 6 to 8).
     class CCameraAnm : public CCamera {
         public:
+            // One camera of the scene animation, 0xC bytes (names guessed;
+            // read by msw::CTournamentMan in TourF).
+            struct SCENE_INFO {
+                const char *pName; // 0x00: the node animation of the camera
+                long nGroup;       // 0x04
+                float fFrame;      // 0x08: its length; 0 or less for an unused camera
+            };
+
             CCameraAnm(long view, short priority, CTask *pParent);
             virtual ~CCameraAnm();
             virtual long GetCamKind() const { return 4; } // value from the module copy
@@ -38,6 +46,29 @@ namespace bcs {
             int IsEnd() const { return m_nFrmFlag & 8; }
             int IsPlaying() const { return m_nAnmFlag & 0x100; }
 
+            // Added for TourF game/tour/CTournamentMan.cpp (return types
+            // guessed). Makes the scene info from the nodes named pName.
+            void MakeSceneInfo(const char *pName, long);
+            // Selects scene camera nCamera.
+            void SetData(long nCamera, long);
+            // The camera of scene camera nCamera at frame fFrame.
+            void GetDataFrame(FVEC3 &rPos, FVEC3 &rAt, float &rRoll, float &rFovy, long nCamera, long,
+                              float fFrame, unsigned long ulFlag);
+
+            // (names guessed) The scene cameras; entry nCamera, or the
+            // default entry when there is no such camera.
+            short GetSceneNum() const { return m_nSceneNum; }
+            const SCENE_INFO &GetSceneInfo(long nCamera) const
+            {
+                if (m_pSceneInfo != 0 && nCamera >= 0 && nCamera < m_nSceneNum) {
+                    return m_pSceneInfo[nCamera];
+                }
+                return m_SceneDefault;
+            }
+            // (names guessed) Bit 0 of the word at 0x138; offsets added to
+            // the animated camera (written directly by TourF).
+            void SetUnk138Bit0() { m_nUnk138 |= 1; }
+
         private:
             // 0xFC: a frame controller (SetFrame passes its address on to a
             // DOL function); only the words the modules read are named.
@@ -45,9 +76,22 @@ namespace bcs {
             unsigned char m_Unk100[4];    // 0x100
             float m_fRate;                // 0x104, set by Play (name guessed)
             float m_fEndFrame;            // 0x108 (name guessed)
-            unsigned char m_Unk10C[0x30]; // 0x10C
+            unsigned char m_Unk10C[0x18]; // 0x10C
+            SCENE_INFO *m_pSceneInfo;     // 0x124 (name guessed)
+            SCENE_INFO m_SceneDefault;    // 0x128 (name guessed)
+            long m_nSceneNum;             // 0x134 (name guessed)
+            unsigned long m_nUnk138;      // 0x138
             unsigned long m_nAnmFlag;     // 0x13C, Play sets bits 0x100 to 0x2000 (name guessed)
-            unsigned char m_Unk140[0x64]; // 0x140 (not mapped yet)
+
+        public:
+            FVEC3 m_vUnk140;               // 0x140
+        private:
+            unsigned char m_Unk14C[0x18];  // 0x14C
+        public:
+            FVEC3 m_vPosOffset;            // 0x164
+            FVEC3 m_vAtOffset;             // 0x170
+        private:
+            unsigned char m_Unk17C[0x28];  // 0x17C (not mapped yet)
     };
 }
 

@@ -26,6 +26,8 @@ namespace bcs {
             };
 
             CMdlObj();
+            // (DOL) The model built from mdl at once, as Create does.
+            CMdlObj(nw4r::g3d::ResMdl mdl, unsigned long, long);
             virtual ~CMdlObj();
             // The overrides, named by the vtable of
             // msw::SelectMenu::CCourtBallMdlObj in MenuF. Return types guessed.
@@ -92,6 +94,9 @@ namespace bcs {
             void MatSetZModeAll(unsigned char bCompare, _GXCompare func, unsigned char bUpdate);
             // The number of nodes of the model's resource.
             unsigned long GetResNodeNum() const;
+            // (DOL; return type guessed) Recomputes the world matrices of
+            // every node; msw::CItemBall passes null.
+            void CalcWorldMatrixAll(const FMTX34 *pMtx);
 
             // -1 if the model has no node of that name.
             long GetNodeID(const char *pName) const;

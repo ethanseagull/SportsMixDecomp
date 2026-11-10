@@ -18,6 +18,8 @@ namespace nw4r {
 }
 
 namespace bcs {
+    struct FVEC3;
+
     namespace G2D {
         class CPaneCtrl;
         class CPaneObj;
@@ -27,16 +29,44 @@ namespace bcs {
         nw4r::lyt::Pane *CreateNullPane(const char *pName);
         // A new picture pane called pName showing rTexMap; null on failure.
         nw4r::lyt::Pane *CreatePicturePane(const char *pName, CTexMap &rTexMap);
+        // Added for MenuF game/menu/CGameSelect.cpp. The same without a
+        // texture map; what the byte is (called with 3) is not known.
+        nw4r::lyt::Pane *CreatePicturePane(const char *pName, unsigned char nArg);
+        // Added for MenuF game/menu/CGameSelect.cpp. Makes pPaneObj's
+        // picture pane show the movie, in the place of pFrame (return type
+        // and argument names guessed).
+        void SetupMoviePane(CPaneObj *pPaneObj, CPaneObj *pFrame);
+        // Added for MenuF game/menu/CPartySelect.cpp. Points the picture
+        // pane pPane at the current movie frame (return type guessed).
+        void RemapMoviePane(nw4r::lyt::Pane *pPane);
         // A copy, called pName, of pPaneCtrl's pane pSrcName, as an object of
         // pPaneCtrl; null on failure. The radar icons pass their layout's
         // file name as the fourth argument and 0 as the fifth. (what the
         // last two are for is not known; their names are guesses)
         CPaneObj *DuplicatePaneObj(CPaneCtrl *pPaneCtrl, const char *pSrcName, const char *pName,
                                    const char *pLayoutName, int nArg);
+        // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp: the same
+        // from a pane (the last argument is 1 where the game's local static
+        // `animUse` is passed).
+        CPaneObj *DuplicatePaneObj(CPaneCtrl *pPaneCtrl, nw4r::lyt::Pane *pSrcPane, const char *pName,
+                                   const char *pLayoutName, int bAnimUse);
+        // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp: a copy,
+        // called pName, of pPaneCtrl's pane pSrcPane, without an object.
+        nw4r::lyt::Pane *DuplicatePane(CPaneCtrl *pPaneCtrl, nw4r::lyt::Pane *pSrcPane, const char *pName,
+                                       const char *pLayoutName, int bAnimUse);
+        // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp: gives
+        // pPane its parent's size (return type guessed).
+        void SetPaneSizeFromParent(nw4r::lyt::Pane *pPane);
+
         // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp. Moves
         // pPane under pParent. Return type and the names of the last two
         // arguments are guesses (called with 1, 0).
         void SetPaneParent(nw4r::lyt::Pane *pPane, nw4r::lyt::Pane *pParent, int bUnk, nw4r::lyt::Pane *pUnk);
+
+        // Added for MenuF game/menu/CChrSign.cpp. The screen position of the
+        // world point rPos seen through camera nCamera, into rOut (return
+        // type and argument names guessed).
+        void GetWorldScreenPosition(const FVEC3 &rPos, long nCamera, FVEC3 &rOut);
 
         // Added for MenuF game/menu/CSelectMenuLayoutBase.cpp: releases a
         // font made from a layout archive (return type guessed).

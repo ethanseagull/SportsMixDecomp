@@ -36,7 +36,19 @@ namespace bcs {
             // last parameter of msw::CStgMdl::AttachToMdl). Values not known;
             // msw::CTournamentChip::Destroy passes 0 with no parent.
             enum AttachMode {
-                ATTACHMODE_0
+                ATTACHMODE_0,
+                ATTACHMODE_1, // msw::CTournamentMan (TourF) attaches its markers with 1 and 3
+                ATTACHMODE_2,
+                ATTACHMODE_3
+            };
+
+            // Which matrix GetMtx copies. (enumerator names guessed) 0 is the
+            // one at 0x08 that CalcRootMtx builds, 1 the one at 0x38, 2 the
+            // one at 0x68 that CalcViewMtx builds.
+            enum ScnObjMtxType {
+                SCNOBJMTXTYPE_ROOT,
+                SCNOBJMTXTYPE_1,
+                SCNOBJMTXTYPE_VIEW
             };
 
             // Bits of m_nFlag. (names guessed) msw::CTableSetMdlObj::SetVisible
@@ -136,6 +148,8 @@ namespace bcs {
             // Rebuilds the matrix at 0x08 from the rotation and the
             // translation members.
             void CalcRootMtx();
+            // In the DOL. Copies the matrix `type` to rMtx.
+            void GetMtx(ScnObjMtxType type, FMTX34 &rMtx) const;
             // fn_800424A0, unnamed in the binary (name guessed). Concatenates
             // pViewMtx with the matrix at 0x38 into the one at 0x68, then
             // calls fn_800424F0. ObjProc runs it for task 4.
@@ -187,6 +201,18 @@ namespace bcs {
                     fRotY += 6.2831855f;
                 }
                 m_fRotY = fRotY;
+            }
+            // (name guessed) The same for the X angle (0xB0), as
+            // msw::CItemBallShellWreck::Main stores it.
+            void SetRotX(float fRotX)
+            {
+                while (fRotX > 6.2831855f) {
+                    fRotX -= 6.2831855f;
+                }
+                while (fRotX < 0.0f) {
+                    fRotX += 6.2831855f;
+                }
+                m_fRotX = fRotX;
             }
 
         private:

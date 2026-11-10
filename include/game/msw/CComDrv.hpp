@@ -72,7 +72,10 @@ namespace msw {
             virtual void OnDisconnect(_CHR_MSG *pMsg);
             virtual void OnInit(_CHR_MSG *pMsg);
             virtual void OnDamage(_CHR_MSG *pMsg);
-            virtual void OnGameMsgProc(MSG_ID id, _CHR_MSG *pMsg);
+            // Returns the answer to the message (BasketF's CComDrvBasketHB
+            // returns this function's result for the messages it does not
+            // answer itself).
+            virtual long OnGameMsgProc(MSG_ID id, _CHR_MSG *pMsg);
             virtual void OnAlarm0(long) {}
             virtual void OnAlarm1(long) {}
             virtual void OnAlarm2(long) {}
@@ -99,6 +102,9 @@ namespace msw {
             long Item_GetItemToTarget(const bcs::FVEC3 &rPos) const;
             long Item_GetPosTurnAroundItem(bcs::FVEC3 &rPos, unsigned long nItem, long nDir, int) const;
             void Item_GetViewPointPosFromItem(bcs::FVEC3 &rPos) const;
+            // DOL. A random number below nMax. (range guessed from the name;
+            // BasketF tests RandMaxI(999) < 20)
+            long RandMaxI(long nMax) const;
 
         protected:
             unsigned char m_Unk04[0x60];

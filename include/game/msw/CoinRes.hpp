@@ -9,9 +9,13 @@ namespace msw {
     // namespace, as the name has no C prefix (a guess). Signatures read from
     // the DOL bodies.
     namespace CoinRes {
-        // Which coin layout (only 0 is used so far; its name is a guess).
+        // Which coin layout: "coin.brlyt", "VO_cockpit_02_coin.brlyt",
+        // "VO_cockpit_03_coin.brlyt" (the volley cockpit picks one by the
+        // screen split; names guessed from the files).
         enum E_COINLAYOUTID {
-            COINLAYOUT_COCKPIT = 0
+            COINLAYOUT_COCKPIT = 0,
+            COINLAYOUT_VOLLEY_02 = 1,
+            COINLAYOUT_VOLLEY_03 = 2
         };
 
         // The layout file, its animation files and the number of them (11),

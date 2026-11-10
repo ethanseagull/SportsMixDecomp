@@ -31,6 +31,9 @@ namespace msw {
                 void ActReset();
                 void ActPopup();
                 void ActDrop();
+                // Coins spent (DodgeF CCockpitDodgeCoin); nNum is passed on
+                // from CCockpitDodge::SetCoinSpendAnim.
+                void ActUse(long nNum);
                 void EnableDisp(int bDisp);
                 // Follows pPane on screen.
                 void AttachPane(nw4r::lyt::Pane *pPane);

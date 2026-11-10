@@ -23,3 +23,5 @@ Matching game/basket/CCockpitChrIcon2DBasket.cpp
 Matching game/basket/CStageFactoryBasket.cpp
 Equivalent game/basket/CCockpitBasketPause.cpp
 Equivalent game/basket/CStageBasket13.cpp
+Equivalent game/basket/CCockpitBasketPauseResult.cpp
+Equivalent game/basket/CCockpitBasketCoin.cpp

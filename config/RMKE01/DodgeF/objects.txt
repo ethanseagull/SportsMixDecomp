@@ -23,3 +23,5 @@ Matching game/dodge/CStageFactoryDodge.cpp
 Equivalent game/dodge/CEventDemoDodge.cpp
 Equivalent game/dodge/CCockpitDodgePause.cpp
 Equivalent game/dodge/CStageDodge13.cpp
+Equivalent game/dodge/CCockpitDodgeCoin.cpp
+Equivalent game/dodge/CCockpitDodgePauseResult.cpp

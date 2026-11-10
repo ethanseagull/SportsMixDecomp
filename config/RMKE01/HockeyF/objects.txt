@@ -22,3 +22,4 @@ Matching game/hockey/CStageFactoryHockey.cpp
 Equivalent game/hockey/CCockpitHockeyCoin.cpp
 Equivalent game/hockey/CCockpitHockeyPause.cpp
 Equivalent game/hockey/CStageHockey13.cpp
+Equivalent game/hockey/CCockpitHockeyPauseResult.cpp

@@ -21,17 +21,17 @@ namespace msw {
             virtual void Remove();
 
             void StateControl();
-            void SetAnimResultWin(long nTeam);
+            void SetAnimResultWin(long nAnim);
 
             // The period scores of the two teams (nNum periods each).
-            void SetCountScore(long *pScore0, long *pScore1, long nNum);
+            long SetCountScore(long *pScore0, long *pScore1, long nNum);
             // (guess) Another per-team, per-period table, filled up to
             // nPeriodNum.
-            void SetCountPoint(long *pPoint0, long *pPoint1, long nPeriod, long nPeriodNum);
-            void SetPerfectIcon(long *pPerfect0, long *pPerfect1, long nNum);
-            void SetTextNext(long nNum, long nPeriod);
-            void SetCountNum(long nPeriod);
-            void SetTotalPoint(long nTotal0, long nTotal1);
+            long SetCountPoint(long *pPoint0, long *pPoint1, long nPeriod, long nPeriodNum);
+            long SetPerfectIcon(long *pPerfect0, long *pPerfect1, long nNum);
+            long SetTextNext(long nNum, long nPeriod);
+            long SetCountNum(long nPeriod);
+            long SetTotalPoint(long nTotal0, long nTotal1);
     };
 }
 

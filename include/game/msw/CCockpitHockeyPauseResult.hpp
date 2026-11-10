@@ -21,13 +21,13 @@ namespace msw {
             virtual void Remove();
 
             void StateControl();
-            void SetAnimResultWin(long nTeam);
+            void SetAnimResultWin(long nAnim);
 
             // The period scores of the two teams (nNum periods each).
-            void SetCountScore(long *pScore0, long *pScore1, long nNum);
-            void SetTextNext(long nNum, long nPeriod);
-            void SetCountNum(long nPeriod);
-            void SetTotalPoint(long nTotal0, long nTotal1);
+            long SetCountScore(long *pScore0, long *pScore1, long nNum);
+            long SetTextNext(long nNum, long nPeriod);
+            long SetCountNum(long nPeriod);
+            long SetTotalPoint(long nTotal0, long nTotal1);
     };
 }
 

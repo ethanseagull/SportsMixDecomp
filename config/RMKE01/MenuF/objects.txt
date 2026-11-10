@@ -11,4 +11,5 @@ Equivalent game/menu/CDepthOfFieldValue.cpp
 Matching game/menu/CButton0.cpp
 Equivalent game/menu/CButton1.cpp
 Equivalent game/menu/CButtonEntry.cpp
+Equivalent game/menu/CSelectMenuLayoutBase.cpp
 Equivalent game/menu/CButton1Code.cpp

@@ -12,6 +12,9 @@ namespace nw4r {
     namespace lyt {
         class Pane;
     }
+    namespace ut {
+        class ArchiveFont;
+    }
 }
 
 namespace bcs {
@@ -30,6 +33,10 @@ namespace bcs {
         // last two are for is not known; their names are guesses)
         CPaneObj *DuplicatePaneObj(CPaneCtrl *pPaneCtrl, const char *pSrcName, const char *pName,
                                    const char *pLayoutName, int nArg);
+
+        // Added for MenuF game/menu/CSelectMenuLayoutBase.cpp: releases a
+        // font made from a layout archive (return type guessed).
+        void RemoveArchiveFont(nw4r::ut::ArchiveFont *pFont);
 
         // (name guessed; no symbol) The object that drives pPane, made by
         // pPaneCtrl; null when either is missing. Inline in the game: the

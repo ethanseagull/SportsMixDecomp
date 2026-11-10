@@ -42,6 +42,11 @@ namespace msw {
             virtual void Main();
             virtual long SendEvent(long nEvent, void *pParam);
             virtual void Disp();
+            // Pure again here: the class's vtable (MenuF .data 0x17A0) has
+            // null entries for the two, where CMenuLinkBase has inline
+            // bodies.
+            virtual int Set() = 0;
+            virtual void Remove() = 0;
             virtual void SetVisible(int bVisible);
 
             virtual void CloseMenu();
@@ -82,6 +87,19 @@ namespace msw {
             // CLayoutBase::CreateLayoutObject and CLayoutDL::SetGDLMemArea.
             bcs::G2D::CPaneCtrl *CreateLytObj(nw4r::lyt::ArcResourceAccessor *pAccessor, long nUnk, long nGDLMemArea);
             void SetTextBoxFromMessage(bcs::G2D::CLayoutBase *pLayout);
+            // The kind id of the button pad nPad has selected on the owner's
+            // current screen; 0 without an owner.
+            unsigned short GetCurrentButtonKindId(long nPad);
+            // Sound and rumble, each only when enabled by m_bSeEnable /
+            // m_bVibEnable. The argument names are guesses.
+            unsigned long SE_Play(long nSe, long nUnk);
+            unsigned long Voice_Play(long nVoice, long nUnk);
+            void Voice_Stop(long nVoice);
+            void Vib_Start(long nPad, long nPattern, unsigned long nUnk);
+            // Whether the owner's back button is moving in / is the
+            // selected button.
+            int IsBackFrameIn(long nPad);
+            int IsBackFrameOut(long nPad);
 
         protected:
             // The owner as a CSelectMenu: the base's helpers call
@@ -99,7 +117,7 @@ namespace msw {
             CMenuPaneAccessor *m_pPaneAccessor;  // 0x3C
             unsigned short m_Unk40;              // 0x40
             unsigned short m_nPushButtonId[4];   // 0x42, cleared by ClearPushButtonId
-            void *m_Unk4C;                       // 0x4C, an array freed with delete[]
+            unsigned char *m_Unk4C;              // 0x4C, an array freed with delete[]
             int m_bSeEnable;                     // 0x50, tested by SE_Play and Voice_Play
             int m_bVibEnable;                    // 0x54, tested by Vib_Start
             CMenuPartList *m_pMenuPartList;      // 0x58

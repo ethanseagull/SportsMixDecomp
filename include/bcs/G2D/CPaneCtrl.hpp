@@ -35,6 +35,9 @@ namespace bcs {
                 // Hangs pPaneObj's pane under rParent's.
                 void AppendPaneObj(CPaneObj *pPaneObj, CPaneObj &rParent);
 
+                // Added for MenuF game/menu/CSelectMenuLayoutBase.cpp.
+                void SetVisible(int bVisible);
+
             private:
                 // Brings the size to the 0x54 that `new` is asked for. The
                 // constructor sets up a nw4r::ut::List here.

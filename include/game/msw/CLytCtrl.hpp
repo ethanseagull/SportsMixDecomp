@@ -12,6 +12,12 @@ namespace nw4r {
     }
 }
 
+namespace bcs {
+    namespace G2D {
+        class CLayoutBase;
+    }
+}
+
 namespace msw {
 
     // Lives in the DOL (a task found through its handle). Only the members
@@ -25,6 +31,10 @@ namespace msw {
             nw4r::lyt::ArcResourceAccessor *NewArcResourceAccessor(const char *pFileName, const char *pRootFolderName);
             nw4r::ut::Font *GetArchiveFont(long nFont);   // return type guessed (some font pointer or null)
             const char *GetFontResourceName(long nFont);
+            // Added for MenuF game/menu/CSelectMenuLayoutBase.cpp. The second
+            // argument is the word at 0x2C of pLayout's CLayoutDL; return
+            // type guessed.
+            void SetTextBoxFromMessage(bcs::G2D::CLayoutBase *pLayout, const char *pName);
 
             // Not in the DOL by name: the sequence appears inline in every
             // user (CLytManager::GetInstance, null check, GetObject). The

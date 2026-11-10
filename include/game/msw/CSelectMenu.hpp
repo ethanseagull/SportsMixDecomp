@@ -8,6 +8,11 @@
 namespace msw {
     class CSelectMenuLayoutBase;
 
+    namespace dwc {
+        class CGameDwc;
+        class CFriend;
+    }
+
     // The task behind the SelectMenu screens (MenuF). Its constructor calls
     // CMenuTask's. Only the members used so far; the two name getters are
     // non-static and neither reads `this`. The class has a second
@@ -90,6 +95,36 @@ namespace msw {
             void Team_Loop1();
             void Team_Out();
 
+            // Added for MenuF game/menu/CPlayerSelect.cpp. The steps of the
+            // Wi-Fi player selection screen (SelectMenu::CPlayerSelect).
+            void WifiPlayerSelect_In();
+            void WifiPlayerSelect_Loop();
+            void WifiPlayerSelect_Out();
+
+            // Added for MenuF game/menu/CPlayerInfo.cpp. The steps of the
+            // Wi-Fi player information window (SelectMenu::CPlayerInfo).
+            void WifiPlayerInfo_In();
+            void WifiPlayerInfo_Loop();
+            void WifiPlayerInfo_Out();
+
+            // Added for MenuF game/menu/CPartySelect.cpp. The steps of the
+            // party game selection screen (SelectMenu::CPartySelect).
+            void PartySelect_In();
+            void PartySelect_Loop();
+            void PartySelect_Loop0();
+            void PartySelect_ChangeStateInit(long nMode);
+            void PartySelect_Loop1();
+            void PartySelect_Out();
+
+            // Added for MenuF game/menu/CWiFiFrindVS.cpp (return types
+            // guessed). The steps of the friend match screen
+            // (SelectMenu::CWiFiFrindVS), and what they call.
+            void FriendVS_In();
+            void FriendVS_Loop();
+            void FriendVS_Out();
+            void CancelVsFriend();
+            void FriendVSWait_SendSetStep(long nStep);
+
             // Added for MenuF game/menu/CPlusMinus.cpp (defined there; the
             // return types and argument names are guesses). Whether pad
             // nPad uses a cursor (either of two flags of CMenuPadInfo).
@@ -132,9 +167,10 @@ namespace msw {
             unsigned char m_Unk9A;           // 0x9A
         public:
             unsigned char m_Unk9B;           // 0x9B
-        private:
-            unsigned char m_Unk9C;           // 0x9C
         public:
+            // 0x9C. (added for game/menu/CPartySelect.cpp) Set to 1, 3, 5
+            // or 7 when one of the four party games is chosen.
+            unsigned char m_Unk9C;
             unsigned char m_Unk9D;           // 0x9D, compared with 4
 
         public:
@@ -184,11 +220,27 @@ namespace msw {
             RFLDataSource m_StarMiiSource;   // 0x6A8
             RFLCreateID m_StarMiiCreateId;   // 0x6AC
         private:
-            unsigned char m_Unk6B4[0x5C];    // 0x6B4
+            unsigned char m_Unk6B4[0x48];    // 0x6B4
+        public:
+            // 0x6FC to 0x707. (names guessed; added for
+            // game/menu/CWiFiFrindVS.cpp) The Wi-Fi connection, the friend
+            // the friend match is with, and a copy of it kept by
+            // FriendVS_In.
+            dwc::CGameDwc *m_pGameDwc;       // 0x6FC
+            dwc::CFriend *m_pVsFriend;       // 0x700
+            dwc::CFriend *m_pVsFriendSaved;  // 0x704
+        private:
+            unsigned char m_Unk708[0x8];     // 0x708
         public:
             CSave::PlayerData *m_pPlayerData; // 0x710, CSave::GetPlayerData(-1)
         private:
-            unsigned char m_Unk714[0x248];   // 0x714
+            unsigned char m_Unk714[0x48];    // 0x714
+        public:
+            // 0x75C. (added for game/menu/CWiFiFrindVS.cpp) 0x1EC bytes
+            // FriendVS_Loop clears before the friend match starts.
+            unsigned char m_FriendVSWaitWork[0x1EC];
+        private:
+            unsigned char m_Unk948[0x14];    // 0x948
         public:
             // 0x95C. (name guessed; added for game/menu/CTeam.cpp) Frames
             // left before the team screen takes stick input again.
@@ -204,12 +256,22 @@ namespace msw {
         public:
             long m_UnkA00;                   // 0xA00
         private:
-            unsigned char m_UnkA04[0xAB8 - 0xA04]; // 0xA04
+            unsigned char m_UnkA04[0x74];    // 0xA04
+        public:
+            // 0xA78. (added for game/menu/CWiFiFrindVS.cpp) Set by
+            // FriendVS_Loop to whether m_Unk23E is 1 when a friend match
+            // is accepted.
+            long m_UnkA78;
+        private:
+            unsigned char m_UnkA7C[0xAB8 - 0xA7C]; // 0xA7C
     };
 
     // Defined in the same MenuF file as CSelectMenu. The text of message
     // pLabel in message group pGroup. Added for game/menu/CInitGuide.cpp.
     const wchar_t *GetMessageLabelString(const char *pGroup, const char *pLabel);
+    // (added for game/menu/CPlayerSelect.cpp) The text of message nIndex
+    // in message group pGroup.
+    const wchar_t *GetMessageString(const char *pGroup, long nIndex);
 
     // (added for game/menu/CTeam.cpp) Returns
     // CSelectMenuLayoutBase::s_DefaultOutAnimOverTime.

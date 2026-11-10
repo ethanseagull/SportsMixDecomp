@@ -36,6 +36,9 @@ namespace bcs {
         // picture pane show the movie, in the place of pFrame (return type
         // and argument names guessed).
         void SetupMoviePane(CPaneObj *pPaneObj, CPaneObj *pFrame);
+        // Added for MenuF game/menu/CPartySelect.cpp. Points the picture
+        // pane pPane at the current movie frame (return type guessed).
+        void RemapMoviePane(nw4r::lyt::Pane *pPane);
         // A copy, called pName, of pPaneCtrl's pane pSrcName, as an object of
         // pPaneCtrl; null on failure. The radar icons pass their layout's
         // file name as the fourth argument and 0 as the fifth. (what the

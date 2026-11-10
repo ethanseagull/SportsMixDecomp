@@ -26,11 +26,19 @@ namespace msw {
                 // Compared as a signed int as well (VolleyF
                 // CTmGameHandlerVolley::_SendMessage).
                 long GetPeriod() const { return m_nPeriod; }
+                // Compared as a signed int too (HockeyF
+                // CEventDemoHockey::CameraEvent).
+                long GetStage() const { return m_nStage; }
 
                 unsigned char m_Unk00[4];
                 unsigned char m_nGameMode; // 0x04, the GAME_MODE of the running game
                 unsigned char m_nGameType; // 0x05, 2 selects the sport's party game
-                unsigned char m_Unk06[6];
+                unsigned char m_Unk06[4];
+                // 0x0A, the stage being played (name guessed; the DOL's
+                // CEventDemoBase::_Init copies it, and HockeyF tests 0x11
+                // before calling CStageHockey17)
+                unsigned char m_nStage;
+                unsigned char m_Unk0B;
                 unsigned char m_nPeriod;   // 0x0C, the period being played; 0 is the first (guess)
                 unsigned char m_Unk0D[0x160 - 0x0D];
                 long m_Unk160;             // 0x160, counted by tournament mission 0x3E (coins?)

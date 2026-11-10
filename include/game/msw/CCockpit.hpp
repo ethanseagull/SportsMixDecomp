@@ -40,6 +40,7 @@ namespace msw {
             static long RemoveObj(long nObjId);               // -1 without a task
             static long IsEndObj(long nObjId);                // 1 without a task
             static void SetAnimEndClose(long nObjId, int bClose); // return type guessed
+            static void PlayEndAnim(long nObjId);                 // return type guessed
     };
 }
 

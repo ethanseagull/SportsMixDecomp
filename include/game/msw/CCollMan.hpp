@@ -3,6 +3,7 @@
 
 #include "bcs/CTask.hpp"
 #include "bcs/FVEC3.hpp"
+#include "bcs/FVEC4.hpp"
 
 namespace msw {
 
@@ -69,6 +70,22 @@ namespace msw {
             static CCollMan *m_pInstance;
 
         protected:
+            // DOL functions the modules' DetectMapHit_ build on. rRect is a
+            // rectangle on the ground (left, right, front, back): the Inner
+            // one keeps the sphere inside it, the Outer ones keep it out of
+            // it (OuterRgnZ_ only along z). Bit 31 of the flags is passed
+            // through. What the float after the rectangle is for is not known
+            // (BasketF passes 0).
+            int DetectMapHitInnerRgn_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, float &rTime, const bcs::FVEC4 &rRect,
+                                      float, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius,
+                                      unsigned long flags);
+            int DetectMapHitOuterRgn_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, float &rTime, const bcs::FVEC4 &rRect,
+                                      float, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius,
+                                      unsigned long flags);
+            int DetectMapHitOuterRgnZ_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, float &rTime, const bcs::FVEC4 &rRect,
+                                       float, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius,
+                                       unsigned long flags);
+
             int m_bEnableViewColl;       // 0x34
             long m_Unk38;                // 0x38, zero from ResetViewColl_
             long m_nViewCollTargetDir;   // 0x3C, -1 from ResetViewColl_

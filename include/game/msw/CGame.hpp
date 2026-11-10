@@ -40,8 +40,16 @@ namespace msw {
                 unsigned char m_nStage;
                 unsigned char m_Unk0B;
                 unsigned char m_nPeriod;   // 0x0C, the period being played; 0 is the first (guess)
-                unsigned char m_Unk0D[0x160 - 0x0D];
-                long m_Unk160;             // 0x160, counted by tournament mission 0x3E (coins?)
+                unsigned char m_Unk0D[0x18 - 0x0D];
+                // 0x18: flag bits (name guessed). BasketF's
+                // CStageManBasket::Main_ skips the change-of-offense sound
+                // while any of 0x4306 is set.
+                unsigned long m_nFlag18;
+                unsigned char m_Unk1C[0x160 - 0x1C];
+                // 0x160: counted by tournament mission 0x3E (HockeyF) and
+                // passed to the coin mission (0x4E) check after a basket
+                // (BasketF); meaning not known.
+                long m_Unk160;
                 unsigned char m_Unk164[0x638 - 0x164];
             };
 
@@ -66,19 +74,21 @@ namespace msw {
             // CTmGameHandler::_SetBattleWin takes it and _IsBattleWin tests
             // for 1.
             static long GetTeamResult(long nTeam);
-            // The score of team nTeam in period nPeriod; the coins of team
-            // nTeam. (DOL, static; return types guessed)
+            // The score of team nTeam in period nPeriod. (DOL, static; return type guessed)
             static long GetTeamPeriodScore(long nTeam, long nPeriod);
+            // The coins of team nTeam: the word at g_GameWork + 0x9C +
+            // 4 * nTeam, 0 for a negative team.
             static long GetTeamCoin(long nTeam);
-            // Sends a message to the running game (static in the DOL: the
-            // first argument goes in r3). Ends in the game's tournament
-            // handler, CTmGameHandler::_SendMessage.
-            static void SendMessage(long, long, long, long);
-            // The score of team nTeam in the running game (a DOL table of
-            // its own, not g_GameWork); whether player nPlayer's character is
-            // the hockey keeper (bit 1 of the byte at g_GameWork + 0x58 +
-            // nPlayer). (DOL, static; return types guessed)
+            // The score of team nTeam, from a word array in the DOL's data.
             static long GetTeamScore(long nTeam);
+            // Passes a message to the running game's virtual at vtable
+            // offset 0x3C, if there is a game.
+            static void SendMessage(long nMsg, long, long, long);
+            // The goal team nTeam attacks: the byte at g_GameWork + 0x88 +
+            // nTeam, read unsigned. (return type guessed)
+            static long GetTargetGoalIdx(long nTeam);
+            // Whether player nPlayer's character is the hockey keeper (bit 1
+            // of the byte at g_GameWork + 0x58 + nPlayer). (return type guessed)
             static int IsCharEx_HockeyKeeper(long nPlayer);
 
             static GameWork g_GameWork;

@@ -5,6 +5,9 @@
 
 namespace msw {
 
+    class CBall;
+    class CChrCore;
+
     // Size 0x254 (from its allocation site). The camera of a match; each
     // sport derives its own. The class lives in the DOL: its constructor,
     // destructor and most virtuals are there, the four inline virtuals are
@@ -51,13 +54,66 @@ namespace msw {
             static CGameCamera *g_pInstance[4];
             static long g_nInstanceNum;
 
+            // DOL members used by the sports' cameras (BasketF
+            // game/basket/CCameraBasketHB.cpp). `this` and the arguments are
+            // read from the callers and the DOL bodies; return types and
+            // parameter names are guessed.
+            // Sets the camera mode; the DOL body returns 0 when `mode` is
+            // the current one and `bForce` is zero.
+            int SetCamMode(long mode, int bForce);
+            void CalcCamData(float rate);
+            void CalcLookPos(const bcs::FVEC3 &rPos, const bcs::FVEC3 &rArg2, const bcs::FVEC3 &rArg3, float rate,
+                             long mask);
+            void MakeingFrontCamData(const bcs::FVEC3 &rPos, const bcs::FVEC3 &rTarget, float, float, float, float,
+                                     float, float);
+            float CalcCurveBlend(float, float, float, float, float, float, float, float, float, float) const;
+            // The ball's and the character's position, x and z negated when
+            // bit 0x2 of m_UnkFC is set.
+            bcs::FVEC3 GetBallPosXZ(const CBall *pBall) const;
+            bcs::FVEC3 GetCorePosXZ(const CChrCore *pCore) const;
+            void NormalizePersPos(bcs::FVEC3 &rPos, float, float min, float max);
+
         protected:
             // 0xFC: flags. With 0x80 set the camera stands still
-            // (GetFrameRateF returns 0). Meaning of the other bits not known.
+            // (GetFrameRateF returns 0); 0x8 is set by the constructor when
+            // the view's aspect type is 1. Meaning of the other bits not known.
             unsigned long m_UnkFC;
+            // 0x100 to 0x110: floats set by the constructor (named by offset
+            // until their meaning is known).
+            float m_Unk100;
+            float m_Unk104;
+            float m_Unk108;
+            float m_Unk10C;
+            float m_Unk110;
 
         private:
-            unsigned char m_Unk100[0x254 - 0x100];
+            unsigned char m_Unk114[0x118 - 0x114];
+
+        protected:
+            bcs::FVEC3 m_Unk118; // 0x118
+
+        private:
+            unsigned char m_Unk124[0x1C0 - 0x124];
+
+        protected:
+            float m_Unk1C0; // 0x1C0
+
+        private:
+            unsigned char m_Unk1C4[0x240 - 0x1C4];
+
+        protected:
+            // 0x240 to 0x24C: floats set by the constructor.
+            float m_Unk240;
+            float m_Unk244;
+            float m_Unk248;
+            float m_Unk24C;
+            // 0x250: no DOL function of this class touches it, and the
+            // DOL's own derived camera (allocated with 0x254 bytes) and
+            // CCameraBasketHB use it as their own, so the class is probably
+            // 0x250 bytes and this the first member of each derived class.
+            // Kept here so the size stays 0x254 until that is checked with
+            // a full build.
+            float m_Unk250;
     };
 }
 

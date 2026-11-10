@@ -10,3 +10,4 @@ Matching game/volley/CBallManVolley.cpp
 Matching game/volley/CCockpitVolleyLayoutBase.cpp
 Equivalent game/volley/CCollManVolley.cpp
 Equivalent game/volley/CChrMarkerVolleyJump.cpp
+Equivalent game/volley/CStageMan.cpp

@@ -395,13 +395,14 @@ namespace msw {
             virtual void SetDispByTag(long, int, unsigned long, unsigned long);
             virtual const STAGE::MDL_GEN_RULE *GetMdlGenRule_() const;
             virtual const STAGE::MDL_GEN_RULE *FindMdlGenRule_(bcs::CRegex &, const char *) const;
-            // GetBaseCourtWidth_, GetBaseCourtDepth_ and GetBaseCourtRadius_
-            // have bodies in the DOL but no exported name: every module's
-            // stage overrides them.
+            // GetBaseCourtWidth_ and GetBaseCourtDepth_ have bodies in the
+            // DOL but no exported name: every module's stage overrides them.
+            // GetBaseCourtRadius_ is emitted as a weak function by VolleyF,
+            // whose stage does not override it.
             virtual float GetBaseCourtWidth_() const;
             virtual float GetBaseCourtDepth_() const;
             virtual float GetBaseCourtFrontZoneDepth_() const;
-            virtual float GetBaseCourtRadius_() const;
+            virtual float GetBaseCourtRadius_() const { return 0.0f; }
             virtual float GetBaseGroundWidth_() const;
             virtual float GetBaseGroundDepth_() const;
             virtual float GetBaseOuterWidth_() const { return 0.0f; }
@@ -508,6 +509,8 @@ namespace msw {
             virtual void SwitchDemoMdlAll(int);
 
             void SetStageNo(long stageNo);
+            // (name guessed) Inline in the modules.
+            long GetStageNo() const { return m_nStageNo; }
             // Loads and builds the stage chosen with SetStageNo.
             void Initialize_();
 

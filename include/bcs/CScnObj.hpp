@@ -2,6 +2,7 @@
 #define BCS_CSCNOBJ_HPP_
 
 #include "bcs/CG3dObj.hpp"
+#include "bcs/FVEC3.hpp"
 #include "revolution/gx/GXEnum.h"
 
 namespace bcs {
@@ -121,7 +122,14 @@ namespace bcs {
             void OffFlag(unsigned long flag) { m_nFlag &= ~flag; }
 
         private:
-            unsigned char m_Unk08[0xA8];  // 0x08
+            unsigned char m_Unk08[0x90];  // 0x08
+
+        public:
+            // (name guessed) The translation CalcRootMtx reads.
+            FVEC3 m_vTrans;               // 0x98
+
+        private:
+            unsigned char m_UnkA4[0x0C];  // 0xA4
 
         public:
             // (names guessed) The rotation about the three axes in radians,
@@ -131,8 +139,12 @@ namespace bcs {
             float m_fRotY;                // 0xB4
             float m_fRotZ;                // 0xB8
 
+            // (name guessed) Set with the translation and rotation by the
+            // volley stage's figures before CalcRootMtx.
+            FVEC3 m_vScale;               // 0xBC
+
         private:
-            unsigned char m_UnkBC[0x40];  // 0xBC
+            unsigned char m_UnkC8[0x34];  // 0xC8
             unsigned long m_nFlag;        // 0xFC (name guessed)
             unsigned char m_Unk100[0x18]; // 0x100
     };

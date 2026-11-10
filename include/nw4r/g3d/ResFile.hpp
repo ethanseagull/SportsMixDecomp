@@ -4,6 +4,7 @@
 #include "nw4r/g3d/ResAnmChr.hpp"
 #include "nw4r/g3d/ResAnmClr.hpp"
 #include "nw4r/g3d/ResAnmTexSrt.hpp"
+#include "nw4r/g3d/ResMdl.hpp"
 
 namespace nw4r {
     namespace g3d {
@@ -23,6 +24,7 @@ namespace nw4r {
                 ResAnmChr GetResAnmChr(const char *pName) const;
                 ResAnmClr GetResAnmClr(const char *pName) const;
                 ResAnmTexSrt GetResAnmTexSrt(const char *pName) const;
+                ResMdl GetResMdl(const char *pName) const;
 
                 // DOL functions; the three calls a file needs before use,
                 // in this order. Bind resolves the file's references against

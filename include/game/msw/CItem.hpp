@@ -86,9 +86,11 @@ namespace msw {
             virtual float GetParamScale() const { return m_fParamScale; }
             virtual long GetParamReboundNum() const { return m_nParamReboundNum; }
             virtual long GetParamThrowTrackType() const { return 0; }
-            virtual long GetParamThrowType() const;
-            virtual float GetParamThrowSearchDirRangeMax() const;
-            virtual float GetParamThrowSearchDistRangeMax() const;
+            // Inline: BasketF emits these three after CItemBasketMushroom,
+            // which does not override them.
+            virtual long GetParamThrowType() const { return 0; }
+            virtual float GetParamThrowSearchDirRangeMax() const { return 0.0f; }
+            virtual float GetParamThrowSearchDistRangeMax() const { return 0.0f; }
             virtual void DoThrowInit(const bcs::FVEC3 &, int);
             virtual void DoTouchDown();
 
@@ -134,13 +136,20 @@ namespace msw {
             // (name guessed) Inline in the original; the modules read the
             // member directly.
             const bcs::FVEC3 &GetPos() const { return m_vPos; }
+            // Starts a parabolic flight towards pos; the three floats are
+            // the per-game parameters at 0xB8 to 0xC0 (BasketF's bomb passes
+            // them from its DoThrowInit). Meaning of each is not known.
+            void SetVelParabola_(const bcs::FVEC3 &pos, float, float, float);
 
         protected:
             unsigned char m_Unk7C[0x14];   // 0x7C
             float m_fParamMainLife;        // 0x90 (name from GetParamMainLife)
             float m_fParamDropLife;        // 0x94 (name from GetParamDropLife)
             float m_fParamScale;           // 0x98 (name from GetParamScale)
-            unsigned char m_Unk9C[0x08];   // 0x9C
+            // 0x9C and 0xA0 are set only by the shells' ExParamUpdate_
+            // (BasketF); BossF's session reads 0x9C as a throw speed.
+            float m_fParamThrowSpeed;      // 0x9C (name guessed)
+            float m_fParamA0;              // 0xA0
             // 0xA4 to 0xC0 are set with the three above by the per-game
             // ExParamUpdate_ overrides; what they mean is not known.
             float m_fParamA4;              // 0xA4

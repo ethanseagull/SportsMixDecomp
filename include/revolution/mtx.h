@@ -14,6 +14,7 @@ typedef struct Vec {
 
 float PSVECSquareDistance(const Vec *pA, const Vec *pB);
 void PSVECNormalize(const Vec *pIn, Vec *pOut);
+float PSVECMag(const Vec *p);
 
 #ifdef __cplusplus
 }

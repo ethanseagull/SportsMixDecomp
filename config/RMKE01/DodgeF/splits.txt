@@ -322,25 +322,20 @@ game/dodge/CChrManDodge.cpp:
 	.text       start:0x00073CF0 end:0x00075B0C
 	.ctors      start:0x00000084 end:0x00000088
 	.rodata     start:0x000013A8 end:0x000013E0
-	.data       start:0x00019DE0 end:0x0001A2A0
+	.data       start:0x00019DE0 end:0x0001A0B0
 	.bss        start:0x00000AF8 end:0x00000B00
 
 game/dodge/CChrMarkerDodge.cpp:
-	.text       start:0x00075B0C end:0x00075D88
-
-game/dodge/CChrMarkerDodgeArrow.cpp:
-	.text       start:0x00075D88 end:0x00076484
+	.text       start:0x00075B0C end:0x00076484
 	.ctors      start:0x00000088 end:0x0000008C
 	.rodata     start:0x000013E0 end:0x000013F0
+	.data       start:0x0001A0B0 end:0x0001A2A0
 	.bss        start:0x00000B00 end:0x00000B50
 
 game/dodge/CCollManDodge.cpp:
-	.text       start:0x00076484 end:0x000772E0
+	.text       start:0x00076484 end:0x00077368
 	.rodata     start:0x000013F0 end:0x00001410
 	.data       start:0x0001A2A0 end:0x0001A368
-
-game/dodge/CCollMan.cpp:
-	.text       start:0x000772E0 end:0x00077368
 
 game/dodge/CComDrvDodge.cpp:
 	.text       start:0x00077368 end:0x00077468
@@ -371,12 +366,9 @@ game/dodge/CEffectCtrlDodge.cpp:
 	.data       start:0x0001A5A0 end:0x0001A5E0
 
 game/dodge/CItemManDodge.cpp:
-	.text       start:0x0007BC24 end:0x0007BE2C
-	.data       start:0x0001A5E0 end:0x0001B3F0
-
-game/dodge/CItemDodgeBombDD_Base.cpp:
-	.text       start:0x0007BE2C end:0x0007DC88
+	.text       start:0x0007BC24 end:0x0007DC88
 	.rodata     start:0x000015B8 end:0x00001678
+	.data       start:0x0001A5E0 end:0x0001B3F0
 
 game/dodge/CEffectCoinGet.cpp:
 	.text       start:0x0007DC88 end:0x0007E4F8
@@ -418,12 +410,12 @@ game/dodge/CStgGmk_BossPackun_Dodge_Act.cpp:
 
 game/dodge/CStgGmk_Case_Act_Dodge.cpp:
 	.text       start:0x0008C360 end:0x0008C934
-	.rodata     start:0x000054E0 end:0x00005548
+	.rodata     start:0x000054E0 end:0x000054F8
 	.data       start:0x0001C9B0 end:0x0001CC40
 
-game/dodge/CStageMan.cpp:
+game/dodge/CStageDodge01.cpp:
 	.text       start:0x0008C934 end:0x0008D7DC
-	.rodata     start:0x00005548 end:0x00005560
+	.rodata     start:0x000054F8 end:0x00005560
 	.data       start:0x0001CC40 end:0x0001D0E8
 	.bss        start:0x00000BA0 end:0x00000BA8
 
@@ -594,24 +586,12 @@ game/dodge/CComManDodgeGame.cpp:
 game/dodge/CStgGmk_WaterWorks_Dodge_Act.cpp:
 	.text       start:0x000B5B44 end:0x000BA5F0
 	.rodata     start:0x00007780 end:0x000078F0
-	.data       start:0x00022B98 end:0x000232E0
-
-game/dodge/CStgGmk_Wave_Dodge_Act.cpp:
-	.text       start:0x000BA5F0 end:0x000BA6B0
-
-game/dodge/CStgGmk_WaveCluster_Dodge.cpp:
-	.text       start:0x000BA6B0 end:0x000BA860
-	.rodata     start:0x000078F0 end:0x000078F8
-
-game/dodge/CStgGmk_Wave.cpp:
-	.text       start:0x000BA860 end:0x000BA8CC
+	.data       start:0x00022B98 end:0x00023230
 
 game/dodge/CStgGmk_Wave_Dodge.cpp:
-	.text       start:0x000BA8CC end:0x000BAA78
-	.data       start:0x000232E0 end:0x00023628
-
-game/dodge/CStgGmk_Wave_Act.cpp:
-	.text       start:0x000BAA78 end:0x000BAB08
+	.text       start:0x000BA5F0 end:0x000BAB08
+	.rodata     start:0x000078F0 end:0x000078F8
+	.data       start:0x00023230 end:0x00023628
 
 game/dodge/CStgGmk_Trolley_Act_Dodge.cpp:
 	.text       start:0x000BAB08 end:0x000BAEC4
@@ -628,7 +608,7 @@ game/dodge/unit_BB688.cpp:
 	.text       start:0x000BB688 end:0x000BD7F8
 	.ctors      start:0x000000C0 end:0x000000C4
 	.rodata     start:0x00007A78 end:0x00007AB8
-	.bss        start:0x00000C60 end:0x00000CD0
+	.bss        start:0x00000C60 end:0x00000C68
 
 game/dodge/unit_BD7F8.cpp:
 	.text       start:0x000BD7F8 end:0x000BE1FC
@@ -654,13 +634,17 @@ game/dodge/CCockpitDodgeCoin.cpp:
 
 game/dodge/CCockpitChrIcon2DDodge.cpp:
 	.text       start:0x000C3BEC end:0x000C3F8C
-	.rodata     start:0x000082C8 end:0x00008630
-	.data       start:0x00024198 end:0x00024588
+	.rodata     start:0x000082C8 end:0x00008880
+	.data       start:0x00024198 end:0x00024200
+
+game/dodge/DodgePrm.cpp:
+	.data       start:0x00024200 end:0x00024588
+	.bss        start:0x00000C68 end:0x00000CD0
 
 game/dodge/CGameDodgeDodgeOrDie.cpp:
 	.text       start:0x000C3F8C end:0x000CA078
 	.ctors      start:0x000000C4 end:0x000000C8
-	.rodata     start:0x00008630 end:0x00008988
+	.rodata     start:0x00008880 end:0x00008988
 	.data       start:0x00024588 end:0x00024CA0
 	.bss        start:0x00000CD0 end:0x00000D50
 

@@ -35,6 +35,10 @@ namespace bcs {
             virtual int OnActive(); // returns 0; type guessed
             virtual int OnLost();   // returns 0; type guessed
 
+            // Makes this the camera of `view`; -1 is the camera's own view
+            // (meaning of -1 guessed). Return type guessed.
+            void SetActive(long view);
+
             // Static: the body in the DOL reads the data block through r3.
             static void LoadQuakeData(const void *pData);
 

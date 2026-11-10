@@ -51,17 +51,22 @@ namespace msw {
             // Decides whether the match is over; `n` is kept at 0x3B.
             void _CheckEndMessage(int n);
 
-            // DOL members used by the modules' handlers. nType is a mission
-            // type (TournamentWork::TOURNAMENT_INFO::MISSION::nType); the
-            // meaning of the other arguments is not known. (return types
-            // guessed)
+            // Set up from the missions of the match (DOL; what they set is
+            // not mapped yet).
             void _SetupPanel();
             void _SetupItemParams();
-            int _IsMissionTeam(long nTeam);
+            // Whether player nPlayer's character is on the mission's team.
+            int _IsMissionTeam(long nPlayer);
+            // The count of the first mission of type nType, 0 without one.
             long _GetCount(long nType) const;
-            void _SetCount(long nType, long n, int, float);
-            void _CountUp(long nType, long n, int, float);
-            void _CheckPoint(long nType, long n, int, float);
+            // On every mission of type nType: set the count to nValue, add
+            // nValue to it, or update it from nValue against the target
+            // (_CheckPoint; the exact rule is not mapped). Each stores fTime
+            // in the mission; a nonzero bSe lets a change count towards the
+            // sound played by Main.
+            void _SetCount(long nType, long nValue, int bSe, float fTime);
+            void _CountUp(long nType, long nValue, int bSe, float fTime);
+            void _CheckPoint(long nType, long nValue, int bSe, float fTime);
 
             // The battle result kept in the tournament's data. Neither takes
             // an object. (return type of the second guessed: whether the
@@ -77,7 +82,8 @@ namespace msw {
             static CTmGameHandler *m_pInstance;
 
         protected:
-            long m_Unk34;        // 0x34, zero from the constructor
+            long m_Unk34;        // 0x34, zero from the constructor; low three bits are
+                                 // CTournament::GetMissionStartMode, the others rule flags
             signed char m_Unk38; // 0x38, set once _CheckEndMessage has a result
             signed char m_Unk39; // 0x39, set by messages; Main counts down in an extra match while it is
             signed char m_Unk3A; // 0x3A, -1 or what _CheckAppeal returned

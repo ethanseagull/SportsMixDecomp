@@ -19,7 +19,7 @@ msw::CTmGameHandler *msw::TournamentVolley::CreateInstance(bcs::CTask *pParent)
 // Most functions below call TournamentWork::GetTournamentInfo and, in the
 // original, some of them never use the result.
 
-typedef msw::TournamentWork::TOURNAMENT_INFO::MISSION MISSION;
+typedef msw::TournamentWork::MISSION_INFO MISSION;
 
 void msw::CTmGameHandlerVolley::_InitRule()
 {
@@ -179,7 +179,7 @@ void msw::CTmGameHandlerVolley::_SetCountDisp(int bShow)
 void msw::CTmGameHandlerVolley::_SetCountUp(long nMission)
 {
     const MISSION &mission = TournamentWork::GetTournamentInfo().aMission[nMission];
-    long nNew = mission.nUnk06;
+    long nNew = mission.nPrevCount;
     long nCount = mission.nCount;
 
     switch (mission.nType) {

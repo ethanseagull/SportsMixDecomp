@@ -12,6 +12,29 @@ namespace msw {
         public:
             CGameDodge(bcs::CTask *pParent);
 
+            // Lives left to character nChr (static: the body works on
+            // CGame::m_pInstance). CChrMarkerDodge shows no marker in the
+            // party game for a character with none left.
+            static long GetChrRestLife(long nChr);
+
+            // The dodgeball game's own virtual functions from slot 0x2A8 (after
+            // CGame's), in the order of __vt__Q23msw10CGameDodge; only as far
+            // as CTmGameHandlerDodge needs. Return types are placeholders
+            // (void) except where a body or caller shows them.
+            virtual void GetPassCount_() const;                          // 0x2A8
+            virtual void IncPassCount_(long);                            // 0x2AC
+            virtual void ClearPassCount_();                              // 0x2B0
+            virtual void SetPassCatch_(long);                            // 0x2B4
+            virtual void TeamNoConv_(long) const;                        // 0x2B8
+            virtual void ChrChange_(long, long);                         // 0x2BC
+            virtual void UpdatePowerAll_();                              // 0x2C0
+            virtual void PowerUpTelopIn_(long);                          // 0x2C4
+            virtual void UpdatePowerUpTelop_(float);                     // 0x2C8
+            virtual void InitScoreAll_();                                // 0x2CC
+            virtual long GetChrLostScore_(long);                         // 0x2D0
+            // GetChrLostScore_: the word at 0x1B4 + 4 * nChr (the score
+            // character nChr has lost; meaning guessed from the name).
+
         private:
             unsigned char m_Unk150[0x420 - sizeof(CGame)];
     };

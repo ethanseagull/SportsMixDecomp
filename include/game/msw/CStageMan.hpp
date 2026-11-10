@@ -13,10 +13,13 @@ namespace bcs {
     class CScnObj;
 }
 
+// The goal of a basket court (BasketF's msw::CGoalObjBasket derives from it):
+// what GetGoal returns. A class in the global namespace.
+class CGoalObj;
+
 namespace msw {
 
     class CArn;
-    class CStageGoal; // (name guessed) what GetGoal returns
     class CStageMdl;
     class CStageMdlListNode;
     class CStageNet;
@@ -311,8 +314,8 @@ namespace msw {
             virtual float GetTeamCourtOffsetX(long team) const { return m_aTeamCourtOffset[team].x; }
             virtual float GetTeamCourtOffsetZ(long team) const { return m_aTeamCourtOffset[team].z; }
             virtual bcs::FVEC3 GetTeamCourtOffset(long team) const { return m_aTeamCourtOffset[team]; }
-            virtual CStageGoal *GetGoal(long) { return 0; }
-            virtual const CStageGoal *GetGoal(long) const { return 0; }
+            virtual CGoalObj *GetGoal(long) { return 0; }
+            virtual const CGoalObj *GetGoal(long) const { return 0; }
             virtual const bcs::FVEC3 &GetGoalPos(long goal) const;
             virtual const bcs::FVEC3 &GetGoalRot(long goal) const;
             virtual const bcs::FVEC3 &GetBoardPos(long goal) const;
@@ -397,11 +400,11 @@ namespace msw {
             virtual const STAGE::MDL_GEN_RULE *FindMdlGenRule_(bcs::CRegex &, const char *) const;
             // GetBaseCourtWidth_ and GetBaseCourtDepth_ have bodies in the
             // DOL but no exported name: every module's stage overrides them.
-            // GetBaseCourtRadius_ is emitted as a weak function by VolleyF,
-            // whose stage does not override it.
             virtual float GetBaseCourtWidth_() const;
             virtual float GetBaseCourtDepth_() const;
             virtual float GetBaseCourtFrontZoneDepth_() const;
+            // Inline: the stages of BasketF and VolleyF, which do not
+            // override it, emit it.
             virtual float GetBaseCourtRadius_() const { return 0.0f; }
             virtual float GetBaseGroundWidth_() const;
             virtual float GetBaseGroundDepth_() const;
@@ -516,6 +519,9 @@ namespace msw {
 
             static bool IsValidInstance();
             static CStageMan *GetInstance();
+            // The default model factory of an MDL_GEN_RULE: the stage
+            // instance's NewMdl_(pStage, n, rRegex).
+            static CStageMdl *NewMdl(CStageMan *pStage, long n, bcs::CRegex &rRegex);
 
             static bcs::FVEC3 m_vZero;
 
@@ -539,6 +545,24 @@ namespace msw {
             long m_nGimmickStep;                // 0x158
             unsigned char m_Unk15C[0xA0];       // 0x15C
     };
+
+    namespace STAGE {
+
+        // (member names guessed) One entry of a stage's model table, size
+        // 0x14: models whose node name matches the regular expression
+        // m_pPattern are made by m_pNewMdl. A table ends with an entry whose
+        // pattern is null; CStageMan::FindMdlGenRule_ then reads the second
+        // word as the next table to search (the base class's table, which a
+        // derived stage stores there the first time it is asked for its own),
+        // or stops when it is null.
+        struct MDL_GEN_RULE {
+            const char *m_pPattern;                                      // 0x00
+            long m_nId;                                                  // 0x04, the next table in an end entry
+            unsigned long m_Unk08;                                       // 0x08
+            unsigned long m_Unk0C;                                       // 0x0C
+            CStageMdl *(*m_pNewMdl)(CStageMan *, long, bcs::CRegex &); // 0x10
+        };
+    }
 }
 
 #endif /* !MSW_CSTAGEMAN_HPP_ */

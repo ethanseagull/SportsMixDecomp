@@ -70,13 +70,29 @@ namespace msw {
             static CCollMan *m_pInstance;
 
         protected:
-            // (DOL; return type and the meaning of the unnamed float guessed)
-            // DetectMapHit_ against the rectangle rRgn (left, right, front,
-            // back in x, y, z, w). The VolleyF manager passes 0.0f for the
-            // float and only the top bit of its flags.
-            int DetectMapHitInnerRgn_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, float &rTime, const bcs::FVEC4 &rRgn,
+            // DOL functions the modules' DetectMapHit_ build on. rRect is a
+            // rectangle on the ground (left, right, front, back): the Inner
+            // one keeps the sphere inside it, the Outer ones keep it out of
+            // it (OuterRgnZ_ only along z). Bit 31 of the flags is passed
+            // through. What the float after the rectangle is for is not known
+            // (BasketF passes 0).
+            int DetectMapHitInnerRgn_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, float &rTime, const bcs::FVEC4 &rRect,
                                       float, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius,
-                                      unsigned long);
+                                      unsigned long flags);
+            int DetectMapHitOuterRgn_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, float &rTime, const bcs::FVEC4 &rRect,
+                                      float, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius,
+                                      unsigned long flags);
+            int DetectMapHitOuterRgnZ_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, float &rTime, const bcs::FVEC4 &rRect,
+                                       float, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius,
+                                       unsigned long flags);
+            // The same for a circle around rCenter of radius fCircleRadius
+            // (DodgeF passes one of the m_ExCollPos/m_fExCollRadius pairs).
+            int DetectMapHitInnerCircle_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, float &rTime,
+                                         const bcs::FVEC3 &rCenter, float fCircleRadius, const bcs::FVEC3 &rFrom,
+                                         const bcs::FVEC3 &rTo, float fRadius, unsigned long flags);
+            int DetectMapHitOuterCircle_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, float &rTime,
+                                         const bcs::FVEC3 &rCenter, float fCircleRadius, const bcs::FVEC3 &rFrom,
+                                         const bcs::FVEC3 &rTo, float fRadius, unsigned long flags);
 
             int m_bEnableViewColl;       // 0x34
             long m_Unk38;                // 0x38, zero from ResetViewColl_

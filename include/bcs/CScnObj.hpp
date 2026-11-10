@@ -38,6 +38,11 @@ namespace bcs {
                 FLAG_HIDE_80 = 0x80
             };
 
+            // How a model follows the one it is attached to (the type of the
+            // last parameter of msw::CStgMdl::AttachToMdl). Values not known.
+            enum AttachMode {
+            };
+
             CScnObj();
             virtual ~CScnObj();
             virtual void ObjProc(unsigned long, unsigned long, void *);    // 0x1C
@@ -120,6 +125,20 @@ namespace bcs {
             // (names guessed) Inline in the modules.
             void OnFlag(unsigned long flag) { m_nFlag |= flag; }
             void OffFlag(unsigned long flag) { m_nFlag &= ~flag; }
+            // (name guessed) Inline in the modules: msw::CChrMarkerDodgeArrow
+            // stores a yaw in radians to 0xB4, brought into [0, 2 pi] after
+            // the model pointer is loaded, so the wrapping is taken to be
+            // part of the setter.
+            void SetRotY(float fRotY)
+            {
+                while (fRotY > 6.2831855f) {
+                    fRotY -= 6.2831855f;
+                }
+                while (fRotY < 0.0f) {
+                    fRotY += 6.2831855f;
+                }
+                m_fRotY = fRotY;
+            }
 
         private:
             unsigned char m_Unk08[0x90];  // 0x08

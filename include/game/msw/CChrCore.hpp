@@ -182,8 +182,8 @@ namespace msw {
             virtual int GetDodgeTargetMarkerPos(bcs::FVEC3 &);       // 0x250
             // 0x254 to 0x844: names and parameters from the slots of
             // __vt__Q23msw13CChrCoreDodge (DodgeF), class name set back to
-            // CChrCore. Return types guessed by a script from the body each
-            // slot points at (f1 set: float; r3 set: int, long for Get*;
+            // CChrCore. Return types are guesses from the body each slot
+            // points at (f1 set: float; r3 set: int, long for Get*;
             // otherwise void or a guess from the name).
             virtual void DodgeForceUpdateAreaCode();                  // 0x254
             virtual int IsDodgeOnBallJump() const;                    // 0x258
@@ -572,6 +572,10 @@ namespace msw {
             // no model yet (the word at 0x90 is zero) or bit 30 of the word
             // at 0xEC is set.
             int IsDisable() const;
+            // (name guessed) Inline in the modules: BasketF's
+            // CStageManBasket::GetBallTeam tests the negation as a value
+            // (cntlzw, then srwi.), not with a compare of IsDisable().
+            int IsEnable() const { return !IsDisable(); }
             // The type the current driver reports; zero without a driver.
             // CChrMarkerBoss only shows markers for type 1 (most likely the
             // human players; not checked).

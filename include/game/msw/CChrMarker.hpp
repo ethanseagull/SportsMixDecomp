@@ -67,7 +67,9 @@ namespace msw {
 
         protected:
             unsigned long m_nFlag; // 0x7C, bit 1: view check enabled
-            bcs::CMdlObj *m_pMdl;  // 0x80, the marker model, made by Initialize (name guessed)
+            // 0x80, the marker's model (Initialize creates it with
+            // new bcs::CMdlObj; null before that)
+            bcs::CMdlObj *m_pMdl;
             void *m_Unk84;         // 0x84, another of the same kind
             long m_nChr;           // 0x88, index for CChrMan::GetChrCore; negative for none
             long m_nType;          // 0x8C, third constructor argument (name guessed)

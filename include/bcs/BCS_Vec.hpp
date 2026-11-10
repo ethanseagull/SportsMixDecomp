@@ -11,6 +11,11 @@ namespace bcs {
     // DOL.
     void BCS_Vec_Slerp(FVEC3 &rOut, const FVEC3 &rFrom, const FVEC3 &rTo, float t);
 
+    // (argument names guessed) rOut = (sin(rotY), 0, cos(rotY)) * len: a
+    // vector of length len along +Z turned by rotY (radians) about Y. In the
+    // DOL.
+    void BCS_VecZ_RotY(FVEC3 &rOut, float len, float rotY);
+
     // The three routines below are inline in the modules and written in
     // paired-single assembly in the original (x and y as a pair, z alone; the
     // compiler does not produce these instructions from float code). They are
@@ -68,6 +73,33 @@ namespace bcs {
             psq_st work, 8(pOut), 1, 0
         }
         return pOut;
+    }
+
+    // (name guessed) pOut = p1 - p2. Written from what
+    // msw::CBallManDodge::GetNearPosBall_ (DodgeF) shows after inlining.
+    inline FVEC3 *FVEC3Sub(register FVEC3 *pOut, register const FVEC3 *p1, register const FVEC3 *p2)
+    {
+        register float a;
+        register float b;
+        register float work;
+
+        asm {
+            psq_l a, 0(p1), 0, 0
+            psq_l b, 0(p2), 0, 0
+            ps_sub work, a, b
+            psq_st work, 0(pOut), 0, 0
+            psq_l a, 8(p1), 1, 0
+            psq_l b, 8(p2), 1, 0
+            ps_sub work, a, b
+            psq_st work, 8(pOut), 1, 0
+        }
+        return pOut;
+    }
+
+    // (name guessed) The length of a vector.
+    inline float FVEC3Len(const FVEC3 *p)
+    {
+        return PSVECMag((const Vec *)p);
     }
 
     // (name guessed) pOut = pIn * scale.

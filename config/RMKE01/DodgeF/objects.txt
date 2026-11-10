@@ -14,3 +14,8 @@ Matching game/dodge/CCameraDodge.cpp
 Matching game/dodge/CStgGmk_Wave_Dodge.cpp
 Matching game/dodge/CCockpitDodgeModelTelop.cpp
 Matching game/dodge/CCockpitChrIcon2DDodge.cpp
+Matching game/dodge/CStageManDodge.cpp
+Matching game/dodge/CComDrvDodge.cpp
+Matching game/dodge/unit_77468.cpp
+Matching game/dodge/CStageDodge01.cpp
+Matching game/dodge/CStageFactoryDodge.cpp

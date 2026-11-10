@@ -43,7 +43,9 @@ namespace msw {
                 unsigned char m_Unk00[4];
                 unsigned char m_nGameMode; // 0x04, the GAME_MODE of the running game
                 unsigned char m_nGameType; // 0x05, 2 selects the sport's party game
-                unsigned char m_Unk06[0x632];
+                unsigned char m_Unk06[0x12];
+                unsigned long m_nFlag18;   // 0x18, bit 0x8000 turns the dodge game's question panels off (guess)
+                unsigned char m_Unk1C[0x638 - 0x1C];
             };
 
             CGame(bcs::CTask *pParent, GAME_MODE mode);

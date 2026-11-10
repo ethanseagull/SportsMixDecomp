@@ -38,7 +38,7 @@ namespace msw {
         // implicit one inlined (a second null check around the call to
         // ~CBallMan). Nothing else of it is visible in the game: the
         // compiler drops its vtable store in the inline constructors, and
-        // the original link stripped its weak vtable and destructor.
+        // its weak vtable and destructor are not in the original module.
         class CBallManVolleyBase : public CBallMan {
             public:
                 CBallManVolleyBase(bcs::CTask *pParent, long nBallMax) : CBallMan(pParent, nBallMax) {}

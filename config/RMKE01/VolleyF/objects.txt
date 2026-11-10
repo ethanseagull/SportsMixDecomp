@@ -5,5 +5,6 @@
 Matching game/volley/CEffectCtrlVolley.cpp
 Matching game/volley/CItemBallVolley.cpp
 Matching game/volley/module.cpp
+Equivalent game/volley/TournamentVolley.cpp
 Matching game/volley/CBallManVolley.cpp
 Matching game/volley/CCockpitVolleyLayoutBase.cpp

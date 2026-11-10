@@ -1,0 +1,2 @@
+# <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
+VolleyF _SendMessage__Q23msw20CTmGameHandlerVolleyFllll near 99.9 r28/r29 swapped in cases 0x12/0x54 (score temp, score pointer, period byte); instructions, constants, calls and branches otherwise identical

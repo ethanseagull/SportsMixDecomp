@@ -6,8 +6,10 @@ DodgeF GetNearPosBall___Q23msw13CBallManDodgeFRCQ23bcs5FVEC3 near 99.1 99.1%: lo
 DodgeF Main__Q23msw9CTelopOutFv near 99.1 99.1%: character number and telop id in swapped registers inside the out-telop inline
 DodgeF PopDamageLife__Q23msw15CEventDemoDodgeFi near 99.5 99.5%: character number and telop id in swapped registers inside the out-telop inline
 DodgeF ResetDamageDemo__Q23msw11EvDemoDodgeFv near 99.1 99.1%: register choice only (identical after renumbering)
+DodgeF ScoreBoard_Loop__Q23msw18CCockpitDodgePauseFv near 98.0 register allocation only (as CCockpitBasketPause::ScoreBoard_Loop): the original reuses the table-pointer register for the third result page, ours takes one more saved register (stmw/lmw); same loads, stores, calls and branches
 DodgeF SendMessage__Q23msw15CEventDemoDodgeFllll near 99.2 99.2%: register choice only (identical after renumbering)
 DodgeF SetDamageDemoType__Q23msw11EvDemoDodgeFll near 98.7 98.7%: register choice only (identical after renumbering)
 DodgeF SetDamegeCamera__Q23msw15CEventDemoDodgeFll near 99.8 99.8%: case 0 swaps the parent and task registers; regs search no gain
 DodgeF StartDamageDemo__Q23msw11EvDemoDodgeFv near 97.8 97.8%: the original keeps a cmpwi 1/beq to the switch end for the empty case 1 plus one dead b; equivalent branch form
+DodgeF UpdateMdl__Q23msw13CStageDodge13FUlf near 98.1 register choice and common-subexpression reuse only (as CStageBasket13::UpdateMdl): in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls
 DodgeF __sinit_\CChrMarkerDodge_cpp unverified 69.0 69.0% schedule only: same 123 instructions, constants and store offsets; the stores into the 18-colour table come in a different order (independent stores of constants, likely harmless; not proven)

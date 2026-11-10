@@ -104,9 +104,14 @@ namespace msw {
             long m_nPeriod;            // 0x78, the period being played (guess)
             long m_nPeriodNum;         // 0x7C, the number of periods (at most 8)
             long m_aPeriodScore[2][8]; // 0x80, per team, per period
+            // 0xC0 and 0x100: two more per-team, per-period tables, read
+            // only by the pause score boards (DodgeF and VolleyF
+            // SetCountPoint, VolleyF SetPerfectIcon). Names guessed.
+            long m_aPeriodPoint[2][8];   // 0xC0
+            long m_aPeriodPerfect[2][8]; // 0x100
 
         private:
-            unsigned char m_UnkC0[0x1D4 - 0xC0];
+            unsigned char m_Unk140[0x1D4 - 0x140];
     };
 }
 

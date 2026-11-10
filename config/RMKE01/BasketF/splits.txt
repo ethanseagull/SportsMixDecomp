@@ -603,10 +603,7 @@ game/basket/CCockpitBasketHarapeko.cpp:
 	.data       start:0x0001DDD8 end:0x0001E2B8
 
 game/basket/TournamentBasket.cpp:
-	.text       start:0x000CCD58 end:0x000CCDE0
-
-game/basket/CTmGameHandlerBasket.cpp:
-	.text       start:0x000CCDE0 end:0x000CDF80
+	.text       start:0x000CCD58 end:0x000CDF80
 	.rodata     start:0x00009508 end:0x00009518
 	.data       start:0x0001E2B8 end:0x0001E6F0
 

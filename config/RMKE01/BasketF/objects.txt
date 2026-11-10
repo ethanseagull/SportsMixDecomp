@@ -4,5 +4,6 @@
 # adding a line (port_unit.py and autopilot.py do it themselves).
 Matching game/basket/CEffectCtrlBasket.cpp
 Matching game/basket/module.cpp
+Matching game/basket/TournamentBasket.cpp
 Matching game/basket/CCockpitBasketLayoutBase.cpp
 Matching game/basket/CCameraBasket.cpp

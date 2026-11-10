@@ -7,7 +7,9 @@ files, parked functions) and prints the one next action, most urgent first:
   1. the full build is missing or older than the sources  -> build
   2. a registered unit has every function finished        -> mark it Matching or Equivalent
   3. a registered unit is partly matched                  -> its next function
-  4. otherwise                                            -> the easiest untouched unit
+  4. an untouched unit whose sibling in another module has source
+                                                          -> port_unit.py --write
+  5. otherwise                                            -> the easiest untouched unit
 
 Units listed in notes/blocked.txt ("<unit>: <reason>" per line) are skipped.
 
@@ -151,7 +153,7 @@ def main():
     if ready:
         u = ready[0]
         print(f"\nNEXT: integrate {u.label}: every function is at 100% but the unit is not marked Matching")
-        print(f"  1. in configure.py change its Object(NonMatching, ...) to Object(Matching, ...)")
+        print(f"  1. py -3.12 tools/decomp/mark.py {u.name} Matching")
         print(f"  2. py -3.12 configure.py, then {BUILD}")
         print("  3. hash check passes: commit the unit. Fails: set it back to NonMatching and log why")
         finish(f"finish {u.name}")
@@ -187,6 +189,29 @@ def main():
         else:
             print("\nNEXT: every module unit is started. Carve units in main.dol, or revisit notes/attempts/.")
         return
+    # a unit another module already has source for starts from that source
+    try:
+        import port_unit
+        pu = port_unit.Units(args.version)
+    except (OSError, ValueError, ImportError):
+        pu = None
+    if pu:
+        best = None
+        for v in fresh:
+            key = f"{v.module}/{v.name}"
+            if key not in pu.units or v.code == 0:
+                continue
+            sib = pu.siblings(key)
+            if sib and sib[0][0] >= 0.6 * v.code and (best is None or sib[0][0] > best[0]):
+                best = (sib[0][0], v, sib[0][1])
+        if best:
+            covered, v, src = best
+            print(f"\nNEXT: port {v.label} from {src}: {covered} of its {v.code} bytes are matched there")
+            print(f"  py -3.12 tools/decomp/port_unit.py {v.name} --write")
+            print("  then act on its CHECK/TODO lines and match the rest as usual")
+            finish(v.module)
+            return
+
     # easiest first: small functions match at the first attempt far more often than large ones
     # (a one- or two-function unit is often a fragment of its neighbour: leave those for later)
     fresh.sort(key=lambda u: (len(u.fns) < 3, u.largest > 400, u.largest > 1200, u.code, u.label))

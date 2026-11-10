@@ -1,0 +1,244 @@
+#!/usr/bin/env python3
+"""Write a unit from its finished sibling in another module.
+
+The game's per-mode modules repeat whole files with the mode's name changed:
+CEffectCtrlTournament / CEffectCtrlMenu / CEffectCtrlBoss / CEffectCtrlBasket
+..., CItemBallBoss / CItemBallVolley ..., CBallManBoss / CBallManHockey ...
+Once one of them has source, the others start from it.
+
+  list                 untouched units with a sibling that has source, best first
+  <unit>               show the sibling it would copy and the expected overlap
+  <unit> --write       write the renamed .cpp (and any missing per-mode headers),
+                       register it NonMatching in configure.py, build it and
+                       print the per-function scores
+
+Renaming: the mode word (Tournament, Menu, Boss, Basket, Volley, Dodge, Hockey)
+is replaced where it is part of a longer identifier or path (CEffectCtrlBoss,
+CStgGmk_X_Boss_Act, game/msw/CItemBallBoss.hpp). Standalone words are left.
+The result is a first draft: scores below 100% are the matcher's job, as usual
+(field offsets, overrides and constants differ between modes more often than
+code shape does).
+
+Usage:
+    python tools/decomp/port_unit.py list [--module BasketF] [--limit 40]
+    python tools/decomp/port_unit.py game/basket/CEffectCtrlBasket [--from BossF/game/boss/CEffectCtrlBoss] [--write]
+"""
+import argparse
+import json
+import re
+import subprocess
+import sys
+from collections import defaultdict
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent.parent
+MODES = {  # module -> (source directory, mode word)
+    "TourF": ("tour", "Tournament"),
+    "MenuF": ("menu", "Menu"),
+    "BossF": ("boss", "Boss"),
+    "BasketF": ("basket", "Basket"),
+    "VolleyF": ("volley", "Volley"),
+    "DodgeF": ("dodge", "Dodge"),
+    "HockeyF": ("hockey", "Hockey"),
+}
+WORDS = "|".join(w for _, w in MODES.values())
+
+
+def stem(name):
+    """Mangled or unit name with length prefixes and mode words removed."""
+    s = re.sub(r"\d+(?=[A-Za-z_])", "", name)
+    return re.sub(WORDS, "<G>", s)
+
+
+def rename(text, src_word, dst_word, src_dir, dst_dir):
+    text = re.sub(r"(?<=[A-Za-z0-9_])" + src_word + r"(?=[A-Z_0-9]|\b)", dst_word, text)
+    # include guards and other all-caps macros: CEFFECTCTRLTOURNAMENT_HPP_
+    text = re.sub(r"\b[A-Z0-9_]*" + src_word.upper() + r"[A-Z0-9_]*\b",
+                  lambda m: m.group(0).replace(src_word.upper(), dst_word.upper()), text)
+    # the mode in prose ("the tournament map"); "menu" is too common a word
+    if src_word != "Menu" and dst_word != "Menu":
+        text = re.sub(r"\b" + src_word.lower() + r"\b", dst_word.lower(), text)
+    text = text.replace(f"game/{src_dir}/", f"game/{dst_dir}/")
+    return text
+
+
+class Units:
+    def __init__(self, version):
+        self.version = version
+        report = json.loads((ROOT / "build" / version / "report.json").read_text(encoding="utf-8"))
+        self.units = {}
+        for u in report["units"]:
+            module, _, name = u["name"].partition("/")
+            if module not in MODES:
+                continue
+            fns = [(f["name"], int(f["size"]), f.get("fuzzy_match_percent", 0.0)) for f in u.get("functions", [])]
+            self.units[u["name"]] = {
+                "module": module, "name": name, "fns": fns,
+                "source": u.get("metadata", {}).get("source_path"),
+            }
+        self.by_stem = defaultdict(list)
+        for key, u in self.units.items():
+            self.by_stem[stem(u["name"].rsplit("/", 1)[-1])].append(key)
+
+    def siblings(self, key):
+        """Units with source in other modules, best first: (score bytes, key)."""
+        t = self.units[key]
+        want = {stem(n): s for n, s, _ in t["fns"]}
+        out = []
+        for k, u in self.units.items():
+            if k == key or u["module"] == t["module"] or not u["source"]:
+                continue
+            done = {stem(n) for n, _, p in u["fns"] if p >= 100.0}
+            score = sum(s for st, s in want.items() if st in done)
+            if score:
+                same_name = stem(u["name"].rsplit("/", 1)[-1]) == stem(t["name"].rsplit("/", 1)[-1])
+                out.append((score + (1 << 30) * same_name, score, k))
+        out.sort(reverse=True)
+        return [(score, k) for _, score, k in out]
+
+
+def cmd_list(us, args):
+    rows = []
+    for key, u in us.units.items():
+        if u["source"] or (args.module and u["module"] != args.module):
+            continue
+        sib = us.siblings(key)
+        if not sib:
+            continue
+        total = sum(s for _, s, _ in u["fns"])
+        rows.append((sib[0][0], total, key, sib[0][1]))
+    rows.sort(reverse=True)
+    print(f"{'covered':>8s} {'unit':>8s}  target  <-  sibling")
+    for covered, total, key, src in rows[:args.limit]:
+        print(f"{covered:8d} {total:8d}  {key}  <-  {src}")
+    print(f"\n{len(rows)} units, {sum(r[0] for r in rows)} bytes of functions whose sibling is matched")
+
+
+def header_closure(path_text, src_word, dst_word, src_dir, dst_dir, written):
+    """Write renamed copies of per-mode headers the renamed source includes but lacks."""
+    for inc in re.findall(r'#include "([^"]+)"', path_text):
+        if (ROOT / "include" / inc).exists() or inc in written:
+            continue
+        orig = rename(inc, dst_word, src_word, dst_dir, src_dir)
+        src = ROOT / "include" / orig
+        if orig == inc or not src.exists():
+            print(f"  missing header {inc} (no sibling header {orig})")
+            continue
+        text = rename(src.read_text(encoding="utf-8"), src_word, dst_word, src_dir, dst_dir)
+        guard_src = re.sub(r"[^A-Za-z0-9]", "_", orig).upper()
+        guard_dst = re.sub(r"[^A-Za-z0-9]", "_", inc).upper()
+        text = text.replace(guard_src, guard_dst)
+        dst = ROOT / "include" / inc
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        dst.write_text(text, encoding="utf-8", newline="\n")
+        written.add(inc)
+        print(f"  wrote include/{inc}  (from {orig})")
+        header_closure(text, src_word, dst_word, src_dir, dst_dir, written)
+
+
+def register(module, unit_path):
+    """Add Object(NonMatching, unit) to the module's library, creating it if needed."""
+    cfg = ROOT / "configure.py"
+    text = cfg.read_text(encoding="utf-8")
+    entry = f'Object(NonMatching, "{unit_path}")'
+    if f'"{unit_path}"' in text:
+        return False
+    m = re.search(r'"lib": "' + module + r'",.*?"objects": \[\n(.*?)\n        \],', text, re.S)
+    if m:
+        text = text[:m.end(1)] + f"\n            {entry}," + text[m.end(1):]
+    else:
+        block = (f'    {{\n        # Game code linked into the {module} module.\n'
+                 f'        "lib": "{module}",\n        "mw_version": config.linker_version,\n'
+                 f'        "cflags": cflags_game,\n        "progress_category": "game",\n'
+                 f'        "objects": [\n            {entry},\n        ],\n    }},\n')
+        anchor = "\n]\n\n\n# Optional callback"
+        if anchor not in text:
+            sys.exit("could not find the end of config.libs in configure.py")
+        text = text.replace(anchor, "\n" + block.rstrip("\n") + anchor, 1)
+    cfg.write_text(text, encoding="utf-8", newline="\n")
+    return True
+
+
+def cmd_port(us, args):
+    key = args.unit if "/" in args.unit.split("game/")[0] else None
+    if key is None:
+        hits = [k for k in us.units if k.endswith("/" + args.unit) or k.split("/", 1)[1] == args.unit]
+        if len(hits) != 1:
+            sys.exit(f"unit {args.unit!r}: {len(hits)} matches {hits[:5]}")
+        key = hits[0]
+    t = us.units[key]
+    sib = us.siblings(key)
+    if args.source:
+        src_key = args.source
+        if src_key not in us.units or not us.units[src_key]["source"]:
+            sys.exit(f"{src_key}: no such unit with source")
+    elif sib:
+        src_key = sib[0][1]
+    else:
+        sys.exit(f"{key}: no sibling with source in another module")
+    s = us.units[src_key]
+    total = sum(sz for _, sz, _ in t["fns"])
+    print(f"{key}  ({len(t['fns'])} functions, {total} bytes)")
+    print(f"  from {src_key}  ({s['source']})")
+    for score, k in sib[:4]:
+        print(f"    candidate {k}: {score} bytes covered")
+    if t["source"] and not args.force:
+        sys.exit(f"  {key} already has source {t['source']}; --force to overwrite")
+    if not args.write:
+        print("  (dry run; --write to create it)")
+        return
+
+    src_dir, src_word = MODES[s["module"]]
+    dst_dir, dst_word = MODES[t["module"]]
+    text = (ROOT / s["source"]).read_text(encoding="utf-8")
+    text = rename(text, src_word, dst_word, src_dir, dst_dir)
+    text = (f"// Written from {s['source']} by tools/decomp/port_unit.py "
+            f"({src_word} -> {dst_word}); check against {t['module']}.\n") + text
+    dst = ROOT / "src" / (t["name"] + ".cpp")
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    dst.write_text(text, encoding="utf-8", newline="\n")
+    print(f"  wrote {dst.relative_to(ROOT)}")
+    header_closure(text, src_word, dst_word, src_dir, dst_dir, set())
+    if register(t["module"], t["name"] + ".cpp"):
+        print(f"  registered {t['name']}.cpp NonMatching in configure.py")
+    have = {stem(n) for n, _, _ in t["fns"]}
+    extra = [n for n, _, _ in s["fns"] if stem(n) not in have]
+    missing = [n for n, _, _ in t["fns"] if stem(n) not in {stem(m) for m, _, _ in s["fns"]}]
+    for n in extra:
+        print(f"  CHECK: the sibling defines {n}; the target unit has no such function "
+              f"(remove it and its declaration unless the target's vtable names it)")
+    for n in missing:
+        print(f"  TODO: {n} is not in the sibling; write it")
+    if args.no_build:
+        return
+    py = sys.executable
+    subprocess.call([py, "configure.py"], cwd=ROOT, stdout=subprocess.DEVNULL)
+    obj = f"build/{us.version}/src/{t['name']}.o"
+    if subprocess.call([py, "tools/decomp/build.py", obj], cwd=ROOT):
+        print("  compile failed: fix the source or headers, then build the object again")
+        return
+    subprocess.call([py, "tools/decomp/build.py", f"build/{us.version}/report.json"], cwd=ROOT,
+                    stdout=subprocess.DEVNULL)
+    subprocess.call([py, "tools/decomp/status.py", "unit", t["name"]], cwd=ROOT)
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("unit", help="'list' or a unit name")
+    ap.add_argument("--from", dest="source", help="sibling unit key, e.g. BossF/game/boss/CEffectCtrlBoss")
+    ap.add_argument("--module")
+    ap.add_argument("--limit", type=int, default=40)
+    ap.add_argument("--write", action="store_true")
+    ap.add_argument("--force", action="store_true")
+    ap.add_argument("--no-build", action="store_true")
+    ap.add_argument("--version", default="RMKE01")
+    args = ap.parse_args()
+    us = Units(args.version)
+    if args.unit == "list":
+        cmd_list(us, args)
+    else:
+        cmd_port(us, args)
+
+
+if __name__ == "__main__":
+    main()

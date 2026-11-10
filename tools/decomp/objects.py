@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 STATES = ("Matching", "Equivalent", "NonMatching")
-MODULES = ("SystemF", "TourF", "MenuF", "BossF", "BasketF", "VolleyF", "DodgeF", "HockeyF")
+MODULES = ("main", "SystemF", "TourF", "MenuF", "BossF", "BasketF", "VolleyF", "DodgeF", "HockeyF")
 DIRS = {"tour": "TourF", "menu": "MenuF", "boss": "BossF", "basket": "BasketF",
         "volley": "VolleyF", "dodge": "DodgeF", "hockey": "HockeyF", "msw": "SystemF"}
 
@@ -52,8 +52,15 @@ def find(unit, version="RMKE01"):
     return None, None
 
 
-def module_of(unit):
-    parts = norm(unit).split("/")
+def module_of(unit, version="RMKE01"):
+    # The unit's own split decides: game/msw/ units live in both the DOL
+    # ("main") and SystemF.
+    unit = norm(unit)
+    for module in MODULES:
+        splits = ROOT / "config" / version / ("" if module == "main" else module) / "splits.txt"
+        if splits.exists() and any(l.rstrip() == unit + ":" for l in splits.read_text(encoding="utf-8").splitlines()):
+            return module
+    parts = unit.split("/")
     return DIRS.get(parts[1]) if len(parts) > 2 and parts[0] == "game" else None
 
 

@@ -24,6 +24,9 @@ namespace bcs {
                 // once animation nAnim has ended.
                 void StopAnimation(long nAnim, int nArg);
                 int IsAnimEnd(long nAnim);
+                // Added for game/msw/cockpit/CMissionCount.cpp: not zero while
+                // animation nAnim plays (return type guessed).
+                int IsAnimPlay(long nAnim);
 
                 nw4r::lyt::Pane *GetPane() const { return m_pPane; }
 

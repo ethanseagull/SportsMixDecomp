@@ -20,6 +20,10 @@ namespace bcs {
             void Create(nw4r::g3d::ResMdl mdl, long, unsigned long, long);
             // Follows the pose of pMdl.
             void SetLink(const CMdlObj *pMdl);
+            // (fn_80060C04, unnamed in the DOL; name and meaning guessed)
+            // Sets the byte at 0x1CC; msw::CDropCoin clears it for a coin
+            // that rises out of the ground.
+            void SetEnable(bool bEnable);
 
         private:
             unsigned char m_Unk1C8[0x3C]; // 0x1C8

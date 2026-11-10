@@ -610,6 +610,10 @@ namespace msw {
             // bytes directly, as signed values.
             long GetPlayerNo() const { return m_nPlayerNo; }
             long GetTeamNo() const { return m_nTeamNo; }
+            // (name guessed) The pad driving the character, read signed
+            // (msw::cockpit::CSPGaugeInputDisp::SetDispAnim in the DOL passes
+            // it to CGame::GetPadDefaultType and CMenuPad::IsNunchakuStyle).
+            long GetPadNo() const { return m_nPadNo; }
             // Not zero for the star player of a team (names guessed). The
             // parameter files of the sports modules call it, so it is inline
             // and emitted there.
@@ -633,7 +637,7 @@ namespace msw {
             // (names guessed) What CRadarIcon2D<Game>::CreateCharaIcon passes
             // to CGame::GetCharType and to CGame::GetTeamColorIdx.
             signed char m_nPlayerNo;     // 0x176
-            unsigned char m_Unk177;
+            signed char m_nPadNo;        // 0x177, see GetPadNo
             signed char m_nTeamNo;       // 0x178
             unsigned char m_Unk179[0x230 - 0x179];
             // 0x230 (name guessed): the level CComMan::GetDatF reads the

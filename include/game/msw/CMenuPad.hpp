@@ -24,6 +24,9 @@ namespace msw {
                 return m_nInput[nPad];
             }
 
+            // Not zero when pad nPad has a nunchaku. In the DOL.
+            int IsNunchakuStyle(long nPad);
+
             static CMenuPad s_Instance;
 
         private:

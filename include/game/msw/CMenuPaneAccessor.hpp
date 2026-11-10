@@ -39,6 +39,9 @@ namespace msw {
             // Both are null when pName or the layout is.
             nw4r::lyt::Pane *GetPane(const char *pName, int bRecursive, nw4r::lyt::Pane *pRoot);
             bcs::G2D::CPaneObj *GetPaneObj(const char *pName);
+            // Added for game/msw/cockpit/CMissionCount.cpp: the pane object
+            // of pane pPane (the counters animate their text boxes' parent).
+            bcs::G2D::CPaneObj *GetPaneObj(nw4r::lyt::Pane *pPane);
             // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp.
             // Puts nLen characters of pText into text box pane nPane.
             // Return type guessed.

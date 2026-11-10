@@ -13,10 +13,13 @@ namespace bcs {
     class CScnObj;
 }
 
+// The goal of a basket court (BasketF's msw::CGoalObjBasket derives from it):
+// what GetGoal returns. A class in the global namespace.
+class CGoalObj;
+
 namespace msw {
 
     class CArn;
-    class CStageGoal; // (name guessed) what GetGoal returns
     class CStageMdl;
     class CStageMdlListNode;
     class CStageNet;
@@ -311,8 +314,8 @@ namespace msw {
             virtual float GetTeamCourtOffsetX(long team) const { return m_aTeamCourtOffset[team].x; }
             virtual float GetTeamCourtOffsetZ(long team) const { return m_aTeamCourtOffset[team].z; }
             virtual bcs::FVEC3 GetTeamCourtOffset(long team) const { return m_aTeamCourtOffset[team]; }
-            virtual CStageGoal *GetGoal(long) { return 0; }
-            virtual const CStageGoal *GetGoal(long) const { return 0; }
+            virtual CGoalObj *GetGoal(long) { return 0; }
+            virtual const CGoalObj *GetGoal(long) const { return 0; }
             virtual const bcs::FVEC3 &GetGoalPos(long goal) const;
             virtual const bcs::FVEC3 &GetGoalRot(long goal) const;
             virtual const bcs::FVEC3 &GetBoardPos(long goal) const;
@@ -508,6 +511,8 @@ namespace msw {
             virtual void SwitchDemoMdlAll(int);
 
             void SetStageNo(long stageNo);
+            // (name guessed) Inline in the modules.
+            long GetStageNo() const { return m_nStageNo; }
             // Loads and builds the stage chosen with SetStageNo.
             void Initialize_();
 

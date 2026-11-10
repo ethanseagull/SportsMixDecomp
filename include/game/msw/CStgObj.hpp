@@ -57,6 +57,17 @@ namespace msw {
             virtual const CStgAct *GetAct() const { return m_pAct; }
             virtual CStgDrv *GetDrv() { return m_pDrv; }
             virtual const CStgDrv *GetDrv() const { return m_pDrv; }
+            // Hooks around Create, SceneEntry and SceneLeave. They belong to
+            // this class, not to msw::CStgGmk: the vtables of the gimmicks
+            // that keep the default name OnCalcSum__Q23msw7CStgObjCFv in
+            // that slot (HockeyF __vt__Q23msw25CStgGmk_WaterWorks_Hockey,
+            // CGoalObjHockey), and CStgGmk's versions of the other four
+            // are overrides.
+            virtual void OnPreCreate();
+            virtual void OnPostCreate();
+            virtual void OnSceneEntry();
+            virtual void OnSceneLeave();
+            virtual unsigned long OnCalcSum() const { return 0; }
 
         private:
             unsigned long m_nMdlNum; // 0x34
@@ -67,32 +78,30 @@ namespace msw {
     };
 
     // The driver of a stage object. A DOL class, size 0xC, vptr at 0x08
-    // (constructor __ct__Q23msw7CStgDrvFPQ23msw7CStgObj). Only what the
-    // modules need to create one is declared.
+    // (constructor __ct__Q23msw7CStgDrvFPQ23msw7CStgObj): the two data
+    // members come before the first virtual function. The order of the
+    // virtual functions is that of __vt__Q23msw29CStgGmk_WaterWorks_Hockey_Drv
+    // (HockeyF); the modules emit weak copies of everything after Main, so
+    // those are inline (HockeyF has them in
+    // game/hockey/CStgGmk_WaterWorks_Hockey.cpp).
     class CStgDrv {
+        private:
+            CStgObj *m_pParent; // 0x00
+            CStgAct *m_pAct;    // 0x04
+
         public:
             CStgDrv(CStgObj *pParent);
             virtual ~CStgDrv();
-
-        private:
-            CStgObj *m_pParent;    // 0x00
-            unsigned long m_Unk04; // 0x04
-    };
-
-    // A model of a stage object. A DOL class, size 0x12C, vptr at 0x128
-    // (constructor __ct__Q23msw7CStgMdlFPQ23msw7CStgObj). Only what the
-    // modules need to create one is declared.
-    class CStgMdl {
-        public:
-            CStgMdl(CStgObj *pParent);
-
-        private:
-            CStgObj *m_pParent;           // 0x00
-            unsigned char m_Unk04[0x124]; // 0x04
-
-        public:
-            virtual ~CStgMdl();
+            virtual void Main(float rate);
+            virtual CStgObj *GetParent() { return m_pParent; }
+            virtual const CStgObj *GetParent() const { return m_pParent; }
+            virtual void SetAct(CStgAct *pAct) { m_pAct = pAct; }
+            virtual CStgAct *GetAct() { return m_pAct; }
+            virtual const CStgAct *GetAct() const { return m_pAct; }
+            virtual void OnUserEvent(CStgAct *pAct, long event, void *pArg) {}
     };
 }
+
+#include "game/msw/CStgMdl.hpp"
 
 #endif /* !MSW_CSTGOBJ_HPP_ */

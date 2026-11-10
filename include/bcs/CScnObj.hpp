@@ -30,6 +30,11 @@ namespace bcs {
                 FLAG_HIDE_80 = 0x80
             };
 
+            // How a model follows the one it is attached to (the type of the
+            // last parameter of msw::CStgMdl::AttachToMdl). Values not known.
+            enum AttachMode {
+            };
+
             CScnObj();
             virtual ~CScnObj();
             virtual void ObjProc(unsigned long, unsigned long, void *);    // 0x1C
@@ -46,6 +51,10 @@ namespace bcs {
             // Queues the object to be deleted later.
             static void AppendDelayDeleteObject(CScnObj *pObj);
 
+            // Rebuilds the matrix at 0x08 from the rotation and the
+            // translation members.
+            void CalcRootMtx();
+
             // (names guessed) Inline in the modules.
             void OnFlag(unsigned long flag) { m_nFlag |= flag; }
             void OffFlag(unsigned long flag) { m_nFlag &= ~flag; }
@@ -61,16 +70,21 @@ namespace bcs {
                 while (fRotY < 0.0f) {
                     fRotY += 6.2831855f;
                 }
-                m_Rot.y = fRotY;
+                m_fRotY = fRotY;
             }
 
         private:
             unsigned char m_Unk08[0xA8];  // 0x08
-            // 0xB0 (name guessed): the constructor clears the vectors at
-            // 0x98, 0xA4 and 0xB0 and sets the one at 0xBC to one value
-            // (most likely translation, ?, rotation and scale; not checked
-            // beyond the yaw written by CChrMarkerDodgeArrow).
-            FVEC3 m_Rot;
+
+        public:
+            // (names guessed) The rotation about the three axes in radians,
+            // as CalcRootMtx reads it. msw::CChrMarkerVolleyJump::MainFunc
+            // turns the Y one directly.
+            float m_fRotX;                // 0xB0
+            float m_fRotY;                // 0xB4
+            float m_fRotZ;                // 0xB8
+
+        private:
             unsigned char m_UnkBC[0x40];  // 0xBC
             unsigned long m_nFlag;        // 0xFC (name guessed)
             unsigned char m_Unk100[0x18]; // 0x100

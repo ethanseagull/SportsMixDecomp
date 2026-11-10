@@ -11,7 +11,7 @@
 #include "game/msw/CTournament.hpp"
 #include "game/msw/TournamentWork.hpp"
 
-typedef msw::TournamentWork::TOURNAMENT_INFO::MISSION MISSION;
+typedef msw::TournamentWork::MISSION_INFO MISSION;
 
 // (guessed) The original tests !IsDisable() as a computed value (cntlzw,
 // srwi.), which is what an inline function returning it gives; a plain
@@ -156,7 +156,7 @@ void msw::CTmGameHandlerDodge::_SetCountDisp(int bDisp)
 void msw::CTmGameHandlerDodge::_SetCountUp(long nMission)
 {
     const MISSION &mission = TournamentWork::GetTournamentInfo().aMission[nMission];
-    CCockpitDodge::SetMissionCountUpNum(0, mission.nUnk06, mission.nCount);
+    CCockpitDodge::SetMissionCountUpNum(0, mission.nPrevCount, mission.nCount);
     _SeCountUpDisp();
 }
 

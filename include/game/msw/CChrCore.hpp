@@ -572,6 +572,10 @@ namespace msw {
             // no model yet (the word at 0x90 is zero) or bit 30 of the word
             // at 0xEC is set.
             int IsDisable() const;
+            // (name guessed) Inline in the modules: BasketF's
+            // CStageManBasket::GetBallTeam tests the negation as a value
+            // (cntlzw, then srwi.), not with a compare of IsDisable().
+            int IsEnable() const { return !IsDisable(); }
             // The type the current driver reports; zero without a driver.
             // CChrMarkerBoss only shows markers for type 1 (most likely the
             // human players; not checked).

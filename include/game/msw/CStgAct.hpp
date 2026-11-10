@@ -44,8 +44,8 @@ namespace msw {
             virtual const CStgObj *GetParent() const { return m_pParent; }
             // Inline in the original (the address of the embedded CStgSrt).
             virtual CStgSrt *GetSrt();
-            virtual const CStgSrt *GetSrt() const;
-            virtual void SetMdl(CStgMdl *pMdl);
+            virtual const CStgSrt *GetSrt() const { return reinterpret_cast<const CStgSrt *>(m_Srt); }
+            virtual void SetMdl(CStgMdl *pMdl) { m_pMdl = pMdl; }
             virtual const CStgMdl *GetMdl(long idx) const;
             virtual void SetFrameRateF(float rate) { m_fFrameRate = rate; }
             virtual float GetFrameRateF() const { return m_fFrameRate; }
@@ -54,7 +54,9 @@ namespace msw {
             virtual void OnInit();
             virtual void OnUpdate(float rate);
             virtual void OnAttackHit(const CCollAtkUnit *pAtk, const CCollBodyUnit *pBody, const bcs::FVEC3 &rPos,
-                                     unsigned long flag);
+                                     unsigned long flag)
+            {
+            }
             virtual void OnBodyPush(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush);
             virtual void OnBodyDamage(CCollBodyUnit *pBody, const CCollAtkUnit *pAtk, const bcs::FVEC3 &rPos);
             virtual void OnBallCatch(CCollBodyUnit *pBody, CBall *pBall);
@@ -71,14 +73,19 @@ namespace msw {
             virtual void RegistBallCatchCallback(CBodyCollision *pColl);
             virtual void RegistReflectHitCallback(CDefCollision &rColl);
             virtual void RegistReflectHitCallback(CDefCollision *pColl);
-            virtual CSESlot::CPosFunc *SE_GetDefaultFunc();
+            virtual CSESlot::CPosFunc *SE_GetDefaultFunc()
+            {
+                return reinterpret_cast<CSESlot::CPosFunc *>(m_PosFunc);
+            }
 
         private:
-            unsigned long m_Unk18;        // 0x18
-            unsigned long m_Unk1C;        // 0x1C
+            // 0x18: the sound slots' default position callback, a
+            // CSESlot::CPosFunc of a DOL class without an exported name
+            // (its vptr, then this actor; CStgAct's constructor sets both).
+            unsigned long m_PosFunc[2];
             CStgObj *m_pParent;           // 0x20
             unsigned char m_Srt[0x144];   // 0x24, the CStgSrt GetSrt returns (layout not mapped)
-            unsigned long m_Unk168;       // 0x168, read by GetMdl(long) const
+            CStgMdl *m_pMdl;              // 0x168, set by SetMdl, read by GetMdl(long) const
             float m_fFrameRate;           // 0x16C
     };
 }

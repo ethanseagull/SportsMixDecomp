@@ -100,6 +100,8 @@ int msw::CCockpitChrIcon2DDodge::Set()
     if (pAccessor != 0) {
         long nLayer;
 
+        // default first: the original lays its block out right after the
+        // compare chain, which this order reproduces (notes/toolchain.md).
         switch (m_nLayer) {
             default:
                 nLayer = 1;

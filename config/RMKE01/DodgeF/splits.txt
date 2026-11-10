@@ -611,7 +611,7 @@ game/dodge/unit_BB688.cpp:
 	.text       start:0x000BB688 end:0x000BD7F8
 	.ctors      start:0x000000C0 end:0x000000C4
 	.rodata     start:0x00007A78 end:0x00007AB8
-	.bss        start:0x00000C60 end:0x00000CD0
+	.bss        start:0x00000C60 end:0x00000C68
 
 game/dodge/unit_BD7F8.cpp:
 	.text       start:0x000BD7F8 end:0x000BE1FC
@@ -637,13 +637,17 @@ game/dodge/CCockpitDodgeCoin.cpp:
 
 game/dodge/CCockpitChrIcon2DDodge.cpp:
 	.text       start:0x000C3BEC end:0x000C3F8C
-	.rodata     start:0x000082C8 end:0x00008630
-	.data       start:0x00024198 end:0x00024588
+	.rodata     start:0x000082C8 end:0x00008880
+	.data       start:0x00024198 end:0x00024200
+
+game/dodge/DodgePrm.cpp:
+	.data       start:0x00024200 end:0x00024588
+	.bss        start:0x00000C68 end:0x00000CD0
 
 game/dodge/CGameDodgeDodgeOrDie.cpp:
 	.text       start:0x000C3F8C end:0x000CA078
 	.ctors      start:0x000000C4 end:0x000000C8
-	.rodata     start:0x00008630 end:0x00008988
+	.rodata     start:0x00008880 end:0x00008988
 	.data       start:0x00024588 end:0x00024CA0
 	.bss        start:0x00000CD0 end:0x00000D50
 

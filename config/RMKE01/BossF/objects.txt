@@ -25,7 +25,7 @@ Equivalent game/boss/CCockpitBossCoder.cpp
 Matching game/boss/CEventDemoBoss.cpp
 Equivalent game/boss/CCameraBoss.cpp
 NonMatching game/boss/CComDrvBoss.cpp
-Equivalent game/boss/CChrCoreBossLuigi.cpp
+Matching game/boss/CChrCoreBossLuigi.cpp
 Equivalent game/boss/CChrCoreBossYoshi.cpp
 Equivalent game/boss/CChrCoreBossSiroma.cpp
 Equivalent game/boss/CChrCoreBossKinopio.cpp

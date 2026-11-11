@@ -321,6 +321,13 @@ namespace msw {
             void RuleInfo_Loop();
             void RuleInfo_Out();
             void PartyInfo_ChangeStateInit(long nMode);
+            // Added for MenuF game/menu/CPartyInfo.cpp. The other steps of
+            // the party game information screen (SelectMenu::CPartyInfo).
+            void PartyInfo_In();
+            void PartyInfo_Loop();
+            void PartyInfo_Loop0();
+            void PartyInfo_Loop1();
+            void PartyInfo_Out();
 
             // Added for MenuF game/menu/CTopMenu.cpp (names of the
             // arguments guessed). The steps of the top menu

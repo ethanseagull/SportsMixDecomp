@@ -328,6 +328,10 @@ namespace msw {
             float GetSpikeTargetPosRot_(bcs::FVEC3 *pPos) const;
             float GetBlockLookDir_(const CBall *pBall) const;
             void Util_ArtsShootBall_(CBall *pBall, const bcs::FVEC3 &rPos);
+            // (added for game/volley/CChrCoreVolleyKoopa.cpp; DOL, meaning
+            // guessed) The default target marker position of kind nType
+            // seen from rFrom.
+            void GetTargetMarkerDefaultPos_(long nType, const bcs::FVEC3 &rFrom, bcs::FVEC3 &rPos, int);
 
         protected:
             // Not mapped yet; size 0x964.
@@ -529,16 +533,42 @@ namespace msw {
             unsigned char m_Unk964[0x994 - 0x964]; // allocated with 0x994 bytes
     };
 
+    // Donkey Kong's air trick jumps up and pounds the ground, which shakes
+    // the camera and sends out a shock wave (CC07_VOLLEY::CcDonkeyQuake).
     class CChrCoreVolleyDonkey : public CChrCoreVolley {
         public:
             CChrCoreVolleyDonkey();
             virtual ~CChrCoreVolleyDonkey();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
+            virtual int SubStateBlockIsSuperType_() const { return 1; } // 0xCE4
+            virtual void SubStateAirTrickSetTrickJumpParam_(STATE_WORK_AIR_TRICK *, long); // 0xCFC
+            virtual void SubStateAirTrickSetTrickMoveParam_(STATE_WORK_AIR_TRICK *, long); // 0xD00
+            virtual float SubStateAirTrickGetTrickMotFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD04
+            virtual float SubStateAirTrickGetTrickDoFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD08
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsTMStartAuto_(STATE_WORK_AIR_TRICK *); // 0xD14
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual void SubStateAirTrickPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xD38
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+            virtual void SubStateAirTrickShootBall_(STATE_WORK_AIR_TRICK *); // 0xD4C
+            virtual void SubStateAirTrickPlayLandMotion_(STATE_WORK_AIR_TRICK *); // 0xD5C
     };
 
+    // Diddy Kong's air trick throws a boomerang
+    // (CC08_VOLLEY::CcBoomerangVolley).
     class CChrCoreVolleyDiddy : public CChrCoreVolley {
         public:
             CChrCoreVolleyDiddy();
             virtual ~CChrCoreVolleyDiddy();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
+            virtual float SubStateAirTrickGetTrickMotFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD04
+            virtual float SubStateAirTrickGetTrickRotFrame_(STATE_WORK_AIR_TRICK *); // 0xD0C
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xD20
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+            virtual void SubStateAirTrickShootBall_(STATE_WORK_AIR_TRICK *); // 0xD4C
+            virtual void SubStateAirTrickPlayLandMotion_(STATE_WORK_AIR_TRICK *); // 0xD5C
     };
 
     // Toad does not dive for a receive: he puts a mushroom (the receiver,
@@ -588,13 +618,33 @@ namespace msw {
             unsigned long m_hReceiver;
     };
 
+    // Bowser's air trick breathes a fireball (CC_CMN::KOOPA::CcFireBall)
+    // at the target marker.
     class CChrCoreVolleyKoopa : public CChrCoreVolley {
         public:
             CChrCoreVolleyKoopa();
             virtual ~CChrCoreVolleyKoopa();
+            virtual int IsVolleyArtsKoopaShotFire() const;             // 0x138
+            virtual int IsVolleyArtsKoopaFireEnd() const;              // 0x13C
+            virtual void Reset_();                                     // 0x384
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
+            virtual int SubStateBlockIsSuperType_() const { return 1; } // 0xCE4
+            virtual void SubStateSpikeDoSmashSpikeEffect_(STATE_WORK_SPIKE *); // 0xCEC
+            virtual float SubStateAirTrickGetTrickMotFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD04
+            virtual float SubStateAirTrickGetTrickRotFrame_(STATE_WORK_AIR_TRICK *); // 0xD0C
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual float SubStateAirTrickGetBallAdsorbFrame_(STATE_WORK_AIR_TRICK *); // 0xD28
+            virtual void SubStateAirTrickPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xD38
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+
+            // Breathes the fireball at the target marker.
+            void SubStateAirTrickFireKoopaFireBall_(STATE_WORK_AIR_TRICK *pWork);
 
         protected:
-            unsigned long m_Unk964; // allocated with 0x968 bytes
+            // 0x964 (name guessed; allocated with 0x968 bytes): the task id
+            // of the fireball, 0 for none.
+            unsigned long m_hFireBall;
     };
 
     class CChrCoreVolleyKoopaJr : public CChrCoreVolley {
@@ -619,10 +669,23 @@ namespace msw {
             virtual int SubStateAirTrickIsEndArtsShotAfter_(STATE_WORK_AIR_TRICK *); // 0xD54
     };
 
+    // Cactuar's air trick shoots needles (CC13_VOLLEY::CcSabotenNeedleVolley).
     class CChrCoreVolleySaboten : public CChrCoreVolley {
         public:
             CChrCoreVolleySaboten();
             virtual ~CChrCoreVolleySaboten();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
+            virtual int SubStateBlockIsSuperType_() const { return 1; } // 0xCE4
+            virtual void SubStateSpikeDoSmashSpikeEffect_(STATE_WORK_SPIKE *); // 0xCEC
+            virtual void SubStateAirTrickSetTrickJumpParam_(STATE_WORK_AIR_TRICK *, long); // 0xCFC
+            virtual void SubStateAirTrickSetTrickMoveParam_(STATE_WORK_AIR_TRICK *, long); // 0xD00
+            virtual float SubStateAirTrickGetTrickMotFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD04
+            virtual float SubStateAirTrickGetTrickDoFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD08
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsTMStartAuto_(STATE_WORK_AIR_TRICK *); // 0xD14
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+            virtual void SubStateAirTrickPlayLandMotion_(STATE_WORK_AIR_TRICK *); // 0xD5C
     };
 
     class CChrCoreVolleyNinja : public CChrCoreVolley {

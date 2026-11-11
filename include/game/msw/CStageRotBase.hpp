@@ -80,8 +80,11 @@ namespace msw {
             virtual float GetParam_ShipRotWidth() const = 0;              // 0x6C, radians
             virtual float GetParam_ShipRotInterval() const { return 0.0f; } // 0x70
             virtual bool GetParam_IsShipRotEnable() const { return true; } // 0x74
-            virtual long GetParam_ShipSe() const = 0;                     // 0x78
+            // HockeyF's CStageHockeyCrushSkate emits the CStageRotBase
+            // defaults of the next one and GetParam_CVID (-1 each).
+            virtual long GetParam_ShipSe() const { return -1; }           // 0x78
             virtual float GetParam_BgRotSpeed() const { return 0.0f; }    // 0x7C
+            virtual long GetParam_CVID() const { return -1; }             // 0x80
     };
 }
 

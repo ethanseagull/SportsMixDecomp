@@ -1306,7 +1306,11 @@ namespace msw {
             // character; the cockpits pick the "1P" to "4P" label with it
             // when IsPadCtrl() is set. Read signed.
             signed char m_nCtrlPlayerNo;
-            unsigned char m_Unk17D[0x184 - 0x17D];
+            unsigned char m_Unk17D[0x180 - 0x17D];
+            // 0x180 (name guessed): a model node for effects
+            // (CChrCoreVolleySaboten's smash spike effect attaches there).
+            unsigned short m_nEffNodeSpike;
+            unsigned char m_Unk182[0x184 - 0x182];
             // 0x184 (name guessed): a model node for effects
             // (CChrCoreBasketYoshi's jump block effect attaches there).
             unsigned short m_nEffNodeBlock;
@@ -1316,7 +1320,12 @@ namespace msw {
             // 0x188 (name guessed): another model node for effects
             // (CChrCoreBasketSaboten's dunk effect attaches there).
             unsigned short m_nEffNodeDunk;
-            unsigned char m_Unk18A[0x190 - 0x18A];
+            unsigned char m_Unk18A[0x18C - 0x18A];
+            // 0x18C, 0x18E (names guessed): two more model nodes for effects
+            // (CChrCoreVolleyDonkey's air trick puts one effect on each,
+            // most likely his two hands).
+            unsigned short m_nEffNodeHand0;
+            unsigned short m_nEffNodeHand1;
             // 0x190 (name guessed): a second model node for effects
             // (CChrCoreVolleyYoshi's block and spike effects attach there).
             unsigned short m_nEffNodeSub;

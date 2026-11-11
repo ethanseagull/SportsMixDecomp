@@ -27,7 +27,7 @@ Equivalent game/hockey/CCockpitHockeyPauseResult.cpp
 Equivalent game/hockey/CCollManHockey.cpp
 Matching game/hockey/CComDrvHockey.cpp
 Matching game/hockey/CStageHockey01.cpp
-Equivalent game/hockey/CBallMarkerHockey.cpp
+Matching game/hockey/CBallMarkerHockey.cpp
 Equivalent game/hockey/CStageHockey07.cpp
 Matching game/hockey/CStageHockey04.cpp
 Equivalent game/hockey/CChrDrvPadHockey.cpp
@@ -36,3 +36,9 @@ Matching game/hockey/CChrCoreHockeyYoshi.cpp
 Equivalent game/hockey/CChrCoreHockeyLuigi.cpp
 Equivalent game/hockey/CChrCoreHockeyKinopio.cpp
 Equivalent game/hockey/CChrCoreHockeyKuroma.cpp
+Equivalent game/hockey/CCockpitHockeyCoder.cpp
+Equivalent game/hockey/CStageHockey16.cpp
+Matching game/hockey/CStageHockey03.cpp
+Equivalent game/hockey/CStageHockey12.cpp
+Equivalent game/hockey/CStageHockey15.cpp
+Matching game/hockey/CStageManHockey.cpp

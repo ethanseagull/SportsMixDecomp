@@ -201,6 +201,27 @@ namespace bcs {
                 return static_cast<char *>(m_pWorkQueue) + m_nWorkSize * idx;
             }
 
+            // (name guessed; inline in BasketF's
+            // CChrCoreBasketYoshi::LoopStateSmashCut) Ends the state at the
+            // head of the queue: the next queued state is entered, or the
+            // first of the table when the queue has run out.
+            void FsmqNext()
+            {
+                if (!FsmqIsEmpty()) {
+                    long head = FsmqWrap(m_nQueueHead + 1, m_nQueueSize);
+                    m_nQueueHead = head;
+                    if (head == m_nQueueTail) {
+                        if (m_pStateTable) {
+                            m_pNextState = m_pStateTable;
+                        } else {
+                            m_pNextState = &m_NullState;
+                        }
+                    } else {
+                        m_pNextState = &m_pStateTable[m_pStateQueue[head]];
+                    }
+                }
+            }
+
             // (name guessed) From a state's hook: lets FsmqExec carry the
             // change out in the same frame.
             void FsmqRetry() { m_nFlag |= 2; }

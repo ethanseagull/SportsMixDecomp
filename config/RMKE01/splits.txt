@@ -68,10 +68,7 @@ game/bcs/G2D/CLytResource.cpp:
 	.text       start:0x800401A0 end:0x80040B70
 
 game/bcs/CScnObj.cpp:
-	.text       start:0x800419CC end:0x80042A48
-
-game/bcs/CScnGroup.cpp:
-	.text       start:0x80042D9C end:0x800430AC
+	.text       start:0x80041888 end:0x80044B00
 
 game/bcs/CGDLObj.cpp:
 	.text       start:0x80044B00 end:0x80044BD4
@@ -399,7 +396,7 @@ game/msw/CStgGmkAct.cpp:
 	.text       start:0x80170108 end:0x80170174
 
 game/msw/CStgGmkMan.cpp:
-	.text       start:0x801704E8 end:0x8017080C
+	.text       start:0x801703A4 end:0x80170BC8
 
 game/msw/CStgMdl.cpp:
 	.text       start:0x80170CCC end:0x80171F04

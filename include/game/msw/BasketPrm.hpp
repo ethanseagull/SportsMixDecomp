@@ -549,6 +549,47 @@ namespace msw {
     extern float BASKET_PRM_S15_KARON_SCALE;
     extern float BASKET_PRM_S15_KARON_COLL_SCALE;
     extern float BASKET_PRM_S15_KARON_SPEED;
+
+    // Stage 17, the turntable and trolley stage (game/basket/CStageBasket17.cpp),
+    // in the order of its parameter table. Unlike the dodgeball set there is
+    // no TT_RADIUS and no OUTER_DEPTH/OUTER_FRONT.
+    extern float BASKET_PRM_S17_TT_INIT_STOP_TIME;
+    extern float BASKET_PRM_S17_TT_STOP_TIME;
+    extern float BASKET_PRM_S17_TT_STOP_TIME_RND;
+    extern float BASKET_PRM_S17_TT_ROT_TIME;
+    extern float BASKET_PRM_S17_TT_ROT_TIME_RND;
+    extern float BASKET_PRM_S17_TT_SPEED;
+    extern long BASKET_PRM_S17_TT_DIR;
+    extern float BASKET_PRM_S17_TT_ACC_TIME;
+    extern float BASKET_PRM_S17_TT_OPEN_RATE;
+    extern float BASKET_PRM_S17_TT_WARN_TIME;
+    extern float BASKET_PRM_S17_TT_WARN_AFTER_TIME;
+    extern float BASKET_PRM_S17_TT_WARN_SE_STOP_TIME;
+    extern float BASKET_PRM_S17_TROLLEY_INIT_RATE;
+    extern float BASKET_PRM_S17_TROLLEY_RATE;
+    extern float BASKET_PRM_S17_TROLLEY_PRE_WAIT;
+    extern float BASKET_PRM_S17_TROLLEY_SPEED;
+    extern long BASKET_PRM_S17_TROLLEY_DIR_TYPE;
+    extern long BASKET_PRM_S17_TROLLEY_NUM_MIN;
+    extern long BASKET_PRM_S17_TROLLEY_NUM_MAX;
+    extern float BASKET_PRM_S17_TROLLEY_LOC_OFFSET;
+    extern float BASKET_PRM_S17_TROLLEY_WIDTH;
+    extern float BASKET_PRM_S17_TROLLEY_DEPTH;
+    extern float BASKET_PRM_S17_TROLLEY_HEIGHT;
+    extern float BASKET_PRM_S17_TROLLEY_ATK_WIDTH;
+    extern float BASKET_PRM_S17_TROLLEY_ATK_DEPTH;
+    extern float BASKET_PRM_S17_TROLLEY_ATK_HEIGHT;
+    extern float BASKET_PRM_S17_TROLLEY_MDL_WIDTH;
+    extern float BASKET_PRM_S17_TROLLEY_MDL_DEPTH;
+    extern float BASKET_PRM_S17_TROLLEY_MDL_HEIGHT;
+    extern long BASKET_PRM_S17_TROLLEY_PAT_TYPE;
+    extern long BASKET_PRM_S17_TROLLEY_PAT_NO;
+    extern long BASKET_PRM_S17_DEB_RELOAD;
+    extern float BASKET_PRM_S17_HEYHO_COIN_RATE;
+    extern float BASKET_PRM_S17_HEYHO_B_DIST_MIN;
+    extern float BASKET_PRM_S17_HEYHO_B_DIST_MAX;
+    extern float BASKET_PRM_S17_HEYHO_C_DIST_MIN;
+    extern float BASKET_PRM_S17_HEYHO_C_DIST_MAX;
 }
 
 #endif /* !MSW_BASKETPRM_HPP_ */

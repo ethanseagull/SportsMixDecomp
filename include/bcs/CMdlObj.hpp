@@ -126,6 +126,10 @@ namespace bcs {
             // Returns the animation that was in the slot.
             CAnmObj *DetachAnmObj(AnmObjType type);
             CAnmObj *GetAnmObj(AnmObjType type);
+            // (DOL; meaning guessed from the name and BasketF's
+            // CChrCoreBasketYoshi, which negates the motion id when it is
+            // set) Not zero while animation slot nSlot plays mirrored.
+            int IsAnmFlipPlay(unsigned long nSlot, long) const;
 
             // (names guessed) The modules read these slots directly.
             // (name guessed) Inline in bcs::CAnmTexSrt::Create.

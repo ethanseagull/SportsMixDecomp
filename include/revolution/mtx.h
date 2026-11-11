@@ -23,6 +23,8 @@ void PSMTXTransApply(const Mtx src, Mtx dst, float x, float y, float z);
 
 // dst = m * src (src as a point); src and dst may be the same.
 void PSMTXMultVec(const Mtx m, const Vec *src, Vec *dst);
+// dst[i] = m * src[i] for count points; src and dst may be the same.
+void PSMTXMultVecArray(const Mtx m, const Vec *src, Vec *dst, unsigned long count);
 
 float PSVECSquareDistance(const Vec *pA, const Vec *pB);
 void PSVECNormalize(const Vec *pIn, Vec *pOut);

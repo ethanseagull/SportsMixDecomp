@@ -53,6 +53,13 @@ namespace msw {
             // Kinds of effect for Util_SetEffect / Util_AttachEffect (values not known).
             enum SET_EFFECT_TYPE {};
             enum ATTACH_EFFECT_TYPE {};
+            // (added for HockeyF game/hockey/CChrCoreHockeyLuigi.cpp; names
+            // not known) A turn spread over frames: the DOL's RotateYParam_
+            // reads the four floats. The size is a guess (the hockey air
+            // trick work has its next member 0x14 bytes on).
+            struct ROT_LERP1 {
+                float m_afUnk[4];
+            };
             // (added for VolleyF game/volley/CChrCoreVolleyKinopio.cpp;
             // contents not known) The work of a move in a fixed direction
             // (Util_SetDirMoveParam), and how the body collision is sized.
@@ -919,6 +926,9 @@ namespace msw {
             // DOL. The yaw (radians) from the character towards a point,
             // in the XZ plane.
             float GetRotY_ToPosXZ(const bcs::FVEC3 &pos) const;
+            // DOL (added for HockeyF game/hockey/CChrCoreHockeyLuigi.cpp). The
+            // yaw towards the goal the character's team attacks.
+            float GetRotY_ToGoal() const;
 
             // (names guessed) Inline in the original; the module reads the
             // members directly (CChrMarkerBoss::AppearCheck loads the byte
@@ -1034,7 +1044,14 @@ namespace msw {
             // (names guessed) Inline in the modules.
             long DriverGetNo() const { return m_nDriver; }
             bcs::CMdlObj *GetMdl() const { return m_pMdl; }
-            long GetComLevel() const { return m_nComLevel; }
+            // (name guessed) The word at 0x230, read directly by
+            // CChrManHockeyCS::CanbeTurnOver_. Not GetComLevel: the DOL has a
+            // GetComLevel__Q23msw8CChrCoreCFv that returns the team's level
+            // instead (CGame::GetTeamComLevel of m_nTeamNo, truncated), called
+            // by CChrCoreHockeyLuigi.
+            long GetComLevelWork() const { return m_nComLevel; }
+            // DOL. The computer level of the character's team (see above).
+            long GetComLevel() const;
 
             // Added for BossF game/boss/CChrDrvPadBoss.cpp (names guessed).
             // Inline in the module: the pad driver reads both words directly.

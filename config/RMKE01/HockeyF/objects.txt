@@ -32,3 +32,6 @@ Equivalent game/hockey/CStageHockey07.cpp
 Matching game/hockey/CStageHockey04.cpp
 Equivalent game/hockey/CChrDrvPadHockey.cpp
 Equivalent game/hockey/CChrManHockey.cpp
+Matching game/hockey/CChrCoreHockeyYoshi.cpp
+Equivalent game/hockey/CChrCoreHockeyLuigi.cpp
+Equivalent game/hockey/CChrCoreHockeyKinopio.cpp

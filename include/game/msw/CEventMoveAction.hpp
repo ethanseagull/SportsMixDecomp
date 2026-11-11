@@ -25,6 +25,13 @@ namespace msw {
             virtual void SetFrame(float fFrame);
             virtual void UpdateFrame(const bcs::FVEC3 &pos, const bcs::FVEC3 &rot, float fFrame);
 
+            // (DOL) Links this action to the model (msw::CEventModel::
+            // SetLinkAction); with b the model owns it.
+            void SetLink(int b);
+            // (DOL) Plays motion nMot on the model at speed fSpeed.
+            // (parameter names guessed)
+            void AnimPlay(long nMot, unsigned long nFlag, float fBlend, float fFrame, float fSpeed);
+
         protected:
             CEventModel *m_pModel;   // 0x04
             float m_fFrame;          // 0x08

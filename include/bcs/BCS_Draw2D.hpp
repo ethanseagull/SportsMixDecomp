@@ -34,6 +34,11 @@ namespace bcs {
     void BCS_GX_DrawLine(float x0, float y0, float z0, float x1, float y1, float z1, BCS_Color c0, BCS_Color c1);
     void BCS_GX_DrawQuad(const FVEC3 &rP0, const FVEC3 &rP1, const FVEC3 &rP2, const FVEC3 &rP3, BCS_Color c0,
                          BCS_Color c1, BCS_Color c2, BCS_Color c3);
+    // (DOL, added for VolleyF's CStageVolley10::DrawEdgeOne_) The same two
+    // under their own names; what the Ex adds is not known.
+    void BCS_GX_DrawLineEx(float x0, float y0, float z0, float x1, float y1, float z1, BCS_Color c0, BCS_Color c1);
+    void BCS_GX_DrawQuadEx(const FVEC3 &rP0, const FVEC3 &rP1, const FVEC3 &rP2, const FVEC3 &rP3, BCS_Color c0,
+                           BCS_Color c1, BCS_Color c2, BCS_Color c3);
 }
 
 #endif /* !BCS_BCS_DRAW2D_HPP_ */

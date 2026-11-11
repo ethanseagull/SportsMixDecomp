@@ -81,3 +81,4 @@ Matching game/hockey/unit_EDBF0.cpp
 Equivalent game/hockey/CCockpitHockeyVSCount.cpp
 Equivalent game/hockey/CCockpitHockeyTelopReady.cpp
 Equivalent game/hockey/CChrCoreHockeySlime.cpp
+Equivalent game/hockey/CStageHockey10.cpp

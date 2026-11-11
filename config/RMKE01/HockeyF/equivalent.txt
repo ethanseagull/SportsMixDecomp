@@ -54,6 +54,7 @@ HockeyF MethdPassCall___Q23msw16CChrDrvPadHockeyFl near 99.7 load order of queue
 HockeyF MovePos___Q33msw11CC09_HOCKEY22CcKinopioBoundMushroomFf near 99.6 register choice in three fmadds (as VolleyF)
 HockeyF OnMsgMain__Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG near 99.9 register choice for the character pointer
 HockeyF OnMsg__Q23msw16CChrDrvPadHockeyFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG near 99.0 register choice and load order in rumble cases 0x53/0x54
+HockeyF OnPostInitialize__Q23msw14CStageHockey10Fv near 99.9 CameraData local at 0x60/frame 0x180 vs 0x5C/0x170 (as VolleyF CStageVolley42, BasketF CStageBasket10); stack slots only
 HockeyF OnReflectHit__Q23msw23CStgGmk_Case_Act_HockeyFPCQ23msw12CCollDefUnitPCQ23msw5CBallRQ23bcs5FVEC3RQ23bcs5FVEC3 near 99.0 register numbering inside the paired-single dot product, and the return value 0x801 built as li 1 / ori 0x800 in the original but one li in ours (same value); same calls, loads, stores, constants and branches (as CStgGmk_Trolley_Act_Hockey::OnReflectHit)
 HockeyF OnReflectHit__Q23msw26CStgGmk_Trolley_Act_HockeyFPCQ23msw12CCollDefUnitPCQ23msw5CBallRQ23bcs5FVEC3RQ23bcs5FVEC3 near 97.4 register numbering inside the paired-single vector helpers, and the return value 0x401 built as li 1 / ori 0x400 in the original but as one li in ours (same value); same calls, loads, stores and branches
 HockeyF Reset___Q23msw21CChrCoreHockeyWaluigiFv near 99.8 same instructions after register renumbering (diff.py: match); objdiff's 0.2% is a relocation detail

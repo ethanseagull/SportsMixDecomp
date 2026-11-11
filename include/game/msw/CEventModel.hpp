@@ -211,6 +211,17 @@ namespace msw {
             // 0x64 times fFrame. (description read from the DOL body)
             void _UpdateAlpha(float fFrame);
 
+            // (name guessed) Sets the bits nMask of the flags when b is
+            // non-zero, else clears them.
+            void _SetFlag(unsigned long nMask, int b)
+            {
+                if (b) {
+                    m_nFlag |= nMask;
+                } else {
+                    m_nFlag &= ~nMask;
+                }
+            }
+
             // (name guessed) The model's alpha now, 0 to 1.
             float GetAlpha() const { return m_fAlpha; }
             long GetVoiceId(long n) const
@@ -257,7 +268,11 @@ namespace msw {
             // their own members from 0xB0.
             unsigned char m_Unk68[0x3C];  // 0x68
             nw4r::g3d::ResFile m_resFile; // 0xA4 (name guessed) see GetResFile
-            unsigned char m_UnkA8[0x8];   // 0xA8
+            // The move and the move action linked to the model (see
+            // SetLinkMove, SetLinkAction); bits 0x1 and 0x2 of the flags say
+            // the model owns them, bit 0x4 that it owns the move's node path.
+            CEventMove *m_pMove;          // 0xA8
+            CEventMoveAction *m_pAction;  // 0xAC
     };
 }
 

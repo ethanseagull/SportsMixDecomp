@@ -29,7 +29,8 @@ game/bcs/CAnmMatClr.cpp:
 	.text       start:0x8000F670 end:0x8000F7D4
 
 game/bcs/CCameraMan.cpp:
-	.text       start:0x80011720 end:0x800117E4
+	.text       start:0x80011720 end:0x80011818
+	.bss        start:0x804BF580 end:0x804BF680
 
 game/bcs/CCamera.cpp:
 	.text       start:0x80011818 end:0x80012B48
@@ -38,7 +39,7 @@ game/bcs/CCameraAnm.cpp:
 	.text       start:0x80012CD8 end:0x800140BC
 
 game/bcs/CCameraAnmCalc.cpp:
-	.text       start:0x80014440 end:0x80014560
+	.text       start:0x80014440 end:0x800145BC
 
 game/bcs/EF/CEffect.cpp:
 	.text       start:0x8001E510 end:0x8001FEE8
@@ -77,7 +78,7 @@ game/bcs/CHBMenu.cpp:
 	.text       start:0x80045AAC end:0x80046D40
 
 game/bcs/CListNodeBase.cpp:
-	.text       start:0x8004BE1C end:0x8004BF88
+	.text       start:0x8004BE1C end:0x8004BFC0
 
 game/bcs/CLoadMan.cpp:
 	.text       start:0x8004C094 end:0x8004DC9C
@@ -206,7 +207,8 @@ game/msw/CAtkCollision.cpp:
 	.text       start:0x80108510 end:0x801093A8
 
 game/msw/CDefCollision.cpp:
-	.text       start:0x8010943C end:0x80109990
+	.text       start:0x8010943C end:0x801099C4
+	.data       start:0x8046EA50 end:0x8046EA5C
 
 game/msw/CComDrv.cpp:
 	.text       start:0x80109A0C end:0x8010CE1C
@@ -217,11 +219,9 @@ game/msw/CEventDemoBase.cpp:
 game/msw/CEventModel.cpp:
 	.text       start:0x80111CCC end:0x801143EC
 
-game/msw/CEventMoveAction.cpp:
-	.text       start:0x80114AB8 end:0x80114B58
-
 game/msw/CEventMove.cpp:
-	.text       start:0x80114BF4 end:0x80114D94
+	.text       start:0x80114AB8 end:0x80114DC0
+	.data       start:0x8046F010 end:0x8046F024
 
 game/msw/CEventChrCore.cpp:
 	.text       start:0x8011722C end:0x801177F4

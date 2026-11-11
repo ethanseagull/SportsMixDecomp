@@ -47,6 +47,12 @@ namespace msw {
             // (name and meaning guessed) Whether the animation idx has
             // ended; msw::CStgGmk_WaterPillar_Act (DOL) passes 1 and -9.
             virtual bool IsEnd(long idx) const;                                // 0x5C
+            virtual void VFunc60();                                            // 0x60
+            virtual void VFunc64();                                            // 0x64
+            // (name and meaning guessed) Whether animation idx (-1: all)
+            // has looped; VolleyF's CStageVolley10::Main_ then switches the
+            // panel to its next animation.
+            virtual bool IsLooped(long idx) const;                             // 0x68
     };
 }
 

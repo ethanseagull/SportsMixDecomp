@@ -61,7 +61,11 @@ namespace msw {
     class CEventCameraNull : public bcs::CScnObj {
         public:
             CEventCameraNull();
-            virtual void UpdateFrame(float);
+            // The vtable (lbl_8046F208, emitted by CEventModel.cpp) is
+            // bcs::CScnObj's with these two replaced.
+            virtual ~CEventCameraNull();
+            // Task 1 places the object at the camera.
+            virtual void ObjProc(unsigned long nTask, unsigned long nArg, void *pArg);
 
             // (name guessed) The camera passed on.
             void SetCamera(bcs::CCamera *pCamera) { m_pCamera = pCamera; }

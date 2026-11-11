@@ -30,19 +30,19 @@ namespace msw {
             virtual void SetHockeyArtsMode(const bcs::FVEC3 &, float, long, long, int, long);    // 0x1E0
             virtual void SetHockeyItemShootMode(const bcs::FVEC3 &, float, long, float, int, long); // 0x1E4
             virtual void SetHockeyBodyGoalMode(long, long, long);                                // 0x1E8
-            virtual void SetHockeySnatch(const CCollAtkUnit *, const bcs::FVEC3 &);              // 0x1EC
+            virtual int SetHockeySnatch(const CCollAtkUnit *, const bcs::FVEC3 &);              // 0x1EC
             virtual void TrgGoalIn(const bcs::FVEC3 &, long, long, long, long, long);            // 0x1F0
             virtual void SetHockeyDropMode(const bcs::FVEC3 &, float, long, long);               // 0x1F4
             virtual void SetHockeyArtsDropMode(const bcs::FVEC3 &, float, long, long);           // 0x1F8
             virtual long GetArtsType() const;                                                    // 0x1FC
-            virtual void TrgHockeyArtsEnd(long);                                                 // 0x200
+            virtual int TrgHockeyArtsEnd(long);                                                 // 0x200
             virtual int IsHockeyArtsEnd() const;                                                 // 0x204
             virtual void SetHockeyArtsStart();                                                   // 0x208
             virtual void SetHockeyShootTargetPos(const bcs::FVEC3 &);                            // 0x20C
             virtual void SetHockeyShootTargetMove(float, float);                                 // 0x210
-            virtual long GetHockeyNoChgLeaderCount();                                            // 0x214
+            virtual float GetHockeyNoChgLeaderCount();                                            // 0x214
             virtual long GetHockeyPassTgtChrIdx();                                               // 0x218
-            virtual void GetPassCatchPos(bcs::FVEC3 &, long);                                    // 0x21C
+            virtual int GetPassCatchPos(bcs::FVEC3 &, long);                                    // 0x21C
             virtual long GetHockeyHaveTeamIdx();                                                 // 0x220
             virtual float GetHockeySnatchFrame();                                                // 0x224
             virtual void SetHockeySnatchFrame(float);                                            // 0x228
@@ -55,7 +55,7 @@ namespace msw {
             virtual float GetHokeyBombExplodeRadius() const;                                     // 0x244
             virtual float GetHokeyBombShootDist() const;                                         // 0x248
             virtual int IsHockeyAttackMode() const;                                              // 0x24C
-            virtual void GetHokeyCurveShootData(float &, bcs::FVEC3 &);                          // 0x250
+            virtual int GetHokeyCurveShootData(float &, bcs::FVEC3 &);                          // 0x250
             virtual float GetFaceOffGuideDispFrm();                                              // 0x254
             virtual void SettHockeyReflectMode(float);                                           // 0x258
             virtual int IsShootExceptionalStart();                                               // 0x25C
@@ -65,7 +65,7 @@ namespace msw {
             virtual void SetJumpBallAttach();                                                    // 0x2B0
             virtual void SetJumpBallMode();                                                      // 0x2B4
             virtual void SetChrReflectMode(long, float);                                         // 0x2B8
-            virtual void JumpBallFrameSet(int);                                                  // 0x2BC
+            virtual float JumpBallFrameSet(int);                                                  // 0x2BC
             virtual int IsShootMode() const;                                                     // 0x2D4
             virtual int IsArtsShootMode() const;                                                 // 0x2D8
             virtual int IsCanbeTurnOver() const;                                                 // 0x2E0

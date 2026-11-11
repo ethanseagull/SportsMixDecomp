@@ -19,13 +19,17 @@ Equivalent game/boss/CRadarIcon2DBoss.cpp
 Matching game/boss/CCockpitBossPause.cpp
 Matching game/boss/CItemManBoss.cpp
 Matching game/boss/CC_PARAM_BOSS.cpp
-NonMatching game/boss/CEffectCoinScore.cpp
-NonMatching game/boss/CQPanelManBoss.cpp
+Equivalent game/boss/CEffectCoinScore.cpp
+Matching game/boss/CQPanelManBoss.cpp
 Equivalent game/boss/CCockpitBossCoin.cpp
 Equivalent game/boss/CCockpitBossCoder.cpp
 Matching game/boss/CEventDemoBoss.cpp
 Equivalent game/boss/CCameraBoss.cpp
-NonMatching game/boss/CComDrvBoss.cpp
+Equivalent game/boss/unit_4F0C4.cpp
+Equivalent game/boss/CComDrvBoss.cpp
+Matching game/boss/unit_51CE4.cpp
+Matching game/boss/unit_52300.cpp
+Matching game/boss/unit_52680.cpp
 Matching game/boss/CChrCoreBossLuigi.cpp
 Equivalent game/boss/CChrCoreBossMethod.cpp
 Matching game/boss/CChrCoreBossMii00.cpp
@@ -45,3 +49,4 @@ Matching game/boss/CChrCoreBossKoopaJr.cpp
 Equivalent game/boss/CChrCoreBossKuroma.cpp
 Equivalent game/boss/CCockpitBoss.cpp
 Equivalent game/boss/unit_636D4.cpp
+Equivalent game/boss/CStickObj.cpp

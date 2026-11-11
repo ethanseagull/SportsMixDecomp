@@ -358,6 +358,56 @@ namespace msw {
     extern float HOCKEY_PRM_S86_FIRE3_INTERVAL0;
     extern float HOCKEY_PRM_S86_FIRE_RESIST;
 
+    // Stage 86, the rest (CStageHockeyCrushSkate86: the court, the rolling
+    // floor and the fire pillar timer).
+    extern float HOCKEY_PRM_S86_COURT_RADIUS;
+    extern float HOCKEY_PRM_S86_BG_ROT_SPEED;
+    extern long HOCKEY_PRM_S86_FLOOR0_ROT_ENABLE;
+    extern float HOCKEY_PRM_S86_FLOOR0_INIT_WAIT;
+    extern float HOCKEY_PRM_S86_FLOOR0_CYCLE;
+    extern float HOCKEY_PRM_S86_FLOOR0_STOP_TIME;
+    extern float HOCKEY_PRM_S86_FLOOR0_STOP_TIME_RND;
+    extern float HOCKEY_PRM_S86_FLOOR0_STOP_TIME2;
+    extern float HOCKEY_PRM_S86_FLOOR0_STOP_TIME_RND2;
+    extern float HOCKEY_PRM_S86_FLOOR0_CHR_FLOW_VEL;
+    extern float HOCKEY_PRM_S86_FLOOR0_ROT_ANGLE;
+    extern float HOCKEY_PRM_S86_FIRE0_INIT_INTERVAL;
+    extern long HOCKEY_PRM_S86_FLOOR1_ROT_ENABLE;
+    extern float HOCKEY_PRM_S86_FLOOR1_INIT_WAIT;
+    extern float HOCKEY_PRM_S86_FLOOR1_CYCLE;
+    extern float HOCKEY_PRM_S86_FLOOR1_STOP_TIME;
+    extern float HOCKEY_PRM_S86_FLOOR1_STOP_TIME_RND;
+    extern float HOCKEY_PRM_S86_FLOOR1_STOP_TIME2;
+    extern float HOCKEY_PRM_S86_FLOOR1_STOP_TIME_RND2;
+    extern float HOCKEY_PRM_S86_FLOOR1_CHR_FLOW_VEL;
+    extern float HOCKEY_PRM_S86_FLOOR1_ROT_ANGLE;
+    extern float HOCKEY_PRM_S86_FIRE1_INIT_INTERVAL;
+    extern long HOCKEY_PRM_S86_FLOOR2_ROT_ENABLE;
+    extern float HOCKEY_PRM_S86_FLOOR2_INIT_WAIT;
+    extern float HOCKEY_PRM_S86_FLOOR2_CYCLE;
+    extern float HOCKEY_PRM_S86_FLOOR2_STOP_TIME;
+    extern float HOCKEY_PRM_S86_FLOOR2_STOP_TIME_RND;
+    extern float HOCKEY_PRM_S86_FLOOR2_STOP_TIME2;
+    extern float HOCKEY_PRM_S86_FLOOR2_STOP_TIME_RND2;
+    extern float HOCKEY_PRM_S86_FLOOR2_CHR_FLOW_VEL;
+    extern float HOCKEY_PRM_S86_FLOOR2_ROT_ANGLE;
+    extern float HOCKEY_PRM_S86_FIRE2_INIT_INTERVAL;
+    extern long HOCKEY_PRM_S86_FLOOR3_ROT_ENABLE;
+    extern float HOCKEY_PRM_S86_FLOOR3_INIT_WAIT;
+    extern float HOCKEY_PRM_S86_FLOOR3_CYCLE;
+    extern float HOCKEY_PRM_S86_FLOOR3_STOP_TIME;
+    extern float HOCKEY_PRM_S86_FLOOR3_STOP_TIME_RND;
+    extern float HOCKEY_PRM_S86_FLOOR3_STOP_TIME2;
+    extern float HOCKEY_PRM_S86_FLOOR3_STOP_TIME_RND2;
+    extern float HOCKEY_PRM_S86_FLOOR3_CHR_FLOW_VEL;
+    extern float HOCKEY_PRM_S86_FLOOR3_ROT_ANGLE;
+    extern float HOCKEY_PRM_S86_FIRE3_INIT_INTERVAL;
+    extern float HOCKEY_PRM_S86_FIRE0_TIME1;
+    extern float HOCKEY_PRM_S86_FIRE0_TIME2;
+    extern float HOCKEY_PRM_S86_FIRE1_TIME1;
+    extern float HOCKEY_PRM_S86_FIRE1_TIME2;
+    extern long HOCKEY_PRM_S86_FIRE_SLOWDOWN_RATE;
+
     // Stage 87 (CStageHockeyCrushSkate87::GetPrmTbl order).
     extern float HOCKEY_PRM_S87_COURT_WIDTH;
     extern float HOCKEY_PRM_S87_COURT_DEPTH;

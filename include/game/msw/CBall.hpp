@@ -62,6 +62,11 @@ namespace msw {
     //  - Return types are not part of the mangled names: all of them are
     //    guesses from the names, except those of the two functions with a
     //    body. The names of the parameters and members are guesses too.
+    //  - The return types of the inline virtuals were checked against
+    //    their bodies, which MenuF's game/menu/CTopMenuChrObj.cpp emits (the
+    //    bodies are in game/msw/CBallInline.hpp): several that were guessed
+    //    void return 0 or 0.0f, and GetShootStartPos returns a vector by
+    //    value (BasketF's override too).
     class CBall : public bcs::CUnivTask, public bcs::CFsmQueue<CBall> {
         public:
             // Bits of m_nFlag.
@@ -106,10 +111,10 @@ namespace msw {
             virtual void SetShootMode(long, float, long, long, unsigned long);  // 0x68 DOL
             virtual void SetShootMode(const bcs::FVEC3 &, long, long, unsigned long); // 0x6C DOL
             virtual void SetReShootMode(int);                                   // 0x70 DOL
-            virtual const bcs::FVEC3 &GetShootStartPos() const;                 // 0x74
+            virtual bcs::FVEC3 GetShootStartPos() const;                 // 0x74
             virtual long GetShootCalcType() const;                              // 0x78
             virtual float GetShootCurveValue() const;                           // 0x7C
-            virtual void CalcJumpShootVel(const bcs::FVEC3 &, const bcs::FVEC3 &, bcs::FVEC3 &, float &); // 0x80
+            virtual float CalcJumpShootVel(const bcs::FVEC3 &, const bcs::FVEC3 &, bcs::FVEC3 &, float &); // 0x80
             virtual void DoExplode(float, float);                               // 0x84 DOL
             virtual int IsAirBall() const;                                      // 0x88
             virtual void OnBaPad0Shot();                                        // 0x8C
@@ -117,8 +122,8 @@ namespace msw {
             virtual int IsBaExplode() const;                                    // 0x94
             virtual int IsBaPad0Shot() const;                                   // 0x98
             virtual void SetDodgeShootMode(long, long, const bcs::FVEC3 &, long, long); // 0x9C
-            virtual void SetDodgeShootMode(long, long, long, unsigned long);    // 0xA0
-            virtual void SetDodgePowerShootMode(long, long, long, float, unsigned long); // 0xA4
+            virtual float SetDodgeShootMode(long, long, long, unsigned long);    // 0xA0
+            virtual float SetDodgePowerShootMode(long, long, long, float, unsigned long); // 0xA4
             virtual void SetOutBallMode(const bcs::FVEC3 &, long, long);        // 0xA8
             virtual void SetFlickBallMode(float, float, float, float, long, long); // 0xAC
             virtual void SetDodgeReflectFreeMode(const bcs::FVEC3 &, float);    // 0xB0
@@ -133,8 +138,8 @@ namespace msw {
             virtual float GetDodgeAddRange() const;                             // 0xD4
             virtual void SetDodgeReceive(const bcs::FVEC3 &, float, float);     // 0xD8
             virtual void SetVolleyServeTossMode(BALL::VOLLEY::SERVE_TOSS_ARG &); // 0xDC
-            virtual void SetVolleyServeShotMode(BALL::VOLLEY::SERVE_SHOT_ARG &); // 0xE0
-            virtual void SetVolleySpikeShotMode(BALL::VOLLEY::SPIKE_SHOT_ARG &); // 0xE4
+            virtual int SetVolleyServeShotMode(BALL::VOLLEY::SERVE_SHOT_ARG &); // 0xE0
+            virtual int SetVolleySpikeShotMode(BALL::VOLLEY::SPIKE_SHOT_ARG &); // 0xE4
             virtual void SetVolleyPassShotMode(BALL::VOLLEY::PASS_SHOT_ARG &);  // 0xE8
             virtual void SetVolleyPassMode(const bcs::FVEC3 &, long, long, long, long, float, long, float,
                                            unsigned long);                      // 0xEC
@@ -156,19 +161,19 @@ namespace msw {
             virtual int CanbeVolleyPickup(long) const { return 0; }             // 0x124
             virtual long GetVolleyReceiveReaction(unsigned long, long) const;   // 0x128
             virtual long GetVolleyBlockReaction(unsigned long, long) const;     // 0x12C
-            virtual long GetVolleyReceiveStaggerFrame(long) const;              // 0x130
+            virtual float GetVolleyReceiveStaggerFrame(long) const;             // 0x130
             virtual long GetVolleyReceiveDropCoinNum(long) const;               // 0x134
             virtual float GetVolleyFlickDownPower(long) const;                  // 0x138
-            virtual void GetVolleyEndureParam(BALL::VOLLEY::ENDURE_PRM &);      // 0x13C
-            virtual long GetVolleyPassCounter() const;                          // 0x140
+            virtual int GetVolleyEndureParam(BALL::VOLLEY::ENDURE_PRM &);       // 0x13C
+            virtual float GetVolleyPassCounter() const;                         // 0x140
             virtual void GetVolleyBallMarkerDispFrame(float &, float &) const;  // 0x144
             virtual void TrgVolleyReceiveReaction(long, unsigned long);         // 0x148
             virtual void TrgVolleyBlockReaction(unsigned long);                 // 0x14C
             virtual long GetVolleyBlockDropCoinNum(long) const;                 // 0x150
-            virtual void TrgVolleyPreparationTouch(long, long, long, long);     // 0x154
+            virtual int TrgVolleyPreparationTouch(long, long, long, long);      // 0x154
             virtual void TrgVolleyArtsAttach(long, long, long, int);            // 0x158
             virtual void TrgVolleyArtsReady(long, int);                         // 0x15C
-            virtual void TrgVolleyArtsOver(long, long, unsigned long);          // 0x160
+            virtual int TrgVolleyArtsOver(long, long, unsigned long);           // 0x160
             virtual int IsVolleyArtsAttach() const;                             // 0x164
             virtual int IsVolleyFakeBall() const;                               // 0x168
             virtual int IsVolleyReqDelete() const { return 0; }                 // 0x16C
@@ -200,25 +205,25 @@ namespace msw {
             virtual int IsVolleyObstacleBallRR() const;                                             // 0x1C8
             virtual int IsVolleyInCatchableArea(long) const;                                        // 0x1CC
             virtual int IsVolleyThroughUnderNet() const;                                            // 0x1D0
-            virtual void DoVolleyItemBallDirectSpike(long, long);                                   // 0x1D4
+            virtual int DoVolleyItemBallDirectSpike(long, long);                                    // 0x1D4
             virtual void SetHockeyChargeShootMode(const bcs::FVEC3 &, float, long, float, long, float, float, float, int, int, int);// 0x1D8
             virtual void SetHockeyShootMode(const bcs::FVEC3 &, float, long, float, long, int, long);// 0x1DC
             virtual void SetHockeyArtsMode(const bcs::FVEC3 &, float, long, long, int, long);       // 0x1E0
             virtual void SetHockeyItemShootMode(const bcs::FVEC3 &, float, long, float, int, long); // 0x1E4
             virtual void SetHockeyBodyGoalMode(long, long, long);                                   // 0x1E8
-            virtual void SetHockeySnatch(const CCollAtkUnit *, const bcs::FVEC3 &);                 // 0x1EC
+            virtual int SetHockeySnatch(const CCollAtkUnit *, const bcs::FVEC3 &);                  // 0x1EC
             virtual void TrgGoalIn(const bcs::FVEC3 &, long, long, long, long, long);               // 0x1F0
             virtual void SetHockeyDropMode(const bcs::FVEC3 &, float, long, long);                  // 0x1F4
             virtual void SetHockeyArtsDropMode(const bcs::FVEC3 &, float, long, long);              // 0x1F8
             virtual long GetArtsType() const;                                                       // 0x1FC
-            virtual void TrgHockeyArtsEnd(long);                                                    // 0x200
+            virtual int TrgHockeyArtsEnd(long);                                                     // 0x200
             virtual int IsHockeyArtsEnd() const;                                                    // 0x204
             virtual void SetHockeyArtsStart();                                                      // 0x208
             virtual void SetHockeyShootTargetPos(const bcs::FVEC3 &);                               // 0x20C
             virtual void SetHockeyShootTargetMove(float, float);                                    // 0x210
-            virtual long GetHockeyNoChgLeaderCount();                                               // 0x214
+            virtual float GetHockeyNoChgLeaderCount();                                              // 0x214
             virtual long GetHockeyPassTgtChrIdx();                                                  // 0x218
-            virtual void GetPassCatchPos(bcs::FVEC3 &, long);                                       // 0x21C
+            virtual int GetPassCatchPos(bcs::FVEC3 &, long);                                        // 0x21C
             virtual long GetHockeyHaveTeamIdx();                                                    // 0x220
             virtual float GetHockeySnatchFrame();                                                   // 0x224
             virtual void SetHockeySnatchFrame(float);                                               // 0x228
@@ -231,7 +236,7 @@ namespace msw {
             virtual float GetHokeyBombExplodeRadius() const;                                        // 0x244
             virtual float GetHokeyBombShootDist() const;                                            // 0x248
             virtual int IsHockeyAttackMode() const;                                                 // 0x24C
-            virtual void GetHokeyCurveShootData(float &, bcs::FVEC3 &);                             // 0x250
+            virtual int GetHokeyCurveShootData(float &, bcs::FVEC3 &);                              // 0x250
             virtual float GetFaceOffGuideDispFrm();                                                 // 0x254
             virtual void SettHockeyReflectMode(float);                                              // 0x258
             virtual int IsShootExceptionalStart();                                                  // 0x25C
@@ -239,7 +244,7 @@ namespace msw {
             virtual float GetHockeyPassSpeed();                                                     // 0x264
             virtual long GetVsBossBallMode() const;                                                 // 0x268
             virtual void SetVsBossTossUpMode(const bcs::FVEC3 &, long, unsigned long);              // 0x26C
-            virtual void SetVsBossSpikeShotMode(BALL::BOSS::SPIKE_SHOT_ARG &);                      // 0x270
+            virtual int SetVsBossSpikeShotMode(BALL::BOSS::SPIKE_SHOT_ARG &);                       // 0x270
             virtual void SetVsBossPassShotMode(BALL::BOSS::PASS_SHOT_ARG &);                        // 0x274
             virtual void SetVsBossPassMode(const bcs::FVEC3 &, long, long, long, long, long, unsigned long);// 0x278
             virtual void SetVsBossShootMode(const bcs::FVEC3 &, long, float);                       // 0x27C
@@ -258,7 +263,7 @@ namespace msw {
             virtual void SetJumpBallAttach();                                                       // 0x2B0
             virtual void SetJumpBallMode();                                                         // 0x2B4
             virtual void SetChrReflectMode(long, float);                                            // 0x2B8
-            virtual void JumpBallFrameSet(int);                                                     // 0x2BC
+            virtual float JumpBallFrameSet(int);                                                    // 0x2BC
             virtual int IsActive() const;                                                           // 0x2C0
             virtual int IsSleepMode() const;                                                        // 0x2C4
             virtual int IsFreeMoveMode() const;                                                     // 0x2C8
@@ -405,6 +410,9 @@ namespace msw {
             // `nModel` takes the ball's own number. (what the second
             // argument selects is not known; the boss game passes 0x40)
             void Create(long nModel, long);
+            // (DOL) Builds the ball from `file`; the inline Create(ResFile)
+            // passes 0x40 for the second argument.
+            void Create(nw4r::g3d::ResFile file, long);
             // (DOL) Moves the ball to rPos. (return type guessed)
             void SetPos(const bcs::FVEC3 &rPos);
             // DOL. Not zero while the ball is attached to something (most
@@ -491,6 +499,10 @@ namespace msw {
             // (DOL; return type guessed) Plays sound nSe at the ball, or at
             // *pPos when it is not null. The item balls pass
             // (nSe, 0, 1, -1, 0.0f, 1.0f, 0.0f), as for CGameSnd::Play.
+            // (DOL; added for MenuF's msw::CTopMenuChrObj, which plays the
+            // sound of the ball's sport with it; arguments as PlaySePos)
+            void PlayMoveSe(long nSe, const bcs::FVEC3 *pPos, unsigned long nArg2, long nArg3, float fArg4,
+                            float fVolume, float fArg6);
             void PlaySePos(long nSe, const bcs::FVEC3 *pPos, unsigned long nArg2, long nArg3, float fArg4,
                            float fVolume, float fArg6);
             // (DOL; return types guessed) Used by BasketF's
@@ -519,7 +531,10 @@ namespace msw {
             // 0xB4, a second scene object, deleted with the model (name
             // guessed; CBallBasketFruit sets bits 0xC0 of its flags)
             bcs::CScnObj *m_pSubObj;
-            unsigned char m_UnkB8[0x28];   // 0xB8
+            // 0xB8 (name guessed): a third scene object of the ball;
+            // MenuF's msw::CTopMenuBall colours it with m_pMdlObj.
+            bcs::CMdlObj *m_pSubObj2;
+            unsigned char m_UnkBC[0x24];   // 0xBC
             // 0xE0 (name guessed): where the ball will come down / is heading;
             // VolleyF's CBallTargetMarker puts its marker there, DodgeF's item
             // balls set it (CItemBallBaseDodge::SetTargetPos).

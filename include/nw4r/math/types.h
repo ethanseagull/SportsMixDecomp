@@ -79,6 +79,9 @@ namespace nw4r {
         // (DOL) *pOut = the rotation about X, Y and Z by the three angles,
         // given in units of 1/256 of a turn. Added for bcs::CScnObj::CalcRootMtx.
         MTX34 *MTX34RotXYZFIdx(MTX34 *pOut, float fIdxX, float fIdxY, float fIdxZ);
+        // (DOL; added for MenuF's msw::CBBoxObj) *pIn turned by pMtx
+        // without its translation.
+        VEC3 *VEC3TransformNormal(VEC3 *pOut, const MTX34 *pMtx, const VEC3 *pIn);
 
         // (DOL) *pOut = the rotation about *pAxis by fIdx (1/256 of a
         // turn). Added for the DOL's pinball ball, which inlines the radian

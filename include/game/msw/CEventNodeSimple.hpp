@@ -1,6 +1,7 @@
 #ifndef CEVENTNODESIMPLE_HPP_
 #define CEVENTNODESIMPLE_HPP_
 
+#include "bcs/FMTX34.hpp"
 #include "bcs/FVEC3.hpp"
 
 namespace msw {
@@ -28,9 +29,23 @@ namespace msw {
             // 0x18, 0x1C: GetResult with a third vector (CEventNodeSimple
             // sets it to a constant).
             virtual void GetResultVec(bcs::FVEC3 &pos, bcs::FVEC3 &rot, bcs::FVEC3 &vec, float fFrame, long nId) = 0;
-            virtual void GetResultEx(bcs::FVEC3 &pos, bcs::FVEC3 &rot, bcs::FVEC3 &vec, float fFrame, long nId) = 0;
+            // 0x1C: the same for a path played mirrored (nFlip, see
+            // msw::CEventMove). The default (0x8011500C, emitted weak by
+            // CEventModel.cpp after CEventMove::SetFrame) ignores nFlip and
+            // gives a scale of 1.
+            virtual void GetResultEx(bcs::FVEC3 &pos, bcs::FVEC3 &rot, bcs::FVEC3 &scale, float fFrame, long nId, long nFlip)
+            {
+                scale.x = 1.0f;
+                scale.y = 1.0f;
+                scale.z = 1.0f;
+                GetResult(pos, rot, fFrame, nId);
+            }
             // 0x20: length of the path in frames.
             virtual float GetNumFrame() const = 0;
+
+            // (DOL fn_801FC430, unnamed; name and parameter names guessed)
+            // The rotation of rMtx once its scale rScale is taken out.
+            static void _GetMtxRot(bcs::FVEC3 &rRot, const bcs::FVEC3 &rScale, const bcs::FMTX34 &rMtx);
     };
 
     // A node path from one position and rotation to another (DOL class,
@@ -49,9 +64,8 @@ namespace msw {
             virtual bool IsEnable(long nId) { return m_fFrame > 0.0f; }
             // (DOL, 0x801FB6CC)
             virtual void GetResult(bcs::FVEC3 &pos, bcs::FVEC3 &rot, float fFrame, long nId);
-            // (DOL, 0x801FECA8 and 0x8011500C)
+            // (DOL, 0x801FECA8; slot 0x1C is the base's GetResultEx)
             virtual void GetResultVec(bcs::FVEC3 &pos, bcs::FVEC3 &rot, bcs::FVEC3 &vec, float fFrame, long nId);
-            virtual void GetResultEx(bcs::FVEC3 &pos, bcs::FVEC3 &rot, bcs::FVEC3 &vec, float fFrame, long nId);
             // (DOL)
             virtual float GetNumFrame() const { return m_fFrame; }
 

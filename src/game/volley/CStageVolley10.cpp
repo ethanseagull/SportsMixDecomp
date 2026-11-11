@@ -1000,7 +1000,7 @@ void msw::CStageVolley10::PanelSetB_UpDownCheckSub_(long nOffense, long col, lon
 
     if ((rowLine || colLine) && teamNo == nOffense && rate < 2) {
         SetPanelLocalType_(idx, GetPanelTypeByTeamNo_(teamNo, 2));
-    } else if (rowBroken && colBroken && rate > 1) {
+    } else if (rowBroken && colBroken && rate >= 2) {
         SetPanelLocalType_(idx, GetPanelTypeByTeamNo_(teamNo, 1));
     }
 }
@@ -1058,7 +1058,7 @@ void msw::CStageVolley10::PanelSetC_UpDownCheckSub_(long nOffense, long col, lon
     if ((rowLine || colLine) && teamNo == nOffense &&
         (rate < 2 || (rowLine && row == hitRow) || (colLine && col == hitCol))) {
         SetPanelLocalType_(idx, GetPanelTypeByTeamNo_(teamNo, 2));
-    } else if (rowBroken && colBroken && rate > 1) {
+    } else if (rowBroken && colBroken && rate >= 2) {
         SetPanelLocalType_(idx, GetPanelTypeByTeamNo_(teamNo, 1));
     }
 }

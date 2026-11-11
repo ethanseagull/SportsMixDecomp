@@ -28,6 +28,7 @@ VolleyF FireReceiver___Q23msw21CChrCoreVolleyKinopioFv near 98.1 float registers
 VolleyF GameGuideDispCheck___Q23msw13CChrManVolleyFv near 99.7 register allocation only in the line-message loop
 VolleyF GamePartyResult_In__Q23msw14CCockpitVolleyFv near 99.3 register allocation only (string base and CMessage instance registers swapped)
 VolleyF GameResult_In__Q23msw14CCockpitVolleyFv near 99.1 register allocation only (result-score block), as HockeyF's near copy
+VolleyF GetAssignRainbowBall__Q23msw15CComDrvVolleyRRCFv near 99.1 zero constant shared between nFreeBits and loop index (one register) and one register renumbering; same logic
 VolleyF GetAssumedTeamCourtOffset___Q23msw14CStageVolley05CFflRQ23bcs5FVEC3 near 99.8 99.8%: operand order of two commutative fmuls (sin*width, (cos-1)*depth) only.
 VolleyF GetDispScale__Q23msw17CBallMarkerVolleyCFv near 98.6 fmadds multiplicand order swapped (rate * diff vs diff * rate, same result)
 VolleyF GetFirstLookInfo_MultiPlay__Q23msw15CCameraVolleyRRFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 99.7 registers only: in the character loop the z*scale product and pos.x swap float registers and the pos.z/scale load order differs (as CCameraHockeyCS/CCameraBasketHB); same loads, stores and branches
@@ -38,12 +39,15 @@ VolleyF GetParam_FlashColor__Q23msw14CStageVolley15CFv unverified 63.3 Same valu
 VolleyF GetParam_FlashColor__Q23msw14CStageVolley16CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2 bytes); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
 VolleyF GetParam_ShotAngle__Q23msw17CPinballManVolleyCFv near 98.3 load order of the two factors only (the original loads the parameter first); same product
 VolleyF GetPosTurnAroundGimmick__Q23msw17CComDrvVolleyGameFRQ23bcs5FVEC3 near 95.1 the two Obstacle_GetPosTurnAroundObstacle calls of the first-turn obstacle branch are laid out in the other order (equivalent branch form) (95.1%)
+VolleyF GetShoudGetDropCoin__Q23msw15CComDrvVolleyRRCFv near 96.7 register choice, loop-pointer init order and float pool offsets shifted by 4 (unit pool layout); same values, same logic
 VolleyF GetValidPtr__Q23msw15CComManVolleyRRFl near 97.0 last test: original branches past li r3,0 to mr r3,r31 (bne); ours lays the two returns out the other way (beq). Same results on both paths; 4 source forms tried
 VolleyF GetVolleySpikeParam__Q23msw21CItemBallVolleyBananaCFRQ43msw4BALL6VOLLEY14SPIKE_SHOT_ARG near 96.0 field 0x18 gets 1 or 2: original branches, ours a branchless select with the same value
 VolleyF GetVolleySpikeParam__Q23msw21CItemBallVolleyRShellCFRQ43msw4BALL6VOLLEY14SPIKE_SHOT_ARG near 96.1 field 0x18 gets 1 or 2: original branches, ours a branchless select with the same value
+VolleyF HitPanel__Q23msw14CStageVolley10FRCQ23bcs5FVEC3i near 100.0 register choice only (two mr source registers swapped); declaration-order search found nothing
 VolleyF Hit__Q23msw15CStageNetVolleyFRCQ23bcs5FVEC3RCQ23bcs5FVEC3 unverified 79.7 Same arithmetic, calls and stores; the original keeps the grid sizes 5 and 3 in saved registers (li r27/r28, cmpw, mullw, int-to-float via xoris) where ours folds them to immediates and constants (frame 0x60 vs 0x50, savegpr_25 vs _27). Source shape that stops the folding not found (locals, inline helper tried).
 VolleyF InitPanelAll__Q23msw14CStageVolley10Fl near 90.6 the original repeats the case 2 and case 4 bodies (18-store clear plus FeverCancel, model-parameter pick); merged here; same work
 VolleyF IsExistItemBall__Q23msw15CComManVolleyRRFPCQ23msw8CChrCoreRCQ23bcs5FVEC3 near 99.8 instruction scheduling only
+VolleyF IsTrolleyTransit__Q23msw14CStageVolley17CFv near 89.0 AABB corner copies are lfs/stfs of the same bytes where the original does lwz/stw block copies (nw4r::math::VEC3 copy shape; a POD base struct for VEC3 gives 99.1%, header change not made), plus float register choice; no behaviour change
 VolleyF IsValid__Q33bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>6HandleCFv near 96.4 register choice only, the same code and score as the CStageDodge11 copy (inline pool/list templates of the fire pillar cluster).
 VolleyF LoopStateAppear__Q23msw30CBallTargetMarkerRhythmReceiveFv near 99.7 x and z of the target position swap float registers
 VolleyF LoopStateDisappear__Q23msw30CBallTargetMarkerRhythmReceiveFv near 99.7 x and z of the target position swap float registers
@@ -90,10 +94,13 @@ VolleyF SetChrIcon__Q23msw14CCockpitVolleyFlllPCQ23bcs5FVEC3PCv near 99.8 regist
 VolleyF SetCoinSpecialAnim__Q23msw14CCockpitVolleyFli near 99.8 register allocation only
 VolleyF SetCoinValue__Q23msw18CCockpitVolleyCoinFll near 98.9 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 VolleyF SetCountNum__Q23msw25CCockpitVolleyPauseResultFl near 99.2 registers only (as CCockpitBasketPauseResult::SetCountNum): the pane accessor and the computed show flag swap r30/r31; same instructions, order and stack frame
+VolleyF SetCountPoint__Q23msw20CCockpitVolleyResultFPlPll near 99.6 register allocation only (float temporaries of the count speed swapped, saved pane pointer r17 vs r18)
+VolleyF SetCountScore__Q23msw20CCockpitVolleyResultFPlPlll near 98.4 register allocation only (float temporaries of the count speed and the saved pane pointer/limit registers swapped)
 VolleyF SetFaceIcon__Q23msw19CCockpitVolleyCoderFPQ33bcs3G2D9CPaneCtrlllPCQ23msw8CChrCore near 99.2 register allocation, and Pane::SetVisible(IsStarPlayer()) inserts the bit with the operands the other way round (same flag byte)
 VolleyF SetHeightObjState___Q23msw17CBallTargetMarkerFv near 98.7 float register choice and scheduling; .rodata offsets shifted because -1.0f/0.23f sit after 1.0f in ours (0.23f has no known user)
 VolleyF SetHeightObjState___Q23msw30CBallTargetMarkerRhythmReceiveFv near 98.4 float register choice and block order of the clamp; .rodata offsets shifted (-1.0f/0.23f placement)
 VolleyF SetIconFace__Q23msw23CCockpitChrIcon2DVolleyFll near 99.1 register allocation only: one more callee-saved register (_savegpr_25 vs _savegpr_26), so the frame is 0x60 instead of 0x50; same calls, constants and accesses
+VolleyF SetPerfectIcon__Q23msw20CCockpitVolleyResultFPlPll near 99.6 register allocation only (float temporaries of the count speed swapped)
 VolleyF SetSPContrllerDisp__Q23msw14CCockpitVolleyFll near 99.8 register allocation only
 VolleyF SetSPGaugeRatio__Q23msw14CCockpitVolleyFlff near 99.8 register allocation only (gauge pointer in r0 vs a saved register)
 VolleyF SetSPGauge__Q23msw21CCockpitVolleySPGaugeFlf near 99.1 99.1%, registers only: the 0x43300000 conversion word and the array offset swap r0/r3
@@ -102,6 +109,7 @@ VolleyF SetScoreValue__Q23msw19CCockpitVolleyCoderFll unverified 81.2 same contr
 VolleyF SetServeScoreAnim__Q23msw18CCockpitVolleyCoinFl near 99.1 register choice only: loop counter and pane-accessor temporary swap r27/r28
 VolleyF SetTeamScore__Q23msw14CCockpitVolleyFv near 99.6 register allocation only (score and coder pointer swapped in the inlined SetTeamScore(long,long,int))
 VolleyF SetTelop3DScoreCount__Q23msw14CCockpitVolleyFllllllllil near 99.3 order of the constant stores into SET_PARAM only (same values and offsets), as HockeyF's near copy
+VolleyF SetTextNext__Q23msw20CCockpitVolleyResultFll near 99.2 register allocation only
 VolleyF Set__Q23msw18CCockpitVolleyCoinFv near 99.4 register choice / schedule only (as CCockpitHockeyCoin::Set)
 VolleyF Set__Q23msw19CCockpitVolleyCoderFv near 99.8 register allocation only: the label loop's table pointer and accessor temporaries swap saved registers; same calls, constants, loads, stores and branches
 VolleyF Set__Q23msw21CCockpitVolleySPGaugeFv near 93.6 93.6%: the layout layer (6 when m_nType is 1, else 0) is computed once before the inlined NewPaneCtrl in ours; the original recomputes the same compare at each of its two uses (AddObject, CreateLayoutObject). The rest is register numbering; calls, constants, tables and loops are the same (.rodata 100%)

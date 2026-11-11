@@ -138,8 +138,8 @@ void msw::CChrCoreBoss::LoopStateSideStep()
                     AnimSetSpeed(3, pParam->m_Unk1C8);
                     pWork->m_nStep = 2;
                 } else {
-                    long nLoop = pWork->m_pMot->nLoop;
                     long nEnd = pWork->m_pMot->nEnd;
+                    long nLoop = pWork->m_pMot->nLoop;
                     if (AnimGetResFrameNum(nLoop) >= pParam->m_Unk1C4) {
                         AnimPlay(3, nEnd, 0, 0.0f, 0.0f);
                         AnimSetSpeed(3, AnimGetFrameNum(3) / pParam->m_Unk1C4);
@@ -157,8 +157,8 @@ void msw::CChrCoreBoss::LoopStateSideStep()
         case 1: {
             // Loops until the end motion fits in what is left.
             long nEnd = pWork->m_pMot->nEnd;
-            float fFrame = pWork->m_fMotFrame;
             float fStart = pParam->m_Unk1C4 - AnimGetResFrameNum(nEnd);
+            float fFrame = pWork->m_fMotFrame;
             if (fFrame > fStart) {
                 AnimPlay(3, nEnd, 0, 3.0f, fFrame - fStart);
                 pWork->m_nStep = 2;

@@ -42,8 +42,11 @@ namespace bcs {
             virtual void VFunc7C();
             virtual void VFunc80();
             virtual void VFunc84();
-            virtual void VFunc88();
-            virtual void VFunc8C();
+            // 0x88, 0x8C (meaning from msw::CEvDemoMdlChr, names not known):
+            // the length in frames of animation nAnim of the file, and
+            // whether it loops.
+            virtual float VFunc88(long nAnim);
+            virtual int VFunc8C(long nAnim);
             virtual void VFunc90();
             virtual void VFunc94();
             virtual int VFunc98(long, unsigned long);   // 0x98, tested for nonzero by the caller
@@ -59,6 +62,12 @@ namespace bcs {
             void Play(long idx, unsigned long flag, float rate, float blend, float frame);
             // Clears bit 0 of the word at 0x18.
             void Stop();
+            // (DOL) The frame of trigger nTrg of animation nAnim. (meaning
+            // of the float not known)
+            float SearchTrgFrame(long nAnim, unsigned long nTrg, float) const;
+            // (DOL fn_80008D38, unnamed; name guessed) Takes the motions from
+            // another file.
+            void ChangeResFile(nw4r::g3d::ResFile file);
             // (DOL; parameter names guessed) Calls pFunc with pUser for each
             // trigger the motion passes.
             void SetTrgCallback(void (*pFunc)(const MOT_TRG *pTrg, void *pUser), void *pUser);

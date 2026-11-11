@@ -207,6 +207,28 @@ namespace msw {
     extern float VOLLEY_PRM_S17_HEYHO_C_DIST_MAX;
     extern long VOLLEY_PRM_S17_TROLLEY_PAT_TYPE;
     extern long VOLLEY_PRM_S17_TROLLEY_PAT_NO;
+
+    // Stage 17, the turntable and the trolley timing
+    // (CStageVolley17::GetPrmTbl). Times are in seconds, rates in percent.
+    extern float VOLLEY_PRM_S17_TT_INIT_STOP_TIME;
+    extern float VOLLEY_PRM_S17_TT_STOP_TIME;
+    extern float VOLLEY_PRM_S17_TT_STOP_TIME_RND;
+    extern float VOLLEY_PRM_S17_TT_ROT_TIME;
+    extern float VOLLEY_PRM_S17_TT_ROT_TIME_RND;
+    extern float VOLLEY_PRM_S17_TT_SPEED;
+    extern long VOLLEY_PRM_S17_TT_DIR;
+    extern float VOLLEY_PRM_S17_TT_ACC_TIME;
+    extern float VOLLEY_PRM_S17_TT_RADIUS;
+    extern float VOLLEY_PRM_S17_TT_OPEN_RATE;
+    extern float VOLLEY_PRM_S17_TT_WARN_TIME;
+    extern float VOLLEY_PRM_S17_TT_WARN_AFTER_TIME;
+    extern float VOLLEY_PRM_S17_TT_WARN_SE_STOP_TIME;
+    extern float VOLLEY_PRM_S17_TROLLEY_INIT_RATE;
+    extern float VOLLEY_PRM_S17_TROLLEY_RATE;
+    extern float VOLLEY_PRM_S17_TROLLEY_PRE_WAIT;
+    extern long VOLLEY_PRM_S17_TROLLEY_DIR_TYPE;
+    extern float VOLLEY_PRM_S17_TROLLEY_LOC_OFFSET;
+    extern long VOLLEY_PRM_S17_DEB_RELOAD;
 }
 
 #endif /* !MSW_VOLLEYPRM_HPP_ */

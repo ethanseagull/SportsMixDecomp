@@ -5,16 +5,23 @@
 #include "bcs/BCS_Vec.hpp"
 #include "bcs/CScnObj.hpp"
 #include "bcs/FVEC3.hpp"
+#include "game/msw/IEvNodeBindable.hpp"
 #include "nw4r/g3d/ResFile.hpp"
 #include "revolution/gx/GXEnum.h"
 
 namespace bcs {
     struct FMTX34;
+    class CAnmMotion;
+    class CMdlObj;
+    class CMdlShadow;
     class CScnGroup;
+    class CSndTask;
 }
 
 namespace msw {
 
+    class CChrMdlObj;
+    class CEffectCluster;
     class CEventMove;
     class CEventMoveAction;
     class CEventNodeBase;
@@ -31,7 +38,10 @@ namespace msw {
     // functions no module emits (marked "DOL body"). Return types are not
     // part of the mangled names: they are read from those bodies ("void" for
     // an empty one), and the pointer types are guesses.
-    class CEventModel {
+    class CEventModel : public IEvNodeBindable {
+            // CEventMove::SetFrame tests the flags directly.
+            friend class CEventMove;
+
         public:
             // One step of a motion sequence. A sequence ends with an entry
             // whose nMot is 0. (member names guessed)
@@ -41,12 +51,19 @@ namespace msw {
                 float fBlend; // 0x04: third argument
                 float fFrame; // 0x08: added to the frame the sequence starts at
             };
+            // One step of a sequence of animations played by name (see the
+            // second AnimPlay below); it ends with an entry whose pName is
+            // null. (member names guessed)
+            struct MOT_NAME_DATA {
+                const char *pName;   // 0x00
+                unsigned long nFlag; // 0x04
+                float fBlend;        // 0x08
+                float fFrame;        // 0x0C
+            };
 
             CEventModel(const short *pMotTable);
             virtual ~CEventModel();
-            virtual void _SetPos(const bcs::FVEC3 &) {}                 // 0x0C (DOL body)
-            virtual void _SetRot(const bcs::FVEC3 &) {}                 // 0x10 (DOL body)
-            virtual void _SetScale(const bcs::FVEC3 &) {}               // 0x14 (DOL body)
+            // 0x0C to 0x14: _SetPos, _SetRot, _SetScale of IEvNodeBindable.
             virtual void SetDisp(int) {}                                // 0x18 (DOL body)
             virtual void SetShadowDisp(int) {}                          // 0x1C
             virtual void UpdateFrame(float) {}                          // 0x20 (DOL body)
@@ -85,7 +102,7 @@ namespace msw {
             virtual float GetNowAlpha() const { return 0.0f; }          // 0x80
             virtual void _UpdateFlags() {}                              // 0x84
             virtual long GetSeMax() const { return -1; }                // 0x88
-            virtual void *GetSndTaskSe(long) { return 0; }              // 0x8C
+            virtual bcs::CSndTask *GetSndTaskSe(long) { return 0; }    // 0x8C
             virtual void SetSndTaskSe(long, unsigned long) {}           // 0x90
             virtual long GetEffMax() const { return -1; }               // 0x94
             virtual unsigned long GetEffcetHandle(long) const { return 0; } // 0x98
@@ -115,7 +132,8 @@ namespace msw {
             // nNode at frame fFrame.
             int IsDisp() const;
             void SetLinkNode(CEventNodeBase *pNode, int b);
-            void SetNode(long nNode, float fFrame);
+            // Returns whether the node path can be followed.
+            int SetNode(long nNode, float fFrame);
 
             // (DOL functions; parameter names guessed) Used by TourF's
             // Stage33: show or hide the model's group; stop, erase or force
@@ -142,6 +160,79 @@ namespace msw {
             float GetMoveFrame() const;
             void SetStarEffect(int bStar);
             void AttachToObject(const CEventModel *pParent, const char *pNode, bcs::CScnObj::AttachMode mode);
+
+            // (DOL functions; the names of the ones unnamed in the DOL and
+            // all parameter names guessed)
+            // Set or clear one bit of the flags: 0x20 the node path can be
+            // followed; 0x800 motion numbers are animation numbers (no
+            // motion table); 0x4000 the floor height comes from the object
+            // set by SetFloorObj; 0x40000 and 0x80000 are handed on by
+            // _UpdateFlags (msw::CEventChrCore).
+            void SetValidMove(int bValid);
+            void SetDirectAnim(int bDirect);
+            void SetFloorObjEnable(int bEnable);
+            void SetEnableFlag18(int bEnable);
+            void SetEnableFlag19(int bEnable);
+            int IsValidMove() const;
+            // Plays the sequence pData from its first entry once, after
+            // marking its last entry to loop when that animation loops.
+            void SetMotionSeq(MOT_DATA *pData);
+            // AnimPlay for a sequence of animations played by name.
+            void AnimPlay(const MOT_NAME_DATA *pData, long nIndex, float fFrame, long nLoop);
+            // Attaches the model to node nNode of pParent.
+            void AttachToObject(const CEventModel *pParent, long nNode, bcs::CScnObj::AttachMode mode);
+            // Makes the model follow pParent (see _UpdateAttach).
+            void AttachToModel(CEventModel *pParent);
+            // The model whose scene object gives the floor height.
+            void SetFloorObj(CEventModel *pObj);
+            // The length in frames of the longest of the animations pName
+            // the bits of nFlag select (1 skeletal, 2 colour, 4 texture
+            // pattern, 8 texture matrix, 0x10 shape) in the model's file.
+            float AnimResFrame(const char *pName, unsigned long nFlag) const;
+            // Sets the rotation of the move's node path (only y is used;
+            // SetMoveOffset and SetMoveOffsetRot set the other two).
+            void SetMovePathRot(const bcs::FVEC3 &vRot);
+            // Moves the model in a straight line by vMove over fFrame frames;
+            // returns the node path it builds for that.
+            CEventNodeBase *SetMoveLinear(const bcs::FVEC3 &vMove, float fFrame, int bUpdate);
+            // Plays sound nSe in sound slot nSlot (stopping the one there),
+            // at the model's position or without one; the three floats go
+            // to msw::CGameSnd::Play.
+            bcs::CSndTask *PlaySe(long nSe, long nSlot, float, float, float);
+            bcs::CSndTask *PlaySeNoPos(long nSe, long nSlot, float, float, float);
+            void StopSe(float fFade, long nFirst, long nLast);
+
+        protected:
+            // Follows the floor (flag 0x8) or the attached model.
+            void _UpdateFloor();
+            void _UpdateAttach();
+            // Forget the sound and effect slots whose sound or effect ended.
+            void _UpdateSe();
+            void _UpdateEffect();
+            // The effect in slot n, if it is still alive.
+            CEffectCluster *_GetEffect(long n);
+            // Plays entry m_nMotIndex of the sequence (to m_nMotLoop at its
+            // end), fFrame added to its start frame.
+            void _PlayMotion(float fFrame);
+            void _PlayMotionName(float fFrame);
+            // _NextMotion for the sequence by name.
+            void _NextMotionName(short nStep, float fFrame);
+            // A model object of file m_mdlFile (the first model when pName
+            // is null) with the animations nFlag selects.
+            bcs::CMdlObj *_CreateMdlObj(const char *pName, unsigned long nFlag);
+            // Gives pMdl a skeletal animation of m_resFile when nFlag asks
+            // for one.
+            bcs::CAnmMotion *_CreateAnmMotion(bcs::CMdlObj *pMdl, unsigned long nFlag);
+            // Plays the animations pName of file on pMdl, those nFlag
+            // selects; returns the length of the longest.
+            float _AnimPlayRes(bcs::CMdlObj *pMdl, const nw4r::g3d::ResFile &file, const char *pName,
+                               unsigned long nFlag, float fBlend, float fFrame);
+            // Whether every animation of pMdl that nFlag selects has ended.
+            int _IsAnimEnd(const bcs::CMdlObj *pMdl, unsigned long nFlag) const;
+            // Sets the floor height of the shadow from the floor object.
+            void _UpdateFloorHeight(bcs::CMdlShadow *pShadow);
+
+        public:
 
             // (names guessed) Inline in TourF: the position (moved by the
             // offset at 0x28) and the rotation, kept and handed to the
@@ -190,6 +281,9 @@ namespace msw {
             const bcs::FVEC3 &GetRot() const { return m_vRot; }
             // (name guessed) Read by msw::CSceneCalc::_CalcFloor.
             const bcs::FVEC3 &GetPosOffset() const { return m_vPosOffset; }
+            // (names guessed) Read by msw::CEventMove.
+            const bcs::FVEC3 &GetScale() const { return m_vScale; }
+            CEventMoveAction *GetMoveAction() const { return m_pAction; }
 
             // (names guessed) Inline in the modules, which write these
             // members directly.
@@ -243,11 +337,9 @@ namespace msw {
             void _NextMotion(short nStep, float fFrame);
 
         protected:
-            // (protected for msw::CEventChrCore, which reads them directly)
-            bcs::FVEC3 m_vPos;            // 0x04 (name guessed)
-            bcs::FVEC3 m_vRot;            // 0x10 (name guessed) radians
-            bcs::FVEC3 m_vScale;          // 0x1C (name guessed) see SetScale
-            bcs::FVEC3 m_vPosOffset;      // 0x28 (name guessed) added by SetPosition
+            // 0x04 to 0x34: position, rotation, scale and position offset,
+            // in IEvNodeBindable (protected for msw::CEventChrCore, which
+            // reads them directly).
             unsigned long m_nFlag;        // 0x34 (name guessed)
             short m_nIndex;               // 0x38
             short m_nType;                // 0x3A
@@ -256,17 +348,22 @@ namespace msw {
             const short *m_pMotTable;     // 0x44 (name guessed) motion number to animation number
             long m_nAnim;                 // 0x48 (name guessed)
             const MOT_DATA *m_pMotData;   // 0x4C (name guessed) the sequence playing
-            unsigned char m_Unk50[4];     // 0x50
+            const MOT_NAME_DATA *m_pMotNameData; // 0x50 (name guessed) the sequence by name playing
             short m_nMotIndex;            // 0x54 (name guessed) entry of the sequence
-            short m_nUnk56;               // 0x56
+            short m_nMotLoop;             // 0x56 (name guessed) entry played after the last one; -1 to stop
             float m_fAnimSpeed;           // 0x58 (name guessed) see CEventChrCore::SetAnimSpeed
             float m_fAlpha;               // 0x5C (name guessed) see _UpdateAlpha
             float m_fAlphaTarget;         // 0x60 (name guessed)
             float m_fAlphaSpeed;          // 0x64 (name guessed)
-            // 0x68 to 0xB0 are not mapped. The class is 0xB0 bytes:
-            // msw::CTournamentChip and msw::CTournamentTrophy (TourF) have
-            // their own members from 0xB0.
-            unsigned char m_Unk68[0x3C];  // 0x68
+            // The class is 0xB0 bytes: msw::CTournamentChip and
+            // msw::CTournamentTrophy (TourF) have their own members from
+            // 0xB0. (names guessed)
+            // The model's place relative to the model it is attached to
+            // (see AttachToModel, _UpdateAttach).
+            bcs::FMTX34 m_AttachMtx;      // 0x68
+            unsigned long m_nAttachHandle; // 0x98: handle of that model's scene object
+            unsigned long m_nFloorHandle; // 0x9C: handle of the scene object giving the floor height
+            nw4r::g3d::ResFile m_mdlFile; // 0xA0: file with the model
             nw4r::g3d::ResFile m_resFile; // 0xA4 (name guessed) see GetResFile
             // The move and the move action linked to the model (see
             // SetLinkMove, SetLinkAction); bits 0x1 and 0x2 of the flags say

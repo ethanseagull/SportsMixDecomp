@@ -37,6 +37,9 @@ namespace msw {
                 // Moves the level by nAdd (clamped to 0..3) and shows its
                 // stars.
                 void SetLevelText(long nAdd);
+                // (inline, no symbol; added for MenuF
+                // game/menu/unit_6EE84.cpp)
+                long GetLevel() const { return m_nLevel; }
                 // Greys out (bDisable) or restores arrow button nBtnKindId.
                 void SetArrowDisable(long nBtnKindId, int bDisable);
 

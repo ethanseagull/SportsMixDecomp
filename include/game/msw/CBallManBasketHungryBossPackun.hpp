@@ -20,6 +20,9 @@ namespace msw {
             // Static, out of line in the original. (used by
             // game/basket/CBallBasketFruit.cpp)
             static float GetBombExplodeR();
+            // (added for game/basket/CGameBasketHungryBossPackun.cpp; return
+            // type guessed) Not zero during the bonus time.
+            int IsNowBonusTime_() const;
 
         private:
             unsigned char m_Unk60[0x84 - 0x60];

@@ -1075,6 +1075,17 @@ namespace msw {
             // Sets the bit IsDisable tests: the character takes no part.
             void SetDisable() { m_UnkEC |= 0x40000000; }
             void OnStatusFlag(unsigned long nBit) { m_nStatusFlag |= nBit; }
+            // (names guessed; added for BasketF game/basket/CChrManBasket.cpp,
+            // which writes the members directly) Clear bits of the words at
+            // 0xEC and 0xF4; the height at 0x1AC.
+            void OffFlagEC(unsigned long nBit) { m_UnkEC &= ~nBit; }
+            void OffFlagF4(unsigned long nBit) { m_nFlagF4 &= ~nBit; }
+            float GetScaleBase() const { return m_fScaleBase; }
+            // DOL (added for BasketF game/basket/CChrManBasket.cpp; return
+            // type guessed): the ball passed to the character, null for
+            // none; and the update of the model matrices after SetPos.
+            CBall *GetPassToBall() const;
+            void RecalcAllMatrix();
 
             // Added for HockeyF game/hockey/CChrManHockey.cpp (all in the
             // DOL; return types and parameter meanings guessed).
@@ -1369,7 +1380,9 @@ namespace msw {
             unsigned long m_nDispFlag;
             // 0xF4 (name guessed): more flags; while bit 0 is set the boss
             // characters start no action, bit 0x4000 bars the air tricks and
-            // CChrCoreBoss::MethdChgLeader sets 0x100000 on the new leader.
+            // CChrCoreBoss::MethdChgLeader sets 0x100000 on the new leader;
+            // CChrManBasket::ChrCoreMainCall_ clears 0x100000 before the
+            // characters run.
             unsigned long m_nFlagF4;
             int m_bStarPlayer;           // 0xF8, see IsStarPlayer
             unsigned char m_UnkFC[0x150 - 0xFC];
@@ -1427,7 +1440,9 @@ namespace msw {
             // 0x1A0-0x1AC (names guessed): a change of body size; the scale
             // it starts from, the one it goes to (below 1 when shrinking),
             // how far it has got (0 when none runs) and the normal scale
-            // (CChrCoreBoss::CanbeSizeChange, MethdSizeChange).
+            // (CChrCoreBoss::CanbeSizeChange, MethdSizeChange). CChrManBasket's
+            // pass aims above a jumping receiver by the normal scale less one,
+            // at most 2 (GetScaleBase).
             float m_fScaleFrom;
             float m_fScaleTo;
             float m_fScaleRate;

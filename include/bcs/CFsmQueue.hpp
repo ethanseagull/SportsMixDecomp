@@ -95,6 +95,21 @@ namespace bcs {
 
             long GetState() const { return FsmqGetState(); }
 
+            // (name guessed; inline in BasketF's
+            // CChrManBasket::StartScoreView_) The number of the state queued
+            // after the head; zero when there is none.
+            long FsmqGetNextState() const
+            {
+                if (FsmqIsEmpty()) {
+                    return 0;
+                }
+                long idx = FsmqWrap(m_nQueueHead + 1, m_nQueueSize);
+                if (idx == m_nQueueTail) {
+                    return 0;
+                }
+                return m_pStateQueue[idx];
+            }
+
             // The work memory of the state at the head of the queue; null
             // when nothing is queued or the states have none.
             void *FsmqGetWork_() const
@@ -143,10 +158,13 @@ namespace bcs {
 
             // Queues state with cleared work memory; it runs at once when
             // the queue was empty.
+            // (The tail is read before the head: BasketF's
+            // CGameBasketHungryBossPackun::LoopStateGameSetup loads them in
+            // that order.)
             void FsmqPush(long state)
             {
-                int bEmpty = FsmqIsEmpty();
                 long tail = m_nQueueTail;
+                int bEmpty = m_nQueueHead == tail;
                 long next = FsmqWrap(tail + 1, m_nQueueSize);
                 m_pStateQueue[tail] = state;
                 m_nQueueTail = next;
@@ -240,6 +258,16 @@ namespace bcs {
                     } else {
                         m_pNextState = &m_pStateTable[m_pStateQueue[head]];
                     }
+                }
+            }
+
+            // (name guessed; inline in BasketF's
+            // CGameBasketHungryBossPackun::LoopStateGameSet) Drops the
+            // states queued after the one at the head of the queue.
+            void FsmqCutNext()
+            {
+                if (!FsmqIsEmpty()) {
+                    m_nQueueTail = FsmqWrap(m_nQueueHead + 1, m_nQueueSize);
                 }
             }
 

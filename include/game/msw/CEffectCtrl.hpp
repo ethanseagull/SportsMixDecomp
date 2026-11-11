@@ -88,6 +88,8 @@ namespace msw {
             // removes the effect at once; Stop lets it end.
             static void EraseAttachEffect(unsigned long hEffect);
             static void StopAttachEffect(unsigned long hEffect);
+            // (DOL; used by msw::CEventModel::StopEffectForce)
+            static void StopAttachEffectForce(unsigned long hEffect);
 
             // The cluster with handle hEffect, null when there is none.
             CEffectCluster *FindList(unsigned long hEffect);
@@ -106,6 +108,9 @@ namespace msw {
             static void Dispose();
             static void DetachResource();
             static void Close();
+            // (DOL, static; added for BasketF
+            // game/basket/CGameBasketHungryBossPackun.cpp) Erases every effect.
+            static void EraseEffectAll();
             // Registers the effects of archive `pPath`, file `fileId` of CLoadData.
             static void AttachArcResource(long fileId, const char *pPath); // return type guessed
 

@@ -23,6 +23,13 @@ namespace bcs {
         }
         return pOut;
     }
+
+    struct FVEC3;
+
+    // (DOL fn_80052C00, unnamed; name and meaning guessed) Turns *pMtx to
+    // look along *pDir from *pPos; msw::CEventCameraNull passes a camera's
+    // z axis and position and a null pUp.
+    void FMTX34LookDir(FMTX34 *pMtx, const FVEC3 *pDir, const FVEC3 *pPos, const FVEC3 *pUp);
 }
 
 #endif /* !BCS_FMTX34_HPP_ */

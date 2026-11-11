@@ -52,7 +52,7 @@ namespace msw {
             virtual void DetachBall();                                 // 0x44
             virtual int IsHaveBall() const;                            // 0x48
             virtual int IsHoldBall() const;                            // 0x4C
-            virtual int CanbeCatch() const;                            // 0x50
+            virtual int CanbeCatch() const { return 0; }               // 0x50
             // 0x54 to 0x70 (added for BasketF game/basket/CNpcGhostBasketBase.cpp;
             // names from __vt__Q23msw19CNpcGhostBasketBase, return types
             // guessed except where noted).

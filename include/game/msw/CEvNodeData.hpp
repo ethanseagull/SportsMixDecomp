@@ -50,7 +50,7 @@ namespace msw {
             virtual void GetResult(bcs::FVEC3 &pos, bcs::FVEC3 &rot, float fFrame, long nId);
             // (DOL, 0x801FDA04 and 0x801FDDA8; signatures from the base)
             virtual void GetResultVec(bcs::FVEC3 &pos, bcs::FVEC3 &rot, bcs::FVEC3 &vec, float fFrame, long nId);
-            virtual void GetResultEx(bcs::FVEC3 &pos, bcs::FVEC3 &rot, bcs::FVEC3 &vec, float fFrame, long nId);
+            virtual void GetResultEx(bcs::FVEC3 &pos, bcs::FVEC3 &rot, bcs::FVEC3 &vec, float fFrame, long nId, long nFlip);
             // Length of the animation in frames, 0 without one.
             virtual float GetNumFrame() const;
 

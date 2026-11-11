@@ -127,6 +127,21 @@ namespace msw {
             // (added for game/basket/CChrCoreBasketSlime.cpp; parameter
             // meanings guessed) Leaves an after-image of the character.
             void CreateIllusion(float fAlpha, float fRate);
+            // (added for game/basket/CChrManBasket.cpp; return types and
+            // meanings guessed from the names) The motion frames at which a
+            // just shot starts and ends, for a near, middle and far shot.
+            long GetJustShotMinStartFrm() const;
+            long GetJustShotMidStartFrm() const;
+            long GetJustShotMaxStartFrm() const;
+            long GetJustShotMinEndFrm() const;
+            long GetJustShotMidEndFrm() const;
+            long GetJustShotMaxEndFrm() const;
+            // Not zero when the trick move towards pTarget asks for the
+            // slow camera.
+            int CheckStateWorkTrickMoveSlow(float fRate, const CChrCore *pTarget);
+            // Hides the combination icon; plays the combination's sound.
+            void DispOffCombinationIcon();
+            void PlayCombinationSe();
 
             // Overrides of CChrCore's virtuals, in vtable order (the slots of
             // __vt__Q23msw14CChrCoreBasket, read from BasketF, that name
@@ -530,6 +545,71 @@ namespace msw {
     struct CChrCoreBasket::STATE_WORK_JUMP_UPPER {
         unsigned char m_Unk00[0x24];
         float m_fFrame;                // 0x24, the frames of the jump so far (the Slime's after-images)
+    };
+
+    // The characters without members or overrides of their own known yet
+    // (added for game/basket/CChrManBasket.cpp, which allocates them with
+    // the sizes given; only the constructors are declared).
+    class CChrCoreBasketMario : public CChrCoreBasket {
+        public:
+            CChrCoreBasketMario();
+            virtual ~CChrCoreBasketMario();
+    };
+
+    class CChrCoreBasketDaisy : public CChrCoreBasket {
+        public:
+            CChrCoreBasketDaisy();
+            virtual ~CChrCoreBasketDaisy();
+    };
+
+    class CChrCoreBasketWario : public CChrCoreBasket {
+        public:
+            CChrCoreBasketWario();
+            virtual ~CChrCoreBasketWario();
+    };
+
+    class CChrCoreBasketDonkey : public CChrCoreBasket {
+        public:
+            CChrCoreBasketDonkey();
+            virtual ~CChrCoreBasketDonkey();
+    };
+
+    class CChrCoreBasketKoopaJr : public CChrCoreBasket {
+        public:
+            CChrCoreBasketKoopaJr();
+            virtual ~CChrCoreBasketKoopaJr();
+    };
+
+    // Allocated with 0x5F4 bytes.
+    class CChrCoreBasketNinja : public CChrCoreBasket {
+        public:
+            CChrCoreBasketNinja();
+            virtual ~CChrCoreBasketNinja();
+
+        protected:
+            unsigned char m_Unk5E8[0x5F4 - 0x5E8];
+    };
+
+    // Allocated with 0x5EC bytes.
+    class CChrCoreBasketSiroma : public CChrCoreBasket {
+        public:
+            CChrCoreBasketSiroma();
+            virtual ~CChrCoreBasketSiroma();
+
+        protected:
+            unsigned char m_Unk5E8[0x5EC - 0x5E8];
+    };
+
+    class CChrCoreBasketMii00 : public CChrCoreBasket {
+        public:
+            CChrCoreBasketMii00();
+            virtual ~CChrCoreBasketMii00();
+    };
+
+    class CChrCoreBasketMii01 : public CChrCoreBasket {
+        public:
+            CChrCoreBasketMii01();
+            virtual ~CChrCoreBasketMii01();
     };
 
     // Luigi: his special shot pulls the other team in with his vacuum

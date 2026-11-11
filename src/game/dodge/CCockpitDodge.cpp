@@ -1440,6 +1440,7 @@ void msw::CCockpitDodge::GamePause_Out()
 
 void msw::CCockpitDodge::GameResult_In()
 {
+    long nPeriod;
     static const long TeamMax = 2;
     static const long titleStrLen = 128;
     long aTotal[2];
@@ -1471,7 +1472,7 @@ void msw::CCockpitDodge::GameResult_In()
     if (pScore != 0) {
         Build(nObjId);
         long nPeriodNum = m_nPeriodNum;
-        long nPeriod = m_nPeriod;
+        nPeriod = m_nPeriod;
         pScore->SetCountScore(m_aPeriodScore[0], m_aPeriodScore[1], nPeriod, nPeriodNum);
         pScore->SetCountPoint(m_aPeriodPoint[0], m_aPeriodPoint[1], nPeriod);
         pScore->SetTextNext(nPeriodNum, nPeriod);

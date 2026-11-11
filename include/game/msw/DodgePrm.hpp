@@ -225,6 +225,49 @@ namespace msw {
     extern float DODGE_PRM_S16_FLASH_TIME;
     extern float DODGE_PRM_S16_FLASH_GAIN;
     extern float DODGE_PRM_S16_FLASH_DECAY;
+
+    // Stage 17, the turntable and trolley stage (CStageDodge17::GetPrmTbl).
+    // Times are in seconds, angles in degrees, rates in percent.
+    extern float DODGE_PRM_S17_TT_INIT_STOP_TIME;
+    extern float DODGE_PRM_S17_TT_STOP_TIME;
+    extern float DODGE_PRM_S17_TT_STOP_TIME_RND;
+    extern float DODGE_PRM_S17_TT_ROT_TIME;
+    extern float DODGE_PRM_S17_TT_ROT_TIME_RND;
+    extern float DODGE_PRM_S17_TT_SPEED;
+    extern long DODGE_PRM_S17_TT_DIR;
+    extern float DODGE_PRM_S17_TT_ACC_TIME;
+    extern float DODGE_PRM_S17_TT_RADIUS;
+    extern float DODGE_PRM_S17_TT_OPEN_RATE;
+    extern float DODGE_PRM_S17_TT_WARN_TIME;
+    extern float DODGE_PRM_S17_TT_WARN_AFTER_TIME;
+    extern float DODGE_PRM_S17_TT_WARN_SE_STOP_TIME;
+    extern float DODGE_PRM_S17_TROLLEY_INIT_RATE;
+    extern float DODGE_PRM_S17_TROLLEY_RATE;
+    extern float DODGE_PRM_S17_TROLLEY_PRE_WAIT;
+    extern float DODGE_PRM_S17_TROLLEY_SPEED;
+    extern long DODGE_PRM_S17_TROLLEY_DIR_TYPE;
+    extern long DODGE_PRM_S17_TROLLEY_NUM_MIN;
+    extern long DODGE_PRM_S17_TROLLEY_NUM_MAX;
+    extern float DODGE_PRM_S17_TROLLEY_LOC_OFFSET;
+    extern float DODGE_PRM_S17_TROLLEY_WIDTH;
+    extern float DODGE_PRM_S17_TROLLEY_DEPTH;
+    extern float DODGE_PRM_S17_TROLLEY_HEIGHT;
+    extern float DODGE_PRM_S17_TROLLEY_ATK_WIDTH;
+    extern float DODGE_PRM_S17_TROLLEY_ATK_DEPTH;
+    extern float DODGE_PRM_S17_TROLLEY_ATK_HEIGHT;
+    extern float DODGE_PRM_S17_TROLLEY_MDL_WIDTH;
+    extern float DODGE_PRM_S17_TROLLEY_MDL_DEPTH;
+    extern float DODGE_PRM_S17_TROLLEY_MDL_HEIGHT;
+    extern long DODGE_PRM_S17_TROLLEY_PAT_TYPE;
+    extern long DODGE_PRM_S17_TROLLEY_PAT_NO;
+    extern long DODGE_PRM_S17_DEB_RELOAD;
+    extern float DODGE_PRM_S17_HEYHO_COIN_RATE;
+    extern float DODGE_PRM_S17_HEYHO_B_DIST_MIN;
+    extern float DODGE_PRM_S17_HEYHO_B_DIST_MAX;
+    extern float DODGE_PRM_S17_HEYHO_C_DIST_MIN;
+    extern float DODGE_PRM_S17_HEYHO_C_DIST_MAX;
+    extern float DODGE_PRM_S17_OUTER_DEPTH;
+    extern float DODGE_PRM_S17_OUTER_FRONT;
 }
 
 #endif /* !MSW_DODGEPRM_HPP_ */

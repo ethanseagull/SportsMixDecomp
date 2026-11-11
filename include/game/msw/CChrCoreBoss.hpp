@@ -251,6 +251,7 @@ namespace msw {
             void SetBallCatchDisable_();
             void SetBallCatchEnableWorld_(float fRange, const bcs::FVEC3 &pos1, const bcs::FVEC3 &pos2);
             void SetBallCatchEnableWorld_(float fRange, float, const bcs::FVEC3 &pos);
+            void SetBallCatchEnableWorld_(float fRange, const bcs::FVEC3 &pos);
             void SetBallCatchEnableRoot_(float fRange, float, const bcs::FVEC3 &pos);
             // Takes the ball in after a receive.
             void ReceiveBall_(long, long nFlag, float, long nType, long);
@@ -474,8 +475,23 @@ namespace msw {
             virtual void SubStateSpikeDoSmashSpikeEffect_(STATE_WORK_SPIKE *); // 0xD24
             virtual int SubStateReceiveDoProcDiveReceive_(STATE_WORK_RECEIVE *); // 0xD34 (not zero when the state is over)
 
+            // Throws the receiver (CC17_BOSS::CcKuromaReceiver, a spell the
+            // ball is taken on in the diving receive) towards where the
+            // ball comes down.
+            void FireReceiver_();
+
         protected:
-            unsigned long m_Unk818; // 0x818; allocated with 0x81C bytes
+            // (inline helpers, names guessed) Not zero while the receiver
+            // task still exists; forgets the handle once it is gone.
+            int IsReceiverAlive_();
+            // Deletes the receiver and forgets it.
+            void ReleaseReceiver_();
+            // The same, with a vanishing effect when it is still in flight.
+            void VanishReceiver_();
+
+            // 0x818 (name guessed; allocated with 0x81C bytes): the task id
+            // of the receiver, 0 for none.
+            unsigned long m_hReceiver;
     };
 
     class CChrCoreBossMii00 : public CChrCoreBoss {

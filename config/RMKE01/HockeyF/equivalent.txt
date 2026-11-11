@@ -16,6 +16,7 @@ HockeyF MainFunc__Q23msw9CFightingFf near 99.4 0x4306 flag test as andi./bne vs 
 HockeyF MainOffenseOnBall___Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG unverified 93.0 original calls UpdateCmdBuf_, ours inlines it (same effect); #pragma auto_inline off gives 100% but is not allowed under rule 3 (one function, not file-wide evidence)
 HockeyF MainOffense___Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG unverified 89.0 original calls UpdateCmdBuf_, ours inlines it (same effect); #pragma auto_inline off gives 100% but is not allowed under rule 3 (one function, not file-wide evidence)
 HockeyF Main__Q23msw18CCockpitHockeyCoinFv near 98.8 register choice only: the loop counters and the pane-accessor temporary sit in r27/r28, the original's first loop counter in r30; same instructions otherwise
+HockeyF Main__Q33msw11CC17_HOCKEY18CcKuromaLockonUnitFv near 96.4 m_hEffect loaded before vs after CEffectCtrl::GetInstance() (scheduling)
 HockeyF MethdPassCall___Q23msw16CChrDrvPadHockeyFl near 99.7 load order of queue head/tail and the two team bytes
 HockeyF MovePos___Q33msw11CC09_HOCKEY22CcKinopioBoundMushroomFf near 99.6 register choice in three fmadds (as VolleyF)
 HockeyF OnMsgMain__Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG near 99.9 register choice for the character pointer

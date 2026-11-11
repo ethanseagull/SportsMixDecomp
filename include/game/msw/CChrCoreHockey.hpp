@@ -583,12 +583,28 @@ namespace msw {
             unsigned char m_Unk76C[0x788 - 0x76C];
     };
 
+    // The Black Mage: his shot trick locks on to the other team and strikes
+    // them (CC17_HOCKEY::CcKuromaMagicMgr).
     class CChrCoreHockeyKuroma : public CChrCoreHockey {
         public:
             CChrCoreHockeyKuroma();
             virtual ~CChrCoreHockeyKuroma();
+            virtual void Reset_();                                     // 0x384
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCC8
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xCD8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual void SubStateArtsShotPlayLandEffect_(STATE_WORK_AIR_TRICK *); // 0xD28
+
         protected:
-            unsigned char m_Unk76C[0x770 - 0x76C];
+            // (inline helper, name guessed) Deletes the strike task, if any.
+            void ReleaseMagic_();
+
+            // 0x76C (name guessed; allocated with 0x770 bytes): the task id
+            // of the CcKuromaMagicMgr, 0 for none.
+            unsigned long m_hMagic;
     };
 
     class CChrCoreHockeySiroma : public CChrCoreHockey {

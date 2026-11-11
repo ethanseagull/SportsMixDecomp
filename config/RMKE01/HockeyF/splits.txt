@@ -85,14 +85,12 @@ game/hockey/CChrCoreHockeyKoopa.cpp:
 game/hockey/CChrCoreHockeyKoopaJr.cpp:
 	.text       start:0x0005588C end:0x000563D4
 	.rodata     start:0x00001EA8 end:0x00001F38
-	.data       start:0x00006B78 end:0x000086E0
+	.data       start:0x00006B78 end:0x00007960
 
 game/hockey/CChrCoreHockeyKuroma.cpp:
-	.text       start:0x000563D4 end:0x00056C34
+	.text       start:0x000563D4 end:0x00056D84
 	.rodata     start:0x00001F38 end:0x00001F60
-
-game/hockey/CcKuromaLockonUnit.cpp:
-	.text       start:0x00056C34 end:0x00056D84
+	.data       start:0x00007960 end:0x000086E0
 
 game/hockey/CChrCoreHockeyLuigi.cpp:
 	.text       start:0x00056D84 end:0x00057B8C

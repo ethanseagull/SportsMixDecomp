@@ -33,3 +33,4 @@ Equivalent game/volley/CChrManVolley.cpp
 Equivalent game/volley/CChrCoreVolleyLuigi.cpp
 Equivalent game/volley/CChrCoreVolleyYoshi.cpp
 Equivalent game/volley/CChrCoreVolleyKinopio.cpp
+Equivalent game/volley/CChrCoreVolleyKuroma.cpp

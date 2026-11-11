@@ -35,6 +35,9 @@ namespace bcs {
                 // Added for MenuF game/menu/CBackground.cpp: jumps animation
                 // nAnim to frame fFrame (return type guessed).
                 void SetAnimCurrentFrame(long nAnim, float fFrame);
+                // Added for BossF game/boss/CCockpitBossCoder.cpp: the last
+                // frame of animation nAnim.
+                float GetAnimMaxFrame(long nAnim);
 
                 nw4r::lyt::Pane *GetPane() const { return m_pPane; }
 

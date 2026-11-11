@@ -36,7 +36,7 @@ Equivalent game/volley/CChrCoreVolleyKinopio.cpp
 Equivalent game/volley/CChrCoreVolleyKuroma.cpp
 Equivalent game/volley/CCockpitVolleyCoder.cpp
 Equivalent game/volley/CChrCoreVolleySiroma.cpp
-Equivalent game/volley/CStageVolley02.cpp
+Matching game/volley/CStageVolley02.cpp
 Equivalent game/volley/CStageVolley06.cpp
 Equivalent game/volley/CStageVolley09.cpp
 Equivalent game/volley/CStageVolley15.cpp
@@ -45,8 +45,8 @@ Equivalent game/volley/CStageVolley16.cpp
 Equivalent game/volley/CStageVolley42.cpp
 NonMatching game/volley/CStageVolley03.cpp
 Equivalent game/volley/CStageVolley05.cpp
-NonMatching game/volley/CStageVolley11.cpp
-Equivalent game/volley/CStgGmk_Case_Act_Volley.cpp
+Equivalent game/volley/StageVolley11.cpp flags=noauto
+Matching game/volley/CStgGmk_Case_Act_Volley.cpp
 Equivalent game/volley/CGimmickManVolley.cpp
 Equivalent game/volley/CBallTargetMarker.cpp pch=MenuF_g3d
 Matching game/volley/CChrCoreVolleyMario.cpp

@@ -54,6 +54,7 @@ VolleyF MainCamera_Normal__Q23msw17CCameraVolleyBossFv near 95.7 stack slots of 
 VolleyF MainFunc__Q23msw20CChrMarkerVolleyJumpFv unverified 95.5 the original multiplies 5.0f by 0.017453292f at run time (two .rodata literals, fmuls); ours folds the product into one constant 0x3DB2B8C2, the same bits the run-time multiply gives. Everything else matches. 10 source forms tried by two models; all fold
 VolleyF MainNormal___Q23msw29CChrDrvPadVolleyRhythmReceiveFPQ33msw7CChrDrv8_CHR_MSG near 99.4 float registers of -1.0f default direction and camera rotation swapped
 VolleyF MainServe___Q23msw16CChrDrvPadVolleyFPQ33msw7CChrDrv8_CHR_MSG near 99.9 float register choice only (camera rotation f1 vs f0)
+VolleyF Main__Q227@unnamed@StageVolley11_cpp@17CStageNetVolley11Fv near 85.6 float literals reached from one .rodata base kept in a saved register instead of a lis per load (open pooling issue, notes/toolchain.md); the extra saved register gives the 0x40 frame; same operations and values
 VolleyF Main__Q23msw18CCockpitVolleyCoinFv near 98.8 register choice / schedule only (as CCockpitHockeyCoin::Main)
 VolleyF Main__Q33msw11CC17_VOLLEY18CcKuromaLockonUnitFv near 96.4 m_hEffect loaded before vs after CEffectCtrl::GetInstance() (scheduling)
 VolleyF Main__Q33msw14GIMMICK_VOLLEY14CEffectCoinGetFv near 99.0 register choice only (stack-vector address registers, paired-single temporaries; as DodgeF's copy)

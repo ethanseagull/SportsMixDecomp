@@ -11,9 +11,7 @@
 // The kind passed to CItemBall's constructor selects the model: 0 green
 // shell, 1 red shell, 2 mushroom, 3 bomb, 4 star, 5 banana.
 //
-// TrgChrHit_ returns 5 (shells, mushroom), 4 (star) or 1 (banana) in the
-// original. CItemBall declares its triggers bool, so those values cannot be
-// returned yet; see TrgChrHit_ in the .cpp.
+// TrgChrHit_ returns 5 (shells, mushroom), 4 (star) or 1 (banana).
 
 namespace msw {
 
@@ -24,7 +22,7 @@ namespace msw {
             virtual ~CItemBallBasketGShell();
 
             virtual long GetJumpShootTailEffect() const;
-            virtual bool TrgChrHit_();
+            virtual long TrgChrHit_();
             virtual float GetDispScale() const;
             virtual void GetShotParam_(BALL_BASKET::SHOT_PARAM &rParam) const;
     };
@@ -36,7 +34,7 @@ namespace msw {
             virtual ~CItemBallBasketRShell();
 
             virtual long GetJumpShootTailEffect() const;
-            virtual bool TrgChrHit_();
+            virtual long TrgChrHit_();
             virtual float GetDispScale() const;
             virtual void GetShotParam_(BALL_BASKET::SHOT_PARAM &rParam) const;
     };
@@ -51,9 +49,9 @@ namespace msw {
             virtual ~CItemBallBasketBomb();
 
             virtual void MainFunc_();
-            virtual bool TrgGoalIn_();
-            virtual bool TrgChrHit_();
-            virtual bool TrgDestroy_();
+            virtual long TrgGoalIn_();
+            virtual long TrgChrHit_();
+            virtual long TrgDestroy_();
             virtual float GetDispScale() const;
             virtual void GetShotParam_(BALL_BASKET::SHOT_PARAM &rParam) const;
             virtual void SetExplodeCenterPos(const bcs::FVEC3 &rPos) { m_vExplodeCenterPos = rPos; }
@@ -85,7 +83,7 @@ namespace msw {
             virtual ~CItemBallBasketStar();
 
             virtual long GetJumpShootTailEffect() const;
-            virtual bool TrgChrHit_();
+            virtual long TrgChrHit_();
             virtual float GetDispScale() const;
             virtual void GetShotParam_(BALL_BASKET::SHOT_PARAM &rParam) const;
     };
@@ -98,7 +96,7 @@ namespace msw {
 
             virtual bool IsDisableRebound() const { return false; }
             virtual long GetJumpShootTailEffect() const;
-            virtual bool TrgChrHit_();
+            virtual long TrgChrHit_();
             virtual float GetDispScale() const;
             virtual void GetShotParam_(BALL_BASKET::SHOT_PARAM &rParam) const;
     };
@@ -110,7 +108,7 @@ namespace msw {
             virtual ~CItemBallBasketBanana();
 
             virtual long GetJumpShootTailEffect() const;
-            virtual bool TrgChrHit_();
+            virtual long TrgChrHit_();
             virtual float GetDispScale() const;
             virtual void GetShotParam_(BALL_BASKET::SHOT_PARAM &rParam) const;
     };

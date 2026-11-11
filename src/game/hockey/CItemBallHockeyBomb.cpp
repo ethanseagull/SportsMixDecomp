@@ -72,13 +72,13 @@ namespace msw {
     {
     }
 
-    bool CItemBallHockeyGShell::TrgShootStart_()
+    long CItemBallHockeyGShell::TrgShootStart_()
     {
         m_nTrgFlag |= 1 << (TRG_SHOOT_START + 1);
         return false;
     }
 
-    bool CItemBallHockeyGShell::TrgChrHit_()
+    long CItemBallHockeyGShell::TrgChrHit_()
     {
         if (IsShot()) {
             BreakShell(this, 0, SE_SHELL_BREAK);
@@ -87,7 +87,7 @@ namespace msw {
         return false;
     }
 
-    bool CItemBallHockeyGShell::TrgGoalIn_()
+    long CItemBallHockeyGShell::TrgGoalIn_()
     {
         long nSe = SE_SHELL_BREAK;
         if (IsShot()) {
@@ -97,7 +97,7 @@ namespace msw {
         return true;
     }
 
-    bool CItemBallHockeyGShell::TrgFreeMode_()
+    long CItemBallHockeyGShell::TrgFreeMode_()
     {
         if (IsShot()) {
             BreakShell(this, 0, SE_SHELL_BREAK);
@@ -106,18 +106,17 @@ namespace msw {
         return false;
     }
 
-    // The original returns 4 when the ball has not been shot; with the bool
-    // return type of CItemBall's triggers that cannot be written here.
-    bool CItemBallHockeyGShell::TrgDamage_()
+    // Returns 4 when the ball has not been shot.
+    long CItemBallHockeyGShell::TrgDamage_()
     {
         if (IsShot()) {
             BreakShell(this, 0, SE_SHELL_BREAK);
             return true;
         }
-        return true; // 4 in the original
+        return 4;
     }
 
-    bool CItemBallHockeyGShell::TrgDestroy_()
+    long CItemBallHockeyGShell::TrgDestroy_()
     {
         return CItemBall::TrgDestroy_();
     }
@@ -138,13 +137,13 @@ namespace msw {
     {
     }
 
-    bool CItemBallHockeyRShell::TrgShootStart_()
+    long CItemBallHockeyRShell::TrgShootStart_()
     {
         m_nTrgFlag |= 1 << (TRG_SHOOT_START + 1);
         return false;
     }
 
-    bool CItemBallHockeyRShell::TrgChrHit_()
+    long CItemBallHockeyRShell::TrgChrHit_()
     {
         if (IsShot()) {
             BreakShell(this, 1, SE_SHELL_BREAK);
@@ -153,7 +152,7 @@ namespace msw {
         return false;
     }
 
-    bool CItemBallHockeyRShell::TrgGoalIn_()
+    long CItemBallHockeyRShell::TrgGoalIn_()
     {
         long nSe = SE_SHELL_BREAK;
         if (IsShot()) {
@@ -163,7 +162,7 @@ namespace msw {
         return true;
     }
 
-    bool CItemBallHockeyRShell::TrgFreeMode_()
+    long CItemBallHockeyRShell::TrgFreeMode_()
     {
         if (IsShot()) {
             BreakShell(this, 1, SE_SHELL_BREAK);
@@ -172,17 +171,16 @@ namespace msw {
         return false;
     }
 
-    // Returns 4 in the original when not shot; see the green shell.
-    bool CItemBallHockeyRShell::TrgDamage_()
+    long CItemBallHockeyRShell::TrgDamage_()
     {
         if (IsShot()) {
             BreakShell(this, 1, SE_SHELL_BREAK);
             return true;
         }
-        return true; // 4 in the original
+        return 4;
     }
 
-    bool CItemBallHockeyRShell::TrgDestroy_()
+    long CItemBallHockeyRShell::TrgDestroy_()
     {
         return CItemBall::TrgDestroy_();
     }
@@ -248,7 +246,7 @@ namespace msw {
     }
 
     // The first call only marks the bomb as shot; any later one sets it off.
-    bool CItemBallHockeyBomb::TrgShootStart_()
+    long CItemBallHockeyBomb::TrgShootStart_()
     {
         if (m_bShot != 0) {
             Explode_(1);
@@ -258,19 +256,19 @@ namespace msw {
         return CItemBall::TrgShootStart_();
     }
 
-    bool CItemBallHockeyBomb::TrgGoalIn_()
+    long CItemBallHockeyBomb::TrgGoalIn_()
     {
         Explode_(1);
         return true;
     }
 
-    bool CItemBallHockeyBomb::TrgDamage_()
+    long CItemBallHockeyBomb::TrgDamage_()
     {
         Explode_(0);
         return true;
     }
 
-    bool CItemBallHockeyBomb::TrgDestroy_()
+    long CItemBallHockeyBomb::TrgDestroy_()
     {
         Explode_(1);
         return CItemBall::TrgDestroy_();
@@ -292,17 +290,17 @@ namespace msw {
     {
     }
 
-    bool CItemBallHockeyStar::TrgShootStart_()
+    long CItemBallHockeyStar::TrgShootStart_()
     {
         return false;
     }
 
-    bool CItemBallHockeyStar::TrgGoalIn_()
+    long CItemBallHockeyStar::TrgGoalIn_()
     {
         return true;
     }
 
-    bool CItemBallHockeyStar::TrgDestroy_()
+    long CItemBallHockeyStar::TrgDestroy_()
     {
         return CItemBall::TrgDestroy_();
     }
@@ -323,37 +321,36 @@ namespace msw {
     {
     }
 
-    bool CItemBallHockeyBanana::TrgShootStart_()
+    long CItemBallHockeyBanana::TrgShootStart_()
     {
         m_nTrgFlag |= 1 << (TRG_SHOOT_START + 1);
         return false;
     }
 
-    bool CItemBallHockeyBanana::TrgChrHit_()
+    long CItemBallHockeyBanana::TrgChrHit_()
     {
-        return IsShot();
+        return IsShot() != 0;
     }
 
-    bool CItemBallHockeyBanana::TrgGoalIn_()
+    long CItemBallHockeyBanana::TrgGoalIn_()
     {
         return true;
     }
 
-    bool CItemBallHockeyBanana::TrgFreeMode_()
+    long CItemBallHockeyBanana::TrgFreeMode_()
     {
-        return IsShot();
+        return IsShot() != 0;
     }
 
-    // Returns 4 in the original when not shot; see the green shell.
-    bool CItemBallHockeyBanana::TrgDamage_()
+    long CItemBallHockeyBanana::TrgDamage_()
     {
         if (IsShot()) {
             return true;
         }
-        return true; // 4 in the original
+        return 4;
     }
 
-    bool CItemBallHockeyBanana::TrgDestroy_()
+    long CItemBallHockeyBanana::TrgDestroy_()
     {
         return CItemBall::TrgDestroy_();
     }
@@ -374,17 +371,17 @@ namespace msw {
     {
     }
 
-    bool CItemBallHockeyToadstool::TrgShootStart_()
+    long CItemBallHockeyToadstool::TrgShootStart_()
     {
         return false;
     }
 
-    bool CItemBallHockeyToadstool::TrgGoalIn_()
+    long CItemBallHockeyToadstool::TrgGoalIn_()
     {
         return true;
     }
 
-    bool CItemBallHockeyToadstool::TrgDestroy_()
+    long CItemBallHockeyToadstool::TrgDestroy_()
     {
         return CItemBall::TrgDestroy_();
     }

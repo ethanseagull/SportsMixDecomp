@@ -7,6 +7,8 @@ Matching game/msw/CGameAccInput.cpp
 Matching game/msw/LayoutTask.cpp
 Matching game/msw/CCollDefUnit.cpp
 NonMatching game/msw/CNowLoading.cpp
+Equivalent game/msw/CEvNodeData.cpp
+Equivalent game/msw/EvDemoVs.cpp
 Matching game/msw/CMenuPadInfo.cpp
 Matching game/msw/CStageNet.cpp
 Matching game/msw/CStage01Base.cpp
@@ -47,4 +49,4 @@ Equivalent game/msw/CGameExDemoBase.cpp
 Equivalent game/msw/CStage10Base/CTelopDispBase.cpp
 Matching game/msw/CCokcpitMenuDataList.cpp
 Equivalent game/msw/CCockpitWindowInfo.cpp
-NonMatching game/msw/CCockpitButtonInfo.cpp
+Equivalent game/msw/CCockpitButtonInfo.cpp

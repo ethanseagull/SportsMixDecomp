@@ -26,9 +26,6 @@ BossF Set__Q23msw21CCockpitBossBallPowerFv near 99.9 register allocation only: t
 BossF SetupGame__Q23msw17CCockpitBossCoderFv near 99.7 register allocation only: the SetOutTelop loop counter gets a different register; same calls, constants, loads, stores and branches
 BossF SubStateReceiveDoProcDiveReceive___Q23msw17CChrCoreBossYoshiFPQ33msw12CChrCoreBoss18STATE_WORK_RECEIVE near 99.8 two float registers swapped
 BossF SubStateReceiveDoProcDiveReceive___Q23msw18CChrCoreBossSiromaFPQ33msw12CChrCoreBoss18STATE_WORK_RECEIVE near 86.8 float constants loaded through one kept base register instead of lis/lfs each (same addresses); the extra saved GPR renumbers registers
-BossF TrgDamage___Q23msw17CItemBallBossBombFv unverified 100.0 original returns 4 when the ball is not shot; Trg*_/DoTrg are declared bool in CItemBall.hpp so ours returns 1 (fix: change the Trg return type to long across CItemBall and all modes)
-BossF TrgDamage___Q23msw19CItemBallBossGShellFv unverified 100.0 original returns 4 when the ball is not shot; Trg*_/DoTrg are declared bool in CItemBall.hpp so ours returns 1 (fix: change the Trg return type to long across CItemBall and all modes)
-BossF TrgDamage___Q23msw19CItemBallBossRShellFv unverified 100.0 original returns 4 when the ball is not shot; Trg*_/DoTrg are declared bool in CItemBall.hpp so ours returns 1 (fix: change the Trg return type to long across CItemBall and all modes)
 BossF __ct__Q23msw11CCameraBossFl near 99.6 register allocation only
 BossF __ct__Q23msw17CItemBallBossBombFPQ23msw5CBall near 98.5 original reloads m_pMdl before CreateAttachEffect; ours reuses the value from the null check (same field, nothing written between)
 BossF __dt__Q23msw11CChrManBossFv near 99.1 loop counter and byte offset swap registers (r29/r30); same instructions otherwise

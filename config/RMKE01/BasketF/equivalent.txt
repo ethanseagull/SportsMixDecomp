@@ -19,6 +19,7 @@ BasketF CreateCountUp__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near
 BasketF CreateCrownIcon__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 97.0 register choice only
 BasketF CreateDummyBall___Q23msw14CBallManBasketFv near 98.8 register choice only: the saved pointer and saved ball number swap registers (mr operands); GetUseEnableIndex_ kept out of line by named temporaries that emit no code (auto-inline limit)
 BasketF CreateObjImpl__Q23msw14CCockpitBasketFll near 94.2 94.2%: in cases 10, 19-21, 25 the original copies the new object to its result register before and after the null check, ours once after. Same calls, constants, case order.
+BasketF CtorStateAirTrick__Q23msw19CChrCoreBasketLuigiFv near 99.0 r3/r4 swapped in the inlined FsmqGetWork_; same as HockeyF Luigi
 BasketF CtorStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.0 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CtorStateAttach__Q23msw16CBallBasketFruitFv near 99.4 float register choice for the tilt-centre and 0/1 axis constants; same loads, operations and stores
 BasketF CtorStateCatch__Q23msw19CNpcGhostBasketBaseFv near 99.1 register choice / schedule only (UpDateCollBody_: argument load order).
@@ -40,6 +41,7 @@ BasketF GetParam_FlashColor__Q23msw14CStageBasket15CFv unverified 63.3 Same valu
 BasketF GetParam_FlashColor__Q23msw14CStageBasket16CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
 BasketF GetShotParam___Q23msw21CItemBallBasketGShellCFRQ33msw11BALL_BASKET10SHOT_PARAM near 99.8 99.8%: fmadds operand order only.
 BasketF LookAt__Q23msw7CStgObjFRCQ23bcs5FVEC3 near 97.9 97.9%: weak inline; the two psq_l/ps_sub operands land in f0/f1 swapped (operand order inside the shared bcs::FVEC3Sub helper). Float registers only.
+BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketLuigiFv near 99.8 r3/r4 swapped in the inlined FsmqGetWork_; same as HockeyF Luigi
 BasketF LoopStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateCatch__Q23msw19CNpcGhostBasketBaseFv near 99.6 one dead branch.
 BasketF LoopStateDisappears__Q23msw19CNpcGhostBasketBaseFv near 99.8 register choice / schedule only (UpDateCollBody_: argument load order).
@@ -87,10 +89,6 @@ BasketF Set__Q23msw22CCockpitBasketHarapekoFv near 93.0 s_PaneName address forme
 BasketF SubDefNormal___Q23msw16CChrDrvPadBasketFv unverified 84.2 84.2%: float constants via one base register instead of the original's per-literal lis (pool-off stand-in could not stay in the shared CChrDrvPad header); extra field reloads in the original; not proven.
 BasketF SubOffDribble___Q23msw16CChrDrvPadBasketFv unverified 99.0 99.0% after the shared CChrDrvPad header dropped the pool-off stand-in (it lowered BossF/HockeyF/VolleyF pad drivers): float constants via one base register instead of per-literal lis; otherwise as before.
 BasketF SubOffNotHaveBall___Q23msw16CChrDrvPadBasketFv unverified 88.4 88.4% after the shared CChrDrvPad header dropped the pool-off stand-in (it lowered BossF/HockeyF/VolleyF pad drivers): float constants via one base register instead of per-literal lis; otherwise as before.
-BasketF TrgChrHit___Q23msw19CItemBallBasketStarFv unverified 99.5 BEHAVIOUR DIFFERS: original returns 5 (Star: 4); CItemBall declares Trg*_ as bool so ours returns 1, and DoTrg passes it on. Fix: CItemBall::Trg*_/DoTrg return long (shared header; touches matched units in other modules).
-BasketF TrgChrHit___Q23msw21CItemBallBasketGShellFv unverified 99.5 BEHAVIOUR DIFFERS: original returns 5 (Star: 4); CItemBall declares Trg*_ as bool so ours returns 1, and DoTrg passes it on. Fix: CItemBall::Trg*_/DoTrg return long (shared header; touches matched units in other modules).
-BasketF TrgChrHit___Q23msw21CItemBallBasketRShellFv unverified 99.5 BEHAVIOUR DIFFERS: original returns 5 (Star: 4); CItemBall declares Trg*_ as bool so ours returns 1, and DoTrg passes it on. Fix: CItemBall::Trg*_/DoTrg return long (shared header; touches matched units in other modules).
-BasketF TrgChrHit___Q23msw24CItemBallBasketToadstoolFv unverified 99.5 BEHAVIOUR DIFFERS: original returns 5 (Star: 4); CItemBall declares Trg*_ as bool so ours returns 1, and DoTrg passes it on. Fix: CItemBall::Trg*_/DoTrg return long (shared header; touches matched units in other modules).
 BasketF UpDateCollBody___Q23msw19CNpcGhostBasketBaseFv near 92.7 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF UpDateCross2Tap__Q23msw16CChrDrvPadBasketFv unverified 72.8 72.8%: float constants via one base register instead of the original's per-literal lis (pool-off stand-in could not stay in the shared CChrDrvPad header); extra field reloads in the original; not proven.
 BasketF UpDateMyKeyState__Q23msw16CChrDrvPadBasketFli unverified 81.1 81.1%: float constants via one base register instead of the original's per-literal lis (pool-off stand-in could not stay in the shared CChrDrvPad header); extra field reloads in the original; not proven.

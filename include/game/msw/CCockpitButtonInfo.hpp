@@ -92,11 +92,11 @@ namespace msw {
                 }
             }
 
-            void SetDefaultCursor(long nButton, bool bDefault, long nLeader)
+            void SetDefaultCursor(long nButton, unsigned char bDefault, long nLeader)
             {
                 if (IsValidButton(nButton)) {
                     for (long i = 0; i < 4; i++) {
-                        m_pInfo[nButton].m_abDefault[i] = bDefault & (nLeader == i);
+                        m_pInfo[nButton].m_abDefault[i] = (i == nLeader) ? bDefault : (unsigned char)0;
                     }
                 }
             }

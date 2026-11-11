@@ -1843,7 +1843,7 @@ SubStateArtsShotPlayLoopMotion___Q23msw19CChrCoreBasketLuigiFPQ33msw14CChrCoreBa
 SubStateArtsShotPlayArtsShotMotion___Q23msw19CChrCoreBasketLuigiFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x00056D08; // type:function size:0x168 scope:global
 SubStateArtsShotPlayLandMotion___Q23msw19CChrCoreBasketLuigiFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x00056E70; // type:function size:0x5C scope:global
 SubStateArtsShotPlayLandEffect___Q23msw19CChrCoreBasketLuigiFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x00056ECC; // type:function size:0x4C scope:global
-fn_4_56F18 = .text:0x00056F18; // type:function size:0x14
+__sinit_\CChrCoreBasketLuigi_cpp = .text:0x00056F18; // type:function size:0x14 scope:local
 __ct__Q23msw19CChrCoreBasketMarioFv = .text:0x00056F2C; // type:function size:0x3C scope:global
 __dt__Q23msw19CChrCoreBasketMarioFv = .text:0x00056F68; // type:function size:0x58 scope:global
 CtorStateAirTrick__Q23msw19CChrCoreBasketMarioFv = .text:0x00056FC0; // type:function size:0x4 scope:global

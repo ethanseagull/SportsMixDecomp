@@ -1,6 +1,7 @@
 #include "game/msw/SelectMenu/CFriendInfo.hpp"
 
 #include "bcs/CMainApp.hpp"
+#include "bcs/BCS_Vec.hpp"
 #include "bcs/CMiiMan.hpp"
 #include "bcs/G2D/CPaneObj.hpp"
 #include "bcs/G2D/G2DUtil.hpp"
@@ -79,6 +80,9 @@ namespace {
         BTN_KIND_TAB_0 = 0x8020, // to 0x8024, one per tab
         BTN_KIND_TAB_4 = 0x8024,
         BTN_KIND_MATCH = 0x8030, // ask the friend for a match
+        // What CButtonEntry::SetUpButton returns for the match button: the
+        // kind id without the 0x8000 bit (the original compares with 0x30).
+        BTN_ID_MATCH = 0x30,
         BTN_KIND_DELETE = 0x80A0 // CPlusMinus's minus button: delete the friend
     };
 
@@ -267,7 +271,10 @@ void msw::CSelectMenu::FriendInfo_Loop()
             }
             if (nStat == DWC_STAT_READY) {
                 // Take down any connection indicator still up.
-                while (FindObj(OBJ_CONNECTION_WAIT) != 0) {
+                for (;;) {
+                    if (FindObj(OBJ_CONNECTION_WAIT) == 0) {
+                        break;
+                    }
                     m_pGameDwc->Window_Pict1Close();
                     RemoveObj(OBJ_CONNECTION_WAIT);
                 }
@@ -284,13 +291,14 @@ void msw::CSelectMenu::FriendInfo_Loop()
         case STEP_MATCH_CREATE:
             if (m_pGameDwc->m_Dwc.CreateFriendMatch(m_Unk708->m_nIndex, m_nPlayerNum)) {
                 m_nStep = STEP_MATCH_WAIT;
-                FriendMatchChancelCheck();
             } else {
                 SendObjEventTrigger(OBJ_CONNECTION_WAIT, EVENT_CONNECTION_CLOSE, 0);
                 m_pGameDwc->Window_Pict1Close();
                 m_fInputWait = MATCH_ERROR_WAIT;
                 m_nStep = STEP_MATCH_ERROR;
+                break;
             }
+            FriendMatchChancelCheck();
             break;
         case STEP_MATCH_WAIT:
         case STEP_MATCH_MATCHED:
@@ -362,6 +370,7 @@ void msw::CSelectMenu::FriendInfo_Loop()
             break;
         case STEP_DELETE: {
             dwc::CFriend *pFriend = m_Unk708;
+            long nIndex = pFriend->m_nIndex;
             // Forget what the save data keeps for the friend.
             for (long i = 0; i < CSave::PlayerData::FRIEND_MAX; i++) {
                 if (m_pPlayerData->m_Friend[i].m_nFriendCode == pFriend->m_nFriendCode) {
@@ -371,7 +380,7 @@ void msw::CSelectMenu::FriendInfo_Loop()
                     break;
                 }
             }
-            m_pFriendList->RemoveFriend(pFriend->m_nIndex);
+            m_pFriendList->RemoveFriend(nIndex);
             if (pFriend != 0) {
                 m_pFriendList->NormalizeNo();
                 // Copy the whole roster into the save data.
@@ -566,6 +575,8 @@ void msw::CSelectMenu::NoFriendInfo_In()
 
 void msw::CSelectMenu::NoFriendInfo_Loop()
 {
+    dwc::CFriend *pFriend;
+    bcs::dwc::CDwcFriend *pEntry;
     static const long padNo0 = 0;
 
     switch (m_nStep) {
@@ -586,13 +597,13 @@ void msw::CSelectMenu::NoFriendInfo_Loop()
             }
             break;
         case NO_FRIEND_STEP_DELETE: {
-            dwc::CFriend *pFriend = m_Unk708;
+            pFriend = m_Unk708;
             m_pFriendList->RemoveFriend(pFriend->m_nIndex);
             if (pFriend != 0) {
                 m_pFriendList->NormalizeNo();
                 // Copy the whole roster into the save data.
                 for (long i = 0; i < CSave::PlayerData::FRIEND_MAX; i++) {
-                    bcs::dwc::CDwcFriend *pEntry = m_pFriendList->GetFriend(i);
+                    pEntry = m_pFriendList->GetFriend(i);
                     CSave::PlayerData::Friend *pSave = &m_pPlayerData->m_Friend[i];
                     if (!pEntry->IsValid()) {
                         memset(pSave, 0, sizeof(CSave::PlayerData::Friend));
@@ -840,7 +851,6 @@ void msw::SelectMenu::CFriendInfo::Main()
         case STATE_ACTIVE:
             CheckFrindStat();
             CheckButtonAnim();
-            GetSelectMenu()->SendObjEventTrigger(OBJ_PLUS_MINUS, EVENT_BACK, m_nPushButtonId);
             if (m_nPrevTab != -1 && m_pPaneAccessor->IsAnimEnd(s_TabPanes[m_nPrevTab], ANIM_TAB_UNSELECT)) {
                 m_pPaneAccessor->PlayAnimation(s_TabPanes[m_nPrevTab], ANIM_TAB_IDLE, 1.0f, 0.0f, 1, 1);
                 m_nPrevTab = -1;
@@ -940,7 +950,7 @@ int msw::SelectMenu::CFriendInfo::Set()
 
                 pPart->m_pList = pMenuPartList;
                 pMenuPartList->Add(pPart);
-                if ((unsigned short)SetUpButton(pPart, i, 0) != BTN_KIND_MATCH) {
+                if ((unsigned short)SetUpButton(pPart, i, 0) != BTN_ID_MATCH) {
                     pPart->m_bUnk40_0020 = 0;
                 }
                 pPart->m_bUnk40_0004 = 1;
@@ -961,23 +971,19 @@ int msw::SelectMenu::CFriendInfo::Set()
             // The copies of the digit panes the scale of the graph uses.
             nw4r::math::VEC3 zero(0.0f, 0.0f, 0.0f);
             {
-                bcs::G2D::CPaneCtrl *pLytObj = GetLytObj();
-                bcs::G2D::CPaneObj *pCopy =
-                    bcs::G2D::DuplicatePaneObj(pLytObj, s_DigitPaneNames[0], "cpy_0", pLayoutName, 0);
-                pLytObj->AppendPaneObj(pCopy, 0);
-                nw4r::lyt::Pane *pPane = pCopy->GetPane();
+                nw4r::lyt::Pane *pPane = DuplicateDigitPane(0, "cpy_0", pLayoutName);
                 bcs::G2D::SetPaneParent(pPane, m_pPaneAccessor->GetPane(PANE_COPY_PARENT), 1, 0);
                 m_pPaneAccessor->SetPaneDisp(PANE_COPY_PARENT, 1);
                 pPane->SetTranslate(zero);
             }
-            m_pZeroPane[0] = DuplicateDigitPane(s_DigitPaneNames[0], s_CopyPaneNames[0], pLayoutName);
-            m_pZeroPane[1] = DuplicateDigitPane(s_DigitPaneNames[0], s_CopyPaneNames[1], pLayoutName);
-            m_pZeroPane[2] = DuplicateDigitPane(s_DigitPaneNames[0], s_CopyPaneNames[2], pLayoutName);
-            m_pFivePane = DuplicateDigitPane(s_DigitPaneNames[5], s_CopyPaneNames[3], pLayoutName);
-            m_pNinePane[0] = DuplicateDigitPane(s_DigitPaneNames[9], s_CopyPaneNames[4], pLayoutName);
-            m_pNinePane[1] = DuplicateDigitPane(s_DigitPaneNames[9], s_CopyPaneNames[5], pLayoutName);
-            m_pNinePane[2] = DuplicateDigitPane(s_DigitPaneNames[9], s_CopyPaneNames[6], pLayoutName);
-            m_pNinePane[3] = DuplicateDigitPane(s_DigitPaneNames[9], s_CopyPaneNames[7], pLayoutName);
+            m_pZeroPane[0] = DuplicateDigitPane(0, s_CopyPaneNames[0], pLayoutName);
+            m_pZeroPane[1] = DuplicateDigitPane(0, s_CopyPaneNames[1], pLayoutName);
+            m_pZeroPane[2] = DuplicateDigitPane(0, s_CopyPaneNames[2], pLayoutName);
+            m_pFivePane = DuplicateDigitPane(5, s_CopyPaneNames[3], pLayoutName);
+            m_pNinePane[0] = DuplicateDigitPane(9, s_CopyPaneNames[4], pLayoutName);
+            m_pNinePane[1] = DuplicateDigitPane(9, s_CopyPaneNames[5], pLayoutName);
+            m_pNinePane[2] = DuplicateDigitPane(9, s_CopyPaneNames[6], pLayoutName);
+            m_pNinePane[3] = DuplicateDigitPane(9, s_CopyPaneNames[7], pLayoutName);
             for (long i = 0; i < 8; i++) {
                 m_pPaneAccessor->SetDisp(s_CopyPaneNames[i], 0);
             }
@@ -1022,11 +1028,11 @@ int msw::SelectMenu::CFriendInfo::Set()
 }
 
 // A copy, called pName, of the digit pane pSrcName; inlined into Set().
-inline nw4r::lyt::Pane *msw::SelectMenu::CFriendInfo::DuplicateDigitPane(const char *pSrcName, const char *pName,
+inline nw4r::lyt::Pane *msw::SelectMenu::CFriendInfo::DuplicateDigitPane(long nDigit, const char *pName,
                                                                          const char *pLayoutName)
 {
     bcs::G2D::CPaneCtrl *pLytObj = GetLytObj();
-    bcs::G2D::CPaneObj *pCopy = bcs::G2D::DuplicatePaneObj(pLytObj, pSrcName, pName, pLayoutName, 0);
+    bcs::G2D::CPaneObj *pCopy = bcs::G2D::DuplicatePaneObj(pLytObj, s_DigitPaneNames[nDigit], pName, pLayoutName, 0);
     pLytObj->AppendPaneObj(pCopy, 0);
     return pCopy->GetPane();
 }
@@ -1058,6 +1064,7 @@ inline void msw::SelectMenu::CFriendInfo::CheckButtonAnim()
 
     m_pMenuPartList->CheckButtonAnim(m_nPushButtonId, 0);
     GetSelectMenu()->SendObjEventTrigger(OBJ_UNK_01, backEvent, m_nPushButtonId);
+    GetSelectMenu()->SendObjEventTrigger(OBJ_PLUS_MINUS, backEvent, m_nPushButtonId);
 }
 
 // Puts pText into text box nPane when the pane exists.
@@ -1200,8 +1207,9 @@ long msw::SelectMenu::CFriendInfo::PushButton(long nPad, long nBtnKindId)
     if (m_pMenuPartList->SetPushButtonAnim(nBtnKindId, nPad) >= 0) {
         return 0;
     }
-    GetSelectMenu()->SendObjEventTrigger(OBJ_UNK_01, nPad + EVENT_PUSH, (void *)nBtnKindId);
-    GetSelectMenu()->SendObjEventTrigger(OBJ_PLUS_MINUS, nPad + EVENT_PUSH, (void *)nBtnKindId);
+    long nEvent = nPad + EVENT_PUSH;
+    GetSelectMenu()->SendObjEventTrigger(OBJ_UNK_01, nEvent, (void *)nBtnKindId);
+    GetSelectMenu()->SendObjEventTrigger(OBJ_PLUS_MINUS, nEvent, (void *)nBtnKindId);
     return 0;
 }
 
@@ -1229,9 +1237,7 @@ void msw::SelectMenu::CFriendInfo::SetUpDisp(int bFriend)
         memcpy(&storeData, &pData->m_StoreData, sizeof(RFLStoreData));
         m_bFriend = 1;
     } else {
-        if (pPlayerData != 0) {
-            SetTextPaneString(PANE_UNK_10, pPlayerData->m_Name);
-        }
+        SetTextPaneString(PANE_UNK_10, pPlayerData->m_Name);
         SetTextPaneString(PANE_TEXT_CODE, pSelectMenu->ExchangeFriendCode(pPlayerData->m_nFriendCode));
         m_pPaneAccessor->SetPaneDisp(PANE_OWN, 1);
         m_pPaneAccessor->SetPaneDisp(PANE_FRIEND, 0);
@@ -1338,7 +1344,10 @@ void msw::SelectMenu::CFriendInfo::CheckFrindStat()
 void msw::SelectMenu::CFriendInfo::SetTabSelect(long nTab, int bFriend)
 {
     long nPrev = m_nTabSelect;
-    if (nTab == nPrev || (unsigned long)nTab > TAB_NUM - 1) {
+    if (nTab == nPrev) {
+        return;
+    }
+    if ((unsigned long)nTab > TAB_NUM - 1) {
         return;
     }
 
@@ -1459,8 +1468,6 @@ void msw::SelectMenu::CFriendInfo::SetScorePos(WiFiSkill *pSkill)
 
 void msw::SelectMenu::CFriendInfo::DispNumberPane(unsigned short nMax)
 {
-    long nValue = nMax;
-
     for (long i = 0; i < 10; i++) {
         m_pPaneAccessor->SetDisp(s_CopyPaneNames[i], 0);
         m_pPaneAccessor->SetPaneDisp(PANE_DIGIT_0 + i, 0);
@@ -1468,35 +1475,31 @@ void msw::SelectMenu::CFriendInfo::DispNumberPane(unsigned short nMax)
 
     // The three lower digits of the top of the scale. Only 0, 5 and 9 can
     // occur (the top is a multiple of 500, or 9999).
-    nw4r::math::VEC3 zero(0.0f, 0.0f, 0.0f);
+    const nw4r::math::VEC3 zero(0.0f, 0.0f, 0.0f);
     for (long i = 0; i < 3; i++) {
+        long nDigit = nMax % 10;
         long nPane = PANE_SCALE_DIGIT - i;
-        long nDigit = nValue % 10;
         nw4r::lyt::Pane *pParent = m_pPaneAccessor->GetPane(nPane);
-        switch (nDigit) {
-            case 0:
-                bcs::G2D::SetPaneParent(m_pZeroPane[i], pParent, 1, 0);
-                m_pZeroPane[i]->SetTranslate(zero);
-                m_pPaneAccessor->SetDisp(s_CopyPaneNames[i], 1);
-                break;
-            case 5:
-                bcs::G2D::SetPaneParent(m_pFivePane, pParent, 1, 0);
-                m_pFivePane->SetTranslate(zero);
-                m_pPaneAccessor->SetDisp(s_CopyPaneNames[3], 1);
-                break;
-            case 9:
-                bcs::G2D::SetPaneParent(m_pNinePane[i], pParent, 1, 0);
-                m_pNinePane[i]->SetTranslate(zero);
-                m_pPaneAccessor->SetDisp(s_CopyPaneNames[4 + i], 1);
-                break;
+        if (nDigit == 0) {
+            bcs::G2D::SetPaneParent(m_pZeroPane[i], pParent, 1, 0);
+            m_pZeroPane[i]->SetTranslate(zero);
+            m_pPaneAccessor->SetDisp(s_CopyPaneNames[i], 1);
+        } else if (nDigit == 5) {
+            bcs::G2D::SetPaneParent(m_pFivePane, pParent, 1, 0);
+            m_pFivePane->SetTranslate(zero);
+            m_pPaneAccessor->SetDisp(s_CopyPaneNames[3], 1);
+        } else if (nDigit == 9) {
+            bcs::G2D::SetPaneParent(m_pNinePane[i], pParent, 1, 0);
+            m_pNinePane[i]->SetTranslate(zero);
+            m_pPaneAccessor->SetDisp(s_CopyPaneNames[4 + i], 1);
         }
         m_pPaneAccessor->SetPaneDisp(nPane, 1);
-        nValue /= 10;
+        nMax /= 10;
     }
 
     // The thousands digit is the original pane.
     nw4r::lyt::Pane *pParent = m_pPaneAccessor->GetPane(PANE_SCALE_ZERO);
-    long nPane = PANE_DIGIT_0 + nValue;
+    long nPane = PANE_DIGIT_0 + nMax;
     nw4r::lyt::Pane *pDigit = m_pPaneAccessor->GetPane(nPane);
     bcs::G2D::SetPaneParent(pDigit, pParent, 1, 0);
     pDigit->SetTranslate(zero);
@@ -1504,6 +1507,16 @@ void msw::SelectMenu::CFriendInfo::DispNumberPane(unsigned short nMax)
     m_pPaneAccessor->SetPaneDisp(nPane, 1);
     m_pPaneAccessor->SetPaneDisp(PANE_SCALE_TOP, 1);
     m_pPaneAccessor->SetPaneDisp(PANE_SCALE_TOP_BASE, 1);
+}
+
+namespace {
+
+    // A pane's translation as an engine vector (same three floats), for the
+    // vector routines of bcs/BCS_Vec.hpp.
+    inline const bcs::FVEC3 &GetPaneTranslate(bcs::G2D::CPaneObj *pObj)
+    {
+        return reinterpret_cast<const bcs::FVEC3 &>(pObj->GetPane()->GetTranslate());
+    }
 }
 
 void msw::SelectMenu::CFriendInfo::SetSkillLine(WiFiSkill *pSkill, nw4r::math::VEC2 &rOrigin, float fStepX,
@@ -1522,18 +1535,20 @@ void msw::SelectMenu::CFriendInfo::SetSkillLine(WiFiSkill *pSkill, nw4r::math::V
     }
 
     nw4r::math::VEC2 origin = rOrigin;
-    const short *pHistory = &pSkill->m_History[nSkip];
+    float fBottom = -1.0f * (fHeight * 0.5f);
+    long nHistory = nSkip;
     m_PrimLine[0].pos.x = origin.x;
     m_PrimLine[0].pos.y = origin.y;
     for (long i = 0; i < GRAPH_POINT_NUM; i++) {
         float fRate = 0.0f;
         if (i >= nEmpty) {
-            if (fRate != *pHistory) {
-                fRate = (*pHistory * 100) / fMax;
+            if (fRate != pSkill->m_History[nHistory]) {
+                fRate = (pSkill->m_History[nHistory] * 100) / fMax;
             }
-            pHistory++;
+            nHistory++;
         }
-        m_PrimLine[i].pos.y = -1.0f * (fHeight * 0.5f) + (fHeight * fRate) / 100.0f;
+        float fLine = (fHeight * fRate) / 100.0f;
+        m_PrimLine[i].pos.y = fBottom + fLine;
         m_PrimLine[i].color = m_GraphColor;
         if (i < GRAPH_POINT_NUM - 1) {
             m_PrimLine[i + 1].pos.x = fStepX + m_PrimLine[i].pos.x;
@@ -1557,11 +1572,9 @@ void msw::SelectMenu::CFriendInfo::SetSkillLine(WiFiSkill *pSkill, nw4r::math::V
 
     // The line from the graph's top to the rating.
     nw4r::math::VEC3 numPos(0.0f, 0.0f, 0.0f);
-    nw4r::math::VEC3 ratePos = m_pPaneAccessor->GetPaneObj(PANE_RATE)->GetPane()->GetTranslate();
-    nw4r::math::VEC3 topPos = m_pPaneAccessor->GetPaneObj(PANE_GRAPH_TOP)->GetPane()->GetTranslate();
-    nw4r::math::VEC3 graphPos = m_pPaneAccessor->GetPaneObj(PANE_GRAPH)->GetPane()->GetTranslate();
-    ratePos.x = ratePos.x + topPos.x - graphPos.x;
-    ratePos.y = ratePos.y + topPos.y - graphPos.y;
+    bcs::FVEC3 ratePos(GetPaneTranslate(m_pPaneAccessor->GetPaneObj(PANE_RATE)));
+    bcs::FVEC3Add(&ratePos, &ratePos, &GetPaneTranslate(m_pPaneAccessor->GetPaneObj(PANE_GRAPH_TOP)));
+    bcs::FVEC3Sub(&ratePos, &ratePos, &GetPaneTranslate(m_pPaneAccessor->GetPaneObj(PANE_GRAPH)));
     m_NumLine[0].pos = m_PrimLine[GRAPH_POINT_NUM - 1].pos;
     m_NumLine[1].pos.x = ratePos.x;
     m_NumLine[1].pos.y = ratePos.y;
@@ -1591,15 +1604,16 @@ void msw::SelectMenu::CFriendInfo::SetBorderSkillLine(long nIndex, long nValue, 
     if (fRate < 100.0f) {
         nw4r::math::VEC3 linePos(0.0f, 0.0f, 0.0f);
         float fHalfWidth = size.width * 0.5f;
-        float fY = -1.0f * (size.height * 0.5f) + (size.height * fRate) / 100.0f;
-        VERTEX_INFO *pLine = m_BorderLine[nIndex];
-        pLine[0].pos.y = fY;
-        pLine[1].pos.y = fY;
-        pLine[0].pos.x = -1.0f * fHalfWidth;
-        pLine[1].pos.x = fHalfWidth;
-        pLine[0].color = s_BorderColor[nIndex];
-        pLine[1].color = s_BorderColor[nIndex];
-        m_pBorderLine[nIndex]->SetVertexInfo(pLine, 2, 3);
+        float fHeight = (size.height * fRate) / 100.0f;
+        float fBottom = -1.0f * (size.height * 0.5f);
+        float fY = fBottom + fHeight;
+        m_BorderLine[nIndex][0].pos.y = fY;
+        m_BorderLine[nIndex][1].pos.y = fY;
+        m_BorderLine[nIndex][0].pos.x = -1.0f * fHalfWidth;
+        m_BorderLine[nIndex][1].pos.x = fHalfWidth;
+        m_BorderLine[nIndex][0].color = s_BorderColor[nIndex];
+        m_BorderLine[nIndex][1].color = s_BorderColor[nIndex];
+        m_pBorderLine[nIndex]->SetVertexInfo(m_BorderLine[nIndex], 2, 3);
         m_pBorderLine[nIndex]->m_Unk17C = 0;
         m_pBorderLine[nIndex]->SetTranslate(linePos);
     }
@@ -1661,7 +1675,6 @@ void msw::SelectMenu::CNoFriendInfo::Main()
             break;
         case STATE_ACTIVE:
             CheckButtonAnim();
-            GetSelectMenu()->SendObjEventTrigger(OBJ_PLUS_MINUS, EVENT_BACK, m_nPushButtonId);
             break;
         case STATE_CLOSE:
             if (GetSelectMenu()->SendObjEventTrigger(OBJ_PLUS_MINUS, EVENT_PLUS_MINUS_IS_OUT, 0)) {
@@ -1706,6 +1719,7 @@ void msw::SelectMenu::CNoFriendInfo::Disp()
 
 int msw::SelectMenu::CNoFriendInfo::Set()
 {
+    const wchar_t *pCode;
     if (m_pPaneAccessor != 0) {
         return 0;
     }
@@ -1735,7 +1749,7 @@ int msw::SelectMenu::CNoFriendInfo::Set()
             m_Unk30 = STATE_SET;
             ClearPushButtonId();
 
-            const wchar_t *pCode = pSelectMenu->ExchangeFriendCode(pSelectMenu->m_Unk708->m_nFriendCode);
+            pCode = pSelectMenu->ExchangeFriendCode(pSelectMenu->m_Unk708->m_nFriendCode);
             m_pPaneAccessor->SetTextBoxString(NO_FRIEND_PANE_TEXT_CODE, pCode, wcslen(pCode));
 
             pSelectMenu->Build(OBJ_PLUS_MINUS);
@@ -1747,13 +1761,14 @@ int msw::SelectMenu::CNoFriendInfo::Set()
 }
 
 // Inlined into Main(); defined after Set() because its local static follows
-// Main()'s in .rodata.
+// Main()'s in .rodata. Unlike CFriendInfo's, it does not ask the part list
+// (the window has no buttons to animate).
 inline void msw::SelectMenu::CNoFriendInfo::CheckButtonAnim()
 {
     static const int backEvent = EVENT_BACK;
 
-    m_pMenuPartList->CheckButtonAnim(m_nPushButtonId, 0);
     GetSelectMenu()->SendObjEventTrigger(OBJ_UNK_01, backEvent, m_nPushButtonId);
+    GetSelectMenu()->SendObjEventTrigger(OBJ_PLUS_MINUS, backEvent, m_nPushButtonId);
 }
 
 void msw::SelectMenu::CNoFriendInfo::Remove()
@@ -1784,7 +1799,8 @@ long msw::SelectMenu::CNoFriendInfo::HitCheck(bcs::FVEC3 *pPos)
 
 long msw::SelectMenu::CNoFriendInfo::PushButton(long nPad, long nBtnKindId)
 {
-    GetSelectMenu()->SendObjEventTrigger(OBJ_UNK_01, nPad + EVENT_PUSH, (void *)nBtnKindId);
-    GetSelectMenu()->SendObjEventTrigger(OBJ_PLUS_MINUS, nPad + EVENT_PUSH, (void *)nBtnKindId);
+    long nEvent = nPad + EVENT_PUSH;
+    GetSelectMenu()->SendObjEventTrigger(OBJ_UNK_01, nEvent, (void *)nBtnKindId);
+    GetSelectMenu()->SendObjEventTrigger(OBJ_PLUS_MINUS, nEvent, (void *)nBtnKindId);
     return 0;
 }

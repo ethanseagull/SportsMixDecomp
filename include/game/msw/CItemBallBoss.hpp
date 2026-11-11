@@ -24,18 +24,18 @@ namespace msw {
             // compiler puts the class's vtable into CItemBallBoss.cpp, which
             // the original object does not have.
             virtual bool IsDisableRebound() const;
-            virtual bool DoTrg(long trg);
+            virtual long DoTrg(long trg);
 
-            virtual bool TrgRebound_();
-            virtual bool TrgReboundToFree_();
-            virtual bool TrgFreeMode_();
-            virtual bool TrgChrHit_();
-            virtual bool TrgAttach_();
+            virtual long TrgRebound_();
+            virtual long TrgReboundToFree_();
+            virtual long TrgFreeMode_();
+            virtual long TrgChrHit_();
+            virtual long TrgAttach_();
 
-            virtual bool TrgReceive_() = 0;
-            virtual bool TrgBlock_() = 0;
-            virtual bool TrgArtsAttach_();
-            virtual bool TrgPreparationTouch_();
+            virtual long TrgReceive_() = 0;
+            virtual long TrgBlock_() = 0;
+            virtual long TrgArtsAttach_();
+            virtual long TrgPreparationTouch_();
     };
 
     inline bool CItemBallBoss::IsDisableRebound() const { return true; }

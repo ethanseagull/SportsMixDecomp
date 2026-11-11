@@ -62,6 +62,18 @@ namespace nw4r {
                     return *m_pData;
                 }
 
+                // Number of named entries, 0 when the dictionary is not valid.
+                unsigned long GetNumData() const
+                {
+                    if (IsValid()) {
+                        return m_pData->numData;
+                    }
+                    return 0;
+                }
+
+                // Index of the entry named `pName`, -1 when there is none (DOL).
+                long GetIndex(const char *pName) const;
+
                 // The data of the idx-th named entry; null when the
                 // dictionary is not valid.
                 void *operator[](int idx) const

@@ -286,8 +286,8 @@ namespace msw {
 
         // Float up and down.
         float fSpMin = BASKET_PRM_S06_MOVE_Y_SP_MIN;
-        float fSpMax = BASKET_PRM_S06_MOVE_Y_SP_MAX;
         float fHeight = BASKET_PRM_S06_MOVE_HEIGHT;
+        float fSpMax = BASKET_PRM_S06_MOVE_Y_SP_MAX;
         if (fSpMin > fSpMax) {
             float fTmp = fSpMin;
             fSpMin = fSpMax;

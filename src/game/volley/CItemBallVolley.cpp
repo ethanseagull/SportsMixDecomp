@@ -3,7 +3,7 @@
 
 namespace msw {
 
-bool CItemBallVolley::DoTrg(long trg) {
+long CItemBallVolley::DoTrg(long trg) {
     switch (trg) {
     case TRG_RECEIVE:
         return TrgReceive_();
@@ -18,31 +18,31 @@ bool CItemBallVolley::DoTrg(long trg) {
     }
 }
 
-bool CItemBallVolley::TrgRebound_() {
+long CItemBallVolley::TrgRebound_() {
     return false;
 }
 
-bool CItemBallVolley::TrgReboundToFree_() {
+long CItemBallVolley::TrgReboundToFree_() {
     return false;
 }
 
-bool CItemBallVolley::TrgFreeMode_() {
+long CItemBallVolley::TrgFreeMode_() {
     return false;
 }
 
-bool CItemBallVolley::TrgChrHit_() {
+long CItemBallVolley::TrgChrHit_() {
     return false;
 }
 
-bool CItemBallVolley::TrgAttach_() {
+long CItemBallVolley::TrgAttach_() {
     return false;
 }
 
-bool CItemBallVolley::TrgArtsAttach_() {
+long CItemBallVolley::TrgArtsAttach_() {
     return true;
 }
 
-bool CItemBallVolley::TrgPreparationTouch_() {
+long CItemBallVolley::TrgPreparationTouch_() {
     return false;
 }
 

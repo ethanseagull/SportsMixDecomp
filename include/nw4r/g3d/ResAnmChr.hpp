@@ -2,6 +2,7 @@
 #define NW4R_G3D_RESANMCHR_HPP_
 
 #include "nw4r/db/Panic.hpp"
+#include "nw4r/g3d/ResDic.hpp"
 #include "nw4r/math/types.h"
 
 namespace nw4r {
@@ -9,7 +10,9 @@ namespace nw4r {
 
         // Only the member the modules read.
         struct ResAnmChrData {
-            unsigned char unk00[0x20];
+            unsigned char unk00[0x10];
+            long toChrDataDic;       // 0x10: offset of the node dictionary (name guessed)
+            unsigned char unk14[0xC];
             unsigned short numFrame; // 0x20 (name guessed)
         };
 
@@ -52,6 +55,17 @@ namespace nw4r {
                 }
 
                 int GetNumFrame() const { return ref().numFrame; }
+
+                // (name guessed) The dictionary of the animated nodes, by
+                // node name; inline in msw::CEvNodeData.
+                ResDic GetChrDic() const
+                {
+                    ResAnmChrData &r = ref();
+                    if (r.toChrDataDic != 0) {
+                        return ResDic(reinterpret_cast<unsigned char *>(&r) + r.toChrDataDic);
+                    }
+                    return ResDic(0);
+                }
 
                 // Node nNode of the animation at frame fFrame (DOL).
                 void GetAnmResult(ChrAnmResult *pResult, unsigned long nNode, float fFrame) const;

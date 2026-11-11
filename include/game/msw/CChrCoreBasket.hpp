@@ -1,6 +1,8 @@
 #ifndef MSW_CCHRCOREBASKET_HPP_
 #define MSW_CCHRCOREBASKET_HPP_
 
+#include "bcs/FVEC3.hpp"
+#include "game/msw/CC_DATA.hpp"
 #include "game/msw/CChrCore.hpp"
 
 namespace msw {
@@ -9,11 +11,21 @@ namespace msw {
 
     // The basketball character core (BasketF).
     //
-    // INCOMPLETE: only what game/basket/CComDrvBasket.cpp calls is
-    // declared. CChrCore is incomplete too, so the class must not be
-    // instantiated or have its vtable emitted yet.
+    // INCOMPLETE: the virtual functions are all declared (the 852 slots of
+    // __vt__Q23msw14CChrCoreBasket, read from BasketF, as CChrCoreHockey.hpp
+    // does), but few members are mapped and CChrCore is incomplete too (see
+    // there). The size, 0x5E8, is where CChrCoreBasketLuigi's own members
+    // start (CChrManBasket allocates it with 0x5F4 bytes). Each destructor
+    // is declared first and without a body, so that it decides where the
+    // vtable goes: the character units (game/basket/CChrCoreBasket<Name>.cpp)
+    // define it and so emit the vtable.
     class CChrCoreBasket : public CChrCore {
         public:
+            // The work of the air trick (the "arts shot"), passed to the
+            // SubStateArtsShot* virtuals (contents mapped only where used).
+            struct STATE_WORK_AIR_TRICK;
+
+            CChrCoreBasket();
             virtual ~CChrCoreBasket();
 
             // Not zero when pChr (holding the ball) is in reach of a cut
@@ -28,12 +40,228 @@ namespace msw {
             // cannot.
             int MethdCombinationPass(float fRotY);
 
-            // Slots 0x978 to 0xA7C of __vt__Q23msw14CChrCoreBasket. They are
-            // CChrCore's virtual functions (the DOL names many of them
-            // CChrCore::), declared here rather than in CChrCore.hpp so that
-            // the placeholder slots of other modules' derived classes
-            // (CChrCoreDodge, CChrCoreBoss) do not move. CChrCoreBasket adds
-            // nothing in front of them, so the offsets are the same.
+            // Overrides of CChrCore's virtuals, in vtable order (the slots of
+            // __vt__Q23msw14CChrCoreBasket, read from BasketF, that name
+            // CChrCoreBasket; return types as guessed in CChrCore).
+            virtual long GetQueueWorkSize() const;                     // 0x10
+            virtual void SetConditionEffect_(long);                    // 0x24
+            virtual int IsNowBlockWork() const;                        // 0x30
+            virtual int Is1on1() const;                                // 0x44
+            virtual void GetTargetMarkerPos(bcs::FVEC3 &);             // 0x58
+            virtual int MoveTargetMarkerPos(float);                    // 0x5C
+            virtual int IsBattle() const;                              // 0x68
+            virtual int IsDisp1On1Maker() const;                       // 0x6C
+            virtual int IsDunkBlockEnable() const;                     // 0x70
+            virtual int CanbePassRequest();                            // 0x74
+            virtual int MethdPassRequest();                            // 0x78
+            virtual float GetBlockWorkDir() const;                     // 0x7C
+            virtual float GetJumpBlockLocalFrame() const;              // 0x80
+            virtual int GetStarRemainderRate() const;                  // 0x84
+            virtual void GetVel(bcs::FVEC3 &) const;                   // 0x294
+            virtual float GetCollSize_BodyPush() const;                // 0x340
+            virtual int Util_GetIdleMotID();                           // 0x348
+            virtual int Util_GetRunMotID();                            // 0x34C
+            virtual int Util_GetLandMotID(long);                       // 0x354
+            virtual int Util_GetJumpUpMotID(int);                      // 0x358
+            virtual void Util_GetJumpLandMotID(int);                   // 0x35C
+            virtual int Util_GetDamageMotID(long, long, long);         // 0x360
+            virtual void Util_SetOffenseLeaderFirstState(long);        // 0x364
+            virtual void Util_SetDefenseLeaderFirstState();            // 0x368
+            virtual void CreateColl_();                                // 0x374
+            virtual void Create_();                                    // 0x378
+            virtual void MainFunc_();                                  // 0x37C
+            virtual void UpdateFunc_();                                // 0x380
+            virtual void ResetCmn_();                                  // 0x388
+            virtual float GetPrmMoveSpeed() const;                     // 0x38C
+            virtual long GetPrmBodySize() const;                       // 0x390
+            virtual void SendMessage_(long, long, long, long);         // 0x394
+            virtual void CtorStateNeutral();                           // 0x3BC
+            virtual void LoopStateNeutral();                           // 0x3C0
+            virtual void DtorStateNeutral();                           // 0x3C4
+            virtual void CtorStateRun();                               // 0x3E0
+            virtual void LoopStateRun();                               // 0x3E4
+            virtual void DtorStateRun();                               // 0x3E8
+            virtual void CtorStateJump();                              // 0x3EC
+            virtual void LoopStateJump();                              // 0x3F0
+            virtual void DtorStateJump();                              // 0x3F4
+            virtual void CtorStateDamage();                            // 0x3F8
+            virtual void LoopStateDamage();                            // 0x3FC
+            virtual void DtorStateDamage();                            // 0x400
+            virtual void CtorStateSideStep();                          // 0x404
+            virtual void LoopStateSideStep();                          // 0x408
+            virtual void DtorStateSideStep();                          // 0x40C
+            virtual void CtorStateItemShoot();                         // 0x410
+            virtual void LoopStateItemShoot();                         // 0x414
+            virtual void DtorStateItemShoot();                         // 0x418
+            virtual void CtorStateBlockCut();                          // 0x41C
+            virtual void LoopStateBlockCut();                          // 0x420
+            virtual void DtorStateBlockCut();                          // 0x424
+            virtual void CtorStateJumpUpper();                         // 0x434
+            virtual void LoopStateJumpUpper();                         // 0x438
+            virtual void DtorStateJumpUpper();                         // 0x43C
+            virtual void CtorStateMotPlay();                           // 0x44C
+            virtual void LoopStateMotPlay();                           // 0x450
+            virtual void DtorStateMotPlay();                           // 0x454
+            virtual void CtorStateSizeChange();                        // 0x458
+            virtual void LoopStateSizeChange();                        // 0x45C
+            virtual void DtorStateSizeChange();                        // 0x460
+            virtual void CtorStateDizzy();                             // 0x470
+            virtual void LoopStateDizzy();                             // 0x474
+            virtual void DtorStateDizzy();                             // 0x478
+            virtual void CtorStateSliding();                           // 0x47C
+            virtual void LoopStateSliding();                           // 0x480
+            virtual void DtorStateSliding();                           // 0x484
+            virtual void CtorStatePass();                              // 0x4AC
+            virtual void LoopStatePass();                              // 0x4B0
+            virtual void DtorStatePass();                              // 0x4B4
+            virtual void CtorStateAerialPass();                        // 0x4B8
+            virtual void LoopStateAerialPass();                        // 0x4BC
+            virtual void DtorStateAerialPass();                        // 0x4C0
+            virtual void CtorStatePassCatch();                         // 0x4C4
+            virtual void LoopStatePassCatch();                         // 0x4C8
+            virtual void DtorStatePassCatch();                         // 0x4CC
+            virtual void CtorStateSDB();                               // 0x4DC
+            virtual void LoopStateSDB();                               // 0x4E0
+            virtual void DtorStateSDB();                               // 0x4E4
+            virtual void CtorStateSDB_Chain();                         // 0x4E8
+            virtual void LoopStateSDB_Chain();                         // 0x4EC
+            virtual void DtorStateSDB_Chain();                         // 0x4F0
+            virtual void CtorStateRDB();                               // 0x4F4
+            virtual void LoopStateRDB();                               // 0x4F8
+            virtual void DtorStateRDB();                               // 0x4FC
+            virtual void CtorStateTrickMove();                         // 0x518
+            virtual void LoopStateTrickMove();                         // 0x51C
+            virtual void DtorStateTrickMove();                         // 0x520
+            virtual void CtorStateCatch();                             // 0x530
+            virtual void LoopStateCatch();                             // 0x534
+            virtual void DtorStateCatch();                             // 0x538
+            virtual void CtorStateSDB_Catch();                         // 0x53C
+            virtual void LoopStateSDB_Catch();                         // 0x540
+            virtual void DtorStateSDB_Catch();                         // 0x544
+            virtual void CtorStateJumpShoot();                         // 0x548
+            virtual void LoopStateJumpShoot();                         // 0x54C
+            virtual void DtorStateJumpShoot();                         // 0x550
+            virtual void CtorStateReboundDunk();                       // 0x560
+            virtual void LoopStateReboundDunk();                       // 0x564
+            virtual void DtorStateReboundDunk();                       // 0x568
+            virtual void CtorStateLayUp();                             // 0x56C
+            virtual void LoopStateLayUp();                             // 0x570
+            virtual void DtorStateLayUp();                             // 0x574
+            virtual void CtorStateAlleyoop();                          // 0x578
+            virtual void LoopStateAlleyoop();                          // 0x57C
+            virtual void DtorStateAlleyoop();                          // 0x580
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void LoopStateAirTrick();                          // 0x588
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void CtorStateDunk();                              // 0x590
+            virtual void LoopStateDunk();                              // 0x594
+            virtual void DtorStateDunk();                              // 0x598
+            virtual void CtorStateBlockWorkLose();                     // 0x5D8
+            virtual void LoopStateBlockWorkLose();                     // 0x5DC
+            virtual void DtorStateBlockWorkLose();                     // 0x5E0
+            virtual void CtorStateAutoDribblePosture();                // 0x5E4
+            virtual void LoopStateAutoDribblePosture();                // 0x5E8
+            virtual void DtorStateAutoDribblePosture();                // 0x5EC
+            virtual void CtorStateJumpBlock();                         // 0x5F0
+            virtual void LoopStateJumpBlock();                         // 0x5F4
+            virtual void DtorStateJumpBlock();                         // 0x5F8
+            virtual void CtorStateSwatIt();                            // 0x5FC
+            virtual void LoopStateSwatIt();                            // 0x600
+            virtual void DtorStateSwatIt();                            // 0x604
+            virtual void CtorStateSmashCut();                          // 0x608
+            virtual void LoopStateSmashCut();                          // 0x60C
+            virtual void DtorStateSmashCut();                          // 0x610
+            virtual void CtorStateDash();                              // 0x620
+            virtual void LoopStateDash();                              // 0x624
+            virtual void DtorStateDash();                              // 0x628
+            virtual void CtorStateJumpPass();                          // 0x62C
+            virtual void LoopStateJumpPass();                          // 0x630
+            virtual void DtorStateJumpPass();                          // 0x634
+            virtual void CtorStateJumpCatch();                         // 0x638
+            virtual void LoopStateJumpCatch();                         // 0x63C
+            virtual void DtorStateJumpCatch();                         // 0x640
+            virtual void CtorStateDribbleMiss();                       // 0x644
+            virtual void LoopStateDribbleMiss();                       // 0x648
+            virtual void DtorStateDribbleMiss();                       // 0x64C
+            virtual void CtorStateTurn();                              // 0x680
+            virtual void LoopStateTurn();                              // 0x684
+            virtual void DtorStateTurn();                              // 0x688
+            virtual void CtorStateFall();                              // 0x7D0
+            virtual void LoopStateFall();                              // 0x7D4
+            virtual void DtorStateFall();                              // 0x7D8
+            virtual void CtorStateRebirth();                           // 0x7DC
+            virtual void LoopStateRebirth();                           // 0x7E0
+            virtual void DtorStateRebirth();                           // 0x7E4
+            virtual int CanbeRun();                                    // 0x7E8
+            virtual int MethdRun(float);                               // 0x7EC
+            virtual int CanbeJump();                                   // 0x800
+            virtual int MethdJump();                                   // 0x804
+            virtual int CanbeSliding();                                // 0x808
+            virtual int MethdSliding(float);                           // 0x80C
+            virtual int CanbeSizeChange(long);                         // 0x810
+            virtual int MethdSizeChange(long, float);                  // 0x814
+            virtual int MethdChgStarState();                           // 0x818
+            virtual int CanbeChgStarState();                           // 0x81C
+            virtual int CanbeJumpUpper() const;                        // 0x834
+            virtual int CanbeNowJumpUpper() const;                     // 0x838
+            virtual int MethdJumpUpper();                              // 0x83C
+            virtual int CanbeSideStep(float, float);                   // 0x840
+            virtual int MethdSideStep(float, float);                   // 0x844
+            virtual int CanbeCatch();                                  // 0x848
+            virtual int MethdCatch();                                  // 0x84C
+            virtual int CanbeCatchToSDB();                             // 0x850
+            virtual int MethdCatchToSDB();                             // 0x854
+            virtual int CanbeDribble();                                // 0x860
+            virtual int CanbeSDB();                                    // 0x864
+            virtual int MethdSDB(float);                               // 0x868
+            virtual int CanbeRDB();                                    // 0x86C
+            virtual int MethdRDB(INPUT_WORK *, float);                 // 0x870
+            virtual int MethdRDB(INPUT_WORK *, float, float);          // 0x874
+            virtual int CanbeTrickMove();                              // 0x884
+            virtual int MethdTrickMove(float);                         // 0x888
+            virtual int CanbeBlockCut(int);                            // 0x894
+            virtual int CanbeNowBlockCut();                            // 0x898
+            virtual int MethdBlockCut(float);                          // 0x89C
+            virtual int CanbeJumpShoot();                              // 0x8BC
+            virtual int MethdJumpShoot();                              // 0x8C0
+            virtual int MethdJumpShoot(float, int);                    // 0x8C4
+            virtual int CanbeRebound();                                // 0x8D0
+            virtual int CanbeReboundDunk();                            // 0x8D4
+            virtual int MethdReboundDunk();                            // 0x8D8
+            virtual int CanbeLayUp();                                  // 0x8DC
+            virtual int MethdLayUp();                                  // 0x8E0
+            virtual int MethdLayUp(int);                               // 0x8E4
+            virtual int CanbeAirTrick();                               // 0x8E8
+            virtual int MethdAirTrick();                               // 0x8EC
+            virtual int CanbeDunk();                                   // 0x8F8
+            virtual int MethdDunk();                                   // 0x8FC
+            virtual int CanbePass(CChrCore *);                         // 0x908
+            virtual int MethdPass(float, int);                         // 0x90C
+            virtual int MethdPass(CChrCore *, int);                    // 0x910
+            virtual int CanbePassIdx(long);                            // 0x914
+            virtual int MethdPassIdx(long);                            // 0x918
+            virtual int CanbeDash() const;                             // 0x91C
+            virtual int MethdDash();                                   // 0x920
+            virtual int CanbeJumpPass();                               // 0x924
+            virtual int MethdJumpPass(long);                           // 0x928
+            virtual int CanbeJumpCatch();                              // 0x92C
+            virtual int MethdJumpCatch(float);                         // 0x930
+            virtual int CanbeDribbleMiss();                            // 0x934
+            virtual int MethdDribbleMiss(float);                       // 0x938
+            virtual int CanbeAerialPass(CChrCore *);                   // 0x93C
+            virtual int MethdAerialPass(float, int);                   // 0x940
+            virtual int CanbeAerialPassIdx(long);                      // 0x944
+            virtual int MethdAerialPassIdx(long);                      // 0x948
+            virtual int CanbeItemShoot();                              // 0x94C
+            virtual int MethdItemShoot(float);                         // 0x950
+            virtual int CanbeSetMoveRevise();                          // 0x954
+            virtual int MethdSetMoveRevise(float);                     // 0x958
+            virtual int MethdDamage(unsigned long, float);             // 0x95C
+            virtual int MethdDamage(unsigned long, float, float, float, long, float, long, long); // 0x960
+            virtual int CanbeUseItem();                                // 0x968
+            virtual int MethdUseItem();                                // 0x96C
+            virtual int MethdTurnOver(long);                           // 0x970
+            virtual int MethdTimeOver(long);                           // 0x974
             virtual int MethdGameSet();                                // 0x978
             virtual int MethdGameResult(int);                          // 0x97C
             virtual int CanbeChgLeaderState();                         // 0x980
@@ -42,15 +270,6 @@ namespace msw {
             virtual int MethdChgLeader(float, long, long, int);        // 0x98C
             virtual int MethdChgLeader(long, long, long);              // 0x990
             virtual int MethdChgLeader();                              // 0x994
-            virtual int CanbeServe(long);                              // 0x998
-            virtual int MethdServe(long);                              // 0x99C
-            virtual int CanbeReceive(int);                             // 0x9A0
-            virtual int CanbeDiveReceive();                            // 0x9A4
-            virtual int MethdReceive(int, int);                        // 0x9A8
-            virtual int MethdReceive(int, int, float);                 // 0x9AC
-            virtual int CanbeSpike(int) const;                         // 0x9B0
-            virtual int MethdSpike(int);                               // 0x9B4
-            virtual int CanbeAutoSpikeJump() const;                    // 0x9B8
             virtual int Canbe1on1();                                   // 0x9BC
             virtual int Methd1on1(int);                                // 0x9C0
             virtual int CanbeAutoDPM();                                // 0x9C4
@@ -66,221 +285,79 @@ namespace msw {
             virtual int MethdAirTrickDownSpeed(float);                 // 0x9EC
             virtual int CanbeSpecialBattle();                          // 0x9F0
             virtual int MethdSpecialBattle();                          // 0x9F4
-            virtual int CanbeArtsShotCatch();                          // 0x9F8
-            virtual int MethdArtsShotCatch();                          // 0x9FC
-            virtual int CanbeBallCatch();                              // 0xA00
-            virtual int MethdBallCatch(float);                         // 0xA04
-            virtual int CanbeLineOver();                               // 0xA08
-            virtual int MethdLineOver(float);                          // 0xA0C
-            virtual int CanbeCrouch();                                 // 0xA10
-            virtual int MethdCrouch();                                 // 0xA14
-            virtual int CanbeSkate(int);                               // 0xA18
-            virtual int MethdSkate(float, int, float, int);            // 0xA1C
-            virtual int CanbeStealStance();                            // 0xA20
-            virtual int MethdStealStance(float);                       // 0xA24
-            virtual int CanbeShootStance();                            // 0xA28
-            virtual int MethdShootStance(float, int);                  // 0xA2C
-            virtual int CanbeBrake();                                  // 0xA30
-            virtual int MethdBrake(float, long);                       // 0xA34
-            virtual int CanbeSwitchBrake(float, int);                  // 0xA38
-            virtual int MethdSwitchBrake(float, float);                // 0xA3C
-            virtual int CanbeSwitch();                                 // 0xA40
-            virtual int MethdSwitch();                                 // 0xA44
-            virtual int CanbeBlockStance();                            // 0xA48
-            virtual int MethdBlockStance(float, float, long);          // 0xA4C
-            virtual int CanbeAutoBlockStance();                        // 0xA50
-            virtual int MethdAutoBlockStance(float, float, long);      // 0xA54
-            virtual int CanbeAutoChangeStance();                       // 0xA58
-            virtual int MethdAutoChangeStance(float, float, long, float); // 0xA5C
-            virtual int MethdArtsDamage(unsigned long, bcs::FVEC3);    // 0xA60
-            virtual int CanbeChangeStance();                           // 0xA64
-            virtual int MethdChangeStance(float, float, long, float);  // 0xA68
             virtual int CanbePassCatchState();                         // 0xA6C
             virtual int CanbeAlleyoop();                               // 0xA70
             virtual int MethdSetPassCatchState(CBall *, int, const bcs::FVEC3 &, long); // 0xA74
             virtual int MethdSetPassCatchJumpWaitFrame(const bcs::FVEC3 &, float); // 0xA78
             virtual int MethdAlleyoop();                               // 0xA7C
-            // Slots 0xA80 to 0xD48 are not mapped yet; placeholders (the
-            // comment names each slot's function) keep GetFuturePos at 0xD4C.
-            virtual void UnkA80(); // 0xA80 CChrCore::MethdSetAlleyoopCatchState(float, float, const bcs::FVEC3&, const bcs::FVEC3&)
-            virtual void UnkA84(); // 0xA84 CChrCore::GetTpInputDribble(msw::CChrCore::INPUT_WORK&, float, float)
-            virtual void UnkA88(); // 0xA88 CChrCoreBasket::GetArtsEventRot()
-            virtual void UnkA8C(); // 0xA8C CChrCoreBasket::DoPlayArtsEvent()
-            virtual void UnkA90(); // 0xA90 CChrCore::CanbeSubShoot()
-            virtual void UnkA94(); // 0xA94 CChrCore::MethdSubShoot(float)
-            virtual void UnkA98(); // 0xA98 CChrCore::CanbeNormalShoot()
-            virtual void UnkA9C(); // 0xA9C CChrCore::MethdNormalShoot(float)
-            virtual void UnkAA0(); // 0xAA0 CChrCore::CanbePowerShot()
-            virtual void UnkAA4(); // 0xAA4 CChrCore::MethdPowerShot(float)
-            virtual void UnkAA8(); // 0xAA8 CChrCore::CanbeSideShot()
-            virtual void UnkAAC(); // 0xAAC CChrCore::MethdSideShot(float)
-            virtual void UnkAB0(); // 0xAB0 CChrCore::CanbeDivingCatch()
-            virtual void UnkAB4(); // 0xAB4 CChrCore::MethdDivingCatch(float)
-            virtual void UnkAB8(); // 0xAB8 CChrCore::CanbeSpinAttack()
-            virtual void UnkABC(); // 0xABC CChrCore::MethdSpinAttack()
-            virtual void UnkAC0(); // 0xAC0 CChrCore::CanbeEventDoll()
-            virtual void UnkAC4(); // 0xAC4 CChrCore::MethdEventDoll()
-            virtual void UnkAC8(); // 0xAC8 CChrCore::CanbePassStance()
-            virtual void UnkACC(); // 0xACC CChrCore::MethdPassStance(float, long)
-            virtual void UnkAD0(); // 0xAD0 CChrCore::CanbeDirectShootStance()
-            virtual void UnkAD4(); // 0xAD4 CChrCore::MethdDirectShootStance(float, long)
-            virtual void UnkAD8(); // 0xAD8 CChrCore::CanbeDirectPassStance()
-            virtual void UnkADC(); // 0xADC CChrCore::MethdDirectPassStance(float, long)
-            virtual void UnkAE0(); // 0xAE0 CChrCore::CanbePassChgLeader()
-            virtual void UnkAE4(); // 0xAE4 CChrCore::MethdPassChgLeader()
-            virtual void UnkAE8(); // 0xAE8 CChrCore::CanbeHockeyTrickMove()
-            virtual void UnkAEC(); // 0xAEC CChrCore::MethdHockeyTrickMove(float, long)
-            virtual void UnkAF0(); // 0xAF0 CChrCore::CanbeTackleGuard()
-            virtual void UnkAF4(); // 0xAF4 CChrCore::MethdTackleGuard(float, int, int)
-            virtual void UnkAF8(); // 0xAF8 CChrCore::CanbeSmashAttack()
-            virtual void UnkAFC(); // 0xAFC CChrCore::MethdSmashAttack(float)
-            virtual void UnkB00(); // 0xB00 CChrCore::CanbeBallScramble(msw::CBall*)
-            virtual void UnkB04(); // 0xB04 CChrCore::MethdBallScramble(msw::CBall*, long, long)
-            virtual void UnkB08(); // 0xB08 CChrCore::CanbeDivingSteal(int)
-            virtual void UnkB0C(); // 0xB0C CChrCore::MethdDivingSteal(float, int, int)
-            virtual void UnkB10(); // 0xB10 CChrCore::CanbeBodyContact()
-            virtual void UnkB14(); // 0xB14 CChrCore::MethdBodyContact(float, long, int)
-            virtual void UnkB18(); // 0xB18 CChrCore::CanbeOffBallStance()
-            virtual void UnkB1C(); // 0xB1C CChrCore::MethdOffBallStance(float, int)
-            virtual void UnkB20(); // 0xB20 CChrCore::CanbeBlockAttack()
-            virtual void UnkB24(); // 0xB24 CChrCore::MethdBlockAttack(int)
-            virtual void UnkB28(); // 0xB28 CChrCore::CanbeTackleAttack()
-            virtual void UnkB2C(); // 0xB2C CChrCore::MethdTackleAttack(float)
-            virtual void UnkB30(); // 0xB30 CChrCore::CanbeAttackFight()
-            virtual void UnkB34(); // 0xB34 CChrCore::MethdAttackFight(long, int)
-            virtual void UnkB38(); // 0xB38 CChrCore::CanbePassCatch()
-            virtual void UnkB3C(); // 0xB3C CChrCore::MethdPassCatch(long, const bcs::FVEC3&, float)
-            virtual void UnkB40(); // 0xB40 CChrCore::CanbeFreeShoot()
-            virtual void UnkB44(); // 0xB44 CChrCore::MethdbFreeShoot(float)
-            virtual void UnkB48(); // 0xB48 CChrCore::CanbeFeintShoot()
-            virtual void UnkB4C(); // 0xB4C CChrCore::MethdFeintShoot(float)
-            virtual void UnkB50(); // 0xB50 CChrCore::CanbeTreadOnQPanel(const msw::CQPanel*)
-            virtual void UnkB54(); // 0xB54 CChrCore::CanbeItemBallShoot()
-            virtual void UnkB58(); // 0xB58 CChrCore::MethdItemBallShoot(float)
-            virtual void UnkB5C(); // 0xB5C CChrCoreBasket::CanbeCombination() const
-            virtual void UnkB60(); // 0xB60 CChrCoreBasket::MethdCombination()
-            virtual void UnkB64(); // 0xB64 CChrCoreBasket::CanbeLanding() const
-            virtual void UnkB68(); // 0xB68 CChrCoreBasket::CanbeFall() const
-            virtual void UnkB6C(); // 0xB6C CChrCoreBasket::MethdFall()
-            virtual void UnkB70(); // 0xB70 CChrCoreBasket::CanbeRebirth() const
-            virtual void UnkB74(); // 0xB74 CChrCoreBasket::MethdRebirth()
-            virtual void UnkB78(); // 0xB78 CChrCore::ArtsOptAliveCheck_()
-            virtual void UnkB7C(); // 0xB7C CChrCore::GetArtsOpt() const
-            virtual void UnkB80(); // 0xB80 CChrCore::GetArtsOptMdl() const
-            virtual void UnkB84(); // 0xB84 CChrCore::ArtsOptCreate(int, int, int)
-            virtual void UnkB88(); // 0xB88 CChrCore::ArtsOptDestroy()
-            virtual void UnkB8C(); // 0xB8C CChrCore::ArtsOptSetDisp(int)
-            virtual void UnkB90(); // 0xB90 CChrCore::ArtsOptFadeIn(float, float, int)
-            virtual void UnkB94(); // 0xB94 CChrCore::ArtsOptFadeOut(float, float, int)
-            virtual void UnkB98(); // 0xB98 CChrCore::ArtsOptSetFadeInSE(long)
-            virtual void UnkB9C(); // 0xB9C CChrCore::ArtsOptSetFadeOutSE(long)
-            virtual void UnkBA0(); // 0xBA0 CChrCore::ArtsOptSetAliveSE(long)
-            virtual void UnkBA4(); // 0xBA4 CChrCore::ArtsOptGetNodeIdx(const char*) const
-            virtual void UnkBA8(); // 0xBA8 CChrCore::ArtsOptAnimPlay(long, int, float, float)
-            virtual void UnkBAC(); // 0xBAC CChrCore::ArtsOptAnimStop()
-            virtual void UnkBB0(); // 0xBB0 CChrCore::ArtsOptAnimSetSpeed(float)
-            virtual void UnkBB4(); // 0xBB4 CChrCore::ArtsOptAnimGetFrame() const
-            virtual void UnkBB8(); // 0xBB8 CChrCore::ArtsOptAnimGetFrameNum() const
-            virtual void UnkBBC(); // 0xBBC CChrCore::ArtsOptAnimGetResFrameNum(long) const
-            virtual void UnkBC0(); // 0xBC0 CChrCore::ArtsOptAnimGetMotID() const
-            virtual void UnkBC4(); // 0xBC4 CChrCore::ArtsOptAnimSetFrame(float)
-            virtual void UnkBC8(); // 0xBC8 CChrCore::ArtsOptAnimResetLoopedFlag()
-            virtual void UnkBCC(); // 0xBCC CChrCore::ArtsOptIsAnimLoop() const
-            virtual void UnkBD0(); // 0xBD0 CChrCore::ArtsOptIsAnimLooped() const
-            virtual void UnkBD4(); // 0xBD4 CChrCore::ArtsOptIsAnimEnd() const
-            virtual void UnkBD8(); // 0xBD8 CChrCore::ArtsOptIsAnimInter() const
-            virtual void UnkBDC(); // 0xBDC CChrCore::ArtsOptIsAnimResLoopType(long) const
-            virtual void UnkBE0(); // 0xBE0 CChrCore::ArtsOptCreateAttachEffect(long, long, unsigned long, const bcs::FVEC3*, unsigned long, unsigned long)
-            virtual void UnkBE4(); // 0xBE4 CChrCore::ArtsOptCreateAttachEffect(long, long, const char*, const bcs::FVEC3*, unsigned long, unsigned long)
-            virtual void UnkBE8(); // 0xBE8 CChrCore::ArtsOptCreateAttachEffectAuto(long, long, unsigned long)
-            virtual void UnkBEC(); // 0xBEC CChrCore::ArtsOptGetEffectHandle(long) const
-            virtual void UnkBF0(); // 0xBF0 CChrCore::ArtsOptSetEffectSpeed(long, float)
-            virtual void UnkBF4(); // 0xBF4 CChrCore::ArtsOptIsEffectAlive(long) const
-            virtual void UnkBF8(); // 0xBF8 CChrCore::ArtsOptStopEffect(long)
-            virtual void UnkBFC(); // 0xBFC CChrCore::ArtsOptEraseEffect(long)
-            virtual void UnkC00(); // 0xC00 CChrCore::ArtsOptStopEffectAll()
-            virtual void UnkC04(); // 0xC04 CChrCore::ArtsOptEraseEffectAll()
-            virtual void UnkC08(); // 0xC08 CChrCore::ArtsOptCreate(long, long, long, long)
-            virtual void UnkC0C(); // 0xC0C CChrCore::Util_DropCoin(float, long, long)
-            virtual void UnkC10(); // 0xC10 CChrCore::CheckCountWork__()
-            virtual void UnkC14(); // 0xC14 CChrCore::CheckWater_(int)
-            virtual void UnkC18(); // 0xC18 CChrCore::CalcMoveSpeedRate_(float, long)
-            virtual void UnkC1C(); // 0xC1C CChrCore::Util_SetEffect(msw::CChrCore::SET_EFFECT_TYPE)
-            virtual void UnkC20(); // 0xC20 CChrCore::Util_AttachEffect(msw::CChrCore::ATTACH_EFFECT_TYPE, long)
-            virtual void UnkC24(); // 0xC24 CChrCore::Util_DetachEffectAll()
-            virtual void UnkC28(); // 0xC28 CChrCore::Util_DetachEffect(msw::CChrCore::ATTACH_EFFECT_TYPE)
-            virtual void UnkC2C(); // 0xC2C CChrCore::Util_DetachEffect_(unsigned long&)
-            virtual void UnkC30(); // 0xC30 CChrCore::Util_EraseEffectAll()
-            virtual void UnkC34(); // 0xC34 CChrCore::Util_EraseEffect(msw::CChrCore::ATTACH_EFFECT_TYPE)
-            virtual void UnkC38(); // 0xC38 CChrCore::Util_EraseEffect_(unsigned long&)
-            virtual void UnkC3C(); // 0xC3C CChrCore::CallbackDropCoinPickup_(const msw::CDropCoin*)
-            virtual void UnkC40(); // 0xC40 CChrCore::CallbackItemPickup_(const msw::CItem*)
-            virtual void UnkC44(); // 0xC44 CChrCoreBasket::CallbackMotTrg_(const bcs::CAnmObjMotBase::MOT_TRG*)
-            virtual void UnkC48(); // 0xC48 CChrCore::CallbackDribbleTap_()
-            virtual void UnkC4C(); // 0xC4C CChrCoreBasket::CallbackBodyDamage_(const msw::CCollAtkUnit*, const bcs::FVEC3&)
-            virtual void UnkC50(); // 0xC50 CChrCoreBasket::CallbackBallDamage_(msw::CBall*, const msw::CCollAtkUnit*, const bcs::FVEC3&)
-            virtual void UnkC54(); // 0xC54 CChrCoreBasket::CallbackBodyPush_(msw::CCollBodyUnit*, msw::CCollBodyUnit*, bcs::FVEC3*)
-            virtual void UnkC58(); // 0xC58 CChrCoreBasket::CallbackBallCatch_(msw::CBall*)
-            virtual void UnkC5C(); // 0xC5C CChrCoreBasket::CallbackAttackHit_(const msw::CCollAtkUnit*, const msw::CCollBodyUnit*, const bcs::FVEC3&, unsigned long)
-            virtual void UnkC60(); // 0xC60 CChrCoreBasket::CallbackBallSnatched_(msw::CBall*)
-            virtual void UnkC64(); // 0xC64 CChrCore::CallbackDefReflectHit_(const msw::CCollDefUnit*, const msw::CBall*, bcs::FVEC3&, bcs::FVEC3&)
-            virtual void UnkC68(); // 0xC68 CChrCore::CallbackDefObstructHit_(const msw::CCollDefUnit*, const msw::CBall*, bcs::FVEC3&, bcs::FVEC3&)
-            virtual void UnkC6C(); // 0xC6C CChrCoreBasket::CallbackDefReflectHit_(const msw::CCollDefUnit*, const msw::CBall*, const bcs::FVEC3&)
-            virtual void UnkC70(); // 0xC70 CChrCoreBasket::CallbackMotTrg_SeFoot_(long, long)
-            virtual void UnkC74(); // 0xC74 CChrCore::CallbackMotTrg_SeLand_(long, long)
-            virtual void UnkC78(); // 0xC78 CChrCore::CallbackMotTrg_SeJump_(long, long)
-            virtual void UnkC7C(); // 0xC7C CChrCore::CallbackMotTrg_BodyVisible_(long, long)
-            virtual void UnkC80(); // 0xC80 CChrCore::CallbackMotTrg_AtkOn_(long, long)
-            virtual void UnkC84(); // 0xC84 CChrCore::CallbackMotTrg_AtkOff_(long, long)
-            virtual void UnkC88(); // 0xC88 CChrCore::SubStateDamageCtorMame_(msw::CChrCore::STATE_WORK_DAMAGE*)
-            virtual void UnkC8C(); // 0xC8C CChrCore::SubStateDamageLoopMame_(msw::CChrCore::STATE_WORK_DAMAGE*)
-            virtual void UnkC90(); // 0xC90 CChrCore::SubStateParalyzeStateSet_(unsigned long, float)
-            virtual void UnkC94(); // 0xC94 CChrCoreBasket::SubStateParalyzeSetEffect_()
-            virtual void UnkC98(); // 0xC98 CChrCoreBasket::SubStateParalyzeEndEffect_()
-            virtual void UnkC9C(); // 0xC9C CChrCoreBasket::GetCcParam_() const
-            virtual void UnkCA0(); // 0xCA0 CChrCoreBasket::NewCcParam2_(long) const
-            virtual void UnkCA4(); // 0xCA4 CChrCoreBasket::GetCcParam2_() const
-            virtual void UnkCA8(); // 0xCA8 CChrCoreBasket::GetSpSetBackPos(bcs::FVEC3&) const
-            virtual void UnkCAC(); // 0xCAC CChrCoreBasket::UpDateCollBody3_()
-            virtual void UnkCB0(); // 0xCB0 CChrCoreBasket::UpdateCollAtk_()
-            virtual void UnkCB4(); // 0xCB4 CChrCoreBasket::SubStateArtsShotStartTrick_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkCB8(); // 0xCB8 CChrCoreBasket::SubStateArtsShotSetTrickFrameParam_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*, long)
-            virtual void UnkCBC(); // 0xCBC CChrCoreBasket::SubStateArtsShotSetTrickJumpParam_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*, long)
-            virtual void UnkCC0(); // 0xCC0 CChrCoreBasket::SubStateArtsShotSetTrickMoveParam_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*, long)
-            virtual void UnkCC4(); // 0xCC4 CChrCoreBasket::SubStateArtsShotGetTrickMotFrame_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*, long)
-            virtual void UnkCC8(); // 0xCC8 CChrCoreBasket::SubStateArtsShotGetTrickDoFrame_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*, long)
-            virtual void UnkCCC(); // 0xCCC CChrCoreBasket::SubStateArtsShotGetTrickRotFrame_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkCD0(); // 0xCD0 CChrCoreBasket::SubStateArtsShotIsReadyArtsShot_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkCD4(); // 0xCD4 CChrCoreBasket::SubStateArtsShotIsStartArtsShot_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkCD8(); // 0xCD8 CChrCoreBasket::SubStateArtsShotCalcRotParam_(msw::CChrCore::ROT_LERP1&, float, float)
-            virtual void UnkCDC(); // 0xCDC CChrCoreBasket::SubStateArtsShotClearMoveParamWork_(msw::CC_DATA::CHR_PARAM::MOVE_PARAM&)
-            virtual void UnkCE0(); // 0xCE0 CChrCoreBasket::SubStateArtsShotDoJumpMove_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkCE4(); // 0xCE4 CChrCoreBasket::SubStateArtsShotFireBullet_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*, long)
-            virtual void UnkCE8(); // 0xCE8 CChrCoreBasket::SubStateArtsShotPlayTrickMotion_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkCEC(); // 0xCEC CChrCoreBasket::SubStateArtsShotReadyArtsShot_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkCF0(); // 0xCF0 CChrCoreBasket::SubStateArtsShotPlayLoopMotion_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkCF4(); // 0xCF4 CChrCoreBasket::SubStateArtsShotStartArtsShot_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkCF8(); // 0xCF8 CChrCoreBasket::SubStateArtsShotPlayArtsShotMotion_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkCFC(); // 0xCFC CChrCoreBasket::SubStateArtsShotAskTargetMarkerMove_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkD00(); // 0xD00 CChrCoreBasket::SubStateArtsShotIsEndArtsShot_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkD04(); // 0xD04 CChrCoreBasket::SubStateArtsShotShootBall_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkD08(); // 0xD08 CChrCoreBasket::SubStateArtsShotStartArtsHitback_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkD0C(); // 0xD0C CChrCoreBasket::SubStateArtsShotIsEndArtsShotAfter_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkD10(); // 0xD10 CChrCoreBasket::SubStateArtsShotDoLandStart_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkD14(); // 0xD14 CChrCoreBasket::SubStateArtsShotPlayLandMotion_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkD18(); // 0xD18 CChrCoreBasket::SubStateArtsShotPlayLandEffect_(msw::CChrCoreBasket::STATE_WORK_AIR_TRICK*)
-            virtual void UnkD1C(); // 0xD1C CChrCoreBasket::CanbePassSign()
-            virtual void UnkD20(); // 0xD20 CChrCoreBasket::MethdPassSign()
-            virtual void UnkD24(); // 0xD24 CChrCoreBasket::CallbackBodyPush3_(msw::CCollBodyUnit*, msw::CCollBodyUnit*, bcs::FVEC3*)
-            virtual void UnkD28(); // 0xD28 CChrCoreBasket::StartDunkBattle(msw::CChrCore*)
-            virtual void UnkD2C(); // 0xD2C CChrCoreBasket::EndDunkBattle()
-            virtual void UnkD30(); // 0xD30 CChrCoreBasket::CheckDunkBattle()
-            virtual void UnkD34(); // 0xD34 CChrCoreBasket::GetColBodyRadius() const
-            virtual void UnkD38(); // 0xD38 CChrCoreBasket::GetPush1Radius() const
-            virtual void UnkD3C(); // 0xD3C CChrCoreBasket::ResultAirTrickBattle(int)
-            virtual void UnkD40(); // 0xD40 CChrCoreBasket::IsDunkBattle()
-            virtual void UnkD44(); // 0xD44 CChrCoreBasket::GetArtsShootType() const
-            virtual void UnkD48(); // 0xD48 CChrCoreBasket::GetArtsFuturePos(float&, float&)
+            virtual float GetArtsEventRot();                           // 0xA88
+            virtual void DoPlayArtsEvent();                            // 0xA8C
+            virtual int CanbeCombination() const;                      // 0xB5C
+            virtual int MethdCombination();                            // 0xB60
+            virtual int CanbeLanding() const;                          // 0xB64
+            virtual int CanbeFall() const;                             // 0xB68
+            virtual int MethdFall();                                   // 0xB6C
+            virtual int CanbeRebirth() const;                          // 0xB70
+            virtual int MethdRebirth();                                // 0xB74
+            virtual void CallbackMotTrg_(const bcs::CAnmObjMotBase::MOT_TRG *); // 0xC44
+            virtual void CallbackBodyDamage_(const CCollAtkUnit *, const bcs::FVEC3 &); // 0xC4C
+            virtual int CallbackBallDamage_(CBall *, const CCollAtkUnit *, const bcs::FVEC3 &); // 0xC50
+            virtual void CallbackBodyPush_(CCollBodyUnit *, CCollBodyUnit *, bcs::FVEC3 *); // 0xC54
+            virtual void CallbackBallCatch_(CBall *);                  // 0xC58
+            virtual void CallbackAttackHit_(const CCollAtkUnit *, const CCollBodyUnit *, const bcs::FVEC3 &, unsigned long); // 0xC5C
+            virtual void CallbackBallSnatched_(CBall *);               // 0xC60
+            virtual int CallbackDefReflectHit_(const CCollDefUnit *, const CBall *, const bcs::FVEC3 &); // 0xC6C
+            virtual void CallbackMotTrg_SeFoot_(long, long);           // 0xC70
+            virtual void SubStateParalyzeSetEffect_();                 // 0xC94
+            virtual void SubStateParalyzeEndEffect_();                 // 0xC98
+
+            // CChrCoreBasket's own virtuals, 0xC9C to 0xD4C (return types
+            // guessed: "int" for a word, "float" for f1, "void *" for a
+            // pointer to a type not mapped yet).
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual void *GetCcParam2_() const;                        // 0xCA4
+            virtual void GetSpSetBackPos(bcs::FVEC3 &) const;          // 0xCA8
+            virtual void UpDateCollBody3_();                           // 0xCAC
+            virtual void UpdateCollAtk_();                             // 0xCB0
+            virtual void SubStateArtsShotStartTrick_(STATE_WORK_AIR_TRICK *); // 0xCB4
+            virtual void SubStateArtsShotSetTrickFrameParam_(STATE_WORK_AIR_TRICK *, long); // 0xCB8
+            virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK *, long); // 0xCBC
+            virtual void SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRICK *, long); // 0xCC0
+            virtual float SubStateArtsShotGetTrickMotFrame_(STATE_WORK_AIR_TRICK *, long); // 0xCC4
+            virtual float SubStateArtsShotGetTrickDoFrame_(STATE_WORK_AIR_TRICK *, long); // 0xCC8
+            virtual float SubStateArtsShotGetTrickRotFrame_(STATE_WORK_AIR_TRICK *); // 0xCCC
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual int SubStateArtsShotIsStartArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCD4
+            virtual void SubStateArtsShotCalcRotParam_(CChrCore::ROT_LERP1 &, float, float); // 0xCD8
+            virtual void SubStateArtsShotClearMoveParamWork_(CC_DATA::CHR_PARAM::MOVE_PARAM &); // 0xCDC
+            virtual void SubStateArtsShotDoJumpMove_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xCE4
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCE8
+            virtual void SubStateArtsShotReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCEC
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xCF0
+            virtual void SubStateArtsShotStartArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCF4
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCF8
+            virtual void SubStateArtsShotAskTargetMarkerMove_(STATE_WORK_AIR_TRICK *); // 0xCFC
+            virtual int SubStateArtsShotIsEndArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD00
+            virtual void SubStateArtsShotShootBall_(STATE_WORK_AIR_TRICK *); // 0xD04
+            virtual void SubStateArtsShotStartArtsHitback_(STATE_WORK_AIR_TRICK *); // 0xD08
+            virtual int SubStateArtsShotIsEndArtsShotAfter_(STATE_WORK_AIR_TRICK *); // 0xD0C
+            virtual void SubStateArtsShotDoLandStart_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual void SubStateArtsShotPlayLandMotion_(STATE_WORK_AIR_TRICK *); // 0xD14
+            virtual void SubStateArtsShotPlayLandEffect_(STATE_WORK_AIR_TRICK *); // 0xD18
+            virtual int CanbePassSign();                               // 0xD1C
+            virtual int MethdPassSign();                               // 0xD20
+            virtual void CallbackBodyPush3_(CCollBodyUnit *, CCollBodyUnit *, bcs::FVEC3 *); // 0xD24
+            virtual void StartDunkBattle(CChrCore *);                  // 0xD28
+            virtual void EndDunkBattle();                              // 0xD2C
+            virtual int CheckDunkBattle();                             // 0xD30
+            virtual float GetColBodyRadius() const;                    // 0xD34
+            virtual float GetPush1Radius() const;                      // 0xD38
+            virtual void ResultAirTrickBattle(int);                    // 0xD3C
+            virtual int IsDunkBattle();                                // 0xD40
+            virtual int GetArtsShootType() const;                      // 0xD44
+            virtual void GetArtsFuturePos(float &, float &);           // 0xD48
             // Added for BasketF game/basket/CNpcGhostBasketBase.cpp (return
             // type guessed): where the character will be after fFrame frames.
             virtual void GetFuturePos(bcs::FVEC3 &rPos, float fFrame); // 0xD4C
@@ -289,6 +366,56 @@ namespace msw {
             // followed by an aerial pass (CChrDrvPadBasket::MethdPass).
             unsigned char m_Unk574[0x57C - 0x574];
             unsigned long m_nBasketFlag;
+            // Not mapped yet.
+            unsigned char m_Unk580[0x5E8 - 0x580];
+    };
+
+    // (field names guessed; only what the character units read is mapped)
+    struct CChrCoreBasket::STATE_WORK_AIR_TRICK {
+        unsigned char m_Unk00[0x8];
+        unsigned long m_nFlag;         // 0x08, bit 9 set while Luigi's vacuum pulls
+        unsigned char m_Unk0C[0x28 - 0xC];
+        float m_fRotY;                 // 0x28, the yaw the trick turns to
+        unsigned char m_Unk2C[0x7C - 0x2C];
+        CChrCore::ROT_LERP1 m_RotLerp; // 0x7C, the turn (SubStateArtsShotCalcRotParam_)
+        unsigned char m_Unk8C[0xA0 - 0x8C];
+        long m_nUnkA0;                 // 0xA0, (meaning not known) below 1 the shot motion stops twice
+        unsigned char m_UnkA4[0x4];
+        long m_nUnkA8;                 // 0xA8, Luigi sets 40
+        unsigned char m_UnkAC[0x4];
+        // 0xB0: the yaw the shot aims at; negative for straight at the goal
+        // (Luigi's target marker sets it).
+        float m_fTargetRotY;
+    };
+
+    // Luigi: his special shot pulls the other team in with his vacuum
+    // (CC_CMN::LUIGI::CcOvacuumForce). Allocated with 0x5F4 bytes.
+    class CChrCoreBasketLuigi : public CChrCoreBasket {
+        public:
+            CChrCoreBasketLuigi();
+            virtual ~CChrCoreBasketLuigi();
+            virtual int MoveTargetMarkerPos(float fRotY);              // 0x5C
+            virtual void Reset_();                                     // 0x384
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void LoopStateAirTrick();                          // 0x588
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void CtorStateJumpBlock();                         // 0x5F0
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCE8
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xCF0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCF8
+            virtual void SubStateArtsShotPlayLandMotion_(STATE_WORK_AIR_TRICK *); // 0xD14
+            virtual void SubStateArtsShotPlayLandEffect_(STATE_WORK_AIR_TRICK *); // 0xD18
+
+        protected:
+            // (inline helper, name guessed) Deletes the vacuum task, if any.
+            void DeleteVacuum_();
+
+            // (names guessed)
+            unsigned long m_nUnk5E8;   // 0x5E8, cleared by the constructor only
+            int m_bVacuum;             // 0x5EC, the vacuum pulls
+            unsigned long m_hVacuum;   // 0x5F0, task id of the vacuum, 0 for none
     };
 }
 

@@ -59,6 +59,7 @@ namespace msw {
     void CCockpitWindowInfo::InfoParameterInitialize(CCockpitLayoutBase *pOwner, const short *pPaneId,
                                                      CMenuPaneAccessor *pPaneAccessor, int nArg)
     {
+        unsigned short nLen;
         if (pPaneId == 0 || pPaneAccessor == 0) {
             return;
         }
@@ -70,7 +71,7 @@ namespace msw {
                 if (pPane != 0) {
                     bcs::G2D::CTextBoxDL *pTextBox = nw4r::ut::DynamicCast<bcs::G2D::CTextBoxDL *>(pPane);
                     if (pTextBox != 0) {
-                        unsigned short nLen = m_pInfo[i].m_nTextLen;
+                        nLen = m_pInfo[i].m_nTextLen;
                         pTextBox->AllocStringBuffer(nLen);
                         pTextBox->SetString(m_pInfo[i].m_aText, 0, nLen);
                     }

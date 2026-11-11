@@ -89,7 +89,7 @@ namespace msw {
                 void CheckButtonAnim();
                 void SetTextPaneString(long nPane, const wchar_t *pText);
                 void SetTextPaneString(long nPane, long nValue);
-                nw4r::lyt::Pane *DuplicateDigitPane(const char *pSrcName, const char *pName, const char *pLayoutName);
+                nw4r::lyt::Pane *DuplicateDigitPane(long nDigit, const char *pName, const char *pLayoutName);
                 bcs::G2D::CLineStripDL *AppendLineStrip(const char *pName);
 
                 // CSelectMenu's steps read the delete button's state.

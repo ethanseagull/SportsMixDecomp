@@ -26,6 +26,10 @@ namespace msw {
             CStageHockeyCrushSkate(bcs::CTask *pParent);
             virtual ~CStageHockeyCrushSkate();
 
+            // Declared in this order because the weak copies are emitted in
+            // reverse declaration order (original: GetFloorFlow,
+            // GetFloorAttribute, GetWorldRotZ).
+            virtual float GetWorldRotZ() const { return GetWorldRotZ__(); }
             virtual long GetFloorAttribute(const bcs::FVEC3 &rPos, FLOW_TYPE type) const
             {
                 return GetFloorAttribute__(rPos);
@@ -34,7 +38,6 @@ namespace msw {
             {
                 GetFloorFlow__(rFlow, rPos, type);
             }
-            virtual float GetWorldRotZ() const { return GetWorldRotZ__(); }
             virtual void Main_(float frame);
             virtual const STAGE::MDL_GEN_RULE *GetMdlGenRule_() const;
             virtual float GetBaseCourtWidth_() const;

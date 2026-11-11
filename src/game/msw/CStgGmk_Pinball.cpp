@@ -112,19 +112,22 @@ namespace {
         float guideRight = right - width;
         float guideFront = front - depth;
         float guideBack = back + depth;
+        // The goal lines and the side walls keep the whole speed.
+        float noDecay = 0.0f;
         float decay = pAct->GetParam_GuideDecay();
 
-        s_Wall[0] = WALL(WALL_GOAL_LEFT, bcs::FVEC3(left, 0.0f, end), bcs::FVEC3(left, 0.0f, -end), 0.0f);
-        s_Wall[1] = WALL(WALL_GOAL_RIGHT, bcs::FVEC3(right, 0.0f, -end), bcs::FVEC3(right, 0.0f, end), 0.0f);
-        s_Wall[2] = WALL(WALL_GUIDE, bcs::FVEC3(left, 0.0f, front), bcs::FVEC3(guideLeft, 0.0f, guideFront), decay);
-        s_Wall[3] = WALL(WALL_GUIDE, bcs::FVEC3(guideRight, 0.0f, guideFront), bcs::FVEC3(right, 0.0f, front), decay);
-        s_Wall[4] = WALL(WALL_GUIDE, bcs::FVEC3(guideLeft, 0.0f, guideBack), bcs::FVEC3(left, 0.0f, back), decay);
-        s_Wall[5] = WALL(WALL_GUIDE, bcs::FVEC3(right, 0.0f, back), bcs::FVEC3(guideRight, 0.0f, guideBack), decay);
-        s_Wall[6] = WALL(WALL_SIDE, bcs::FVEC3(guideLeft, 0.0f, guideFront), bcs::FVEC3(guideLeft, 0.0f, -end), 0.0f);
-        s_Wall[7] = WALL(WALL_SIDE, bcs::FVEC3(guideRight, 0.0f, -end), bcs::FVEC3(guideRight, 0.0f, guideFront), 0.0f);
-        s_Wall[8] = WALL(WALL_SIDE, bcs::FVEC3(guideLeft, 0.0f, end), bcs::FVEC3(guideLeft, 0.0f, guideBack), 0.0f);
-        s_Wall[9] = WALL(WALL_SIDE, bcs::FVEC3(guideRight, 0.0f, guideBack), bcs::FVEC3(guideRight, 0.0f, end), 0.0f);
-        s_Wall[10] = WALL();
+        WALL *pWall = s_Wall;
+        *pWall++ = WALL(WALL_GOAL_LEFT, bcs::FVEC3(left, 0.0f, end), bcs::FVEC3(left, 0.0f, -end), noDecay);
+        *pWall++ = WALL(WALL_GOAL_RIGHT, bcs::FVEC3(right, 0.0f, -end), bcs::FVEC3(right, 0.0f, end), noDecay);
+        *pWall++ = WALL(WALL_GUIDE, bcs::FVEC3(left, 0.0f, front), bcs::FVEC3(guideLeft, 0.0f, guideFront), decay);
+        *pWall++ = WALL(WALL_GUIDE, bcs::FVEC3(guideRight, 0.0f, guideFront), bcs::FVEC3(right, 0.0f, front), decay);
+        *pWall++ = WALL(WALL_GUIDE, bcs::FVEC3(guideLeft, 0.0f, guideBack), bcs::FVEC3(left, 0.0f, back), decay);
+        *pWall++ = WALL(WALL_GUIDE, bcs::FVEC3(right, 0.0f, back), bcs::FVEC3(guideRight, 0.0f, guideBack), decay);
+        *pWall++ = WALL(WALL_SIDE, bcs::FVEC3(guideLeft, 0.0f, guideFront), bcs::FVEC3(guideLeft, 0.0f, -end), noDecay);
+        *pWall++ = WALL(WALL_SIDE, bcs::FVEC3(guideRight, 0.0f, -end), bcs::FVEC3(guideRight, 0.0f, guideFront), noDecay);
+        *pWall++ = WALL(WALL_SIDE, bcs::FVEC3(guideLeft, 0.0f, end), bcs::FVEC3(guideLeft, 0.0f, guideBack), noDecay);
+        *pWall++ = WALL(WALL_SIDE, bcs::FVEC3(guideRight, 0.0f, guideBack), bcs::FVEC3(guideRight, 0.0f, end), noDecay);
+        *pWall = WALL();
     }
 
     // The rows of the rotation part of rMtx made unit length.
@@ -313,22 +316,23 @@ namespace msw {
                 bcs::FMTX34 nodeMtx;
                 m_pAttachObj->GetNodeWorldMtx(m_nAttachNode, nodeMtx);
                 NormalizeRows(nodeMtx);
-                bcs::FVEC3 zero(0.0f, 0.0f, 0.0f);
                 bcs::FVEC3 pos;
+                bcs::FVEC3 zero(0.0f, 0.0f, 0.0f);
                 PSMTXMultVec(nodeMtx.m, reinterpret_cast<const Vec *>(&zero), reinterpret_cast<Vec *>(&pos));
                 mtx.m[0][3] = pos.x;
                 mtx.m[1][3] = pos.y - radius;
                 mtx.m[2][3] = pos.z;
             }
         } else {
-            bcs::FVEC3 pos(mtx.m[0][3], mtx.m[1][3], mtx.m[2][3]);
             bcs::FVEC3 prevPos(prev.m[0][3], prev.m[1][3], prev.m[2][3]);
+            bcs::FVEC3 pos(mtx.m[0][3], mtx.m[1][3], mtx.m[2][3]);
             bcs::FVEC3 move;
             bcs::FVEC3Sub(&move, &pos, &prevPos);
             move.y = 0.0f;
             bcs::FVEC3 dir;
             bcs::BCS_Vec_Normalize(dir, move);
-            Roll(dir, GetRadius(), bcs::FVEC3Len(&move));
+            float radius = GetRadius();
+            Roll(dir, radius, bcs::FVEC3Len(&move));
         }
         CStgMdl::SetMtx(mtx);
     }
@@ -843,17 +847,21 @@ namespace msw {
                     switch (pWall->nType) {
                         case WALL_GOAL_LEFT:
                             side = pos.z < 0.0f ? 0 : 2;
-                            SE_PlayByParam(1);
-                            CGame::SendMessage(0x25, 3, side, 0);
                             break;
                         case WALL_GOAL_RIGHT:
                             side = pos.z < 0.0f ? 1 : 3;
-                            SE_PlayByParam(1);
-                            CGame::SendMessage(0x25, 3, side, 0);
                             break;
                         default:
-                            SE_PlayByParam(0);
+                            side = -1; // an ordinary wall
                             break;
+                    }
+                    if (side >= 0) {
+                        // A goal line: the ball has scored.
+                        SE_PlayByParam(1);
+                        CGame::SendMessage(0x25, 3, side, 0);
+                    } else {
+                        // An ordinary wall: just the bounce sound.
+                        SE_PlayByParam(0);
                     }
                     break;
                 }
@@ -1136,15 +1144,18 @@ namespace msw {
         CStgSrt *pSrt = GetSrt();
         bcs::FVEC3 prev = pSrt->GetPos();
         m_fGrowTime += rate;
-        m_fGrowTime = m_fGrowTimeMax < m_fGrowTime ? m_fGrowTimeMax : m_fGrowTime;
+        float grow = m_fGrowTime;
+        if (m_fGrowTimeMax < grow) {
+            grow = m_fGrowTimeMax;
+        }
+        m_fGrowTime = grow;
         float limit = GetParam_VelLimit();
-        bcs::FVEC3 velMax(limit, limit, limit);
-        pSrt->SetVelLimit(velMax);
+        pSrt->SetVelLimit(bcs::FVEC3(limit, limit, limit));
 
         float speed = GetParam_Speed();
         GetParam_Dec();
-        bcs::FVEC3 vel = pSrt->GetVel();
-        if (bcs::FVEC3Len(&vel) > speed) {
+        bcs::FVEC3 curVel = pSrt->GetVel();
+        if (bcs::FVEC3Len(&curVel) > speed) {
             pSrt->SetDec(GetParam_Dec());
         } else {
             pSrt->SetDec(0.0f);
@@ -1158,7 +1169,11 @@ namespace msw {
         pSrt->Update(rate);
 
         bcs::FVEC3 pos = pSrt->GetPos();
-        vel = pSrt->GetVel();
+        // The distance moved this frame. Unused; the original computes it
+        // too (perhaps for stripped debug code).
+        bcs::FVEC3 move;
+        bcs::FVEC3 vel = pSrt->GetVel();
+        bcs::FVEC3Sub(&move, &pos, &prev);
         if (WallHitCheck(&pos, &vel, prev, pos, vel)) {
             m_bAlive = 0;
             SE_PlayByParam(3);
@@ -1692,18 +1707,18 @@ namespace msw {
     // The entrance event: the launcher takes the ball up, at 210 degrees.
     void CPinballMecha::StartEvent(CStgGmk_Pinball *pGmk)
     {
-        float angle = 3.6651917f;
         m_nState = STATE_EVENT;
         m_nStep = 0;
         m_pGmk = pGmk;
-        m_fAngle = NormalizeAngle(angle);
+        m_fAngle = NormalizeAngle(3.6651917f);
         if (IsValid()) {
             CStageNodeAnm *pAnm = m_pNode->GetAnm();
             pAnm->Play(7, 0, 1.0f, 0.0f, 0.0f, 1);
             pAnm->Play(1, 0, 1.0f, 0.0f, 0.0f, 2);
             pGmk->Standby();
             bcs::CScnObj *pObj = m_pNode->GetObj();
-            static_cast<CStgGmk_Pinball_Mdl *>(pGmk->GetMdl(0))->SetAttach(pObj, m_nExitNode);
+            CStgGmk_Pinball_Mdl *pMdl = static_cast<CStgGmk_Pinball_Mdl *>(pGmk->GetMdl(0));
+            pMdl->SetAttach(pObj, m_nExitNode);
             bcs::FVEC3 pos = m_pNode->GetObj()->m_vTrans;
             SE_PlayPos(0, 0xD6F, pos, 0.0f, 0);
             AddQuake(250.0f);
@@ -1719,24 +1734,26 @@ namespace msw {
         m_nStep = 0;
         m_pGmk = pGmk;
         m_fAngle = angle;
-        if (IsValid() && pGmk != 0) {
-            CStageNodeAnm *pAnm = m_pNode->GetAnm();
-            if (m_nState == STATE_SHOOT_LEFT) {
-                pAnm->Play(3, 0, 1.0f, 0.0f, 0.0f, 1);
-                AddQuake(150.0f);
-                AddQuake(165.0f);
-            } else {
-                pAnm->Play(5, 0, 1.0f, 0.0f, 0.0f, 1);
-                AddQuake(150.0f);
-                AddQuake(165.0f);
-            }
-            pAnm->Play(1, 0, 1.0f, 0.0f, 0.0f, 2);
-            pGmk->Standby();
-            bcs::CScnObj *pObj = m_pNode->GetObj();
-            static_cast<CStgGmk_Pinball_Mdl *>(pGmk->GetMdl(0))->SetAttach(pObj, m_nExitNode);
-            bcs::FVEC3 pos = m_pNode->GetObj()->m_vTrans;
-            SE_PlayPos(0, 0xD70, pos, 0.0f, 0);
+        if (!IsValid() || pGmk == 0) {
+            return;
         }
+        CStageNodeAnm *pAnm = m_pNode->GetAnm();
+        if (m_nState == STATE_SHOOT_LEFT) {
+            pAnm->Play(3, 0, 1.0f, 0.0f, 0.0f, 1);
+            AddQuake(150.0f);
+            AddQuake(165.0f);
+        } else {
+            pAnm->Play(5, 0, 1.0f, 0.0f, 0.0f, 1);
+            AddQuake(150.0f);
+            AddQuake(165.0f);
+        }
+        pAnm->Play(1, 0, 1.0f, 0.0f, 0.0f, 2);
+        pGmk->Standby();
+        bcs::CScnObj *pObj = m_pNode->GetObj();
+        CStgGmk_Pinball_Mdl *pMdl = static_cast<CStgGmk_Pinball_Mdl *>(pGmk->GetMdl(0));
+        pMdl->SetAttach(pObj, m_nExitNode);
+        bcs::FVEC3 pos = m_pNode->GetObj()->m_vTrans;
+        SE_PlayPos(0, 0xD70, pos, 0.0f, 0);
     }
 
     // Idling: after a few loops of animation 1 it fidgets once (2).

@@ -101,6 +101,9 @@ namespace msw {
             void SetCatchDisable(long index);
             // (added for HockeyF's CStgGmk_FirePillar_Hockey_Act; DOL)
             int IsEnable(long index) const;
+            // (added for game/msw/CC_CMN/LUIGI/CcOvacuumForce.cpp; DOL)
+            void SetSizeAll(const bcs::FVEC3 &rSize);
+            void SetYRotAll(float fRotY);
 
         private:
             unsigned long m_Unk00[3];

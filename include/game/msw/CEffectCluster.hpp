@@ -35,6 +35,9 @@ namespace msw {
             // (DOL; added for VolleyF game/volley/CChrCoreVolleyKinopio.cpp)
             // Moves the cluster in the draw order by fOffset.
             void SetZSortOffset(float fOffset);
+            // (DOL; added for game/msw/CCockpitModelTelop.cpp; return type
+            // guessed) Nonzero while the cluster still plays.
+            int IsValid();
 
             // (name guessed; the DOL's fn_801233FC) Called with 1 on a
             // cluster just attached to a layout pane object. Calls a member

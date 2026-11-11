@@ -443,7 +443,7 @@ game/msw/CTrophyObj.cpp:
 	.text       start:0x8019BEF0 end:0x8019CAE0
 
 game/msw/CCockpitModelTelop.cpp:
-	.text       start:0x8019CC80 end:0x8019D0FC
+	.text       start:0x8019CC80 end:0x8019D1E4
 
 game/msw/CCockpitModelTelopHold.cpp:
 	.text       start:0x8019D1E4 end:0x8019DAB0
@@ -523,7 +523,7 @@ game/msw/CC_CMN/CChrParasite.cpp:
 	.text       start:0x801C568C end:0x801C574C
 
 game/msw/CC_CMN/LUIGI/CcOvacuumForce.cpp:
-	.text       start:0x801C5880 end:0x801C5CF8
+	.text       start:0x801C5880 end:0x801C6148
 
 game/msw/CC_CMN/DONKEY/CcEarthQuake.cpp:
 	.text       start:0x801C7244 end:0x801C73A8

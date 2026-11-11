@@ -26,6 +26,28 @@ namespace bcs {
                 // (DOL; parameter name guessed) MenuF msw::SelectMenu::
                 // CCourtChr calls it through a member pointer with 4 frames.
                 void SetDelayTime(float fTime);
+                // (name guessed; the DOL's fn_8001F120) Stores fRate at
+                // 0x15C and passes it to SetRate of the animation objects at
+                // 0x48-0x58. msw::CCockpitModelTelop::SendEvent calls it
+                // through a member pointer.
+                void SetAnmRate(float fRate);
+
+                // (name guessed; the DOL's fn_80123490, a weak inline: its
+                // address is taken by msw::CEffectCluster's fn_801233FC and
+                // by msw::CCockpitModelTelop) Sets bit 0x100000 of the flags
+                // at 0xA4 for 1, clears it otherwise.
+                void Set2DFlag(int b2D)
+                {
+                    if (b2D == 1) {
+                        m_nFlags |= 0x100000;
+                    } else {
+                        m_nFlags &= ~0x100000;
+                    }
+                }
+
+            private:
+                unsigned char m_Unk00[0xA4];
+                unsigned long m_nFlags; // 0xA4 (bits used by SetAttachStatus too)
         };
     }
 }

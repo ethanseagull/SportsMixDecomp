@@ -1193,6 +1193,9 @@ namespace msw {
             void SE_PlayWrapAct(long nSe, unsigned long, long);
             // Knocks the character back (flags nFlag) towards fRotY.
             void SetHookDamage(unsigned long nFlag, float fRotY, float, float, long, float, long, long, long, long);
+            // (added for game/msw/CC_CMN/LUIGI/CcOvacuumForce.cpp; DOL,
+            // meaning guessed) Pulls the character along rDir at fSpeed.
+            void SetForceVel(const bcs::FVEC3 &rDir, float fSpeed);
             // A model and an animation file of the character's extra
             // model (Toad's mushrooms, the slime's squad); invalid when there is none.
             nw4r::g3d::ResFile GetChrOptResFile();

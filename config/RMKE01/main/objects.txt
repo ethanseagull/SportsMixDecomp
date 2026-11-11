@@ -62,4 +62,6 @@ Equivalent game/msw/CStage10Base/CTelopDispBase.cpp
 Matching game/msw/CCokcpitMenuDataList.cpp
 Equivalent game/msw/CCockpitWindowInfo.cpp
 Equivalent game/msw/CCockpitButtonInfo.cpp
-NonMatching game/msw/CStgGmk_Pinball.cpp
+Equivalent game/msw/CStgGmk_Pinball.cpp
+Equivalent game/msw/CC_CMN/LUIGI/CcOvacuumForce.cpp
+Equivalent game/msw/CCockpitModelTelop.cpp

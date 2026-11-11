@@ -45,6 +45,10 @@ namespace msw {
             virtual void InitMenuPadParameter(unsigned char);
             virtual void EndMenuPadParameter(long);
 
+            // (added for BasketF game/basket/CCockpitBasket.cpp; return type
+            // guessed) Whether the menu has gone out.
+            int IsMenuOut();
+
         protected:
             unsigned long m_Unk84; // 0x84, not set by the constructor
             unsigned long m_Unk88; // 0x88

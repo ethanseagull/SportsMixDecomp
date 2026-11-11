@@ -11,6 +11,11 @@ namespace msw {
         // index into a two-entry label table). What the other two
         // arguments select is not known; the score boards pass 0 and 1.
         long GetTotalScoreUnitIndex(long nScore, long nArg0, long nArg1);
+        // Added for BasketF game/basket/CCockpitBasket.cpp: the title of the
+        // result screen and of the score board, written to pBuf (nLen
+        // characters); both return pBuf (guess).
+        const wchar_t *GetResultTitleString(wchar_t *pBuf, long nLen);
+        const wchar_t *GetScoreBoardTitleString(wchar_t *pBuf, long nLen);
     }
 }
 

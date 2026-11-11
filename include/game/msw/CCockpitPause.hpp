@@ -85,6 +85,9 @@ namespace msw {
 
             // Id of the live pause task in the task manager.
             static unsigned long s_TaskHandle;
+            // (added for BasketF game/basket/CCockpitBasket.cpp; return type
+            // guessed) Removes the pause task, if there is one.
+            static void Remove();
 
         protected:
             union {

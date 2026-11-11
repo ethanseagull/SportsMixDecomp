@@ -48,6 +48,9 @@ namespace bcs {
                 // The g3d file `pName` of the loaded archives (a null handle
                 // when there is none).
                 nw4r::g3d::ResFile GetG3DResFile(const char *pName);
+                // The g3d file holding the model `pName` (a null handle when
+                // there is none).
+                nw4r::g3d::ResFile GetG3DResFileByMdlName(const char *pName);
         };
     }
 }

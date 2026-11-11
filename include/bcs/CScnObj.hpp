@@ -146,6 +146,9 @@ namespace bcs {
             void SetDrawPriority(long nOpa, long nXlu);
             // (meaning guessed) The opaque pass priority alone.
             void SetDrawPriorityOpa(long nOpa);
+            // (DOL; meaning guessed from the name) How the bounding box is
+            // turned into a depth for sorting.
+            void SetBBoxZSortCalcType(long nType);
 
             // Rebuilds the matrix at 0x08 from the rotation and the
             // translation members.

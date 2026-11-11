@@ -52,3 +52,11 @@ Equivalent game/hockey/CCockpitHockey.cpp
 Equivalent game/hockey/CShootMarker.cpp
 Matching game/hockey/CGoalMdlHockey.cpp
 Equivalent game/hockey/CGimmickManHockey.cpp
+Equivalent game/hockey/CChrCoreHockeyMario.cpp
+Equivalent game/hockey/CChrCoreHockeyMoogle.cpp
+Equivalent game/hockey/CChrCoreHockeyKoopa.cpp
+Equivalent game/hockey/CChrCoreHockeyDonkey.cpp
+Equivalent game/hockey/CChrCoreHockeySaboten.cpp
+Equivalent game/hockey/CChrCoreHockeyMii00.cpp
+Equivalent game/hockey/CChrCoreHockeyMii01.cpp
+Equivalent game/hockey/CChrCoreHockeyPeach.cpp

@@ -24,10 +24,17 @@ namespace msw {
                     // the slime file (fn_801D1130, fn_801D112C).
                     virtual void Main() {}
                     virtual void Disp() {}
-                    // fn_801CC0D0 (name guessed): empty.
-                    virtual void Update();
+                    // fn_801CC0D0: empty here. Its name and arguments come from
+                    // HockeyF's override, CC16_HOCKEY::CcSquadFactoryHockey::AnimPlay
+                    // (the sport's factory plays a motion and an effect on
+                    // the three squad models; argument meanings guessed).
+                    virtual void AnimPlay(long nEffSlot, int bLoop, float fSpeed);
 
-                private:
+                    // fn_801CC0D4 (KillChild__Q43msw6CC_CMN5SLIME14CcSquadFactoryFl):
+                    // deletes squad model nIndex.
+                    void KillChild(long nIndex);
+
+                protected:
                     // fn_801CBF90 (name guessed).
                     void Create_(CChrCore *pChr, const float *pfSpeed);
 

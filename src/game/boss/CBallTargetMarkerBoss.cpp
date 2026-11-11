@@ -272,6 +272,8 @@ void msw::CBallTargetMarkerBoss::SetHeightObjState_()
             }
         } else {
             float fRate = Clamp01(1.0f - Clamp01(fRest / fLen));
+            // Lerps written as (to - from): the original's constants are the
+            // folded differences (0xBFCCCCCC, 0xBDCCCCD0), not -1.6f and -0.1f.
             float fScale = fRate * (4.0f - 5.6f) + 5.6f;
             m_pMdlBase->SetAlphaRateF((fRate * -0.5f + 1.0f) * m_fAppearRate);
             m_pMdlBase->m_vScale.Set(fScale, 1.0f, fScale);

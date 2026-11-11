@@ -20,6 +20,11 @@ namespace bcs {
     // In the DOL.
     void BCS_Vec_RotY(FVEC3 &rOut, const FVEC3 &rIn, float rotY);
 
+    // (argument names and meaning guessed) The angle (radians) between two
+    // vectors; msw::CStgGmk_WaterPillarCluster::GetZoneByPos gives it the
+    // sign of the cross product's y itself. In the DOL.
+    float BCS_Vec_GetRot(const FVEC3 &rFrom, const FVEC3 &rTo);
+
     // (argument names and meaning guessed) The foot of the perpendicular
     // from rPos to the line through rLinePos along rLineDir, in rOut; not
     // zero when there is one. In the DOL.

@@ -9,6 +9,7 @@ extern "C" {
 double pow(double x, double y);
 double ceil(double x);
 double fmod(double x, double y);
+double tan(double x);
 
 #ifdef __cplusplus
 }
@@ -19,14 +20,6 @@ inline float fmodf(float x, float y)
     return (float)fmod(x, y);
 }
 
-// Single-precision absolute value (the compiler's builtin; fabs on a
-// double would add a conversion).
-#ifdef __MWERKS__
-inline float fabsf(float x)
-{
-    return __fabsf(x);
-}
-#endif
 // Inline, as in the compiler's own library: one fabs instruction.
 inline double fabs(double x)
 {
@@ -34,6 +27,17 @@ inline double fabs(double x)
     return __fabs(x);
 #else
     return x < 0.0 ? -x : x;
+#endif
+}
+
+// The float version. Inline, one fabs instruction without the rounding
+// (frsp) the double version needs (DodgeF CChrManDodge::Util_SearchPassTo_).
+inline float fabsf(float x)
+{
+#ifdef __MWERKS__
+    return __fabsf(x);
+#else
+    return x < 0.0f ? -x : x;
 #endif
 }
 #endif

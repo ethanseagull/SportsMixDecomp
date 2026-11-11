@@ -1,6 +1,8 @@
 #ifndef BCS_CFSMQUEUE_HPP_
 #define BCS_CFSMQUEUE_HPP_
 
+#include "bcs/BCS_Util.hpp"
+
 namespace bcs {
 
     // State machine that runs a queue of states, size 0x60. Like bcs::CFsm
@@ -26,12 +28,12 @@ namespace bcs {
             T *m_pOwner;          // 0x00 (guessed by analogy with CFsm)
             State *m_pStateTable; // 0x04 (guessed by analogy with CFsm)
             State *m_pState;      // 0x08, current state; starts at m_NullState
-            unsigned long m_Unk0C;
+            State *m_pRunState;   // 0x0C, the state at the head of the queue (name guessed)
             unsigned long m_Unk10;
             unsigned long m_Unk14;
             long m_nQueueHead;    // 0x18, index of the state now running
             long m_nQueueTail;    // 0x1C, equal to the head when the queue is empty
-            unsigned long m_Unk20;
+            long m_nQueueSize;    // 0x20, entries of the queue (a ring)
             long m_nWorkSize;     // 0x24, bytes of work memory per queue entry
             long *m_pStateQueue;  // 0x28, state number of each queue entry
             void *m_pWorkQueue;   // 0x2C, work memory of each queue entry
@@ -56,6 +58,57 @@ namespace bcs {
             }
 
             long GetState() const { return FsmqGetState(); }
+
+            // (names guessed) Inline in msw::CStgGmk_WaterPillar's Activate
+            // and Inactivate, which run them on the actor's queue (DOL).
+
+            // idx brought into [0, num).
+            static long FsmqWrap(long idx, long num)
+            {
+                if (idx >= num) {
+                    return idx % num;
+                }
+                if (idx < 0) {
+                    return idx + num;
+                }
+                return idx;
+            }
+
+            // Empties the queue.
+            void FsmqClear()
+            {
+                if (m_pStateTable) {
+                    m_pRunState = m_pStateTable;
+                } else {
+                    m_pRunState = &m_NullState;
+                }
+                m_nQueueTail = 0;
+                m_nQueueHead = 0;
+            }
+
+            // Queues state with cleared work memory; it runs at once when
+            // the queue was empty.
+            void FsmqPush(long state)
+            {
+                int bEmpty = FsmqIsEmpty();
+                long tail = m_nQueueTail;
+                long next = FsmqWrap(tail + 1, m_nQueueSize);
+                m_pStateQueue[tail] = state;
+                m_nQueueTail = next;
+                if (bEmpty && m_pStateTable) {
+                    m_pRunState = &m_pStateTable[state];
+                }
+                if (m_pWorkQueue && m_nWorkSize) {
+                    BCS_CpuClear(static_cast<char *>(m_pWorkQueue) + m_nWorkSize * tail, m_nWorkSize);
+                }
+            }
+
+            // Drops the queue and runs state.
+            void FsmqChangeState(long state)
+            {
+                FsmqClear();
+                FsmqPush(state);
+            }
     };
 }
 

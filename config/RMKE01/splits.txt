@@ -278,7 +278,9 @@ game/msw/CQPanel.cpp:
 	.text       start:0x80130634 end:0x80132E30
 
 game/msw/CItemBanana.cpp:
-	.text       start:0x8013331C end:0x8013385C
+	.text       start:0x8013331C end:0x8013394C
+	.data       start:0x80470560 end:0x804706A8
+	.sdata2     start:0x805C2D20 end:0x805C2D50
 
 game/msw/CItemBomb.cpp:
 	.text       start:0x8013394C end:0x80134204
@@ -287,10 +289,9 @@ game/msw/CBombExplosion.cpp:
 	.text       start:0x8013443C end:0x80134978
 
 game/msw/CItemMushroom.cpp:
-	.text       start:0x80134A50 end:0x80134F0C
-
-game/msw/CItemToadstool.cpp:
-	.text       start:0x80135114 end:0x80135648
+	.text       start:0x80134A50 end:0x80135978
+	.data       start:0x80470830 end:0x80470AC0
+	.sdata2     start:0x805C2DB0 end:0x805C2DF8
 
 game/msw/CItemShellCmn.cpp:
 	.text       start:0x80135978 end:0x801373DC

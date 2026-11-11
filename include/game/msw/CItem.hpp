@@ -157,6 +157,9 @@ namespace msw {
             // (name guessed; the DOL's fn_801295C8; SetRotY proper is at 0x80129608) Sets the Y rotation of
             // the item's model to `rad`, wrapped into [-pi, pi].
             void SetRotYWrapped(float rad);
+            // (DOL, name guessed; fn_80128F08) Sets target flags of body
+            // collision `index` (the banana and the toadstool set 0x10).
+            void CollBodySetTargetFlag(long index, unsigned long flag);
             // Clears target flags of body collision `index` (DOL).
             void CollBodyResetTargetFlag(long index, unsigned long flag);
             // Turns the item about the Y axis by `rad` (DOL).
@@ -215,6 +218,9 @@ namespace msw {
             // (name guessed) Inline in the original; the modules read the
             // member directly.
             const bcs::FVEC3 &GetPos() const { return m_vPos; }
+            // (name guessed) Inline in the original: the DOL items reload
+            // m_nFlag after testing a bit through it.
+            bool IsFlag(unsigned long flag) const { return (m_nFlag & flag) != 0; }
             // Starts a parabolic flight towards pos; the three floats are
             // the per-game parameters at 0xB8 to 0xC0 (BasketF's bomb passes
             // them from its DoThrowInit). Meaning of each is not known.

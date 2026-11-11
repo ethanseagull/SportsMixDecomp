@@ -26,8 +26,89 @@ namespace msw {
             CComDrvDodgeGame();
             virtual ~CComDrvDodgeGame();
 
+            // Added for game/dodge/CComDrvDodgeGameOffRun.cpp. The off-ball
+            // runs (to a charge spot, forward, back, sideways, to a
+            // character) and waiting for a catch in the infield.
+            void ActCallOffRunCharge();
+            void ActLoopOffRunCharge();
+            void ActCallOffRunFront();
+            void ActLoopOffRunFront();
+            void ActCallOffRunBack();
+            void ActLoopOffRunBack();
+            void ActCallOffRunSide();
+            void ActLoopOffRunSide();
+            void ActCallOffRunChr(long nChr, float fSpeed);
+            void ActLoopOffRunChr();
+            void ActCallInFieldCatchWait();
+            void ActLoopInFieldCatchWait();
+
+            // Defined in game/dodge/CComDrvDodgeGame.cpp and the files after
+            // it (return types guessed).
+            void ActCallBaseWait(float fFrame);
+            void SetOffStanceMode(long nMode);
+            void GetOffRunChargePos(bcs::FVEC3 &rPos) const;
+            void GetOffRunFrontPos(bcs::FVEC3 &rPos) const;
+            void GetOffRunBackPos(bcs::FVEC3 &rPos) const;
+            void GetOffRunSidePos(bcs::FVEC3 &rPos) const;
+            // What to do once at the charge spot: 0 shoot when charged,
+            // 2..8 pass or shoot (see ActLoopOffRunCharge).
+            long LotActChargeAfterOffRunCharge() const;
+            CChrCore *GetPassTargetChrCore() const;
+
+            // Added for game/dodge/CComDrvDodgeGameGimmick.cpp: escaping
+            // and going round the stage gimmicks, bombs and obstacles.
+            virtual long RunCorrect_GetFirstRotDirAroundChr(const bcs::FVEC3 &pos, float fLeft, float fRight) const;
+            virtual void GetPosTurnAroundForRunEx(bcs::FVEC3 &pos);
+            virtual void GetViewPointPosForRunEx(bcs::FVEC3 &pos);
+            int ShoudEscGimmick() const;
+            int GetEscPosFromGimmick(bcs::FVEC3 &rPos) const;
+            int GetSafePosFromGimmick(bcs::FVEC3 &rPos) const;
+            int GetPosTurnAroundGimmick(bcs::FVEC3 &rPos);
+            int ItemBall_GetEscPosFromBall(bcs::FVEC3 &rPos, long nBall) const;
+            long RunCorrect_GetFirstRotDir(const bcs::FVEC3 &pos, float fLeft, float fRight) const;
+            // The bomb ball about to blow up next to the character (its
+            // number in CBallMan's table, negative for none); inline, both
+            // ShoudEscGimmick and GetEscPosFromGimmick have it.
+            inline long ItemBall_GetBallToHitMe() const;
+
+            // (game/dodge/unit_BE1FC.cpp, return types guessed from how
+            // the gimmick file uses them) The stage gimmicks: stage 4's
+            // pylons, stage 7's mud bombs, stage 12's pinballs, stage 15's
+            // cases, stage 17's trolleys.
+            long Stage04_GetPylonToTarget(const bcs::FVEC3 &rPos) const;
+            long Stage04_GetPosTurnAroundPylon(bcs::FVEC3 &rPos, long nPylon, long nDir) const;
+            int Stage04_GetViewPointPosFromPylon(bcs::FVEC3 &rPos) const;
+            unsigned long Stage07_GetMudBombToTarget(const bcs::FVEC3 &rPos) const;
+            long Stage07_GetPosTurnAroundMudBomb(bcs::FVEC3 &rPos, unsigned long nBomb, long nDir) const;
+            int Stage07_GetViewPointPosFromMudBomb(bcs::FVEC3 &rPos) const;
+            long Stage12_GetPinballToHitMe(float) const;
+            int Stage12_GetEscPosFromPinball(bcs::FVEC3 &rPos, long nPinball) const;
+            long Stage12_GetPinballToTarget(const bcs::FVEC3 &rPos, float) const;
+            int Stage12_GetSafePosFromPinball(bcs::FVEC3 &rPos, long nPinball) const;
+            long Stage15_GetCaseToTarget(const bcs::FVEC3 &rPos, float) const;
+            long Stage15_GetPosTurnAroundCase(bcs::FVEC3 &rPos, long nCase, long nDir) const;
+            long Stage17_GetTrolleyToHitMe() const;
+            int Stage17_GetEscPosFromTrolley(bcs::FVEC3 &rPos, long nTrolley) const;
+            int Stage17_GetViewPointPosFromTrolley(bcs::FVEC3 &rPos) const;
+
         protected:
-            unsigned char m_Unk170[0x264 - 0x170];
+            unsigned char m_Unk170[0x204 - 0x170];
+            // 0x204 (name guessed): set before a shot at the end of the
+            // charge run, 1 for the follow-up actions 2 and 6.
+            long m_nShootKind;
+            unsigned char m_Unk208[0x22C - 0x208];
+            // 0x22C to 0x22F (names guessed): what the driver escapes:
+            // bomb items, other items, obstacles; the last one is passed
+            // negated to the obstacle helpers.
+            char m_bEscItemBomb;    // 0x22C
+            char m_bEscItem;        // 0x22D
+            char m_bEscObstacle;    // 0x22E
+            char m_bUnk22F;         // 0x22F
+            unsigned char m_Unk230[0x250 - 0x230];
+            // 0x250 (name guessed): not zero when the driver escapes
+            // gimmicks at all.
+            long m_nEscGimmick;
+            unsigned char m_Unk254[0x264 - 0x254];
     };
 
     // INCOMPLETE: the computer driver of the party game "dodge or die"

@@ -7,7 +7,10 @@
 namespace msw {
 
     // The "?" panels of the basketball game (BasketF
-    // game/basket/CQPanelBasket.cpp). No member of its own.
+    // game/basket/CQPanelBasket.cpp). Size 0xC24
+    // (msw::CGimmickManBasket::Initialize_ allocates that much), like the
+    // other modules' panel managers; the members past CQPanelMan are not
+    // mapped.
     class CQPanelManBasket : public CQPanelMan {
         public:
             CQPanelManBasket(bcs::CTask *pParent);
@@ -17,6 +20,9 @@ namespace msw {
             virtual void SetupItemPopRate_();
             virtual long ChoiceItemPopRateTblIdx_(long nTeam) const;
             virtual const POPUP_GROUP *GetPopupGroupData_(long nStage) const;
+
+        private:
+            unsigned char m_Unk9A8[0xC24 - 0x9A8]; // 0x9A8
     };
 
     // A panel of the basketball game, size 0xF4 (nothing added). Built only

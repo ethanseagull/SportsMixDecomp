@@ -18,7 +18,7 @@ namespace msw {
     // copies of GetMaxNum, GetCurPattern, SetCurPattern, SetCurPatternAuto,
     // GetLocInfoNum, GetLocInfoPosNum, GetLocInfo(long) and
     // SetLocInfo(long, const LOC_INFO &), so those are inline in the
-    // original; only the bodies that are certain are written. Return types
+    // original (bodies from DodgeF's game/dodge/CStgGmk_Pylon_Act_Dodge.cpp). Return types
     // not visible in a body are guesses.
     class CStgGmk_PylonCluster : public CStgGmkClusterImpl {
         public:
@@ -38,16 +38,17 @@ namespace msw {
             virtual void InactivateAll();
             virtual long GetCurPattern() const { return m_nCurPattern; }
             virtual void SetCurPattern(long pattern) { m_nCurPattern = pattern; }
-            virtual void SetCurPatternAuto();
+            virtual void SetCurPatternAuto() { SetCurPattern(SelectPattern()); }
             virtual long SelectPattern() const;
             virtual long GetParam_LocPattern() const;
             virtual void LoadLocInfoTbl();
-            virtual long GetLocInfoNum() const;
-            virtual long GetLocInfoPosNum() const;
+            virtual long GetLocInfoNum() const { return m_nLocInfoNum; }
+            virtual long GetLocInfoPosNum() const { return PYLON_MAX; }
             virtual const LOC_INFO &GetLocInfo(long pattern, long idx) const;
             virtual void SetLocInfo(long pattern, long idx, const LOC_INFO &rInfo);
-            virtual const LOC_INFO &GetLocInfo(long idx) const;
-            virtual void SetLocInfo(long idx, const LOC_INFO &rInfo);
+            // Position idx of the current pattern.
+            virtual const LOC_INFO &GetLocInfo(long idx) const { return GetLocInfo(GetCurPattern(), idx); }
+            virtual void SetLocInfo(long idx, const LOC_INFO &rInfo) { SetLocInfo(GetCurPattern(), idx, rInfo); }
             virtual void ApplyLocInfo(CStgGmk_Pylon *pPylon, const LOC_INFO &rInfo) const;
             virtual long GetLocValidNumIdx() const;
             virtual long GetLocRawTblIdx(long, long) const;

@@ -27,7 +27,8 @@ namespace msw {
                     // fn_801CC0D0: empty here. Its name and arguments come from
                     // HockeyF's override, CC16_HOCKEY::CcSquadFactoryHockey::AnimPlay
                     // (the sport's factory plays a motion and an effect on
-                    // the three squad models; argument meanings guessed).
+                    // the three squad models; argument meanings guessed; BasketF's
+                    // CC16_BASKET::CcSquadFactoryBasket overrides it too).
                     virtual void AnimPlay(long nEffSlot, int bLoop, float fSpeed);
 
                     // fn_801CC0D4 (KillChild__Q43msw6CC_CMN5SLIME14CcSquadFactoryFl):
@@ -38,6 +39,7 @@ namespace msw {
                     // fn_801CBF90 (name guessed).
                     void Create_(CChrCore *pChr, const float *pfSpeed);
 
+                protected:
                     unsigned long m_aTaskId[SQUAD_NUM]; // 0x34: ids of the squad tasks
             };
         }

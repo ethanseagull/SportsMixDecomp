@@ -68,7 +68,8 @@ namespace msw {
             // Sets the bomb off once: a blast at the ball (attached to its
             // model with bAttach) that does not hit the thrower's team.
             void Explode_(int bAttach);
-            float GetExplosionCollSize();
+            // Static: DodgeF's CComDrvDodgeGame calls it without an object.
+            static float GetExplosionCollSize();
 
         private:
             void StartFuse_();

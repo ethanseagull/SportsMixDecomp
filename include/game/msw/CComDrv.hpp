@@ -113,7 +113,21 @@ namespace msw {
             long RunCorrect_GetPosTurnAroundChr(bcs::FVEC3 &rPos, long nChr, long nDir) const;
             long Item_GetItemToTarget(const bcs::FVEC3 &rPos) const;
             long Item_GetPosTurnAroundItem(bcs::FVEC3 &rPos, unsigned long nItem, long nDir, int) const;
+            // (int: DodgeF's CComDrvDodgeGame::GetViewPointPosForRunEx tests it)
             int Item_GetViewPointPosFromItem(bcs::FVEC3 &rPos) const;
+            // (DOL; added for DodgeF game/dodge/CComDrvDodgeGameGimmick.cpp,
+            // return types guessed from how it uses them; the action, item
+            // and obstacle helpers it also uses are declared with VolleyF's
+            // below) The ball in play; the left and right edges of the
+            // character's court; an escape position rPos corrected for what
+            // is around it.
+            CBall *GetActiveBall() const;
+            float GetMyCourtLeft() const;
+            float GetMyCourtRight() const;
+            void RunCorrect_RenewEscPos(bcs::FVEC3 &rPos, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rDir, float fLen) const;
+            // DOL. A world position brought into the court's own frame
+            // (passes the long on as Local2World does).
+            bcs::FVEC3 World2Local(const bcs::FVEC3 &rPos, long) const;
             // DOL. A random number below nMax. (range guessed from the name;
             // BasketF tests RandMaxI(999) < 20)
             long RandMaxI(long nMax) const;
@@ -127,6 +141,15 @@ namespace msw {
             unsigned long CalcWorkBaseMaxSize() const;
             // DOL. The work of the action running now (zero for none).
             void *GetCurrentActWork();
+            // (DOL; added for DodgeF game/dodge/CComDrvDodgeGameOffRun.cpp)
+            // Start the common actions: turn to the target or to rPos. (The
+            // result EntryAct/ReturnAct pass, as DodgeF uses it: 0 done, 1
+            // given up.)
+            void ActCallLookTarget();
+            void ActCallLookTarget(const bcs::FVEC3 &rPos);
+            // (DOL) A random number between fMin and fMax (RandRangeF below
+            // is the other generator; which is which is not known).
+            float RandRange(float fMin, float fMax) const;
 
             // (DOL; added for VolleyF's CComDrvVolleyGame units; return types
             // and meanings guessed from the names and the callers)
@@ -174,7 +197,8 @@ namespace msw {
 
         protected:
             // 0x04 (name guessed): flag bits; the volley driver's actions
-            // clear 0x4 together with m_fUnk54 before a wait.
+            // and DodgeF CComDrvDodgeGame's off-ball runs clear 0x4 together
+            // with m_fUnk54 before a wait or a turn to their target.
             unsigned long m_nFlag;
             unsigned char m_Unk08[0x54 - 0x08];
             float m_fUnk54;   // 0x54
@@ -189,9 +213,12 @@ namespace msw {
             long m_nMyChrIdx;
             // 0x70 (name guessed): the driven character's position, kept
             // by ClearAll/UpdateInfo (VolleyF CComDrvVolley::CanbeDiveReceive
-            // measures from it).
+            // measures from it; DodgeF hands it to CComMan::GetZtoCenter).
             bcs::FVEC3 m_MyPos;
-            unsigned char m_Unk7C[0x94 - 0x7C];
+            // 0x7C (name guessed): the character's position in the world;
+            // DodgeF's gimmick escapes measure from it.
+            bcs::FVEC3 m_MyWorldPos;
+            unsigned char m_Unk88[0x94 - 0x88];
             // 0x94, 0x98 (names guessed): passed to CComMan's
             // GetStageCourtCenterX/Z and to CComOSG::Init by the volley
             // driver; a court number and the grid's kind.

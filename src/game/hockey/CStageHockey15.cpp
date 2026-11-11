@@ -286,6 +286,7 @@ void msw::CStageHockey15::OnSoundEvent(long event)
         case 1:
         case 2:
         case 3:
+        case 4:
             SE_Play(SE_SLOT_EVENT, SE_EVENT, 0.0f, 0);
             break;
     }

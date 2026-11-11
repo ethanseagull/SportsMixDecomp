@@ -2,7 +2,10 @@
 #define MSW_CSTGGMK_PYLON_HPP_
 
 #include "bcs/FVEC3.hpp"
+#include "bcs/New.hpp"
 #include "game/msw/CStgGmk.hpp"
+#include "game/msw/CStgGmk_Pylon_Act.hpp"
+#include "game/msw/CStgSrt.hpp"
 
 namespace msw {
 
@@ -37,12 +40,22 @@ namespace msw {
             long m_nMdlIdx; // 0x12C, which model of the table (only one)
     };
 
+    // The driver of a pylon. A DOL class, size 0xC (nothing added to
+    // msw::CStgDrv).
+    class CStgGmk_Pylon_Drv : public CStgDrv {
+        public:
+            CStgGmk_Pylon_Drv(CStgGmk *pParent);
+            virtual ~CStgGmk_Pylon_Drv();
+            virtual void Main(float rate);
+    };
+
     // One pylon, the gimmick that CStgGmk_PylonCluster places. A DOL class,
     // size 0x78 (CStgGmk_Pylon_Dodge, allocated at 0x78, adds nothing). The
     // order of the virtual functions follows __vt__Q23msw19CStgGmk_Pylon_Dodge
-    // (DodgeF). DodgeF emits weak copies of NewDrv, GetRadius, GetVel, GetPos
-    // and GetDefaultPos, so those are inline in the original; their bodies
-    // are not written yet. Return types not visible in a body are guesses.
+    // (DodgeF). DodgeF emits weak copies of NewDrv, GetRadius, GetVel,
+    // GetPos, GetDefaultPos and SetDefaultPos, in reverse order of the
+    // declarations here (so NewDrv, an override with no slot of its own, is
+    // declared last). Return types not visible in a body are guesses.
     class CStgGmk_Pylon : public CStgGmk {
         public:
             CStgGmk_Pylon(bcs::CTask *pParent, int);
@@ -50,21 +63,41 @@ namespace msw {
             virtual void Main();
             virtual void Disp();
             virtual unsigned long CalcSum() const;
-            virtual CStgDrv *NewDrv(long heap);
             virtual void OnPostCreate();
             virtual void OnSceneEntry();
             virtual void OnSceneLeave();
 
-            virtual void SetDefaultPos(const bcs::FVEC3 &rPos);
-            virtual const bcs::FVEC3 &GetDefaultPos() const;
+            virtual void SetDefaultPos(const bcs::FVEC3 &rPos) { m_DefaultPos = rPos; }
+            virtual const bcs::FVEC3 &GetDefaultPos() const { return m_DefaultPos; }
             virtual void Respawn();
             virtual bool IsActive() const;
             virtual void Inactivate();
             virtual bool IsLanding() const;
             virtual void SetAccel(const bcs::FVEC3 &rAccel);
-            virtual bcs::FVEC3 GetPos() const;
-            virtual bcs::FVEC3 GetVel() const;
-            virtual float GetRadius() const;
+            // The position of the actor.
+            virtual bcs::FVEC3 GetPos() const
+            {
+                bcs::FVEC3 pos(0.0f, 0.0f, 0.0f);
+                pos = GetSrt()->GetPos();
+                return pos;
+            }
+            // The velocity of the actor.
+            virtual bcs::FVEC3 GetVel() const
+            {
+                bcs::FVEC3 vel(0.0f, 0.0f, 0.0f);
+                vel = GetSrt()->GetVel();
+                return vel;
+            }
+            virtual float GetRadius() const { return GetPylonAct()->GetParam_Radius(); }
+
+            virtual CStgDrv *NewDrv(long heap) { return new (heap) CStgGmk_Pylon_Drv(this); }
+
+        private:
+            // The actor is always a CStgGmk_Pylon_Act. (name guessed)
+            const CStgGmk_Pylon_Act *GetPylonAct() const
+            {
+                return static_cast<const CStgGmk_Pylon_Act *>(GetAct());
+            }
 
         private:
             unsigned long m_Unk68;   // 0x68

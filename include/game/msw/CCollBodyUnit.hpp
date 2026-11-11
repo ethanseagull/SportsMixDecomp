@@ -27,7 +27,8 @@ namespace msw {
             signed char m_nUnk17;
             unsigned char m_Unk18[0x2C - 0x18];
             // 0x2C (name guessed): the unit's position; VolleyF's
-            // CStgGmk_Pinball_Act_Volley::OnBallCatch reads it.
+            // CStgGmk_Pinball_Act_Volley::OnBallCatch and DodgeF's
+            // msw::CStgGmk_Pinball_Act_Dodge::OnDamage read it.
             bcs::FVEC3 m_Pos;
 
             const bcs::FVEC3 &GetPos() const { return m_Pos; }

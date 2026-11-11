@@ -30,13 +30,15 @@ namespace msw {
     // until it is shot again.
     //
     // The order of the new virtual functions (IsAlive to DtorState_INACTIVE)
-    // follows __vt__Q23msw26CStgGmk_Pinball_Act_Volley (VolleyF), which
+    // follows __vt__Q23msw26CStgGmk_Pinball_Act_Volley (VolleyF) and
+    // __vt__Q23msw25CStgGmk_Pinball_Act_Dodge (DodgeF), which
     // emits weak copies of IsAlive, IsInvincible, SetInvincible,
     // SE_GetSlotNum, IsEnableDefColl and GetParam_LocOffsetZ: those are
     // inline here. The DOL emits weak copies of GetParam_AtkCollRadius,
     // GetParam_AtkHitEffectFrame and GetShotAngle as well. The DOL's own
     // vtable (lbl_804851D8, 0x2AC bytes) ends at DtorState_INACTIVE:
-    // GetParam_BallKickPower is VolleyF's. Return types not visible in a
+    // GetParam_BallKickPower is declared by the VolleyF and DodgeF classes
+    // (both put it last). Return types not visible in a
     // body are guesses.
     class CStgGmk_Pinball_Act : public CStgGmkAct, public bcs::CFsmQueue<CStgGmk_Pinball_Act> {
         public:

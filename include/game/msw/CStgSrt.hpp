@@ -24,17 +24,28 @@ namespace msw {
             // (name guessed) The velocity; msw::CStgGmk_Trolley::GetVel
             // reads it.
             const bcs::FVEC3 &GetVel() const { return m_Vel; }
-            // (name guessed; inline in VolleyF's CStgGmk_Pinball_Act_Volley)
-            // Sets the velocity and its copy in the rotated frame at 0xD8.
+            // (name guessed) Sets the velocity and its copy turned by the
+            // rotation matrix (at 0xD8), rebuilding the rotation first if
+            // the direction changed. Inline in VolleyF's
+            // CStgGmk_Pinball_Act_Volley and DodgeF's
+            // msw::CStgGmk_Pinball_Act_Dodge::OnDamage and
+            // msw::CStgGmk_Pylon_Act_Dodge::SetPushVel. The direction flag is
+            // tested as (m_nFlag & 2) through GetRotMtx: the originals of
+            // VolleyF's OnBallCatch and the Pylon's SetPushVel test it with
+            // rlwinm. (this form), DodgeF's Pinball OnDamage with extrwi.
+            // (what (m_nFlag >> 1) & 1 gives). Same bit; this form gives the
+            // best total of the three (Pinball OnDamage 98.1% instead of
+            // 98.4%, Pylon SetPushVel 99.6% instead of 98.8%, Volley
+            // OnBallCatch 97.7% instead of 97.4%).
             void SetVel(const bcs::FVEC3 &rVel)
             {
                 m_Vel = rVel;
-                if (m_nFlag & 2) {
-                    CalcRotMtx(m_RotMtx, m_Dir, m_Up);
-                    m_nFlag &= ~2;
-                }
-                PSMTXMultVec(m_RotMtx.m, (const Vec *)&rVel, (Vec *)&m_WorldVel);
+                PSMTXMultVec(GetRotMtx().m, (const Vec *)&rVel, (Vec *)&m_WorldVel);
             }
+
+            // (name and meaning guessed) msw::CStgGmk_Pylon_Act_Dodge::SetPushVel
+            // stores its GetParam_Dec here with the push velocity.
+            void SetDecel(float decel) { m_fUnkFC = decel; }
 
             void SetFront(const bcs::FVEC3 &rFront);
             // (added for game/msw/CStgGmk_Trolley.cpp) The same from the
@@ -182,10 +193,10 @@ namespace msw {
         private:
             unsigned long m_nFlagC8;     // 0xC8
             bcs::FVEC3 m_Vel;            // 0xCC (name guessed)
-            bcs::FVEC3 m_WorldVel;       // 0xD8, m_Vel turned by the rotation (StartRun)
+            bcs::FVEC3 m_WorldVel;       // 0xD8, m_Vel turned by the rotation (StartRun, SetVel)
             bcs::FVEC3 m_UnkE4;          // 0xE4
             bcs::FVEC3 m_UnkF0;          // 0xF0
-            float m_fUnkFC;              // 0xFC
+            float m_fUnkFC;              // 0xFC (SetDecel; StopAccel clears it)
             bcs::FVEC3 m_Unk100;         // 0x100
             bcs::FVEC3 m_Unk10C;         // 0x10C
             bcs::FVEC3 m_VelMax;         // 0x118 (SetVelLimit)

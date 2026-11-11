@@ -55,6 +55,7 @@ MenuF PlayMode_Loop0__Q23msw11CSelectMenuFv near 99.9 register choice only: the 
 MenuF Remove__Q33msw10SelectMenu7CCupChrFv near 94.1 cup handle addressed as addi base,4 plus 0x64 instead of 0x68 directly (same address); register order
 MenuF Remove__Q33msw10SelectMenu9CCourtChrFv near 98.9 register choice and instruction order only
 MenuF RuleInfo_Loop__Q23msw11CSelectMenuFv near 97.9 switch range check on the tab button ids: the original recomputes nBtnKindId-0x8010/0x8020 (addi) in the case body, ours reuses the value from the range compare; one instruction and register choice only, same calls and arguments
+MenuF RuleSel_Loop__Q23msw11CSelectMenuFv near 99.4 register allocation only: in the inlined RuleSel_ResetRule loop the counter and the player data pointer swap saved registers (r26/r27); jump table symbol name only
 MenuF SelectAnimAllOff__Q33msw10SelectMenu10CPartyInfoFv near 89.8 original loads the tab count s_TabNum[m_Unk9C] (const table) a second time (own lis/addi/lwzx) for the loop bound; ours reuses the value already loaded: three instructions fewer and register choice, same value
 MenuF SendEvent__Q33msw10SelectMenu10CPlusMinusFlPv near 99.8 register choice only: r28/r29 swapped in event 0x49 cases 2 and 3
 MenuF SendEvent__Q33msw10SelectMenu13CLevelMessageFlPv near 97.1 equivalent branch form: the original tests state 4..5 and 1..3 with two signed compares each; ours folds each into one unsigned range compare (subi/cmplwi). Same conditions, same calls
@@ -83,6 +84,7 @@ MenuF SetTagTitleIn__Q33msw10SelectMenu9CBackIconFl near 92.4 the table base add
 MenuF SetTextPaneFromInputDigit__Q33msw10SelectMenu11CFriendCodeFv near 97.5 register allocation only
 MenuF SetUpButton__Q23msw12CButtonEntryFPQ23msw15CMenuPartButtonli near 99.8 operand order of one commutative add (index*0x68 + data vs data + index*0x68); same instructions otherwise
 MenuF SetUpDisp__Q33msw10SelectMenu11CFriendInfoFi near 99.5 register allocation only
+MenuF SetUpOprion__Q33msw10SelectMenu8CRuleSelFv near 98.1 register allocation only: row loop counter and table pointers in other saved registers, one addi scheduled differently
 MenuF SetUpSliderBar__Q33msw10SelectMenu11CFriendListFv near 95.2 the base pane's translation is copied to the stack as three words (lwz/stw) in the original and as three floats (lfs/stfs) here, since our nw4r::math::VEC3 has constructors; same 12 bytes, plus register choice
 MenuF Set__Q33msw10SelectMenu10CCourtBallFv near 95.2 file-local .data objects reached as one base plus offsets in the original, one symbol each in ours (same addresses); register choice
 MenuF Set__Q33msw10SelectMenu10CCupSelectFv near 98.9 register allocation only: in the new-mark loop the first pane and the accessor take separate saved registers, so one more GPR is saved (_savegpr_24 instead of _25); same calls, constants and memory accesses
@@ -124,6 +126,7 @@ MenuF Set__Q33msw10SelectMenu8CButton1Fv near 99.8 register choice only: r27 and
 MenuF Set__Q33msw10SelectMenu8CButton2Fv near 99.2 register choice only: r23/r24/r25 are permuted between the new CMenuPartList, the ButtonParam pointer and the new CMenuPartButton in the button loop; same instructions otherwise
 MenuF Set__Q33msw10SelectMenu8CButtonAFv near 98.8 register choice only: r23/r24 swapped between the CSelectMenu/CPaneCtrl pointers and the file-name/font-name temporaries; same instructions otherwise (as CButton1::Set)
 MenuF Set__Q33msw10SelectMenu8CCharaOkFv near 99.2 the two button-text results sit in swapped callee-saved registers; same panes
+MenuF Set__Q33msw10SelectMenu8CRuleSelFv near 99.7 SetUpButton result range test computes id+0xFFD0 (addis/subi) where ours computes id-0x30 (subi); both are truncated to 16 bits before the unsigned compare, same result; plus register choice in the page-text block
 MenuF Set__Q33msw10SelectMenu8CTopMenuFv near 99.2 register allocation only (pPaneCtrl and the font name swap registers around the AddFontRefLink calls)
 MenuF Set__Q33msw10SelectMenu9CBackIconFv near 99.7 register allocation/order only
 MenuF Set__Q33msw10SelectMenu9CCourtChrFv near 91.7 file-local .data objects reached as one base plus offsets in the original, one symbol each in ours (same addresses); register choice; the original loads s_MarkerColor[4] once before the marker loop, ours each pass (same value)

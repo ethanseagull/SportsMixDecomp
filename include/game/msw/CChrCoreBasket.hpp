@@ -51,6 +51,9 @@ namespace msw {
             // The work of the smash cut (state 0x32; contents mapped only
             // where used).
             struct STATE_WORK_SMASH_CUT;
+            // The work of the jump to the upper floor (mapped only where
+            // used).
+            struct STATE_WORK_JUMP_UPPER;
             // (values not known) Which part of the air trick a motion is
             // asked for (GetAirTrickMotID).
             enum AIR_TIRCK_FLOW {};
@@ -121,6 +124,9 @@ namespace msw {
             // guessed from the name) Turns on the attack collision of the
             // lay-up.
             void SetCCLayUpAtkCol();
+            // (added for game/basket/CChrCoreBasketSlime.cpp; parameter
+            // meanings guessed) Leaves an after-image of the character.
+            void CreateIllusion(float fAlpha, float fRate);
 
             // Overrides of CChrCore's virtuals, in vtable order (the slots of
             // __vt__Q23msw14CChrCoreBasket, read from BasketF, that name
@@ -520,6 +526,12 @@ namespace msw {
         float m_fRadius;               // 0x2C, the reach of the cut (Toad's mushroom takes it as its size)
     };
 
+    // (field names guessed; only what the character units read is mapped)
+    struct CChrCoreBasket::STATE_WORK_JUMP_UPPER {
+        unsigned char m_Unk00[0x24];
+        float m_fFrame;                // 0x24, the frames of the jump so far (the Slime's after-images)
+    };
+
     // Luigi: his special shot pulls the other team in with his vacuum
     // (CC_CMN::LUIGI::CcOvacuumForce). Allocated with 0x5F4 bytes.
     class CChrCoreBasketLuigi : public CChrCoreBasket {
@@ -784,6 +796,81 @@ namespace msw {
             // 0x5EC (name guessed): task id of a boomerang still out, 0 for
             // none; nothing in this unit sets it.
             unsigned long m_hBanana;
+    };
+
+    // The Slime: his jump to the upper floor and his smash cut leave
+    // after-images, and his special shot sends three slimes
+    // (CC16_BASKET::CcSlimeSquadBasket) to circle the goal; while he gets
+    // ready the three are shown on him (CC16_BASKET::CcSquadFactoryBasket).
+    // Allocated size not checked; members end at 0x608.
+    class CChrCoreBasketSlime : public CChrCoreBasket {
+        public:
+            // The colours of the special shot's effects for one colour
+            // variant: the point light's two and two konst colours of the
+            // effect's models. (names guessed)
+            struct SLIME_COL_SET {
+                bcs::BCS_Color m_LightColor0;
+                bcs::BCS_Color m_LightColor1;
+                bcs::BCS_Color m_KColor0;
+                bcs::BCS_Color m_KColor1;
+            };
+
+            // The after-images of a state (names guessed): one is made every
+            // m_fInterval frames while the state's frame is in [m_fStart,
+            // m_fEnd].
+            // The frames between two after-images, and how many frames one
+            // lasts.
+            struct ILLUSION_PARAM {
+                float m_fInterval;
+                float m_fNum;
+            };
+
+            struct ILLUSION_WORK {
+                float m_fStart;        // 0x00
+                float m_fEnd;          // 0x04
+                float m_fUnk08;        // 0x08, cleared only
+                float m_fCount;        // 0x0C, the frames to the next after-image
+                float m_fInterval;     // 0x10
+                float m_fAlpha;        // 0x14
+                float m_fNum;          // 0x18, how many frames an after-image lasts
+            };
+
+            CChrCoreBasketSlime();
+            virtual ~CChrCoreBasketSlime();
+            virtual void Reset_();                                     // 0x384
+            virtual void CtorStateBlockCut();                          // 0x41C
+            virtual void CtorStateJumpUpper();                         // 0x434
+            virtual void LoopStateJumpUpper();                         // 0x438
+            virtual void DtorStateJumpUpper();                         // 0x43C
+            virtual void CtorStateSmashCut();                          // 0x608
+            virtual void LoopStateSmashCut();                          // 0x60C
+            virtual void DtorStateSmashCut();                          // 0x610
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual void SubStateArtsShotStartTrick_(STATE_WORK_AIR_TRICK *pWork); // 0xCB4
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *pWork, long); // 0xCE4
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
+
+            // The colours of colour variant nColor (0 to 2; the caller
+            // clamps it).
+            static const SLIME_COL_SET *GetArtsEffectUnit(long nColor);
+
+        protected:
+            // (inline helpers) Starts the after-images of a state; makes
+            // those due after fFrame of the state.
+            void SetIllusionWork(float fEnd, const ILLUSION_PARAM &rParam);
+            void UpDateIllusionWork(float fFrame);
+            // (inline helper, name guessed) Deletes the squad shown on
+            // the Slime, if any.
+            void DeleteSquadFactory_();
+
+            ILLUSION_WORK m_IllusionWork;  // 0x5E8
+            // 0x604 (name guessed): task id of the squad shown on the Slime
+            // (CC16_BASKET::CcSquadFactoryBasket), 0 for none.
+            unsigned long m_hSquadFactory;
     };
 }
 

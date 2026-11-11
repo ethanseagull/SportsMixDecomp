@@ -34,7 +34,15 @@ namespace msw {
             virtual void UpdateColor_();
 
         protected:
-            unsigned char m_Unk7C[0x9C - 0x7C];
+            // 0x7C to 0x88 named from BasketF CChrMoveBlockMarkerBasket::
+            // CheckAppear (it places the marker; names guessed).
+            float m_fPosX;          // 0x7C
+            float m_fPosY;          // 0x80
+            float m_fPosZ;          // 0x84
+            float m_fRotY;          // 0x88
+            void *m_Unk8C;          // 0x8C
+            long m_nChr;            // 0x90, passed to CChrMan::GetChrCore
+            unsigned char m_Unk94[0x9C - 0x94];
     };
 }
 

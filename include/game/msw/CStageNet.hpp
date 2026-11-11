@@ -11,6 +11,9 @@ namespace msw {
     class CStageNet : public CStgGmk {
         public:
             CStageNet(bcs::CTask *pParent, unsigned long);
+            // (DOL, __dt__Q23msw9CStageNetFv; VolleyF's CStageNetVolley
+            // destructor calls it)
+            virtual ~CStageNet();
 
             // (DOL; CStgObj leaves it pure)
             virtual CStgMdl *NewMdl(long heap, unsigned long idx);

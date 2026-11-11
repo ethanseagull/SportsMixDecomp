@@ -13,8 +13,8 @@ struct _GXTexObj;
 
 namespace bcs {
     class CMdlObj;
-    class CTask;
     struct BCS_Color;
+    class CTask;
 }
 
 namespace nw4r {
@@ -1243,6 +1243,12 @@ namespace msw {
             void SetCollBodyPushPower_(long nPower);
             void SetCollBodyPushType_(BODY_COLL_SIZE_SET_TYPE type, float);
             void SetCollBodyPushRank_(long nRank);
+            // Added for BasketF game/basket/CChrCoreBasketSlime.cpp (DOL;
+            // parameter meanings guessed): the size (radius, height and a
+            // third value) and offset of the body collision's push unit (it also uses
+            // Eff_SetPointLightColor and Eff_SetMdlKColorReg, above).
+            void SetCollBodyPushSize_(float fRadius, float fHeight, float);
+            void SetCollBodyPushPos_(float fX, float fY, float fZ);
             // Added for BasketF game/basket/CChrCoreBasketYoshi.cpp (DOL;
             // return type guessed). The effect in slot nSlot; null when
             // there is none.

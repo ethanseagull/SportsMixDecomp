@@ -20,7 +20,9 @@ namespace msw {
             // of the Slime's special shot: it circles a point, then chases
             // the nearest player of the other team. 0x118 bytes (HockeyF's
             // CC16_HOCKEY::CcSlimeSquadHockey is allocated at 0x11C and adds
-            // one word). A bcs::CFsm of its own states is at 0x94 (vptr at
+            // one word; BasketF's
+            // CC16_BASKET::CcSlimeSquadBasket is allocated at 0x118 and adds
+            // none). A bcs::CFsm of its own states is at 0x94 (vptr at
             // 0xD8; the @148@ thunk). The virtual functions are read from
             // __vt__Q33msw11CC16_HOCKEY18CcSlimeSquadHockey; return types and
             // argument meanings guessed. Members mapped only where the
@@ -77,7 +79,9 @@ namespace msw {
                     long m_nIndex;               // 0x100, the constructor's nIndex
                     unsigned char m_Unk104[0x108 - 0x104];
                     unsigned long m_hEffect;     // 0x108, an effect attached to the model
-                    unsigned char m_Unk10C[0x118 - 0x10C];
+                    unsigned char m_Unk10C[0x110 - 0x10C];
+                    long m_nTeam;                // 0x110, the constructor's nTeam
+                    long m_nPlayer;              // 0x114, the constructor's nPlayer
             };
         }
     }

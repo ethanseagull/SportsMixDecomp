@@ -488,6 +488,41 @@ namespace msw {
     extern float BASKET_PRM_S09_CV_ACC_SPEED_0;
     extern long BASKET_PRM_S09_CV_DIR_0; // 0: towards the attacked goal, 1 to 3: a fixed direction
 
+    // Stage 10, the panel stage, listed in CStageBasket10::GetPrmTbl. The
+    // letters are the panel kinds (Q is the kind of the panels named "h").
+    extern float BASKET_PRM_S10_PANEL_RESPAWN_TIME;
+    extern float BASKET_PRM_S10_PANEL_RESPAWN_RND;
+    extern float BASKET_PRM_S10_PANEL_SIZE_A;
+    extern float BASKET_PRM_S10_PANEL_CYCLE_A;
+    extern float BASKET_PRM_S10_PANEL_LIFE_A;
+    extern float BASKET_PRM_S10_PANEL_LIFE_RND_A;
+    extern float BASKET_PRM_S10_PANEL_SIZE_B;
+    extern float BASKET_PRM_S10_PANEL_SIZE_END_B;
+    extern long BASKET_PRM_S10_PANEL_RATE_BEG_B;
+    extern long BASKET_PRM_S10_PANEL_RATE_END_B;
+    extern float BASKET_PRM_S10_PANEL_LIFE_B;
+    extern float BASKET_PRM_S10_PANEL_LIFE_RND_B;
+    extern float BASKET_PRM_S10_PANEL_SIZE_C;
+    extern float BASKET_PRM_S10_PANEL_CYCLE_C;
+    extern float BASKET_PRM_S10_PANEL_LIFE_C;
+    extern float BASKET_PRM_S10_PANEL_LIFE_RND_C;
+    extern float BASKET_PRM_S10_PANEL_SIZE_Q;
+    extern float BASKET_PRM_S10_PANEL_LIFE_Q;
+    extern float BASKET_PRM_S10_PANEL_LIFE_RND_Q;
+    extern float BASKET_PRM_S10_BONUS_START_TIME_0;
+    extern float BASKET_PRM_S10_BONUS_START_TIME_1;
+    extern float BASKET_PRM_S10_BONUS_START_TIME_2;
+    extern float BASKET_PRM_S10_BONUS_START_TIME_3;
+    extern float BASKET_PRM_S10_BONUS_START_TIME_4;
+    extern float BASKET_PRM_S10_PANEL_INTERVAL_D;
+    extern float BASKET_PRM_S10_PANEL_LIFE_D;
+    extern float BASKET_PRM_S10_PANEL_LIFE_RND_D;
+    extern float BASKET_PRM_S10_PANEL_SIZE_E;
+    extern float BASKET_PRM_S10_PANEL_SPEED0_E;
+    extern float BASKET_PRM_S10_PANEL_SPEED1_E;
+    extern float BASKET_PRM_S10_PANEL_INTERVAL_E;
+    extern long BASKET_PRM_S10_PANEL_SET;
+
     // Stage 16, the star piece stage. Times are in seconds.
     extern float BASKET_PRM_S16_DROP_AREA_Z;
     extern long BASKET_PRM_S16_MAX_NUM;

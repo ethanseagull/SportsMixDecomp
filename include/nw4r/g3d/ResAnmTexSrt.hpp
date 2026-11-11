@@ -9,6 +9,16 @@ namespace nw4r {
         // Handle to a texture matrix animation resource: one pointer, null
         // when the resource was not found. Minimal declaration written for
         // this project; the member and function names are guessed.
+        // Result of evaluating a texture matrix animation for one material.
+        // Size 0xE8 (bcs::CAnmTexSrt::Create allocates an array of them
+        // through __construct_new_array). Contents not mapped. Minimal
+        // declaration written for this project.
+        struct TexSrtAnmResult {
+            TexSrtAnmResult() {}
+
+            unsigned char m_Data[0xE8];
+        };
+
         class ResAnmTexSrt {
             public:
                 explicit ResAnmTexSrt(ResAnmTexSrtData *pData = 0) : m_pData(pData) {}

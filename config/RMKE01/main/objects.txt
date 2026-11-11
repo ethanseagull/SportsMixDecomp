@@ -47,4 +47,4 @@ Equivalent game/msw/CGameExDemoBase.cpp
 Equivalent game/msw/CStage10Base/CTelopDispBase.cpp
 Matching game/msw/CCokcpitMenuDataList.cpp
 Equivalent game/msw/CCockpitWindowInfo.cpp
-NonMatching game/msw/CCockpitButtonInfo.cpp
+Equivalent game/msw/CCockpitButtonInfo.cpp

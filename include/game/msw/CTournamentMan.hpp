@@ -215,6 +215,9 @@ namespace msw {
             // The sound in slot nSlot, 0 when there is none or it ended.
             bcs::CSndTask *GetSe(long nSlot) const;
 
+            // CTask ends with a short at 0x30; without this the compiler puts
+            // the byte-aligned colours in its tail padding at 0x32.
+            unsigned char m_Unk32[2];          // 0x32
             bcs::BCS_Color m_Color;            // 0x34: the map colour faded to
             bcs::BCS_Color m_ColorStart;       // 0x38: the map colour faded from
             float m_fColorRate;                // 0x3C

@@ -5,6 +5,8 @@
 // written from the mangled names and the code that uses them; member names
 // are guesses.
 
+#include "revolution/gx/GXStruct.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,6 +34,17 @@ typedef struct RFLCreateID {
 typedef struct RFLStoreData {
     unsigned char data[0x4C];
 } RFLStoreData;
+
+// (added for MenuF game/menu/CFriendList.cpp) How a Mii's face is drawn
+// into a texture, 0x10 bytes, as the caller fills it: the size in texels,
+// the kind of background (1 there) and its colour, and a flag (0 there).
+typedef struct RFLIconSetting {
+    unsigned short width;   // 0x00
+    unsigned short height;  // 0x02
+    long bgType;            // 0x04
+    GXColor bgColor;        // 0x08
+    long drawXluOnly;       // 0x0C
+} RFLIconSetting;
 
 #ifdef __cplusplus
 }

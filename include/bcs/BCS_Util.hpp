@@ -9,6 +9,11 @@
 
 namespace bcs {
 
+    // In the DOL (added for BasketF game/basket/CNpcGhostBasketBase.cpp;
+    // parameter names guessed). Draws an index below nNum, each with the
+    // weight pTbl gives it.
+    long BCS_LotProbability(const long *pTbl, long nNum);
+
     // In the DOL. Clears size bytes at p, 32 bytes at a time.
     void BCS_CpuClear32(void *p, unsigned long size);
 

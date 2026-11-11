@@ -44,21 +44,22 @@ namespace msw {
     };
 
     // INCOMPLETE: the manager of the mud bombs, a DOL singleton (m_pInst in
-    // .sbss). Its list of bombs is at 0x00, a word at 0x20; nothing else is mapped.
+    // .sbss). Its list of bombs is at 0x00 (a bcs::CList, 0x28 bytes, whose
+    // node count is the word at 0x20); nothing else is mapped.
     class CNpcBossPackun::CMudBombMan {
         public:
             static CMudBombMan *GetInstance() { return m_pInst; }
 
             bcs::CList<CMudBomb> &GetList() { return m_List; }
             // (name guessed) The word at 0x20, added to DodgeF's
-            // CStageDodge07 check sum; most likely the number of bombs.
-            unsigned long GetNum() const { return m_nNum; }
+            // CStageDodge07 check sum: the list's node count, the number of
+            // bombs.
+            unsigned long GetNum() const { return m_List.GetCount(); }
 
         private:
             static CMudBombMan *m_pInst;
 
             bcs::CList<CMudBomb> m_List; // 0x00
-            unsigned long m_nNum;        // 0x20 (name guessed)
     };
 }
 

@@ -35,11 +35,16 @@ namespace msw {
             virtual void Unk30();
             virtual void Unk34();
             virtual void Unk38();
-            virtual void Unk3C();
+            // 0x3C (names guessed) Sets the frame of animation anm (-1: all).
+            // DodgeF's CStageDodge11 and the DOL's STAGE11::CStgRndAnmObj.
+            virtual void SetFrame(long anm, float frame);
             virtual void Unk40();
             virtual void Unk44();
-            virtual void Unk48();
-            virtual void Unk4C();
+            // 0x48 (name and return type guessed) The length in frames of
+            // animation anm.
+            virtual float GetFrameMax(long anm);
+            // 0x4C (name guessed) Sets the playback rate of animation anm (-1: all).
+            virtual void SetRate(long anm, float rate);
             virtual void Unk50();
             virtual void Unk54();
             virtual void Unk58();
@@ -64,6 +69,8 @@ namespace msw {
             // (name guessed)
             CStageNodeAnm *GetAnm() const { return m_pAnm; }
             void OnFlag(unsigned long flag) { m_nFlag |= flag; }
+            // (name guessed)
+            void OffFlag(unsigned long flag) { m_nFlag &= ~flag; }
             unsigned long GetFlag() const { return m_nFlag; }
 
         private:

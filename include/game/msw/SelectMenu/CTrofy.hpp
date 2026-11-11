@@ -29,6 +29,11 @@ namespace msw {
                 // Shows trophy nIndex of m_pFriend in pane pPaneObj.
                 // Return type guessed.
                 void SetWiFiTrofy(long nIndex, bcs::G2D::CPaneObj *pPaneObj);
+                // Added for MenuF game/menu/CFriendInfo.cpp (return types
+                // guessed): the sparkle on trophy nIndex, and taking all of
+                // them off.
+                void SetWiFiTrofyEffect(long nIndex, bcs::G2D::CPaneObj *pPaneObj);
+                void ClearTrofyEffect();
 
                 // 0x5C. The friend whose trophies are shown (set by
                 // SelectMenu::CWiFiFrindVS::Set).

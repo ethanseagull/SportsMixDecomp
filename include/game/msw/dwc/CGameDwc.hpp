@@ -24,6 +24,13 @@ namespace msw {
                 // The same without a button.
                 void Window_Message(char *pGroup, char *pLabel, int nUnk1, unsigned long nUnk2);
                 void Window_Close();
+                // Added for MenuF game/menu/CFriendInfo.cpp (argument names
+                // guessed): the same with Yes and No, a window with a
+                // picture, and closing that one.
+                void WindowYesNo_Button(char *pGroup, char *pLabel, int nUnk0, wchar_t *pText0, wchar_t *pText1,
+                                        unsigned long nUnk1);
+                void Window_Picture1(char *pGroup, char *pLabel, int nUnk);
+                void Window_Pict1Close();
 
                 // (no symbol; name guessed) Forgets the answer of the last
                 // message window. Inline in MenuF.

@@ -33,6 +33,24 @@ namespace msw {
     extern float DODGE_PRM_S02_BIG_ITEM_POP_DIST;
     extern float DODGE_PRM_S02_BIG_ITEM_POP_POS_X;
 
+    // Stage 03, the fountain stage: a row of water jets is the centre line
+    // and moves between ORIFICE_NUM places on each side of the middle
+    // (ORIFICE_SPACE apart) every CENTER_CYCLE seconds, with a court
+    // without a border every BORDERLESS_CNT moves (for BORDERLESS_TIME
+    // seconds). The _TIME values without a unit above are in frames.
+    extern float DODGE_PRM_S03_CENTER_CYCLE;
+    extern long DODGE_PRM_S03_ORIFICE_NUM;
+    extern float DODGE_PRM_S03_ORIFICE_SPACE;
+    extern long DODGE_PRM_S03_BORDERLESS_CNT;
+    extern float DODGE_PRM_S03_BORDERLESS_TIME;
+    extern long DODGE_PRM_S03_CANNOT_COMEBACK;
+    extern float DODGE_PRM_S03_WATER_HEIGHT;
+    extern float DODGE_PRM_S03_WATER_PRESTART_TIME;
+    extern float DODGE_PRM_S03_PAT2_PRESTART_TIME;
+    extern float DODGE_PRM_S03_WATER_TALL_TIME;
+    extern float DODGE_PRM_S03_WATER_SPEED;
+    extern long DODGE_PRM_S03_WATER_NUM;
+
     // Stage 04, the pylon stage (the pylon models, actors and cluster).
     extern float DODGE_PRM_S04_PYLON_MDL_RADIUS;
     extern float DODGE_PRM_S04_PYLON_MDL_HEIGHT;
@@ -89,6 +107,39 @@ namespace msw {
     extern float DODGE_PRM_S07_PACKUN_EXPLODE_SIZE;
     extern float DODGE_PRM_S07_PACKUN_EXPLODE_SIZE_Y;
     extern float DODGE_PRM_S07_PACKUN_EXPLODE_SCALE_FCTR;
+
+    // Stage 09, the conveyor belt stage. Times are in seconds, speeds in
+    // world units per frame.
+    extern float DODGE_PRM_S09_CV_SPEED;
+    extern float DODGE_PRM_S09_CV_ACC_SPEED;
+    extern float DODGE_PRM_S09_CV_JUMP_ACC_FOLLOW;
+    extern float DODGE_PRM_S09_CV_JUMP_ACC_AGAINST;
+    extern float DODGE_PRM_S09_EV_INTERVAL;
+    extern float DODGE_PRM_S09_EV_TIME;
+    extern float DODGE_PRM_S09_CV_ACC_TIME;
+    extern float DODGE_PRM_S09_CV_PRE_ACC_TIME;
+
+    // Stage 11, the volcano stage with the tilting court and the bubbles
+    // (CStageDodge11::GetPrmTbl). Angles in degrees, speeds per second,
+    // intervals in seconds, the _FRM values in frames. CENTER_LEVEL is the
+    // number of steps the court tilts and moves by.
+    extern float DODGE_PRM_S11_COURT_ANGLE;
+    extern float DODGE_PRM_S11_COURT_ROT_SPEED;
+    extern float DODGE_PRM_S11_COURT_ROT_ACC;
+    extern float DODGE_PRM_S11_CHR_FLOW_SPEED;
+    extern float DODGE_PRM_S11_CENTER_MOVE_SPEED;
+    extern float DODGE_PRM_S11_CENTER_MOVE_ACC;
+    extern float DODGE_PRM_S11_CENTER_RANGE;
+    extern long DODGE_PRM_S11_CENTER_LEVEL;
+    extern float DODGE_PRM_S11_BUBBLE_SCALE;
+    extern float DODGE_PRM_S11_BUBBLE_PRESTART;
+    extern float DODGE_PRM_S11_BUBBLE_JUMP_HEIGHT;
+    extern float DODGE_PRM_S11_BUBBLE_JUMP_FRM;
+    extern float DODGE_PRM_S11_BUBBLE_JUMP_DOF_FRM;
+    extern float DODGE_PRM_S11_BUBBLE_DOWN_FRM;
+    extern float DODGE_PRM_S11_BUBBLE_INIT_INTERVAL;
+    extern float DODGE_PRM_S11_BUBBLE_INTERVAL;
+    extern float DODGE_PRM_S11_BUBBLE_ZONE_Z;
 
     // Stage 12, the pinball stage (CStageDodge12::GetPrmTbl and
     // CPinballManDodge).

@@ -33,6 +33,9 @@ namespace msw {
             // argument names guessed).
             int IsInputPointerMode(long nPad);
             void ChangeInputStickModeForce(long nPad);
+            // (added for MenuF game/menu/CFriendCode.cpp; return type
+            // guessed)
+            void ChangeInputPointerModeForce(long nPad);
 
             static CMenuPad s_Instance;
 

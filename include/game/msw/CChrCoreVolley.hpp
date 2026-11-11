@@ -298,6 +298,9 @@ namespace msw {
             // Not zero while a star makes the character's receives safe.
             int IsStarConditionReceive_() const;
             void SetBallCatchEnableWorld_(float fRange, float, const bcs::FVEC3 &pos);
+            void SetBallCatchEnableWorld_(float fRange, const bcs::FVEC3 &pos);
+            // Places the block's collision at rPos (block size, yaw).
+            void UpdateCollDefSetParam_(const bcs::FVEC3 &rPos, float fSize, float fRotY);
             float GetBallShotTrgFrame_(long nMotId, float) const;
             CBall *GetTargetBall_() const;
             // The yaw the block faces.
@@ -309,7 +312,11 @@ namespace msw {
 
         protected:
             // Not mapped yet; size 0x964.
-            unsigned char m_Unk574[0x890 - 0x574];
+            unsigned char m_Unk574[0x888 - 0x574];
+            // 0x888, 0x88C (names guessed): cleared when a block is hit
+            // (CChrCoreVolleyKuroma::SubStateBlockJumpBlockHit_).
+            float m_fBlockUnk888;
+            float m_fBlockUnk88C;
             // 0x890 (name guessed): two values the receive states leave for
             // CheckCountWork__ (from the work's 0xD4 and 0xD8).
             float m_afCountWork[2];
@@ -362,7 +369,8 @@ namespace msw {
         unsigned char m_Unk00[0x4];
         unsigned long m_nFlag;       // 0x04
         float m_fRotY;               // 0x08, negative for none
-        unsigned char m_Unk0C[0x3C - 0xC];
+        unsigned char m_Unk0C[0x38 - 0xC];
+        float m_fCollSize;           // 0x38, passed to UpdateCollDefSetParam_ (name guessed)
         float m_fActStartFrame;      // 0x3C
         float m_fActTrgFrame;        // 0x40, negative once done
         bcs::FVEC3 m_EffOfs;         // 0x44, the block effect's offset
@@ -578,13 +586,55 @@ namespace msw {
             unsigned char m_Unk964[0x96C - 0x964]; // allocated with 0x96C bytes
     };
 
+    // The Black Mage: his diving receive throws a spell the ball is taken
+    // on (CC17_VOLLEY::CcKuromaReceiver), his air trick locks on to the
+    // other team and strikes them (CC17_VOLLEY::CcKuromaMagicMgr).
     class CChrCoreVolleyKuroma : public CChrCoreVolley {
         public:
             CChrCoreVolleyKuroma();
             virtual ~CChrCoreVolleyKuroma();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
+            virtual void Reset_();                                     // 0x384
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void DtorStateReceive();                           // 0x5C8
+            virtual void SubStateBlockJumpCollSet_(STATE_WORK_BLOCK_JUMP *); // 0xCAC
+            virtual int SubStateBlockIsNormalType_() const { return 0; } // 0xCB0
+            virtual int SubStateBlockIsJumpType_() const { return 0; } // 0xCB4
+            virtual int SubStateBlockIsNoFlickType_() const { return 1; } // 0xCB8
+            virtual void SubStateBlockJumpActStart_(STATE_WORK_BLOCK_JUMP *); // 0xCCC
+            virtual int SubStateBlockJumpIsActEnd_(STATE_WORK_BLOCK_JUMP *); // 0xCD0
+            virtual int SubStateBlockJumpActEnd_(STATE_WORK_BLOCK_JUMP *);  // 0xCD4
+            virtual void SubStateBlockJumpBlockHit_(const CCollDefUnit *); // 0xCE0
+            virtual void SubStateSpikeDoSmashSpikeEffect_(STATE_WORK_SPIKE *); // 0xCEC
+            virtual void SubStateAirTrickSetTrickJumpParam_(STATE_WORK_AIR_TRICK *, long); // 0xCFC
+            virtual void SubStateAirTrickSetTrickMoveParam_(STATE_WORK_AIR_TRICK *, long); // 0xD00
+            virtual float SubStateAirTrickGetTrickMotFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD04
+            virtual float SubStateAirTrickGetTrickDoFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD08
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual void SubStateAirTrickPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xD38
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+            virtual void SubStateAirTrickPlayLandMotion_(STATE_WORK_AIR_TRICK *); // 0xD5C
+            virtual void SubStateAirTrickPlayLandEffect_(STATE_WORK_AIR_TRICK *); // 0xD60
+            virtual int SubStateReceiveDoProcDiveReceive_(STATE_WORK_RECEIVE *); // 0xD6C (not zero when the state is over)
+
+            // Throws the receiver towards where the ball comes down.
+            void FireReceiver_();
 
         protected:
-            unsigned char m_Unk964[0x96C - 0x964]; // allocated with 0x96C bytes
+            // (inline helpers, names guessed) Not zero while the receiver
+            // task still exists; forgets the handle once it is gone.
+            int IsReceiverAlive_();
+            // Delete the task and forget it.
+            void ReleaseMagic_();
+            void ReleaseReceiver_();
+            // The same, with a vanishing effect when it is still in flight.
+            void VanishReceiver_();
+
+            // (names guessed; allocated with 0x96C bytes) Task ids, 0 for
+            // none.
+            unsigned long m_hMagic;    // 0x964, the air trick's CcKuromaMagicMgr
+            unsigned long m_hReceiver; // 0x968
     };
 
     class CChrCoreVolleyMii00 : public CChrCoreVolley {

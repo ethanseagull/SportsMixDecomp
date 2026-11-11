@@ -2,6 +2,7 @@
 #define MSW_DWC_CFRIEND_HPP_
 
 #include "bcs/dwc/CDwcFriend.hpp"
+#include "game/msw/WiFiSkill.hpp"
 #include "revolution/rfl.h"
 
 namespace msw {
@@ -17,8 +18,15 @@ namespace msw {
                 struct StorageData {
                     unsigned char m_Unk00[0x1C];  // 0x00
                     RFLStoreData m_StoreData;     // 0x1C, the friend's Mii
-                    unsigned char m_Unk68[0x198]; // 0x68
-                    short m_nWinNum;              // 0x200, shown as a number (meaning guessed)
+                    unsigned char m_Unk68[0x18];  // 0x68
+                    // 0x80. (added for MenuF game/menu/CFriendInfo.cpp) The
+                    // friend's ratings in the four sports; the overall one
+                    // follows at 0x200.
+                    WiFiSkill m_Skill[4];
+                    union {
+                        short m_nWinNum;          // 0x200, shown as a number (meaning guessed)
+                        WiFiSkill m_TotalSkill;   // 0x200, its first member is m_nWinNum
+                    };
                 };
 
                 StorageData *GetOwnStorageData() const;

@@ -29,6 +29,10 @@ namespace msw {
             // (DOL) Reads entry nId of the computer parameter table for
             // level nLevel. (meaning of the arguments guessed)
             static float GetDatF(long nId, long nLevel);
+            // (DOL; added for HockeyF game/hockey/CChrCoreHockeyLuigi.cpp) The
+            // same for a level between the table's levels (interpolated, it
+            // seems; CGame::GetTeamComLevel gives one).
+            static float GetDatF(long nId, float fLevel);
             // (DOL) Number of the pad-driven characters of team nTeam.
             static long GetExistPadDrvNum(long nTeam);
             // (DOL) Index of the ball in play; negative for none.

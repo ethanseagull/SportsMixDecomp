@@ -1,6 +1,8 @@
 #ifndef SAVE_DATA_PLAYER_HPP_
 #define SAVE_DATA_PLAYER_HPP_
 
+#include "dwc.h"
+#include "game/msw/WiFiSkill.hpp"
 #include "revolution/rfl.h"
 
 namespace msw {
@@ -24,8 +26,14 @@ namespace msw {
         // nGameKind (CSelectMenu::m_nGameKind): the computer level (0 to
         // 3) the level window starts from. Meaning guessed from that use.
         unsigned char IsDifficult(long nGameKind);
+        // (added for MenuF game/menu/CFriendList.cpp; return type guessed)
+        // Not zero when the data holds a player.
+        int IsValid() const;
 
-        unsigned char m_Unk0000[0x18];
+        // 0x00. (added for MenuF game/menu/CFriendCode.cpp; name and
+        // length guessed) The player's name, shown in the friend code
+        // message.
+        wchar_t m_Name[0xC];
         // 0x18 to 0x2B. (names guessed; added for MenuF
         // game/menu/CPlusMinus.cpp) The player's own Mii, passed to
         // CSelectMenu::Mii_SelectParam.
@@ -33,7 +41,51 @@ namespace msw {
         long m_nMiiIndex;                // 0x1C
         RFLDataSource m_MiiSource;       // 0x20
         RFLCreateID m_MiiCreateId;       // 0x24
-        unsigned char m_Unk002C[0x5C50 - 0x2C];
+        unsigned char m_Unk002C[0x38 - 0x2C];
+
+        // 0x38 to 0x56EF. (names guessed; added for MenuF
+        // game/menu/CFriendCode.cpp) The Wi-Fi account and friend roster.
+        // One saved friend, copied from bcs::dwc::CDwcFriend.
+        struct Friend {
+            unsigned char m_Unk00[0x18]; // 0x00
+            long m_Unk18;                // 0x18, CDwcFriend 0x04
+            long m_Unk1C;                // 0x1C, CDwcFriend 0x08
+            long m_Unk20;                // 0x20, CDwcFriend 0x0C
+            unsigned long long m_nFriendCode; // 0x28, CDwcFriend 0x10
+            long m_Unk30;                // 0x30, CDwcFriend 0x18
+            long m_Unk34;                // 0x34, CDwcFriend 0x1C
+            unsigned char m_Data[0x260]; // 0x38, CDwcFriend 0xE0
+            // 0x298. (added for MenuF game/menu/CFriendInfo.cpp; meaning
+            // not known) Cleared when the friend is deleted.
+            // Signed: game/menu/CFriendList.cpp shows them as numbers
+            // (loaded with lha).
+            short m_Unk298;
+            short m_Unk29A;
+            short m_Unk29C;
+            unsigned char m_Unk29E[0x2];
+        };
+
+        enum {
+            FRIEND_MAX = 32
+        };
+
+        DWCstAccUserData m_AccUserData;  // 0x38
+        unsigned long long m_nFriendCode; // 0x78, the player's own code
+        long m_nFriendNum;               // 0x80
+        unsigned char m_Unk0084[0x108 - 0x84];
+        // 0x108. (added for MenuF game/menu/CFriendInfo.cpp) The player's
+        // ratings in the four sports, then the overall one.
+        WiFiSkill m_Skill[4];
+        WiFiSkill m_TotalSkill;          // 0x288
+        unsigned char m_Unk02E8[0x2EA - 0x2E8];
+        // 0x2EA to 0x2EF. (added for MenuF game/menu/CFriendList.cpp;
+        // meaning not known) Three counts shown on the player's row of the
+        // friend roster, like Friend::m_Unk298 to m_Unk29C for a friend.
+        short m_Unk2EA;
+        short m_Unk2EC;
+        short m_Unk2EE;
+        Friend m_Friend[FRIEND_MAX];     // 0x2F0
+        unsigned char m_Unk56F0[0x5C50 - 0x56F0];
         unsigned char m_nFlags5C50; // 0x5C50; bit 0x08 picks the second camera table in CSelectMenu::HowTo_In (MenuF)
         unsigned char m_Unk5C51[0x5C95 - 0x5C51];
         // 0x5C95, 0x5CB5, 0x5CD5, 0x5CF5: one byte per sport (basketball,

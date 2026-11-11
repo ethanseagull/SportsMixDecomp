@@ -8,6 +8,11 @@
 #include "game/msw/CMenuPartButton.hpp"
 #include "nw4r/lyt/ResourceAccessor.hpp"
 
+// Sound codes for the button indices in a button archive (names guessed).
+// The only .data object of this file: in the module it follows
+// CCharaStatus's vtable.
+long msw::ButtonEntrySETable[8] = { 0xBC0, 0xBBB, 0xBBC, 0xBBD, 0xBBE, 0xBBF, 0xBC1, 0 };
+
 msw::CButtonEntry::CButtonEntry()
 {
     for (int i = 0; i < NAME_MAX; i++) {

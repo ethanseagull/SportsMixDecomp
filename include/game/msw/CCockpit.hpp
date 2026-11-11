@@ -91,6 +91,11 @@ namespace msw {
                 m_Result = nResult;
             }
             void SetUnk70(long nValue) { m_Unk70 = nValue; }
+            // (added for DodgeF game/dodge/CCockpitDodge.cpp; static, return
+            // type and argument names guessed) Places mini telop nObjId (a
+            // CCockpitTelopMiniPos) at world position rPos as seen by camera
+            // nCamNo.
+            static long CreateTelopMiniPos(long nObjId, unsigned char nCamNo, const bcs::FVEC3 &rPos);
 
             // Id of the cockpit task, set by the constructor; 0 when there
             // is none.

@@ -39,7 +39,7 @@ namespace msw {
             virtual void OnAttackHit(const CCollAtkUnit *pAtk, const CCollBodyUnit *pBody, const bcs::FVEC3 &rPos,
                                      unsigned long flag);
             virtual void OnBodyPush(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush);
-            virtual void OnBodyDamage(CCollBodyUnit *pBody, const CCollAtkUnit *pAtk, const bcs::FVEC3 &rPos);
+            virtual unsigned long OnBodyDamage(CCollBodyUnit *pBody, const CCollAtkUnit *pAtk, const bcs::FVEC3 &rPos);
             virtual void OnBallCatch(CCollBodyUnit *pBody, CBall *pBall);
 
             virtual int IsAlive() const;                                  // 0x1A4

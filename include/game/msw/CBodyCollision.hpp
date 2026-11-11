@@ -17,7 +17,34 @@ namespace msw {
     // words are not mapped.
     class CBodyCollision {
         public:
+            // Added for BossF game/boss/CChrCoreBossKinopio.cpp (DOL;
+            // argument meanings guessed): nUnit units of collision kind
+            // nKind.
+            CBodyCollision(long, long nUnit, long nKind, unsigned long);
+            ~CBodyCollision();
+            void SetTargetFlagAll(unsigned long flag);
+            void SetPushRankAll(long rank);
+            void SetPushPowerAll(long power);
+            void SetPosAll(const bcs::FVEC3 &pos);
+            void AddPosXZAll(const bcs::FVEC3 &pos, const bcs::FVEC3 &move);
+            void SetSizeAll(float fRadius, float fHeight, float);
+            void SetPushEnableAll();
+            void SetEnableAll();
+            // Recomputes the bounding boxes after a move.
+            void CalcAABBAll();
+
             // Target flags of every unit: set all to `flag`, or add `flag`.
+            // Added for the DOL's msw::CStgGmk_WaterPillar_Act (parameter
+            // meanings guessed).
+            CBodyCollision();
+            void Create(long num, long, long, unsigned long);
+            void SetCollType(long index, long type);
+            void SetDisableAll();
+            void SetPos(long index, const bcs::FVEC3 &rPos);
+            void SetSize(long index, const bcs::FVEC3 &rSize);
+            void SetSize(long index, float x, float y, float z);
+            void SetPushEnable(long index);
+
             void ResetTargetFlagAll(unsigned long flag);
             void AddTargetFlagAll(unsigned long flag);
 
@@ -40,24 +67,22 @@ namespace msw {
             void SetTargetFlag(long index, unsigned long flag);
             void SetRadius(long index, float radius);
             void SetBodyDisableAll();
+            // (added for VolleyF's CC09_VOLLEY::CcKinopioBoundMushroom)
+            void SetHitEffectFrameAll(float fFrame);
 
             // Added for BasketF game/basket/CNpcGhostBasketBase.cpp (all in
-            // the DOL; argument meanings guessed). nUnit, nType and nNum
-            // describe the units (the ghost makes four).
-            CBodyCollision(long nUnit, long nType, long, unsigned long);
+            // the DOL; argument meanings guessed). The ghost makes four
+            // units with the constructor above (BasketF read its arguments
+            // as nUnit, nType, ?, ?; BossF's reading kept). The
+            // constructor, SetCollType, SetPos, SetSize, SetPushEnable,
+            // SetPosAll, AddPosXZAll and CalcAABBAll it also uses are
+            // declared above.
             void SetEnable(long index);
             void SetDisable(long index);
-            void SetPushEnable(long index);
             void SetCatchEnable(long index);
-            void SetCollType(long index, long type);
             void ResetTargetFlag(long index, unsigned long flag);
             void SetBallCatchCallback(long index, BallCatchCallback pFunc, void *pArg);
-            void SetPos(long index, const bcs::FVEC3 &rPos);
-            void SetPosAll(const bcs::FVEC3 &rPos);
-            void AddPosXZAll(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo);
-            void CalcAABBAll();
             void SetYRot(long index, float fRotY);
-            void SetSize(long index, float fRadius, float fHeight, float fDepth);
             float GetRadius(long index) const;
 
         private:

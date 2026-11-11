@@ -28,4 +28,8 @@ Matching game/volley/CStageVolley01.cpp
 Equivalent game/volley/CCockpitChrIcon2DVolley.cpp
 Matching game/volley/unit_CA990.cpp
 NonMatching game/volley/CItemBallVolleyBomb.cpp
+Equivalent game/volley/CChrDrvPadVolley.cpp
 Equivalent game/volley/CChrManVolley.cpp
+Equivalent game/volley/CChrCoreVolleyLuigi.cpp
+Equivalent game/volley/CChrCoreVolleyYoshi.cpp
+Equivalent game/volley/CChrCoreVolleyKinopio.cpp

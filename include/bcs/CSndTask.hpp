@@ -49,6 +49,18 @@ namespace bcs {
 
             // 0x34, right after CTask (0x34 bytes): the sound this task plays
             nw4r::snd::SoundHandle m_Handle;
+            // The rest from the DOL's fn_8007A1CC and the functions of
+            // CSndTask.cpp (names guessed).
+            unsigned long m_nSoundId;     // 0x38: the id passed to Play
+            long m_Unk3C;                 // 0x3C
+            // 0x40: bit 1 set by Stop (later calls do nothing), bit 3 for a
+            // sound PrepareBGM made, bit 4 tested by CSnd::PauseAll
+            unsigned long m_nFlag;
+            unsigned long m_Unk44;        // 0x44
+            float m_aUnk48[3];            // 0x48
+            void *m_pUnk54;               // 0x54: position for the 3D actor
+            void *m_pUnk58;               // 0x58: nw4r::snd::Sound3DActor
+            long m_nPauseCount;           // 0x5C: Pause(..., 1) calls not yet resumed
     };
 }
 

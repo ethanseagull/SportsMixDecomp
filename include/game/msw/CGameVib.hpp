@@ -13,6 +13,9 @@ namespace msw {
             // The first argument picks a word at 0x3C of an instance, the
             // second a 0x24-byte entry. (the meaning of nUnk is not known)
             static int Start(long nTable, long nPattern, long nUnk, long nPad);
+            // (added for HockeyF game/hockey/CChrDrvPadHockey.cpp) Rumble on
+            // pad nPad for fFrame frames (meaning guessed).
+            static int Start(float fFrame, long nPad);
             // Stops the rumble of pad nPad (local pads only).
             static void Stop(long nPad);
     };

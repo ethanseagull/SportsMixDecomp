@@ -172,7 +172,7 @@ namespace msw {
                 return 0;
             }
 
-            int IsCrossInput_() const { return m_fCrossDir >= 0.0f; }
+            int IsCrossInput_() const { return m_fStickDir2 >= 0.0f; }
 
             // The cross key as 1 to 4 (by quarter; meanings not checked),
             // 0 when it is not pushed.
@@ -183,7 +183,7 @@ namespace msw {
                 if (!IsCrossInput_()) {
                     return 0;
                 }
-                fDeg = 57.295776f * m_fCrossDir;
+                fDeg = 57.295776f * m_fStickDir2;
                 if (fDeg >= 45.0f && fDeg <= 135.0f) {
                     return 2;
                 }
@@ -281,7 +281,7 @@ namespace msw {
             {
                 float fRot = -1.0f;
                 if (m_fStickDir >= 0.0f) {
-                    fRot = RoundRad_(m_fStickDir + m_pChr->m_fRotY);
+                    fRot = RoundRad_(m_fStickDir + m_pChr->m_fCamRotY);
                 }
                 return fRot;
             }
@@ -289,7 +289,7 @@ namespace msw {
             // The same, the character's facing when the stick is idle.
             float GetInputRotY_() const
             {
-                float fRotY = m_pChr->m_fRotY;
+                float fRotY = m_pChr->m_fCamRotY;
                 float fRot = m_pChr->GetRotY();
                 if (m_fStickDir >= 0.0f) {
                     fRot = RoundRad_(fRotY + m_fStickDir);

@@ -16,6 +16,11 @@ namespace msw {
     // words are not mapped.
     class CAtkCollision {
         public:
+            // Added for the DOL's msw::CStgGmk_WaterPillar_Act.
+            CAtkCollision();
+            ~CAtkCollision();
+            void SetDisableAll();
+
             // The radius of unit `index`.
             float GetRadius(long index) const;
             // (name guessed; the DOL's fn_80109170) The float at 0xA0 of

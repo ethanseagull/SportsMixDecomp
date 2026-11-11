@@ -15,6 +15,11 @@ typedef struct Vec {
 typedef float Mtx[3][4];
 
 void PSMTXCopy(const Mtx src, Mtx dst);
+void PSMTXIdentity(Mtx m);
+// ab = a * b.
+void PSMTXConcat(const Mtx a, const Mtx b, Mtx ab);
+// dst = src with (x, y, z) added to the translation.
+void PSMTXTransApply(const Mtx src, Mtx dst, float x, float y, float z);
 
 // dst = m * src (src as a point); src and dst may be the same.
 void PSMTXMultVec(const Mtx m, const Vec *src, Vec *dst);
@@ -22,6 +27,7 @@ void PSMTXMultVec(const Mtx m, const Vec *src, Vec *dst);
 float PSVECSquareDistance(const Vec *pA, const Vec *pB);
 void PSVECNormalize(const Vec *pIn, Vec *pOut);
 float PSVECMag(const Vec *p);
+void PSVECCrossProduct(const Vec *pA, const Vec *pB, Vec *pAxB);
 
 typedef struct Quaternion {
     float x; // 0x00

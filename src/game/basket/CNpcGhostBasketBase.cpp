@@ -282,7 +282,7 @@ namespace msw {
             }
         }
 
-        FsmqExecState();
+        FsmqExec();
 
         // Float up and down.
         float fSpMin = BASKET_PRM_S06_MOVE_Y_SP_MIN;
@@ -401,7 +401,7 @@ namespace msw {
     void CNpcGhostBasketBase::CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush)
     {
         if (pOther->GetOwnerKind() == 1) {
-            long nChr = pOther->m_nOwnerNo;
+            long nChr = pOther->m_nOwnerIdx;
             CChrCore *pChr = CChrMan::GetChrCore(nChr);
             if (pChr && (pChr->GetStatusFlag() & 0x20000)) {
                 // A character dashing into the ghost knocks the ball out.

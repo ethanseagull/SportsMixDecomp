@@ -5,6 +5,12 @@
 #include "game/msw/CSave.hpp"
 #include "revolution/rfl.h"
 
+namespace bcs {
+    namespace dwc {
+        class CDwcFriendList;
+    }
+}
+
 namespace msw {
     class CSelectMenuLayoutBase;
 
@@ -164,6 +170,80 @@ namespace msw {
             long Chara_FindNotDecideCharaIndex(long nPad);
             void SetCharaSelectSaveParam();
 
+            // Added for MenuF game/menu/CEntry.cpp (return types guessed).
+            // The steps of the entry screen (SelectMenu::CEntry), offline
+            // and on Wi-Fi, and what they call.
+            void Entry_In();
+            void Entry_Loop();
+            void Entry_LoopStep0();
+            void Entry_Out();
+            void WifiEntry_In();
+            void WifiEntry_Loop();
+            void WifiEntry_LoopStep0();
+            void WifiEntry_Out();
+            void WifiEntry_PadEntry();
+            void WifiEntry_ChangeStateInit();
+            void Entry_NextStateExhibition(long nBtnKindId);
+            void Entry_NextStateTournament(long nBtnKindId);
+            void Entry_NextStateParty(long nBtnKindId);
+            // 0 when pads 0 to nNum - 1 all have a remote, else -1.
+            long Entry_CheckConnectPad(long nNum);
+            void Entry_ChangeStateInit(long nMode);
+            void Entry_LoopStep1();
+            void Entry_LoopStep10();
+            void Entry_LoopStep11();
+            void Entry_LoopStep12();
+            void Entry_LoopStep20();
+            void Entry_LoopStep21();
+            void Entry_LoopStep22();
+            void Entry_LoopStep23();
+            void ClearMenuHistory();
+            void PushMenuHistory(unsigned char nUnk0, unsigned char nUnk1, unsigned short nUnk2);
+            void _DisablePointStick(long nPad, int bUnk);
+
+            // Added for MenuF game/menu/CCharaStatus.cpp (names guessed).
+            // Size 0x28. What the character select screen holds for one of
+            // its six character slots; the array is at 0x488.
+            struct CharaSelectParam {
+                long m_Unk00;                // 0x00, 0xFF with m_nPlayerKind for an empty slot
+                long m_nPlayerKind;          // 0x04, 0 to 3 a pad, 4 the computer, 0xFF none
+                long m_Unk08;                // 0x08, passed to CCharSel's pad sign calls
+                long m_Unk0C;                // 0x0C
+                unsigned char m_nChara;      // 0x10, 0 to 19, 0xFF none
+                unsigned char m_nCharaSub;   // 0x11, the character's variant, 0xFF none
+                unsigned char m_nState;      // 0x12, 1 and up once chosen
+                unsigned char m_Unk13[0x15]; // 0x13
+            };
+
+            // Slot nIndex (0 to 5), or null.
+            CharaSelectParam *GetCharaSelectParam(long nIndex);
+
+            // Added for MenuF game/menu/CFriendCode.cpp (return types and
+            // argument names guessed). The steps of the friend code entry
+            // screen (SelectMenu::CFriendCode) and of the friend's
+            // information window (SelectMenu::CFriendInfo), and what they
+            // call.
+            void FriendCode_In();
+            void FriendCode_Loop();
+            void FriendCode_LoopStep();
+            void FriendCode_Out();
+            void FriendPlayerInfo_In();
+            void FriendPlayerInfo_Loop();
+            void FriendPlayerInfo_Out();
+            void FriendInfo_In();
+            // The Wi-Fi message windows: message pLabel of group pGroup
+            // with an A button, with Yes and No, with no button, and
+            // closing the window. The texts fill parts of the message
+            // (null: none).
+            void WindowA_Button(char *pGroup, char *pLabel, wchar_t *pText0, wchar_t *pText1);
+            void WindowYesNo_Button(char *pGroup, char *pLabel, int nUnk0, wchar_t *pText0, wchar_t *pText1,
+                                    int nUnk1);
+            void Window_Message(char *pGroup, char *pLabel, int nUnk);
+            void Window_Close();
+            // Writes friend code nCode as text into m_MessageWork and
+            // returns it.
+            wchar_t *ExchangeFriendCode(unsigned long long nCode);
+
             // Data, added for the same unit. The class is 0xAB8 bytes (the
             // size layout.py finds); only two members are named so far.
             // The second polymorphic part mentioned above (a `@68@` thunk)
@@ -262,7 +342,20 @@ namespace msw {
         public:
             unsigned char m_Unk27B;          // 0x27B
         private:
-            unsigned char m_Unk27C[0x427];   // 0x27C
+            unsigned char m_Unk27C;          // 0x27C
+        public:
+            // (added for game/menu/CEntry.cpp; names guessed)
+            // 0x27D. Set to 1 when a Wi-Fi entry goes on to the character
+            // select screen.
+            unsigned char m_Unk27D;
+        private:
+            unsigned char m_Unk27E[0x2];     // 0x27E
+        public:
+            // 0x280. The player number of each pad that has entered, 0xFF
+            // for the others.
+            unsigned char m_nPadPlayer[4];
+        private:
+            unsigned char m_Unk284[0x41F];   // 0x284
         public:
             // 0x6A3 to 0x6B3. (names guessed; added for
             // game/menu/CPlusMinus.cpp) The Mii _SetStarMii gives the
@@ -272,8 +365,18 @@ namespace msw {
             RFLDataSource m_StarMiiSource;   // 0x6A8
             RFLCreateID m_StarMiiCreateId;   // 0x6AC
         private:
-            unsigned char m_Unk6B4[0x48];    // 0x6B4
+            unsigned char m_Unk6B4[0x18];    // 0x6B4
         public:
+            // 0x6CC. (added for game/menu/CEntry.cpp; name guessed) Frames
+            // the controller error window of the entry screen waits.
+            float m_fEntryErrorWait;
+        private:
+            unsigned char m_Unk6D0[0x28];    // 0x6D0
+        public:
+            // 0x6F8. (added for game/menu/CFriendCode.cpp; name guessed)
+            // The Wi-Fi friend roster, taken from the connection by
+            // FriendCode_In.
+            bcs::dwc::CDwcFriendList *m_pFriendList;
             // 0x6FC to 0x707. (names guessed; added for
             // game/menu/CWiFiFrindVS.cpp) The Wi-Fi connection, the friend
             // the friend match is with, and a copy of it kept by
@@ -281,8 +384,11 @@ namespace msw {
             dwc::CGameDwc *m_pGameDwc;       // 0x6FC
             dwc::CFriend *m_pVsFriend;       // 0x700
             dwc::CFriend *m_pVsFriendSaved;  // 0x704
+            // 0x708. (added for game/menu/CFriendCode.cpp) Cleared by
+            // FriendPlayerInfo_In (meaning not known).
+            long m_Unk708;
         private:
-            unsigned char m_Unk708[0x8];     // 0x708
+            unsigned char m_Unk70C[0x4];     // 0x70C
         public:
             CSave::PlayerData *m_pPlayerData; // 0x710, CSave::GetPlayerData(-1)
         private:
@@ -308,7 +414,10 @@ namespace msw {
             // attract demo once its music has stopped.
             float m_fTitleDemoWait;
         private:
-            unsigned char m_Unk968[0x20];    // 0x968
+            // 0x968. (added for game/menu/CFriendCode.cpp; name and
+            // length guessed) Text filled in by ExchangeFriendCode and
+            // shown in the message windows.
+            wchar_t m_MessageWork[0x10];
         public:
             // 0x988. (name guessed; added for game/menu/CPlusMinus.cpp)
             // Non-zero when _SetStarMii gives Miis.
@@ -318,7 +427,20 @@ namespace msw {
         public:
             long m_UnkA00;                   // 0xA00
         private:
-            unsigned char m_UnkA04[0x74];    // 0xA04
+            unsigned char m_UnkA04[0x58];    // 0xA04
+        public:
+            // 0xA5C. (added for game/menu/CEntry.cpp; name guessed) Set by
+            // Entry_In when the camera is still moving in; cleared once
+            // it has stopped.
+            long m_bEntryCameraWait;
+        private:
+            unsigned char m_UnkA60[0x8];     // 0xA60
+        public:
+            // 0xA68. (added for game/menu/CCourtTab.cpp) When non-zero,
+            // CCourt does not pass its events on to menu object 1.
+            long m_UnkA68;
+        private:
+            unsigned char m_UnkA6C[0xC];     // 0xA6C
         public:
             // 0xA78. (added for game/menu/CWiFiFrindVS.cpp) Set by
             // FriendVS_Loop to whether m_Unk23E is 1 when a friend match
@@ -343,6 +465,11 @@ namespace msw {
     // argument names are guesses). The play mode of button nBtnKindId of
     // the play mode screen for nPlayerNum players, or a negative value.
     long _GetPlayModeFromButtonId(long nBtnKindId, long nPlayerNum);
+
+    // Defined in another MenuF file (added for game/menu/CEntry.cpp; the
+    // argument name is a guess). The play mode of a party game for
+    // nPlayerNum players.
+    long _GetPartyPlayType(long nPlayerNum);
 
     // Defined in another MenuF file (added for game/menu/CTitle.cpp; the
     // argument names are guesses). A table of stage ids for game kind

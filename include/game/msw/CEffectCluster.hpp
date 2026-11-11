@@ -6,6 +6,7 @@
 #include "bcs/FVEC3.hpp"
 
 namespace bcs {
+    class CMdlObj;
     namespace EF {
         class CEffect;
     }
@@ -25,6 +26,13 @@ namespace msw {
             void SetFadeoutTime(float fFrame);
             long GetEffectNum();
             bcs::EF::CEffect *GetEffect(long nIndex);
+            // (DOL; added for BossF game/boss/CChrCoreBossKinopio.cpp) The
+            // models of the cluster; an entry may be null.
+            long GetMdlObjNum();
+            bcs::CMdlObj *GetMdlObj(long nIndex);
+            // (DOL; added for VolleyF game/volley/CChrCoreVolleyKinopio.cpp)
+            // Moves the cluster in the draw order by fOffset.
+            void SetZSortOffset(float fOffset);
 
             // (name guessed; the DOL's fn_801233FC) Called with 1 on a
             // cluster just attached to a layout pane object. Calls a member
@@ -32,6 +40,12 @@ namespace msw {
             // the member (fn_80123490) sets or clears bit 0x100000 of the
             // word at 0xA4.
             void Set2D(int b2D);
+
+            // (name guessed; the DOL's fn_801234B4) Sets the alpha of every
+            // effect of the cluster, through a member pointer like
+            // CallEffectFunc. msw::CStgGmk_WaterPillar_Act::OnUpdate fades
+            // its effects with it.
+            void SetAlpha(float fAlpha);
 
             // (name guessed) Calls pFunc with nArg on each effect of the
             // cluster that still exists. Inline in the DOL's

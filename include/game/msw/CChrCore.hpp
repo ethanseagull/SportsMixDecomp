@@ -1,8 +1,11 @@
 #ifndef MSW_CCHRCORE_HPP_
 #define MSW_CCHRCORE_HPP_
 
+#include "bcs/CAnmObjMotBase.hpp"
 #include "bcs/CFsmQueue.hpp"
 #include "bcs/FVEC3.hpp"
+#include "game/msw/CChrDrv.hpp"
+#include "nw4r/g3d/ResFile.hpp"
 
 struct _GXTexObj;
 
@@ -11,9 +14,22 @@ namespace bcs {
     class CTask;
 }
 
+namespace nw4r {
+    namespace g3d {
+        class ResFile;
+    }
+}
+
 namespace msw {
 
+    class CBall;
     class CChrDrv;
+    class CCollAtkUnit;
+    class CCollBodyUnit;
+    class CCollDefUnit;
+    class CDropCoin;
+    class CItem;
+    class CQPanel;
 
     // One character on the court. A DOL class; each game module derives its
     // own (CChrCoreBoss, CChrCoreBasket, ...). bcs::CFsmQueue<CChrCore> is at
@@ -23,12 +39,13 @@ namespace msw {
     //  - Only some members are named; the rest up to the size, 0x574, is
     //    padding, so that new of a derived class gets the right size. The
     //    class must not be instantiated or embedded until it is mapped.
-    //  - The virtual functions stop at slot 0x844 of about 1,100. Their order
+    //  - The virtual functions are all declared, 0x08 to 0xC98 (the vtable
+    //    of a derived class goes on from 0xC9C). Their order
     //    and names are the slots of __vt__Q23msw12CChrCoreBoss (BossF), read
-    //    with the class name set back to CChrCore. All of them except the
-    //    destructor, GetMainOrderValue and IsNowFallOut are unnamed inline
-    //    functions in the DOL; they are declared without bodies here, so a
-    //    unit that has to emit this vtable needs the bodies first.
+    //    with the class name set back to CChrCore. Most of them are inline
+    //    functions in the DOL (the modules emit weak copies); they are
+    //    declared without bodies here, so a derived class's vtable refers to
+    //    them by name only.
     //  - Return types are not part of the mangled names: "int" stands for a
     //    DOL body that returns a word, "float" for one that loads f1, "void"
     //    for an empty one. All are guesses, as are the member names.
@@ -36,6 +53,19 @@ namespace msw {
         public:
             // (contents not known; the MethdRDB slots take a pointer to one)
             struct INPUT_WORK;
+            // (contents not known) The work of the damage state, passed to the
+            // SubStateDamage* virtuals.
+            struct STATE_WORK_DAMAGE;
+            // Kinds of effect for Util_SetEffect / Util_AttachEffect (values not known).
+            enum SET_EFFECT_TYPE {};
+            enum ATTACH_EFFECT_TYPE {};
+            // (added for VolleyF game/volley/CChrCoreVolleyKinopio.cpp;
+            // contents not known) The work of a move in a fixed direction
+            // (Util_SetDirMoveParam), and how the body collision is sized.
+            struct DIR_MOVE {
+                unsigned char m_Unk00[0x20];
+            };
+            enum BODY_COLL_SIZE_SET_TYPE {};
 
             CChrCore();
             virtual ~CChrCore();                                     // 0x08
@@ -101,7 +131,7 @@ namespace msw {
             virtual int GetVolleySpikeFeintTargetPos(float, bcs::FVEC3 &, bcs::FVEC3 &, bcs::FVEC3 &); // 0xF0
             virtual int GetVolleyBallShotCollPos(long, bcs::FVEC3 &, float &) const; // 0xF4
             virtual void GetVolleySpikeOffsetPos(long, bcs::FVEC3 &) const; // 0xF8
-            virtual void *GetVolleyTargetBall() const;               // 0xFC
+            virtual CBall *GetVolleyTargetBall() const;              // 0xFC
             virtual int IsVolleySuperSpikeCurveType() const;         // 0x100
             virtual float GetVolleySuperSpikeCurveRate() const;      // 0x104
             virtual float GetVolleySuperSpikeCurveMaxDist() const;   // 0x108
@@ -653,7 +683,213 @@ namespace msw {
             virtual int MethdUseItem();                               // 0x96C
             virtual int MethdTurnOver(long);                          // 0x970
             virtual int MethdTimeOver(long);                          // 0x974
-            // ... the vtable goes on from here (about 1,100 slots in all).
+            // 0x978-0xA2C added for BossF game/boss/CChrDrvPadBoss.cpp, named
+            // from __vt__Q23msw12CChrCoreBoss (return types guessed as above).
+            virtual int MethdGameSet();                               // 0x978
+            virtual int MethdGameResult(int);                         // 0x97C
+            virtual int CanbeChgLeaderState();                        // 0x980
+            virtual int CanbeChgNewLeaderState();                     // 0x984
+            virtual int CanbeChgLeader(CChrCore *);                   // 0x988
+            virtual int MethdChgLeader(float, long, long, int);       // 0x98C
+            virtual int MethdChgLeader(long, long, long);             // 0x990
+            virtual int MethdChgLeader();                             // 0x994
+            virtual int CanbeServe(long);                             // 0x998
+            virtual int MethdServe(long);                             // 0x99C
+            virtual int CanbeReceive(int);                            // 0x9A0
+            virtual int CanbeDiveReceive();                           // 0x9A4
+            virtual int MethdReceive(int, int);                       // 0x9A8
+            virtual int MethdReceive(int, int, float);                // 0x9AC
+            virtual int CanbeSpike(int) const;                        // 0x9B0
+            virtual int MethdSpike(int);                              // 0x9B4
+            virtual int CanbeAutoSpikeJump() const;                   // 0x9B8
+            virtual int Canbe1on1();                                  // 0x9BC
+            virtual int Methd1on1(int);                               // 0x9C0
+            virtual int CanbeAutoDPM();                               // 0x9C4
+            virtual int MethdAutoDPM(float, float);                   // 0x9C8
+            virtual int CanbeBlockWorkLose();                         // 0x9CC
+            virtual int MethdBlockWorkLose();                         // 0x9D0
+            virtual int CanbeJumpBlock();                             // 0x9D4
+            virtual int MethdJumpBlock(float);                        // 0x9D8
+            virtual int CanbeSwatIt() const;                          // 0x9DC
+            virtual int MethdSwatIt();                                // 0x9E0
+            virtual int CanbeSmashCut();                              // 0x9E4
+            virtual int MethdSmashCut(float);                         // 0x9E8
+            virtual int MethdAirTrickDownSpeed(float);                // 0x9EC
+            virtual int CanbeSpecialBattle();                         // 0x9F0
+            virtual int MethdSpecialBattle();                         // 0x9F4
+            virtual int CanbeArtsShotCatch();                         // 0x9F8
+            virtual int MethdArtsShotCatch();                         // 0x9FC
+            virtual int CanbeBallCatch();                             // 0xA00
+            virtual int MethdBallCatch(float);                        // 0xA04
+            virtual int CanbeLineOver();                              // 0xA08
+            virtual int MethdLineOver(float);                         // 0xA0C
+            virtual int CanbeCrouch();                                // 0xA10
+            virtual int MethdCrouch();                                // 0xA14
+            virtual int CanbeSkate(int);                              // 0xA18
+            virtual int MethdSkate(float, int, float, int);           // 0xA1C
+            virtual int CanbeStealStance();                           // 0xA20
+            virtual int MethdStealStance(float);                      // 0xA24
+            virtual int CanbeShootStance();                           // 0xA28
+            virtual int MethdShootStance(float, int);                 // 0xA2C
+            // 0xA30-0xC98, the rest of CChrCore's vtable, added for BossF
+            // game/boss/CChrCoreBossLuigi.cpp and its siblings, named from
+            // __vt__Q23msw12CChrCoreBoss (return types guessed as above;
+            // CChrCoreBoss's own virtuals start at 0xC9C).
+            virtual int CanbeBrake();                                  // 0xA30
+            virtual int MethdBrake(float, long);                       // 0xA34
+            virtual int CanbeSwitchBrake(float, int);                  // 0xA38
+            virtual int MethdSwitchBrake(float, float);                // 0xA3C
+            virtual int CanbeSwitch();                                 // 0xA40
+            virtual int MethdSwitch();                                 // 0xA44
+            virtual int CanbeBlockStance();                            // 0xA48
+            virtual int MethdBlockStance(float, float, long);          // 0xA4C
+            virtual int CanbeAutoBlockStance();                        // 0xA50
+            virtual int MethdAutoBlockStance(float, float, long);      // 0xA54
+            virtual int CanbeAutoChangeStance();                       // 0xA58
+            virtual int MethdAutoChangeStance(float, float, long, float); // 0xA5C
+            virtual int MethdArtsDamage(unsigned long, bcs::FVEC3);    // 0xA60
+            virtual int CanbeChangeStance();                           // 0xA64
+            virtual int MethdChangeStance(float, float, long, float);  // 0xA68
+            virtual int CanbePassCatchState();                         // 0xA6C
+            virtual int CanbeAlleyoop();                               // 0xA70
+            virtual int MethdSetPassCatchState(CBall *, int, const bcs::FVEC3 &, long); // 0xA74
+            virtual int MethdSetPassCatchJumpWaitFrame(const bcs::FVEC3 &, float); // 0xA78
+            virtual int MethdAlleyoop();                               // 0xA7C
+            virtual int MethdSetAlleyoopCatchState(float, float, const bcs::FVEC3 &, const bcs::FVEC3 &); // 0xA80
+            virtual void GetTpInputDribble(INPUT_WORK &, float, float); // 0xA84
+            virtual float GetArtsEventRot();                           // 0xA88
+            virtual void DoPlayArtsEvent();                            // 0xA8C
+            virtual int CanbeSubShoot();                               // 0xA90
+            virtual int MethdSubShoot(float);                          // 0xA94
+            virtual int CanbeNormalShoot();                            // 0xA98
+            virtual int MethdNormalShoot(float);                       // 0xA9C
+            virtual int CanbePowerShot();                              // 0xAA0
+            virtual int MethdPowerShot(float);                         // 0xAA4
+            virtual int CanbeSideShot();                               // 0xAA8
+            virtual int MethdSideShot(float);                          // 0xAAC
+            virtual int CanbeDivingCatch();                            // 0xAB0
+            virtual int MethdDivingCatch(float);                       // 0xAB4
+            virtual int CanbeSpinAttack();                             // 0xAB8
+            virtual int MethdSpinAttack();                             // 0xABC
+            virtual int CanbeEventDoll();                              // 0xAC0
+            virtual int MethdEventDoll();                              // 0xAC4
+            virtual int CanbePassStance();                             // 0xAC8
+            virtual int MethdPassStance(float, long);                  // 0xACC
+            virtual int CanbeDirectShootStance();                      // 0xAD0
+            virtual int MethdDirectShootStance(float, long);           // 0xAD4
+            virtual int CanbeDirectPassStance();                       // 0xAD8
+            virtual int MethdDirectPassStance(float, long);            // 0xADC
+            virtual int CanbePassChgLeader();                          // 0xAE0
+            virtual int MethdPassChgLeader();                          // 0xAE4
+            virtual int CanbeHockeyTrickMove();                        // 0xAE8
+            virtual int MethdHockeyTrickMove(float, long);             // 0xAEC
+            virtual int CanbeTackleGuard();                            // 0xAF0
+            virtual int MethdTackleGuard(float, int, int);             // 0xAF4
+            virtual int CanbeSmashAttack();                            // 0xAF8
+            virtual int MethdSmashAttack(float);                       // 0xAFC
+            virtual int CanbeBallScramble(CBall *);                    // 0xB00
+            virtual int MethdBallScramble(CBall *, long, long);        // 0xB04
+            virtual int CanbeDivingSteal(int);                         // 0xB08
+            virtual int MethdDivingSteal(float, int, int);             // 0xB0C
+            virtual int CanbeBodyContact();                            // 0xB10
+            virtual int MethdBodyContact(float, long, int);            // 0xB14
+            virtual int CanbeOffBallStance();                          // 0xB18
+            virtual int MethdOffBallStance(float, int);                // 0xB1C
+            virtual int CanbeBlockAttack();                            // 0xB20
+            virtual int MethdBlockAttack(int);                         // 0xB24
+            virtual int CanbeTackleAttack();                           // 0xB28
+            virtual int MethdTackleAttack(float);                      // 0xB2C
+            virtual int CanbeAttackFight();                            // 0xB30
+            virtual int MethdAttackFight(long, int);                   // 0xB34
+            virtual int CanbePassCatch();                              // 0xB38
+            virtual int MethdPassCatch(long, const bcs::FVEC3 &, float); // 0xB3C
+            virtual int CanbeFreeShoot();                              // 0xB40
+            virtual int MethdbFreeShoot(float);                        // 0xB44
+            virtual int CanbeFeintShoot();                             // 0xB48
+            virtual int MethdFeintShoot(float);                        // 0xB4C
+            virtual int CanbeTreadOnQPanel(const CQPanel *);           // 0xB50
+            virtual int CanbeItemBallShoot();                          // 0xB54
+            virtual int MethdItemBallShoot(float);                     // 0xB58
+            virtual int CanbeCombination() const;                      // 0xB5C
+            virtual int MethdCombination();                            // 0xB60
+            virtual int CanbeLanding() const;                          // 0xB64
+            virtual int CanbeFall() const;                             // 0xB68
+            virtual int MethdFall();                                   // 0xB6C
+            virtual int CanbeRebirth() const;                          // 0xB70
+            virtual int MethdRebirth();                                // 0xB74
+            virtual void ArtsOptAliveCheck_();                         // 0xB78
+            virtual void *GetArtsOpt() const;                         // 0xB7C
+            virtual void *GetArtsOptMdl() const;                      // 0xB80
+            virtual void ArtsOptCreate(int, int, int);                 // 0xB84
+            virtual void ArtsOptDestroy();                             // 0xB88
+            virtual void ArtsOptSetDisp(int);                          // 0xB8C
+            virtual void ArtsOptFadeIn(float, float, int);             // 0xB90
+            virtual void ArtsOptFadeOut(float, float, int);            // 0xB94
+            virtual void ArtsOptSetFadeInSE(long);                     // 0xB98
+            virtual void ArtsOptSetFadeOutSE(long);                    // 0xB9C
+            virtual void ArtsOptSetAliveSE(long);                      // 0xBA0
+            virtual long ArtsOptGetNodeIdx(const char *) const;        // 0xBA4
+            virtual void ArtsOptAnimPlay(long, int, float, float);     // 0xBA8
+            virtual void ArtsOptAnimStop();                            // 0xBAC
+            virtual void ArtsOptAnimSetSpeed(float);                   // 0xBB0
+            virtual float ArtsOptAnimGetFrame() const;                 // 0xBB4
+            virtual float ArtsOptAnimGetFrameNum() const;              // 0xBB8
+            virtual float ArtsOptAnimGetResFrameNum(long) const;       // 0xBBC
+            virtual int ArtsOptAnimGetMotID() const;                   // 0xBC0
+            virtual void ArtsOptAnimSetFrame(float);                   // 0xBC4
+            virtual void ArtsOptAnimResetLoopedFlag();                 // 0xBC8
+            virtual int ArtsOptIsAnimLoop() const;                     // 0xBCC
+            virtual int ArtsOptIsAnimLooped() const;                   // 0xBD0
+            virtual int ArtsOptIsAnimEnd() const;                      // 0xBD4
+            virtual int ArtsOptIsAnimInter() const;                    // 0xBD8
+            virtual int ArtsOptIsAnimResLoopType(long) const;          // 0xBDC
+            virtual int ArtsOptCreateAttachEffect(long, long, unsigned long, const bcs::FVEC3 *, unsigned long, unsigned long); // 0xBE0
+            virtual int ArtsOptCreateAttachEffect(long, long, const char *, const bcs::FVEC3 *, unsigned long, unsigned long); // 0xBE4
+            virtual int ArtsOptCreateAttachEffectAuto(long, long, unsigned long); // 0xBE8
+            virtual long ArtsOptGetEffectHandle(long) const;           // 0xBEC
+            virtual void ArtsOptSetEffectSpeed(long, float);           // 0xBF0
+            virtual int ArtsOptIsEffectAlive(long) const;              // 0xBF4
+            virtual void ArtsOptStopEffect(long);                      // 0xBF8
+            virtual void ArtsOptEraseEffect(long);                     // 0xBFC
+            virtual void ArtsOptStopEffectAll();                       // 0xC00
+            virtual void ArtsOptEraseEffectAll();                      // 0xC04
+            virtual void ArtsOptCreate(long, long, long, long);        // 0xC08
+            virtual void Util_DropCoin(float, long, long);             // 0xC0C
+            virtual void CheckCountWork__();                           // 0xC10
+            virtual int CheckWater_(int);                              // 0xC14
+            virtual void CalcMoveSpeedRate_(float, long);              // 0xC18
+            virtual void Util_SetEffect(SET_EFFECT_TYPE);              // 0xC1C
+            virtual void Util_AttachEffect(ATTACH_EFFECT_TYPE, long);  // 0xC20
+            virtual void Util_DetachEffectAll();                       // 0xC24
+            virtual void Util_DetachEffect(ATTACH_EFFECT_TYPE);        // 0xC28
+            virtual void Util_DetachEffect_(unsigned long &);          // 0xC2C
+            virtual void Util_EraseEffectAll();                        // 0xC30
+            virtual void Util_EraseEffect(ATTACH_EFFECT_TYPE);         // 0xC34
+            virtual void Util_EraseEffect_(unsigned long &);           // 0xC38
+            virtual void CallbackDropCoinPickup_(const CDropCoin *);   // 0xC3C
+            virtual void CallbackItemPickup_(const CItem *);           // 0xC40
+            virtual void CallbackMotTrg_(const bcs::CAnmObjMotBase::MOT_TRG *); // 0xC44
+            virtual int CallbackDribbleTap_();                         // 0xC48
+            virtual void CallbackBodyDamage_(const CCollAtkUnit *, const bcs::FVEC3 &); // 0xC4C
+            virtual int CallbackBallDamage_(CBall *, const CCollAtkUnit *, const bcs::FVEC3 &); // 0xC50
+            virtual void CallbackBodyPush_(CCollBodyUnit *, CCollBodyUnit *, bcs::FVEC3 *); // 0xC54
+            virtual void CallbackBallCatch_(CBall *);                  // 0xC58
+            virtual void CallbackAttackHit_(const CCollAtkUnit *, const CCollBodyUnit *, const bcs::FVEC3 &, unsigned long); // 0xC5C
+            virtual void CallbackBallSnatched_(CBall *);               // 0xC60
+            virtual int CallbackDefReflectHit_(const CCollDefUnit *, const CBall *, bcs::FVEC3 &, bcs::FVEC3 &); // 0xC64
+            virtual int CallbackDefObstructHit_(const CCollDefUnit *, const CBall *, bcs::FVEC3 &, bcs::FVEC3 &); // 0xC68
+            virtual int CallbackDefReflectHit_(const CCollDefUnit *, const CBall *, const bcs::FVEC3 &); // 0xC6C
+            virtual void CallbackMotTrg_SeFoot_(long, long);           // 0xC70
+            virtual void CallbackMotTrg_SeLand_(long, long);           // 0xC74
+            virtual void CallbackMotTrg_SeJump_(long, long);           // 0xC78
+            virtual void CallbackMotTrg_BodyVisible_(long, long);      // 0xC7C
+            virtual void CallbackMotTrg_AtkOn_(long, long);            // 0xC80
+            virtual void CallbackMotTrg_AtkOff_(long, long);           // 0xC84
+            virtual void SubStateDamageCtorMame_(STATE_WORK_DAMAGE *); // 0xC88
+            virtual void SubStateDamageLoopMame_(STATE_WORK_DAMAGE *); // 0xC8C
+            virtual int SubStateParalyzeStateSet_(unsigned long, float); // 0xC90
+            virtual void SubStateParalyzeSetEffect_();                // 0xC94
+            virtual void SubStateParalyzeEndEffect_();                 // 0xC98
 
             // Not zero when the character takes no part in the game: it has
             // no model yet (the word at 0x90 is zero) or bit 30 of the word
@@ -785,14 +1021,19 @@ namespace msw {
             // The position, as a reference to the member (GetPos(FVEC3 &)
             // copies it).
             const bcs::FVEC3 &GetPos();
-            // The const overload, also in the DOL (BasketF's
-            // CChrDrvPadBasket::MethdTrickMove calls it).
+            // The same for a const character (GetPos__Q23msw8CChrCoreCFv;
+            // msw::CStgGmk_WaterPillarCluster::OnUpdate in the DOL; BasketF's
+            // CChrDrvPadBasket::MethdTrickMove calls it too).
             const bcs::FVEC3 &GetPos() const;
             float GetRotY() const;
             // The goal the character's team attacks, as a point.
             const bcs::FVEC3 &GetTargetGoalPos() const;
             // The distance to rPos in the XZ plane.
             float GetDist_ToPosXZ(const bcs::FVEC3 &rPos) const;
+            // (name guessed; the DOL's fn_800E1E1C) The distance to rPos.
+            float GetDist_ToPos(const bcs::FVEC3 &rPos) const;
+            // (name guessed) See m_PrevPos.
+            const bcs::FVEC3 &GetPrevPos() const { return m_PrevPos; }
             // The yaw (radians) from the character towards pChr.
             float GetRotY_ToChr(const CChrCore *pChr) const;
             // Frame, motion id and play of animation slot nSlot (the
@@ -807,33 +1048,124 @@ namespace msw {
 
             // Added for BasketF game/basket/CChrDrvPadBasket.cpp (all in the
             // DOL; return types guessed). Not zero while the character is in
-            // the named step of its play.
+            // the named step of its play (IsStepAirTrick is below).
             int IsStepCatch() const;
             int IsStepPassCatch() const;
             int IsStepTrickMove() const;
-            int IsStepAirTrick() const;
             int IsStepNormalShoot() const;
             int IsStepCatchDunk() const;
             // Not zero when the character holds a stocked item.
             int IsHaveStockItem() const;
             // The yaw (radians) towards the goal the character attacks.
             float GetRotY_ToGoal() const;
-            // Plays sound nId at pPos (null: at the character).
-            void PlaySePos(long nId, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
+
+            // Added for BossF game/boss/CChrDrvPadBoss.cpp (names guessed).
+            // Inline in the module: the pad driver reads both words directly.
+            float GetCamRotY() const { return m_fCamRotY; }
+            // The word at 0xEC; the pad driver ignores input while bit 25 or
+            // bit 27 is set (IsDisable tests bit 30).
+            unsigned long GetStatusFlag2() const { return m_UnkEC; }
+            // DOL.
+            int IsStepAirTrick() const;
+
+            // Added for HockeyF game/hockey/CChrDrvPadHockey.cpp (names
+            // guessed). Inline: the pad driver reads the word directly.
+            float GetFrameStep() const { return m_fFrameStep; }
+            // DOL. The yaw towards the goal the character's team defends.
+            float GetGuardGoalYRot() const;
+            // DOL. Sends message id to the character's driver.
+            void DriverSendMessage(CChrDrv::MSG_ID id, long, long, unsigned long, unsigned long);
+
+            // Added for BossF game/boss/CChrCoreBoss<Name>.cpp (all in the
+            // DOL; return types and parameter meanings guessed).
+            // Effects at a node of the character (nNode) or at a point.
+            unsigned long Eff_CreateAttach(long nSlot, long nEff, unsigned long nNode, const bcs::FVEC3 *pOfs,
+                                           unsigned long, unsigned long, unsigned long);
+            unsigned long Eff_CreateSimple(long nEff, const bcs::FVEC3 &pos, float fScale, unsigned long,
+                                           unsigned long, unsigned long);
+            unsigned long Eff_CreateSimple(long nEff, const bcs::FVEC3 &pos, const bcs::FVEC3 &rot, unsigned long,
+                                           unsigned long, unsigned long);
+            // Positions of the model's trans node, of a named node and of a
+            // virtual node.
+            void GetTransNodePos(bcs::FVEC3 &rPos) const;
+            void GetNodePos(const char *pName, bcs::FVEC3 &rPos) const;
+            void GetVNodePos(long nNode, bcs::FVEC3 &rPos) const;
+            const bcs::FVEC3 &GetRot();
+            // Turns towards fRotY by fRate of the difference.
+            void RotateYRate_(float fRotY, float fRate);
+            int IsAnimEnd(unsigned long nSlot) const;
+            void SetMoveMotType(long nType);
+            void PlayVoice(long nVoice, unsigned long);
+            int IsInvincible() const;
+            // The ball the character holds.
+            CBall *GetAttachBall() const;
+            long GetGuardCourtIdx() const;
+
+            // Added for VolleyF game/volley/CChrCoreVolley<Name>.cpp (all in
+            // the DOL; return types and parameter meanings guessed).
+            unsigned long Eff_CreateSimple(long nEff, const bcs::FVEC3 &pos, unsigned long, unsigned long,
+                                           unsigned long);
+            // An effect attached to the character's default node.
+            unsigned long Eff_CreateAttachAuto(long nSlot, long nEff, unsigned long);
+            // Stops the effect in slot nSlot.
+            void Eff_Stop(long nSlot);
+            // The length in frames of motion nMotId.
+            float AnimGetResFrameNum(long nMotId) const;
+            // Takes ball hBall (its handle) into the character's hand.
+            void AttachBall(long hBall, long, float, unsigned long);
+            // Plays sound nSe of the character's action table.
+            void SE_PlayWrapAct(long nSe, unsigned long, long);
+            // Knocks the character back (flags nFlag) towards fRotY.
+            void SetHookDamage(unsigned long nFlag, float fRotY, float, float, long, float, long, long, long, long);
+            // A model and an animation file of the character's extra
+            // model (Toad's mushrooms, the slime's squad); invalid when there is none.
+            nw4r::g3d::ResFile GetChrOptResFile();
+            nw4r::g3d::ResFile GetChrOptMotResFile();
+            // The court the character's team attacks, and the goal it
+            // defends (0 or 1).
+            long GetTargetCourtIdx() const;
+            long GetGuardGoalIdx() const;
+            // Moves the character along its jump; nMode not known.
+            void Util_DoJumpMoveEX(int nMode);
+            // Sets a jump of fFrame frames from height fFrom.
+            void Util_SetJumpParam(float fFrame, float fFrom, float, float);
+            void Util_SetDirMoveParam(DIR_MOVE &rMove, float);
+            int Eff_IsAlive(long nSlot) const;
+            // Stops the effect in slot nSlot at once.
+            void Eff_StopForce(long nSlot);
+            void AnimSetSpeed(unsigned long nSlot, float fSpeed);
+            // Plays sound nSe at pPos (null: at the character). (BasketF had
+            // it returning void; VolleyF's return type kept.)
+            unsigned long PlaySePos(long nSe, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
+            void SetMoveMotStep_(long nStep);
+            // The body collision's push settings.
+            void SetCollBodyPushPower_(long nPower);
+            void SetCollBodyPushType_(BODY_COLL_SIZE_SET_TYPE type, float);
+            void SetCollBodyPushRank_(long nRank);
 
         protected:
             unsigned long m_Unk60;
             CChrDrv *m_pDriver[2];       // 0x64 (count guessed from the index's place)
             long m_nDriver;              // 0x6C, index of the driver in use, negative for none
         public:
-            // 0x70, 0x74 (names guessed; added for BasketF
-            // game/basket/CChrDrvPadBasket.cpp, which reads both directly):
-            // the yaw in radians that the pad's stick direction is added to,
-            // and the frames one update advances (the driver's timers add it).
-            float m_fRotY;
+            // (public: BasketF's game/basket/CChrDrvPadBasket.cpp reads 0x70
+            // and 0x74 directly.)
+            // 0x70 (name guessed): the yaw the pad's stick directions are
+            // relative to; CChrDrvPadBoss adds it to the stick angle.
+            float m_fCamRotY;
+            // 0x74 (name guessed): the frames one update advances;
+            // CChrDrvPadHockey::CheckStickParam counts its timers with it.
             float m_fFrameStep;
+            // 0x78 (name guessed): a speed factor for the character's
+            // motions and turns (AnimPlay, RotateYRate_ read it);
+            // CChrCoreVolleyLuigi turns its vacuum by it times m_fFrameStep.
+            float m_fTimeScale;
+            // 0x7C (name guessed): the position of the previous frame;
+            // msw::CStgGmk_WaterPillar_Act::OnBodyPush (DOL) pushes the
+            // character back by its movement since.
+            bcs::FVEC3 m_PrevPos;
         protected:
-            unsigned char m_Unk78[0x90 - 0x78];
+            unsigned char m_Unk88[0x90 - 0x88];
             // 0x90 (name guessed): the character's model; IsDisable is true
             // while it is null. CChrManHockey::ArtsStart_ fades it out.
             bcs::CMdlObj *m_pMdl;
@@ -852,7 +1184,9 @@ namespace msw {
             CChrCore *m_pPassCheckChr;
             unsigned char m_Unk16C[0x174 - 0x16C];
             signed char m_nChrId;        // 0x174, a character number (meaning guessed; signed, see GetChrTypeID)
-            unsigned char m_Unk175;
+            // 0x175 (name guessed): the character's colour variant, read
+            // signed (CChrCoreBossSlime::Reset_ picks its colour from it).
+            signed char m_nColor;
             // (names guessed) What CRadarIcon2D<Game>::CreateCharaIcon passes
             // to CGame::GetCharType and to CGame::GetTeamColorIdx.
             signed char m_nPlayerNo;     // 0x176
@@ -861,7 +1195,27 @@ namespace msw {
             // 0x179 (name guessed): the CChrManBoss::CreateDriver_ stores the
             // entry of SetCamIdAssign_'s table here.
             signed char m_nCamNo;
-            unsigned char m_Unk17A[0x230 - 0x17A];
+            unsigned char m_Unk17A[0x186 - 0x17A];
+            // 0x186 (name guessed): the model node effects attach to by
+            // default (the volley characters pass it to Eff_CreateAttach).
+            unsigned short m_nEffNode;
+            unsigned char m_Unk188[0x190 - 0x188];
+            // 0x190 (name guessed): a second model node for effects
+            // (CChrCoreVolleyYoshi's block and spike effects attach there).
+            unsigned short m_nEffNodeSub;
+            unsigned char m_Unk192[0x20C - 0x192];
+            // 0x20C (name guessed): the vertical speed of a jump (negative
+            // while falling; CChrCoreVolleyKinopio's block jump tests it).
+            float m_fJumpVelY;
+            unsigned char m_Unk210[0x224 - 0x210];
+            // 0x224, 0x228 (names guessed): two jump values the air tricks
+            // set next to Util_SetJumpParam.
+            float m_fJumpUnk224;
+            float m_fJumpUnk228;
+            // 0x22C (name guessed): the step of the jump move
+            // (Util_DoJumpMoveEX); 2 and up once the character has landed.
+            signed char m_nJumpStep;
+            unsigned char m_Unk22D[0x230 - 0x22D];
             // 0x230 (name guessed): the level CComMan::GetDatF reads the
             // computer's parameters for (CComManVolleyGame::GetConditionHandicapDis).
             long m_nComLevel;

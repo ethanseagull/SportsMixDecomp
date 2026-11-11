@@ -171,7 +171,7 @@ long msw::CChrDrvPadBasket::OnMsg(MSG_ID id, _CHR_MSG *pMsg)
             break;
         case 0x28:
             if (m_fStickDir >= 0.0f) {
-                float fRot = m_fStickDir + m_pChr->m_fRotY;
+                float fRot = m_fStickDir + m_pChr->m_fCamRotY;
                 if (m_pChr->GetChrId() == 0xE) {
                     fRot += PI + CGame::GetGoalYRot(m_pChr->GetTargetGoalIdx());
                 }
@@ -188,7 +188,7 @@ long msw::CChrDrvPadBasket::OnMsg(MSG_ID id, _CHR_MSG *pMsg)
             m_nUnk94 = 0;
             break;
         case 0x38:
-            if (m_nStroke != -1) {
+            if (m_nStrokeType != -1) {
                 ClearStroke_(0.0f);
                 nRet = 1;
             }
@@ -212,10 +212,10 @@ long msw::CChrDrvPadBasket::OnMsg(MSG_ID id, _CHR_MSG *pMsg)
             break;
         }
         case 0x3C:
-            if (m_nStroke != -1) {
+            if (m_nStrokeType != -1) {
                 ClearStroke_(0.0f);
             }
-            nRet = m_nStroke;
+            nRet = m_nStrokeType;
             break;
         case 0x25:
             nRet = IsCmd_(0xF, 0, 1, 0);
@@ -241,7 +241,7 @@ long msw::CChrDrvPadBasket::OnMsg(MSG_ID id, _CHR_MSG *pMsg)
                 } else {
                     nRet = 4;
                 }
-                fDiff = RoundRadPI(CGame::GetGoalYRot(m_pChr->GetTargetGoalIdx()) - m_pChr->m_fRotY);
+                fDiff = RoundRadPI(CGame::GetGoalYRot(m_pChr->GetTargetGoalIdx()) - m_pChr->m_fCamRotY);
                 if (fabsf(fDiff) < PI / 2) {
                     if (nRet == 2) {
                         nRet = 4;
@@ -382,7 +382,7 @@ void msw::CChrDrvPadBasket::MainOffense_(_CHR_MSG *)
     if (m_pChr->GetStatusFlag() & 1) {
         if (m_pChr->GetStatusFlag() & 0x8000) {
             if (m_fStickDir >= 0.0f) {
-                float fRot = RoundRad(m_pChr->m_fRotY + m_fStickDir);
+                float fRot = RoundRad(m_pChr->m_fCamRotY + m_fStickDir);
                 m_pChr->MethdSliding(fRot);
                 m_pChr->MethdRun(fRot);
             }
@@ -407,7 +407,7 @@ void msw::CChrDrvPadBasket::MainOffense_(_CHR_MSG *)
                     float fRot;
 
                     work.m_nUnk00 = 0;
-                    fRot = RoundRad(m_pChr->m_fRotY + m_fStickDir);
+                    fRot = RoundRad(m_pChr->m_fCamRotY + m_fStickDir);
                     if (!m_pChr->MethdRDB(&work, fRot, m_fStickPower)) {
                         m_pChr->MethdCatchToSDB();
                     }
@@ -446,7 +446,7 @@ void msw::CChrDrvPadBasket::SubOffDribble_()
         }
 
         CChrCoreBasket *pChr = GetChr();
-        float fRot = RoundRad(pChr->m_fRotY + m_fStickDir);
+        float fRot = RoundRad(pChr->m_fCamRotY + m_fStickDir);
         if (!pChr->MethdAutoDPM(fRot, m_fStickPower)) {
             CChrCore::INPUT_WORK work;
 
@@ -463,7 +463,7 @@ void msw::CChrDrvPadBasket::SubOffNotHaveBall_()
     if (m_pChr->GetFlagEC() & 0x0A000000) {
         return;
     }
-    fRotY = m_pChr->m_fRotY;
+    fRotY = m_pChr->m_fCamRotY;
     if (m_fStickDir >= 0.0f) {
         m_pChr->MethdSetMoveRevise(RoundRad(fRotY + m_fStickDir));
     }
@@ -504,7 +504,7 @@ void msw::CChrDrvPadBasket::SubOffNotHaveBall_()
         }
     }
     if (m_fStickDir >= 0.0f) {
-        float fRot = RoundRad(m_pChr->m_fRotY + m_fStickDir);
+        float fRot = RoundRad(m_pChr->m_fCamRotY + m_fStickDir);
         m_pChr->MethdSliding(fRot);
         m_pChr->MethdRun(fRot);
     }
@@ -524,7 +524,7 @@ void msw::CChrDrvPadBasket::SubDefNormal_()
         m_pChr->MethdItemShoot(GetMoveRotY_());
         return;
     }
-    fRotY = m_pChr->m_fRotY;
+    fRotY = m_pChr->m_fCamRotY;
     if (m_fStickDir >= 0.0f) {
         m_pChr->MethdSetMoveRevise(RoundRad(fRotY + m_fStickDir));
     }
@@ -564,7 +564,7 @@ void msw::CChrDrvPadBasket::SubDefNormal_()
         }
     }
     if (m_fStickDir >= 0.0f) {
-        float fRot = RoundRad(m_pChr->m_fRotY + m_fStickDir);
+        float fRot = RoundRad(m_pChr->m_fCamRotY + m_fStickDir);
         m_pChr->MethdSliding(fRot);
         m_pChr->MethdRun(fRot);
     }
@@ -785,19 +785,19 @@ int msw::CChrDrvPadBasket::CheckStrokeRaw(long nStroke) const
             }
             return 0;
         case 4:
-            return m_nStroke == 3;
+            return m_nStrokeType == 3;
         case 5:
-            return m_nStroke == 0;
+            return m_nStrokeType == 0;
         case 6:
-            return m_nStroke == 1;
+            return m_nStrokeType == 1;
         case 7:
-            return m_nStroke == 2;
+            return m_nStrokeType == 2;
         case 8:
             return bcs::CWifiPad::IsNunchukStroke(0.65f, m_pChr->GetPadNo());
         case 9:
             return bcs::CWifiPad::IsBothHandStroke(0.2f, 0.2f, m_pChr->GetPadNo());
         case 10:
-            return (unsigned long)m_nStroke <= 2;
+            return (unsigned long)m_nStrokeType <= 2;
     }
     return 0;
 }
@@ -852,7 +852,7 @@ int msw::CChrDrvPadBasket::MethdTrickMove()
             float fSide;
 
             if (m_fStickDir >= 0.0f) {
-                float fDiff = RoundRadPI(m_pChr->m_fRotY + m_fStickDir - m_pChr->GetRotY_ToGoal());
+                float fDiff = RoundRadPI(m_pChr->m_fCamRotY + m_fStickDir - m_pChr->GetRotY_ToGoal());
                 if (fDiff < 0.0f) {
                     fSide = -1.0f;
                 } else {
@@ -894,7 +894,7 @@ int msw::CChrDrvPadBasket::MethdTrickMove()
         }
     } else if (IsCmd_(0, 1, 4, 0)) {
         if (m_fStickDir >= 0.0f) {
-            float fDiff = RoundRadPI(m_pChr->m_fRotY + m_fStickDir - m_pChr->GetRotY_ToGoal());
+            float fDiff = RoundRadPI(m_pChr->m_fCamRotY + m_fStickDir - m_pChr->GetRotY_ToGoal());
             if (fDiff < 0.0f) {
                 fSide = -1.0f;
             } else {
@@ -928,7 +928,7 @@ int msw::CChrDrvPadBasket::MethdShoot()
     if (IsCmd_(0x23, 0, 0, 1) || bItem) {
         float fRot = -1.0f;
         if (m_fStickDir >= 0.0f) {
-            fRot = RoundRad(m_fStickDir + m_pChr->m_fRotY);
+            fRot = RoundRad(m_fStickDir + m_pChr->m_fCamRotY);
             if (bItem && m_pChr->IsHaveStockItem() && m_pChr->MethdJumpShoot(fRot, bItem)) {
                 ClearStroke_(15.0f);
                 return 1;
@@ -960,7 +960,7 @@ long msw::CChrDrvPadBasket::CheckArtsChrInput(const _CHR_MSG *pMsg)
             if (!(m_fStickDir >= 0.0f) || !(m_fStickPower >= 0.5f)) {
                 return 0;
             }
-            fDiff = RoundRadPI(m_fStickDir + m_pChr->m_fRotY);
+            fDiff = RoundRadPI(m_fStickDir + m_pChr->m_fCamRotY);
             fAbs = fabsf(fDiff);
             if (fAbs < PI / 4) {
                 return 1;
@@ -975,7 +975,7 @@ long msw::CChrDrvPadBasket::CheckArtsChrInput(const _CHR_MSG *pMsg)
         }
         case 1:
             if (m_fStickDir >= 0.0f && m_fStickPower >= 0.5f) {
-                float fRot = RoundRad(m_fStickDir + m_pChr->m_fRotY);
+                float fRot = RoundRad(m_fStickDir + m_pChr->m_fCamRotY);
                 if (fRot >= PI / 4 && fRot <= PI * 3 / 4) {
                     return 2;
                 }
@@ -986,7 +986,7 @@ long msw::CChrDrvPadBasket::CheckArtsChrInput(const _CHR_MSG *pMsg)
             return 0;
         case 15:
             if (m_fStickDir >= 0.0f) {
-                return 57.295776f * RoundRad(m_fStickDir + m_pChr->m_fRotY);
+                return 57.295776f * RoundRad(m_fStickDir + m_pChr->m_fCamRotY);
             }
             return -1;
     }

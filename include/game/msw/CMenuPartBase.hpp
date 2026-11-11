@@ -66,6 +66,10 @@ namespace msw {
             virtual void SetCursorAnimByPadNoBits(unsigned long);
             virtual void SetButtonAnim(long, int, long);
 
+            // (added for game/menu/CCourtTab.cpp) Clears the per-pad
+            // cursor bits.
+            void ClearPadNoBits();
+
             // (name guessed; no symbol) The 0x0020 flag as an int: the
             // SelectMenu screens compare it signed, which the bit-field
             // read directly does not give.

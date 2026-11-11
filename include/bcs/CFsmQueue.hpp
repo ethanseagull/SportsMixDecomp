@@ -3,6 +3,7 @@
 
 #include "bcs/BCS_Util.hpp"
 #include "bcs/CState.hpp"
+#include "bcs/New.hpp"
 
 namespace bcs {
 
@@ -12,42 +13,73 @@ namespace bcs {
     // state sits at 0x30 instead of 0x18.
     //
     // Known from msw::CChrCore's constructor in the DOL (which builds this
-    // base inline) and from the instance functions BasketF emits out of line
-    // (FsmqIsEmpty, FsmqGetState, GetState, FsmqGetWork_). Member names are
-    // guesses; members marked Unk are only known to be cleared by that
-    // constructor.
+    // base inline), from the instance functions BasketF emits out of line
+    // (FsmqIsEmpty, FsmqGetState, GetState, FsmqGetWork_) and from
+    // msw::CStgGmk_WaterPillar_Act (DOL), which builds, runs and destroys
+    // one inline and emits the instances of CStateTemplate and the
+    // destructor. Member names are guesses.
     template <class T>
     class CFsmQueue {
         public:
-            // One entry per state, 0x2C bytes, as in bcs::CFsm; opaque here
-            // for the same reason.
-            struct State {
-                unsigned char m_Unk00[0x2C];
-            };
+            // One entry per state, 0x2C bytes, as in bcs::CFsm.
+            typedef CStateTemplate<T> State;
+            typedef void (T::*StateFunc)();
+
+            CFsmQueue()
+            {
+                m_pOwner = 0;
+                // The null state's hooks are set again here, from one null
+                // pointer to member (as in bcs::CFsm).
+                typename CStateTemplate<CFsmQueue<T> >::StateFunc pNull = 0;
+                m_NullState.Set(this, pNull, pNull, pNull);
+                m_pStateTable = 0;
+                m_pState = &m_NullState;
+                m_pNextState = 0;
+                m_nStateNum = 0;
+                m_nFlag = 0;
+                m_nQueueHead = 0;
+                m_nQueueTail = 0;
+                m_nQueueSize = 0;
+                m_nWorkSize = 0;
+                m_pStateQueue = 0;
+                m_pWorkQueue = 0;
+            }
 
         protected:
-            T *m_pOwner;          // 0x00 (guessed by analogy with CFsm)
-            State *m_pStateTable; // 0x04 (guessed by analogy with CFsm)
-            State *m_pState;      // 0x08, current state; starts at m_NullState
-            State *m_pRunState;   // 0x0C, the state at the head of the queue (name guessed)
-            unsigned long m_Unk10;
-            // 0x14 (name guessed): bit 0 is set when a state was entered
-            // this frame, bit 1 asks FsmqExecState for another round
-            // (FsmqDoChain sets it).
-            unsigned long m_nFsmqFlag;
+            T *m_pOwner;          // 0x00
+            State *m_pStateTable; // 0x04, m_nStateNum entries
+            CState *m_pState;     // 0x08, current state; starts at m_NullState
+            CState *m_pNextState; // 0x0C, the state to enter next; null when none is pending
+            long m_nStateNum;     // 0x10
+            // 0x14: bit 0 is set when a state was entered this frame, bit 1
+            // asks FsmqExec to run another round (FsmqRetry).
+            unsigned long m_nFlag;
             long m_nQueueHead;    // 0x18, index of the state now running
             long m_nQueueTail;    // 0x1C, equal to the head when the queue is empty
             long m_nQueueSize;    // 0x20, entries of the queue (a ring)
             long m_nWorkSize;     // 0x24, bytes of work memory per queue entry
             long *m_pStateQueue;  // 0x28, state number of each queue entry
             void *m_pWorkQueue;   // 0x2C, work memory of each queue entry
-            State m_NullState;    // 0x30
+            CStateTemplate<CFsmQueue<T> > m_NullState; // 0x30
 
         public:
             // The class's only virtual function (its vtable in the DOL is
-            // three words). Not written yet, for the reason given at
-            // bcs::CFsm's destructor.
-            virtual ~CFsmQueue();
+            // three words). Frees the queues and the state table.
+            virtual ~CFsmQueue()
+            {
+                if (m_pStateQueue) {
+                    delete[] m_pStateQueue;
+                }
+                m_pStateQueue = 0;
+                if (m_pWorkQueue) {
+                    delete[] static_cast<char *>(m_pWorkQueue);
+                }
+                m_pWorkQueue = 0;
+                if (m_pStateTable) {
+                    delete[] m_pStateTable;
+                }
+                m_pStateTable = 0;
+            }
 
             int FsmqIsEmpty() const { return m_nQueueHead == m_nQueueTail; }
 
@@ -62,6 +94,25 @@ namespace bcs {
             }
 
             long GetState() const { return FsmqGetState(); }
+
+            // The work memory of the state at the head of the queue; null
+            // when nothing is queued or the states have none.
+            void *FsmqGetWork_() const
+            {
+                if (FsmqIsEmpty()) {
+                    return 0;
+                }
+                if (!m_pWorkQueue || !m_nWorkSize) {
+                    return 0;
+                }
+                return static_cast<char *>(m_pWorkQueue) + m_nWorkSize * m_nQueueHead;
+            }
+
+            template <class W>
+            W *FsmqGetWork() const
+            {
+                return static_cast<W *>(FsmqGetWork_());
+            }
 
             // (names guessed) Inline in msw::CStgGmk_WaterPillar's Activate
             // and Inactivate, which run them on the actor's queue (DOL).
@@ -82,9 +133,9 @@ namespace bcs {
             void FsmqClear()
             {
                 if (m_pStateTable) {
-                    m_pRunState = m_pStateTable;
+                    m_pNextState = m_pStateTable;
                 } else {
-                    m_pRunState = &m_NullState;
+                    m_pNextState = &m_NullState;
                 }
                 m_nQueueTail = 0;
                 m_nQueueHead = 0;
@@ -100,7 +151,7 @@ namespace bcs {
                 m_pStateQueue[tail] = state;
                 m_nQueueTail = next;
                 if (bEmpty && m_pStateTable) {
-                    m_pRunState = &m_pStateTable[state];
+                    m_pNextState = &m_pStateTable[state];
                 }
                 if (m_pWorkQueue && m_nWorkSize) {
                     BCS_CpuClear(static_cast<char *>(m_pWorkQueue) + m_nWorkSize * tail, m_nWorkSize);
@@ -116,8 +167,9 @@ namespace bcs {
 
             // (added for BasketF game/basket/CNpcGhostBasketBase.cpp; inline
             // there, out of line as FsmqSetState__Q23bcs35CFsmQueue<Q23msw16CNpcBehemothBoss>Fl
-            // in BossF) Drops the queue and runs state, as FsmqChangeState;
-            // returns the state's cleared work memory (null without one).
+            // in BossF, which gives this overload its name) Drops the queue
+            // and runs state, as FsmqChangeState; returns the state's
+            // cleared work memory (null without one).
             void *FsmqSetState(long state)
             {
                 FsmqClear();
@@ -127,7 +179,7 @@ namespace bcs {
                 m_pStateQueue[tail] = state;
                 m_nQueueTail = next;
                 if (bEmpty && m_pStateTable) {
-                    m_pRunState = &m_pStateTable[state];
+                    m_pNextState = &m_pStateTable[state];
                 }
                 void *pWork;
                 if (m_pWorkQueue == 0 || m_nWorkSize == 0) {
@@ -139,19 +191,8 @@ namespace bcs {
                 return pWork;
             }
 
-            // The work memory of the state now running; null when the queue
-            // is empty or the states have none. (BasketF emits it out of
-            // line for CChrCore; the ghost NPC's copy is inline.)
-            void *FsmqGetWork_() const
-            {
-                if (FsmqIsEmpty()) {
-                    return 0;
-                }
-                return FsmqGetWorkAt_(m_nQueueHead);
-            }
-
-            // (name guessed) The work memory of queue entry idx; null when
-            // the states have none.
+            // (name guessed; BasketF) The work memory of queue entry idx;
+            // null when the states have none.
             void *FsmqGetWorkAt_(long idx) const
             {
                 if (m_pWorkQueue == 0 || m_nWorkSize == 0) {
@@ -160,34 +201,59 @@ namespace bcs {
                 return static_cast<char *>(m_pWorkQueue) + m_nWorkSize * idx;
             }
 
-            template <class W> W *FsmqGetWork() const { return static_cast<W *>(FsmqGetWork_()); }
+            // (name guessed) From a state's hook: lets FsmqExec carry the
+            // change out in the same frame.
+            void FsmqRetry() { m_nFlag |= 2; }
 
-            // (name guessed) One frame of the machine: leaves the current
-            // state and enters the queued one when there is one, otherwise
-            // runs the current state; again while bit 1 of m_nFsmqFlag is
-            // set. Inline in BasketF's CNpcGhostBasketBase::MainFunc. The
-            // entries are laid out as bcs::CStateTemplate<T> (their virtual
-            // functions are called through the vptr at 0); State stays
-            // opaque so that no constructor is generated for m_NullState.
-            void FsmqExecState()
+        protected:
+            // (name guessed) Makes a table of nStateNum states run on pOwner
+            // and a queue of nQueueSize entries with nWorkSize bytes of work
+            // memory each.
+            void FsmqInit(T *pOwner, long nStateNum, long nQueueSize, long nWorkSize)
             {
-                do {
-                    m_nFsmqFlag &= ~3;
-                    if (m_pRunState) {
-                        AsState(m_pState)->DtorState();
-                        m_pState = m_pRunState;
-                        m_pRunState = 0;
-                        m_nFsmqFlag |= 1;
-                        AsState(m_pState)->CtorState();
-                    }
-                    if (!m_pRunState && !(m_nFsmqFlag & 2)) {
-                        AsState(m_pState)->LoopState();
-                    }
-                } while (m_nFsmqFlag & 2);
+                m_pOwner = pOwner;
+                m_pStateTable = new (0x100) State[nStateNum];
+                m_nStateNum = nStateNum;
+                m_nFlag = 0;
+                m_nQueueHead = 0;
+                m_nQueueTail = 0;
+                m_pStateQueue = new (0x100) long[nQueueSize];
+                m_nQueueSize = nQueueSize;
+                BCS_CpuClear(m_pStateQueue, nQueueSize * sizeof(long));
+                m_pWorkQueue = new (0x100) char[nQueueSize * nWorkSize];
+                m_nWorkSize = nWorkSize;
+                BCS_CpuClear(m_pWorkQueue, nQueueSize * nWorkSize);
+                FsmqClear();
             }
 
-        private:
-            static CState *AsState(State *p) { return reinterpret_cast<CState *>(p); }
+            // (name guessed) Sets the three hooks of state nState.
+            void FsmqSetState(long nState, StateFunc pCtor, StateFunc pLoop, StateFunc pDtor)
+            {
+                m_pStateTable[nState].Set(m_pOwner, pCtor, pLoop, pDtor);
+            }
+
+            // (name guessed) One frame of the state machine, called from the
+            // owner's update (msw::CStgGmk_WaterPillar_Act; inline in
+            // BasketF's CNpcGhostBasketBase::MainFunc): enters a pending
+            // state (leaving the current one), then runs the current state's
+            // loop unless a change is pending again; repeats while a hook
+            // asked for it (FsmqRetry).
+            void FsmqExec()
+            {
+                do {
+                    m_nFlag &= ~3;
+                    if (m_pNextState) {
+                        m_pState->DtorState();
+                        m_pState = m_pNextState;
+                        m_pNextState = 0;
+                        m_nFlag |= 1;
+                        m_pState->CtorState();
+                    }
+                    if (!m_pNextState && !(m_nFlag & 2)) {
+                        m_pState->LoopState();
+                    }
+                } while (m_nFlag & 2);
+            }
     };
 }
 

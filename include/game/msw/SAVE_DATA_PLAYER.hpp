@@ -1,6 +1,7 @@
 #ifndef SAVE_DATA_PLAYER_HPP_
 #define SAVE_DATA_PLAYER_HPP_
 
+#include "dwc.h"
 #include "revolution/rfl.h"
 
 namespace msw {
@@ -15,12 +16,20 @@ namespace msw {
         // (added for MenuF game/menu/CPlayMode.cpp) Forgets the Mii chosen
         // on the character select screen.
         void ClearSelectMii();
+        // (added for MenuF game/menu/CEntry.cpp; return types and argument
+        // names guessed) The index of the Mii with id createId, and
+        // choosing a Mii by index.
+        long SearchMiiIndex(RFLCreateID createId);
+        void SetSelectMii(long nIndex, int bUnk);
         // (added for MenuF game/menu/CCharaLevelStar.cpp) For game kind
         // nGameKind (CSelectMenu::m_nGameKind): the computer level (0 to
         // 3) the level window starts from. Meaning guessed from that use.
         unsigned char IsDifficult(long nGameKind);
 
-        unsigned char m_Unk0000[0x18];
+        // 0x00. (added for MenuF game/menu/CFriendCode.cpp; name and
+        // length guessed) The player's name, shown in the friend code
+        // message.
+        wchar_t m_Name[0xC];
         // 0x18 to 0x2B. (names guessed; added for MenuF
         // game/menu/CPlusMinus.cpp) The player's own Mii, passed to
         // CSelectMenu::Mii_SelectParam.
@@ -28,7 +37,33 @@ namespace msw {
         long m_nMiiIndex;                // 0x1C
         RFLDataSource m_MiiSource;       // 0x20
         RFLCreateID m_MiiCreateId;       // 0x24
-        unsigned char m_Unk002C[0x5C50 - 0x2C];
+        unsigned char m_Unk002C[0x38 - 0x2C];
+
+        // 0x38 to 0x56EF. (names guessed; added for MenuF
+        // game/menu/CFriendCode.cpp) The Wi-Fi account and friend roster.
+        // One saved friend, copied from bcs::dwc::CDwcFriend.
+        struct Friend {
+            unsigned char m_Unk00[0x18]; // 0x00
+            long m_Unk18;                // 0x18, CDwcFriend 0x04
+            long m_Unk1C;                // 0x1C, CDwcFriend 0x08
+            long m_Unk20;                // 0x20, CDwcFriend 0x0C
+            unsigned long long m_nFriendCode; // 0x28, CDwcFriend 0x10
+            long m_Unk30;                // 0x30, CDwcFriend 0x18
+            long m_Unk34;                // 0x34, CDwcFriend 0x1C
+            unsigned char m_Data[0x260]; // 0x38, CDwcFriend 0xE0
+            unsigned char m_Unk298[0x8]; // 0x298
+        };
+
+        enum {
+            FRIEND_MAX = 32
+        };
+
+        DWCstAccUserData m_AccUserData;  // 0x38
+        unsigned long long m_nFriendCode; // 0x78, the player's own code
+        long m_nFriendNum;               // 0x80
+        unsigned char m_Unk0084[0x2F0 - 0x84];
+        Friend m_Friend[FRIEND_MAX];     // 0x2F0
+        unsigned char m_Unk56F0[0x5C50 - 0x56F0];
         unsigned char m_nFlags5C50; // 0x5C50; bit 0x08 picks the second camera table in CSelectMenu::HowTo_In (MenuF)
         unsigned char m_Unk5C51[0x5C95 - 0x5C51];
         // 0x5C95, 0x5CB5, 0x5CD5, 0x5CF5: one byte per sport (basketball,

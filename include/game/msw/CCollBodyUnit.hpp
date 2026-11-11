@@ -19,15 +19,16 @@ namespace msw {
             unsigned char m_nOwnerKind;
             unsigned char m_Unk13;
             // 0x14 (name guessed): the owner's index (the character's, when
-            // the kind is 1); read signed.
-            signed char m_nOwnerNo;
+            // the kind is 1); read signed. The DOL's
+            // msw::CStgGmk_WaterPillar_Act::OnBodyPush passes it to
+            // CChrMan::GetChrCore for an owner of kind 1.
+            signed char m_nOwnerIdx;
 
             // (name guessed) Inline: DodgeF compares the byte as a signed int.
             long GetOwnerKind() const { return m_nOwnerKind; }
 
-            // (DOL; added for BasketF game/basket/CNpcGhostBasketBase.cpp,
-            // meaning guessed) Calls this unit's push callback for being
-            // pushed by pOther by pPush (null: no push).
+            // (DOL) Runs this unit's push callback for being pushed by
+            // pOther by pPush (null: no push).
             void DoBodyPushCallback(CCollBodyUnit *pOther, bcs::FVEC3 *pPush);
     };
 }

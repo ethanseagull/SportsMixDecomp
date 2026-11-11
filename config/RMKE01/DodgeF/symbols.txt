@@ -2254,7 +2254,7 @@ SubStateArtsShotPlayArtsShotMotion___Q23msw18CChrCoreDodgeDiddyFPQ33msw13CChrCor
 SubStateArtsShotFireBullet___Q23msw18CChrCoreDodgeDiddyFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl = .text:0x00059830; // type:function size:0x250 scope:global
 __dt__Q210CC08_DODGE16CcBoomerangDodgeFv = .text:0x00059A80; // type:function size:0x58 scope:global
 SetCollParam___Q43msw6CC_CMN5DIDDY11CcBoomerangFv = .text:0x00059AD8; // type:function size:0x4 scope:global
-fn_6_59ADC = .text:0x00059ADC; // type:function size:0x14
+__sinit_\CChrCoreDodgeDiddy_cpp = .text:0x00059ADC; // type:function size:0x14 scope:local
 @148@__dt__Q210CC08_DODGE16CcBoomerangDodgeFv = .text:0x00059AF0; // type:function size:0x8 scope:global
 __ct__Q23msw19CChrCoreDodgeDonkeyFv = .text:0x00059AF8; // type:function size:0x3C scope:global
 __dt__Q23msw19CChrCoreDodgeDonkeyFv = .text:0x00059B34; // type:function size:0x58 scope:global

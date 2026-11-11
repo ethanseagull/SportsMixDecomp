@@ -61,3 +61,4 @@ Matching game/dodge/CStageDodgeDOD57.cpp
 Equivalent game/dodge/CHaikyuManDD.cpp
 Equivalent game/dodge/CChrCoreDodgeMoogle.cpp
 Matching game/dodge/CChrCoreDodgeDonkey.cpp
+Matching game/dodge/CChrCoreDodgeDiddy.cpp

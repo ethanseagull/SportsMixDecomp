@@ -71,3 +71,5 @@ Equivalent game/dodge/CComDrvDodgeGameGimmick.cpp
 Equivalent game/dodge/CCockpitDodgeResult.cpp
 Equivalent game/dodge/CCockpitDodgeCoder.cpp
 Matching game/dodge/CStageManDodgeDodgeOrDie.cpp
+Equivalent game/dodge/CLockCursorDodge.cpp
+Matching game/dodge/CCockpitDodgeLayoutBase.cpp

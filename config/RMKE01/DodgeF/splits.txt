@@ -478,14 +478,18 @@ game/dodge/CStgGmk_Pylon_Act_Dodge.cpp:
 	.data       start:0x000215E0 end:0x00021A00
 
 game/dodge/CLockCursorDodge.cpp:
-	.text       start:0x000AC36C end:0x000ADCC0
+	.text       start:0x000AC36C end:0x000AD954
 	.ctors      start:0x000000B0 end:0x000000B4
 	.rodata     start:0x00006C58 end:0x00007230
-	.data       start:0x00021A00 end:0x00021CA8
+	.data       start:0x00021A00 end:0x00021C08
 	.bss        start:0x00000C30 end:0x00000C38
 
+game/dodge/CCockpitDodgeLayoutBase.cpp:
+	.text       start:0x000AD954 end:0x000ADB9C
+	.data       start:0x00021C08 end:0x00021CA8
+
 game/dodge/CCockpitDodgeTelopInOutChange.cpp:
-	.text       start:0x000ADCC0 end:0x000AF6CC
+	.text       start:0x000ADB9C end:0x000AF6CC
 	.ctors      start:0x000000B4 end:0x000000B8
 	.rodata     start:0x00007230 end:0x00007520
 	.data       start:0x00021CA8 end:0x00021FC8

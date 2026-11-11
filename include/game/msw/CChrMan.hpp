@@ -129,6 +129,10 @@ namespace msw {
             // Passes a message to the NPCs. BasketF's CBallBasketFruit sends
             // (0xB, 0, -1, ball number, 0) when a fruit on a string explodes.
             static void NpcSendMessage(long nMsg, long, long, long, long);
+            // (DOL, static; added for BasketF
+            // game/basket/CChrCoreBasketLuigi.cpp) Sends message id to every
+            // character (Luigi's shot sends 0x33 when his vacuum stops).
+            static void AllSendMsg(CChrDrv::MSG_ID id, long, long, unsigned long, unsigned long);
             // (fn_800EE528, fn_800EE570, unnamed in the DOL) The static
             // wrappers of DecideScoredViewLookChr_ and GetScoredViewLookChr_.
             // The DOL's CGameScoredView keeps the second's result as a

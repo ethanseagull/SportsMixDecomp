@@ -26,7 +26,7 @@ Matching game/boss/CEventDemoBoss.cpp
 Equivalent game/boss/CCameraBoss.cpp
 NonMatching game/boss/CComDrvBoss.cpp
 Matching game/boss/CChrCoreBossLuigi.cpp
-NonMatching game/boss/CChrCoreBossMethod.cpp
+Equivalent game/boss/CChrCoreBossMethod.cpp
 Matching game/boss/CChrCoreBossMii00.cpp
 Matching game/boss/CChrCoreBossMii01.cpp
 Matching game/boss/CChrCoreBossMoogle.cpp

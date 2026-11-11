@@ -82,6 +82,30 @@ namespace msw {
                 float m_afUnk04[3];
             };
             enum BODY_COLL_SIZE_SET_TYPE {};
+            // (added for BossF game/boss/CChrCoreBossMethod.cpp) The states
+            // of the queue: each number is the place of its CtorState* /
+            // LoopState* / DtorState* triple in the vtable (CtorStateDefault
+            // is 0). The names are the ones of those functions.
+            enum STATE {
+                STATE_DEFAULT, STATE_NEUTRAL, STATE_BLOCK_WORK, STATE_AUTO_BLOCK_WORK, STATE_RUN,
+                STATE_JUMP, STATE_DAMAGE, STATE_SIDE_STEP, STATE_ITEM_SHOOT, STATE_BLOCK_CUT,
+                STATE_CHARGE_CUT, STATE_JUMP_UPPER, STATE_DROP_CUT, STATE_MOT_PLAY, STATE_SIZE_CHANGE,
+                STATE_FREEZE, STATE_DIZZY, STATE_SLIDING, STATE_PARALYZE, STATE_MAME_CHANGE,
+                STATE_EVENT_DOLL, STATE_PASS, STATE_AERIAL_PASS, STATE_PASS_CATCH, STATE_ARTS_PASS,
+                STATE_SDB, STATE_SDB_CHAIN, STATE_RDB, STATE_RDB_CHAIN, STATE_QUICK_TURN,
+                STATE_TRICK_MOVE, STATE_TRICK_DANCE, STATE_CATCH, STATE_SDB_CATCH, STATE_JUMP_SHOOT,
+                STATE_AERIAL_SHOOT, STATE_REBOUND_DUNK, STATE_LAY_UP, STATE_ALLEYOOP, STATE_AIR_TRICK,
+                STATE_DUNK, STATE_ITEM_BALL_ATTACK, STATE_BIG_DUNK, STATE_SERVE, STATE_RECEIVE,
+                STATE_SPIKE, STATE_BLOCK_WORK_LOSE, STATE_AUTO_DRIBBLE_POSTURE, STATE_JUMP_BLOCK, STATE_SWAT_IT,
+                STATE_SMASH_CUT, STATE_ARTS_SHOT_CATCH, STATE_DASH, STATE_JUMP_PASS, STATE_JUMP_CATCH,
+                STATE_DRIBBLE_MISS, STATE_BALL_CATCH, STATE_BALL_CATCH_BACK, STATE_STAGGER, STATE_IMPACT,
+                STATE_TURN, STATE_SPIN_STAGGER, STATE_ARTS_OUT, STATE_LINE_OVER, STATE_CROUCH,
+                STATE_DIVING_CATCH, STATE_SPIN_ATTACK, STATE_SKATE, STATE_STEAL_STANCE, STATE_SHOOT_STANCE,
+                STATE_BRAKE, STATE_SWITCH, STATE_BLOCK_STANCE, STATE_CHANGE_STANCE, STATE_AUTO_CHANGE_STANCE,
+                STATE_DIRECT_SHOOT_STANCE, STATE_DIRECT_PASS_STANCE, STATE_TACKLE_GUARD, STATE_FALL_OUT, STATE_FALL_SAFE,
+                STATE_SMASH_ATTACK, STATE_BALL_SCRAMBLE, STATE_FACE_OFF, STATE_DIVING_STEAL, STATE_BODY_CONTACT,
+                STATE_OFF_BALL_STANCE, STATE_ATTACK_FIGHT, STATE_KEEPER_CATCH_ACTION, STATE_FALL, STATE_REBIRTH
+            };
 
             CChrCore();
             virtual ~CChrCore();                                     // 0x08
@@ -1282,6 +1306,35 @@ namespace msw {
             void RotateYParam_(ROT_LERP1 &rLerp);
             int Util_DoDirMove(const CC_DATA::CHR_PARAM::MOVE_PARAM &rParam, float fFrame, DIR_MOVE &rMove, int);
 
+            // Added for BossF game/boss/CChrCoreBossMethod.cpp (all in the
+            // DOL; return types and parameter meanings guessed).
+            // Starts a change of body size (0: back to normal, 2: grown or
+            // shrunk) lasting fFrame frames.
+            void SetBodyScaleState(long nState, float fFrame);
+            // Makes the character invincible for fFrame frames.
+            void SetInvincible(float fFrame);
+            void SetSpecialState(long nState);
+            // The character picks nothing up for fFrame frames.
+            void SetNoPickupCount(float fFrame);
+            void ResetBodyScale_();
+            void ResetBodyColor_();
+            // Starts condition nCondition (see m_nComLevel) for fFrame frames.
+            void SetCondition(long nCondition, float fFrame, unsigned long);
+            void AdjustOffsetPos_(int);
+            void Util_NodePatchWarpToTransNode();
+            void Reset();
+            // The square of GetDist_ToPosXZ.
+            float GetDist_ToPosXZSq(const bcs::FVEC3 &rPos) const;
+            // The item held in the hand, and the one kept in stock.
+            CItem *GetAttachItem() const;
+            CItem *GetStockItem() const;
+            // Lets the held item go, or drops it at rVel.
+            void DetachItem(int);
+            void DropItem(const bcs::FVEC3 &rVel, int, int);
+            // (names guessed) Inline in the module: see m_hBall and m_nFlagF4.
+            unsigned long GetBallHandle() const { return m_hBall; }
+            void OnFlagF4(unsigned long nBit) { m_nFlagF4 |= nBit; }
+
         protected:
             unsigned long m_Unk60;
             CChrDrv *m_pDriver[2];       // 0x64 (count guessed from the index's place)
@@ -1314,7 +1367,10 @@ namespace msw {
             // 0xF0 (name guessed): CChrCore::UpdateDisp_ draws nothing while
             // bit 2 is set, and CChrMarkerDodge shows no marker then.
             unsigned long m_nDispFlag;
-            unsigned char m_UnkF4[4];
+            // 0xF4 (name guessed): more flags; while bit 0 is set the boss
+            // characters start no action, bit 0x4000 bars the air tricks and
+            // CChrCoreBoss::MethdChgLeader sets 0x100000 on the new leader.
+            unsigned long m_nFlagF4;
             int m_bStarPlayer;           // 0xF8, see IsStarPlayer
             unsigned char m_UnkFC[0x150 - 0xFC];
             // 0x150 (name guessed): the id of a ball task; the White Mage's
@@ -1367,7 +1423,25 @@ namespace msw {
             // 0x190 (name guessed): a second model node for effects
             // (CChrCoreVolleyYoshi's block and spike effects attach there).
             unsigned short m_nEffNodeSub;
-            unsigned char m_Unk192[0x208 - 0x192];
+            unsigned char m_Unk192[0x1A0 - 0x192];
+            // 0x1A0-0x1AC (names guessed): a change of body size; the scale
+            // it starts from, the one it goes to (below 1 when shrinking),
+            // how far it has got (0 when none runs) and the normal scale
+            // (CChrCoreBoss::CanbeSizeChange, MethdSizeChange).
+            float m_fScaleFrom;
+            float m_fScaleTo;
+            float m_fScaleRate;
+            float m_fScaleBase;
+            unsigned char m_Unk1B0[0x1EC - 0x1B0];
+            // 0x1EC-0x1FE (names guessed): the last damage taken, as passed
+            // to CChrCoreBoss::MethdDamage.
+            float m_fDamage;
+            float m_fDamageSizeTime;
+            long m_nDamageQuake;
+            float m_fDamageUnk1F8;
+            short m_nDamageUnk1FC;
+            short m_nDamageUnk1FE;
+            unsigned char m_Unk200[0x208 - 0x200];
             // 0x208-0x210 (names guessed): the speed of a jump. The three are
             // one vector (CChrCoreVolleyMoogle's hover scales them with the
             // paired-single vector helpers); see GetJumpVel.
@@ -1393,18 +1467,31 @@ namespace msw {
             // 0x22C (name guessed): the step of the jump move
             // (Util_DoJumpMoveEX); 2 and up once the character has landed.
             signed char m_nJumpStep;
-            unsigned char m_Unk22D[0x230 - 0x22D];
+            unsigned char m_Unk22D[0x22E - 0x22D];
+            // 0x22E (name guessed): not zero when a hit of damage type 7
+            // turns the character into a bean (CChrCoreBoss::MethdDamage).
+            signed char m_bCanMame;
+            unsigned char m_Unk22F[0x230 - 0x22F];
             // 0x230 (name guessed): the level CComMan::GetDatF reads the
             // computer's parameters for (CComManVolleyGame::GetConditionHandicapDis).
+            // It is the character's condition (SetCondition): 1 is the
+            // star state, 3 is set at time over (CChrCoreBoss).
             long m_nComLevel;
             // The rest, up to the size of 0x574: the DOL constructor writes
             // up to 0x570 and CChrCoreBoss's own members start at 0x574.
-            unsigned char m_Unk234[0x264 - 0x234];
+            // 0x234 (name guessed): the frames a change of body size lasts.
+            float m_fSizeChangeTime;
+            unsigned char m_Unk238[0x264 - 0x238];
             // 0x264 (meaning not known): a float HockeyF's
             // CChrCoreHockeyWaluigi passes to CChrCoreHockey::Util_ShootBall_
             // for each copy of the puck it throws.
             float m_fUnk264;
-            unsigned char m_Unk268[0x574 - 0x268];
+            // 0x268 (meaning not known): copied into the receive state's work.
+            float m_fUnk268;
+            unsigned char m_Unk26C[0x284 - 0x26C];
+            // 0x284 (meaning not known): cleared at the end of a game.
+            float m_fUnk284;
+            unsigned char m_Unk288[0x574 - 0x288];
     };
 
     // The work the MethdRDB slots take. Only the first word is known: BasketF's

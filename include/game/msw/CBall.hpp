@@ -470,6 +470,9 @@ namespace msw {
             // hockey ball markers read; what they stand for is not known.
             int IsFlag1() const { return m_nFlag & 0x1; }
             int IsFlag4() const { return m_nFlag & 0x4; }
+            // (added for BossF CChrCoreBoss::CanbeSpike, which then spikes
+            // the ball whatever its height)
+            int IsFlag2() const { return m_nFlag & 0x2; }
             int IsFlag100000() const { return m_nFlag & 0x100000; }
             // (names guessed) msw::CItemBall attaches its model to the
             // ball's; msw::CItemBallShellWreck sends the wreck off along the

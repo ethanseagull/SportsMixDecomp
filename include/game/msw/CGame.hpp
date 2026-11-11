@@ -129,7 +129,10 @@ namespace msw {
                 // panel gives no coin; with bit 0 of 0x1C8 set the panels pop up
                 // again without waiting. (meanings and names guessed)
                 unsigned long m_nUnk40;    // 0x40
-                unsigned char m_Unk44[0x151 - 0x44];
+                // 0x44 (meaning not known): VolleyF's ready-start demo passes
+                // it with m_Unk0B to the serve telop.
+                long m_nUnk44;
+                unsigned char m_Unk48[0x151 - 0x48];
                 // 0x151 (meaning not known): BasketF's CStageBasket05 starts
                 // its heavy raft swing on any turn of the rafts while it is
                 // not zero, and otherwise waits for the camera's side.
@@ -383,6 +386,14 @@ namespace msw {
             // team of type 1 the computer driver.
             static long GetTeamCtrlType(long nTeam);
             static void SetStartFadeType(long nType);
+            // (DOL, static; added for VolleyF CReadyStartDemoVolley; return
+            // types and meanings guessed) Not negative when a pad asks to
+            // skip the demo (-1: any pad); moves the cockpit parts; the
+            // name of player nPlayer's character (for the Mii and other
+            // characters from type 0x13 on).
+            static long DemoSkipInputCheck(long nPad);
+            static void SetCockpitPartMove(long, long);
+            static const wchar_t *GetCharName(long nPlayer);
             // The difficulty of the game (see GameWork::m_nGameLevel).
             // Inline; the parameter files emit it.
             static long GetGameLevel() { return g_GameWork.m_nGameLevel; }
@@ -432,6 +443,9 @@ namespace msw {
             // Whether player nPlayer's character is the hockey keeper (bit 1
             // of the byte at g_GameWork + 0x58 + nPlayer). (return type guessed)
             static int IsCharEx_HockeyKeeper(long nPlayer);
+            // (added for HockeyF game/hockey/CCockpitHockeyVSCount.cpp; return
+            // type guessed) Whether character nChr is a star character.
+            static int IsCharEx_StarChar(long nChr);
             // (name guessed; the DOL's fn_8018C300, after SetPadDefaultType)
             // The byte at g_GameWork + 0x198 + nPad, read signed. The
             // cockpit's special-shot input prompt reads 1 as a nunchaku, 0 as

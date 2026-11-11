@@ -384,12 +384,12 @@ game/hockey/CCockpitHockeyLayoutBase.cpp:
 	.data       start:0x0001BBA0 end:0x0001BC50
 
 game/hockey/CCockpitHockeyTelopReady.cpp:
-	.text       start:0x000C1140 end:0x000C2344
+	.text       start:0x000C1140 end:0x000C207C
 	.rodata     start:0x0000ACD8 end:0x0000AED8
 	.data       start:0x0001BC50 end:0x0001BD60
 
 game/hockey/CCockpitHockeyClash.cpp:
-	.text       start:0x000C2344 end:0x000C46E4
+	.text       start:0x000C207C end:0x000C46E4
 	.rodata     start:0x0000AED8 end:0x0000B938
 	.data       start:0x0001BD60 end:0x0001C168
 

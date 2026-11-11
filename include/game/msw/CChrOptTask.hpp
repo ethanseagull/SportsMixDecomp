@@ -3,6 +3,7 @@
 
 #include "bcs/CUnivTask.hpp"
 #include "bcs/CAnmObjMotBase.hpp"
+#include "game/msw/CChrOptMdlObj.hpp"
 #include "nw4r/g3d/ResFile.hpp"
 
 namespace bcs {
@@ -17,13 +18,30 @@ namespace msw {
     // a task part (destructor fn_800D3BD4, Main fn_800D4324, CTask::Disp,
     // CUnivTask::GetFrameRateF) and an msw::CChrOptMdlObj at 0x34. Only the
     // functions used so far are declared; the layout is not mapped.
-    class CChrOptTask : public bcs::CUnivTask {
+    class CChrOptTask : public bcs::CUnivTask, public CChrOptMdlObj {
         public:
             // fn_800D3AD0. nArg sets bit 1 of the word at 0x50 (meaning not
             // known).
             CChrOptTask(bcs::CTask *pParent, int nArg);
 
             virtual void Main();
+
+            // The class's own virtual functions and its overrides of
+            // CChrOptMdlObj's, in the order of lbl_8046C258 after the
+            // embedded CChrOptMdlObj vtable (slots 0x78 to 0x90; added for
+            // HockeyF game/hockey/CChrCoreHockeySlime.cpp, which calls
+            // 0x84 and 0x90). Only the two overrides are known by their
+            // thunks (fn_800D5058, fn_800D5060); the other names are
+            // placeholders.
+            virtual void VirtualUnk78();                           // 0x78 fn_800D43B4
+            virtual void VirtualUnk7C();                           // 0x7C fn_800D4708
+            virtual void CreateObj(nw4r::g3d::ResMdl mdl);         // 0x80 fn_800D496C
+            virtual void AnimPlay(long nMotId, int bLoop, float fSpeed, float fFrame); // 0x84 fn_800D4A6C
+            virtual void VirtualUnk88();                           // 0x88 fn_800D4BD8
+            virtual void VirtualUnk8C();                           // 0x8C fn_800D4C84
+            // 0x90 fn_800D4D78 (name guessed from its arguments: an effect
+            // slot, an effect id and 3, as CChrCore::Eff_CreateAttachAuto).
+            virtual unsigned long Eff_CreateAttachAuto(long nSlot, long nEff, unsigned long);
 
             // fn_800D3E68 (name and argument meanings guessed). Makes model
             // pMdlName of res with the motions of mot, attaches it to node
@@ -36,7 +54,8 @@ namespace msw {
             void AnimPlay(long nMot, float fInterFrame, float fSpeed);
 
         private:
-            unsigned char m_Unk34[0xC0 - 0x34];
+            // 0x34 to 0x50 is the CChrOptMdlObj.
+            unsigned char m_Unk50[0xC0 - 0x50];
     };
 }
 

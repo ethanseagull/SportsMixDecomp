@@ -399,13 +399,13 @@ game/volley/CComManVolleyRR.cpp:
 
 game/volley/CCockpitVolleyMarkerIcon2D.cpp:
 	.text       start:0x000B1EEC end:0x000B27D0
-	.rodata     start:0x00008680 end:0x00008770
-	.data       start:0x0001C3E0 end:0x0001C4D8
+	.rodata     start:0x00008680 end:0x00008878
+	.data       start:0x0001C3E0 end:0x0001C4C0
 
 game/volley/CCockpitVolleyTelopServe.cpp:
 	.text       start:0x000B27D0 end:0x000B32BC
-	.rodata     start:0x00008770 end:0x000089C8
-	.data       start:0x0001C4D8 end:0x0001C5B0
+	.rodata     start:0x00008878 end:0x000089C8
+	.data       start:0x0001C4C0 end:0x0001C5B0
 
 game/volley/CCockpitVolleyLayoutBase.cpp:
 	.text       start:0x000B32BC end:0x000B34B4

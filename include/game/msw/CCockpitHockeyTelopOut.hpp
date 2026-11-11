@@ -19,11 +19,16 @@ namespace msw {
             virtual int Set();
             virtual void Remove();
 
-            void SetChrPadNo(long nChr);
+            // Shows the pad label ("1P" to "4P") of character nChr; -1 to -3
+            // when it has none.
+            long SetChrPadNo(long nChr);
+            // (inline; its local static is kept) Puts character nChr's face
+            // in the telop.
             void SetChrFaceIcon(long nChr);
 
         private:
-            unsigned char m_Unk60[0x68 - 0x60];
+            long m_nType; // 0x60, the constructor's nType: which layout
+            long m_nChr;  // 0x64, the character (CChrMan index) shown
     };
 }
 

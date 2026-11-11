@@ -749,7 +749,7 @@ game/msw/CNameMesg.cpp:
 	.text       start:0x802567D8 end:0x80258548
 
 game/msw/CCockpitChrIcon2D.cpp:
-	.text       start:0x80258E04 end:0x80259130
+	.text       start:0x802589D0 end:0x802593A0
 
 game/msw/CCockpitPauseLayoutBase.cpp:
 	.text       start:0x8025C344 end:0x8025C3F4

@@ -52,11 +52,8 @@ namespace msw {
             void CreateTopMenuObj(nw4r::g3d::ResFile file, long nKind, long);
             // Builds a Mii's model for the player info screens.
             void CreatePlayerInfoObj(nw4r::g3d::ResFile file, RFLStoreData &rData, unsigned long nFlag, long);
-            // Shows or hides the model (meaning of the second argument not
-            // known; 1 in both callers).
-            void SetDispEnable(int bDisp, int);
-            // The expression of the face (1 to 7).
-            void SetFaceAnmType(long nType);
+            // (SetDispEnable, declared above: MenuF's callers pass 1 for
+            // bShadow. SetFaceAnmType, above: the face expression, 1 to 7.)
             // The gold version of the model.
             void EnableGoldModel(int bGold);
             // The size of a Mii's head.

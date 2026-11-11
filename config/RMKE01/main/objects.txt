@@ -18,6 +18,7 @@ Equivalent game/bcs/CMdlShadow.cpp
 Equivalent game/bcs/CMusicData.cpp
 Equivalent game/msw/CStage04Base.cpp
 Equivalent game/msw/menu/CDispTaskList.cpp
+Equivalent game/msw/CStage02Base.cpp
 Matching game/msw/CMenuPadInfo.cpp
 Matching game/msw/CStageNet.cpp
 Matching game/msw/CStage01Base.cpp

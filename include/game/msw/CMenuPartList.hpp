@@ -35,6 +35,10 @@ namespace msw {
             // itself when there is none). The name of the last argument is
             // a guess: callers pass CMenuPad::GetInput(nPad).
             long CheckStckMoveButton(long nPad, unsigned short nBtnKindId, unsigned long nInput);
+            // (added for game/menu/CTopMenu.cpp; return type and meaning
+            // guessed, after CheckStckMoveButton) The kind id the stick
+            // moves the cursor to from nBtnKindId; 0x8000 for none.
+            long StickMovementJudgmentCursor(long nPad, unsigned short nBtnKindId, unsigned long nInput);
             // Returns 0 on the path read; the return type and the argument
             // names are guesses.
             long CheckButtonAnim(const unsigned short *pPushButtonId, unsigned long *pUnk);

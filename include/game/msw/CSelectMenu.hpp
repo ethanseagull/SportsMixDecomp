@@ -88,6 +88,20 @@ namespace msw {
             // Defined in another MenuF file (return type guessed). The
             // option kind of the rules of the current game.
             long RuleSel_GetOptionKindId();
+            // (added for game/menu/CRuleSel.cpp; names of the arguments
+            // guessed) The other steps of the rules screen
+            // (SelectMenu::CRuleSel). RuleSel_SetRuleText steps option
+            // nOption by nStep settings (0: only shows its help line) and
+            // returns whether its setting changed; RuleSel_ResetRule puts
+            // every option back to its default.
+            void RuleSel_In();
+            void RuleSel_Loop();
+            void RuleSel_Out();
+            int RuleSel_SetRuleText(long nOption, long nStep);
+            void RuleSel_ResetRule();
+            // Defined in another MenuF file (return type guessed). Whether
+            // the character change rule is offered.
+            int CheckCharChange();
             // The steps of the "how to play" screen (SelectMenu::CHowTo).
             void HowTo_In();
             void HowTo_Loop();
@@ -743,7 +757,13 @@ namespace msw {
             // is accepted.
             long m_UnkA78;
         private:
-            unsigned char m_UnkA7C[0x24];    // 0xA7C
+            unsigned char m_UnkA7C[0x18];    // 0xA7C
+        public:
+            // 0xA94. (name guessed; added for game/menu/CRuleSel.cpp)
+            // Frames left before the rules screen steps a setting again.
+            float m_fRuleInputWait;
+        private:
+            unsigned char m_UnkA98[0x8];     // 0xA98
         public:
             // 0xAA0. (added for game/menu/CFriendList.cpp; name guessed)
             // The name the friend roster's help line was last made for.

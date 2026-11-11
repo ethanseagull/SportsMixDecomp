@@ -346,6 +346,10 @@ namespace msw {
             // and above differently (most likely the Mii characters; not
             // checked).
             static long GetCharType(long nPlayer);
+            // (DOL, static; return type guessed) The character type of Mii
+            // nIndex of a source (19 and up). Added for MenuF
+            // game/menu/CCourtChr.cpp.
+            static long GetMiiChrType(RFLDataSource source, long nIndex);
             // The colour of team nTeam: the byte at g_GameWork + 0x80 +
             // nTeam, read unsigned. The radar uses it as an index of four.
             static long GetTeamColorIdx(long nTeam);
@@ -401,6 +405,10 @@ namespace msw {
             // team that goal nGoal belongs to.
             static long GetGuardGoalIdx(long nTeam);
             static long GetTeamIdxByGoalIdx(long nGoal);
+            // (DOL, static; meaning guessed from the name) Not zero when the
+            // leader of team nTeam may be changed by the player
+            // (CChrManDodge::Util_SearchChgLeader_).
+            static int IsPlayTypeCanChangeLeader(long nTeam);
             // (DOL, static) The position of goal nGoal. (return type guessed)
             static const bcs::FVEC3 &GetGoalPos(long nGoal);
             // DOL, static. The direction goal nGoal faces (out of the goal,

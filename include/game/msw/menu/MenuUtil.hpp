@@ -25,6 +25,9 @@ namespace nw4r {
 
 namespace msw {
     namespace menu {
+        // Added for BasketF game/basket/CCockpitBasket.cpp: the players per
+        // team for play type nType (GameWork byte 6). Types guessed.
+        long GetTeamPlayerNum(long nType);
         // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp (return
         // types and argument names guessed):
         // A picture pane called pName showing player nPlayer's face, made

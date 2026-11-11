@@ -11,6 +11,10 @@ namespace msw {
         // known. Argument names are guesses.
         class CGameDwc {
             public:
+                // (added for BasketF game/basket/CCockpitBasket.cpp) The
+                // instance; null when there is none.
+                static CGameDwc *GetInstance();
+
                 // Opens the message window with message pLabel of group
                 // pGroup and an A button. The two texts fill parts of the
                 // message (null: none); what nUnk1 and nUnk2 select is not
@@ -46,6 +50,15 @@ namespace msw {
                 // read (names unknown).
                 long m_UnkDBC;
                 long m_UnkDC0;
+
+            private:
+                unsigned char m_UnkDC4[0xDCC - 0xDC4];
+
+            public:
+                // 0xDCC: cleared by msw::CCockpitBasket::GameResult_In
+                // before it sends empty data to the opponent (meaning not
+                // known).
+                long m_UnkDCC;
         };
     }
 }

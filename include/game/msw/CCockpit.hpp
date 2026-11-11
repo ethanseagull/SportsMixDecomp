@@ -14,6 +14,8 @@ namespace nw4r {
 }
 
 namespace msw {
+    class CCockpitResult;
+    class CCockpitResultPartyVS;
 
     // The task that owns the in-game displays. Lives in the DOL; vptr at 0.
     // The virtual functions are declared in the order of its vtable
@@ -77,6 +79,30 @@ namespace msw {
             // is none.
             static unsigned long s_TaskHandle;
 
+            // (added for BasketF game/basket/CCockpitBasket.cpp; return
+            // types and argument names guessed) What every player of each
+            // team played, for GetResultMemberData: nUnk is passed through,
+            // then up to three characters per team.
+            struct ResultMemberInfo {
+                long nUnk;          // 0x00
+                long aChr[2][3];    // 0x04
+            };
+
+            // (added for BasketF game/basket/CCockpitBasket.cpp; return types
+            // guessed) Shows or hides the displays this class owns.
+            void SetDisp(int bDisp);
+            // The time left on the result screen's countdown (frames).
+            float CalcTimeCount();
+            void CreateDemoTelop();
+            void RemoveDemoTelop();
+            // Fill the result displays: the team results (bUnk: whether
+            // the cockpit is in its first result state, CCockpitBasket's
+            // state 4; pTotal gets the two teams' totals), the players, the
+            // party VS result.
+            void GetResultData(CCockpitResult *pResult, int bUnk, long *pTotal);
+            void GetResultMemberData(ResultMemberInfo *pInfo);
+            void GetResultPartyVSParameter(CCockpitResultPartyVS *pResult);
+
         protected:
             // Runs the parts every cockpit shares, at the start of Main.
             void MainLoopCommon();
@@ -86,12 +112,15 @@ namespace msw {
 
         protected:
             // 0x44: CMenuTask ends here (0x44 bytes). msw::CCockpitTournament's
-            // constructor clears this word.
-            unsigned long m_Unk44;
+            // constructor clears this word. msw::CCockpitBasket's result
+            // states step through it (0, 1, 2; compared signed).
+            long m_Unk44;
+
+            // 0x48: set to 2 by msw::CCockpitBasket::GamePartyResult_Loop
+            // once the party result has closed (meaning not known).
+            long m_Unk48;
 
         private:
-            unsigned char m_Unk48[4]; // 0x48
-
             // Not mapped. From the constructor in the DOL: 0x4C holds the
             // eight archive paths (CLoadData::GetFilePath), 0x6C a short,
             // 0x1CC and 0x1D0 words. The size is where
@@ -120,7 +149,15 @@ namespace msw {
             long m_aPeriodPerfect[2][8]; // 0x100
 
         private:
-            unsigned char m_Unk140[0x1D4 - 0x140];
+            unsigned char m_Unk140[0x1C8 - 0x140];
+
+        protected:
+            // 0x1C8: the result screen's countdown in frames
+            // (msw::CCockpitBasket::GameResult_Loop sets it; name guessed).
+            float m_fTimeCount;
+
+        private:
+            unsigned char m_Unk1CC[0x1D4 - 0x1CC];
     };
 }
 

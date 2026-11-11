@@ -19,7 +19,21 @@ namespace nw4r {
         // resource of that name). The other names are guessed.
         class ResFile {
             public:
-                explicit ResFile(ResFileData *pData = 0) : m_pData(pData) {}
+                // The default constructor makes NW4R's alignment check (of a
+                // null pointer, so it folds away), but it still keeps a member
+                // array of handles (MenuF CCourtChr, CCupChr) built by a plain
+                // store loop as in the original, not peeled and unrolled. The
+                // strings are in CCourtChr's .data. Construction from a pointer
+                // has no check: TourF CTournamentTrophy::CreateModel and
+                // CTournamentRouteMan_Stage32::Initialize lose it otherwise.
+                ResFile() : m_pData(0)
+                {
+                    ResFileData *p = 0;
+                    if ((unsigned long)p & 0x1F) {
+                        db::Panic("g3d_resfile_ac.h", 60, "NW4R:Failed assertion !((u32)p & 0x1f)");
+                    }
+                }
+                explicit ResFile(ResFileData *pData) : m_pData(pData) {}
 
                 bool IsValid() const { return m_pData != 0; }
 
@@ -27,6 +41,9 @@ namespace nw4r {
                 ResAnmClr GetResAnmClr(const char *pName) const;
                 ResAnmTexSrt GetResAnmTexSrt(const char *pName) const;
                 ResMdl GetResMdl(const char *pName) const;
+                // DOL functions (MenuF msw::SelectMenu::CCourtChr).
+                ResTex GetResTex(const char *pName) const;
+                unsigned long GetResTexNumEntries() const;
 
                 // DOL functions; the three calls a file needs before use,
                 // in this order. Bind resolves the file's references against

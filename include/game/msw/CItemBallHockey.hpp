@@ -20,14 +20,14 @@ namespace msw {
             // first virtual is defined out of line gets its vtable emitted in
             // that unit (notes/toolchain.md, "Where a vtable is emitted").
             virtual ~CItemBallHockey();
-            virtual bool DoTrg(long trg);
+            virtual long DoTrg(long trg);
 
-            virtual bool TrgRebound_();
-            virtual bool TrgReboundToFree_();
-            virtual bool TrgFreeMode_();
-            virtual bool TrgChrHit_();
-            virtual bool TrgAttach_();
-            virtual bool TrgDamage_();
+            virtual long TrgRebound_();
+            virtual long TrgReboundToFree_();
+            virtual long TrgFreeMode_();
+            virtual long TrgChrHit_();
+            virtual long TrgAttach_();
+            virtual long TrgDamage_();
     };
 
     inline CItemBallHockey::~CItemBallHockey() {}

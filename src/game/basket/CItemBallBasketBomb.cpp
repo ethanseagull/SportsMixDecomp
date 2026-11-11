@@ -100,12 +100,12 @@ namespace msw {
         (void)fUnused;
     }
 
-    bool CItemBallBasket::TrgFreeMode_()
+    long CItemBallBasket::TrgFreeMode_()
     {
         return !IsDestroyed();
     }
 
-    bool CItemBallBasket::DoTrg(long trg)
+    long CItemBallBasket::DoTrg(long trg)
     {
         return CItemBall::DoTrg(trg);
     }
@@ -189,8 +189,7 @@ namespace msw {
         return 0x4F3;
     }
 
-    // The original returns 5; see CItemBallBasketKinds.hpp.
-    bool CItemBallBasketGShell::TrgChrHit_()
+    long CItemBallBasketGShell::TrgChrHit_()
     {
         return 5;
     }
@@ -211,8 +210,7 @@ namespace msw {
         return 1.4f;
     }
 
-    // The original returns 5; see CItemBallBasketKinds.hpp.
-    bool CItemBallBasketRShell::TrgChrHit_()
+    long CItemBallBasketRShell::TrgChrHit_()
     {
         return 5;
     }
@@ -342,18 +340,18 @@ namespace msw {
         return 1.65f;
     }
 
-    bool CItemBallBasketBomb::TrgChrHit_()
+    long CItemBallBasketBomb::TrgChrHit_()
     {
         return !IsDestroyed();
     }
 
-    bool CItemBallBasketBomb::TrgGoalIn_()
+    long CItemBallBasketBomb::TrgGoalIn_()
     {
         return !IsDestroyed();
     }
 
     // Goes off unless the ball is being held.
-    bool CItemBallBasketBomb::TrgDestroy_()
+    long CItemBallBasketBomb::TrgDestroy_()
     {
         int bExplode = 1;
         CBall *pBall = static_cast<CBall *>(bcs::CTaskMan::GetTask(m_nBallId));
@@ -395,8 +393,7 @@ namespace msw {
     {
     }
 
-    // The original returns 4; see CItemBallBasketKinds.hpp.
-    bool CItemBallBasketStar::TrgChrHit_()
+    long CItemBallBasketStar::TrgChrHit_()
     {
         return 4;
     }
@@ -435,8 +432,7 @@ namespace msw {
     {
     }
 
-    // The original returns 5; see CItemBallBasketKinds.hpp.
-    bool CItemBallBasketToadstool::TrgChrHit_()
+    long CItemBallBasketToadstool::TrgChrHit_()
     {
         return 5;
     }
@@ -480,7 +476,7 @@ namespace msw {
         return 1.0f;
     }
 
-    bool CItemBallBasketBanana::TrgChrHit_()
+    long CItemBallBasketBanana::TrgChrHit_()
     {
         return true;
     }

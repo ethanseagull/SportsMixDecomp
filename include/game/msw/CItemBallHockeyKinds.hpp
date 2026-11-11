@@ -25,12 +25,12 @@ namespace msw {
             virtual ~CItemBallHockeyGShell();
 
             virtual void MainFunc_();
-            virtual bool TrgShootStart_();
-            virtual bool TrgGoalIn_();
-            virtual bool TrgFreeMode_();
-            virtual bool TrgChrHit_();
-            virtual bool TrgDamage_();
-            virtual bool TrgDestroy_();
+            virtual long TrgShootStart_();
+            virtual long TrgGoalIn_();
+            virtual long TrgFreeMode_();
+            virtual long TrgChrHit_();
+            virtual long TrgDamage_();
+            virtual long TrgDestroy_();
     };
 
     // A red shell: as the green one.
@@ -40,12 +40,12 @@ namespace msw {
             virtual ~CItemBallHockeyRShell();
 
             virtual void MainFunc_();
-            virtual bool TrgShootStart_();
-            virtual bool TrgGoalIn_();
-            virtual bool TrgFreeMode_();
-            virtual bool TrgChrHit_();
-            virtual bool TrgDamage_();
-            virtual bool TrgDestroy_();
+            virtual long TrgShootStart_();
+            virtual long TrgGoalIn_();
+            virtual long TrgFreeMode_();
+            virtual long TrgChrHit_();
+            virtual long TrgDamage_();
+            virtual long TrgDestroy_();
     };
 
     // A bomb: lit (fuse effect and sound) from the start, explodes when shot
@@ -57,10 +57,10 @@ namespace msw {
             virtual ~CItemBallHockeyBomb();
 
             virtual void MainFunc_();
-            virtual bool TrgShootStart_();
-            virtual bool TrgGoalIn_();
-            virtual bool TrgDamage_();
-            virtual bool TrgDestroy_();
+            virtual long TrgShootStart_();
+            virtual long TrgGoalIn_();
+            virtual long TrgDamage_();
+            virtual long TrgDestroy_();
 
         private:
             // Starts the fuse effect and sound (once the model exists).
@@ -88,9 +88,9 @@ namespace msw {
             virtual ~CItemBallHockeyToadstool();
 
             virtual void MainFunc_();
-            virtual bool TrgShootStart_();
-            virtual bool TrgGoalIn_();
-            virtual bool TrgDestroy_();
+            virtual long TrgShootStart_();
+            virtual long TrgGoalIn_();
+            virtual long TrgDestroy_();
     };
 
     // A star.
@@ -100,9 +100,9 @@ namespace msw {
             virtual ~CItemBallHockeyStar();
 
             virtual void MainFunc_();
-            virtual bool TrgShootStart_();
-            virtual bool TrgGoalIn_();
-            virtual bool TrgDestroy_();
+            virtual long TrgShootStart_();
+            virtual long TrgGoalIn_();
+            virtual long TrgDestroy_();
     };
 
     // A banana.
@@ -112,12 +112,12 @@ namespace msw {
             virtual ~CItemBallHockeyBanana();
 
             virtual void MainFunc_();
-            virtual bool TrgShootStart_();
-            virtual bool TrgGoalIn_();
-            virtual bool TrgFreeMode_();
-            virtual bool TrgChrHit_();
-            virtual bool TrgDamage_();
-            virtual bool TrgDestroy_();
+            virtual long TrgShootStart_();
+            virtual long TrgGoalIn_();
+            virtual long TrgFreeMode_();
+            virtual long TrgChrHit_();
+            virtual long TrgDamage_();
+            virtual long TrgDestroy_();
     };
 
     // The change effect of the hockey game: an effect at the ball at the

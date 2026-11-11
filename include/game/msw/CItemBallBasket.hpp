@@ -35,12 +35,12 @@ namespace msw {
             }
 
             virtual ~CItemBallBasket();
-            virtual bool DoTrg(long trg);
+            virtual long DoTrg(long trg);
             virtual bool IsDisableRebound() const { return true; }
             virtual float GetScale() const { return 1.0f; }
             virtual long GetJumpShootTailEffect() const { return -1; }
             virtual void MainFunc_();
-            virtual bool TrgFreeMode_();
+            virtual long TrgFreeMode_();
 
             // New virtual functions (slots 0x98 to 0xA8).
             // The scale the item model is shown at (name from the symbol).

@@ -249,7 +249,7 @@ namespace msw {
         }
     }
 
-    bool CItemBall::DoTrg(long trg)
+    long CItemBall::DoTrg(long trg)
     {
         switch (trg) {
             case TRG_SHOOT_START:
@@ -284,50 +284,50 @@ namespace msw {
         return false;
     }
 
-    bool CItemBall::TrgShootStart_()
+    long CItemBall::TrgShootStart_()
     {
         m_nTrgFlag |= 1 << (TRG_SHOOT_START + 1);
         return false;
     }
 
-    bool CItemBall::TrgRebound_()
+    long CItemBall::TrgRebound_()
     {
         return true;
     }
 
-    bool CItemBall::TrgGoalIn_()
+    long CItemBall::TrgGoalIn_()
     {
         return true;
     }
 
     // The next four hold once the ball has been shot.
-    bool CItemBall::TrgReboundToFree_()
+    long CItemBall::TrgReboundToFree_()
     {
         return (m_nTrgFlag >> (TRG_SHOOT_START + 1)) & 1;
     }
 
-    bool CItemBall::TrgFreeMode_()
+    long CItemBall::TrgFreeMode_()
     {
         return (m_nTrgFlag >> (TRG_SHOOT_START + 1)) & 1;
     }
 
-    bool CItemBall::TrgChrHit_()
+    long CItemBall::TrgChrHit_()
     {
         return (m_nTrgFlag >> (TRG_SHOOT_START + 1)) & 1;
     }
 
-    bool CItemBall::TrgAttach_()
+    long CItemBall::TrgAttach_()
     {
         return (m_nTrgFlag >> (TRG_SHOOT_START + 1)) & 1;
     }
 
-    bool CItemBall::TrgDamage_()
+    long CItemBall::TrgDamage_()
     {
         return true;
     }
 
     // Detaches the models from the ball and lets Main delete the task.
-    bool CItemBall::TrgDestroy_()
+    long CItemBall::TrgDestroy_()
     {
         if (m_nStep == 0) {
             if (m_pMdl != 0) {
@@ -345,7 +345,7 @@ namespace msw {
         return true;
     }
 
-    bool CItemBall::TrgConstruct_()
+    long CItemBall::TrgConstruct_()
     {
         return false;
     }

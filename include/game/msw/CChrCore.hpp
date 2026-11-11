@@ -1130,6 +1130,16 @@ namespace msw {
                                            unsigned long);
             // An effect attached to the character's default node.
             unsigned long Eff_CreateAttachAuto(long nSlot, long nEff, unsigned long);
+            // Added for VolleyF game/volley/CChrCoreVolleySiroma.cpp (DOL;
+            // return types guessed). An effect at a point kept in slot nSlot;
+            // a jump of fFrame frames (three-value form); lets the held ball
+            // go; the position as a pointer; a sound that follows pPos.
+            unsigned long Eff_CreateSimple(long nSlot, long nEff, const bcs::FVEC3 &pos, float fRotY, unsigned long,
+                                           unsigned long, unsigned long);
+            void Util_SetJumpParam(float fFrame, float fFrom, float);
+            void DetachBall();
+            const bcs::FVEC3 *GetPosPtr();
+            void SE_PlayMove(long nSlot, long nSe, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
             // Stops the effect in slot nSlot.
             void Eff_Stop(long nSlot);
             // (DOL; added for DodgeF CChrCoreDodgeWaluigi) The play speed of
@@ -1231,7 +1241,12 @@ namespace msw {
             unsigned long m_nDispFlag;
             unsigned char m_UnkF4[4];
             int m_bStarPlayer;           // 0xF8, see IsStarPlayer
-            unsigned char m_UnkFC[0x168 - 0xFC];
+            unsigned char m_UnkFC[0x150 - 0xFC];
+            // 0x150 (name guessed): the id of a ball task; the White Mage's
+            // magic circle (VolleyF CC15_VOLLEY::CcSiromaMagicCircle) waits
+            // on it until the ball is shot.
+            unsigned long m_hBall;
+            unsigned char m_Unk154[0x168 - 0x154];
             // 0x168 (name guessed): set by the DOL's SetPassCheckMode(CChrCore *,
             // CBall *); DodgeF's CChrManDodge::Util_SearchChgLeader_ reads it
             // from the character that passed the ball, as the receiver.
@@ -1272,7 +1287,11 @@ namespace msw {
             // 0x20C (name guessed): the vertical speed of a jump (negative
             // while falling; CChrCoreVolleyKinopio's block jump tests it).
             float m_fJumpVelY;
-            unsigned char m_Unk210[0x224 - 0x210];
+            unsigned char m_Unk210[0x218 - 0x210];
+            // 0x218 (name guessed): the gravity of a jump; the White Mage's
+            // air trick sets it after Util_SetJumpParam.
+            float m_fJumpGravity;
+            unsigned char m_Unk21C[0x224 - 0x21C];
             // 0x224, 0x228 (names guessed): two jump values the air tricks
             // set next to Util_SetJumpParam.
             float m_fJumpUnk224;

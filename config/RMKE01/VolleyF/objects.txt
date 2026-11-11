@@ -35,3 +35,4 @@ Equivalent game/volley/CChrCoreVolleyYoshi.cpp
 Equivalent game/volley/CChrCoreVolleyKinopio.cpp
 Equivalent game/volley/CChrCoreVolleyKuroma.cpp
 Equivalent game/volley/CCockpitVolleyCoder.cpp
+Equivalent game/volley/CChrCoreVolleySiroma.cpp

@@ -22,6 +22,9 @@ namespace bcs {
 
             // DOL. The first node of the list this node is in, or null.
             CListNodeBase *GetBegin();
+            // DOL (fn_8004BFA4, the same body; msw::CStgGmkMan's const
+            // getters call it).
+            const CListNodeBase *GetBegin() const;
             // DOL. Links this node in before pNode, into pNode's list.
             void Link(CListNodeBase *pNode);
             // DOL. Takes the node out of its list; returns the node that
@@ -34,6 +37,15 @@ namespace bcs {
             // null pointer, as the DOL's loops do. The loops stop at the
             // list's end node first, so that branch is never taken.
             static void Step(CListNodeBase *&rpNode)
+            {
+                rpNode = rpNode->m_pNext;
+                if (rpNode == 0) {
+                    rpNode = rpNode->GetBegin();
+                }
+            }
+
+            // The same step on a const node (calls the const GetBegin).
+            static void Step(const CListNodeBase *&rpNode)
             {
                 rpNode = rpNode->m_pNext;
                 if (rpNode == 0) {
@@ -83,6 +95,7 @@ namespace bcs {
 
             CListNodeBase *GetFirst() const { return m_Head.m_pNext; }
             CListNodeBase *GetEnd() { return &m_End; }
+            const CListNodeBase *GetEnd() const { return &m_End; }
             // (name guessed) The number of nodes.
             long GetCount() const { return m_nCount; }
 

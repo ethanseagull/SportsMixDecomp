@@ -3,6 +3,7 @@
 
 #include "bcs/CAnmObjMat.hpp"
 #include "nw4r/g3d/ResAnmClr.hpp"
+#include "nw4r/g3d/ResMdl.hpp"
 
 namespace bcs {
 
@@ -18,6 +19,15 @@ namespace bcs {
             // Returns 1 on success. The last two parameters are not
             // understood; msw::CTableSetMdlObj passes 0 for both.
             int Create(const CMdlObj *pMdl, nw4r::g3d::ResAnmClr res, int, long);
+
+            // 0x50 to 0x5C, as in bcs::CAnmTexSrt (names guessed; only
+            // ChangeRes is called so far, by VolleyF's
+            // CC15_VOLLEY::CcSiromaMagicCircleObj::Main). The result type of
+            // GetResult is left open.
+            virtual const void *GetResult(void *pResult, unsigned long idx);
+            virtual int Bind(nw4r::g3d::ResMdl mdl);
+            virtual int ChangeRes(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmClr res);
+            virtual void Release();
 
         private:
             // Laid out like CAnmTexSrt and CAnmTexPat, whose constructors

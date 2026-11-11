@@ -434,6 +434,9 @@ namespace msw {
             void WarpPos(const bcs::FVEC3 &rPos);
             void Attach(bcs::CMdlObj *pMdl, unsigned long nNode, float, unsigned long, unsigned long, bcs::CScnGroup *);
             void Detach();
+            // DOL (name from the symbol). Stops the trail effect behind the
+            // ball (VolleyF's CChrCoreVolleySiroma, once it is pulled in).
+            void StopTailEffect();
             // (names guessed) Two more bits of m_nFlag that the basket and
             // hockey ball markers read; what they stand for is not known.
             int IsFlag1() const { return m_nFlag & 0x1; }

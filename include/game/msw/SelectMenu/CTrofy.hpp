@@ -20,11 +20,20 @@ namespace msw {
         // CSelectMenu). Only the members used so far; names are guesses.
         class CTrofy : public CSelectMenuLayoutBase {
             public:
+                // (added for MenuF game/menu/CTrofy.cpp)
+                CTrofy(long nId);
                 virtual ~CTrofy();
                 virtual void Main();
                 virtual void Disp();
                 virtual int Set();
                 virtual void Remove();
+
+                // (added for MenuF game/menu/CTrofy.cpp) Shows the pane of
+                // the best trophy earned in sport nIndex (0 basketball, 1
+                // volleyball, 2 dodgeball, 3 hockey) and returns its object
+                // (null when none is earned); rEffect gets the effect id of
+                // the trophy's sparkle, or keeps its value when none.
+                bcs::G2D::CPaneObj *GetWiFiTrofyPane(long nIndex, long &rEffect);
 
                 // Shows trophy nIndex of m_pFriend in pane pPaneObj.
                 // Return type guessed.

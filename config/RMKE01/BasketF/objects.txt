@@ -50,3 +50,4 @@ Matching game/basket/CStageBasket09.cpp
 Equivalent game/basket/CStageBasket15.cpp
 Equivalent game/basket/CCockpitBasket.cpp
 Equivalent game/basket/CChrDrvPadBasket.cpp
+Equivalent game/basket/CNpcGhostBasketBase.cpp

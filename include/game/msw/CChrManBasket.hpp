@@ -6,7 +6,9 @@
 
 namespace msw {
 
+    class CNpcBase;
     class CNpcBossPackun;
+    class CNpcGhostBasketBase;
 
     // INCOMPLETE: the character manager of the basketball game (BasketF).
     // Allocated with 0xE8 and 0xEC bytes (the second by a derived class);
@@ -40,8 +42,23 @@ namespace msw {
                 return GetInstance()->m_fChgInputDisableFrame[nTeam] <= 0.0f;
             }
 
+            // Added for game/basket/CNpcGhostBasketBase.cpp (names from the
+            // DOL symbols; return types and meanings guessed). Makes the
+            // ghost of type nType for team nTeam.
+            CNpcGhostBasketBase *CreateGhost_(long nType, long nTeam);
+            // Team nTeam's ghost; null when there is none.
+            CNpcBase *GetGhost_(long nTeam);
+            // Starts the extra time (when the ghost takes the ball from the
+            // team that is not the player's).
+            void SetClockOverTime_();
+            // (name guessed) Zero while bit 1 of the word at 0xAC is set:
+            // the ghost does not come back then.
+            bool IsGhostAppearEnable() const { return !(m_nFlagAC & 2); }
+
         protected:
-            unsigned char m_Unk8C[0xD4 - 0x8C];
+            unsigned char m_Unk8C[0xAC - 0x8C];
+            unsigned long m_nFlagAC;    // 0xAC (name guessed), see IsGhostAppearEnable
+            unsigned char m_UnkB0[0xD4 - 0xB0];
             // 0xD4 (name guessed): per team, the frames left before the pad
             // may change character again (OnChgCharacterInputDiableFrame_
             // writes it).

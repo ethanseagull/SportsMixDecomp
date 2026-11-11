@@ -451,6 +451,9 @@ namespace msw {
             // character starting a special move); IsVolleyScored is not zero
             // once the rally has ended in a point.
             static void SetOffenseTeam(long nTeam);
+            // (DOL; added for BasketF game/basket/CNpcGhostBasketBase.cpp,
+            // meaning guessed) Switches the loose ball mode on or off.
+            static void SetLooseBallMode(int bOn);
             static int IsVolleyScored();
             // (fn_8017D558, unnamed in the DOL) IsNowBonusTime_ on the
             // running game, zero without one.

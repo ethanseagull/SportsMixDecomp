@@ -41,6 +41,25 @@ namespace msw {
             void SetRadius(long index, float radius);
             void SetBodyDisableAll();
 
+            // Added for BasketF game/basket/CNpcGhostBasketBase.cpp (all in
+            // the DOL; argument meanings guessed). nUnit, nType and nNum
+            // describe the units (the ghost makes four).
+            CBodyCollision(long nUnit, long nType, long, unsigned long);
+            void SetEnable(long index);
+            void SetDisable(long index);
+            void SetPushEnable(long index);
+            void SetCatchEnable(long index);
+            void SetCollType(long index, long type);
+            void ResetTargetFlag(long index, unsigned long flag);
+            void SetBallCatchCallback(long index, BallCatchCallback pFunc, void *pArg);
+            void SetPos(long index, const bcs::FVEC3 &rPos);
+            void SetPosAll(const bcs::FVEC3 &rPos);
+            void AddPosXZAll(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo);
+            void CalcAABBAll();
+            void SetYRot(long index, float fRotY);
+            void SetSize(long index, float fRadius, float fHeight, float fDepth);
+            float GetRadius(long index) const;
+
         private:
             unsigned long m_Unk00[3];
     };

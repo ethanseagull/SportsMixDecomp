@@ -6,11 +6,13 @@
 namespace msw {
 
     // Base of the item balls of the boss game (BossF). It adds four triggers
-    // to the ten of CItemBall. No constructor is declared yet: the derived
-    // classes call CItemBall's directly, so this class's is inline and its
-    // arguments are not known from this unit.
+    // to the ten of CItemBall. The item kinds are in CItemBallBossKinds.hpp.
     class CItemBallBoss : public CItemBall {
         public:
+            // Inline: the item kinds of game/boss/CItemBallBossBomb.cpp call
+            // CItemBall's constructor directly.
+            CItemBallBoss(CBall *pBall, long type) : CItemBall(pBall, type) {}
+
             enum {
                 TRG_RECEIVE = TRG_NUM,
                 TRG_BLOCK,

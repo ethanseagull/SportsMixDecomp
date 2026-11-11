@@ -436,6 +436,11 @@ namespace msw {
             // (fn_800C7660, name guessed) Calls UpdateDisp_; msw::CItemBall
             // calls it when the item shows or hides its demo display.
             void UpdateDisp();
+            // (DOL; return type guessed) Plays sound nSe at the ball, or at
+            // *pPos when it is not null. The item balls pass
+            // (nSe, 0, 1, -1, 0.0f, 1.0f, 0.0f), as for CGameSnd::Play.
+            void PlaySePos(long nSe, const bcs::FVEC3 *pPos, unsigned long nArg2, long nArg3, float fArg4,
+                           float fVolume, float fArg6);
             // (DOL; return types guessed) Used by BasketF's
             // msw::CBallBasketFruit.
             void TrgItemEffect_(long);

@@ -144,6 +144,8 @@ namespace bcs {
             // (meaning of the two values guessed: the opaque and the
             // translucent pass)
             void SetDrawPriority(long nOpa, long nXlu);
+            // (meaning guessed) The opaque pass priority alone.
+            void SetDrawPriorityOpa(long nOpa);
 
             // Rebuilds the matrix at 0x08 from the rotation and the
             // translation members.

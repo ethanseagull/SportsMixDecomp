@@ -116,7 +116,7 @@ game/bcs/CRsoModule.cpp:
 	.text       start:0x80078814 end:0x80078928
 
 game/bcs/CSndTask.cpp:
-	.text       start:0x8007A560 end:0x8007A790
+	.text       start:0x8007A560 end:0x8007A818
 
 game/bcs/CTask.cpp:
 	.text       start:0x8007B2FC end:0x8007B5B0
@@ -258,7 +258,9 @@ game/msw/CEffectTable.cpp:
 	.text       start:0x80124604 end:0x801247E0
 
 game/msw/CEffectAttachTable.cpp:
-	.text       start:0x801248FC end:0x80124B1C
+	.text       start:0x801248FC end:0x80124C20
+	.rodata     start:0x80439C38 end:0x80439C40
+	.bss        start:0x804D40F8 end:0x804D41F8
 
 game/msw/CDropCoinMan.cpp:
 	.text       start:0x80124C20 end:0x80126AE8
@@ -551,6 +553,8 @@ game/msw/CC_CMN/SABOTEN/CcNeedle.cpp:
 
 game/msw/CC_CMN/SLIME/CcSquadFactory.cpp:
 	.text       start:0x801CBE54 end:0x801CC0D4
+	.rodata     start:0x804428F0 end:0x80442998
+	.data       start:0x80483798 end:0x804837B4
 
 game/msw/CC_CMN/SLIME/CcSlimeSquad.cpp:
 	.text       start:0x801CC13C end:0x801CDB30
@@ -708,7 +712,8 @@ game/msw/CMenuOption.cpp:
 	.text       start:0x80230A28 end:0x802319E0
 
 game/msw/menu/CMovieScnObj.cpp:
-	.text       start:0x80236454 end:0x802366C8
+	.text       start:0x80236454 end:0x802366DC
+	.bss        start:0x804D8BE0 end:0x804D8C00
 
 game/msw/CNpcString.cpp:
 	.text       start:0x802380A4 end:0x80239480

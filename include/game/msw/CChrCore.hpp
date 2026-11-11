@@ -11,6 +11,12 @@ namespace bcs {
     class CTask;
 }
 
+namespace nw4r {
+    namespace g3d {
+        class ResFile;
+    }
+}
+
 namespace msw {
 
     class CChrDrv;
@@ -689,6 +695,15 @@ namespace msw {
             // DOL. The yaw (radians) from the character towards a point,
             // in the XZ plane.
             float GetRotY_ToPosXZ(const bcs::FVEC3 &pos) const;
+            // DOL (added for game/msw/CC_CMN/SLIME/CcSquadFactory.cpp). The
+            // model and motion files of the character's option models (the
+            // slime's squad); a null handle when there are none.
+            nw4r::g3d::ResFile GetChrOptResFile();
+            nw4r::g3d::ResFile GetChrOptMotResFile();
+            // DOL. Plays sound nSe at *pPos (at the character when null).
+            // Argument meanings as bcs::CSndTask::Play (guessed).
+            void PlaySePos(long nSe, const bcs::FVEC3 *pPos, unsigned long nArg2, long nArg3, float fArg4,
+                           float fVolume, float fArg6);
 
             // (names guessed) Inline in the original; the module reads the
             // members directly (CChrMarkerBoss::AppearCheck loads the byte

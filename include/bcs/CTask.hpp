@@ -2,6 +2,7 @@
 #define BCS_CTASK_HPP_
 
 #include "bcs/CMainApp.hpp"
+#include "nw4r/ut/List.hpp"
 
 namespace bcs {
 
@@ -36,6 +37,13 @@ namespace bcs {
             // leaves 0xFCFF there, bcs::CCamera's 0xFC00, and
             // msw::CTournamentCamera's stores 0xFC01.
             void SetUnk08(unsigned long value) { m_Unk08 = value; }
+
+            // (name guessed) The child after pChild, the first one when
+            // pChild is null; null after the last.
+            CTask *GetNextChild(const CTask *pChild) const
+            {
+                return static_cast<CTask *>(nw4r::ut::List_GetNext(&m_ChildList, pChild));
+            }
             // (name guessed) Clears bits of the word at 0x08 (DodgeF's
             // CTelopVoice, CTelopOut and CLifeGaugeTask clear 0x4).
             void ClearUnk08(unsigned long bits) { m_Unk08 &= ~bits; }
@@ -45,7 +53,14 @@ namespace bcs {
             unsigned long m_Unk08;       // 0x08
             unsigned long m_nFlag;       // 0x0C, bit 0 asks for deletion (name guessed)
             CTask *m_pParent;            // 0x10 (name guessed)
-            unsigned char m_Unk14[0x1C]; // 0x14
+            unsigned char m_Unk14[0x10]; // 0x14
+
+        public:
+            // (name guessed) The constructor runs List_Init on it; bcs::CSnd's
+            // functions walk the children of its root sound task through it.
+            nw4r::ut::List m_ChildList;  // 0x24
+
+        private:
             short m_nPriority;           // 0x30 (name guessed)
     };
 }

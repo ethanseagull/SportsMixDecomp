@@ -13,6 +13,10 @@ namespace msw {
         class CMovieScnObj : public bcs::CGDLObj {
             public:
                 CMovieScnObj();
+                virtual ~CMovieScnObj();
+                // Draws the movie's frame in the opaque pass (task 6) while a
+                // display list is set; other tasks go to CGDLObj.
+                virtual void ObjProc(unsigned long nTask, unsigned long nParam, void *pInfo);
 
                 // Screen rectangle (0x128 to 0x134).
                 void SetDrawPositionXYWH(float fX, float fY, float fW, float fH);

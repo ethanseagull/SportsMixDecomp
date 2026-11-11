@@ -1728,7 +1728,7 @@ SubStateArtsShotFireBullet___Q23msw19CChrCoreBasketDiddyFPQ33msw14CChrCoreBasket
 ThrowBanana___Q23msw19CChrCoreBasketDiddyFv = .text:0x0005110C; // type:function size:0x25C scope:global
 __dt__Q33msw11CC08_BASKET17CcBoomerangBasketFv = .text:0x00051368; // type:function size:0x58 scope:global
 SetCollParam___Q43msw6CC_CMN5DIDDY11CcBoomerangFv = .text:0x000513C0; // type:function size:0x4 scope:global
-fn_4_513C4 = .text:0x000513C4; // type:function size:0x14
+__sinit_\CChrCoreBasketDiddy_cpp = .text:0x000513C4; // type:function size:0x14 scope:local
 @148@__dt__Q33msw11CC08_BASKET17CcBoomerangBasketFv = .text:0x000513D8; // type:function size:0x8 scope:global
 __ct__Q23msw20CChrCoreBasketDonkeyFv = .text:0x000513E0; // type:function size:0x3C scope:global
 __dt__Q23msw20CChrCoreBasketDonkeyFv = .text:0x0005141C; // type:function size:0x58 scope:global

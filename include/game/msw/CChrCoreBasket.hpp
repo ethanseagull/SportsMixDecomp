@@ -757,6 +757,34 @@ namespace msw {
             virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
             virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
     };
+
+    // Diddy Kong: his special shot throws a banana boomerang
+    // (CC_CMN::DIDDY::CcBoomerang) from his option model. (size not known;
+    // at least 0x5F0)
+    class CChrCoreBasketDiddy : public CChrCoreBasket {
+        public:
+            CChrCoreBasketDiddy();
+            virtual ~CChrCoreBasketDiddy();
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCBC
+            virtual void SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCC0
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *pWork, long); // 0xCE4
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
+
+        protected:
+            // Throws the boomerang, unless one is still out.
+            void ThrowBanana_();
+
+            unsigned char m_Unk5E8[0x5EC - 0x5E8];
+            // 0x5EC (name guessed): task id of a boomerang still out, 0 for
+            // none; nothing in this unit sets it.
+            unsigned long m_hBanana;
+    };
 }
 
 #endif /* !MSW_CCHRCOREBASKET_HPP_ */

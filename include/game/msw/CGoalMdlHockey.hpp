@@ -7,7 +7,7 @@ namespace msw {
 
     // The goal model of the hockey game (HockeyF, game/hockey/CGoalMdlHockey.cpp,
     // not written yet), size 0x340 (CGoalObj17::NewMdl and
-    // msw::CGoalObjHockey::NewMdl allocate it). Members not mapped.
+    // msw::CGoalObjHockey::NewMdl allocate it), all of it msw::CGoalMdl's.
     class CGoalMdlHockey : public CGoalMdl {
         public:
             CGoalMdlHockey(CStgGmk *pParent);
@@ -16,11 +16,11 @@ namespace msw {
             virtual void Create(long res, const MDL_PARAM *pParam);
             virtual void Main(float rate);
             virtual bcs::CMdlObj *NewMdl(long heap) const;
-            virtual const char *const *GetAnmNameTbl() const;
-            virtual const ANM_PARAM *GetAnmParamTbl() const;
-
-        private:
-            unsigned char m_Unk12C[0x340 - 0x12C]; // 0x12C, from the end of msw::CStgMdl
+            // New virtual functions of this class (msw::CGoalMdl's vtable
+            // ends at 0x130): the suffixes of the animation names, ending
+            // with null, and the animations.
+            virtual const char *const *GetAnmNameTbl() const;       // 0x134
+            virtual const ANM_PARAM *GetAnmParamTbl() const;        // 0x138
     };
 }
 

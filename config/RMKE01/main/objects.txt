@@ -20,6 +20,7 @@ Equivalent game/msw/CStage04Base.cpp
 Equivalent game/msw/menu/CDispTaskList.cpp
 Equivalent game/msw/CStage02Base.cpp
 Equivalent game/bcs/CMiiMan.cpp
+Matching game/msw/CStgGmkClusterImpl.cpp
 Matching game/msw/CMenuPadInfo.cpp
 Matching game/msw/CStageNet.cpp
 Matching game/msw/CStage01Base.cpp

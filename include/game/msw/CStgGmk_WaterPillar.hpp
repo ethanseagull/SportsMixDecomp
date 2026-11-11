@@ -5,6 +5,7 @@
 #include "game/msw/CStageMan.hpp"
 #include "game/msw/CStgGmk.hpp"
 #include "game/msw/CStgGmkClusterImpl.hpp"
+#include "game/msw/CStgGmk_WaterPillar_Mdl.hpp"
 #include "game/msw/CStgGmk_WaterPillar_Act.hpp"
 #include "game/msw/CStgSeSlot.hpp"
 #include "game/msw/CStgSrt.hpp"
@@ -16,6 +17,15 @@ namespace bcs {
 namespace msw {
 
     class CChrCore;
+
+    // The driver of a water pillar. A DOL class, size 0xC (nothing added to
+    // msw::CStgDrv).
+    class CStgGmk_WaterPillar_Drv : public CStgDrv {
+        public:
+            CStgGmk_WaterPillar_Drv(CStgGmk *pParent);
+            virtual ~CStgGmk_WaterPillar_Drv();
+            virtual void Main(float rate);
+    };
 
     // One water pillar. A DOL class, size 0x74, constructor
     // __ct__Q23msw19CStgGmk_WaterPillarFPQ23bcs5CTaski.
@@ -70,35 +80,6 @@ namespace msw {
             }
 
             bcs::FVEC3 m_DefaultPos; // 0x68
-    };
-
-    // The driver of a water pillar. A DOL class, size 0xC (nothing added to
-    // msw::CStgDrv).
-    class CStgGmk_WaterPillar_Drv : public CStgDrv {
-        public:
-            CStgGmk_WaterPillar_Drv(CStgGmk *pParent);
-            virtual ~CStgGmk_WaterPillar_Drv();
-            virtual void Main(float rate);
-    };
-
-    // The model of a water pillar. A DOL class, size 0x130. Create and
-    // GetParam_MdlHeight have DOL defaults without exported names
-    // (fn_80190D9C and fn_8019101C, the vtable slots of
-    // __vt__Q23msw23CStgGmk_WaterPillar_Mdl).
-    class CStgGmk_WaterPillar_Mdl : public CStgMdl {
-        public:
-            CStgGmk_WaterPillar_Mdl(CStgGmk *pParent, long idx);
-            virtual ~CStgGmk_WaterPillar_Mdl();
-            virtual void Create();
-            virtual void Main(float rate);
-            virtual bcs::CMdlObj *NewMdl(long heap) const;
-
-            virtual void SetMdlIdx(long idx) { m_nMdlIdx = idx; }
-            virtual long GetMdlIdx() const { return m_nMdlIdx; }
-            virtual float GetParam_MdlHeight() const;
-
-        private:
-            long m_nMdlIdx; // 0x12C, which model of the module's table
     };
 
     // The water pillars of the fountain stage (stage 03): a cluster of

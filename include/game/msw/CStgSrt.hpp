@@ -2,7 +2,9 @@
 #define MSW_CSTGSRT_HPP_
 
 #include "bcs/BCS_Vec.hpp"
+#include "bcs/FMTX34.hpp"
 #include "bcs/FVEC3.hpp"
+#include "nw4r/math/types.h"
 
 namespace msw {
 
@@ -30,10 +32,57 @@ namespace msw {
                 m_nFlag |= 2;
             }
 
+            // (name guessed) The model matrix: scale, then rotation, then
+            // translation, rebuilt from the parts flagged as changed (bit 2
+            // the scale, bit 1 the direction, bit 0 the position).
+            // Inline in msw::CStgGmk_WaterPillar_Act::UpdateMdlMtx (DOL).
+            const bcs::FMTX34 &GetMtx()
+            {
+                if (m_nFlag & 7) {
+                    if (m_nFlag & 4) {
+                        PSMTXIdentity(m_ScaleMtx.m);
+                        nw4r::math::MTX34Scale(reinterpret_cast<nw4r::math::MTX34 *>(&m_ScaleMtx),
+                                               reinterpret_cast<const nw4r::math::MTX34 *>(&m_ScaleMtx),
+                                               reinterpret_cast<const nw4r::math::VEC3 *>(&m_Scale));
+                        CalcRotMtx(m_RotMtx, m_Dir, m_Up);
+                        PSMTXConcat(m_RotMtx.m, m_ScaleMtx.m, m_Mtx.m);
+                        PSMTXTransApply(m_Mtx.m, m_Mtx.m, m_Pos.x, m_Pos.y, m_Pos.z);
+                        m_nFlag &= ~4;
+                    }
+                    if (m_nFlag & 2) {
+                        CalcRotMtx(m_RotMtx, m_Dir, m_Up);
+                        m_nFlag &= ~2;
+                    }
+                    PSMTXConcat(m_RotMtx.m, m_ScaleMtx.m, m_Mtx.m);
+                    PSMTXTransApply(m_Mtx.m, m_Mtx.m, m_Pos.x, m_Pos.y, m_Pos.z);
+                    m_nFlag &= ~7;
+                }
+                return m_Mtx;
+            }
+
+            // (name and meaning guessed) Clears both vectors at 0x100 and
+            // 0x10C and flags them (bit 4 of the word at 0xC8). Inline in
+            // msw::CStgGmk_WaterPillar_Act's constructor (DOL).
+            void ClearVelocity()
+            {
+                bcs::FVEC3 zero(0.0f, 0.0f, 0.0f);
+                m_Unk10C = zero;
+                m_Unk100 = zero;
+                m_nFlagC8 |= 0x10;
+            }
+
+            // In the DOL: the rotation matrix for direction rDir and up
+            // vector rUp.
+            static void CalcRotMtx(bcs::FMTX34 &rMtx, const bcs::FVEC3 &rDir, const bcs::FVEC3 &rUp);
+
         private:
             bcs::FVEC3 m_Pos;             // 0x00
             bcs::FVEC3 m_Dir;             // 0x0C
-            unsigned char m_Unk18[0xA8];  // 0x18
+            bcs::FVEC3 m_Up;              // 0x18 (name guessed)
+            bcs::FVEC3 m_Scale;           // 0x24
+            bcs::FMTX34 m_Mtx;            // 0x30, see GetMtx
+            bcs::FMTX34 m_RotMtx;         // 0x60
+            bcs::FMTX34 m_ScaleMtx;       // 0x90
             unsigned long m_nFlag;        // 0xC0, 7 after construction
 
         public:
@@ -42,7 +91,11 @@ namespace msw {
             virtual void SetPos(const bcs::FVEC3 &rPos);  // 0x10
 
         private:
-            unsigned char m_UnkC8[0x7C]; // 0xC8
+            unsigned long m_nFlagC8;     // 0xC8
+            unsigned char m_UnkCC[0x34]; // 0xCC
+            bcs::FVEC3 m_Unk100;         // 0x100
+            bcs::FVEC3 m_Unk10C;         // 0x10C
+            unsigned char m_Unk118[0x2C]; // 0x118
     };
 }
 

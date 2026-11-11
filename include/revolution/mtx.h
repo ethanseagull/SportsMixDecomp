@@ -15,6 +15,11 @@ typedef struct Vec {
 typedef float Mtx[3][4];
 
 void PSMTXCopy(const Mtx src, Mtx dst);
+void PSMTXIdentity(Mtx m);
+// ab = a * b.
+void PSMTXConcat(const Mtx a, const Mtx b, Mtx ab);
+// dst = src with (x, y, z) added to the translation.
+void PSMTXTransApply(const Mtx src, Mtx dst, float x, float y, float z);
 
 // dst = m * src (src as a point); src and dst may be the same.
 void PSMTXMultVec(const Mtx m, const Vec *src, Vec *dst);

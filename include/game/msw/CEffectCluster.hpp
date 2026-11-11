@@ -33,6 +33,12 @@ namespace msw {
             // word at 0xA4.
             void Set2D(int b2D);
 
+            // (name guessed; the DOL's fn_801234B4) Sets the alpha of every
+            // effect of the cluster, through a member pointer like
+            // CallEffectFunc. msw::CStgGmk_WaterPillar_Act::OnUpdate fades
+            // its effects with it.
+            void SetAlpha(float fAlpha);
+
             // (name guessed) Calls pFunc with nArg on each effect of the
             // cluster that still exists. Inline in the DOL's
             // msw::cockpit::CEffectSet::SetDispFlag; the cluster's own

@@ -18,6 +18,19 @@ namespace msw {
     class CBodyCollision {
         public:
             // Target flags of every unit: set all to `flag`, or add `flag`.
+            // Added for the DOL's msw::CStgGmk_WaterPillar_Act (parameter
+            // meanings guessed).
+            CBodyCollision();
+            ~CBodyCollision();
+            void Create(long num, long, long, unsigned long);
+            void SetCollType(long index, long type);
+            void SetEnableAll();
+            void SetDisableAll();
+            void SetPos(long index, const bcs::FVEC3 &rPos);
+            void SetSize(long index, const bcs::FVEC3 &rSize);
+            void SetSize(long index, float x, float y, float z);
+            void SetPushEnable(long index);
+
             void ResetTargetFlagAll(unsigned long flag);
             void AddTargetFlagAll(unsigned long flag);
 

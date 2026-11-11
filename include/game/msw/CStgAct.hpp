@@ -58,10 +58,13 @@ namespace msw {
             {
             }
             virtual void OnBodyPush(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush);
-            virtual void OnBodyDamage(CCollBodyUnit *pBody, const CCollAtkUnit *pAtk, const bcs::FVEC3 &rPos);
+            virtual unsigned long OnBodyDamage(CCollBodyUnit *pBody, const CCollAtkUnit *pAtk, const bcs::FVEC3 &rPos);
             virtual void OnBallCatch(CCollBodyUnit *pBody, CBall *pBall);
-            virtual void OnReflectHit(const CCollDefUnit *pDef, const CBall *pBall, bcs::FVEC3 &rPos,
-                                      bcs::FVEC3 &rVel);
+            // The two return values (2 and 0x102 in the DOL's
+            // msw::CStgGmk_WaterPillar_Act) go back to the collision
+            // callbacks, which return an unsigned long.
+            virtual unsigned long OnReflectHit(const CCollDefUnit *pDef, const CBall *pBall, bcs::FVEC3 &rPos,
+                                               bcs::FVEC3 &rVel);
             virtual unsigned long OnCalcSum() const { return 0; }
             virtual void RegistAttackHitCallback(CAtkCollision &rColl);
             virtual void RegistAttackHitCallback(CAtkCollision *pColl);

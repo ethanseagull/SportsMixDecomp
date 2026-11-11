@@ -39,7 +39,9 @@ namespace msw {
     // no virtual functions).
     class CStgGmkAct : public CStgAct {
         public:
-            CStgGmkAct(CStgObj *pParent);
+            // Inline (msw::CStgGmk_WaterPillar_Act's constructor and
+            // destructor in the DOL build this part inline).
+            CStgGmkAct(CStgObj *pParent) : CStgAct(pParent), m_pBallCollProxy(0) {}
             virtual ~CStgGmkAct();
 
             // Drops the old ball proxy and makes a new one.

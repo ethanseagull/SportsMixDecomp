@@ -7,6 +7,7 @@
 #include "game/msw/CStageVolley05.hpp"
 #include "game/msw/CStageVolley06.hpp"
 #include "game/msw/CStageVolley09.hpp"
+#include "game/msw/CStageVolley10.hpp"
 #include "game/msw/CStageVolley11.hpp"
 #include "game/msw/CStageVolley12.hpp"
 #include "game/msw/CStageVolley15.hpp"
@@ -27,17 +28,7 @@ namespace msw {
     // header must not make a unit emit the vtables.
 
     // Stage 01 (CStageManVolley, then CStage01Base at 0x200), stages 02,
-    // 03, 05, 06, 09, 11, 12, 15, 16, 17 and 42 have their own headers.
-
-    class CStageVolley10 : public CStageManVolley {
-        public:
-            // Made with 4 for stages 10, 37 and 38 (meaning not known).
-            CStageVolley10(bcs::CTask *pParent, long);
-            virtual ~CStageVolley10();
-
-        private:
-            unsigned char m_Unk200[0x28]; // size 0x228
-    };
+    // 03, 05, 06, 09, 10, 11, 12, 15, 16, 17 and 42 have their own headers.
 
     class CStageVolley13 : public CStageManVolley {
         public:

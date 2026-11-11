@@ -61,9 +61,17 @@ game/boss/CChrCore.cpp:
 	.data       start:0x000012F0 end:0x00004A18
 
 game/boss/CChrCoreBossKinopio.cpp:
-	.text       start:0x0002E720 end:0x0002F434
+	.text       start:0x0002E720 end:0x0002F300
 	.rodata     start:0x00000A10 end:0x00000A40
-	.data       start:0x00004A18 end:0x00007310
+	.data       start:0x00004A18 end:0x000057D0
+
+game/boss/CChrCoreBossKoopa.cpp:
+	.text       start:0x0002F300 end:0x0002F39C
+	.data       start:0x000057D0 end:0x00006570
+
+game/boss/CChrCoreBossKoopaJr.cpp:
+	.text       start:0x0002F39C end:0x0002F434
+	.data       start:0x00006570 end:0x00007310
 
 game/boss/CChrCoreBossKuroma.cpp:
 	.text       start:0x0002F434 end:0x00030480
@@ -104,9 +112,21 @@ game/boss/CChrCoreBossSaboten.cpp:
 	.data       start:0x0000E028 end:0x0000EDC8
 
 game/boss/CChrCoreBossSiroma.cpp:
-	.text       start:0x0003539C end:0x00035A6C
+	.text       start:0x0003539C end:0x00035840
 	.rodata     start:0x00000B28 end:0x00000B58
-	.data       start:0x0000EDC8 end:0x00012448
+	.data       start:0x0000EDC8 end:0x0000FB68
+
+game/boss/CChrCoreBossSlime.cpp:
+	.text       start:0x00035840 end:0x00035940
+	.data       start:0x0000FB68 end:0x00010908
+
+game/boss/CChrCoreBossWaluigi.cpp:
+	.text       start:0x00035940 end:0x000359D8
+	.data       start:0x00010908 end:0x000116A8
+
+game/boss/CChrCoreBossWario.cpp:
+	.text       start:0x000359D8 end:0x00035A6C
+	.data       start:0x000116A8 end:0x00012448
 
 game/boss/CChrCoreBossYoshi.cpp:
 	.text       start:0x00035A6C end:0x0003605C

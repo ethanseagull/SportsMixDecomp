@@ -1,5 +1,4 @@
-// msw::CChrCoreBossKinopio (Toad), msw::CChrCoreBossKoopa (Bowser) and
-// msw::CChrCoreBossKoopaJr (Bowser Jr.) in the boss game.
+// msw::CChrCoreBossKinopio (Toad) in the boss game.
 //
 // Toad does not dive for a receive: he puts a mushroom (the receiver,
 // CC09_BOSS::CcKinopioReceiver) on the ground where the ball comes down, and
@@ -318,33 +317,4 @@ void msw::CC09_BOSS::CcKinopioReceiver::CallbackBodyPush_(CCollBodyUnit *pBody, 
         m_BodyColl.AddPosXZAll(to, to);
         m_BodyColl.CalcAABBAll();
     }
-}
-
-msw::CChrCoreBossKoopa::CChrCoreBossKoopa()
-{
-}
-
-msw::CChrCoreBossKoopa::~CChrCoreBossKoopa()
-{
-}
-
-void msw::CChrCoreBossKoopa::Reset_()
-{
-    CChrCoreBoss::Reset_();
-}
-
-void msw::CChrCoreBossKoopa::SubStateSpikeDoSmashSpikeEffect_(STATE_WORK_SPIKE *)
-{
-}
-
-msw::CChrCoreBossKoopaJr::CChrCoreBossKoopaJr()
-{
-}
-
-msw::CChrCoreBossKoopaJr::~CChrCoreBossKoopaJr()
-{
-}
-
-void msw::CChrCoreBossKoopaJr::SubStateSpikeDoSmashSpikeEffect_(STATE_WORK_SPIKE *)
-{
 }

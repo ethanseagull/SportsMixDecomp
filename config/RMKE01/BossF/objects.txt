@@ -26,6 +26,7 @@ Matching game/boss/CEventDemoBoss.cpp
 Equivalent game/boss/CCameraBoss.cpp
 NonMatching game/boss/CComDrvBoss.cpp
 Matching game/boss/CChrCoreBossLuigi.cpp
+NonMatching game/boss/CChrCoreBossMethod.cpp
 Matching game/boss/CChrCoreBossMii00.cpp
 Matching game/boss/CChrCoreBossMii01.cpp
 Matching game/boss/CChrCoreBossMoogle.cpp
@@ -34,7 +35,12 @@ Matching game/boss/CChrCoreBossPeach.cpp
 Matching game/boss/CChrCoreBossSaboten.cpp
 Equivalent game/boss/CChrCoreBossYoshi.cpp
 Equivalent game/boss/CChrCoreBossSiroma.cpp
+Matching game/boss/CChrCoreBossSlime.cpp
+Matching game/boss/CChrCoreBossWaluigi.cpp
+Matching game/boss/CChrCoreBossWario.cpp
 Equivalent game/boss/CChrCoreBossKinopio.cpp
+Matching game/boss/CChrCoreBossKoopa.cpp
+Matching game/boss/CChrCoreBossKoopaJr.cpp
 Equivalent game/boss/CChrCoreBossKuroma.cpp
 Equivalent game/boss/CCockpitBoss.cpp
 Equivalent game/boss/unit_636D4.cpp

@@ -5,6 +5,7 @@
 Matching game/boss/module.cpp
 Matching game/boss/CItemBallBoss.cpp
 NonMatching game/boss/CItemBallBossBomb.cpp
+Equivalent game/boss/CBallTargetMarkerBoss.cpp pch=MenuF_g3d
 Matching game/boss/CStageManBoss.cpp
 Matching game/boss/CEffectCtrlBoss.cpp
 Matching game/boss/TournamentBoss.cpp

@@ -43,6 +43,12 @@ namespace bcs {
             long GetView() const { return m_nView; }
             // (name guessed) Read by msw::CTournamentMan (TourF).
             const VIEW_DATA &GetViewData() const { return m_Data; }
+            // (names guessed) Inline: msw::CGameGoalDemo and
+            // msw::CGameScoredView (DOL, game/msw/CGameExDemoBase.cpp) store
+            // the three members of a new camera directly.
+            void SetPos(const FVEC3 &rPos) { m_Data.pos = rPos; }
+            void SetAt(const FVEC3 &rAt) { m_Data.at = rAt; }
+            void SetRoll(float fRoll) { m_Data.roll = fRoll; }
 
             // Static: the body in the DOL reads the data block through r3.
             static void LoadQuakeData(const void *pData);

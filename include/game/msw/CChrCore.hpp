@@ -665,6 +665,22 @@ namespace msw {
             void SetTeamNo(long nTeam);
             void SetPadID(long nPad);
             void GetPos(bcs::FVEC3 &rPos);
+            // Added for the DOL's game/msw/CGameExDemoBase.cpp (all in the
+            // DOL). The position (return type guessed: the callers read the
+            // three floats through the returned pointer).
+            const bcs::FVEC3 &GetPos();
+            // The yaw in radians.
+            float GetRotY() const;
+            void SetRotY(float fRotY);
+            // (meanings guessed) Hides or shows the character for an event.
+            void SetEvtHidden(int bHidden, int);
+            // (fn_800DF580, unnamed in the DOL; name guessed) Stores the rate
+            // clamped to [0, 1] at 0x514.
+            void SetSeVolume(float fRate);
+            // (fn_800DE0B8, unnamed in the DOL; name guessed) Clamps the rate
+            // to [0, 1] and passes it on to CGameSnd::SetVoiceVolume for the
+            // character's player.
+            void SetVoiceVolume(float fRate, float);
             // (names guessed) Inline in the modules: the character managers
             // write the members directly.
             void SetCamNo(long nCam) { m_nCamNo = nCam; }

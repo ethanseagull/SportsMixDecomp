@@ -20,6 +20,12 @@ namespace msw {
             static void SetDemoCameraFrame(float fFrame, int);
             static void PlayDemoCamera(int);
             static void SetEndDemoCamera();
+            // Added for the DOL's game/msw/CGameExDemoBase.cpp (DOL, static;
+            // return types guessed).
+            static int IsEndDemoCamera();
+            // (fn_80119F24, unnamed in the DOL; name guessed) Stores the
+            // value at 0x4D4 of the running demo's camera.
+            static void SetDemoCameraParam(float);
 
             // Whether event demos are played: true when the byte at
             // g_GameWork + 0x151 is set, otherwise a flag in small data.

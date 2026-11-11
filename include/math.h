@@ -18,6 +18,15 @@ inline float fmodf(float x, float y)
 {
     return (float)fmod(x, y);
 }
+
+// Single-precision absolute value (the compiler's builtin; fabs on a
+// double would add a conversion).
+#ifdef __MWERKS__
+inline float fabsf(float x)
+{
+    return __fabsf(x);
+}
+#endif
 #endif
 
 #endif /* !MATH_H_ */

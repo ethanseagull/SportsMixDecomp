@@ -108,7 +108,12 @@ namespace msw {
                 // 0x1C, copied from the tournament's work by
                 // TournamentRule::SetupGame (meaning not known)
                 long m_nUnk1C;
-                unsigned char m_Unk20[0x40 - 0x20];
+                unsigned char m_Unk20[0x34 - 0x20];
+                // 0x34 (name guessed): a speed rate of the game. The DOL's
+                // goal demo (game/msw/CGameExDemoBase.cpp) sets its own rate
+                // here while the demo camera plays and restores it after.
+                float m_fGameSpeed;
+                unsigned char m_Unk38[0x40 - 0x38];
                 // 0x40, flag words whose bit 0 the boss game's "?" panels test
                 // (game/boss/CQPanelManBoss.cpp): with bit 0 of 0x40 set a coin
                 // panel gives no coin; with bit 0 of 0x1C8 set the panels pop up
@@ -411,6 +416,24 @@ namespace msw {
             // (fn_8017D558, unnamed in the DOL) IsNowBonusTime_ on the
             // running game, zero without one.
             static int IsNowBonusTime();
+            // Added for the DOL's game/msw/CGameExDemoBase.cpp (all static
+            // in the DOL; names after the virtuals they call, return types
+            // and parameter meanings guessed).
+            // Stops camera quake nQuake (-1: all) on the active cameras.
+            static void StopCameraQuake(long nQuake);
+            // (fn_8017EB18, unnamed in the DOL) Stops every quake of the
+            // game's own four cameras.
+            static void StopAllCameraQuake();
+            // (fn_8017E820, fn_8017E880, fn_8017E8A8, unnamed in the DOL)
+            // TelopCreate_, TelopRemove_ and TelopIsEnd_ on m_pInstance;
+            // TelopIsEnd gives 1 without an instance.
+            static void TelopCreate(long nTelop, int, long);
+            static void TelopRemove(long nTelop);
+            static int TelopIsEnd(long nTelop);
+            // The speed lines effect over the screen for fFrame frames, and
+            // (fn_8018BED0, unnamed in the DOL) its early end.
+            static void StartSaturatedLinework(float fFrame);
+            static void EndSaturatedLinework();
             // Adds nCoin coins to team nTeam. (DOL)
             static void AddTeamCoin(long nTeam, long nCoin);
 

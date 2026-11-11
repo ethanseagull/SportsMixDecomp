@@ -90,6 +90,10 @@ namespace msw {
             // (fn_800CD520, unnamed in the DOL) IsExistStarBall_ on the
             // instance, zero without one.
             static int IsExistStarBall();
+            // AllReset_ and AllSleep_ on the instance (DOL; the DOL's
+            // CGameScoredView calls them before its camera starts).
+            static void AllReset();
+            static void AllSleep();
 
             static CBallMan *GetInstance();
             // Not zero when there is an instance.

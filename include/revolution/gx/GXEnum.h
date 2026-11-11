@@ -45,4 +45,124 @@ typedef enum _GXCompare {
     GX_ALWAYS
 } GXCompare;
 
+// The enumerations below were added for the DOL's
+// game/msw/CGameExDemoBase.cpp, with only the values it passes. Names follow
+// the public description of the GX interface.
+typedef enum _GXPrimitive {
+    GX_QUADS = 0x80
+} GXPrimitive;
+
+typedef enum _GXVtxFmt {
+    GX_VTXFMT0,
+    GX_VTXFMT7 = 7
+} GXVtxFmt;
+
+typedef enum _GXAttr {
+    GX_VA_POS = 9,
+    GX_VA_CLR0 = 11,
+    GX_VA_TEX0 = 13
+} GXAttr;
+
+typedef enum _GXAttrType {
+    GX_NONE,
+    GX_DIRECT
+} GXAttrType;
+
+// The component counts of the attributes share their values.
+typedef enum _GXCompCnt {
+    GX_POS_XY = 0,
+    GX_POS_XYZ = 1,
+    GX_CLR_RGB = 0,
+    GX_CLR_RGBA = 1,
+    GX_TEX_S = 0,
+    GX_TEX_ST = 1
+} GXCompCnt;
+
+typedef enum _GXCompType {
+    GX_F32 = 4,
+    GX_RGBA8 = 5
+} GXCompType;
+
+typedef enum _GXTexCoordID {
+    GX_TEXCOORD0,
+    GX_TEXCOORD_NULL = 0xFF
+} GXTexCoordID;
+
+typedef enum _GXTexGenType {
+    GX_TG_MTX3x4,
+    GX_TG_MTX2x4
+} GXTexGenType;
+
+typedef enum _GXTexGenSrc {
+    GX_TG_TEX0 = 4
+} GXTexGenSrc;
+
+typedef enum _GXTexMtx {
+    GX_TEXMTX0 = 30,
+    GX_IDENTITY = 60
+} GXTexMtx;
+
+typedef enum _GXPTTexMtx {
+    GX_PTIDENTITY = 125
+} GXPTTexMtx;
+
+typedef enum _GXTexMtxType {
+    GX_MTX3x4,
+    GX_MTX2x4
+} GXTexMtxType;
+
+typedef enum _GXPosNrmMtx {
+    GX_PNMTX0 = 0,
+    GX_PNMTX1 = 3
+} GXPosNrmMtx;
+
+typedef enum _GXTevStageID {
+    GX_TEVSTAGE0
+} GXTevStageID;
+
+typedef enum _GXTexMapID {
+    GX_TEXMAP0,
+    GX_TEXMAP_NULL = 0xFF
+} GXTexMapID;
+
+typedef enum _GXTevColorArg {
+    GX_CC_C0 = 2,
+    GX_CC_TEXC = 8,
+    GX_CC_RASC = 10,
+    GX_CC_ZERO = 15
+} GXTevColorArg;
+
+typedef enum _GXTevAlphaArg {
+    GX_CA_A0 = 1,
+    GX_CA_RASA = 5,
+    GX_CA_ZERO = 7
+} GXTevAlphaArg;
+
+typedef enum _GXTevOp {
+    GX_TEV_ADD
+} GXTevOp;
+
+typedef enum _GXTevBias {
+    GX_TB_ZERO
+} GXTevBias;
+
+typedef enum _GXTevScale {
+    GX_CS_SCALE_1
+} GXTevScale;
+
+typedef enum _GXBlendMode {
+    GX_BM_NONE,
+    GX_BM_BLEND
+} GXBlendMode;
+
+typedef enum _GXBlendFactor {
+    GX_BL_SRCALPHA = 4,
+    GX_BL_INVSRCALPHA = 5
+} GXBlendFactor;
+
+typedef enum _GXLogicOp {
+    GX_LO_CLEAR = 0,
+    GX_LO_SET = 15
+} GXLogicOp;
+
 #endif /* !REVOLUTION_GX_GXENUM_H_ */

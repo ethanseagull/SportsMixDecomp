@@ -60,6 +60,9 @@ namespace msw {
             // Sets or clears bit 1 of m_nFlag; clearing it also resets a
             // field of the two objects at 0x80 and 0x84.
             void EnableViewCheck(int bEnable);
+            // (DOL; BasketF's markers call it with 0 on stage 6) Sets the
+            // fog index of the marker's model.
+            void SetFogIdx(long nIdx);
 
             // The colour of entry nIdx of a table in the DOL (m_Unk90 is
             // passed for it). A member function, though it does not use

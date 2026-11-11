@@ -1,6 +1,7 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
 BasketF ActInterrup__Q23msw19CNpcGhostBasketBaseFv near 94.9 94.9%: dead FsmqWrap(-1) compare code in two pushes, doubled cntlzw on two flag tests, load order.
 BasketF AddCoinValue__Q23msw18CCockpitBasketCoinFlll near 99.0 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
+BasketF ArrowSignalCheck__Q23msw16CChrMarkerBasketFv near 99.2 99.2%: user-team/character-team registers swapped only (same as HockeyF sibling)
 BasketF Bubble_CalcCreatePos__Q23msw14CStageBasket11Fv near 98.8 register numbering only
 BasketF CalcPos___Q33msw11CC09_BASKET14CBoundMushroomFv near 99.4 register choice around the paired-single court-offset add
 BasketF CallbackBallCatch2__Q23msw19CNpcGhostBasketBaseFPQ23msw13CCollBodyUnitPQ23msw5CBallPv near 99.6 register choice / schedule only (UpDateCollBody_: argument load order).
@@ -72,6 +73,7 @@ BasketF MainFunc__Q23msw19CNpcGhostBasketBaseFv near 98.9 register choice / sche
 BasketF MainFunc___Q23msw19CItemBallBasketBombFv unverified 95.5 95.5%: original converts the flash grey level to u8 with a quantized psq_st (qr2), ours with fctiwz (no asm helper); value in [55,255], rounding may differ by 1; two extra frsp and stack slots follow.
 BasketF MainOffense___Q23msw16CChrDrvPadBasketFPQ33msw7CChrDrv8_CHR_MSG unverified 88.8 88.8% after the shared CChrDrvPad header dropped the pool-off stand-in (it lowered BossF/HockeyF/VolleyF pad drivers): float constants via one base register instead of per-literal lis; otherwise as before.
 BasketF Main__Q23msw14CGoalMdlBasketFf near 98.0 98.0%: schedule only; one mr placed before the first of two null-check beq instead of between them
+BasketF Main__Q23msw18CArrowSignalBasketFv near 99.0 99.0%: fmadds input registers swapped, position-copy load order (same as HockeyF sibling)
 BasketF Main__Q23msw18CCockpitBasketCoinFv near 98.8 register choice only (as CCockpitHockeyCoin::Main): loop counters and pointer temporaries in different saved registers
 BasketF Main__Q33msw11CC09_BASKET17CcKinopioReceiverFv near 99.6 register choice for one load
 BasketF Main__Q33msw11CC17_BASKET18CcKuromaLockonUnitFv near 96.4 scheduling: m_hEffect loaded before CEffectCtrl::GetInstance() in the original (Hockey/Volley/Dodge same)

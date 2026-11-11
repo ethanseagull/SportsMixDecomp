@@ -8,10 +8,13 @@ namespace msw {
     // Base of the item balls of the hockey game (HockeyF). Unlike the Boss
     // version it adds no triggers: DoTrg only forwards to CItemBall's, and
     // IsDisableRebound is not overridden (the derived vtables hold
-    // CItemBall's). No constructor is declared yet: the derived classes call
-    // CItemBall's directly, so this class's is inline.
+    // CItemBall's). The item kinds are in CItemBallHockeyKinds.hpp.
     class CItemBallHockey : public CItemBall {
         public:
+            // Inline: the item kinds of game/hockey/CItemBallHockeyBomb.cpp
+            // call CItemBall's constructor directly.
+            CItemBallHockey(CBall *pBall, long type) : CItemBall(pBall, type) {}
+
             // Declared first and defined inline below the class (guess): the
             // original object has no CItemBallHockey vtable, and a class whose
             // first virtual is defined out of line gets its vtable emitted in

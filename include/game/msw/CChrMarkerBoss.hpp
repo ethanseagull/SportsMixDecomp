@@ -6,7 +6,7 @@
 namespace msw {
 
     // The character marker of the boss game (BossF). It adds no members to
-    // CChrMarker (size 0x9C); it only replaces the two checks that decide
+    // CChrMarker (size 0xA0); it only replaces the two checks that decide
     // when the marker is shown.
     class CChrMarkerBoss : public CChrMarker {
         public:

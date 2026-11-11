@@ -348,6 +348,10 @@ namespace msw {
             static long GetCharColor(long nPlayer);
             static void *GetMiiStoreData(long nPlayer);
             static long GetPartyGameParam(long nIndex);
+            // DOL, static (return type guessed). How team nTeam is played;
+            // BossF's CChrManBoss::InitLeader_ gives the characters of a
+            // team of type 1 the computer driver.
+            static long GetTeamCtrlType(long nTeam);
             static void SetStartFadeType(long nType);
             // The difficulty of the game (see GameWork::m_nGameLevel).
             // Inline; the parameter files emit it.

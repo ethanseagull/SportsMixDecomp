@@ -11,9 +11,10 @@ namespace bcs {
     class CScnObjGather {
         public:
             // (parameter meaning guessed) Adds pObj to the opaque and/or
-            // the translucent list, culled against pFrustum. Return type
-            // guessed.
-            void Add(CScnObj *pObj, int bOpa, int bXlu, const CFrustum *pFrustum);
+            // the translucent list, culled against pFrustum. Returns 2 when
+            // the object is culled; bcs::CScnGroup then skips its children,
+            // passes the frustum on for 0 and none for 1.
+            int Add(CScnObj *pObj, int bOpa, int bXlu, const CFrustum *pFrustum);
     };
 }
 

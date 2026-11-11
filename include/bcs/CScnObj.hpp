@@ -2,13 +2,15 @@
 #define BCS_CSCNOBJ_HPP_
 
 #include "bcs/CG3dObj.hpp"
+#include "bcs/FMTX34.hpp"
 #include "bcs/FVEC3.hpp"
+#include "nw4r/math/types.h"
 #include "revolution/gx/GXEnum.h"
 
 namespace bcs {
 
     struct BCS_Color;
-    struct FMTX34;
+    class CHandleTable;
 
     // An object in the 3D scene. Size 0x118 (the members of bcs::CMdlObj
     // start there). A DOL class. The virtual functions are declared in the
@@ -96,10 +98,12 @@ namespace bcs {
             virtual void SetMatTevColorRGB(const char *, _GXTevRegID, BCS_Color);           // 0x88
             virtual void SetMatTevColorA(_GXTevRegID, unsigned char);                       // 0x8C
             virtual void SetMatTevColorA(const char *, _GXTevRegID, unsigned char);         // 0x90
-            // 0x94 to 0x10C: names and parameters from the slots of the
-            // vtable of msw::CFgMdl in the DOL (bcs::CMdlObj's functions;
-            // UpdateFrame is null in bcs::CScnObj's vtable). Return types
-            // guessed.
+            // 0x94 to 0x108: names and parameters from the slots of the
+            // vtable of msw::CFgMdl in the DOL (bcs::CMdlObj's functions).
+            // Return types guessed. The vtable ends at 0x108: bcs::CScnGroup's
+            // has 67 words and a class derived from it adds its own
+            // virtuals from 0x10C (lbl_804666F8); the zero word after
+            // bcs::CScnObj's vtable in the DOL is alignment padding.
             virtual void RestoreMatTevColor(_GXTevRegID);                                   // 0x94
             virtual void RestoreMatTevColor(const char *, _GXTevRegID);                     // 0x98
             virtual void SetMatTevKColor(_GXTevKColorID, BCS_Color);                        // 0x9C
@@ -130,32 +134,91 @@ namespace bcs {
             virtual void SetMatChanAmbColorA(const char *, _GXChannelID, unsigned char);    // 0x100
             virtual void RestoreMatChanAmbColor(_GXChannelID);                              // 0x104
             virtual void RestoreMatChanAmbColor(const char *, _GXChannelID);                // 0x108
-            virtual void UpdateFrame(float) = 0;                                            // 0x10C, null in the DOL vtable
+
+            // fn_8004196C (name guessed). Creates the handle table and the
+            // delayed-delete list; called once at start-up.
+            static void Initialize();
 
             // The object registered under a handle, or null.
             static CScnObj *GetScnObj(unsigned long handle);
 
             // Queues the object to be deleted later.
             static void AppendDelayDeleteObject(CScnObj *pObj);
+            // fn_80041A64 (name guessed). Deletes the queued objects. Unless
+            // bAll is set, an object with flag 0x100000 or 0x200000 stays
+            // queued.
+            static void ExecDelayDeleteObject(int bAll);
+
+            // fn_80041CBC (name guessed). Sets (bOn) or clears flag.
+            void SetFlag(unsigned long flag, int bOn);
+
+            // fn_80041DC4 (name guessed). Copies *pMtx to the matrix `type`,
+            // or sets it to identity when pMtx is null.
+            void SetMtx(ScnObjMtxType type, const FMTX34 *pMtx);
+            void SetMtx(ScnObjMtxType type, const FMTX34 &rMtx);
+            // fn_80041E0C (name guessed). Copies the matrix `type` to *pMtx.
+            void GetMtx(ScnObjMtxType type, FMTX34 *pMtx) const;
+            // In the DOL. Copies the matrix `type` to rMtx.
+            void GetMtx(ScnObjMtxType type, FMTX34 &rMtx) const;
 
             // Makes the object follow node `nNode` of pParent; a null parent
             // detaches it. (parameter names and return type guessed)
             void AttachToObject(const CScnObj *pParent, long nNode, AttachMode mode);
             // (meaning of the two values guessed: the opaque and the
-            // translucent pass)
+            // translucent pass) A negative value leaves that one unchanged.
             void SetDrawPriority(long nOpa, long nXlu);
             // (meaning guessed) The opaque pass priority alone.
             void SetDrawPriorityOpa(long nOpa);
+            void SetDrawPriorityXlu(long nXlu);
+
+            // fn_80041F24 and fn_80041FB0 (names guessed). The bounding box,
+            // brought up to date first when flag 0x20000 says it is stale.
+            // The first argument of the first one is not read (callers pass
+            // 0 or 1).
+            void GetBoundingBox(long, nw4r::math::AABB *pBox);
+            void GetBoundingBox(nw4r::math::AABB *pBox);
+
+            // fn_80042040 (name guessed after msw::CChrCore::RotateYTo_).
+            // Turns the Y angle towards fTarget by fStep the short way round;
+            // returns 1 once it is reached.
+            int RotateYTo(float fTarget, float fStep);
+            // fn_80042128 (name guessed after msw::CChrCore::RotateYRate_).
+            // Turns the Y angle by fRate of the way to fTarget.
+            void RotateYRate(float fTarget, float fRate);
 
             // Rebuilds the matrix at 0x08 from the rotation and the
             // translation members.
             void CalcRootMtx();
-            // In the DOL. Copies the matrix `type` to rMtx.
-            void GetMtx(ScnObjMtxType type, FMTX34 &rMtx) const;
+            // fn_80042260 (name guessed). The world matrix of the node this
+            // object is attached to, or null; forgets an attachment whose
+            // object is gone.
+            const FMTX34 *GetAttachMtx();
             // fn_800424A0, unnamed in the binary (name guessed). Concatenates
             // pViewMtx with the matrix at 0x38 into the one at 0x68, then
-            // calls fn_800424F0. ObjProc runs it for task 4.
+            // calls CalcSortValue. ObjProc runs it for task 4.
             void CalcViewMtx(const FMTX34 *pViewMtx);
+            // fn_800424F0 (name guessed). The depth used to sort the object:
+            // from the bounding box seen through pViewMtx when flags 0x40000
+            // and 0x10000 are set, else the view translation's z.
+            void CalcSortValue(const FMTX34 *pViewMtx);
+
+            // How CalcSortValue reads the box: 1 its nearest corner, 2 its
+            // farthest, anything else its centre. (meaning guessed)
+            void SetBBoxZSortCalcType(long nType);
+
+            // Chains pObj to the end of the joint list; null clears the list.
+            void SetJointObj(CScnObj *pObj);
+            // Queues every object of the joint list for deletion.
+            void DeleteJointObj();
+            // fn_80042BDC and fn_80042CBC (names guessed). Whether this
+            // object or one in its joint list is drawn in the opaque /
+            // translucent pass.
+            int IsDrawOpaJoint() const;
+            int IsDrawXluJoint() const;
+            // fn_80042CA8 and fn_80042D88 (names guessed). Whether the
+            // object itself is drawn in that pass.
+            int IsDrawOpa() const;
+            int IsDrawXlu() const;
 
             // (name guessed) Whether task nTask of ObjProc is switched off:
             // bit 0 of the flags switches off tasks 0 to 8, bit n task n.
@@ -168,6 +231,9 @@ namespace bcs {
             }
             // (name guessed)
             unsigned long GetFlag() const { return m_nFlag; }
+            // (name guessed) Whether any bit of flag is set. Inline in
+            // CalcSortValue (the double cntlzw of a bool result).
+            bool TestFlag(unsigned long flag) const { return (m_nFlag & flag) != 0; }
             // (name guessed) The handle GetScnObj takes.
             unsigned long GetHandle() const { return m_nHandle; }
 
@@ -248,7 +314,20 @@ namespace bcs {
             }
 
         private:
-            unsigned char m_Unk08[0x90];  // 0x08
+            // fn_800429B4 (name guessed). Unchains the joint list.
+            void ClearJointObj()
+            {
+                if (m_pJointObj != 0) {
+                    m_pJointObj->ClearJointObj();
+                }
+                m_pJointObj = 0;
+            }
+
+        protected:
+            // (names guessed) Indexed by ScnObjMtxType: the root matrix
+            // CalcRootMtx builds, the world matrix CalcWorldMtx builds and
+            // the view matrix CalcViewMtx builds.
+            FMTX34 m_Mtx[3];              // 0x08
 
         public:
             // (name guessed) The translation CalcRootMtx reads.
@@ -271,12 +350,45 @@ namespace bcs {
             FVEC3 m_vScale;               // 0xBC
 
         private:
-            unsigned char m_UnkC8[0x30];  // 0xC8
+            // (names guessed) What AttachToObject stores: the handle of the
+            // object followed, its node and the AttachMode.
+            unsigned long m_nAttachHandle;      // 0xC8
+            unsigned short m_nAttachNode;       // 0xCC
+            unsigned char m_nAttachMode;        // 0xCE
+            unsigned char m_nBBoxZSortCalcType; // 0xCF
+            nw4r::math::AABB m_BBox;            // 0xD0 (name guessed)
+            unsigned long m_UnkE8;              // 0xE8
+            unsigned short m_UnkEC;             // 0xEC
+            // 0xEE: tested against a mask by bcs::CScnObjGather::Add.
+            unsigned short m_UnkEE;
+            CScnObj *m_pJointObj;               // 0xF0 (name guessed)
+            unsigned short m_UnkF4;             // 0xF4
+            unsigned short m_UnkF6;             // 0xF6
             // 0xF8 (name guessed): the handle GetScnObj looks the object up
             // by; the constructor sets it and AppendDelayDeleteObject reads it.
             unsigned long m_nHandle;
-            unsigned long m_nFlag;        // 0xFC (name guessed)
-            unsigned char m_Unk100[0x18]; // 0x100
+            unsigned long m_nFlag;              // 0xFC (name guessed)
+            unsigned char m_nDrawPriorityOpa;   // 0x100 (name guessed)
+            unsigned char m_nDrawPriorityXlu;   // 0x101 (name guessed)
+            unsigned char m_nAlphaRate;         // 0x102 (name guessed)
+            unsigned char m_nAlphaMode;         // 0x103 (name guessed)
+            // 0x104 (name guessed): what GetValueForSortXlu returns.
+            float m_fSortValue;
+            // (names guessed) The links of the child list of the
+            // bcs::CScnGroup holding this object.
+            CScnObj *m_pGroupPrev;              // 0x108
+            CScnObj *m_pGroupNext;              // 0x10C
+            unsigned long m_Unk110;             // 0x110
+            unsigned long m_Unk114;             // 0x114
+
+            // (names guessed) The table of handles (lbl_805C0890) and the
+            // handles queued by AppendDelayDeleteObject (lbl_805C0894,
+            // lbl_805C0898).
+            static CHandleTable *s_pHandleTable;
+            static unsigned long *s_pDelayDeleteHandle;
+            static unsigned long s_nDelayDeleteNum;
+
+            friend class CScnGroup;
     };
 }
 

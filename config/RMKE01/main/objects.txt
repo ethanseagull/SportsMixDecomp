@@ -9,6 +9,7 @@ Matching game/msw/CCollDefUnit.cpp
 NonMatching game/msw/CNowLoading.cpp
 Equivalent game/msw/CEvNodeData.cpp
 Equivalent game/msw/EvDemoVs.cpp
+Equivalent game/bcs/CScnObj.cpp
 Matching game/msw/CMenuPadInfo.cpp
 Matching game/msw/CStageNet.cpp
 Matching game/msw/CStage01Base.cpp

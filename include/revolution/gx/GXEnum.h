@@ -143,6 +143,23 @@ typedef unsigned char GXBool;
 #define GX_FALSE ((GXBool)0)
 #define GX_TRUE ((GXBool)1)
 
+// (added for the DOL's pinball ball's debug drawing)
+typedef enum _GXCullMode {
+    GX_CULL_NONE,
+    GX_CULL_FRONT,
+    GX_CULL_BACK,
+    GX_CULL_ALL
+} GXCullMode;
+
+typedef enum _GXTexOffset {
+    GX_TO_ZERO,
+    GX_TO_SIXTEENTH,
+    GX_TO_EIGHTH,
+    GX_TO_FOURTH,
+    GX_TO_HALF,
+    GX_TO_ONE
+} GXTexOffset;
+
 typedef enum _GXBlendMode {
     GX_BM_NONE,
     GX_BM_BLEND,

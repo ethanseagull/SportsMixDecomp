@@ -19,6 +19,8 @@ namespace msw {
     class CEffectCluster {
         public:
             void SetTranslate(const bcs::FVEC3 *pPos);
+            // (added for the DOL's pinball ball) Scales every effect.
+            void SetScale(const bcs::FVEC3 *pScale);
             // Rotation in radians.
             void SetRotateRad(const bcs::FVEC3 *pRot);
             // (parameter names and return types guessed) Fades the cluster

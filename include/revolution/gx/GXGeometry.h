@@ -11,6 +11,8 @@ extern "C" {
 // so far, written from the calls; argument names are guesses.
 
 void GXClearVtxDesc(void);
+void GXSetLineWidth(unsigned char width, GXTexOffset tex_offsets);
+void GXSetCullMode(GXCullMode mode);
 // fn_80296AE0 in main.dol (unnamed there).
 void GXSetVtxDesc(GXAttr attr, GXAttrType type);
 void GXSetVtxAttrFmt(GXVtxFmt fmt, GXAttr attr, GXCompCnt cnt, GXCompType type, unsigned char frac);

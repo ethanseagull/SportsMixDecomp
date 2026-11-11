@@ -21,6 +21,8 @@ namespace msw {
             void SetDisableAll();
             // (added for VolleyF's CStgGmk_Trolley_Act_Volley)
             void SetReflectDisableAll();
+            // (added for the DOL's pinball ball)
+            void SetIndexAll(long nIndex);
 
         private:
             unsigned long m_Unk00[3];

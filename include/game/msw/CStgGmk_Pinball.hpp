@@ -2,6 +2,7 @@
 #define MSW_CSTGGMK_PINBALL_HPP_
 
 #include "bcs/FVEC3.hpp"
+#include "bcs/New.hpp"
 #include "game/msw/CStgGmk.hpp"
 #include "game/msw/CStgGmk_Pinball_Act.hpp"
 #include "game/msw/CStgSrt.hpp"
@@ -14,6 +15,7 @@ namespace msw {
         public:
             CStgGmk_Pinball_Drv(CStgGmk *pParent);
             virtual ~CStgGmk_Pinball_Drv();
+            virtual void Main(float rate);
     };
 
     // One ball of a sport's stage 12, the gimmick that CPinballMan makes. A
@@ -40,7 +42,8 @@ namespace msw {
             virtual void SetDefaultPos(const bcs::FVEC3 &rPos) { m_DefaultPos = rPos; }
             virtual const bcs::FVEC3 &GetDefaultPos() const { return m_DefaultPos; }
             virtual void Respawn(float frame);
-            virtual bool IsActive() const;
+            // The actor's IsAlive (an int: no conversion to bool).
+            virtual int IsActive() const;
             virtual void Inactivate();
             virtual void Sleep(float frame);
             virtual void Standby();
@@ -61,14 +64,20 @@ namespace msw {
             }
             virtual float GetRadius() const { return GetPinballAct()->GetParam_CollRadius(); }
 
+            // (DOL) The DOL emits both as weak copies; the per-sport
+            // classes override them.
+            virtual CStgAct *NewAct(long heap) { return new (heap) CStgGmk_Pinball_Act(this); }
+            virtual CStgDrv *NewDrv(long heap) { return new (heap) CStgGmk_Pinball_Drv(this); }
+
         private:
             // The actor is always a CStgGmk_Pinball_Act. (name guessed)
             const CStgGmk_Pinball_Act *GetPinballAct() const
             {
                 return static_cast<const CStgGmk_Pinball_Act *>(GetAct());
             }
+            CStgGmk_Pinball_Act *GetPinballAct() { return static_cast<CStgGmk_Pinball_Act *>(GetAct()); }
 
-            unsigned char m_Unk68[4];    // 0x68
+            int m_Unk68;                 // 0x68, the second argument of the constructor
             bcs::FVEC3 m_DefaultPos;     // 0x6C (GetDefaultPos)
     };
 }

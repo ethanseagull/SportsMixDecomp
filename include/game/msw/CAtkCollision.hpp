@@ -61,6 +61,9 @@ namespace msw {
             void SetRadius(long index, float fRadius);
             void SetPos(long index, const bcs::FVEC3 &rPos);
             void SetPos2(long index, const bcs::FVEC3 &rPos);
+            // (DOL fn_8010934C, next to SetHitEffectFrameAll; name guessed;
+            // added for the DOL's pinball ball)
+            void SetHitEffectFrame(long index, float fFrame);
             void SetSize(long index, const bcs::FVEC3 &rSize);
 
         private:

@@ -80,6 +80,16 @@ namespace nw4r {
         // given in units of 1/256 of a turn. Added for bcs::CScnObj::CalcRootMtx.
         MTX34 *MTX34RotXYZFIdx(MTX34 *pOut, float fIdxX, float fIdxY, float fIdxZ);
 
+        // (DOL) *pOut = the rotation about *pAxis by fIdx (1/256 of a
+        // turn). Added for the DOL's pinball ball, which inlines the radian
+        // form below.
+        MTX34 *MTX34RotAxisFIdx(MTX34 *pOut, const VEC3 *pAxis, float fIdx);
+
+        inline MTX34 *MTX34RotAxisRad(MTX34 *pOut, const VEC3 *pAxis, float fRad)
+        {
+            return MTX34RotAxisFIdx(pOut, pAxis, 40.743664f * fRad);
+        }
+
         // The same with the angles in radians (256 / 2 pi = 40.743664 units
         // per radian). Inline in bcs::CScnObj::CalcRootMtx.
         inline MTX34 *MTX34RotXYZRad(MTX34 *pOut, float fRadX, float fRadY, float fRadZ)

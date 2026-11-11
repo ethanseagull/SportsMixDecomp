@@ -38,7 +38,7 @@ namespace msw {
             // 0x3C (names guessed) Sets the frame of animation anm (-1: all).
             // DodgeF's CStageDodge11 and the DOL's STAGE11::CStgRndAnmObj.
             virtual void SetFrame(long anm, float frame);
-            virtual void Unk40();
+            virtual float GetFrame(long anm); // 0x40 (name guessed; the DOL's pinball launcher)
             virtual void Unk44();
             // 0x48 (name and return type guessed) The length in frames of
             // animation anm.

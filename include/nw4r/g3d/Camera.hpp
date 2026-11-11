@@ -41,6 +41,12 @@ namespace nw4r {
                 void SetOrtho(float top, float bottom, float left, float right, float near, float far);
                 // The view matrix (world to camera).
                 void GetCameraMtx(math::MTX34 *pMtx) const;
+                // (added for the DOL's pinball ball's debug drawing) Load
+                // the camera's viewport, projection and scissor into GX.
+                void GXSetViewport() const;
+                void GXSetProjection() const;
+                void GXSetScissor() const;
+                void GXSetScissorBoxOffset() const;
 
             private:
                 CameraData *mCamData; // 0x00

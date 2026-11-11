@@ -101,6 +101,23 @@ namespace msw {
                 m_nFlagC8 |= 0x10;
             }
             void ClearUnkE4() { m_UnkE4.Set(0.0f, 0.0f, 0.0f); }
+            // (added for the DOL's pinball ball, names guessed) The vector
+            // at 0xE4 (its y is the speed of a fall), the acceleration at
+            // 0xF0 (CStgGmk_Pinball::SetAccel), the deceleration at 0xFC,
+            // and the limits of the velocity: rMax at 0x118 (flag 2 of
+            // 0xC8) and -rMax at 0x124 (flag 1).
+            const bcs::FVEC3 &GetUnkE4() const { return m_UnkE4; }
+            void SetAccel(const bcs::FVEC3 &rAccel) { m_UnkF0 = rAccel; }
+            void SetDec(float dec) { m_fUnkFC = dec; }
+            void SetVelLimit(const bcs::FVEC3 &rMax)
+            {
+                m_VelMax = rMax;
+                m_nFlagC8 |= 2;
+                bcs::FVEC3 min;
+                bcs::FVEC3Scale(&min, &rMax, -1.0f);
+                m_VelMin = min;
+                m_nFlagC8 |= 1;
+            }
             // The run of the trolley: StopAccel clears flag 4 and the
             // vectors at 0xF0 and 0xFC; SetLocalVel sets a local velocity
             // and turns it into the world velocity at 0xD8 by the
@@ -171,7 +188,9 @@ namespace msw {
             float m_fUnkFC;              // 0xFC
             bcs::FVEC3 m_Unk100;         // 0x100
             bcs::FVEC3 m_Unk10C;         // 0x10C
-            unsigned char m_Unk118[0x2C]; // 0x118
+            bcs::FVEC3 m_VelMax;         // 0x118 (SetVelLimit)
+            bcs::FVEC3 m_VelMin;         // 0x124
+            unsigned char m_Unk130[0x14]; // 0x130
     };
 }
 

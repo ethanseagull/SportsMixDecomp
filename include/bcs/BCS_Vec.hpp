@@ -45,6 +45,14 @@ namespace bcs {
 
     // (argument names guessed) The same with length 1. In the DOL.
     void BCS_VecOneZ_RotY(FVEC3 &rOut, float rotY);
+    // (added for the DOL's pinball ball) The unit X vector turned by rotY.
+    void BCS_VecOneX_RotY(FVEC3 &rOut, float rotY);
+
+    // (added for the DOL's pinball ball) The crossing of the lines (not
+    // segments) through (x0, z0)-(x1, z1) and (x2, z2)-(x3, z3); false
+    // when they are parallel.
+    int BCS_GetLineToLineCross(float *pX, float *pZ, float x0, float z0, float x1, float z1, float x2, float z2,
+                               float x3, float z3);
 
     // The three routines below are inline in the modules and written in
     // paired-single assembly in the original (x and y as a pair, z alone; the

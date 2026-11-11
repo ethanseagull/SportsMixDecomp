@@ -563,14 +563,13 @@ game/msw/CStage11Base.cpp:
 game/msw/cockpit.cpp:
 	.text       start:0x801DF710 end:0x801E00F8
 
-game/msw/CStgGmk_Pinball_Act.cpp:
-	.text       start:0x801E14E4 end:0x801E5388
-
 game/msw/CStgGmk_Pinball.cpp:
-	.text       start:0x801E5424 end:0x801E5878
-
-game/msw/CPinballMan.cpp:
-	.text       start:0x801E587C end:0x801E628C
+	.text       start:0x801E0130 end:0x801E782C
+	.ctors      start:0x8042D244 end:0x8042D248
+	.rodata     start:0x80443118 end:0x80443160
+	.data       start:0x80484E50 end:0x804857B8
+	.bss        start:0x804D7538 end:0x804D7738
+	.sdata2     start:0x805C4D80 end:0x805C4E10
 
 game/msw/CStgEffectSlot.cpp:
 	.text       start:0x801E78D0 end:0x801E82B8

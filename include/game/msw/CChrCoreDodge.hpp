@@ -38,6 +38,10 @@ namespace msw {
             struct STATE_WORK_BALL_CATCH;
             struct STATE_WORK_ITEM_SHOOT;
             struct HIT_BALL_STATE;
+
+            // (DodgeF, static; added for game/dodge/CItemBallBombDodge.cpp)
+            // The parameter block of character nChr.
+            static const CHR_CORE_DODGE::CC_PARAM_DODGE *GetCcParamByChrIdx(long nChr);
             struct MOT_ACT_PARAM;
             struct MOT_ACT_CONTEXT;
             // (values not known) The kind of throw (MethdShootSub) and an

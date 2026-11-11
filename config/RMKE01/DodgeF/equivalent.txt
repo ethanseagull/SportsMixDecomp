@@ -11,10 +11,14 @@ DodgeF CoinOutWait__Q23msw17CCockpitDodgeCoinFv near 99.0 register choice only: 
 DodgeF CoinOut__Q23msw17CCockpitDodgeCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 DodgeF CreateMiniTelop__Q23msw13CCockpitDodgeFllPQ23bcs5FVEC3 near 98.9 98.9%: float registers given to bcs::FVEC3Add's paired-single block; same loads, ps_add, stores.
 DodgeF DetectMapHit___Q23msw13CCollManDodgeFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 87.4 87.4%: branches, calls, constants, offsets and stack layout match; ours addresses the float constants through a kept .rodata base register (r31) instead of lis per load, which costs one more saved register (_savegpr_19 vs _20) and shifts registers/scheduling after it
+DodgeF DoNormalShootPhysMove__Q23msw18CItemBallStarDodgeFRQ23bcs5FVEC3RQ23bcs5FVEC3ff near 99.2 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF EffectCoinGetCreate___Q23msw16CGimmickManDodgeFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 95.4 original reloads m_pMdl before CreateAttachEffect (no store in between, same value); multiply scheduled differently
+DodgeF Explode___Q23msw18CItemBallBombDodgeFi near 99.8 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF GameResult_In__Q23msw13CCockpitDodgeFv near 99.0 99.0%: register choice for the period words and result pointers.
 DodgeF GetExplosionParam__Q23msw14CItemDodgeBombFRfRfRfRlRlRUl near 99.7 99.7%: the two registers of the team-number compare are swapped.
 DodgeF GetFarPosBall___Q23msw13CBallManDodgeFRCQ23bcs5FVEC3 near 99.1 99.1%: loop counter and best-ball pointer swap saved registers r29/r30; instructions and order otherwise identical (register allocation only)
+DodgeF GetMyVelY__Q23msw18CItemBallBombDodgeCFv near 99.3 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
+DodgeF GetMyVelY__Q23msw19CItemBallSmallDodgeCFv near 99.3 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF GetNearPosBall___Q23msw13CBallManDodgeFRCQ23bcs5FVEC3 near 99.1 99.1%: loop counter and best-ball pointer swap saved registers r29/r30; instructions and order otherwise identical (register allocation only)
 DodgeF GetParam_FlashColor__Q23msw13CStageDodge15CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
 DodgeF GetParam_FlashColor__Q23msw13CStageDodge16CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
@@ -32,6 +36,11 @@ DodgeF Main___Q23msw13CStageDodge11Ff near 99.4 register choice only (Main_ also
 DodgeF MovePos___Q210CC09_DODGE22CcKinopioBoundMushroomFf near 99.6 fmadds multiplicands swapped (register choice)
 DodgeF OnCalcSum__Q23msw13CStageDodge03CFv near 98.3 register choice / operand order only.
 DodgeF OnCalcSum__Q23msw13CStageDodge07CFv near 97.7 97.7%: ours adds one redundant empty-list check (cmpwi/beq) before jumping to the loop's own test; same result.
+DodgeF OnCtorNormalShoot__Q23msw18CItemBallStarDodgeFv near 99.4 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
+DodgeF OnCtorNormalShoot__Q23msw19CItemBallSmallDodgeFv near 99.3 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
+DodgeF OnCtorNormalShoot__Q23msw20CItemBallBananaDodgeFv near 99.4 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
+DodgeF OnCtorNormalShoot__Q23msw20CItemBallGShellDodgeFv near 99.4 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
+DodgeF OnCtorNormalShoot__Q23msw20CItemBallRShellDodgeFv near 99.4 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF OnGimmickCancel__Q23msw13CStageDodge05Fv near 99.1 99.1%: float register allocation only.
 DodgeF OnGimmickReset__Q23msw13CStageDodge05Fv near 99.2 99.2%: float register allocation only.
 DodgeF OnPostAppendNode__Q23msw13CStageDodge12FPCQ33msw5STAGE12MDL_GEN_RULERQ23bcs6CRegexPQ23msw17CStageMdlListNodeRQ34nw4r3g3d7ResFileRQ23msw4CArnl near 99.8 99.8%: the two case-local sscanf result variables have their stack slots (0x8/0xC) swapped. No behaviour change.
@@ -49,17 +58,20 @@ DodgeF SendMessage__Q23msw13CStageDodge09Fllll near 95.5 95.5%: instruction orde
 DodgeF SendMessage__Q23msw13CStageDodge11Fllll near 99.8 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
 DodgeF SendMessage__Q23msw13CStageDodge15Fllll near 99.8 99.8%: instructions and relocation targets identical (objdump); objdiff scores the 0.0f literal reference differently.
 DodgeF SendMessage__Q23msw15CEventDemoDodgeFllll near 99.2 99.2%: register choice only (identical after renumbering)
+DodgeF SetBoundVel__Q23msw18CItemBallBombDodgeFv near 96.2 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF SetChrIcon__Q23msw13CCockpitDodgeFlllPCQ23bcs5FVEC3 near 99.6 99.6%: loop counter and icon pointer swap registers.
 DodgeF SetCoinValue__Q23msw17CCockpitDodgeCoinFll near 98.9 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 DodgeF SetCountNum__Q23msw24CCockpitDodgePauseResultFl near 99.2 registers only (as CCockpitBasketPauseResult::SetCountNum): the pane accessor and the computed show flag swap r30/r31; same instructions, order and stack frame
 DodgeF SetDamageDemoType__Q23msw11EvDemoDodgeFll near 98.7 98.7%: register choice only (identical after renumbering)
 DodgeF SetDamegeCamera__Q23msw15CEventDemoDodgeFll near 99.8 99.8%: case 0 swaps the parent and task registers; regs search no gain
 DodgeF SetLifeGaugeState__Q23msw13CCockpitDodgeFlllll near 99.9 99.9%: one register for the OrDie object pointer.
+DodgeF SetVelocity__Q23msw18CItemBallBombDodgeFv near 99.3 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF Set__Q23msw17CCockpitDodgeCoinFv near 99.3 register choice only (as CCockpitHockeyCoin::Set)
 DodgeF StartDamageDemo__Q23msw11EvDemoDodgeFv near 97.8 97.8%: the original keeps a cmpwi 1/beq to the switch end for the empty case 1 plus one dead b; equivalent branch form
 DodgeF Start__Q33msw13CStageDodge0310CWaterInfoFli near 93.4 original also computes max(WATER_NUM,0) with srawi/andc as the loop bound after the >0 guard; same iteration count; registers.
 DodgeF SubStateArtsShotFireBullet___Q23msw20CChrCoreDodgeKinopioFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 97.9 register choice and order of the float loads/stores setting up the court rectangle and start position (VolleyF CreateBoundMushroom_ same)
 DodgeF SubStateArtsShotPlayTrickMotion___Q23msw19CChrCoreDodgeKuromaFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN near 99.1 register allocation only (VolleyF copy same)
+DodgeF TrgConstruct___Q23msw18CItemBallBombDodgeFv near 98.4 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF UpdateCourtCenter___Q23msw13CStageDodge03Ff near 96.4 register choice / operand order only.
 DodgeF UpdateMdl__Q23msw13CStageDodge13FUlf near 98.1 register choice and common-subexpression reuse only (as CStageBasket13::UpdateMdl): in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls
 DodgeF UpdatePos___Q33msw13CStageDodge0310CWaterInfoFv near 90.6 float registers and instruction order; frame and values match.

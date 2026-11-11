@@ -471,6 +471,12 @@ namespace msw {
             // velocity.
             bcs::CMdlObj *GetMdlObj() const { return m_pMdlObj; }
             const bcs::FVEC3 &GetVelocity() const { return m_Velocity; }
+            // (names guessed; added for DodgeF game/dodge/CItemBallBombDodge.cpp)
+            // Direct access for the dodgeball item behaviours, which read
+            // and write these members of the ball without a call.
+            void SetVelocity(const bcs::FVEC3 &rVel) { m_Velocity = rVel; }
+            void SetTargetPos(const bcs::FVEC3 &rPos) { m_TargetPos = rPos; }
+            long GetShootType() const { return m_nShootType; }
             // (fn_800C7660, name guessed) Calls UpdateDisp_; msw::CItemBall
             // calls it when the item shows or hides its demo display.
             void UpdateDisp();
@@ -505,7 +511,11 @@ namespace msw {
             // 0xB4, a second scene object, deleted with the model (name
             // guessed; CBallBasketFruit sets bits 0xC0 of its flags)
             bcs::CScnObj *m_pSubObj;
-            unsigned char m_UnkB8[0x40];   // 0xB8
+            unsigned char m_UnkB8[0x28];   // 0xB8
+            // 0xE0 (name guessed): where the ball is heading; DodgeF's item
+            // balls set it with their velocity (CItemBallBaseDodge::SetTargetPos).
+            bcs::FVEC3 m_TargetPos;
+            unsigned char m_UnkEC[0xC];    // 0xEC
             bcs::FVEC3 m_Pos;              // 0xF8
             unsigned char m_Unk104[0x0C];  // 0x104
             bcs::FVEC3 m_Velocity;         // 0x110 (name guessed)

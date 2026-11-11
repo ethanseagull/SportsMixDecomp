@@ -16,6 +16,7 @@ namespace nw4r {
 namespace msw {
     class CCockpitResult;
     class CCockpitResultPartyVS;
+    class CCockpitResultPartyTeam;
 
     // The task that owns the in-game displays. Lives in the DOL; vptr at 0.
     // The virtual functions are declared in the order of its vtable
@@ -127,6 +128,9 @@ namespace msw {
             void GetResultData(CCockpitResult *pResult, int bUnk, long *pTotal);
             void GetResultMemberData(ResultMemberInfo *pInfo);
             void GetResultPartyVSParameter(CCockpitResultPartyVS *pResult);
+            // (added for VolleyF game/volley/CCockpitVolley.cpp) The same for
+            // the team party result.
+            void GetResultPartyTeamParameter(CCockpitResultPartyTeam *pResult);
 
         protected:
             // Runs the parts every cockpit shares, at the start of Main.

@@ -39,6 +39,7 @@ namespace msw {
     extern float BASKET_PRM_S03_WATER_RADIUS2;
     extern float BASKET_PRM_S03_WATER_RADIUS3;
     extern float BASKET_PRM_S03_WATER_RESIST;
+    extern long BASKET_PRM_S03_WATER_SLOWDOWN_RATE;
     extern float BASKET_PRM_S03_WATER_HEIGHT;
     extern float BASKET_PRM_S03_WATER_PRESTART_TIME;
     extern float BASKET_PRM_S03_WATER_STAY_TIME;
@@ -50,6 +51,7 @@ namespace msw {
     extern float BASKET_PRM_S03_WC_LOC_RADIUS;
     extern long BASKET_PRM_S03_WC_LOC_NUM;
     extern long BASKET_PRM_S03_WC_LOC_NUM_PER_GRP;
+    extern long BASKET_PRM_S03_DEB_DRAW_INFO; // in .bss
 
     // Stage 06, the lit stage, listed in CStageBasket06::GetPrmTbl.
     extern float BASKET_PRM_S06_MOVE_SPEED;

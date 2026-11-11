@@ -375,6 +375,11 @@ namespace msw {
             // The goal team nTeam attacks: the byte at g_GameWork + 0x88 +
             // nTeam, read unsigned. (return type guessed)
             static long GetTargetGoalIdx(long nTeam);
+            // (DOL, static; meanings guessed from the names and from
+            // BasketF's CStageBasket03) The goal team nTeam guards, and the
+            // team that goal nGoal belongs to.
+            static long GetGuardGoalIdx(long nTeam);
+            static long GetTeamIdxByGoalIdx(long nGoal);
             // (DOL, static) The position of goal nGoal. (return type guessed)
             static const bcs::FVEC3 &GetGoalPos(long nGoal);
             // DOL, static. The direction goal nGoal faces (out of the goal,

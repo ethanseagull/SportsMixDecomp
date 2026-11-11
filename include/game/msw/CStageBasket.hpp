@@ -3,6 +3,7 @@
 
 #include "game/msw/CStageBasket01.hpp"
 #include "game/msw/CStageBasket02.hpp"
+#include "game/msw/CStageBasket03.hpp"
 #include "game/msw/CStageBasket05.hpp"
 #include "game/msw/CStageBasket06.hpp"
 #include "game/msw/CStageBasket07.hpp"
@@ -25,16 +26,7 @@ namespace msw {
     // The destructors are declared so that they are the key functions: this
     // header must not make a unit emit the vtables.
 
-    // Stages 01, 02, 05, 06, 07, 13, 17 and 70 to 72 have their own headers.
-
-    class CStageBasket03 : public CStageManBasket {
-        public:
-            CStageBasket03(bcs::CTask *pParent);
-            virtual ~CStageBasket03();
-
-        private:
-            unsigned char m_Unk218[0xA0]; // size 0x2B8
-    };
+    // Stages 01, 02, 03, 05, 06, 07, 13, 16, 17 and 70 to 72 have their own headers.
 
     class CStageBasket09 : public CStageManBasket {
         public:

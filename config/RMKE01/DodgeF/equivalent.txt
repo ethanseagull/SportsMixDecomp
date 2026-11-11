@@ -32,6 +32,7 @@ DodgeF Main___Q23msw13CStageDodge11Ff near 99.4 register choice only (Main_ also
 DodgeF MovePos___Q210CC09_DODGE22CcKinopioBoundMushroomFf near 99.6 fmadds multiplicands swapped (register choice)
 DodgeF OnCalcSum__Q23msw13CStageDodge03CFv near 98.3 register choice / operand order only.
 DodgeF OnCalcSum__Q23msw13CStageDodge07CFv near 97.7 97.7%: ours adds one redundant empty-list check (cmpwi/beq) before jumping to the loop's own test; same result.
+DodgeF OnDamage__Q23msw25CStgGmk_Trolley_Act_DodgeFPQ23msw13CCollBodyUnitPQ23msw5CBall near 98.5 98.5%: float register choice inside inlined FVEC3Sub/FVEC3LenSq only; constants, offsets, calls, stack slots and branches identical
 DodgeF OnGimmickCancel__Q23msw13CStageDodge05Fv near 99.1 99.1%: float register allocation only.
 DodgeF OnGimmickReset__Q23msw13CStageDodge05Fv near 99.2 99.2%: float register allocation only.
 DodgeF OnPostAppendNode__Q23msw13CStageDodge12FPCQ33msw5STAGE12MDL_GEN_RULERQ23bcs6CRegexPQ23msw17CStageMdlListNodeRQ34nw4r3g3d7ResFileRQ23msw4CArnl near 99.8 99.8%: the two case-local sscanf result variables have their stack slots (0x8/0xC) swapped. No behaviour change.

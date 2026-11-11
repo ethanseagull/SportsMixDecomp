@@ -106,6 +106,9 @@ namespace msw {
             static void Dispose();
             static void DetachResource();
             static void Close();
+            // (DOL, static; added for BasketF
+            // game/basket/CGameBasketHungryBossPackun.cpp) Erases every effect.
+            static void EraseEffectAll();
             // Registers the effects of archive `pPath`, file `fileId` of CLoadData.
             static void AttachArcResource(long fileId, const char *pPath); // return type guessed
 

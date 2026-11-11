@@ -78,6 +78,8 @@ namespace msw {
                 // Compared as a signed int too (HockeyF
                 // CEventDemoHockey::CameraEvent).
                 long GetStage() const { return m_nStage; }
+                // Compared as a signed int (BasketF CGameBasketHungryBossPackun).
+                long GetUnk150() const { return m_Unk150; }
 
                 // 0x00 (meaning not known): HockeyF's CFighting compares it
                 // with a team number (the fight gauge and the shake icon).
@@ -123,7 +125,10 @@ namespace msw {
                 // goal demo (game/msw/CGameExDemoBase.cpp) sets its own rate
                 // here while the demo camera plays and restores it after.
                 float m_fGameSpeed;
-                unsigned char m_Unk38[0x40 - 0x38];
+                // 0x38 (meaning not known): BasketF's party game clears it
+                // when a game is set up.
+                float m_fUnk38;
+                unsigned char m_Unk3C[0x40 - 0x3C];
                 // 0x40, flag words whose bit 0 the boss game's "?" panels test
                 // (game/boss/CQPanelManBoss.cpp): with bit 0 of 0x40 set a coin
                 // panel gives no coin; with bit 0 of 0x1C8 set the panels pop up
@@ -132,7 +137,10 @@ namespace msw {
                 // 0x44 (meaning not known): VolleyF's ready-start demo passes
                 // it with m_Unk0B to the serve telop.
                 long m_nUnk44;
-                unsigned char m_Unk48[0x151 - 0x48];
+                unsigned char m_Unk48[0x150 - 0x48];
+                // 0x150 (meaning not known): with 1 here BasketF's party
+                // game sets bit 0 of CChrManBasket's flags when play starts.
+                unsigned char m_Unk150;
                 // 0x151 (meaning not known): BasketF's CStageBasket05 starts
                 // its heavy raft swing on any turn of the rafts while it is
                 // not zero, and otherwise waits for the camera's side.
@@ -256,7 +264,7 @@ namespace msw {
             virtual void GetDodgeChrMaxLife_(long) const;                // 0x164
             virtual void SetPassCountLimit_(long, long);                 // 0x168
             virtual void GetPassCountLimit_(long) const;                 // 0x16C
-            virtual void IsNowBonusTime_() const;                        // 0x170
+            virtual int IsNowBonusTime_() const;                         // 0x170 (int: BasketF CGameBasketHungryBossPackun)
             virtual void IsVolleyScored_() const;                        // 0x174
             virtual void IsVolleyServeClockOver_() const;                // 0x178
             virtual void _GetHockeyResultGoalId();                       // 0x17C
@@ -271,7 +279,7 @@ namespace msw {
             virtual void ChangeGoalIdx_();                               // 0x1A0
             virtual void ChangeCameraBaseDir_();                         // 0x1A4
             virtual void IsSetOver_();                                   // 0x1A8
-            virtual void IsGameSet_();                                   // 0x1AC
+            virtual int IsGameSet_();                                    // 0x1AC (int: BasketF CGameBasketHungryBossPackun)
             virtual void RsrcLoadStart_();                               // 0x1B0
             virtual void RsrcIsLoadEnd_();                               // 0x1B4
             virtual void RsrcInitialize_();                              // 0x1B8
@@ -305,7 +313,7 @@ namespace msw {
             virtual void TelopEnd_(long);                                // 0x228
             virtual void TelopRemove_(long);                             // 0x22C
             virtual void TelopIsWait_(long);                             // 0x230
-            virtual void TelopIsEnd_(long);                              // 0x234
+            virtual int TelopIsEnd_(long);                               // 0x234 (int: BasketF CGameBasketHungryBossPackun)
             virtual void PushTeamItem_(long, long);                      // 0x238
             virtual void PopTeamItem_(long);                             // 0x23C
             virtual void TeamItemStartRoulette_(long, long);             // 0x240
@@ -321,7 +329,7 @@ namespace msw {
             virtual void ScoreBookInitCountWork_();                      // 0x268
             virtual void ScoreBookAddCountWork_(long, long, long);       // 0x26C
             virtual void ScoreBookApplyCountWork_();                     // 0x270
-            virtual void MenuCallGameResult_();                          // 0x274
+            virtual int MenuCallGameResult_();                           // 0x274 (int: BasketF CGameBasketHungryBossPackun)
             virtual void MenuCallInterval_();                            // 0x278
             virtual void MenuCallPause_();                               // 0x27C
             virtual void MenuCallGameEnd_();                             // 0x280
@@ -557,11 +565,49 @@ namespace msw {
             static GameWork g_GameWork;
             static CGame *m_pInstance;
 
-        private:
+            // Added for BasketF game/basket/CGameBasketHungryBossPackun.cpp
+            // (static in the DOL; return types and parameter names guessed).
+            static void AddTeamPeriodScore(long nTeam, long nPeriod, long nScore);
+            static void SetTeamResult(long nTeam, long nResult);
+            static void ClearCoinHistory();
+            static void SetGoalCoin(long n);
+            static void SetGoalEffectCoin(long n);
+            static void SetGoalScore(long n);
+            static void SetGoalBonusPoint(long n);
+            static void SetGoalBonusType(long n);
+            static void SetJumpBallMode(int bOn);
+            static void SetPreparationMode(int bOn);
+            // Counters advanced by fRate each frame of the main loop.
+            static void IncBallModeCounter(float fRate);
+            static void IncCoinHistCount(float fRate);
+
+        protected:
+            // Added for BasketF game/basket/CGameBasketHungryBossPackun.cpp
+            // (DOL member functions; return types and meanings guessed).
+            void KillTempChild_();
+            void BgResetFade_();
+            int IsScrnFadeEnd_(unsigned long nMask) const;
+            void SetTurnStartTelopType_(long nType, float fFrame);
+            // Counts m_fStateCount down; not zero once it has run out.
+            int StateWorkDecStateCount_();
+            void ClearGameResult_();
+            // Static: the party game calls it without an object.
+            static void SetGameResultAll_(long nResult);
+
             // The constructor writes up to 0x14C, so the class is at least
             // 0x150 bytes; its real size is not known. 0x34-0x94 is the
-            // bcs::CFsmQueue<CGame> base.
-            unsigned char m_Unk94[0x150 - 0x94];
+            // bcs::CFsmQueue<CGame> base. Names of the fields below are
+            // guesses from BasketF's CGameBasketHungryBossPackun.
+            unsigned char m_Unk94[0xD0 - 0x94];
+            long m_nNextState;    // 0xD0, the state the wait-start state goes on to
+            long m_nStateStep;    // 0xD4, the step inside the running state
+            float m_fStateCount;  // 0xD8, frames left (StateWorkDecStateCount_)
+            // 0xDC: flag bits; bit 0 stops goals from scoring, bit 2 means
+            // the game is set.
+            unsigned long m_nGameFlag;
+            unsigned char m_UnkE0[0x130 - 0xE0];
+            long m_Unk130;        // 0x130, the game is set while above 0 (meaning not known)
+            unsigned char m_Unk134[0x150 - 0x134];
     };
 }
 

@@ -149,6 +149,15 @@ namespace msw {
             // is declared here as long.
             static void DecideScoredViewLookChr(long nTeam);
             static long GetScoredViewLookChr(long nTeam);
+            // (DOL, static; added for BasketF
+            // game/basket/CGameBasketHungryBossPackun.cpp; return types and
+            // argument meanings guessed) The functions of the same name with
+            // a trailing underscore, on the instance.
+            static void AllReset();
+            static void AllSendReset();
+            static void AllSetState(long nState, long, long);
+            static void AllStop(CChrCore::STOP_MODE, CChrCore::STOP_MODE);
+            static int CanbeTurnOver();
 
         protected:
             unsigned char m_Unk34[0x50 - 0x34]; // two nw4r::ut::List at 0x34 and 0x40, a word at 0x4C

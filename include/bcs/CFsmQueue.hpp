@@ -143,10 +143,13 @@ namespace bcs {
 
             // Queues state with cleared work memory; it runs at once when
             // the queue was empty.
+            // (The tail is read before the head: BasketF's
+            // CGameBasketHungryBossPackun::LoopStateGameSetup loads them in
+            // that order.)
             void FsmqPush(long state)
             {
-                int bEmpty = FsmqIsEmpty();
                 long tail = m_nQueueTail;
+                int bEmpty = m_nQueueHead == tail;
                 long next = FsmqWrap(tail + 1, m_nQueueSize);
                 m_pStateQueue[tail] = state;
                 m_nQueueTail = next;
@@ -219,6 +222,16 @@ namespace bcs {
                     } else {
                         m_pNextState = &m_pStateTable[m_pStateQueue[head]];
                     }
+                }
+            }
+
+            // (name guessed; inline in BasketF's
+            // CGameBasketHungryBossPackun::LoopStateGameSet) Drops the
+            // states queued after the one at the head of the queue.
+            void FsmqCutNext()
+            {
+                if (!FsmqIsEmpty()) {
+                    m_nQueueTail = FsmqWrap(m_nQueueHead + 1, m_nQueueSize);
                 }
             }
 

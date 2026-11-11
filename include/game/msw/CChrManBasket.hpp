@@ -54,6 +54,12 @@ namespace msw {
             // (name guessed) Zero while bit 1 of the word at 0xAC is set:
             // the ghost does not come back then.
             bool IsGhostAppearEnable() const { return !(m_nFlagAC & 2); }
+            // (added for game/basket/CGameBasketHungryBossPackun.cpp; names
+            // guessed) Ends the extra time; sets flag bits of m_nFlagAC
+            // (bit 0 is set by the party game's wait-start state for stage
+            // 1, meaning not known).
+            void ResetClockOver_();
+            void SetFlagAC(unsigned long nFlag) { m_nFlagAC |= nFlag; }
 
             // Added for game/basket/CComManBasket.cpp (return types
             // guessed). Not zero when the boss Packun has been made.

@@ -67,6 +67,8 @@ BasketF LoopStateAirTrick__Q23msw21CChrCoreBasketSabotenFv near 95.4 bool (flag&
 BasketF LoopStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateCatch__Q23msw19CNpcGhostBasketBaseFv near 99.6 one dead branch.
 BasketF LoopStateDisappears__Q23msw19CNpcGhostBasketBaseFv near 99.8 register choice / schedule only (UpDateCollBody_: argument load order).
+BasketF LoopStateGameSet__Q23msw27CGameBasketHungryBossPackunFv near 99.0 register allocation only: in the inlined bcs::CFsmQueue::FsmqPush the old tail and the wrapped next index swap registers; same instructions and memory accesses
+BasketF LoopStateGameSetup__Q23msw27CGameBasketHungryBossPackunFv near 98.2 register allocation only: in the inlined bcs::CFsmQueue::FsmqNext the head+1 value and the queue size swap registers; same instructions and memory accesses
 BasketF LoopStateGetLooseBall__Q23msw19CNpcGhostBasketBaseFv near 99.4 original compares MoveRun's unused result.
 BasketF LoopStateJumpUpper__Q23msw19CChrCoreBasketSlimeFv near 99.7 99.7%: r3/r4 choice for the work pointer only
 BasketF LoopStateMotPlay__Q23msw19CNpcGhostBasketBaseFv near 99.5 register choice / schedule only (UpDateCollBody_: argument load order).
@@ -147,6 +149,7 @@ BasketF SubStateArtsShotIsReadyArtsShot___Q23msw20CChrCoreBasketKuromaFPQ33msw14
 BasketF SubStateArtsShotPlayTrickMotion___Q23msw20CChrCoreBasketKuromaFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK near 99.1 same constants 5.0f/10.0f read from swapped .rodata pool addresses (pool order)
 BasketF UpDateCollBody___Q23msw19CNpcGhostBasketBaseFv near 92.7 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF UpDateCross2Tap__Q23msw16CChrDrvPadBasketFv unverified 72.8 72.8%: float constants via one base register instead of the original's per-literal lis (pool-off stand-in could not stay in the shared CChrDrvPad header); extra field reloads in the original; not proven.
+BasketF UpDateCrownDisp__Q23msw27CGameBasketHungryBossPackunFv near 98.3 register allocation only: the leading-team loop's counter, best score and team mask take other registers (and two li are scheduled differently); same logic
 BasketF UpDateMyKeyState__Q23msw16CChrDrvPadBasketFli unverified 81.1 81.1%: float constants via one base register instead of the original's per-literal lis (pool-off stand-in could not stay in the shared CChrDrvPad header); extra field reloads in the original; not proven.
 BasketF UpDate__Q33msw6BASKET15CStickState2TapFfff unverified 77.6 77.6%: float constants via one base register instead of the original's per-literal lis (pool-off stand-in could not stay in the shared CChrDrvPad header); extra field reloads in the original; not proven.
 BasketF UpDate__Q33msw6BASKET15CStickStateRollFfff unverified 79.5 79.5%: float constants via one base register instead of the original's per-literal lis (pool-off stand-in could not stay in the shared CChrDrvPad header); extra field reloads in the original; not proven.

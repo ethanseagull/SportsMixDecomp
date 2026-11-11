@@ -81,6 +81,7 @@ DodgeF StartDamageDemo__Q23msw11EvDemoDodgeFv near 97.8 97.8%: the original keep
 DodgeF Start__Q33msw13CStageDodge0310CWaterInfoFli near 93.4 original also computes max(WATER_NUM,0) with srawi/andc as the loop bound after the >0 guard; same iteration count; registers.
 DodgeF SubStateArtsShotFireBullet___Q23msw18CChrCoreDodgeKoopaFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 99.7 99.7%: register only (new CcFireBall pointer in r31 vs r30); same leftover as Basket/Hockey Koopa
 DodgeF SubStateArtsShotFireBullet___Q23msw18CChrCoreDodgePeachFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 87.4 87.4%: original computes the bomb counts at run time (li 7; srawi / li 6; cmpwi), ours folds them to the same constants; hence one more saved reg and 0xF0 vs 0xE0 frame, stack slots, registers. Same as Basket/Hockey/Volley Peach
+DodgeF SubStateArtsShotFireBullet___Q23msw18CChrCoreDodgeSlimeFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 99.1 float register allocation only (fRadius/fRot/loop constants in other FPRs, loop counters swapped); same instructions, constants, calls and stack slots
 DodgeF SubStateArtsShotFireBullet___Q23msw20CChrCoreDodgeKinopioFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 97.9 register choice and order of the float loads/stores setting up the court rectangle and start position (VolleyF CreateBoundMushroom_ same)
 DodgeF SubStateArtsShotPlayTrickMotion___Q23msw19CChrCoreDodgeKuromaFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN near 99.1 register allocation only (VolleyF copy same)
 DodgeF TrgConstruct___Q23msw18CItemBallBombDodgeFv near 98.4 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
@@ -96,3 +97,4 @@ DodgeF __dt__Q23bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>Fv near
 DodgeF __dt__Q23msw12CChrManDodgeFv near 99.1 99.1%: loop registers r29/r30 swapped.
 DodgeF __dt__Q23msw13CStageDodge11Fv near 99.0 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
 DodgeF __dt__Q33msw7STAGE1120CBgFirePillarClusterFv near 98.1 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
+DodgeF __sinit_\CChrCoreDodgeSlime_cpp near 99.4 register allocation only (the colour words and the array base pointer in other GPRs); same stores, values and offsets

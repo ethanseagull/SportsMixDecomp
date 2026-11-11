@@ -1,6 +1,7 @@
 #ifndef MSW_CCHRCOREDODGE_HPP_
 #define MSW_CCHRCOREDODGE_HPP_
 
+#include "game/msw/CC_DATA.hpp"
 #include "game/msw/CChrCore.hpp"
 
 namespace bcs {
@@ -86,19 +87,19 @@ namespace msw {
             virtual void OnDivingCatchStart_(STATE_WORK_DIVING_CATCH *); // 0xD58
             virtual void UnkD5C();
             virtual void UnkD60();
-            virtual void UnkD64();
-            virtual void UnkD68();
+            virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD64
+            virtual void SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD68
             virtual void UnkD6C();
             virtual void UnkD70();
             virtual void UnkD74();
             virtual void UnkD78();
             virtual void UnkD7C();
-            virtual void UnkD80();
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD80
             virtual void UnkD84();
             virtual void SubStateArtsShotCalcRotParam_(ROT_LERP1 &, float, float); // 0xD88
             virtual void UnkD8C();
-            virtual void UnkD90();
-            virtual void UnkD94();
+            virtual void SubStateArtsShotDoJumpMove_(STATE_WORK_AIR_TRICK_CMN *); // 0xD90
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD94
             virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
             virtual void SubStateArtsShotReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD9C
             virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA0
@@ -378,14 +379,22 @@ namespace msw {
             virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
     };
 
-    // (only what Luigi's vacuum uses is mapped)
+    // (only what Luigi's vacuum and Toad's trick use is mapped; names guessed)
     struct CChrCoreDodge::STATE_WORK_AIR_TRICK_CMN {
-        unsigned char m_Unk00[0xB0];
+        unsigned char m_Unk00[0xAC];
+        float m_fJumpUnk;              // 0xAC, for CChrCore::m_fJumpUnk224
         bcs::FVEC3 m_TargetPos;        // 0xB0, where the trick turns to
-        unsigned char m_UnkBC[0xFC - 0xBC];
+        unsigned char m_UnkBC[0xC8 - 0xBC];
+        bcs::FVEC3 m_MovePos;          // 0xC8, where the trick moves to
+        float m_fUnkD4;                // 0xD4
+        unsigned char m_UnkD8[0x4];
+        CC_DATA::CHR_PARAM::MOVE_PARAM m_MoveParam; // 0xDC
+        unsigned char m_UnkEC[0xFC - 0xEC];
         CChrCore::ROT_LERP1 m_RotLerp; // 0xFC, the turn (SubStateArtsShotCalcRotParam_)
         float m_fRotY;                 // 0x10C, the yaw the trick turns to
-        unsigned char m_Unk110[0x124 - 0x110];
+        long m_nTrickStep;             // 0x110
+        float m_fTrickFrame;           // 0x114, the length of the trick
+        unsigned char m_Unk118[0x124 - 0x118];
         long m_nArtsLevel;             // 0x124
     };
 
@@ -499,6 +508,15 @@ namespace msw {
         public:
             CChrCoreDodgeKinopio();
             virtual ~CChrCoreDodgeKinopio();
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD64
+            virtual void SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD68
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD80
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD94
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
     };
 
     // Size 0x930.

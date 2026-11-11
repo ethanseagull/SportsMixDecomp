@@ -199,8 +199,8 @@ namespace msw {
         bcs::FVEC3 ofs;
         bcs::FVEC3 eye = bcs::CWorldEnv::GetViewCameraData(0)->m_Eye;
         bcs::FVEC3Sub(&ofs, &pSrt->GetPos(), &eye);
-        float alpha = 1.0f;
         float dist = bcs::FVEC3Len(&ofs);
+        float alpha = 1.0f;
         if (dist < s_fEffFadeFar) {
             float d = dist - s_fEffFadeNear;
             if (0.0f > d) {
@@ -459,10 +459,11 @@ namespace msw {
     {
         bool bCap = false;
         const CStgSrt *pSrt = GetSrt();
+        CChrCore *pChr;
         long num = CChrMan::GetChrCoreNum();
         float radius = GetParam_Radius3();
         for (long i = 0; i < num; i++) {
-            CChrCore *pChr = CChrMan::GetChrCore(i);
+            pChr = CChrMan::GetChrCore(i);
             if (pChr != 0 && pChr->IsEnable() && pChr->GetDist_ToPos(pSrt->GetPos()) < radius) {
                 bCap = true;
                 break;

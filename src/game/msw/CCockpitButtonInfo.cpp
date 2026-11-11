@@ -85,7 +85,8 @@ namespace msw {
         long nLeader = CMenuPadInfo::s_Instance.GetPadLeader();
         long nNum = m_nNum;
         for (long i = 0; i < nNum; i++) {
-            SetDefaultCursor(i, i == nButton, nLeader);
+            bool bDefault = nButton == i;
+            SetDefaultCursor(i, bDefault, nLeader);
         }
     }
 

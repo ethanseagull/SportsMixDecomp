@@ -83,13 +83,13 @@ namespace msw {
     {
     }
 
-    bool CItemBallBossGShell::TrgShootStart_()
+    long CItemBallBossGShell::TrgShootStart_()
     {
         m_nTrgFlag |= 1 << (TRG_SHOOT_START + 1);
         return false;
     }
 
-    bool CItemBallBossGShell::TrgChrHit_()
+    long CItemBallBossGShell::TrgChrHit_()
     {
         if (IsShot()) {
             BreakShell(this, 0, SE_SHELL_BREAK);
@@ -98,7 +98,7 @@ namespace msw {
         return false;
     }
 
-    bool CItemBallBossGShell::TrgGoalIn_()
+    long CItemBallBossGShell::TrgGoalIn_()
     {
         long nSe = SE_SHELL_BREAK;
         if (IsShot()) {
@@ -108,7 +108,7 @@ namespace msw {
         return true;
     }
 
-    bool CItemBallBossGShell::TrgFreeMode_()
+    long CItemBallBossGShell::TrgFreeMode_()
     {
         if (IsShot()) {
             BreakShell(this, 0, SE_SHELL_BREAK);
@@ -117,23 +117,22 @@ namespace msw {
         return false;
     }
 
-    // The original returns 4 when the ball has not been shot; with the bool
-    // return type of CItemBall's triggers that cannot be written here.
-    bool CItemBallBossGShell::TrgDamage_()
+    // Returns 4 when the ball has not been shot.
+    long CItemBallBossGShell::TrgDamage_()
     {
         if (IsShot()) {
             BreakShell(this, 0, SE_SHELL_BREAK);
             return true;
         }
-        return true; // 4 in the original
+        return 4;
     }
 
-    bool CItemBallBossGShell::TrgDestroy_()
+    long CItemBallBossGShell::TrgDestroy_()
     {
         return CItemBall::TrgDestroy_();
     }
 
-    bool CItemBallBossGShell::TrgReceive_()
+    long CItemBallBossGShell::TrgReceive_()
     {
         if (IsShot()) {
             BreakShell(this, 0, SE_SHELL_BREAK);
@@ -142,7 +141,7 @@ namespace msw {
         return false;
     }
 
-    bool CItemBallBossGShell::TrgBlock_()
+    long CItemBallBossGShell::TrgBlock_()
     {
         if (IsShot()) {
             BreakShell(this, 0, SE_SHELL_BREAK);
@@ -177,13 +176,13 @@ namespace msw {
     {
     }
 
-    bool CItemBallBossRShell::TrgShootStart_()
+    long CItemBallBossRShell::TrgShootStart_()
     {
         m_nTrgFlag |= 1 << (TRG_SHOOT_START + 1);
         return false;
     }
 
-    bool CItemBallBossRShell::TrgChrHit_()
+    long CItemBallBossRShell::TrgChrHit_()
     {
         if (IsShot()) {
             BreakShell(this, 1, SE_SHELL_BREAK);
@@ -192,7 +191,7 @@ namespace msw {
         return false;
     }
 
-    bool CItemBallBossRShell::TrgGoalIn_()
+    long CItemBallBossRShell::TrgGoalIn_()
     {
         long nSe = SE_SHELL_BREAK;
         if (IsShot()) {
@@ -202,7 +201,7 @@ namespace msw {
         return true;
     }
 
-    bool CItemBallBossRShell::TrgFreeMode_()
+    long CItemBallBossRShell::TrgFreeMode_()
     {
         if (IsShot()) {
             BreakShell(this, 1, SE_SHELL_BREAK);
@@ -211,22 +210,21 @@ namespace msw {
         return false;
     }
 
-    // Returns 4 in the original when not shot; see the green shell.
-    bool CItemBallBossRShell::TrgDamage_()
+    long CItemBallBossRShell::TrgDamage_()
     {
         if (IsShot()) {
             BreakShell(this, 1, SE_SHELL_BREAK);
             return true;
         }
-        return true; // 4 in the original
+        return 4;
     }
 
-    bool CItemBallBossRShell::TrgDestroy_()
+    long CItemBallBossRShell::TrgDestroy_()
     {
         return CItemBall::TrgDestroy_();
     }
 
-    bool CItemBallBossRShell::TrgReceive_()
+    long CItemBallBossRShell::TrgReceive_()
     {
         if (IsShot()) {
             BreakShell(this, 1, SE_SHELL_BREAK);
@@ -235,7 +233,7 @@ namespace msw {
         return false;
     }
 
-    bool CItemBallBossRShell::TrgBlock_()
+    long CItemBallBossRShell::TrgBlock_()
     {
         if (IsShot()) {
             BreakShell(this, 1, SE_SHELL_BREAK);
@@ -316,7 +314,7 @@ namespace msw {
     }
 
     // The first call only marks the bomb as shot; any later one sets it off.
-    bool CItemBallBossBomb::TrgShootStart_()
+    long CItemBallBossBomb::TrgShootStart_()
     {
         if (m_bShot != 0) {
             Explode_(1);
@@ -326,7 +324,7 @@ namespace msw {
         return CItemBall::TrgShootStart_();
     }
 
-    bool CItemBallBossBomb::TrgReceive_()
+    long CItemBallBossBomb::TrgReceive_()
     {
         if (IsShot()) {
             Explode_(1);
@@ -335,7 +333,7 @@ namespace msw {
         return false;
     }
 
-    bool CItemBallBossBomb::TrgBlock_()
+    long CItemBallBossBomb::TrgBlock_()
     {
         if (IsShot()) {
             Explode_(1);
@@ -344,20 +342,19 @@ namespace msw {
         return false;
     }
 
-    bool CItemBallBossBomb::TrgGoalIn_()
+    long CItemBallBossBomb::TrgGoalIn_()
     {
         Explode_(1);
         return true;
     }
 
-    // Returns 4 in the original when not shot; see the green shell.
-    bool CItemBallBossBomb::TrgDamage_()
+    long CItemBallBossBomb::TrgDamage_()
     {
         if (IsShot()) {
             Explode_(0);
             return true;
         }
-        return true; // 4 in the original
+        return 4;
     }
 
     long CItemBallBossBomb::GetVolleyPassTailEffect(long, long, long) const
@@ -370,7 +367,7 @@ namespace msw {
         return -1;
     }
 
-    bool CItemBallBossBomb::TrgPreparationTouch_()
+    long CItemBallBossBomb::TrgPreparationTouch_()
     {
         UnusedReferences(m_fRate);
         return false;
@@ -396,49 +393,49 @@ namespace msw {
     {
     }
 
-    bool CItemBallBossToadstool::TrgShootStart_()
+    long CItemBallBossToadstool::TrgShootStart_()
     {
         m_nTrgFlag |= 1 << (TRG_SHOOT_START + 1);
         return false;
     }
 
-    bool CItemBallBossToadstool::TrgChrHit_()
+    long CItemBallBossToadstool::TrgChrHit_()
     {
         m_nTrgFlag &= ~(1 << (TRG_SHOOT_START + 1));
         return true;
     }
 
-    bool CItemBallBossToadstool::TrgGoalIn_()
+    long CItemBallBossToadstool::TrgGoalIn_()
     {
         m_nTrgFlag &= ~(1 << (TRG_SHOOT_START + 1));
         return true;
     }
 
-    bool CItemBallBossToadstool::TrgFreeMode_()
+    long CItemBallBossToadstool::TrgFreeMode_()
     {
         m_nTrgFlag &= ~(1 << (TRG_SHOOT_START + 1));
         return true;
     }
 
-    bool CItemBallBossToadstool::TrgDamage_()
+    long CItemBallBossToadstool::TrgDamage_()
     {
         m_nTrgFlag &= ~(1 << (TRG_SHOOT_START + 1));
         return true;
     }
 
-    bool CItemBallBossToadstool::TrgDestroy_()
+    long CItemBallBossToadstool::TrgDestroy_()
     {
         m_nTrgFlag &= ~(1 << (TRG_SHOOT_START + 1));
         return CItemBall::TrgDestroy_();
     }
 
-    bool CItemBallBossToadstool::TrgReceive_()
+    long CItemBallBossToadstool::TrgReceive_()
     {
         m_nTrgFlag &= ~(1 << (TRG_SHOOT_START + 1));
         return true;
     }
 
-    bool CItemBallBossToadstool::TrgBlock_()
+    long CItemBallBossToadstool::TrgBlock_()
     {
         m_nTrgFlag &= ~(1 << (TRG_SHOOT_START + 1));
         return true;
@@ -475,43 +472,43 @@ namespace msw {
     {
     }
 
-    bool CItemBallBossStar::TrgShootStart_()
+    long CItemBallBossStar::TrgShootStart_()
     {
         m_nTrgFlag |= 1 << (TRG_SHOOT_START + 1);
         return false;
     }
 
-    bool CItemBallBossStar::TrgChrHit_()
+    long CItemBallBossStar::TrgChrHit_()
     {
         return true;
     }
 
-    bool CItemBallBossStar::TrgGoalIn_()
+    long CItemBallBossStar::TrgGoalIn_()
     {
         return true;
     }
 
-    bool CItemBallBossStar::TrgFreeMode_()
+    long CItemBallBossStar::TrgFreeMode_()
     {
         return true;
     }
 
-    bool CItemBallBossStar::TrgDamage_()
+    long CItemBallBossStar::TrgDamage_()
     {
         return true;
     }
 
-    bool CItemBallBossStar::TrgDestroy_()
+    long CItemBallBossStar::TrgDestroy_()
     {
         return CItemBall::TrgDestroy_();
     }
 
-    bool CItemBallBossStar::TrgReceive_()
+    long CItemBallBossStar::TrgReceive_()
     {
         return true;
     }
 
-    bool CItemBallBossStar::TrgBlock_()
+    long CItemBallBossStar::TrgBlock_()
     {
         return true;
     }
@@ -547,49 +544,48 @@ namespace msw {
     {
     }
 
-    bool CItemBallBossBanana::TrgShootStart_()
+    long CItemBallBossBanana::TrgShootStart_()
     {
         m_nTrgFlag |= 1 << (TRG_SHOOT_START + 1);
         return false;
     }
 
-    bool CItemBallBossBanana::TrgChrHit_()
+    long CItemBallBossBanana::TrgChrHit_()
     {
-        return IsShot();
+        return IsShot() != 0;
     }
 
-    bool CItemBallBossBanana::TrgGoalIn_()
+    long CItemBallBossBanana::TrgGoalIn_()
     {
         return true;
     }
 
-    bool CItemBallBossBanana::TrgFreeMode_()
+    long CItemBallBossBanana::TrgFreeMode_()
     {
-        return IsShot();
+        return IsShot() != 0;
     }
 
-    // Returns 4 in the original when not shot; see the green shell.
-    bool CItemBallBossBanana::TrgDamage_()
+    long CItemBallBossBanana::TrgDamage_()
     {
         if (IsShot()) {
             return true;
         }
-        return true; // 4 in the original
+        return 4;
     }
 
-    bool CItemBallBossBanana::TrgDestroy_()
+    long CItemBallBossBanana::TrgDestroy_()
     {
         return CItemBall::TrgDestroy_();
     }
 
-    bool CItemBallBossBanana::TrgReceive_()
+    long CItemBallBossBanana::TrgReceive_()
     {
-        return IsShot();
+        return IsShot() != 0;
     }
 
-    bool CItemBallBossBanana::TrgBlock_()
+    long CItemBallBossBanana::TrgBlock_()
     {
-        return IsShot();
+        return IsShot() != 0;
     }
 
     long CItemBallBossBanana::GetVolleyPassTailEffect(long, long, long) const

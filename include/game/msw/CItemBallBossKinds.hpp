@@ -28,14 +28,14 @@ namespace msw {
             virtual long GetVolleyPassTailEffect(long effect, long, long) const;
 
             virtual void MainFunc_();
-            virtual bool TrgShootStart_();
-            virtual bool TrgGoalIn_();
-            virtual bool TrgFreeMode_();
-            virtual bool TrgChrHit_();
-            virtual bool TrgDamage_();
-            virtual bool TrgDestroy_();
-            virtual bool TrgReceive_();
-            virtual bool TrgBlock_();
+            virtual long TrgShootStart_();
+            virtual long TrgGoalIn_();
+            virtual long TrgFreeMode_();
+            virtual long TrgChrHit_();
+            virtual long TrgDamage_();
+            virtual long TrgDestroy_();
+            virtual long TrgReceive_();
+            virtual long TrgBlock_();
     };
 
     // A red shell: as the green one.
@@ -48,14 +48,14 @@ namespace msw {
             virtual long GetVolleyPassTailEffect(long effect, long, long) const;
 
             virtual void MainFunc_();
-            virtual bool TrgShootStart_();
-            virtual bool TrgGoalIn_();
-            virtual bool TrgFreeMode_();
-            virtual bool TrgChrHit_();
-            virtual bool TrgDamage_();
-            virtual bool TrgDestroy_();
-            virtual bool TrgReceive_();
-            virtual bool TrgBlock_();
+            virtual long TrgShootStart_();
+            virtual long TrgGoalIn_();
+            virtual long TrgFreeMode_();
+            virtual long TrgChrHit_();
+            virtual long TrgDamage_();
+            virtual long TrgDestroy_();
+            virtual long TrgReceive_();
+            virtual long TrgBlock_();
     };
 
     // A bomb: lit (fuse effect and sound) from the start, explodes on the
@@ -69,12 +69,12 @@ namespace msw {
             virtual long GetVolleyPassTailEffect(long effect, long, long) const;
 
             virtual void MainFunc_();
-            virtual bool TrgShootStart_();
-            virtual bool TrgGoalIn_();
-            virtual bool TrgDamage_();
-            virtual bool TrgReceive_();
-            virtual bool TrgBlock_();
-            virtual bool TrgPreparationTouch_();
+            virtual long TrgShootStart_();
+            virtual long TrgGoalIn_();
+            virtual long TrgDamage_();
+            virtual long TrgReceive_();
+            virtual long TrgBlock_();
+            virtual long TrgPreparationTouch_();
 
         private:
             // Starts the fuse effect and sound (once the model exists).
@@ -110,14 +110,14 @@ namespace msw {
             virtual long GetVolleyPassTailEffect(long effect, long, long) const;
 
             virtual void MainFunc_();
-            virtual bool TrgShootStart_();
-            virtual bool TrgGoalIn_();
-            virtual bool TrgFreeMode_();
-            virtual bool TrgChrHit_();
-            virtual bool TrgDamage_();
-            virtual bool TrgDestroy_();
-            virtual bool TrgReceive_();
-            virtual bool TrgBlock_();
+            virtual long TrgShootStart_();
+            virtual long TrgGoalIn_();
+            virtual long TrgFreeMode_();
+            virtual long TrgChrHit_();
+            virtual long TrgDamage_();
+            virtual long TrgDestroy_();
+            virtual long TrgReceive_();
+            virtual long TrgBlock_();
     };
 
     // A star.
@@ -132,14 +132,14 @@ namespace msw {
             virtual long GetVolleyPassTailEffect(long effect, long, long) const;
 
             virtual void MainFunc_();
-            virtual bool TrgShootStart_();
-            virtual bool TrgGoalIn_();
-            virtual bool TrgFreeMode_();
-            virtual bool TrgChrHit_();
-            virtual bool TrgDamage_();
-            virtual bool TrgDestroy_();
-            virtual bool TrgReceive_();
-            virtual bool TrgBlock_();
+            virtual long TrgShootStart_();
+            virtual long TrgGoalIn_();
+            virtual long TrgFreeMode_();
+            virtual long TrgChrHit_();
+            virtual long TrgDamage_();
+            virtual long TrgDestroy_();
+            virtual long TrgReceive_();
+            virtual long TrgBlock_();
     };
 
     // A banana.
@@ -152,14 +152,14 @@ namespace msw {
             virtual long GetVolleyPassTailEffect(long effect, long, long) const;
 
             virtual void MainFunc_();
-            virtual bool TrgShootStart_();
-            virtual bool TrgGoalIn_();
-            virtual bool TrgFreeMode_();
-            virtual bool TrgChrHit_();
-            virtual bool TrgDamage_();
-            virtual bool TrgDestroy_();
-            virtual bool TrgReceive_();
-            virtual bool TrgBlock_();
+            virtual long TrgShootStart_();
+            virtual long TrgGoalIn_();
+            virtual long TrgFreeMode_();
+            virtual long TrgChrHit_();
+            virtual long TrgDamage_();
+            virtual long TrgDestroy_();
+            virtual long TrgReceive_();
+            virtual long TrgBlock_();
     };
 
     // The change effect of the boss game: plays the change sound at the ball.

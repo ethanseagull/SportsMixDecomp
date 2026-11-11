@@ -119,6 +119,16 @@ def main() -> None:
     url = TOOLS[args.tool](args.tag)
     output = Path(args.output)
 
+    # Worktrees share build/compilers and build/binutils through a junction.
+    # Ninja reads the junction's own mtime, which extracting never updates, so
+    # it reruns this step after every configure; re-extracting then fails on a
+    # DLL another worktree's compiler has open. Skip a zip already in place.
+    stamp = output / ".download_tag"
+    if url.endswith(".zip") and stamp.is_file():
+        if stamp.read_text().strip() == f"{args.tool} {args.tag}":
+            print(f"{output} already holds {args.tool} {args.tag}")
+            return
+
     print(f"Downloading {url} to {output}")
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     try:
@@ -140,6 +150,9 @@ def main() -> None:
             req, context=ssl.create_default_context(cafile=certifi.where())
         ) as response:
             download(url, response, output)
+
+    if url.endswith(".zip"):
+        stamp.write_text(f"{args.tool} {args.tag}\n")
 
 
 if __name__ == "__main__":

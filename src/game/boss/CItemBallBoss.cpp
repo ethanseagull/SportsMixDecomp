@@ -2,7 +2,7 @@
 
 namespace msw {
 
-bool CItemBallBoss::DoTrg(long trg) {
+long CItemBallBoss::DoTrg(long trg) {
     switch (trg) {
     case TRG_RECEIVE:
         return TrgReceive_();
@@ -17,31 +17,31 @@ bool CItemBallBoss::DoTrg(long trg) {
     }
 }
 
-bool CItemBallBoss::TrgRebound_() {
+long CItemBallBoss::TrgRebound_() {
     return false;
 }
 
-bool CItemBallBoss::TrgReboundToFree_() {
+long CItemBallBoss::TrgReboundToFree_() {
     return false;
 }
 
-bool CItemBallBoss::TrgFreeMode_() {
+long CItemBallBoss::TrgFreeMode_() {
     return false;
 }
 
-bool CItemBallBoss::TrgChrHit_() {
+long CItemBallBoss::TrgChrHit_() {
     return false;
 }
 
-bool CItemBallBoss::TrgAttach_() {
+long CItemBallBoss::TrgAttach_() {
     return false;
 }
 
-bool CItemBallBoss::TrgArtsAttach_() {
+long CItemBallBoss::TrgArtsAttach_() {
     return true;
 }
 
-bool CItemBallBoss::TrgPreparationTouch_() {
+long CItemBallBoss::TrgPreparationTouch_() {
     return false;
 }
 

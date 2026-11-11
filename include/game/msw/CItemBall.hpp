@@ -30,7 +30,9 @@ namespace msw {
     class CItemBall : public bcs::CUnivTaskEx {
         public:
             // Triggers handled by DoTrg (0x1C); each sets a bit in m_nTrgFlag
-            // and calls the Trg*_ function of the same position.
+            // and calls the Trg*_ function of the same position. DoTrg and the
+            // Trg*_ functions return long: some modes' item balls return 4,
+            // 5 or 0x40, which DoTrg passes on unchanged.
             enum {
                 TRG_SHOOT_START,
                 TRG_REBOUND,
@@ -50,7 +52,7 @@ namespace msw {
             virtual void Main();
 
             virtual long GetType() const { return m_nType; }
-            virtual bool DoTrg(long trg);
+            virtual long DoTrg(long trg);
             // (guessed) no module emits the base version.
             virtual bool IsDisableRebound() const { return false; }
             virtual long GetBoundSe() const { return -1; }
@@ -76,16 +78,16 @@ namespace msw {
 
             // Empty in the DOL (fn_800CF158, defined in CItemBall.cpp).
             virtual void MainFunc_();
-            virtual bool TrgShootStart_();
-            virtual bool TrgRebound_();
-            virtual bool TrgReboundToFree_();
-            virtual bool TrgGoalIn_();
-            virtual bool TrgFreeMode_();
-            virtual bool TrgChrHit_();
-            virtual bool TrgAttach_();
-            virtual bool TrgDamage_();
-            virtual bool TrgDestroy_();
-            virtual bool TrgConstruct_();
+            virtual long TrgShootStart_();
+            virtual long TrgRebound_();
+            virtual long TrgReboundToFree_();
+            virtual long TrgGoalIn_();
+            virtual long TrgFreeMode_();
+            virtual long TrgChrHit_();
+            virtual long TrgAttach_();
+            virtual long TrgDamage_();
+            virtual long TrgDestroy_();
+            virtual long TrgConstruct_();
 
             // The ball, or null when it is gone or being deleted.
             CBall *GetBall() const;

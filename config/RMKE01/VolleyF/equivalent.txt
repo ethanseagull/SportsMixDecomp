@@ -8,8 +8,10 @@ VolleyF DetectMapHit___Q33msw28@unnamed@CCollManVolley_cpp@19CCollManVolleyParty
 VolleyF FireReceiver___Q23msw20CChrCoreVolleyKuromaFv near 98.2 as the boss sibling: flag-test form, local store order/stack slots, registers
 VolleyF FireReceiver___Q23msw21CChrCoreVolleyKinopioFv near 98.1 float registers and order of the paired-single normalise (as the boss sibling)
 VolleyF GameGuideDispCheck___Q23msw13CChrManVolleyFv near 99.7 register allocation only in the line-message loop
+VolleyF GetValidPtr__Q23msw15CComManVolleyRRFl near 97.0 last test: original branches past li r3,0 to mr r3,r31 (bne); ours lays the two returns out the other way (beq). Same results on both paths; 4 source forms tried
 VolleyF GetVolleySpikeParam__Q23msw21CItemBallVolleyBananaCFRQ43msw4BALL6VOLLEY14SPIKE_SHOT_ARG near 96.0 field 0x18 gets 1 or 2: original branches, ours a branchless select with the same value
 VolleyF GetVolleySpikeParam__Q23msw21CItemBallVolleyRShellCFRQ43msw4BALL6VOLLEY14SPIKE_SHOT_ARG near 96.1 field 0x18 gets 1 or 2: original branches, ours a branchless select with the same value
+VolleyF IsExistItemBall__Q23msw15CComManVolleyRRFPCQ23msw8CChrCoreRCQ23bcs5FVEC3 near 99.8 instruction scheduling only
 VolleyF LoopStateThrow__Q23msw19CItemVolleyBananaRRFv near 92.0 92.0%: operand order of a commutative fmadd and fmul only (accel*rate vs rate*accel, rate*x vs x*rate); loads, constants and frsp match; 6 attempts, regs search no gain
 VolleyF LoopStateThrow__Q23msw22CItemVolleyToadstoolRRFv near 98.9 98.9%: register choice only (1.0f constant in f3 and the 5-degree limit in f2, swapped in the original); 6 attempts, regs search no gain
 VolleyF MainFunc__Q23msw20CChrMarkerVolleyJumpFv unverified 95.5 the original multiplies 5.0f by 0.017453292f at run time (two .rodata literals, fmuls); ours folds the product into one constant 0x3DB2B8C2, the same bits the run-time multiply gives. Everything else matches. 10 source forms tried by two models; all fold
@@ -25,6 +27,7 @@ VolleyF ScoreInWait__Q23msw18CCockpitVolleyCoinFv near 99.0 register choice only
 VolleyF ScoreIn__Q23msw18CCockpitVolleyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 VolleyF ScoreOutWait__Q23msw18CCockpitVolleyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 VolleyF ScoreOut__Q23msw18CCockpitVolleyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
+VolleyF SearchPersonalBall__Q23msw15CComManVolleyRRFPCQ23msw8CChrCorei near 99.8 cmpw operand order / register choice only
 VolleyF SetCoinValue__Q23msw18CCockpitVolleyCoinFll near 98.9 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 VolleyF SetCountNum__Q23msw25CCockpitVolleyPauseResultFl near 99.2 registers only (as CCockpitBasketPauseResult::SetCountNum): the pane accessor and the computed show flag swap r30/r31; same instructions, order and stack frame
 VolleyF SetIconFace__Q23msw23CCockpitChrIcon2DVolleyFll near 99.1 register allocation only: one more callee-saved register (_savegpr_25 vs _savegpr_26), so the frame is 0x60 instead of 0x50; same calls, constants and accesses
@@ -36,10 +39,6 @@ VolleyF SubStateBlockJumpBlockHit___Q23msw21CChrCoreVolleyKinopioFPCQ23msw12CCol
 VolleyF SubStateBlockJumpIsActEnd___Q23msw20CChrCoreVolleyKuromaFPQ33msw14CChrCoreVolley21STATE_WORK_BLOCK_JUMP near 93.5 stack slots of position copies; bool-form flag test; load order of rect.x/y; register numbering
 VolleyF SubStateBlockJumpIsActEnd___Q23msw21CChrCoreVolleyKinopioFPQ33msw14CChrCoreVolley21STATE_WORK_BLOCK_JUMP near 99.9 instruction scheduling only
 VolleyF SubStateReceiveDoProcDiveReceive___Q23msw19CChrCoreVolleyYoshiFPQ33msw14CChrCoreVolley18STATE_WORK_RECEIVE near 99.8 f2/f3 swapped in the angle wrap (same as the boss sibling)
-VolleyF TrgDamage___Q23msw19CItemBallVolleyBombFv unverified 100.0 original returns 4 when the ball is not shot; Trg*_/DoTrg are bool in CItemBall.hpp so ours returns 1 (fix: Trg return type long across CItemBall and all modes)
-VolleyF TrgDamage___Q23msw21CItemBallVolleyGShellFv unverified 100.0 original returns 4 when the ball is not shot; Trg*_/DoTrg are bool in CItemBall.hpp so ours returns 1 (fix: Trg return type long across CItemBall and all modes)
-VolleyF TrgDamage___Q23msw21CItemBallVolleyRShellFv unverified 100.0 original returns 4 when the ball is not shot; Trg*_/DoTrg are bool in CItemBall.hpp so ours returns 1 (fix: Trg return type long across CItemBall and all modes)
-VolleyF TrgPreparationTouch___Q23msw21CItemBallVolleyBananaFv unverified 59.0 original returns 0x40 when shot; Trg*_ are bool in CItemBall.hpp so ours returns 1 (fix: Trg return type long across CItemBall and all modes)
 VolleyF UpdateMdl__Q23msw14CStageVolley13FUlf near 98.1 register choice and common-subexpression reuse only (as CStageBasket13::UpdateMdl): in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls
 VolleyF _SendMessage__Q23msw20CTmGameHandlerVolleyFllll near 99.9 r28/r29 swapped in cases 0x12/0x54 (score temp, score pointer, period byte); instructions, constants, calls and branches otherwise identical
 VolleyF __ct__Q23msw19CItemBallVolleyBombFPQ23msw5CBall near 98.5 original reloads m_pMdl before CreateAttachEffect; ours reuses the null-checked value (same field, nothing stored between)

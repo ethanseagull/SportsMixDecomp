@@ -831,8 +831,8 @@ namespace msw {
         back.x += lookPos.x;
         back.z += lookPos.z;
 
-        float zero = 0.0f;
         long nChr = CChrMan::GetChrCoreNum();
+        float zero = 0.0f;
         for (long i = 0; i < nChr; i++) {
             CChrCore *pChr = CChrMan::GetChrCore(i);
             if (pChr == 0 || pChr->IsDisable() || nLookChr == pChr->GetPlayerNo()) {

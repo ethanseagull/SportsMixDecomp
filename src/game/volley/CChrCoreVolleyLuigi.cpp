@@ -42,6 +42,16 @@ namespace {
         return bcs::FVEC3Dist(&pos1, &pos2);
     }
 
+    // (guessed) The original .rodata ends with a -1.0f that nothing left in
+    // the file reads, most likely used by code the link stripped. This dead
+    // comparison, made from the last function, keeps it in place. See
+    // notes/decisions.md, "Unreferenced data kept by dead references".
+    inline void UnusedReferences(float f)
+    {
+        if (f == -1.0f) {
+        }
+    }
+
     inline float Min(float fValue, float fMax)
     {
         return fValue > fMax ? fMax : fValue;
@@ -304,5 +314,6 @@ int msw::CChrCoreVolleyLuigi::SubStateAirTrickIsStartArtsShot_(STATE_WORK_AIR_TR
         float fRot = fSwingMax * nw4r::math::SinRad(m_fVacuumRot);
         SetRotY(pWork->m_fRotY + fRot);
     }
+    UnusedReferences(m_fVacuumRot);
     return bStart;
 }

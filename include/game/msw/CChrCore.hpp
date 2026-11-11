@@ -665,6 +665,25 @@ namespace msw {
             void SetTeamNo(long nTeam);
             void SetPadID(long nPad);
             void GetPos(bcs::FVEC3 &rPos);
+
+            // Added for DodgeF game/dodge/CChrManDodge.cpp (all in the DOL;
+            // parameter names guessed). The position of the goal the
+            // character's team attacks.
+            const bcs::FVEC3 &GetTargetGoalPos() const;
+            // The yaw (radians) from pos towards the character, in the XZ
+            // plane (meaning guessed from the name; see GetRotY_ToPosXZ).
+            float GetRotY_FromPosXZ(const bcs::FVEC3 &pos) const;
+            // The yaw (radians) from the character towards pChr.
+            float GetRotY_ToChr(const CChrCore *pChr) const;
+            // The distance from the character to pos in the XZ plane.
+            float GetDist_ToPosXZ(const bcs::FVEC3 &pos) const;
+            // Not zero when the character is within fRadius of pos in the XZ
+            // plane (meaning guessed from the name).
+            int IsInnerXZ(const bcs::FVEC3 &pos, float fRadius);
+            // (names guessed) Inline in the modules: CChrManDodge reads the
+            // members directly.
+            long GetDriverIdx() const { return m_nDriver; }
+            CChrCore *GetPassCheckChr() const { return m_pPassCheckChr; }
             // (names guessed) Inline in the modules: the character managers
             // write the members directly.
             void SetCamNo(long nCam) { m_nCamNo = nCam; }
@@ -684,7 +703,12 @@ namespace msw {
             unsigned long m_nDispFlag;
             unsigned char m_UnkF4[4];
             int m_bStarPlayer;           // 0xF8, see IsStarPlayer
-            unsigned char m_UnkFC[0x78];
+            unsigned char m_UnkFC[0x168 - 0xFC];
+            // 0x168 (name guessed): set by the DOL's SetPassCheckMode(CChrCore *,
+            // CBall *); DodgeF's CChrManDodge::Util_SearchChgLeader_ reads it
+            // from the character that passed the ball, as the receiver.
+            CChrCore *m_pPassCheckChr;
+            unsigned char m_Unk16C[0x174 - 0x16C];
             signed char m_nChrId;        // 0x174, a character number (meaning guessed; signed, see GetChrTypeID)
             unsigned char m_Unk175;
             // (names guessed) What CRadarIcon2D<Game>::CreateCharaIcon passes

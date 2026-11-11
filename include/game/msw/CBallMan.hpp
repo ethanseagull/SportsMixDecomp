@@ -85,6 +85,9 @@ namespace msw {
             static unsigned long GetBallHandle(long nBall);
             static CBall *GetBallPtr(long nBall);
             static CBall *GetNearPosBall(const bcs::FVEC3 &rPos);
+            // (return type guessed from GetPassFlyFrame_) The frames a pass
+            // from rFrom to rTo takes.
+            static float GetPassFlyFrame(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, long);
             static void DelBall(long nBall);
             static CBall *AddBall(CBall *pBall);
             // (fn_800CD520, unnamed in the DOL) IsExistStarBall_ on the

@@ -37,3 +37,6 @@ DodgeF SetDamegeCamera__Q23msw15CEventDemoDodgeFll near 99.8 99.8%: case 0 swaps
 DodgeF Set__Q23msw17CCockpitDodgeCoinFv near 99.3 register choice only (as CCockpitHockeyCoin::Set)
 DodgeF StartDamageDemo__Q23msw11EvDemoDodgeFv near 97.8 97.8%: the original keeps a cmpwi 1/beq to the switch end for the empty case 1 plus one dead b; equivalent branch form
 DodgeF UpdateMdl__Q23msw13CStageDodge13FUlf near 98.1 register choice and common-subexpression reuse only (as CStageBasket13::UpdateMdl): in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls
+DodgeF Util_SearchArtsPassTo___Q23msw12CChrManDodgeFl near 99.1 99.1%: register allocation only (same as CChrManHockey's).
+DodgeF Util_SearchPassmeetTo___Q23msw12CChrManDodgeFlfRQ23bcs5FVEC3 near 99.2 99.2%: two stack-address registers swapped; team byte sign-extended in place.
+DodgeF __dt__Q23msw12CChrManDodgeFv near 99.1 99.1%: loop registers r29/r30 swapped.

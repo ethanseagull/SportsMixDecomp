@@ -28,6 +28,17 @@ inline double fabs(double x)
     return x < 0.0 ? -x : x;
 #endif
 }
+
+// The float version. Inline, one fabs instruction without the rounding
+// (frsp) the double version needs (DodgeF CChrManDodge::Util_SearchPassTo_).
+inline float fabsf(float x)
+{
+#ifdef __MWERKS__
+    return __fabsf(x);
+#else
+    return x < 0.0f ? -x : x;
+#endif
+}
 #endif
 
 #endif /* !MATH_H_ */

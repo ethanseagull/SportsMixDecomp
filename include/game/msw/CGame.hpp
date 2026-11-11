@@ -383,6 +383,14 @@ namespace msw {
             // team that goal nGoal belongs to.
             static long GetGuardGoalIdx(long nTeam);
             static long GetTeamIdxByGoalIdx(long nGoal);
+            // (DOL, static; meaning guessed from the name) The goal of team
+            // nTeam: DodgeF's CChrManDodge::Util_SearchNearOwnGoal_ takes
+            // goal 1 - GetGoalIdx(nTeam). (return type guessed)
+            static long GetGoalIdx(long nTeam);
+            // (DOL, static; meaning guessed from the name) Not zero when the
+            // leader of team nTeam may be changed by the player
+            // (CChrManDodge::Util_SearchChgLeader_).
+            static int IsPlayTypeCanChangeLeader(long nTeam);
             // (DOL, static) The position of goal nGoal. (return type guessed)
             static const bcs::FVEC3 &GetGoalPos(long nGoal);
             // DOL, static. The direction goal nGoal faces (out of the goal,

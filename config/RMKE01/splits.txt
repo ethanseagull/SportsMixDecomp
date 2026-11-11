@@ -443,10 +443,10 @@ game/msw/CTrophyObj.cpp:
 	.text       start:0x8019BEF0 end:0x8019CAE0
 
 game/msw/CCockpitModelTelop.cpp:
-	.text       start:0x8019CC80 end:0x8019D1E4
-
-game/msw/CCockpitModelTelopHold.cpp:
-	.text       start:0x8019D1E4 end:0x8019DAB0
+	.text       start:0x8019CC80 end:0x8019DC9C
+	.rodata     start:0x8043DD28 end:0x8043DD50
+	.data       start:0x80480A70 end:0x80480BF8
+	.sdata2     start:0x805C4198 end:0x805C41A8
 
 game/msw/CRadarIcon2D.cpp:
 	.text       start:0x8019DC9C end:0x8019FF6C

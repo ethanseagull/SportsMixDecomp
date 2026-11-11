@@ -30,10 +30,24 @@ namespace bcs {
             virtual void Release();
 
         private:
+            // (name guessed) Detaches the animation and frees what Create
+            // allocated; the same as bcs::CAnmTexSrt's.
+            void Destroy()
+            {
+                DetachFromParent();
+                if (m_pResult != 0) {
+                    delete[] m_pResult;
+                }
+                m_pResult = 0;
+                m_nResultNum = 0;
+                ResetFrame();
+                ReleaseMatTable();
+            }
+
             // Laid out like CAnmTexSrt and CAnmTexPat, whose constructors
             // and destructors are copies of this class's.
             nw4r::g3d::ResAnmClr m_Res;  // 0x28
-            void *m_pResult;             // 0x2C, one per animated material
+            nw4r::g3d::ClrAnmResult *m_pResult; // 0x2C, one per animated material
             unsigned long m_nResultNum;  // 0x30
     };
 }

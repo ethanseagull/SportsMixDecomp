@@ -12,6 +12,9 @@ namespace msw {
     // the unit of its CDefCollision; member names and meanings are guesses.
     class CCollUnit {
         public:
+            // Out of line (fn_801067A4); the vtable (lbl_8046EA98) has only it.
+            virtual ~CCollUnit();
+
             void SetCollKind(long kind);
             void SetCollType(long type);
             void SetPos(const bcs::FVEC3 &rPos);
@@ -51,20 +54,37 @@ namespace msw {
             void SetNoHitFlag(unsigned long flag) { m_nNoHitFlag = flag; }
             void SetMyNoHitFlag(unsigned long flag) { m_nMyNoHitFlag = flag; }
 
-        private:
-            unsigned char m_Unk00[0x10];
+        protected:
+            // The set classes write the units' fields directly.
+            friend class CDefCollision;
+
+            // 0x00: vtable
+            unsigned char m_Unk04[8];
+            unsigned long m_nUnk0C;      // 0x0C, the last constructor argument
             unsigned short m_nFlag10;    // 0x10
-            unsigned char m_Unk12[6];
+            unsigned char m_nCollKind;   // 0x12 (SetCollKind)
+            unsigned char m_nCollType;   // 0x13 (SetCollType)
+            signed char m_nIndex;        // 0x14 (CDefCollision::SetIndexAll)
+            unsigned char m_Unk15;
+            signed char m_nTeamNo;       // 0x16 (CDefCollision::SetTeamNoAll)
+            signed char m_nOwnerChrIdx;  // 0x17 (GetCollOwnerChrIdx)
             unsigned long m_nShape;      // 0x18, the pillar sets 4
+            // (names guessed) CDefCollision::SetMyNoHitFlagAll writes 0x1C, so
+            // these two may be the other way round.
             unsigned long m_nNoHitFlag;  // 0x1C (names guessed)
             unsigned long m_nMyNoHitFlag; // 0x20
             unsigned char m_Unk24[8];
             bcs::FVEC3 m_Pos;            // 0x2C (name guessed)
-            unsigned char m_Unk38[0x24];
+            unsigned char m_Unk38[0x18];
+            bcs::FVEC3 m_PrevPos;        // 0x50 (name guessed; CCollUnit::SetPos)
             bcs::FVEC3 m_Size;           // 0x5C
             unsigned char m_Unk68[0x18];
             float m_fRotY;               // 0x80 (SetRotY)
             unsigned char m_Unk84[0x1C];
+            // The constructor (fn_801066C8) initialises nothing past 0x9E, so
+            // CCollUnit is 0xA0 bytes and this word belongs to the derived
+            // units (msw::CCollDefUnit's reflect flags); kept here for the
+            // callers that reach it through CDefCollision::GetColl.
             unsigned long m_nFlagA0;     // 0xA0
     };
 }

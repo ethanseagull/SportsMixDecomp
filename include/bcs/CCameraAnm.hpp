@@ -97,12 +97,25 @@ namespace bcs {
             SCENE_INFO m_SceneDefault;    // 0x128 (name guessed)
             long m_nSceneNum;             // 0x134 (name guessed)
             unsigned long m_nUnk138;      // 0x138
-            unsigned long m_nAnmFlag;     // 0x13C, Play sets bits 0x100 to 0x2000 (name guessed)
+            unsigned long m_nAnmFlag;     // 0x13C, Play sets bits 0x100 to 0x2000 (name guessed);
+                                          // 0x400 and 0x800 mirror x and z about m_vUnk140
+                                          // (bcs::CCameraAnmCalc::_CalcRev)
+
+            friend class CCameraAnmCalc;
 
         public:
             FVEC3 m_vUnk140;               // 0x140
+            // (names guessed) Read by bcs::CCameraAnmCalc::_CalcRotOffset:
+            // the animated position and target are scaled by m_vScale,
+            // turned about Y by m_fRotY when it is positive, then moved by
+            // m_vPosOffset and m_vAtOffset.
+            FVEC3 m_vScale;                // 0x14C
         private:
-            unsigned char m_Unk14C[0x18];  // 0x14C
+            float m_Unk158;                // 0x158
+        public:
+            float m_fRotY;                 // 0x15C
+        private:
+            float m_Unk160;                // 0x160
         public:
             FVEC3 m_vPosOffset;            // 0x164
             FVEC3 m_vAtOffset;             // 0x170

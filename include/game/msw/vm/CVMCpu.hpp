@@ -76,6 +76,13 @@ namespace msw {
                 long Run();
 
             protected:
+                // One opcode: returns the new state (0 to go on).
+                typedef long (CVMCpu::*OPFUNC)();
+                // DOL s_aOpFunc at 0x80486BD8 (.data, 92 entries): the opcode handlers
+                // fn_801F7710.., indexed by the opcode byte. Run and
+                // CVMScript::CallEntry dispatch through it. (name guessed)
+                static OPFUNC s_aOpFunc[];
+
                 // (name guessed) Inline helper: SetCall scales the index
                 // after subtracting, as a separate argument.
                 void SetStack(long nIndex, long nValue) { m_pStack[nIndex].i = nValue; }

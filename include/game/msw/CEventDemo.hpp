@@ -2,6 +2,7 @@
 #define CEVENTDEMO_HPP_
 
 namespace bcs {
+    class CTask;
     struct FVEC3;
 }
 
@@ -35,6 +36,18 @@ namespace msw {
             // (read from the DOL body; return type guessed)
             static int IsEnable();
 
+            // Ends the demo objects of WORK (asks each task to delete
+            // itself and clears its flags); with bWaitFade set, only once
+            // the master fade ends (through CEventDemoBase::AddFadeEndFunc).
+            // (parameter name guessed)
+            static void Cleanup(int bWaitFade);
+            // Sets bits nFlags in the four flag words of WORK.
+            static void SetFlags(unsigned long nFlags);
+            // (fn_80119CCC, unnamed in the DOL) Passes a message on to the
+            // running demo's CEventDemoBase::SendMessage; CGame::SendMessage_
+            // calls it with its own four arguments.
+            static void SendMessage(long, long, long, long);
+
             // 0x38 bytes in the DOL's .bss. Only the byte BossF's
             // CEventDemoBoss::CreateDemo sets when it plays no demo; its
             // meaning and all names are guessed.
@@ -45,7 +58,13 @@ namespace msw {
                 // (VolleyF CReadyStartDemoVolley::EventCansel); IsEventSkip
                 // then skips.
                 unsigned char bCancel;
-                unsigned char m_Unk04[0x34];
+                unsigned char m_Unk04[0x14 - 0x04];
+                // 0x14: flag words of the four demo objects (SetFlags,
+                // Cleanup; names guessed).
+                unsigned long anFlags[4];
+                // 0x24: the four demo objects' tasks; Cleanup deletes them.
+                bcs::CTask *apTask[4];
+                unsigned char m_Unk34[0x38 - 0x34];
             };
             static WORK m_Work;
 

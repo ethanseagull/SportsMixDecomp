@@ -13,6 +13,12 @@ namespace msw {
             public:
                 // Inline: the TourF copies are weak functions.
                 CVMData() : m_Unk00(0), m_pValue(0), m_Unk20(0) { Init(); }
+                // Binds the script image pImage (DOL CVMScript::SetScript
+                // inlines it).
+                CVMData(void *pImage) : m_Unk00(reinterpret_cast<unsigned long>(pImage)), m_pValue(0), m_Unk20(0)
+                {
+                    Setup();
+                }
                 ~CVMData() { Init(); }
 
                 // (return types guessed) Loads script file nFile, and binds
@@ -45,6 +51,10 @@ namespace msw {
                 };
 
                 void Init();
+                // DOL fn_801F70E0: checks the "SBD" image at m_Unk00 and sets
+                // up the pointers into it (BindData calls it after loading).
+                // (name guessed)
+                void Setup();
                 // The tag of function `pName` in group nGroup (-1: any);
                 // null when there is none.
                 FUNCTION_TAG *FindFunctionTag(const char *pName, long nGroup);

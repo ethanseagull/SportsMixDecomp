@@ -82,6 +82,8 @@ BasketF MethdTrickMove__Q23msw16CChrDrvPadBasketFv unverified 81.9 81.9%: float 
 BasketF MovePos___Q33msw11CC09_BASKET14CBoundMushroomFf near 99.6 fmadds multiplicands swapped (register choice)
 BasketF MoveRun__Q23msw19CNpcGhostBasketBaseFRCQ23bcs5FVEC3ff near 98.2 order of a commutative multiply and one stack slot.
 BasketF MoveRun__Q23msw19CNpcGhostBasketBaseFRCQ23bcs5FVEC3ffff near 99.1 order of a commutative multiply and one stack slot.
+BasketF NormalVecXZ__Q23msw13CComManBasketFRQ23bcs5FVEC3RCQ23bcs5FVEC3 near 97.3 97.3%: ps_sum0 destination register in inlined FVEC3LenSq only
+BasketF NormalizeCanMovePosToBossPackun__Q23msw13CComManBasketFRQ23bcs5FVEC3PCQ23msw8CChrCore near 99.9 99.9%: two pairs of stack slots swapped (Local2World temp/scale, World2Local temp/Len copy); static-order swap of fX/fZ
 BasketF OnMsgMain___Q23msw16CChrDrvPadBasketFPQ33msw7CChrDrv8_CHR_MSG unverified 99.6 99.6% after the shared CChrDrvPad header dropped the pool-off stand-in (it lowered BossF/HockeyF/VolleyF pad drivers): float constants via one base register instead of per-literal lis; otherwise as before.
 BasketF OnMsg__Q23msw16CChrDrvPadBasketFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG unverified 92.8 92.8% after the shared CChrDrvPad header dropped the pool-off stand-in (it lowered BossF/HockeyF/VolleyF pad drivers): float constants via one base register instead of per-literal lis; otherwise as before.
 BasketF OnPostCreateMdl__Q23msw30CStageBasketHungryBossPackun72FPCQ33msw5STAGE12MDL_GEN_RULERQ23bcs6CRegexRQ33bcs77CPool<PQ23msw9CStageMdl,Q33msw9CStageMan15CMdlPtrPoolNode,Q33bcs4pool6NoLock>6HandleRQ23msw4CArnl near 98.3 register choice only: r4 vs r0 for the constant 1 and the result of the max
@@ -96,11 +98,13 @@ BasketF SendMessage__Q23msw19CNpcGhostBasketBaseFlllll near 99.9 register choice
 BasketF SetBallScore__Q23msw22CCockpitBasketHarapekoFll near 98.6 register choice and instruction order only
 BasketF SetCoinValue__Q23msw18CCockpitBasketCoinFll near 98.9 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 BasketF SetCountNum__Q23msw25CCockpitBasketPauseResultFl near 99.2 registers only: the pane accessor and the computed show flag swap r30/r31; same instructions, order and stack frame
+BasketF SetCountScore__Q23msw20CCockpitBasketResultFPlPlll near 99.6 99.6%: float register choice around m_fUnk00 + m_fUnk04*i only
 BasketF SetDispBallFruit4__Q23msw22CCockpitBasketHarapekoFi near 99.5 register choice and instruction order only
 BasketF SetFaceIcon__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 97.6 register choice, one pointer increment scheduled elsewhere, single-bit set as clear-then-insert vs shift-then-insert (same value)
 BasketF SetScore__Q23msw22CCockpitBasketHarapekoFllii near 97.8 register choice and instruction order only
 BasketF SetTeamFaceIcon__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 97.4 register choice; second table pointer as base+0x48 vs direct address (same address); single-bit set as clear-then-insert vs shift-then-insert
 BasketF SetTelop3DScoreCount__Q23msw14CCockpitBasketFllllllllil near 97.5 97.5%: only the order of the stores into the parameter struct differs.
+BasketF SetTextNext__Q23msw20CCockpitBasketResultFll near 99.2 99.2%: r30/r31 swapped (pane accessor vs loop flag)
 BasketF Set__Q23msw18CCockpitBasketCoinFv near 99.3 register choice only (as CCockpitHockeyCoin::Set)
 BasketF Set__Q23msw22CCockpitBasketHarapekoFv near 93.0 s_PaneName address formed as s_LayoutRes base + 0x60 in a saved register instead of its own load (same address), one more saved register; same calls
 BasketF ShotArtsBall___Q23msw21CChrCoreBasketWaluigiFl near 99.6 float register choice for the 1/60 multiply operands and one byte load into r0 vs r9

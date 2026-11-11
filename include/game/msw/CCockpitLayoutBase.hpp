@@ -41,7 +41,7 @@ namespace msw {
             virtual void OnCursorCheck(long, unsigned short);
             virtual void StickMoveCheck(long, unsigned short);
             virtual void IsButtonKindOfStickMode(unsigned short);
-            virtual void CancelMenu();
+            virtual long CancelMenu(); // returns 0 (the original sets r3)
             virtual void PushButton(long);
             // The next four are inline: each module that derives a class
             // emits them. They return 0.

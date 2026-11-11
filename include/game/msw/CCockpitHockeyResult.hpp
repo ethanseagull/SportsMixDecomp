@@ -18,7 +18,7 @@ namespace msw {
             virtual long SendEvent(long nEvent, void *pParam);
             virtual int Set();
             virtual void Remove();
-            virtual void CancelMenu();
+            virtual long CancelMenu(); // returns 0 (the original sets r3)
 
             // The period scores of the two teams; nPeriod is the period
             // reached, nNum the number of periods.

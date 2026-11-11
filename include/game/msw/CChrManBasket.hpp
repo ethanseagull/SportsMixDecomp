@@ -55,6 +55,14 @@ namespace msw {
             // the ghost does not come back then.
             bool IsGhostAppearEnable() const { return !(m_nFlagAC & 2); }
 
+            // Added for game/basket/CComManBasket.cpp (return types
+            // guessed). Not zero when the boss Packun has been made.
+            int IsCreateBossPackun_() const;
+            // Not zero when every character of team nTeam is computer-driven.
+            int IsAllComTeam_(long nTeam) const;
+            // The yaw from rPos1 towards rPos2 in the XZ plane.
+            static float GetRotY_Pos1ToPos2XZ(const bcs::FVEC3 &rPos1, const bcs::FVEC3 &rPos2);
+
         protected:
             unsigned char m_Unk8C[0xAC - 0x8C];
             unsigned long m_nFlagAC;    // 0xAC (name guessed), see IsGhostAppearEnable

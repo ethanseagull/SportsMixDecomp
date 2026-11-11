@@ -123,12 +123,15 @@ namespace bcs {
             CAnmObj *GetAnmObj(AnmObjType type);
 
             // (names guessed) The modules read these slots directly.
+            // (name guessed) Inline in bcs::CAnmTexSrt::Create.
+            nw4r::g3d::ResMdl GetResMdl() const { return m_ResMdl; }
             CAnmObj *GetAnmObjChr() const { return m_pAnmObjChr; }
             CAnmObj *GetAnmObjMatClr() const { return m_pAnmObjMatClr; }
             CAnmObj *GetAnmObjTexSrt() const { return m_pAnmObjTexSrt; }
 
         private:
-            unsigned char m_Unk118[0x34]; // 0x118
+            nw4r::g3d::ResMdl m_ResMdl;   // 0x118 (name guessed)
+            unsigned char m_Unk11C[0x30]; // 0x11C
             CAnmObj *m_pAnmObjChr;        // 0x14C (names of the five guessed)
             CAnmObj *m_pAnmObjMatClr;     // 0x150
             CAnmObj *m_pAnmObj3;          // 0x154

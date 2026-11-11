@@ -20,10 +20,10 @@ game/bcs/CAnmBlendMotion.cpp:
 	.text       start:0x8000A5B4 end:0x8000D044
 
 game/bcs/CAnmTexSrt.cpp:
-	.text       start:0x8000D22C end:0x8000D414
+	.text       start:0x8000D1EC end:0x8000DCE8
 
 game/bcs/CAnmTexPat.cpp:
-	.text       start:0x8000DD28 end:0x8000DF1C
+	.text       start:0x8000DCE8 end:0x8000E830
 
 game/bcs/CAnmMatClr.cpp:
 	.text       start:0x8000F670 end:0x8000F7D4

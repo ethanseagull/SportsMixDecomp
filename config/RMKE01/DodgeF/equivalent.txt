@@ -17,6 +17,7 @@ DodgeF Explode___Q23msw18CItemBallBombDodgeFi near 99.8 register numbering/instr
 DodgeF GameResult_In__Q23msw13CCockpitDodgeFv near 99.0 99.0%: register choice for the period words and result pointers.
 DodgeF GetExplosionParam__Q23msw14CItemDodgeBombFRfRfRfRlRlRUl near 99.7 99.7%: the two registers of the team-number compare are swapped.
 DodgeF GetFarPosBall___Q23msw13CBallManDodgeFRCQ23bcs5FVEC3 near 99.1 99.1%: loop counter and best-ball pointer swap saved registers r29/r30; instructions and order otherwise identical (register allocation only)
+DodgeF GetFirstLookInfo_MultiPlay__Q23msw14CCameraDodgeBDFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 98.7 98.7%: stack slots allocated in reverse, callee-saved float register numbering, load order of two ball heights in one compare; frame, calls, constants, branches, accesses identical
 DodgeF GetMyVelY__Q23msw18CItemBallBombDodgeCFv near 99.3 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF GetMyVelY__Q23msw19CItemBallSmallDodgeCFv near 99.3 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF GetNearPosBall___Q23msw13CBallManDodgeFRCQ23bcs5FVEC3 near 99.1 99.1%: loop counter and best-ball pointer swap saved registers r29/r30; instructions and order otherwise identical (register allocation only)
@@ -27,6 +28,7 @@ DodgeF GetTeamOuterFieldBack__Q23msw13CStageDodge11CFll near 99.8 register choic
 DodgeF IsValid__Q33bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>6HandleCFv near 96.4 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
 DodgeF LoopStateAirTrick__Q23msw18CChrCoreDodgeLuigiFv near 99.6 r3/r4 swapped in the inlined FsmqGetWork_ (queue head vs work pointer); same as HockeyF Luigi
 DodgeF LoopStateThrow__Q23msw21CItemDodgeBombDD_BaseFv near 95.8 95.8%: original converts the flash grey level with a quantized psq_st (u8, clamps); ours uses a plain (unsigned char) cast, same value for the in-range 55..255 it computes; frame 0x30 vs 0x20, colour bytes stored in another order, two extra frsp on single values, two constants loaded in the other order.
+DodgeF MainCamera_Normal__Q23msw14CCameraDodgeBDFv near 98.3 98.3%: schedule only (m_Unk274 loaded later, float register numbering)
 DodgeF Main__Q210CC17_DODGE18CcKuromaLockonUnitFv near 96.4 scheduling: m_hEffect loaded before CEffectCtrl::GetInstance() in the original (HockeyF/VolleyF copies same)
 DodgeF Main__Q23msw17CCockpitDodgeCoinFv near 98.8 register choice only (as CCockpitHockeyCoin::Main): loop counters and pointer temporaries in different saved registers
 DodgeF Main__Q23msw9CTelopOutFv near 99.1 99.1%: character number and telop id in swapped registers inside the out-telop inline

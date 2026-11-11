@@ -51,6 +51,9 @@ namespace msw {
             // (added for game/msw/CStgGmk_Trolley.cpp) The same from the
             // three components: the DOL's fn_801747B8, next to SetFront.
             void SetFront(float x, float y, float z);
+            // (name guessed; DOL fn_80174804, after SetFront) Sets the up
+            // vector, as SetFront the front one.
+            void SetUp(float x, float y, float z);
 
             // (name guessed) Point the direction from the position towards
             // rTarget; inline in msw::CStgObj::LookAt.
@@ -112,6 +115,24 @@ namespace msw {
                 m_nFlagC8 |= 0x10;
             }
             void ClearUnkE4() { m_UnkE4.Set(0.0f, 0.0f, 0.0f); }
+            // (name guessed; inline in game/msw/CStgGmk_Pylon.cpp, DOL)
+            // Stops all motion: m_UnkE4, the acceleration and both
+            // velocities to zero.
+            void ClearMotion()
+            {
+                m_UnkE4.Set(0.0f, 0.0f, 0.0f);
+                m_UnkF0.Set(0.0f, 0.0f, 0.0f);
+                m_Vel.Set(0.0f, 0.0f, 0.0f);
+                m_WorldVel.Set(0.0f, 0.0f, 0.0f);
+            }
+            // (name guessed; DOL game/msw/CStgGmk_Pylon.cpp) The resistance,
+            // on with flag 0x10 (ClearFlagC8(0x10) turns it off).
+            void SetResist(const bcs::FVEC3 &rResist)
+            {
+                m_Unk100 = rResist;
+                m_nFlagC8 |= 0x10;
+            }
+            const bcs::FVEC3 &GetAccel() const { return m_UnkF0; }
             // (added for the DOL's pinball ball, names guessed) The vector
             // at 0xE4 (its y is the speed of a fall), the acceleration at
             // 0xF0 (CStgGmk_Pinball::SetAccel), the deceleration at 0xFC,

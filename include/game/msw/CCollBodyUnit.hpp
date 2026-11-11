@@ -30,11 +30,18 @@ namespace msw {
             // CStgGmk_Pinball_Act_Volley::OnBallCatch and DodgeF's
             // msw::CStgGmk_Pinball_Act_Dodge::OnDamage read it.
             bcs::FVEC3 m_Pos;
+            unsigned char m_Unk38[0xA0 - 0x38];
+            // 0xA0 (meaning unknown): the DOL's msw::CStgGmk_Pylon_Act::OnBodyPush
+            // does not move the pylon, nor slows the push, for a unit where
+            // it is 5.
+            unsigned char m_nUnkA0;
 
             const bcs::FVEC3 &GetPos() const { return m_Pos; }
 
             // (name guessed) Inline: DodgeF compares the byte as a signed int.
             long GetOwnerKind() const { return m_nOwnerKind; }
+            // (name guessed) Compared as a signed int by the DOL's pylon.
+            long GetUnkA0() const { return m_nUnkA0; }
 
             // (DOL) Runs this unit's push callback for being pushed by
             // pOther by pPush (null: no push).

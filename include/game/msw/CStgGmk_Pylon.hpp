@@ -11,7 +11,7 @@ namespace msw {
 
     // The model of a pylon (the red cone "s04_redcorn_00"). A DOL class, size
     // 0x130 (HockeyF's CStgGmk_Pylon_Hockey::NewMdl allocates it), vtable
-    // lbl_80488E10. The virtual functions after msw::CStgMdl's are in the
+    // __vt__Q23msw17CStgGmk_Pylon_Mdl (0x80488E10). The virtual functions after msw::CStgMdl's are in the
     // order of that vtable; HockeyF emits weak copies of SetMdlIdx and
     // GetMdlIdx, so they are inline.
     class CStgGmk_Pylon_Mdl : public CStgMdl {
@@ -31,10 +31,11 @@ namespace msw {
             virtual long GetMdlIdx() const { return m_nMdlIdx; }
             // The size of the model at scale 1 (names guessed: Main divides
             // the actor's radius by half the first two and its height by the
-            // third). All 1.0 in the DOL (fn_80218230 and the next two).
-            virtual float GetParam_OrgWidth() const { return 1.0f; }
-            virtual float GetParam_OrgDepth() const { return 1.0f; }
-            virtual float GetParam_OrgHeight() const { return 1.0f; }
+            // third). All 1.0, defined right after Main (no module refers to
+            // them, so they have no name in the DOL).
+            virtual float GetParam_OrgWidth() const;
+            virtual float GetParam_OrgDepth() const;
+            virtual float GetParam_OrgHeight() const;
 
         private:
             long m_nMdlIdx; // 0x12C, which model of the table (only one)
@@ -58,8 +59,11 @@ namespace msw {
     // declared last). Return types not visible in a body are guesses.
     class CStgGmk_Pylon : public CStgGmk {
         public:
-            CStgGmk_Pylon(bcs::CTask *pParent, int);
+            // (The default argument lets CStgGmkCluster<CStgGmk_Pylon>
+            // make one: its NewGmk stores 0.)
+            CStgGmk_Pylon(bcs::CTask *pParent, int arg = 0);
             virtual ~CStgGmk_Pylon();
+            virtual CStgMdl *NewMdl(long heap, unsigned long idx);
             virtual void Main();
             virtual void Disp();
             virtual unsigned long CalcSum() const;
@@ -70,7 +74,7 @@ namespace msw {
             virtual void SetDefaultPos(const bcs::FVEC3 &rPos) { m_DefaultPos = rPos; }
             virtual const bcs::FVEC3 &GetDefaultPos() const { return m_DefaultPos; }
             virtual void Respawn();
-            virtual bool IsActive() const;
+            virtual int IsActive() const;
             virtual void Inactivate();
             virtual bool IsLanding() const;
             virtual void SetAccel(const bcs::FVEC3 &rAccel);
@@ -91,6 +95,7 @@ namespace msw {
             virtual float GetRadius() const { return GetPylonAct()->GetParam_Radius(); }
 
             virtual CStgDrv *NewDrv(long heap) { return new (heap) CStgGmk_Pylon_Drv(this); }
+            virtual CStgAct *NewAct(long heap) { return new (heap) CStgGmk_Pylon_Act(this); }
 
         private:
             // The actor is always a CStgGmk_Pylon_Act. (name guessed)

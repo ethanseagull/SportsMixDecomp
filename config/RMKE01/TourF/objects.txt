@@ -16,3 +16,4 @@ Equivalent game/tour/TournamentRule.cpp
 Equivalent game/tour/CTournamentRouteMan_Stage32.cpp
 Equivalent game/tour/CTournamentRouteMan_Stage33.cpp
 Equivalent game/tour/CTournamentMan.cpp
+Equivalent game/tour/CTmScript.cpp

@@ -71,6 +71,12 @@ namespace msw {
             virtual float GetFirstPopupWaitTime() const;
             virtual float GetNextPopupWaitTime() const;
 
+            // (DOL) Marks the panel as a miss ("suka"): DodgeF's managers
+            // call it with 1 when a touched panel gives nothing.
+            void SetSuka(int);
+            // (name guessed) The panel's position at 0xA0.
+            const bcs::FVEC3 &GetPos() const { return m_Pos; }
+
         protected:
             unsigned char m_Unk7C[0x84 - 0x7C]; // 0x7C
             CQPanelMan *m_pMan;                 // 0x84

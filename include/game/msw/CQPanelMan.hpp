@@ -91,6 +91,9 @@ namespace msw {
         protected:
             // In the DOL.
             void SetItemPopRate_(long nIdx, const ITEM_POPUP_RATE_TBL_TBL &rTbl);
+            // In the DOL. The panel touched at rPos, or null; DodgeF passes
+            // 1 when bit 1 of the check flags is clear (meaning not known).
+            CQPanel *QPanelHitCheck_(const bcs::FVEC3 &rPos, long);
 
             unsigned char m_Unk34[0x44 - 0x34]; // 0x34
             // (name guessed) GameWork's word at 0x14 clamped to 0-4, forced

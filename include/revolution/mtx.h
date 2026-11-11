@@ -18,6 +18,8 @@ void PSMTXCopy(const Mtx src, Mtx dst);
 void PSMTXIdentity(Mtx m);
 // ab = a * b.
 void PSMTXConcat(const Mtx a, const Mtx b, Mtx ab);
+// inv = the inverse of src; 0 when src has none.
+unsigned long PSMTXInverse(const Mtx src, Mtx inv);
 // dst = src with (x, y, z) added to the translation.
 void PSMTXTransApply(const Mtx src, Mtx dst, float x, float y, float z);
 

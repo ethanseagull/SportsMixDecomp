@@ -26,15 +26,14 @@ namespace msw {
     // declared. DodgeF's game/dodge/CStgGmk_Case_Act_Dodge.cpp emits weak
     // copies of some of these (IsAlive, SetAlive, IsInvincible,
     // IsEnableDefColl, GetParam_LocOffsetZ, GetParam_ItemHitMethod,
-    // Eff_GetSlotNum, SE_GetSlotNum, OnDamage), so they are inline (bodies from
-    // VolleyF's game/volley/CStgSeSlot.cpp). Return
-    // types not visible in a body are guesses.
+    // Eff_GetSlotNum, SE_GetSlotNum), and so does BasketF's
+    // game/basket/CStgGmk_Case_Act_Basket.cpp, so they are inline here.
+    // Return types not visible in a body are guesses.
     class CStgGmk_Case_Act : public CStgGmkAct, public bcs::CFsmQueue<CStgGmk_Case_Act> {
         public:
             CStgGmk_Case_Act(CStgGmk *pParent);
             virtual ~CStgGmk_Case_Act();
 
-            virtual long Eff_GetSlotNum() const { return 1; }
             virtual void UpdateMdlMtx();
             virtual void OnUpdate(float rate);
             virtual void OnAttackHit(const CCollAtkUnit *pAtk, const CCollBodyUnit *pBody, const bcs::FVEC3 &rPos,
@@ -74,6 +73,9 @@ namespace msw {
             virtual float GetParam_BreakTime() const;                     // 0x20C
             virtual long GetParam_ItemHitMethod() const { return 1; }     // 0x210
             virtual long SE_GetSlotNum() const { return 1; }              // 0x214
+            // Declared here, not with the other overrides: the original emits its weak
+            // copy between IsInvincible and GetParam_ItemHitMethod (reverse declaration order).
+            virtual long Eff_GetSlotNum() const { return 1; }
             virtual void UpdateColl();                                    // 0x218
             virtual bool IsInvincible() const { return m_fInvincibleTime > 0.0f; } // 0x21C
             virtual void SetAlive(int bAlive) { m_bAlive = bAlive; }      // 0x220
@@ -107,10 +109,10 @@ namespace msw {
 
         private:
             unsigned char m_Unk1D4[0x28]; // 0x1D4, not mapped
-            int m_bAlive;                 // 0x1FC, IsAlive / SetAlive
+            int m_bAlive;                 // 0x1FC (IsAlive, SetAlive)
             unsigned char m_Unk200[0xC];  // 0x200, not mapped
-            float m_fInvincibleTime;      // 0x20C, IsInvincible while above zero (name guessed)
-            float m_Unk210;               // 0x210
+            float m_fInvincibleTime;      // 0x20C (IsInvincible while above zero; name guessed)
+            unsigned char m_Unk210[0x4];  // 0x210, not mapped
     };
 }
 

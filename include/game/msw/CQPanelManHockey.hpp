@@ -19,7 +19,7 @@ namespace msw {
             virtual CQPanel *CreatePanel_(const bcs::FVEC3 &, const bcs::FVEC3 &, PANEL_POP_INFO *, long);
             virtual void SetupItemPopRate_();
             virtual long ChoiceItemPopRateTblIdx_(long) const;
-            virtual const void *GetPopupGroupData_(long) const;
+            virtual const POPUP_GROUP *GetPopupGroupData_(long) const;
 
         private:
             unsigned char m_Unk9A8[0xC24 - 0x9A8]; // 0x9A8

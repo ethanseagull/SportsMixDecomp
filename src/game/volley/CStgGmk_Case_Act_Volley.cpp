@@ -8,13 +8,6 @@
 #include "game/msw/CStgGmk_Case_Volley.hpp"
 #include "game/msw/CBall.hpp"
 
-// CStgAct::OnInit is weak in every module's case actor unit, so inline in
-// the original; defined here rather than in the shared header so that no
-// other unit starts emitting a copy.
-inline void msw::CStgAct::OnInit()
-{
-}
-
 long msw::CStgGmk_Case_Act_Volley::GetParam_Effect(long type) const
 {
     switch (type) {

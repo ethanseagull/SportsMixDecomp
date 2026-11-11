@@ -381,6 +381,7 @@ namespace msw {
         float m_fUnk20;              // 0x20
         CC_DATA::CHR_PARAM::MOVE_PARAM m_MoveParam; // 0x24
         CChrCore::DIR_MOVE m_DirMove; // 0x34
+        unsigned char m_Unk44[0x54 - 0x44];
         long m_nTrickStep;           // 0x54
         float m_fTrickFrame;         // 0x58, the length of the trick
         float m_fTrickCount;         // 0x5C, frames of it done

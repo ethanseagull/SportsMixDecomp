@@ -53,6 +53,12 @@ namespace msw {
             // guessed). Whether the top-menu character nChr is unlocked;
             // CCourtChr passes the ball index and -1.
             static int IsUnlockTopMenuChr(long nChr, long nUnk);
+            // Added for BasketF game/basket/unit_7E8FC.cpp (return types
+            // guessed). Whether the mission forbids the computer of team
+            // nTeam the named kind of shot.
+            static int IsMissionComThrowingShootDisable(long nTeam);
+            static int IsMissionComDunkShootDisable(long nTeam);
+            static int IsMissionComLayupShootDisable(long nTeam);
     };
 }
 

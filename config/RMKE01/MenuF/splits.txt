@@ -366,11 +366,16 @@ game/menu/CChrSign.cpp:
 	.rodata     start:0x0000E1F0 end:0x0000E338
 	.data       start:0x00009178 end:0x00009240
 
-game/menu/CRuleInfo.cpp:
-	.text       start:0x0007C044 end:0x0007E220
-	.rodata     start:0x0000E338 end:0x0000E5E0
-	.data       start:0x00009240 end:0x00009610
+game/menu/CTrofy.cpp:
+	.text       start:0x0007C044 end:0x0007C764
+	.rodata     start:0x0000E338 end:0x0000E418
+	.data       start:0x00009240 end:0x00009308
 	.bss        start:0x00001488 end:0x00001498
+
+game/menu/CRuleInfo.cpp:
+	.text       start:0x0007C764 end:0x0007E220
+	.rodata     start:0x0000E418 end:0x0000E5E0
+	.data       start:0x00009308 end:0x00009610
 
 game/menu/CInitGuide.cpp:
 	.text       start:0x0007E220 end:0x0007E874

@@ -26,6 +26,10 @@ namespace msw {
         // Not zero while sport nGameMode has not been played in mode nMode.
         // (meaning and return type guessed)
         int IsFirstPlay(long nMode, long nGameMode);
+        // (added for MenuF game/menu/CTrofy.cpp) The best Wi-Fi rating
+        // reached in sport nSport (0 basketball, 1 volleyball, 2 dodgeball,
+        // 3 hockey; meaning guessed from the trophy thresholds).
+        short GetMaxSkill(long nSport);
         // (added for MenuF game/menu/CPlayMode.cpp) Forgets the Mii chosen
         // on the character select screen.
         void ClearSelectMii();

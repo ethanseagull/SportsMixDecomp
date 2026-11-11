@@ -43,6 +43,10 @@ namespace bcs {
             static void SetListenerMaxVolumeDistance(float fDistance);
             static void SetListenerUnitDistance(float fDistance);
             static void SetListenerInteriorSize(float fSize);
+            // (name guessed) The sound id of a sound archive label
+            // (SoundArchive::ConvertLabelStringToSoundId), -1 when there is
+            // none, 0 while the sound system is not running. fn_80079E30
+            static long GetSoundID(const char *pLabel);
 
             // (names guessed) The state of the sound system (5 once it is
             // running, lbl_805C0A30), and the task every sound task is made

@@ -16,8 +16,10 @@ namespace bcs {
             // msw::SelectMenu::CCourtBallMdlObj in MenuF (return types guessed).
             virtual long GetObjType() const;        // 0x0C returns 4 for a CMdlObj, 2 for an animation
             virtual int IsScnObj() const;           // 0x10 returns 1 for a CMdlObj, 0 for an animation
-            virtual int IsAnmObj() const;           // 0x14 returns 0 for a CMdlObj, 1 for an animation
-            virtual void NotifyAppendDelayDelete(); // 0x18 empty in both
+            // 0x14 and 0x18 are inline (weak copies in VolleyF
+            // game/volley/CStageNetVolley.cpp, MenuF game/menu/CBgMdl.cpp).
+            virtual int IsAnmObj() const { return 0; }  // 0x14 1 for an animation
+            virtual void NotifyAppendDelayDelete() {}   // 0x18 empty in both
             // 0x1C. The return type is guessed and the base version is not
             // known. DetachFromParent calls the parent's with (0x10001, 0, this).
             virtual void ObjProc(unsigned long, unsigned long, void *) = 0;

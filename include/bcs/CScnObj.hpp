@@ -79,7 +79,10 @@ namespace bcs {
             // (which names bcs::CMdlObj's overrides). The ones from 0x54 on
             // without a DOL name are one-line bodies there; the material
             // setters are empty in bcs::CScnObj. Return types guessed.
-            virtual int IsScnObj() const;                                                   // 0x10
+            // IsScnObj, GetAlphaMode and GetEffectRootNodeIdx are inline (weak
+            // copies in VolleyF game/volley/CStageNetVolley.cpp and MenuF
+            // game/menu/CBgMdl.cpp).
+            virtual int IsScnObj() const { return 1; }                                      // 0x10
             virtual const FMTX34 *GetNodeWorldMtxPtr(unsigned long) const;                  // 0x40
             virtual void SetNodeLocalMtx(unsigned long, const FMTX34 &);                    // 0x44
             virtual void SetNodeWorldMtx(unsigned long, const FMTX34 &);                    // 0x48
@@ -88,9 +91,9 @@ namespace bcs {
             virtual void SetAlphaMode(AlphaMode);                                           // 0x54
             virtual unsigned char GetAlphaRate() const;                                     // 0x58
             virtual float GetAlphaRateF() const;                                            // 0x5C
-            virtual AlphaMode GetAlphaMode() const;                                         // 0x60
+            virtual AlphaMode GetAlphaMode() const { return AlphaMode(m_nAlphaMode); }      // 0x60
             virtual void SetExBlendMode(int);                                               // 0x64
-            virtual long GetEffectRootNodeIdx() const;                                      // 0x68
+            virtual long GetEffectRootNodeIdx() const { return 0; }                         // 0x68
             virtual void ExEffectDraw(int, unsigned long, void *);                          // 0x6C
             virtual void DrawJointObjOpa(void *);                                           // 0x70
             virtual void DrawJointObjXluExOpa(void *);                                      // 0x74

@@ -202,6 +202,9 @@ namespace msw {
             }
             virtual CStageAnm *GetAnmObj() { return m_pAnm; }
             virtual const CStageAnm *GetAnmObj() const { return m_pAnm; }
+            // Inline (defined below the class): VolleyF's
+            // game/volley/CStageNetVolley.cpp has the weak copy, a
+            // CStgMdlObjBase<bcs::CMdlObj>.
             virtual bcs::CMdlObj *NewMdl(long heap) const;
             virtual bcs::CMdlShadow *NewShadowMdl(long heap) const { return new (heap) bcs::CMdlShadow; }
             virtual bcs::CMdlRef *NewRefMdl(long heap) const { return new (heap) bcs::CMdlRef; }
@@ -218,6 +221,17 @@ namespace msw {
             virtual void OnSceneLeave() {}
             virtual void OnUpdate(float rate) {}
     };
+}
+
+#include "bcs/CMdlObj.hpp"
+#include "game/msw/CStgMdlObjBase.hpp"
+
+namespace msw {
+
+    inline bcs::CMdlObj *CStgMdl::NewMdl(long heap) const
+    {
+        return new (heap) CStgMdlObjBase<bcs::CMdlObj>;
+    }
 }
 
 #endif /* !MSW_CSTGMDL_HPP_ */

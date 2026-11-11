@@ -5,6 +5,8 @@
 
 namespace msw {
 
+    class CStageMdlNodeList;
+
     // A model of the stage, as held in CStageMan's model pool. Size 0x10CC
     // (CStageMan::DoCreateMdl allocates it), with the vptr at 0x10C8 after
     // the data. Only the scene object at 0x04 is mapped (BasketF
@@ -15,11 +17,15 @@ namespace msw {
         public:
             // (name guessed)
             bcs::CScnObj *GetScnObj() const { return m_pScnObj; }
+            // (name guessed) The list of the model's nodes.
+            CStageMdlNodeList *GetNodeList() const { return m_pNodeList; }
 
         private:
             unsigned char m_Unk00[0x4];     // 0x00
             bcs::CScnObj *m_pScnObj;        // 0x04
-            unsigned char m_Unk08[0x10C0];  // 0x08
+            unsigned char m_Unk08[0xC];     // 0x08
+            CStageMdlNodeList *m_pNodeList; // 0x14 (name guessed)
+            unsigned char m_Unk18[0x10B0];  // 0x18
 
         public:
             virtual void Unk08();

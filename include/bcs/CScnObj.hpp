@@ -166,10 +166,28 @@ namespace bcs {
             }
             // (name guessed)
             unsigned long GetFlag() const { return m_nFlag; }
+            // (name guessed) The handle GetScnObj takes.
+            unsigned long GetHandle() const { return m_nHandle; }
 
             // (names guessed) Inline in the modules.
             void OnFlag(unsigned long flag) { m_nFlag |= flag; }
             void OffFlag(unsigned long flag) { m_nFlag &= ~flag; }
+            // (name and meaning guessed) Sets or clears both of the bits
+            // 0x10000000 and 0x20000000; HockeyF's CStageHockey01 does it to
+            // switch its audience models with the camera.
+            void SetHide(int bHide)
+            {
+                if (bHide) {
+                    OnFlag(0x10000000);
+                } else {
+                    OffFlag(0x10000000);
+                }
+                if (bHide) {
+                    OnFlag(0x20000000);
+                } else {
+                    OffFlag(0x20000000);
+                }
+            }
             // (name guessed) Inline in the modules: msw::CChrMarkerDodgeArrow
             // stores a yaw in radians to 0xB4, brought into [0, 2 pi] after
             // the model pointer is loaded, so the wrapping is taken to be
@@ -220,7 +238,10 @@ namespace bcs {
             FVEC3 m_vScale;               // 0xBC
 
         private:
-            unsigned char m_UnkC8[0x34];  // 0xC8
+            unsigned char m_UnkC8[0x30];  // 0xC8
+            // 0xF8 (name guessed): the handle GetScnObj looks the object up
+            // by; the constructor sets it and AppendDelayDeleteObject reads it.
+            unsigned long m_nHandle;
             unsigned long m_nFlag;        // 0xFC (name guessed)
             unsigned char m_Unk100[0x18]; // 0x100
     };

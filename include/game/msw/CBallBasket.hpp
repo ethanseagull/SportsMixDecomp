@@ -169,6 +169,14 @@ namespace msw {
             float m_fShootCurveValue;   // 0x3A0
             unsigned char m_Unk3A4[0x468 - 0x3A4];
     };
+
+    // A dummy ball of the basket game, size 0x468 (CBallManBasket's
+    // CreateDummyBall_). (what it is used for is not known)
+    class CBallBasketDummy : public CBallBasket {
+        public:
+            CBallBasketDummy(bcs::CTask *pParent, long nBallNo);
+            virtual ~CBallBasketDummy();
+    };
 }
 
 #endif /* !MSW_CBALLBASKET_HPP_ */

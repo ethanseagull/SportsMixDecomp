@@ -422,6 +422,12 @@ namespace msw {
             void SetBallNo(long nBallNo) { m_nBallNo = nBallNo; }
             // DOL.
             void SetPos(const bcs::FVEC3 *pPos);
+            // DOL. The model the ball is attached to, or null.
+            bcs::CScnObj *GetAttachMdlObj() const;
+            // (names guessed) Two more bits of m_nFlag that the basket and
+            // hockey ball markers read; what they stand for is not known.
+            int IsFlag4() const { return m_nFlag & 0x4; }
+            int IsFlag100000() const { return m_nFlag & 0x100000; }
             // (names guessed) msw::CItemBall attaches its model to the
             // ball's; msw::CItemBallShellWreck sends the wreck off along the
             // velocity.

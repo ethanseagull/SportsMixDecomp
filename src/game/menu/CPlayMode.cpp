@@ -605,6 +605,7 @@ void msw::SelectMenu::CPlayMode::Disp()
 
 int msw::SelectMenu::CPlayMode::Set()
 {
+    const char *pFileName;
     if (m_pPaneAccessor != 0) {
         return 0;
     }
@@ -618,7 +619,7 @@ int msw::SelectMenu::CPlayMode::Set()
     long nPlayerIdx = GetPlayerIdx(pSelectMenu->m_nPlayerNum);
     m_nPlayerIdx = nPlayerIdx;
 
-    const char *pFileName = pSelectMenu->GetArchiveFileName(pSelectMenu->GetLoadArchiveFileId(-1));
+    pFileName = pSelectMenu->GetArchiveFileName(pSelectMenu->GetLoadArchiveFileId(-1));
     nw4r::lyt::ArcResourceAccessor *pAccessor =
         pLytCtrl->NewArcResourceAccessor(pFileName, pSelectMenu->GetArchiveRootFolderName(1));
     if (pAccessor != 0) {

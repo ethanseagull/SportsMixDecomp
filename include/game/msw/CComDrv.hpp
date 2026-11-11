@@ -6,6 +6,7 @@
 
 namespace msw {
 
+    class CBall;
     class CChrCore;
 
     // INCOMPLETE: the computer driver of one character. A DOL class; each
@@ -17,8 +18,9 @@ namespace msw {
     // functions after CComDrvDodge's code (in reverse declaration order), so
     // they are inline. Other return types are guesses.
     //
-    // Data: only m_pChr is mapped. layout.py finds members up to 0x16C; the
-    // size is not known, so the class must not be instantiated or embedded.
+    // Data: m_nMyTeam, m_pChr and m_pBall are mapped. layout.py finds
+    // members up to 0x16C and CComDrvHockey's start at 0x170, so the size is
+    // taken as 0x170 (no allocation of CComDrv itself was found).
     class CComDrv : public CChrDrv {
         public:
             CComDrv(long nArg);
@@ -85,13 +87,47 @@ namespace msw {
             // turned into a world position; passes the long on to
             // CComMan::Local2World.
             bcs::FVEC3 Local2World(const bcs::FVEC3 &pos, long) const;
+            // DOL. The index of the ball in play (CComMan's); negative for
+            // none.
+            long GetActiveBallIdx() const;
+            // DOL. Distance between two points in the XZ plane.
+            float GetDisXZ(const bcs::FVEC3 &rPos0, const bcs::FVEC3 &rPos1) const;
+            // DOL. Added for VolleyF game/volley/unit_CA990.cpp; return
+            // types guessed from how it uses them. The character (index,
+            // negative for none) or item (zero for none) in the way of
+            // rPos, and the position to go round it, given the direction a
+            // previous call returned (-1 for a new one).
+            long RunCorrect_GetChrToTarget(const bcs::FVEC3 &rPos) const;
+            long RunCorrect_GetPosTurnAroundChr(bcs::FVEC3 &rPos, long nChr, long nDir) const;
+            long Item_GetItemToTarget(const bcs::FVEC3 &rPos) const;
+            long Item_GetPosTurnAroundItem(bcs::FVEC3 &rPos, unsigned long nItem, long nDir, int) const;
+            void Item_GetViewPointPosFromItem(bcs::FVEC3 &rPos) const;
             // DOL. A random number below nMax. (range guessed from the name;
             // BasketF tests RandMaxI(999) < 20)
             long RandMaxI(long nMax) const;
 
         protected:
-            unsigned char m_Unk04[0x64];
+            unsigned char m_Unk04[0x60];
+            // 0x64 (name guessed): the driven character's team. HockeyF
+            // passes it to CComManHockey::GetKeeperCore, VolleyF compares it
+            // with GameWork::GetUserTeam.
+            long m_nMyTeam;
             CChrCore *m_pChr; // 0x68, the character driven
+            unsigned char m_Unk6C[0x110 - 0x6C];
+            // 0x110 (name guessed): the ball the driver follows, set by
+            // UpdateInfo; VolleyF hands it to CComManVolley.
+            CBall *m_pBall;
+            // The size 0x170 is where CComDrvHockey's own members start;
+            // the DOL's functions use members up to 0x16C.
+            unsigned char m_Unk114[0x160 - 0x114];
+            // 0x160 to 0x16C (names guessed): the obstacle a gimmick
+            // driver is turning round (VolleyF CComDrvVolleyRR::
+            // GetPosTurnAroundGimmick). Kind: -1 none, 1 a character, 2 an
+            // item; the target is the character index or the item.
+            long m_nTurnKind;     // 0x160
+            long m_nTurnTarget;   // 0x164
+            long m_nTurnDir;      // 0x168, what the RunCorrect/Item helpers returned
+            float m_fTurnFrame;   // 0x16C, set to 60 when a turn starts
     };
 }
 

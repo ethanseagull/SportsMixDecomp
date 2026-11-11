@@ -18,6 +18,7 @@ MenuF Set__Q33msw10SelectMenu12CButtonACodeFv near 98.8 register choice only: r2
 MenuF Set__Q33msw10SelectMenu12CPartySelectFv near 98.9 saved-register allocation (r26-r30) in the button loop and the first movie-pane loop; same calls, constants, memory accesses and branches
 MenuF Set__Q33msw10SelectMenu13CButtonACode2Fv near 98.8 register choice only: r23/r24 swapped between the CSelectMenu/CPaneCtrl pointers and the file-name/font-name temporaries; same instructions otherwise (as CButton1::Set)
 MenuF Set__Q33msw10SelectMenu13CEntryExplainFv near 97.6 register choice only: the part list and this swap r31/r30 (ours r24/r31), loop registers shift with them, plus the order of one mr; same instructions otherwise
+MenuF Set__Q33msw10SelectMenu5CTeamFv near 100.0 register allocation only: the saved copy of r1 lands in r2 vs r7 around wcslen; same instructions otherwise
 MenuF Set__Q33msw10SelectMenu8CButton1Fv near 99.8 register choice only: r27 and r30 are swapped between the CSelectMenu pointer and the new CMenuPartList; same instructions otherwise
 MenuF Set__Q33msw10SelectMenu8CButton2Fv near 99.2 register choice only: r23/r24/r25 are permuted between the new CMenuPartList, the ButtonParam pointer and the new CMenuPartButton in the button loop; same instructions otherwise
 MenuF Set__Q33msw10SelectMenu8CButtonAFv near 98.8 register choice only: r23/r24 swapped between the CSelectMenu/CPaneCtrl pointers and the file-name/font-name temporaries; same instructions otherwise (as CButton1::Set)

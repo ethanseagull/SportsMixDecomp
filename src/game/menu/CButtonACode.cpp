@@ -141,6 +141,7 @@ void msw::SelectMenu::CButtonACode::Disp()
 
 int msw::SelectMenu::CButtonACode::Set()
 {
+    const char *pFileName;
     if (m_pPaneAccessor != 0) {
         return 0;
     }
@@ -151,7 +152,7 @@ int msw::SelectMenu::CButtonACode::Set()
         return -1;
     }
 
-    const char *pFileName = pSelectMenu->GetArchiveFileName(1);
+    pFileName = pSelectMenu->GetArchiveFileName(1);
     nw4r::lyt::ArcResourceAccessor *pAccessor =
         pLytCtrl->NewArcResourceAccessor(pFileName, pSelectMenu->GetArchiveRootFolderName(1));
     if (pAccessor != 0) {
@@ -289,6 +290,7 @@ msw::SelectMenu::CButtonACode2::~CButtonACode2()
 
 int msw::SelectMenu::CButtonACode2::Set()
 {
+    const char *pFileName;
     if (m_pPaneAccessor != 0) {
         return 0;
     }
@@ -299,7 +301,7 @@ int msw::SelectMenu::CButtonACode2::Set()
         return -1;
     }
 
-    const char *pFileName = pSelectMenu->GetArchiveFileName(1);
+    pFileName = pSelectMenu->GetArchiveFileName(1);
     nw4r::lyt::ArcResourceAccessor *pAccessor =
         pLytCtrl->NewArcResourceAccessor(pFileName, pSelectMenu->GetArchiveRootFolderName(1));
     if (pAccessor != 0) {

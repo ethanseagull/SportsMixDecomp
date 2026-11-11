@@ -7,6 +7,8 @@
 namespace nw4r {
     namespace lyt {
 
+        class Material;
+
         // Width and height of a pane.
         struct Size {
             float width;  // 0x00
@@ -54,7 +56,9 @@ namespace nw4r {
                 virtual void Unk5C();
                 virtual void Unk60();
                 virtual void Unk64();
-                virtual void Unk68();
+                // 0x68 (VolleyF game/volley/CCockpitChrIcon2DVolley.cpp: a
+                // picture pane's material). Constness guessed.
+                virtual Material *GetMaterial() const;
                 virtual void Unk6C();
 
                 void SetSize(const Size &rSize) { mSize = rSize; }
@@ -72,7 +76,8 @@ namespace nw4r {
                 {
                     mFlag = (unsigned char)((mFlag & 0xFE) | (bVisible ? 1 : 0));
                 }
-                // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp.
+                // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp (SetRotate
+                // also for VolleyF game/volley/CCockpitChrIcon2DVolley.cpp).
                 void SetRotate(const math::VEC3 &rRotate) { mRotate = rRotate; }
                 void SetScale(const math::VEC2 &rScale) { mScale = rScale; }
                 // Bit 2 of the flags (name from the ogws description).

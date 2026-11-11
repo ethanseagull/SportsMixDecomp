@@ -41,6 +41,10 @@ namespace msw {
             static bcs::FVEC3 Local2World(const bcs::FVEC3 &rPos, long nCourt);
             // (DOL) Distance between two points in the XZ plane.
             static float GetDisXZ(const bcs::FVEC3 &rPos0, const bcs::FVEC3 &rPos1);
+            // (DOL) A character's position in the court's own frame, and in
+            // the world.
+            static bcs::FVEC3 GetChrPos(const CChrCore *pChr);
+            static bcs::FVEC3 GetChrWorldPos(const CChrCore *pChr);
 
             // (DOL) Walks the items that have been thrown.
             static CItem *ThrowItem_GetFirst();

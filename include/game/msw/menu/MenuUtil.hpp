@@ -42,6 +42,14 @@ namespace msw {
         // is passed -1 by the coin counters; what it selects is not known.
         const wchar_t *GetNumString(unsigned long nNum, unsigned long nArg);
 
+        // Added for VolleyF game/volley/CCockpitChrIcon2DVolley.cpp. Makes a
+        // picture pane named pName showing character nChr's face, sized
+        // like pBase, in layout pPaneCtrl; null on failure. (what the panes
+        // are attached to is not known; return type guessed from the
+        // caller, which writes pane members through it)
+        nw4r::lyt::Pane *CreateFaceIconPicturePane(long nChr, bcs::G2D::CPaneCtrl *pPaneCtrl,
+                                                   nw4r::lyt::Pane *pBase, const char *pName);
+
         // (added for game/menu/CWiFiFrindVS.cpp; return type and argument
         // names guessed) Shows the texture pTexObj in a new picture pane
         // named pName, made in pPaneCtrl's layout over pPane.

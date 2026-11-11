@@ -114,7 +114,11 @@ namespace msw {
                 // panel gives no coin; with bit 0 of 0x1C8 set the panels pop up
                 // again without waiting. (meanings and names guessed)
                 unsigned long m_nUnk40;    // 0x40
-                unsigned char m_Unk44[0x160 - 0x44];
+                unsigned char m_Unk44[0x152 - 0x44];
+                // 0x152 (name guessed): how many goals the court has
+                // (HockeyF CCollManHockey loops over them).
+                unsigned char m_nGoalNum;
+                unsigned char m_Unk153[0x160 - 0x153];
                 // 0x160: counted by tournament mission 0x3E (HockeyF) and
                 // passed to the coin mission (0x4E) check after a basket
                 // (BasketF); meaning not known.
@@ -361,6 +365,9 @@ namespace msw {
             static long GetTargetGoalIdx(long nTeam);
             // (DOL, static) The position of goal nGoal. (return type guessed)
             static const bcs::FVEC3 &GetGoalPos(long nGoal);
+            // DOL, static. The direction goal nGoal faces (out of the goal,
+            // in the ground plane; HockeyF CCollManHockey).
+            static const bcs::FVEC3 &GetGoalDir(long nGoal);
             // (DOL, static; argument meanings guessed from BasketF's
             // CBallBasketFruit::TrgGoalIn_: shooter, team, shoot type, ball
             // kind, a float, the goal's position)
@@ -387,6 +394,8 @@ namespace msw {
             static void StartSlowEffect(float, float, float, float);
             static void StopSlowEffect();
             static int IsNowSlowEffect();
+            // DOL, static. Not zero while an arts (special move) event plays (guess).
+            static int IsArtsEventMode();
             // (fn_8017D558, unnamed in the DOL) IsNowBonusTime_ on the
             // running game, zero without one.
             static int IsNowBonusTime();

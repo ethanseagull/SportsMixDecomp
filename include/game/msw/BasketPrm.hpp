@@ -311,6 +311,12 @@ namespace msw {
     extern float BASKET_PRM_S70_JS_MAX_ED_FRAME_SU;
     extern long BASKET_PRM_HB_BOMB_DOWN_FRM;
     extern float BASKET_PRM_HB_BOMB_EXPLODE_EFF_SCALE;
+
+    // Stage 70 (the boss Piranha Plant), "just shot" timing: the three
+    // shot distances the ball's timing frames are given for.
+    extern float BASKET_PRM_S70_JS_MIN_DIST;
+    extern float BASKET_PRM_S70_JS_MID_DIST;
+    extern float BASKET_PRM_S70_JS_MAX_DIST;
 }
 
 #endif /* !MSW_BASKETPRM_HPP_ */

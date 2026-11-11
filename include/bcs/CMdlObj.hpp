@@ -112,6 +112,11 @@ namespace bcs {
                 m_SilhouetteColor = silhouette;
                 m_BaseColor = base;
             }
+            // (names guessed) The two one at a time, as MenuF's
+            // msw::SelectMenu::CCupChr::CreateChrMenuObj sets them: each
+            // colour is copied and stored before the next is read.
+            void SetSilhouetteColor(BCS_Color silhouette) { m_SilhouetteColor = silhouette; }
+            void SetBaseColor(BCS_Color base) { m_BaseColor = base; }
 
             // -1 if the model has no node of that name.
             long GetNodeID(const char *pName) const;

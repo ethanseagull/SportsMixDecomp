@@ -31,6 +31,9 @@ namespace msw {
             // are the repeated shapes inside msw::CMenuMdlTableSet::MainLoop
             // and PlayImpl; names and parameter order are guessed.
 
+            // (name guessed) msw::SelectMenu::CCupChr reads the model.
+            bcs::CMdlObj *GetMdl() const { return m_pMdl; }
+
             bcs::CAnmMotion *GetAnmMotion() const
             {
                 return static_cast<bcs::CAnmMotion *>(m_pMdl->GetAnmObjChr());

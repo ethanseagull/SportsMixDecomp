@@ -42,6 +42,11 @@ namespace msw {
                 // already running is restarted only when bForce is 1.
                 void ChangeState(long state, int bForce);
 
+                // (names guessed) The model shown and the one queued;
+                // msw::SelectMenu::CCupChr reads them.
+                unsigned long GetMdlHandle() const { return m_hMdl; }
+                unsigned long GetNextMdlHandle() const { return m_hNextMdl; }
+
                 // The fade time in frames.
                 static float s_FadeInOutTime;
 

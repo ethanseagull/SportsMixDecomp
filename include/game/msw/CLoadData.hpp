@@ -15,6 +15,14 @@ namespace msw {
             static unsigned long GetSize(long index); // return type guessed
             // Non-zero once the entry has been read.
             static int IsComplete(long index); // return type guessed
+            // (return type guessed) Non-zero once entry `index` is loaded;
+            // msw::SelectMenu::CCupChr::Initialize tests it.
+            static int IsLoaded(long index);
+            // Added for MenuF game/menu/CMenu.cpp: start loading the menu's
+            // files, reset the table, and free what was loaded.
+            static void LoadMenu();
+            static void InitData();
+            static void UnLoad();
 
             // The ones below are static in the DOL too: their bodies index
             // the table of files with the first argument.

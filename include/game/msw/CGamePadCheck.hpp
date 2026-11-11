@@ -13,6 +13,10 @@ namespace msw {
             // reads the instance from a global).
             static void CleanUp();
 
+            // (DOL .sbss) The step of the pad check; msw::CMenu leaves its
+            // start-up state only while it is below 2. (type guessed)
+            static long m_PadCheckStap;
+
             unsigned char m_Unk00[0xAC];
             long m_UnkAC; // 0xAC, set to 1 once at start-up
             unsigned char m_UnkB0[0x18];

@@ -9,7 +9,7 @@ namespace msw {
 
     // The model of a goal (CGoalObj's model 1). A DOL class, constructor
     // __ct__Q23msw8CGoalMdlFPQ23msw7CStgGmk; msw::CStgMdl's vptr stays at
-    // 0x128. Its own members are not mapped (HockeyF's CGoalMdlHockey ends
+    // 0x128. Its own members from 0x12C (HockeyF's CGoalMdlHockey ends
     // at 0x340). The new virtual functions follow
     // __vt__Q33msw14CStageHockey1710CGoalMdl17 (HockeyF); names of the
     // table types and return types not shown by a body are guesses.
@@ -28,16 +28,24 @@ namespace msw {
 
             CGoalMdl(CStgGmk *pParent);
             virtual ~CGoalMdl();
+            virtual void Main(float rate);
             virtual void Commit();
             virtual void OnPostCreate();
 
-            virtual void SetSubType(long type);                     // 0x124
-            virtual long GetSubType() const;                        // 0x128
-            virtual void SetScore(long score);                      // 0x12C
-            virtual const void *GetNodeExInfo() const;              // 0x130
+            // The four inline ones are emitted weak by HockeyF's
+            // game/hockey/CGoalMdlHockey.cpp.
+            virtual void SetSubType(long type) { m_nSubType = type; } // 0x124
+            virtual long GetSubType() const { return m_nSubType; }    // 0x128
+            virtual void SetScore(long score);                        // 0x12C
+            virtual const void *GetNodeExInfo() const { return 0; }   // 0x130
             // The suffixes of the animation names, ending with null.
             virtual const char *const *GetAnmNameTbl() const;       // 0x134
             virtual const ANM_PARAM *GetAnmParamTbl() const;        // 0x138
+
+        protected:
+            // 0x12C, the goal's model variant; it numbers the model names
+            // (CGoalObjHockey::NewMdl passes the goal's sub-type on).
+            long m_nSubType;
     };
 }
 

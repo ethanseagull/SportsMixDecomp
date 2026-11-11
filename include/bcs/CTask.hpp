@@ -47,6 +47,9 @@ namespace bcs {
             // (name guessed) Clears bits of the word at 0x08 (DodgeF's
             // CTelopVoice, CTelopOut and CLifeGaugeTask clear 0x4).
             void ClearUnk08(unsigned long bits) { m_Unk08 &= ~bits; }
+            // (name guessed) Sets bits of the word at 0x08 (HockeyF's
+            // CShootMarker sets 0x1).
+            void OnUnk08(unsigned long bits) { m_Unk08 |= bits; }
 
         private:
             unsigned long m_nId;         // 0x04 (name guessed)

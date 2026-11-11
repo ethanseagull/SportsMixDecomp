@@ -80,7 +80,7 @@ namespace msw {
             virtual bool IsInvincible() const { return m_fInvincibleTime > 0.0f; } // 0x21C
             virtual void SetAlive(int bAlive) { m_bAlive = bAlive; }      // 0x220
             virtual void DoDamage(const bcs::FVEC3 &rPos, int, int);      // 0x224
-            virtual void OnDamage(CCollBodyUnit *pBody, CBall *pBall);    // 0x228
+            virtual void OnDamage(CCollBodyUnit *pBody, CBall *pBall) {}  // 0x228
             virtual void OnBreak();                                       // 0x22C
             virtual bool IsEnableDefColl() const { return false; }        // 0x230
             virtual void CreateKaron();                                   // 0x234

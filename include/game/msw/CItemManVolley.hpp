@@ -14,6 +14,7 @@ namespace msw {
             // where the vtable's weak functions go, and it stores no vtable
             // pointer. So the vtable's key function is CreateItem and
             // CItemManVolley.cpp emits the vtable.
+            CItemManVolley(bcs::CTask *pParent) : CItemMan(pParent) {}
             virtual ~CItemManVolley() {}
 
             virtual CItem *CreateItem(long kind, const bcs::FVEC3 &pos);

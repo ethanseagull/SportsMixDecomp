@@ -42,7 +42,9 @@ namespace msw {
                 const char *const *ppAnmSuffix; // 0x10, appended to pAnmName, ends with a null entry
                 const char *pAnmName;           // 0x14
                 unsigned long unk18;            // 0x18
-                unsigned long unk1C;            // 0x1C
+                // 0x1C, a table of how the animations are played (HockeyF
+                // CGoalMdlHockey passes its CGoalMdl::ANM_PARAM table)
+                const void *pAnmParam;
             };
 
             // Builds the parts of a model for Create(const CCreator &). An

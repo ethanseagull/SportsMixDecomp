@@ -63,6 +63,8 @@ namespace msw {
             // Screen position and size of team nTeam's 3D coin pane: -1 for
             // an unknown team, -2 without the pane, else 0.
             long GetTargetInfo(long nTeam, bcs::FVEC3 &rPos, nw4r::lyt::Size &rSize);
+            // Team nIdx's 3D coin (CCockpitHockey::Get3DCoinTaskImpl).
+            cockpit::C3DCoin &Get3DCoin(long nIdx) { return m_3DCoin[nIdx]; }
 
         private:
             // The text for a count: empty for none. Inline, defined in the

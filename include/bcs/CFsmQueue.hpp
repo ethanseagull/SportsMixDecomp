@@ -95,6 +95,21 @@ namespace bcs {
 
             long GetState() const { return FsmqGetState(); }
 
+            // (name guessed; inline in BasketF's
+            // CChrManBasket::StartScoreView_) The number of the state queued
+            // after the head; zero when there is none.
+            long FsmqGetNextState() const
+            {
+                if (FsmqIsEmpty()) {
+                    return 0;
+                }
+                long idx = FsmqWrap(m_nQueueHead + 1, m_nQueueSize);
+                if (idx == m_nQueueTail) {
+                    return 0;
+                }
+                return m_pStateQueue[idx];
+            }
+
             // The work memory of the state at the head of the queue; null
             // when nothing is queued or the states have none.
             void *FsmqGetWork_() const

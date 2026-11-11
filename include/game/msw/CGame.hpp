@@ -120,7 +120,10 @@ namespace msw {
                 // HockeyF's fire pillars (stage 86) change their timing
                 // when it falls below HOCKEY_PRM_S86_FIRE_TIME1/2 seconds.
                 float m_fGameTime;
-                unsigned char m_Unk28[0x34 - 0x28];
+                unsigned char m_Unk28[0x30 - 0x28];
+                // 0x30 (name guessed): the shot clock in frames (BasketF's
+                // CChrManBasket counts it down and shows it in seconds).
+                float m_fShotTime;
                 // 0x34 (name guessed): a speed rate of the game. The DOL's
                 // goal demo (game/msw/CGameExDemoBase.cpp) sets its own rate
                 // here while the demo camera plays and restores it after.
@@ -425,6 +428,16 @@ namespace msw {
             // Passes a message to the running game's virtual at vtable
             // offset 0x3C, if there is a game.
             static void SendMessage(long nMsg, long, long, long);
+            // (DOL, static; added for BasketF game/basket/CChrManBasket.cpp;
+            // return types and parameter meanings guessed) Fades the
+            // background in (fFrom, fFrames); the shot clock's length and
+            // the setter of the clock (g_GameWork.m_fShotTime); not zero in
+            // a tournament; the arts event of player nPlayer begins.
+            static void BgSetFadeIn(float fFrom, float fFrames);
+            static float GetMaxShotTime();
+            static void SetShotTime(float fTime);
+            static int IsTournament();
+            static void TrgArtsEvent(long nPlayer);
             // The goal team nTeam attacks: the byte at g_GameWork + 0x88 +
             // nTeam, read unsigned. (return type guessed)
             static long GetTargetGoalIdx(long nTeam);

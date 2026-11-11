@@ -9,10 +9,17 @@
 
 namespace bcs {
 
+    struct FVEC3;
+
     // In the DOL (added for BasketF game/basket/CNpcGhostBasketBase.cpp;
     // parameter names guessed). Draws an index below nNum, each with the
     // weight pTbl gives it.
     long BCS_LotProbability(const long *pTbl, long nNum);
+
+    // In the DOL (added for BasketF game/basket/CChrManBasket.cpp;
+    // parameter meanings guessed). Not zero when rPos lies in the face
+    // spanned from rFrom to rTo with the two widths, in the XZ plane.
+    int BCS_Util_IsPointInFaceXZ(const FVEC3 &rPos, const FVEC3 &rFrom, const FVEC3 &rTo, float, float);
 
     // In the DOL. Clears size bytes at p, 32 bytes at a time.
     void BCS_CpuClear32(void *p, unsigned long size);

@@ -1039,6 +1039,17 @@ namespace msw {
             // Sets the bit IsDisable tests: the character takes no part.
             void SetDisable() { m_UnkEC |= 0x40000000; }
             void OnStatusFlag(unsigned long nBit) { m_nStatusFlag |= nBit; }
+            // (names guessed; added for BasketF game/basket/CChrManBasket.cpp,
+            // which writes the members directly) Clear bits of the words at
+            // 0xEC and 0xF4; the height at 0x1AC.
+            void OffFlagEC(unsigned long nBit) { m_UnkEC &= ~nBit; }
+            void OffFlagF4(unsigned long nBit) { m_nFlagF4 &= ~nBit; }
+            float GetUnk1AC() const { return m_fUnk1AC; }
+            // DOL (added for BasketF game/basket/CChrManBasket.cpp; return
+            // type guessed): the ball passed to the character, null for
+            // none; and the update of the model matrices after SetPos.
+            CBall *GetPassToBall() const;
+            void RecalcAllMatrix();
 
             // Added for HockeyF game/hockey/CChrManHockey.cpp (all in the
             // DOL; return types and parameter meanings guessed).
@@ -1297,7 +1308,9 @@ namespace msw {
             // 0xF0 (name guessed): CChrCore::UpdateDisp_ draws nothing while
             // bit 2 is set, and CChrMarkerDodge shows no marker then.
             unsigned long m_nDispFlag;
-            unsigned char m_UnkF4[4];
+            // 0xF4 (name guessed): more flag bits; CChrManBasket::
+            // ChrCoreMainCall_ clears 0x100000 before the characters run.
+            unsigned long m_nFlagF4;
             int m_bStarPlayer;           // 0xF8, see IsStarPlayer
             unsigned char m_UnkFC[0x150 - 0xFC];
             // 0x150 (name guessed): the id of a ball task; the White Mage's
@@ -1350,7 +1363,11 @@ namespace msw {
             // 0x190 (name guessed): a second model node for effects
             // (CChrCoreVolleyYoshi's block and spike effects attach there).
             unsigned short m_nEffNodeSub;
-            unsigned char m_Unk192[0x208 - 0x192];
+            unsigned char m_Unk192[0x1AC - 0x192];
+            // 0x1AC (name guessed): a height; CChrManBasket's pass aims
+            // above a jumping receiver by it less one, at most 2.
+            float m_fUnk1AC;
+            unsigned char m_Unk1B0[0x208 - 0x1B0];
             // 0x208-0x210 (names guessed): the speed of a jump. The three are
             // one vector (CChrCoreVolleyMoogle's hover scales them with the
             // paired-single vector helpers); see GetJumpVel.

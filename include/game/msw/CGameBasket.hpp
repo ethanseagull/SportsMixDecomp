@@ -33,6 +33,9 @@ namespace msw {
             // (added for game/basket/CComManBasket.cpp) The radius of the
             // three-point line.
             static float GetCourt3PointSize();
+            // (added for game/basket/CChrManBasket.cpp; return type guessed)
+            // Plays exceptional slow camera nType.
+            void PlayExceptionalCameraSlow_(long nType);
 
             // (added for game/basket/CGameBasketHungryBossPackun.cpp) The
             // overrides of CGame's virtual functions, from the slots of

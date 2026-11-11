@@ -103,6 +103,9 @@ namespace msw {
             // meaning guessed from the name): the character holding the
             // ball, null for none.
             static CChrCore *Util_SearchHoldBallChr(long);
+            // (DOL, static; added for BasketF game/basket/CChrManBasket.cpp)
+            // The NPC holding the ball, null for none.
+            static CNpcBase *Util_SearchHoldBallNpc(long);
             // DOL (added for DodgeF game/dodge/CItemBallBombDodge.cpp;
             // meaning guessed from the name): Util_SearchNearPosChar_ on the
             // instance, the character nearest to rPos (the second argument is

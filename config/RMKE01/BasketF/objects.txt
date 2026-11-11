@@ -78,3 +78,4 @@ Equivalent game/basket/CArrowSignalBasket.cpp
 Equivalent game/basket/CChrCoreBasketSlime.cpp
 NonMatching game/basket/CStageBasket10.cpp
 Equivalent game/basket/CCockpitBasketCoder.cpp
+Equivalent game/basket/CChrManBasket.cpp

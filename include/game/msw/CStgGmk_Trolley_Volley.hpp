@@ -104,12 +104,17 @@ namespace msw {
 
     // The trolley, size 0x80 (nothing added to msw::CStgGmk_Trolley). Made
     // by msw::CStageVolley17::NewTrolley. All inline: game/volley/CStageVolley17.cpp
-    // emits the vtable, NewAct, NewMdl and the destructor.
+    // emits the vtable, NewAct, NewMdl and the destructor (reverse order
+    // of the declarations here).
     class CStgGmk_Trolley_Volley : public CStgGmk_Trolley {
         public:
             CStgGmk_Trolley_Volley(bcs::CTask *pParent) : CStgGmk_Trolley(pParent, 0) {}
             virtual ~CStgGmk_Trolley_Volley() {}
 
+            virtual CStgMdl *NewMdl(long heap, unsigned long idx)
+            {
+                return new (heap) CStgGmk_Trolley_Mdl_Volley(this, idx);
+            }
             virtual CStgAct *NewAct(long heap) { return new (heap) CStgGmk_Trolley_Act_Volley(this); }
     };
 }

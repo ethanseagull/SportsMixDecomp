@@ -26,16 +26,19 @@ namespace msw {
             // (name guessed; inline, no symbol; added for
             // game/menu/CPlusMinus.cpp) Either of the two low flags of pad
             // nPad's entry.
-            int IsUsedCursor(long nPad) const
-            {
-                return m_aPad[nPad].m_bUnk06_02 | m_aPad[nPad].m_bUnk06_01;
-            }
+            int IsUsedCursor(long nPad) const { return m_aPad[nPad].IsUsedCursor(); }
 
             // (name guessed; inline, no symbol; added for
             // game/menu/CEntry.cpp) The flag byte at 0x04 of pad nPad's
             // entry: 0x01 while a remote is connected, 0x02 while it has
             // an extension.
             unsigned char GetPadFlags(long nPad) const { return m_aPad[nPad].m_nFlags04; }
+
+            // (name guessed; inline, no symbol; added for
+            // game/menu/unit_6EE84.cpp) Pad nPad takes part in the character
+            // select: bit 0x04 of the flags at 0x04 is set and the one at
+            // 0x06 is not.
+            int IsCharSelPad(long nPad) const { return m_aPad[nPad].IsCharSelPad(); }
 
             // (names guessed; inline, no symbol; added for
             // game/msw/CCokcpitMenuDataList.cpp) The halfword at 0x0A of
@@ -50,8 +53,11 @@ namespace msw {
             // steps write the flags at 0x04 and 0x06 and the byte at 0x07.
             friend class CSelectMenu;
 
+            // 0x10 bytes per pad from 0x04. (2026-11-11, game/menu/unit_6EE84.cpp)
+            // The pads start at 0x04, not 0x00: the original's loops over
+            // them keep a pointer to 0x04 + 0x10 * nPad and reach the flags
+            // at 0 and 2 from it. The absolute offsets are as before.
             struct PAD {
-                unsigned char m_Unk00[4];    // 0x00
                 // 0x04. (name guessed; added for game/menu/CTitle.cpp)
                 // Flag bits: CSelectMenu::Title_Loop sets 0x04 for pad 0
                 // and clears it for the others, with byte masks (andi.).
@@ -76,11 +82,24 @@ namespace msw {
                 unsigned char m_nPlayerNo;
                 unsigned char m_Unk08[2];    // 0x08
                 unsigned short m_nState;     // 0x0A (name guessed)
-                unsigned char m_Unk0C[4];    // 0x0C
+                unsigned char m_Unk0C[8];    // 0x0C, to the next pad's 0x04
+
+                // (see CMenuPadInfo::IsUsedCursor)
+                int IsUsedCursor() const { return m_bUnk06_02 | m_bUnk06_01; }
+
+                // (see CMenuPadInfo::IsCharSelPad)
+                int IsCharSelPad() const
+                {
+                    int bSel = 0;
+                    if ((m_nFlags04 & 4) && !(m_nFlags06 & 4)) {
+                        bSel = 1;
+                    }
+                    return bSel;
+                }
             };
 
-            PAD m_aPad[4];               // 0x00
-            unsigned char m_Unk40[4];    // 0x40
+            unsigned char m_Unk00[4];    // 0x00
+            PAD m_aPad[4];               // 0x04
             long m_nPadLeader;           // 0x44 (name guessed)
             unsigned char m_Unk48[8];    // 0x48
     };

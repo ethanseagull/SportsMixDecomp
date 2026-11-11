@@ -78,7 +78,13 @@ typedef struct RFLMiddleDB {
 // the game's own code.
 typedef struct RFLAdditionalInfo {
     wchar_t name[11];             // 0x00
-    unsigned char m_Unk16[0x26];  // 0x16
+    unsigned char m_Unk16[0x1E];  // 0x16
+    // 0x34. (added for MenuF game/menu/unit_6EE84.cpp; name guessed) The
+    // top bit picks the Mii's voice (CSelectMenu::CharSel_CallMiiVoice), so
+    // it is taken to be the sex; the rest of the word is not used.
+    unsigned long sex : 1;
+    unsigned long m_Unk34 : 31;
+    unsigned char m_Unk38[0x4];   // 0x38
 } RFLAdditionalInfo;
 
 // Size 8. Identifies one Mii; copied as two words.

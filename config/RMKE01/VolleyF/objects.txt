@@ -74,3 +74,5 @@ Equivalent game/volley/CReadyStartDemoVolley.cpp
 Equivalent game/volley/CCockpitVolleyMarkerIcon2D.cpp
 Equivalent game/volley/CCockpitVolleyTelopServe.cpp
 Equivalent game/volley/CCockpitVolleySPGauge.cpp
+Equivalent game/volley/CChrCoreVolleySlime.cpp
+Equivalent game/volley/CStageNetVolley.cpp

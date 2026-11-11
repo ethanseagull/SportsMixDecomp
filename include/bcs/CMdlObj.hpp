@@ -36,7 +36,9 @@ namespace bcs {
             void GetScnMtxPos(FMTX34 *pMtx, unsigned long nUnk, CScnObj::ScnObjMtxType type) const;
             // The overrides, named by the vtable of
             // msw::SelectMenu::CCourtBallMdlObj in MenuF. Return types guessed.
-            virtual long GetObjType() const;                                                // 0x0C
+            // Inline: 4 for a model (weak copies in VolleyF
+            // game/volley/CStageNetVolley.cpp, MenuF game/menu/CBgMdl.cpp).
+            virtual long GetObjType() const { return 4; }                                   // 0x0C
             virtual void ObjProc(unsigned long, unsigned long, void *);                     // 0x1C
             virtual void CalcBoundingVolume();                                              // 0x2C
             virtual void GetNodeLocalMtx(unsigned long, FMTX34 &) const;                    // 0x34

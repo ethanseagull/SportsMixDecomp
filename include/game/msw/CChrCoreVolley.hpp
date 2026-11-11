@@ -332,6 +332,11 @@ namespace msw {
             // guessed) The default target marker position of kind nType
             // seen from rFrom.
             void GetTargetMarkerDefaultPos_(long nType, const bcs::FVEC3 &rFrom, bcs::FVEC3 &rPos, int);
+            // (added for game/volley/CChrCoreVolleySlime.cpp; DOL, meanings
+            // guessed) The rectangle of the court half the arts shot aims
+            // at; sets the work's shot frame from the trick motion.
+            void Util_GetTargetCourtRect_(bcs::FVEC4 &rRect);
+            void SubStateAirTrickDoGetBallShotTrg_(STATE_WORK_AIR_TRICK *pWork);
 
         protected:
             // Not mapped yet; size 0x964.
@@ -397,7 +402,7 @@ namespace msw {
         float m_fAdsorbUnk60;        // 0x60, passed to AttachBall
         float m_fAnimSpeed;          // 0x64
         long m_nArtsLevel;           // 0x68
-        unsigned char m_Unk6C[0x4];
+        float m_fShotFrame;          // 0x6C, the motion frame the shot comes out at (name guessed)
         short m_nAdsorbStep;         // 0x70
         short m_bAdsorbEnd;          // 0x72, set once the pull is over
         float m_fAdsorbFrame;        // 0x74
@@ -745,13 +750,33 @@ namespace msw {
             unsigned long m_hMagic; // 0x964
     };
 
+    // The Slime: his air trick calls three slimes (the squad); their models
+    // come out with him (CC_CMN::SLIME::CcSquadFactory), then he throws
+    // them as CC16_VOLLEY::CcSlimeSquadVolley at the other court.
     class CChrCoreVolleySlime : public CChrCoreVolley {
         public:
             CChrCoreVolleySlime();
             virtual ~CChrCoreVolleySlime();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
+            virtual void Reset_();                                     // 0x384
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual int SubStateBlockIsSuperType_() const { return 1; } // 0xCE4
+            virtual void SubStateAirTrickStartTrick_(STATE_WORK_AIR_TRICK *); // 0xCF4
+            virtual float SubStateAirTrickGetTrickRotFrame_(STATE_WORK_AIR_TRICK *); // 0xD0C
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual void SubStateAirTrickStartBallAdsorb_(STATE_WORK_AIR_TRICK *, CBall *); // 0xD24
+            virtual float SubStateAirTrickGetBallAdsorbFrame_(STATE_WORK_AIR_TRICK *); // 0xD28
+            virtual void SubStateAirTrickTrgBallAdsorbEnd_(STATE_WORK_AIR_TRICK *); // 0xD30
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+
+            // Throws the three slimes.
+            void SubStateAirTrickFireSlimeChild_(STATE_WORK_AIR_TRICK *pWork);
 
         protected:
-            unsigned char m_Unk964[0x96C - 0x964]; // allocated with 0x96C bytes
+            // (names guessed; allocated with 0x96C bytes)
+            long m_nColorType;              // 0x964, the colour set of the effects (0 to 2)
+            unsigned long m_hSquadFactory;  // 0x968, the squad factory's task id, 0 for none
     };
 
     // The Black Mage: his diving receive throws a spell the ball is taken

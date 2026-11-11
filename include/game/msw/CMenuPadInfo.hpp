@@ -31,6 +31,12 @@ namespace msw {
                 return m_aPad[nPad].m_bUnk06_02 | m_aPad[nPad].m_bUnk06_01;
             }
 
+            // (name guessed; inline, no symbol; added for
+            // game/menu/CEntry.cpp) The flag byte at 0x04 of pad nPad's
+            // entry: 0x01 while a remote is connected, 0x02 while it has
+            // an extension.
+            unsigned char GetPadFlags(long nPad) const { return m_aPad[nPad].m_nFlags04; }
+
             static CMenuPadInfo s_Instance;
 
         private:

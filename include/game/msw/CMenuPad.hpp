@@ -26,6 +26,9 @@ namespace msw {
 
             // Not zero when pad nPad has a nunchaku. In the DOL.
             int IsNunchakuStyle(long nPad);
+            // (added for MenuF game/menu/CEntry.cpp; return type guessed)
+            // Not zero while pad nPad is connected.
+            int IsConnect(long nPad);
             // Added for MenuF game/menu/CWiFiFrindVS.cpp (return types and
             // argument names guessed).
             int IsInputPointerMode(long nPad);

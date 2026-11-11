@@ -33,6 +33,10 @@ namespace msw {
             long PlayAnimation(long nPane, long nAnim, float fSpeed, float fFrame, int bRecursive, int bReset);
             // 1 when the pane is not found.
             int IsAnimEnd(long nPane, long nAnim);
+            // (added for game/menu/CCourtTab.cpp; return type and the name
+            // of the int guessed, after PlayAnimation) Stops animation
+            // nAnim of pane nPane.
+            void StopAnimation(long nPane, long nAnim, int bRecursive);
 
             // Does not check the index.
             const char *GetPaneName(long nPane);

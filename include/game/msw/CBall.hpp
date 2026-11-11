@@ -424,6 +424,9 @@ namespace msw {
             void SetPos(const bcs::FVEC3 *pPos);
             // DOL. The model the ball is attached to, or null.
             bcs::CScnObj *GetAttachMdlObj() const;
+            // DOL. The ball's offset from the hand of the character holding
+            // it (VolleyF's CChrCoreVolleyLuigi lifts it while it comes in).
+            void SetAttachPos(const bcs::FVEC3 &rOfs, int);
             // (names guessed) Two more bits of m_nFlag that the basket and
             // hockey ball markers read; what they stand for is not known.
             int IsFlag4() const { return m_nFlag & 0x4; }

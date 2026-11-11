@@ -15,6 +15,11 @@ namespace msw {
         // (added for MenuF game/menu/CPlayMode.cpp) Forgets the Mii chosen
         // on the character select screen.
         void ClearSelectMii();
+        // (added for MenuF game/menu/CEntry.cpp; return types and argument
+        // names guessed) The index of the Mii with id createId, and
+        // choosing a Mii by index.
+        long SearchMiiIndex(RFLCreateID createId);
+        void SetSelectMii(long nIndex, int bUnk);
         // (added for MenuF game/menu/CCharaLevelStar.cpp) For game kind
         // nGameKind (CSelectMenu::m_nGameKind): the computer level (0 to
         // 3) the level window starts from. Meaning guessed from that use.

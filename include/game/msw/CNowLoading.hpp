@@ -9,6 +9,9 @@ namespace msw {
         public:
             // Static: the body in the DOL stores into the global instance.
             static void SetType(long);
+            // Added for MenuF game/menu/CMenu.cpp: shows or hides the
+            // loading screen.
+            static void SetDisp(int bDisp);
 
         private:
             static CNowLoading *s_pInstance; // (name guessed) lbl_805C0C48

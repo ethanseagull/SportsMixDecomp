@@ -121,7 +121,7 @@ namespace msw {
                 return (CSelectMenu *)m_Unk10;
             }
 
-            unsigned long m_Unk2C;               // 0x2C
+            long m_Unk2C;                        // 0x2C, signed: CCupChr::StepControl compares it with 1 (cmpwi)
             long m_Unk30;                        // 0x30, the state: STATE_* (name kept for CFade.cpp)
             unsigned long m_Unk34;               // 0x34
             nw4r::ut::ArchiveFont *m_pArcFont;   // 0x38, released by DeleteArcFont

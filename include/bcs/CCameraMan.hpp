@@ -13,6 +13,7 @@ namespace bcs {
             static CCamera *GetActiveCamera(long nView);
             // Non-zero while the debug camera runs in view nView.
             static int IsDbgCamera(long nView);
+            static void RemoveEntryAll();
     };
 }
 

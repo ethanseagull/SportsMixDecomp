@@ -24,6 +24,9 @@ namespace bcs {
     // two longs before the call.
     float BCS_RandRange(float min, float max);
     long BCS_RandRange(long min, long max);
+    // In the DOL. As BCS_RandRange(float, float), from the generator of
+    // BCS_OrgRandMax.
+    float BCS_OrgRandRange(float min, float max);
 }
 
 #endif /* !BCS_BCS_RAND_HPP_ */

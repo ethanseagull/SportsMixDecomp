@@ -6,6 +6,10 @@
 
 struct _GXTexObj;
 
+namespace bcs {
+    class CTask;
+}
+
 namespace msw {
 
     class CChrDrv;
@@ -15,9 +19,9 @@ namespace msw {
     // 0x00 and the two share the vptr at 0x5C; own members start at 0x60.
     //
     // INCOMPLETE: only what game/boss/CChrMarkerBoss.cpp needs is here.
-    //  - The members stop at 0x234. The constructor in the DOL writes up to
-    //    0x570, so the class must not be instantiated, embedded or derived
-    //    from until the rest is added.
+    //  - Only some members are named; the rest up to the size, 0x574, is
+    //    padding, so that new of a derived class gets the right size. The
+    //    class must not be instantiated or embedded until it is mapped.
     //  - The virtual functions stop at slot 0x844 of about 1,100. Their order
     //    and names are the slots of __vt__Q23msw12CChrCoreBoss (BossF), read
     //    with the class name set back to CChrCore. All of them except the
@@ -646,6 +650,28 @@ namespace msw {
             // and emitted there.
             int IsStarPlayer() const { return m_bStarPlayer; }
 
+            // How a character is stopped (CChrMan::AllStop_). Values not known.
+            enum STOP_MODE {};
+
+            // Added for BossF game/boss/CChrManBoss.cpp (all in the DOL;
+            // return types and parameter names guessed). Create sets the
+            // character up under task pParent as player nPlayer, character
+            // nChrType (CGame::GetCharType) in colour nColor.
+            void Create(bcs::CTask *pParent, long nPlayer, long nChrType, long nColor);
+            // Puts pDrv in driver slot nDrv (0: the pad, 1: the computer).
+            void DriverSetEntry(long nDrv, CChrDrv *pDrv);
+            // Makes driver slot nDrv the one in use.
+            void DriverConnect(long nDrv, long, long, unsigned long, unsigned long);
+            void SetTeamNo(long nTeam);
+            void SetPadID(long nPad);
+            void GetPos(bcs::FVEC3 &rPos);
+            // (names guessed) Inline in the modules: the character managers
+            // write the members directly.
+            void SetCamNo(long nCam) { m_nCamNo = nCam; }
+            // Sets the bit IsDisable tests: the character takes no part.
+            void SetDisable() { m_UnkEC |= 0x40000000; }
+            void OnStatusFlag(unsigned long nBit) { m_nStatusFlag |= nBit; }
+
         protected:
             unsigned long m_Unk60;
             CChrDrv *m_pDriver[2];       // 0x64 (count guessed from the index's place)
@@ -666,10 +692,16 @@ namespace msw {
             signed char m_nPlayerNo;     // 0x176
             signed char m_nPadNo;        // 0x177, see GetPadNo
             signed char m_nTeamNo;       // 0x178
-            unsigned char m_Unk179[0x230 - 0x179];
+            // 0x179 (name guessed): the CChrManBoss::CreateDriver_ stores the
+            // entry of SetCamIdAssign_'s table here.
+            signed char m_nCamNo;
+            unsigned char m_Unk17A[0x230 - 0x17A];
             // 0x230 (name guessed): the level CComMan::GetDatF reads the
             // computer's parameters for (CComManVolleyGame::GetConditionHandicapDis).
             long m_nComLevel;
+            // The rest, up to the size of 0x574: the DOL constructor writes
+            // up to 0x570 and CChrCoreBoss's own members start at 0x574.
+            unsigned char m_Unk234[0x574 - 0x234];
     };
 }
 

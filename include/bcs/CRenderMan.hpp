@@ -15,6 +15,7 @@ namespace bcs {
             static void PushBack(CScnObj *pObj, long);
             static void EnableDepthOfFieldEffect(int bEnable);
             static void SetDepthOfFieldParam(long type, float fx, float fy, float fz);
+            static void ReqCleanUp();
     };
 }
 

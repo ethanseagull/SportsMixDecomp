@@ -61,6 +61,13 @@ namespace msw {
             // with these three parameters gives; a direct call does not.
             long PlayQueued(long nAnim, float rate, float frame) { return PlayImpl(nAnim, rate, frame, 0, 0.0f); }
 
+            // (names guessed) Inline in msw::SelectMenu::CCupChr, which
+            // sets up its table set by hand.
+            CTableSetMdlObj *GetObj() const { return m_pObj; }
+            void SetObj(CTableSetMdlObj *pObj) { m_pObj = pObj; }
+            void SetResFile(nw4r::g3d::ResFile file) { m_ResFile = file; }
+            void SetWait(float fWait) { m_fWait = fWait; }
+
         private:
             CTableSetMdlObj *m_pObj;       // 0x00
             const AnimInfo *m_pAnimTable;  // 0x04

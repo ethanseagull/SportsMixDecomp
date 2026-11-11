@@ -22,6 +22,11 @@ namespace msw {
             // BasketF's CBallBasketFruit, which calls CanbeCatch. Return
             // types guessed. (the class's destructor and later slots are not
             // declared yet)
+            // DOL; overrides of bcs::CTask's (slots 0x0C and 0x10 of the
+            // BossF vtables of the classes derived from it).
+            virtual void Main();
+            virtual void Disp();
+
             virtual void Create();                                     // 0x18
             virtual long GetNpcType() const;                           // 0x1C
             virtual void Reset();                                      // 0x20

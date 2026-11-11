@@ -42,6 +42,12 @@ namespace msw {
             void StopAttachEffect();
             void SetMiiNoface(int bNoFace);
 
+            // (names guessed) Read and set by msw::SelectMenu::CCupChr.
+            CChrMdlObj *GetMdl() const { return m_pMdl; }
+            long GetChr() const { return m_nChr; }
+            long GetSub() const { return m_nSub; }
+            void SetId(long nId) { m_nId = nId; }
+
         private:
             nw4r::ut::Link m_Link;  // 0x00, in msw::CChrMenuCtrl's list
             CChrMdlObj *m_pMdl;     // 0x08

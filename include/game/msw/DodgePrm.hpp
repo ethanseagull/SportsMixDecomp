@@ -15,6 +15,9 @@ namespace msw {
     extern float DODGE_PRM_S02_WAVE_BIG_ANIM_TIME;
     extern float DODGE_PRM_S02_WAVE_OFFSET_X;
     extern float DODGE_PRM_S02_WAVE_BIG_OFFSET_X;
+    extern float DODGE_PRM_S02_WAVE_PUSH_POWER;
+    extern float DODGE_PRM_S02_WAVE_PULL_POWER;
+    extern float DODGE_PRM_S02_WAVE_POS_MARGIN;
     extern long DODGE_PRM_S02_COIN_POP_NUM;
     extern long DODGE_PRM_S02_BIG_COIN_POP_NUM;
     extern long DODGE_PRM_S02_ITEM_POP_CYCLE;
@@ -44,6 +47,20 @@ namespace msw {
     extern long DODGE_PRM_S04_PYLON_LOC_PAT_TYPE;
     extern long DODGE_PRM_S04_PYLON_LOC_PAT_NO;
 
+    // Stage 05, the floating rafts (CStageDodge05::GetPrmTbl).
+    extern float DODGE_PRM_S05_START_TIME_SEC;
+    extern float DODGE_PRM_S05_FLOAT_DEPTH;
+    extern float DODGE_PRM_S05_DEPTH_CYCLE;
+    extern float DODGE_PRM_S05_FLOAT_STOP_TIME;
+    extern float DODGE_PRM_S05_HEAVY_TIME_SEC;
+    extern float DODGE_PRM_S05_HEAVY_FLOAT_DEPTH;
+    extern float DODGE_PRM_S05_HEAVY_DEPTH_CYCLE;
+    extern float DODGE_PRM_S05_HEAVY_FLOAT_STOP_TIME;
+    extern float DODGE_PRM_S05_HEAVY_ACC_TIME_SEC;
+    extern float DODGE_PRM_S05_TURRET_EARLY_HIT;
+    extern float DODGE_PRM_S05_ENV_SE_TIME;
+    extern float DODGE_PRM_S05_ENV_SE_TIME_RND;
+
     // Stage 07, the boss Packun (CStageDodge07::GetPrmTbl).
     extern float DODGE_PRM_S07_PACKUN_CLOSE_STANDBY_TIME_RND;
     extern float DODGE_PRM_S07_PACKUN_OPEN_STANDBY_TIME_RND;
@@ -72,6 +89,49 @@ namespace msw {
     extern float DODGE_PRM_S07_PACKUN_EXPLODE_SIZE;
     extern float DODGE_PRM_S07_PACKUN_EXPLODE_SIZE_Y;
     extern float DODGE_PRM_S07_PACKUN_EXPLODE_SCALE_FCTR;
+
+    // Stage 12, the pinball stage (CStageDodge12::GetPrmTbl and
+    // CPinballManDodge).
+    extern float DODGE_PRM_S12_BALL_SIZE;
+    extern float DODGE_PRM_S12_BALL_COLLSIZE;
+    extern float DODGE_PRM_S12_BALL_SPEED;
+    extern float DODGE_PRM_S12_BALL_SPEED_LIMIT;
+    extern float DODGE_PRM_S12_BALL_KICK_POW;
+    extern float DODGE_PRM_S12_BALL_BALL_KICK_POW;
+    extern float DODGE_PRM_S12_BALL_DECEL;
+    extern float DODGE_PRM_S12_BALL_GUIDE_DECAY;
+    extern float DODGE_PRM_S12_BALL_FORCE_ACC;
+    extern float DODGE_PRM_S12_BALL_INIT_SLEEP;
+    extern float DODGE_PRM_S12_BALL_INTERVAL;
+    extern float DODGE_PRM_S12_BALL_ANGLE;
+    extern float DODGE_PRM_S12_BALL_SIDE_RATE;
+    extern long DODGE_PRM_S12_BALL_NUM;
+    extern float DODGE_PRM_S12_BALL_DOWN_TIME;
+
+    // Stage 16, the star piece stage (CStageDodge16::GetPrmTbl). Times are
+    // in seconds, angles in degrees.
+    extern float DODGE_PRM_S16_DROP_AREA_Z;
+    extern long DODGE_PRM_S16_MAX_NUM;
+    extern float DODGE_PRM_S16_POP_TIME;
+    extern float DODGE_PRM_S16_POP_TIME_RND;
+    extern float DODGE_PRM_S16_POP_POS_Y;
+    extern float DODGE_PRM_S16_DROP_SPEED;
+    extern float DODGE_PRM_S16_DROP_ANGLE;
+    extern long DODGE_PRM_S16_BOUND_NUM;
+    extern float DODGE_PRM_S16_BOUND_REDUCE_Y;
+    extern float DODGE_PRM_S16_BOUND_REDUCE_XZ;
+    extern long DODGE_PRM_S16_ADD_COIN_0;
+    extern float DODGE_PRM_S16_WARP_INTERVAL;
+    extern float DODGE_PRM_S16_WARP_TIME;
+    extern float DODGE_PRM_S16_WARP_SPEED;
+    extern float DODGE_PRM_S16_WARP_BLUR_SHIFT;
+    extern long DODGE_PRM_S16_FLASH_COLOR_R;
+    extern long DODGE_PRM_S16_FLASH_COLOR_G;
+    extern long DODGE_PRM_S16_FLASH_COLOR_B;
+    extern long DODGE_PRM_S16_FLASH_COLOR_A;
+    extern float DODGE_PRM_S16_FLASH_TIME;
+    extern float DODGE_PRM_S16_FLASH_GAIN;
+    extern float DODGE_PRM_S16_FLASH_DECAY;
 }
 
 #endif /* !MSW_DODGEPRM_HPP_ */

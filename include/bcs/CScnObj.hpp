@@ -214,6 +214,18 @@ namespace bcs {
                 }
                 m_fRotX = fRotX;
             }
+            // (name guessed) The same for the Z angle (0xB8), as
+            // MenuF's msw::SelectMenu::CCupChr::StepControl turns it.
+            void SetRotZ(float fRotZ)
+            {
+                while (fRotZ > 6.2831855f) {
+                    fRotZ -= 6.2831855f;
+                }
+                while (fRotZ < 0.0f) {
+                    fRotZ += 6.2831855f;
+                }
+                m_fRotZ = fRotZ;
+            }
 
             // (name guessed) Sets the three angles at once; msw::CDropCoin
             // stores them through one load of the model pointer.

@@ -39,6 +39,12 @@ namespace msw {
             // Puts the cup into a group, or into draw layer nLayer.
             void _PushBack(bcs::CScnGroup *pGroup);
             void _PushBack(long nLayer);
+
+            // (MenuF msw::SelectMenu::CCupChr; argument meanings and return
+            // types guessed) Makes the cup model of type nType and kind
+            // nKind; the object the cup hangs from.
+            static CTrophyObj *CreateModel(long nType, long nKind, long, long, const char *);
+            bcs::CScnObj *GetParentObj();
     };
 }
 

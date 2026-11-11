@@ -18,10 +18,21 @@ namespace msw {
     // non-static and neither reads `this`. The class has a second
     // polymorphic part (its destructor has a `@68@` thunk) that is not
     // written here, so do not create or destroy one through this header.
+    // (msw::CMenu does `new CSelectMenu`: that only needs the size, 0xAB8,
+    // and the out-of-line constructor.)
     class CSelectMenu : public CMenuTask {
         public:
             CSelectMenu(bcs::CTask *pParent);
             virtual ~CSelectMenu();
+            // Overrides of bcs::CTask's (vtable slots 3 and 4).
+            virtual void Main();
+            virtual void Disp();
+
+            // Added for MenuF game/menu/CMenu.cpp: start loading what the
+            // select menu needs, and whether that has finished (return type
+            // guessed).
+            static void InitLoad();
+            static int IsCompleteOfInitLoad();
 
             const char *GetArchiveFileName(long nArchive);
             const char *GetArchiveRootFolderName(long nArchive);

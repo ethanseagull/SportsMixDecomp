@@ -141,7 +141,8 @@ int msw::CBallManBasket::IsDummyBall_(const CBall *pBall) const
 
 void msw::CBallManBasket::CreateDummyBall_()
 {
-    long nBallNo = GetInstance()->GetUseEnableIndex_();
+    long nBallNo;
+    nBallNo = GetInstance()->GetUseEnableIndex_();
     CBall *pBall = new (0) CBallBasketDummy(CBallMan::GetInstance(), nBallNo);
 
     pBall->Create(-1, 0x40);

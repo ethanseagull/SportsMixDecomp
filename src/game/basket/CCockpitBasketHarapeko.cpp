@@ -1035,9 +1035,9 @@ void msw::CCockpitBasketHarapeko::CreateCountUp(bcs::G2D::CPaneCtrl *pPaneCtrl)
     for (long i = 0; i < nPlayerNum; i++, pPlayerPane++) {
         const unsigned char *pTextPane = pPlayerPane->nCountUpText;
         const unsigned char *pFramePane = pPlayerPane->nCountUpFrame;
-        const unsigned char *pNullPane = pPlayerPane->nCountUpNull;
         const unsigned char *pPicAPane = pPlayerPane->nCountUpPicA;
         const unsigned char *pPicBPane = pPlayerPane->nCountUpPicB;
+        const unsigned char *pNullPane = pPlayerPane->nCountUpNull;
 
         for (long j = 0; j < s_CountUpPaneNum; j++) {
             bcs::G2D::CPaneObj *pNullObj = bcs::G2D::DuplicatePaneObj(

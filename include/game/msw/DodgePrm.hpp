@@ -15,6 +15,9 @@ namespace msw {
     extern float DODGE_PRM_S02_WAVE_BIG_ANIM_TIME;
     extern float DODGE_PRM_S02_WAVE_OFFSET_X;
     extern float DODGE_PRM_S02_WAVE_BIG_OFFSET_X;
+    extern float DODGE_PRM_S02_WAVE_PUSH_POWER;
+    extern float DODGE_PRM_S02_WAVE_PULL_POWER;
+    extern float DODGE_PRM_S02_WAVE_POS_MARGIN;
     extern long DODGE_PRM_S02_COIN_POP_NUM;
     extern long DODGE_PRM_S02_BIG_COIN_POP_NUM;
     extern long DODGE_PRM_S02_ITEM_POP_CYCLE;

@@ -22,6 +22,9 @@ namespace msw {
         void CreateVictoryDemo(bcs::CTask *pParent, const VICTORY_DATA *pData);
         void CreateReadyStartDemo(bcs::CTask *pParent, const short *pData);
         void CreateChangeCourtDemo(bcs::CTask *pParent, const short *pData);
+        // (DOL; return type guessed) The player the ready-start demo
+        // shows (VolleyF CReadyStartDemoVolley).
+        long GetTargetReadyStart();
 
         // Looks up the model resource `pName` in archive `nArc` (a
         // msw::CLoadData entry; a null pSub picks a default sub-folder) and

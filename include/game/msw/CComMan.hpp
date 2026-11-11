@@ -54,10 +54,9 @@ namespace msw {
             static bcs::FVEC3 GetChrPos(const CChrCore *pChr);
             static bcs::FVEC3 GetChrWorldPos(const CChrCore *pChr);
             // (DOL; added for DodgeF game/dodge/CComDrvDodgeGameOffRun.cpp)
-            // The same for character number nChr; and the distance of rPos
-            // from the court's centre line along Z (meaning guessed from the
-            // name).
-            static bcs::FVEC3 GetChrPos(long nChr);
+            // The distance of rPos from the court's centre line along Z
+            // (meaning guessed from the name); GetChrPos(long), below, is the
+            // position of character number nChr.
             static float GetZtoCenter(const bcs::FVEC3 &rPos);
 
             // (DOL) Walks the items that have been thrown.
@@ -94,6 +93,25 @@ namespace msw {
             static unsigned long FallGShell_GetNear(const bcs::FVEC3 &rPos);
             static int FallGShell_IsEnable(unsigned long nShell);
             static bcs::FVEC3 FallGShell_GetPos(unsigned long nShell);
+            // (added for HockeyF game/hockey/unit_7AD44.cpp; meaning of the
+            // long not known) Whether the yaw fRot is close enough to
+            // fTarget.
+            static int IsRangeRot(float fRot, float fTarget, long);
+
+            // (DOL; added for VolleyF's CComDrvVolleyGame units; return
+            // types and meanings guessed) A level table entry as an integer;
+            // a random character of team nTeam; the position of character
+            // nChr; the centre of court nCourt; which of three positions is
+            // best for the two of pMy (nIdx: the nth best).
+            static long GetDatI(long nId, float fLevel);
+            static long GetDatI(long nId, long nLevel);
+            static int IsExistChrToTargetWorld(const CChrCore *pChr, const bcs::FVEC3 &rPos, float, float,
+                                               unsigned long nIgnoreBits, int);
+            static CChrCore *GetChrCoreRand(long nTeam);
+            static bcs::FVEC3 GetChrPos(long nChr);
+            static float GetStageCourtCenterX(long nCourt);
+            static float GetStageCourtCenterZ(long nCourt);
+            static long GetNearBestPos2on3(const bcs::FVEC3 *pMy, const bcs::FVEC3 *pTarget, long nIdx);
 
             static CComMan *g_pInstance;
     };

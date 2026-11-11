@@ -150,7 +150,7 @@ namespace msw {
                     : CcSlimeSquad(pParent, rPos, rRot, nIndex, nTeam, nPlayer)
                 {
                     Create(res, mot);
-                    m_BodyColl.SetHitEffectFrameAll(0.0f);
+                    m_Body.SetHitEffectFrameAll(0.0f);
                     long nEff = s_aSlimeEff[m_nIndex][0];
                     if (nEff >= 0) {
                         m_hEffect = CEffectCtrl::CreateAttachEffectAuto(nEff, m_pMdl, 3);
@@ -160,7 +160,7 @@ namespace msw {
 
                 virtual void CtorStateTouchDown();
                 virtual void CtorStateDead();
-                virtual long GetMotID_(long nKind) const;
+                virtual short GetMotID_(long nKind) const;
                 virtual float GetRotateRadius_() const;
                 virtual float GetRotateSpeed_() const;
                 virtual float GetChaseSpeed_() const;
@@ -412,7 +412,7 @@ void msw::CC16_BASKET::CcSquadFactoryBasket::AnimPlay(long nEffSlot, int bLoop, 
             CChrOptTask *pTask = static_cast<CChrOptTask *>(bcs::CTaskMan::GetTask(m_aTaskId[i]));
             if (pTask && !pTask->IsDelete()) {
                 if (s_aSquadAnim[i].nMotId >= 0) {
-                    pTask->PlayMotion(s_aSquadAnim[i].nMotId, bLoop, fInterFrame, 0.0f);
+                    pTask->AnimPlay(s_aSquadAnim[i].nMotId, bLoop, fInterFrame, 0.0f);
                 }
                 if (s_aSquadAnim[i].nEff >= 0) {
                     pTask->Eff_CreateAttachAuto(nEffSlot, s_aSquadAnim[i].nEff, 3);
@@ -428,7 +428,7 @@ msw::CC16_BASKET::CcSlimeSquadBasket::~CcSlimeSquadBasket()
     m_hEffect = 0;
 }
 
-long msw::CC16_BASKET::CcSlimeSquadBasket::GetMotID_(long nKind) const
+short msw::CC16_BASKET::CcSlimeSquadBasket::GetMotID_(long nKind) const
 {
     return s_aSlimeMotId[m_nIndex][nKind];
 }

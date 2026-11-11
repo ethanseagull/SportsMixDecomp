@@ -105,7 +105,13 @@ namespace msw {
     // Its members end at 0x1B8, the size of the green shell.
     class CItemShellCmn : public CItem {
         public:
-            CItemShellCmn(CItemMan *pMan);
+            // Inline: the DOL has it only inside the two shells' constructors.
+            CItemShellCmn(CItemMan *pMan) : CItem(pMan)
+            {
+                m_nReboundCount = 0;
+                m_hEffect = 0;
+                m_fThrowTime = 0.0f;
+            }
             virtual ~CItemShellCmn();
 
             virtual float GetBodyCollRadius() const;
@@ -120,8 +126,11 @@ namespace msw {
             virtual void Create_(long, const bcs::FVEC3 &pos);
 
         protected:
-            unsigned char m_Unk1AC[0x1B4 - 0x1AC];
-            float m_fThrowTime; // 0x1B4, (name guessed) set by the boss shells' DoThrowInit
+            long m_nReboundCount;    // 0x1AC, (name guessed) wall bounces so far, against GetParamReboundNum
+            unsigned long m_hEffect; // 0x1B0, (name guessed) the effect attached while it flies
+            // 0x1B4, (name guessed) frames the shell flies level before it
+            // starts to fall; set by DoThrowInit
+            float m_fThrowTime;
     };
 
     class CItemGShell : public CItemShellCmn {
@@ -153,13 +162,19 @@ namespace msw {
 
             virtual void DoHoming_();
             virtual long SearchTarget_(const bcs::FVEC3 &rPos, float fDir, int, long);
-            virtual void GetHomingTargetPos(bcs::FVEC3 &rPos);
+            // Not zero when there is a target; its position in rPos.
+            virtual int GetHomingTargetPos(bcs::FVEC3 &rPos);
 
         protected:
-            unsigned char m_Unk1B8[0x1C0 - 0x1B8];
-            long m_nTarget;    // 0x1C0, what SearchTarget_ returned
-            unsigned char m_Unk1C4[4];
-            long m_nUnk1C8;    // 0x1C8, (meaning unknown) tested by the boss DoThrowInit; size 0x1CC
+            long m_nHomingStep; // 0x1B8, (name guessed) 0: first frame, 1: homing, 99: done
+            float m_fUnk1BC;    // 0x1BC, (meaning unknown) 4 from the constructor and CtorStateThrow
+            long m_nTarget;     // 0x1C0, what SearchTarget_ returned
+            // 0x1C4, (name guessed) the target was in the air when the shell
+            // was thrown: DoHoming_ steers in 3D
+            long m_bHomingAir;
+            // 0x1C8, (meaning unknown; 0 when m_bHomingAir is set) the shell
+            // flies level at first; tested by DoThrowInit; size 0x1CC
+            long m_nUnk1C8;
     };
 
     class CItemBanana : public CItem {

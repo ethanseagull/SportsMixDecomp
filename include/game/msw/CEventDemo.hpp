@@ -41,7 +41,11 @@ namespace msw {
             struct WORK {
                 unsigned char m_Unk00[2];
                 unsigned char bSkip;        // 0x02
-                unsigned char m_Unk03[0x35];
+                // 0x03 (name guessed): set when a demo is cancelled
+                // (VolleyF CReadyStartDemoVolley::EventCansel); IsEventSkip
+                // then skips.
+                unsigned char bCancel;
+                unsigned char m_Unk04[0x34];
             };
             static WORK m_Work;
 

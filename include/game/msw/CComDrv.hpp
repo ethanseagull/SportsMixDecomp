@@ -23,6 +23,18 @@ namespace msw {
     // taken as 0x170 (no allocation of CComDrv itself was found).
     class CComDrv : public CChrDrv {
         public:
+            // (added for VolleyF's CComDrvVolleyGame units; names guessed)
+            // The start of every action's work (EntryAct, GetCurrentActWork):
+            // the step the action is at and a timer the driver counts up;
+            // each action's own members follow from 0x1C.
+            struct ACT_WORK {
+                unsigned long m_nUnk00;
+                long m_nStep;     // 0x04
+                float m_fTime;    // 0x08
+                float m_fTime2;   // 0x0C
+                unsigned char m_Unk10[0x1C - 0x10];
+            };
+
             CComDrv(long nArg);
             virtual ~CComDrv();
 
@@ -67,10 +79,10 @@ namespace msw {
             virtual int IsActiveBallNothingThk() const { return 0; }
             virtual void BeforeMsgFunc(MSG_ID id, _CHR_MSG *pMsg);
             virtual void EndMsgFunc(MSG_ID id, _CHR_MSG *pMsg);
-            virtual void OnMain(_CHR_MSG *pMsg);
+            virtual long OnMain(_CHR_MSG *pMsg);
             virtual void OnConnect(_CHR_MSG *pMsg);
             virtual void OnDisconnect(_CHR_MSG *pMsg);
-            virtual void OnInit(_CHR_MSG *pMsg);
+            virtual long OnInit(_CHR_MSG *pMsg);
             virtual void OnDamage(_CHR_MSG *pMsg);
             // Returns the answer to the message (BasketF's CComDrvBasketHB
             // returns this function's result for the messages it does not
@@ -104,23 +116,12 @@ namespace msw {
             // (int: DodgeF's CComDrvDodgeGame::GetViewPointPosForRunEx tests it)
             int Item_GetViewPointPosFromItem(bcs::FVEC3 &rPos) const;
             // (DOL; added for DodgeF game/dodge/CComDrvDodgeGameGimmick.cpp,
-            // return types guessed from how it uses them) The action at the
-            // root of the action stack; the item about to hit the character
-            // (a task id, zero for none) and the position to escape it to;
-            // the obstacle (handle, zero for none) about to hit the
-            // character or in the way of rPos, of the kinds in nMask, and how
-            // to escape it or go round it; whether an obstacle handle is a
-            // special one; the left and right edges of the character's court;
-            // an escape position rPos corrected for what is around it.
-            long GetRootActType() const;
+            // return types guessed from how it uses them; the action, item
+            // and obstacle helpers it also uses are declared with VolleyF's
+            // below) The ball in play; the left and right edges of the
+            // character's court; an escape position rPos corrected for what
+            // is around it.
             CBall *GetActiveBall() const;
-            unsigned long Item_GetItemToHitMe() const;
-            int Item_GetEscPosFromItem(bcs::FVEC3 &rPos, unsigned long nItem) const;
-            unsigned long Obstacle_GetObstacleToHitMe(unsigned long nMask) const;
-            int Obstacle_GetEscPosFromObstacle(bcs::FVEC3 &rPos, unsigned long nObstacle, int) const;
-            unsigned long Obstacle_GetObstacleToTarget(const bcs::FVEC3 &rPos, unsigned long nMask) const;
-            int Obstacle_IsSpObstacleHandle(unsigned long nObstacle) const;
-            long Obstacle_GetPosTurnAroundObstacle(bcs::FVEC3 &rPos, unsigned long nObstacle, long nDir, int) const;
             float GetMyCourtLeft() const;
             float GetMyCourtRight() const;
             void RunCorrect_RenewEscPos(bcs::FVEC3 &rPos, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rDir, float fLen) const;
@@ -130,33 +131,55 @@ namespace msw {
             // DOL. A random number below nMax. (range guessed from the name;
             // BasketF tests RandMaxI(999) < 20)
             long RandMaxI(long nMax) const;
+            // DOL. A random percentage to test a rate against (added for
+            // HockeyF game/hockey/unit_AFCA0.cpp, which compares it with a
+            // rate clamped to 0-100).
+            long LotRate() const;
             // DOL. The size of the per-action work CComDrv's own actions
             // need (0x5C); a derived driver passes the larger of this and
             // its own to the constructor (DodgeF CComDrvDodgeDD).
             unsigned long CalcWorkBaseMaxSize() const;
             // DOL. The work of the action running now (zero for none).
             void *GetCurrentActWork();
-            // (DOL; added for DodgeF game/dodge/CComDrvDodgeGameOffRun.cpp,
-            // return types guessed) Starts action nAct and returns its work
-            // (the caller fills in the action's arguments); ends the action
-            // running now, nResult telling how it went (0 done, 1 given up,
-            // as the callers use it).
-            void *EntryAct(long nAct);
-            void ReturnAct(long nResult);
-            // (DOL) Start the common actions: wait nFrame frames, turn to
-            // the target or to rPos.
-            void ActCallWait(float fFrame);
+            // (DOL; added for DodgeF game/dodge/CComDrvDodgeGameOffRun.cpp)
+            // Start the common actions: turn to the target or to rPos. (The
+            // result EntryAct/ReturnAct pass, as DodgeF uses it: 0 done, 1
+            // given up.)
             void ActCallLookTarget();
             void ActCallLookTarget(const bcs::FVEC3 &rPos);
-            // (DOL) Random numbers between fMin and fMax (two generators;
-            // which is which is not known).
+            // (DOL) A random number between fMin and fMax (RandRangeF below
+            // is the other generator; which is which is not known).
             float RandRange(float fMin, float fMax) const;
-            float RandRangeF(float fMin, float fMax) const;
-            // (DOL) Not zero when a pad driver exists for this character
-            // (meaning guessed from the name); the computer level as a
-            // float, as CComMan::GetDatF takes it.
-            int IsExistPadDrv() const;
+
+            // (DOL; added for VolleyF's CComDrvVolleyGame units; return types
+            // and meanings guessed from the names and the callers)
+            // Starts action nAct and returns its work; ends the running one
+            // with a result.
+            void *EntryAct(long nAct);
+            void ReturnAct(long nRet);
+            void ActCallWait(float fFrame);
+            long GetRootActType() const;
             float GetComLvF() const;
+            float GetComBaseLvF() const;
+            int IsExistPadDrv() const;
+            CChrCore *GetLastSpChrCore() const;
+            long GetMyStockItemType() const;
+            float RandRangeF(float fMin, float fMax) const;
+            long LotProbability(const long *pRate, long nNum) const;
+            float GetEmCourtLeft() const;
+            float GetEmCourtRight() const;
+            float GetEmCourtFront() const;
+            float GetEmCourtBack() const;
+            float GetMyCourtCenterX() const;
+            float GetMyCourtCenterZ() const;
+            unsigned long Item_GetItemToHitMe() const;
+            int Item_GetEscPosFromItem(bcs::FVEC3 &rPos, unsigned long nItem) const;
+            unsigned long Obstacle_GetObstacleToHitMe(unsigned long nKindBits) const;
+            int Obstacle_GetEscPosFromObstacle(bcs::FVEC3 &rPos, unsigned long nObstacle, int) const;
+            unsigned long Obstacle_GetObstacleToTarget(const bcs::FVEC3 &rPos, unsigned long nKindBits) const;
+            int Obstacle_IsSpObstacleHandle(unsigned long nObstacle) const;
+            long Obstacle_GetPosTurnAroundObstacle(bcs::FVEC3 &rPos, unsigned long nObstacle, long nDir, int) const;
+            int RunCorrect_GetViewPointPosFromChr(bcs::FVEC3 &rPos) const;
 
             // DOL. The common actions, one per frame while running; derived
             // drivers list them in their action tables (g_ActFuncMap).
@@ -173,26 +196,45 @@ namespace msw {
             void ActLoopJumpBlock();
 
         protected:
-            // 0x04 (name guessed): flags. The off-ball runs of DodgeF's
-            // CComDrvDodgeGame clear bit 2 and m_fUnk54 before turning to
-            // their target.
+            // 0x04 (name guessed): flag bits; the volley driver's actions
+            // and DodgeF CComDrvDodgeGame's off-ball runs clear 0x4 together
+            // with m_fUnk54 before a wait or a turn to their target.
             unsigned long m_nFlag;
             unsigned char m_Unk08[0x54 - 0x08];
-            float m_fUnk54; // 0x54
+            float m_fUnk54;   // 0x54
             unsigned char m_Unk58[0x64 - 0x58];
             // 0x64 (name guessed): the driven character's team. HockeyF
             // passes it to CComManHockey::GetKeeperCore, VolleyF compares it
             // with GameWork::GetUserTeam.
             long m_nMyTeam;
             CChrCore *m_pChr; // 0x68, the character driven
-            unsigned char m_Unk6C[0x70 - 0x6C];
-            // 0x70 (name guessed): the character's position, which DodgeF
-            // hands to CComMan::GetZtoCenter.
-            bcs::FVEC3 m_ChrPos;
+            // 0x6C (name guessed): the driven character's index (the
+            // volley driver compares it with GetShoudTwoAttackChrIdx).
+            long m_nMyChrIdx;
+            // 0x70 (name guessed): the driven character's position, kept
+            // by ClearAll/UpdateInfo (VolleyF CComDrvVolley::CanbeDiveReceive
+            // measures from it; DodgeF hands it to CComMan::GetZtoCenter).
+            bcs::FVEC3 m_MyPos;
             // 0x7C (name guessed): the character's position in the world;
             // DodgeF's gimmick escapes measure from it.
-            bcs::FVEC3 m_ChrWorldPos;
-            unsigned char m_Unk88[0x110 - 0x88];
+            bcs::FVEC3 m_MyWorldPos;
+            unsigned char m_Unk88[0x94 - 0x88];
+            // 0x94, 0x98 (names guessed): passed to CComMan's
+            // GetStageCourtCenterX/Z and to CComOSG::Init by the volley
+            // driver; a court number and the grid's kind.
+            long m_nCourtIdx;
+            long m_nUnk98;
+            unsigned char m_Unk9C[0xC0 - 0x9C];
+            // 0xC0, 0xCC (name guessed): with m_MyPos the positions of the
+            // driver's team (VolleyF's Ninja defence passes the three to
+            // CComMan::GetNearBestPos2on3).
+            bcs::FVEC3 m_aMatePos[2];
+            unsigned char m_UnkD8[0x108 - 0xD8];
+            // 0x108 (name guessed): how many team mates m_aMatePos holds.
+            long m_nMateNum;
+            // 0x10C (name guessed): the other team (CGame::GetTeamScore,
+            // CComMan::GetChrCoreRand).
+            long m_nEmTeam;
             // 0x110 (name guessed): the ball the driver follows, set by
             // UpdateInfo; VolleyF hands it to CComManVolley.
             CBall *m_pBall;

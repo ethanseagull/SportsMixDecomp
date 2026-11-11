@@ -23,9 +23,11 @@ namespace msw {
             // Follows the offset of the scene's model nChr (-1: none).
             void SetFloorChr(long nChr);
 
-        private:
+        protected:
+            // (protected: VolleyF's CSceneCalcReadyStart::Calc calls it)
             void _CalcFloor(bcs::FVEC3 &rPos, bcs::FVEC3 &rAt);
 
+        private:
             CEventScene *m_pScene;    // 0x34
 
         public:

@@ -78,12 +78,15 @@ namespace bcs {
             // the constructor made (msw::CSceneCalc::SetCalc).
             void SetCalc(CCameraAnmCalc *pCalc) { m_pCalc = pCalc; }
             CCameraAnmCalc *GetDefaultCalc() const { return m_pCalcDefault; }
+            float GetFrame() const { return m_fFrame; }
 
         private:
             // 0xFC: a frame controller (SetFrame passes its address on to a
             // DOL function); only the words the modules read are named.
             unsigned long m_nFrmFlag;     // 0xFC (name guessed)
-            unsigned char m_Unk100[4];    // 0x100
+            // 0x100 (name guessed): the frame being played (VolleyF
+            // CSceneCalcReadyStart::Calc divides it by m_fEndFrame - 1).
+            float m_fFrame;
             float m_fRate;                // 0x104, set by Play (name guessed)
             float m_fEndFrame;            // 0x108 (name guessed)
             unsigned char m_Unk10C[0xC];  // 0x10C

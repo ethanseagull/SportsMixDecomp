@@ -31,3 +31,4 @@ Equivalent game/boss/CChrCoreBossSiroma.cpp
 Equivalent game/boss/CChrCoreBossKinopio.cpp
 Equivalent game/boss/CChrCoreBossKuroma.cpp
 Equivalent game/boss/CCockpitBoss.cpp
+Equivalent game/boss/unit_636D4.cpp

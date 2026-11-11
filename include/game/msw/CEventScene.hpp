@@ -63,6 +63,14 @@ namespace msw {
             void SetNodeChr(const char *pNode, long nChr, long, unsigned long);
             void CreateTimer(long nNum);
             void AddTimer(short nId, float fFrame, short, unsigned long);
+            // (added for VolleyF CReadyStartDemoVolley; DOL, names and
+            // return types guessed)
+            void AddTimerRel(short nId, float fFrame, short, unsigned long);
+            float AddCut(const char *pName, long, long, float);
+            void SetFloorMove(long, long, int);
+            void ResetTimer();
+            void _StartFadeOut() const;
+            int _IsPlayFade() const;
 
             // The model nChr when that slot is in use (bit nChr of the mask
             // at 0x98), null otherwise.
@@ -76,7 +84,9 @@ namespace msw {
 
         protected:
             float m_fUnk34;              // 0x34 (read by VolleyF's CPerfectDemoVolley::EventStart)
-            unsigned char m_Unk38[0x1C]; // 0x38
+            unsigned char m_Unk38[4];    // 0x38
+            float m_fUnk3C;              // 0x3C (cleared by VolleyF's CReadyStartDemoVolley::EventPlay)
+            unsigned char m_Unk40[0x14]; // 0x40
 
         public:
             bcs::CCameraAnm *m_pCamera;  // 0x54: made by the constructor, 0x1A4 bytes
@@ -91,9 +101,13 @@ namespace msw {
             unsigned char m_Unk9A;       // 0x9A
             signed char m_nChrNum;       // 0x9B: number of model slots
             signed char m_nCutNum;       // 0x9C: cuts added so far (AddSceneCut)
-            unsigned char m_Unk9D;       // 0x9D
+            signed char m_nUnk9D;        // 0x9D (read signed)
             unsigned char m_nUnk9E;      // 0x9E
-            unsigned char m_Unk9F[5];    // 0x9F; the class is 0xA4 bytes
+            signed char m_nUnk9F;        // 0x9F: not zero while a fade is to be started on cancel
+            // 0xA0/0xA2 (names guessed): skip bits requested and the
+            // bits that mean no skip (IsEventSkip compares them).
+            unsigned short m_nSkip;      // 0xA0
+            unsigned short m_nSkipNone;  // 0xA2; the class is 0xA4 bytes
     };
 }
 

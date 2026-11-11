@@ -17,6 +17,10 @@ namespace msw {
         public:
             CSignBoard(long nId, long nType, float fSortZ);
             virtual ~CSignBoard();
+            virtual void Main();
+            virtual long SendEvent(long nEvent, void *pParam);
+            // Inline: DodgeF and VolleyF emit it with their boards' vtables.
+            virtual void Disp() {}
             virtual int Set();
             virtual void Remove();
 

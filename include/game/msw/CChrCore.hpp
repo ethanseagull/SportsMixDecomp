@@ -104,7 +104,7 @@ namespace msw {
             virtual int IsAirTrickSwingEnd() const;                  // 0x4C
             virtual int IsAirTrickFall() const;                      // 0x50
             virtual float GetAirTrickStatePassFrame() const;         // 0x54
-            virtual void GetTargetMarkerPos(bcs::FVEC3 &);           // 0x58
+            virtual int GetTargetMarkerPos(bcs::FVEC3 &);            // 0x58 (int: VolleyF CComDrvVolleyGame tests it)
             virtual int MoveTargetMarkerPos(float);                  // 0x5C
             virtual int AutoMoveTargetMarkerPos();                   // 0x60
             virtual long CheckGuideTelopDisp();                      // 0x64
@@ -1063,6 +1063,11 @@ namespace msw {
             float GetDist_ToPosXZ(const bcs::FVEC3 &rPos) const;
             // (name guessed; the DOL's fn_800E1E1C) The distance to rPos.
             float GetDist_ToPos(const bcs::FVEC3 &rPos) const;
+            // (name guessed; the DOL's fn_800E1EC4) The square of it.
+            float GetDist_ToPosSq(const bcs::FVEC3 &rPos) const;
+            // (name guessed; the DOL's fn_800E19D4) The pitch (radians) of
+            // the line from rPos up to the character.
+            float GetRotX_FromPos(const bcs::FVEC3 &rPos) const;
             // (name guessed) See m_PrevPos.
             const bcs::FVEC3 &GetPrevPos() const { return m_PrevPos; }
             // The yaw (radians) from the character towards pChr.
@@ -1152,6 +1157,11 @@ namespace msw {
                                            unsigned long);
             // An effect attached to the character's default node.
             unsigned long Eff_CreateAttachAuto(long nSlot, long nEff, unsigned long);
+            // (added for HockeyF game/hockey/CChrCoreHockeySlime.cpp; return
+            // types guessed) The colours of the point light, and a
+            // konstant colour of the model, of the effect in slot nSlot.
+            void Eff_SetPointLightColor(long nSlot, bcs::BCS_Color color0, bcs::BCS_Color color1);
+            void Eff_SetMdlKColorReg(long nSlot, _GXTevKColorID id, bcs::BCS_Color color);
             // Added for VolleyF game/volley/CChrCoreVolleySiroma.cpp (DOL;
             // return types guessed). An effect at a point kept in slot nSlot;
             // a jump of fFrame frames (three-value form); lets the held ball
@@ -1235,12 +1245,10 @@ namespace msw {
             void SetCollBodyPushRank_(long nRank);
             // Added for BasketF game/basket/CChrCoreBasketSlime.cpp (DOL;
             // parameter meanings guessed): the size (radius, height and a
-            // third value) and offset of the body collision's push unit,
-            // and the colours of the effect in slot nSlot.
+            // third value) and offset of the body collision's push unit (it also uses
+            // Eff_SetPointLightColor and Eff_SetMdlKColorReg, above).
             void SetCollBodyPushSize_(float fRadius, float fHeight, float);
             void SetCollBodyPushPos_(float fX, float fY, float fZ);
-            void Eff_SetPointLightColor(long nSlot, bcs::BCS_Color color0, bcs::BCS_Color color1);
-            void Eff_SetMdlKColorReg(long nSlot, _GXTevKColorID id, bcs::BCS_Color color);
             // Added for BasketF game/basket/CChrCoreBasketYoshi.cpp (DOL;
             // return type guessed). The effect in slot nSlot; null when
             // there is none.

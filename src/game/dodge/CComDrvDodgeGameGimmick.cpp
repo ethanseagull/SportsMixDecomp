@@ -71,7 +71,7 @@ inline long CComDrvDodgeGame::ItemBall_GetBallToHitMe() const
     bcs::FVEC3 pos = pBall->GetTargetPos();
     float fExplosion = CItemBallBombDodge::GetExplosionCollSize();
     float fRange = 0.5f + (fExplosion + m_pChr->GetCollSize_BodyDamage());
-    if (GetDisXZ(m_ChrWorldPos, pos) < fRange) {
+    if (GetDisXZ(m_MyWorldPos, pos) < fRange) {
         return pBall->GetBallNo();
     }
     return -1;
@@ -305,7 +305,7 @@ int CComDrvDodgeGame::ItemBall_GetEscPosFromBall(bcs::FVEC3 &rPos, long nBall) c
     float fRange = 0.5f + (fExplosion + m_pChr->GetCollSize_BodyDamage()) + 0.4f;
 
     bcs::FVEC3 dir;
-    DirXZ(dir, ballPos, m_ChrWorldPos);
+    DirXZ(dir, ballPos, m_MyWorldPos);
     SetLenXZ(dir, fRange);
 
     bcs::FVEC3 escPos(ballPos.x + dir.x, 0.0f, ballPos.z + dir.z);
@@ -327,7 +327,7 @@ long CComDrvDodgeGame::RunCorrect_GetFirstRotDir(const bcs::FVEC3 &pos, float fM
     float fLeft = GetMyCourtLeft() + (0.5f + m_pChr->GetCollSize_BodyPush());
     float fRight = GetMyCourtRight() - (0.5f + m_pChr->GetCollSize_BodyPush());
 
-    if (pos.z < m_ChrPos.z) {
+    if (pos.z < m_MyPos.z) {
         if (fMaxX >= fRight) {
             return 1;
         }
@@ -355,7 +355,7 @@ long CComDrvDodgeGame::RunCorrect_GetFirstRotDirAroundChr(const bcs::FVEC3 &pos,
     float fLeft = GetMyCourtLeft() + (0.5f + m_pChr->GetCollSize_BodyPush());
     float fRight = GetMyCourtRight() - (0.5f + m_pChr->GetCollSize_BodyPush());
 
-    if (pos.z < m_ChrPos.z) {
+    if (pos.z < m_MyPos.z) {
         if (fMaxX >= fRight) {
             return 1;
         }

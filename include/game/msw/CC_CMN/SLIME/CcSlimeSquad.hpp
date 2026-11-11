@@ -15,23 +15,22 @@ namespace msw {
     namespace CC_CMN {
         namespace SLIME {
 
-            // (DOL class; meaning guessed from the names) One of the three
-            // slimes of the Slime's special shot: it circles the goal, then
-            // chases characters of the other team. 0x118 bytes (BasketF
-            // allocates its CC16_BASKET::CcSlimeSquadBasket, which adds no
-            // member, with that size).
-            //
-            // INCOMPLETE: the bases and virtual functions are read from the
-            // DOL's vtable lbl_804836D0 and BasketF's
-            // __vt__Q33msw11CC16_BASKET18CcSlimeSquadBasket: the state
-            // machine at 0x94 (its vptr at 0xD8), then the states and the
-            // per-game hooks the modules override. Members are mapped from
-            // the DOL constructor only where the modules read them; names
-            // guessed.
+            // INCOMPLETE (DOL class; added for HockeyF
+            // game/hockey/CChrCoreHockeySlime.cpp). One of the three slimes
+            // of the Slime's special shot: it circles a point, then chases
+            // the nearest player of the other team. 0x118 bytes (HockeyF's
+            // CC16_HOCKEY::CcSlimeSquadHockey is allocated at 0x11C and adds
+            // one word; BasketF's
+            // CC16_BASKET::CcSlimeSquadBasket is allocated at 0x118 and adds
+            // none). A bcs::CFsm of its own states is at 0x94 (vptr at
+            // 0xD8; the @148@ thunk). The virtual functions are read from
+            // __vt__Q33msw11CC16_HOCKEY18CcSlimeSquadHockey; return types and
+            // argument meanings guessed. Members mapped only where the
+            // module code uses them.
             class CcSlimeSquad : public CChrObstacle, public bcs::CFsm<CcSlimeSquad> {
                 public:
-                    // At rPos turned by rRot; nIndex is which of the three
-                    // (0 to 2), nTeam and nPlayer the owner's.
+                    // nIndex: which of the three slimes (0 to 2); nTeam and
+                    // nPlayer: the shooter's team and player numbers.
                     CcSlimeSquad(bcs::CTask *pParent, const bcs::FVEC3 &rPos, const bcs::FVEC3 &rRot, long nIndex,
                                  long nTeam, long nPlayer);
                     virtual ~CcSlimeSquad();
@@ -40,12 +39,6 @@ namespace msw {
                     virtual float GetAttackRadius() const;
                     virtual float GetAttackRange() const;
                     virtual int IsAttackEnd() const;
-
-                    // Makes the model of res with the motions of mot.
-                    void Create(nw4r::g3d::ResFile res, nw4r::g3d::ResFile mot);
-                    // Starts circling round rCenter at height fHeight, from
-                    // angle fRot. (meanings guessed)
-                    void SetTargetOrbit(const bcs::FVEC3 &rCenter, float fHeight, float fRot);
 
                     virtual void MainFunc();
                     virtual void CtorStateFire();
@@ -63,8 +56,8 @@ namespace msw {
                     virtual void CtorStateDead();
                     virtual void LoopStateDead();
                     virtual void DtorStateDead();
-                    // The motion of kind nKind (0 to 3) for this slime.
-                    virtual long GetMotID_(long nKind) const;
+                    // The motion id of motion nMot of this slime.
+                    virtual short GetMotID_(long nMot) const;
                     virtual float GetRotateRadius_() const;
                     virtual float GetRotateRotSpeed_() const;
                     virtual float GetRotateSpeed_() const;
@@ -72,19 +65,23 @@ namespace msw {
                     virtual float GetSearchTargetDist_() const;
                     virtual float GetGiveupChaseDist_() const;
 
+                    // Makes the model from res with the motions of mot.
+                    void Create(nw4r::g3d::ResFile res, nw4r::g3d::ResFile mot);
+                    // Sends the slime round rCenter at height fY, starting
+                    // at the yaw fRotY (guess).
+                    void SetTargetOrbit(const bcs::FVEC3 &rCenter, float fY, float fRotY);
+
                 protected:
                     bcs::CMdlObj *m_pMdl;        // 0xDC
                     unsigned char m_UnkE0[0xEC - 0xE0];
-                    CBodyCollision m_BodyColl;   // 0xEC
+                    CBodyCollision m_Body;       // 0xEC
                     unsigned char m_UnkF8[0x100 - 0xF8];
-                    long m_nIndex;               // 0x100, which of the three (0 to 2)
+                    long m_nIndex;               // 0x100, the constructor's nIndex
                     unsigned char m_Unk104[0x108 - 0x104];
-                    // 0x108: the effect attached to the model (the modules
-                    // set and stop it), 0 for none.
-                    unsigned long m_hEffect;
+                    unsigned long m_hEffect;     // 0x108, an effect attached to the model
                     unsigned char m_Unk10C[0x110 - 0x10C];
-                    long m_nTeam;                // 0x110
-                    long m_nPlayer;              // 0x114
+                    long m_nTeam;                // 0x110, the constructor's nTeam
+                    long m_nPlayer;              // 0x114, the constructor's nPlayer
             };
         }
     }

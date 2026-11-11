@@ -73,7 +73,7 @@ void CComDrvDodgeGame::ActLoopOffRunCharge()
             pWork->m_nStep++;
             break;
         case 3: {
-            float fZ = CComMan::GetZtoCenter(m_ChrPos);
+            float fZ = CComMan::GetZtoCenter(m_MyPos);
             if (fZ < 1.5f && pWork->m_nParam < 0) {
                 pWork->m_nParam = LotActChargeAfterOffRunCharge();
             }

@@ -21,6 +21,24 @@ namespace msw {
             // nKind.
             void GetPlayerSaveData(long nPlayer, long nLevel);
             void SetGameParameter(long nKind);
+            // (added for MenuF game/menu/CRuleSel.cpp; names and return
+            // types guessed) The number of options of kind nKind, the name
+            // of option nOption and the help line of its setting nId; the
+            // default setting of an option at difficulty nLevel (static:
+            // the game passes no instance).
+            long GetMenuNum(long nKind);
+            const wchar_t *GetMenuName(long nKind, long nOption);
+            const wchar_t *GetMenuParameterTelop(long nKind, long nOption, long nId);
+            static long GetMenuDefaultId(long nKind, long nOption, long nLevel);
+            // Stores the options of player nPlayer at difficulty nLevel
+            // (nType: 0 exhibition, 1 tournament, 2 boss tournament).
+            void SetPlayerSaveData(long nPlayer, long nType, long nLevel);
+            // A copy of the options to go back to when the rules screen is
+            // left with B: made, filled, put back and freed.
+            void AllocTemporary();
+            void BackupTemporary();
+            void RestoreTemporary();
+            void FreeTemporary();
 
             static CMenuOption s_Instance;
     };

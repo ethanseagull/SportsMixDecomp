@@ -29,6 +29,7 @@ namespace msw {
     class CStgObj : public bcs::CUnivTask {
         public:
             virtual ~CStgObj();
+            virtual void Main();
 
             virtual void SetIdx(long idx) { m_nIdx = idx; }
             virtual long GetIdx() const { return m_nIdx; }

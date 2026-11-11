@@ -5,6 +5,7 @@
 #include "bcs/New.hpp"
 #include "game/msw/CStgGmk.hpp"
 #include "game/msw/CStgGmk_Case_Act.hpp"
+#include "game/msw/CStgMdl.hpp"
 #include "game/msw/CStgSrt.hpp"
 
 namespace bcs {
@@ -19,6 +20,19 @@ namespace msw {
         public:
             CStgGmk_Case_Drv(CStgGmk *pParent);
             virtual ~CStgGmk_Case_Drv();
+    };
+
+    // The model of a case. A DOL class, size 0x134 (constructor
+    // __ct__Q23msw16CStgGmk_Case_MdlFPQ23msw7CStgGmkl, the case's type as
+    // the second argument); msw::CStgMdl's vptr stays at 0x128. Only what
+    // the modules' inline factories need is declared.
+    class CStgGmk_Case_Mdl : public CStgMdl {
+        public:
+            CStgGmk_Case_Mdl(CStgGmk *pParent, long type);
+            virtual ~CStgGmk_Case_Mdl();
+
+        private:
+            unsigned char m_Unk12C[0x8]; // 0x12C
     };
 
     // (purpose guessed from the names) One case (crate) of the ship stage
@@ -73,6 +87,11 @@ namespace msw {
             virtual float GetDepth() const { return GetCaseAct()->GetParam_Depth(); }
 
             virtual CStgDrv *NewDrv(long heap) { return new (heap) CStgGmk_Case_Drv(this); }
+
+        protected:
+            // (name guessed) The type given to the constructor; the
+            // container factories hand it on to the model.
+            long GetCaseType() const { return m_Unk68; }
 
         private:
             // The actor is always a CStgGmk_Case_Act. (name guessed)

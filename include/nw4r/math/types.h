@@ -47,7 +47,21 @@ namespace nw4r {
         struct AABB {
             VEC3 min; // 0x00
             VEC3 max; // 0x0C
+
+            AABB()
+            {
+            }
+
+            // Added for HockeyF game/hockey/CStageHockey17.cpp: the two
+            // corners are copied as words and the box normalised.
+            AABB(const VEC3 &rMin, const VEC3 &rMax) : min(rMin), max(rMax) { Normalize(); }
+
+            // (DOL) Orders each axis's two values so min <= max.
+            void Normalize();
         };
+
+        // (DOL) Whether the two boxes overlap.
+        bool IntersectionAABB(const AABB *pBox1, const AABB *pBox2);
 
         // A 3x4 matrix, row by row; column 3 is the translation. Added for
         // HockeyF game/hockey/CCockpitHockeyCoin.cpp (a pane's global

@@ -236,7 +236,10 @@ namespace {
         unsigned char nUp;
     };
 
-    const CoinPane sCoinPane[1] = {
+    // Number of teams with a coin gauge.
+    const long TEAM_NUM = 1;
+
+    const CoinPane sCoinPane[TEAM_NUM] = {
         { 45, 46, 47 }
     };
 
@@ -313,12 +316,14 @@ int msw::CCockpitBossCoder::Set()
             pPaneCtrl->SetSortZ(0.0f);
             pPaneCtrl->SetVisible(0);
 
+            long i;
+
             m_SPGauge[0].SetParam(pPaneCtrl, 40, 40, 41, ANIM_SP_BAR, ANIM_SP_BAR_MAX, ANIM_SP_K, ANIM_SP_K_MAX);
             m_SPGauge[0].SetGaugeAnim(m_pPaneAccessor, 0.0f);
-            m_SPInputDisp[0].SetParam(0, sSPContPane[0], ANIM_SP_CONT, sSPButtonPane[0][0], sSPButtonPane[0][1]);
-            m_SPInputDisp[0].SetDispAnim(m_pPaneAccessor, 0);
-
-            long i;
+            for (i = 0; i < TEAM_NUM; i++) {
+                m_SPInputDisp[i].SetParam(i, sSPContPane[i], ANIM_SP_CONT, sSPButtonPane[i][0], sSPButtonPane[i][1]);
+                m_SPInputDisp[i].SetDispAnim(m_pPaneAccessor, 0);
+            }
 
             for (i = 0; i < playerLen; i++) {
                 m_pPaneAccessor->SetPaneDisp(sPlayerLabelPane[i], 0);
@@ -358,9 +363,9 @@ int msw::CCockpitBossCoder::SetupGame()
     static const long animId = ANIM_HIT_0;
     static const long teamNo = 0;
 
-    LifeGaugeIn();
-    BossGaugeIn();
-    CoinIn();
+    LifeGaugeInWait();
+    BossGaugeInWait();
+    CoinInWait();
 
     long nPlayerNum = m_nPlayerNum;
     long i;
@@ -372,11 +377,13 @@ int msw::CCockpitBossCoder::SetupGame()
         SetOutTelop(i, 0);
     }
 
-    bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(sCoinPane[teamNo].nPower);
+    for (long nTeam = teamNo; nTeam < TEAM_NUM; nTeam++) {
+        bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(sCoinPane[nTeam].nPower);
 
-    if (pObj != 0) {
-        pObj->PlayAnimation(ANIM_COIN_DOWN, 1.0f, 0.0f, 1, 1, 1);
-        pObj->PushNextAnimation(ANIM_COIN_DOWN_WAIT, 1.0f, 0.0f, 1, 1);
+        if (pObj != 0) {
+            pObj->PlayAnimation(ANIM_COIN_DOWN, 1.0f, 0.0f, 1, 1, 1);
+            pObj->PushNextAnimation(ANIM_COIN_DOWN_WAIT, 1.0f, 0.0f, 1, 1);
+        }
     }
     return 0;
 }
@@ -385,28 +392,36 @@ int msw::CCockpitBossCoder::SetupGame()
 int msw::CCockpitBossCoder::LifeGaugeOut()
 {
     m_pPaneAccessor->PlayAnimation(PANE_g_Null, ANIM_GAUGE_OUT, 1.0f, 0.0f, 0, 1);
-    m_pPaneAccessor->PlayAnimation(sCoinPane[0].nPower, ANIM_GAUGE_OUT, 1.0f, 0.0f, 0, 1);
+    for (long i = 0; i < TEAM_NUM; i++) {
+        m_pPaneAccessor->PlayAnimation(sCoinPane[i].nPower, ANIM_GAUGE_OUT, 1.0f, 0.0f, 0, 1);
+    }
     return 0;
 }
 
 int msw::CCockpitBossCoder::LifeGaugeIn()
 {
     m_pPaneAccessor->PlayAnimation(PANE_g_Null, ANIM_GAUGE_IN, 1.0f, 0.0f, 0, 1);
-    m_pPaneAccessor->PlayAnimation(sCoinPane[0].nPower, ANIM_GAUGE_IN, 1.0f, 0.0f, 0, 1);
+    for (long i = 0; i < TEAM_NUM; i++) {
+        m_pPaneAccessor->PlayAnimation(sCoinPane[i].nPower, ANIM_GAUGE_IN, 1.0f, 0.0f, 0, 1);
+    }
     return 0;
 }
 
 int msw::CCockpitBossCoder::LifeGaugeOutWait()
 {
     m_pPaneAccessor->PlayAnimation(PANE_g_Null, ANIM_GAUGE_OUT_WAIT, 1.0f, 0.0f, 0, 1);
-    m_pPaneAccessor->PlayAnimation(sCoinPane[0].nPower, ANIM_GAUGE_OUT_WAIT, 1.0f, 0.0f, 0, 1);
+    for (long i = 0; i < TEAM_NUM; i++) {
+        m_pPaneAccessor->PlayAnimation(sCoinPane[i].nPower, ANIM_GAUGE_OUT_WAIT, 1.0f, 0.0f, 0, 1);
+    }
     return 0;
 }
 
 int msw::CCockpitBossCoder::LifeGaugeInWait()
 {
     m_pPaneAccessor->PlayAnimation(PANE_g_Null, ANIM_GAUGE_IN_WAIT, 1.0f, 0.0f, 0, 1);
-    m_pPaneAccessor->PlayAnimation(sCoinPane[0].nPower, ANIM_GAUGE_IN_WAIT, 1.0f, 0.0f, 0, 1);
+    for (long i = 0; i < TEAM_NUM; i++) {
+        m_pPaneAccessor->PlayAnimation(sCoinPane[i].nPower, ANIM_GAUGE_IN_WAIT, 1.0f, 0.0f, 0, 1);
+    }
     return 0;
 }
 
@@ -469,15 +484,20 @@ void msw::CCockpitBossCoder::SetLifeValue(long nPlayer, float fLife, float fLife
         return;
     }
 
+    float fRate = fLife;
+
     if (fLife > 1.0f) {
-        fLife = 1.0f;
+        fRate = 1.0f;
     } else if (fLife < 0.0f) {
-        fLife = 0.0f;
+        fRate = 0.0f;
     }
+
+    float fRate2 = fLife2;
+
     if (fLife2 > 1.0f) {
-        fLife2 = 1.0f;
+        fRate2 = 1.0f;
     } else if (fLife2 < 0.0f) {
-        fLife2 = 0.0f;
+        fRate2 = 0.0f;
     }
 
     const LifePane *pPane = &sLifePane[m_nLayout][nPlayer];
@@ -487,8 +507,8 @@ void msw::CCockpitBossCoder::SetLifeValue(long nPlayer, float fLife, float fLife
     if (pLife != 0) {
         // A full gauge is frame 0.
         float fFrameMax = pLife->GetAnimMaxFrame(animId);
-        float fFrame = fFrameMax * (1.0f - fLife);
-        float fFrame2 = fFrameMax * (1.0f - fLife2);
+        float fFrame = fFrameMax * (1.0f - fRate);
+        float fFrame2 = fFrameMax * (1.0f - fRate2);
 
         pLife->PlayAnimation(animId, speed, fFrame, recursive, reset, 1);
         if (pLife2 != 0) {
@@ -502,6 +522,9 @@ void msw::CCockpitBossCoder::SetLifeGaugeAnim(long nPlayer, long nState)
     long nAnim;
 
     switch (nState) {
+        default:
+            nAnim = ANIM_HIT_0;
+            break;
         case 1:
             nAnim = ANIM_HIT_1;
             break;
@@ -510,9 +533,6 @@ void msw::CCockpitBossCoder::SetLifeGaugeAnim(long nPlayer, long nState)
             break;
         case 3:
             nAnim = ANIM_HIT_3;
-            break;
-        default:
-            nAnim = ANIM_HIT_0;
             break;
     }
     m_pPaneAccessor->PlayAnimation(sLifePane[m_nLayout][nPlayer].nGauge, nAnim, 1.0f, 0.0f, 1, 1);
@@ -556,7 +576,11 @@ void msw::CCockpitBossCoder::SetSPGaugeDisp(int bDisp)
 
     if (pObj != 0) {
         pObj->StopAllAnimation(1);
-        pObj->GetPane()->SetVisible(bDisp == 1);
+        if (bDisp == 1) {
+            pObj->GetPane()->SetVisible(true);
+        } else {
+            pObj->GetPane()->SetVisible(false);
+        }
     }
 }
 
@@ -622,7 +646,7 @@ void msw::CCockpitBossCoder::SetCoinMaxState(long nState)
                 pCoin->GetPane()->SetVisible(true);
             }
             m_SPGauge[teamNo].SetGaugeMaxAnim(m_pPaneAccessor, 1);
-            m_EffectSet.SetEffect(0, 0, 0x459, m_pPaneAccessor->GetPaneObj(PANE_f_l));
+            m_EffectSet.SetEffect(0, 0, 0x459, m_pPaneAccessor->GetPaneObj(sSPFlashPane[teamNo]));
             break;
     }
 }
@@ -645,10 +669,9 @@ void msw::CCockpitBossCoder::SetBossLifePercent(float fRate)
     if (fRate >= 1.0f) {
         m_pPaneAccessor->PlayAnimation(PANE_B_hp, ANIM_BOSS_GAUGE_FULL, 1.0f, 0.0f, recursive, reset);
     } else {
-        if (fRate < 0.0f) {
-            fRate = 0.0f;
-        }
-        m_pPaneAccessor->PlayAnimation(PANE_B_hp, ANIM_BOSS_GAUGE, speed, frameMax - frameMax * fRate, recursive,
+        float fValue = fRate < 0.0f ? 0.0f : fRate;
+
+        m_pPaneAccessor->PlayAnimation(PANE_B_hp, ANIM_BOSS_GAUGE, speed, frameMax - frameMax * fValue, recursive,
                                        reset);
     }
 }
@@ -688,7 +711,9 @@ void msw::CCockpitBossCoder::SetFaceIcon(bcs::G2D::CPaneCtrl *pPaneCtrl)
     static const long TeamNum = 1;
 
     for (long nTeam = 0; nTeam < TeamNum; nTeam++) {
-        for (long i = 0; i < m_nPlayerNum; i++) {
+        long nPlayerNum = m_nPlayerNum;
+
+        for (long i = 0; i < nPlayerNum; i++) {
             CChrCore *pChr = CChrMan::GetChrCore(chrNo[i]);
 
             if (pChr != 0 && !pChr->IsDisable()) {
@@ -770,8 +795,14 @@ void msw::CCockpitBossCoder::SetFaceIcon(bcs::G2D::CPaneCtrl *pPaneCtrl, long nT
         bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(pLabelParent);
 
         if (pObj != 0 && nPlayerNum > 1) {
-            pObj->PlayAnimation((pChr->IsPadCtrl() || pChr == pLeader) ? ANIM_LABEL_PLAYER : ANIM_LABEL_PLAYER_OFF,
-                                1.0f, 0.0f, recursive, reset, 1);
+            long nAnim;
+
+            if (pChr->IsPadCtrl() || pChr == pLeader) {
+                nAnim = ANIM_LABEL_PLAYER;
+            } else {
+                nAnim = ANIM_LABEL_PLAYER_OFF;
+            }
+            pObj->PlayAnimation(nAnim, 1.0f, 0.0f, recursive, reset, 1);
         }
     } else {
         // The label changes only while a human player leads the team.
@@ -809,22 +840,20 @@ void msw::CCockpitBossCoder::SetFaceIcon(bcs::G2D::CPaneCtrl *pPaneCtrl, long nT
     nw4r::lyt::Pane *pStarSrc = m_pPaneAccessor->GetPane(PANE_cs_ico);
     nw4r::lyt::Pane *pStarParent = m_pPaneAccessor->GetPane(pPane->nStarParent);
 
-    if (pStarSrc == 0 || pStarParent == 0) {
-        return;
-    }
+    if (pStarSrc != 0 && pStarParent != 0) {
+        long nStar = pPane->nStar;
+        nw4r::lyt::Pane *pStar = m_pPaneAccessor->GetPane(nStar);
 
-    long nStar = pPane->nStar;
-    nw4r::lyt::Pane *pStar = m_pPaneAccessor->GetPane(nStar);
+        if (pStar == 0) {
+            pStar = bcs::G2D::DuplicatePane(pPaneCtrl, pStarSrc, sPaneNames[nStar], sLayoutNames[0], 0);
+            bcs::G2D::SetPaneParent(pStar, pStarParent, 1, 0);
+            bcs::G2D::SetPaneSizeFromParent(pStar);
+            pStar->SetTranslate(zero);
+        }
 
-    if (pStar == 0) {
-        pStar = bcs::G2D::DuplicatePane(pPaneCtrl, pStarSrc, sPaneNames[nStar], sLayoutNames[0], 0);
-        bcs::G2D::SetPaneParent(pStar, pStarParent, 1, 0);
-        bcs::G2D::SetPaneSizeFromParent(pStar);
-        pStar->SetTranslate(zero);
-    }
-
-    if (pStar != 0) {
-        pStar->SetVisible(pChr->IsStarPlayer() != 0);
+        if (pStar != 0) {
+            pStar->SetVisible(pChr->IsStarPlayer());
+        }
     }
 }
 
@@ -841,7 +870,10 @@ void msw::CCockpitBossCoder::SetOutTelop(long nPlayer, int bOut)
     static const long animId1 = ANIM_OUT_WAIT;
     static const long animId = ANIM_OUT_HIDE;
 
-    if (m_pPaneAccessor == 0 || nPlayer >= m_nPlayerNum) {
+    if (m_pPaneAccessor == 0) {
+        return;
+    }
+    if (nPlayer >= m_nPlayerNum) {
         return;
     }
 
@@ -914,7 +946,7 @@ namespace {
         unsigned char nText;
     };
 
-    const PowerPane sPowerPane[1] = {
+    const PowerPane sPowerPane[TEAM_NUM] = {
         { 0, 1, 2 }
     };
 
@@ -938,10 +970,12 @@ void msw::CCockpitBossBallPower::Main()
     m_DispTaskList.StatusCheck(m_pPaneAccessor);
 
     if (m_nStep == 1) {
-        bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(sPowerPane[0].nGauge);
+        for (long i = 0; i < TEAM_NUM; i++) {
+            bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(sPowerPane[i].nGauge);
 
-        if (pObj != 0) {
-            pObj->PlayAnimation(ANIM_POWER_IN_WAIT, 1.0f, 0.0f, 0, 1, 1);
+            if (pObj != 0) {
+                pObj->PlayAnimation(ANIM_POWER_IN_WAIT, 1.0f, 0.0f, 0, 1, 1);
+            }
         }
         m_nStep = 2;
     }
@@ -965,19 +999,22 @@ int msw::CCockpitBossBallPower::Set()
         return -1;
     }
 
+    unsigned char nUnk60;
+
     switch (CGame::g_GameWork.m_Unk0B) {
+        default:
+            nUnk60 = 1;
+            break;
         case 2:
         case 3:
-            m_nUnk60 = 3;
+            nUnk60 = 3;
             break;
         case 4:
         case 5:
-            m_nUnk60 = 5;
-            break;
-        default:
-            m_nUnk60 = 1;
+            nUnk60 = 5;
             break;
     }
+    m_nUnk60 = nUnk60;
 
     const char *pFileName = CCockpit::GetResourceFileName(RES_FILE);
     nw4r::lyt::ArcResourceAccessor *pAccessor =
@@ -1019,40 +1056,48 @@ long msw::CCockpitBossBallPower::SendEvent(long nEvent, void *pParam)
 
 int msw::CCockpitBossBallPower::LifeGaugeOut()
 {
-    bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(sPowerPane[0].nGauge);
+    for (long i = 0; i < TEAM_NUM; i++) {
+        bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(sPowerPane[i].nGauge);
 
-    if (pObj != 0) {
-        pObj->PlayAnimation(ANIM_POWER_OUT, 1.0f, 0.0f, 0, 1, 1);
+        if (pObj != 0) {
+            pObj->PlayAnimation(ANIM_POWER_OUT, 1.0f, 0.0f, 0, 1, 1);
+        }
     }
     return 0;
 }
 
 int msw::CCockpitBossBallPower::LifeGaugeIn()
 {
-    bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(sPowerPane[0].nGauge);
+    for (long i = 0; i < TEAM_NUM; i++) {
+        bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(sPowerPane[i].nGauge);
 
-    if (pObj != 0) {
-        pObj->PlayAnimation(ANIM_POWER_IN, 1.0f, 0.0f, 0, 1, 1);
+        if (pObj != 0) {
+            pObj->PlayAnimation(ANIM_POWER_IN, 1.0f, 0.0f, 0, 1, 1);
+        }
     }
     return 0;
 }
 
 int msw::CCockpitBossBallPower::LifeGaugeOutWait()
 {
-    bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(sPowerPane[0].nGauge);
+    for (long i = 0; i < TEAM_NUM; i++) {
+        bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(sPowerPane[i].nGauge);
 
-    if (pObj != 0) {
-        pObj->PlayAnimation(ANIM_POWER_OUT_WAIT, 1.0f, 0.0f, 0, 1, 1);
+        if (pObj != 0) {
+            pObj->PlayAnimation(ANIM_POWER_OUT_WAIT, 1.0f, 0.0f, 0, 1, 1);
+        }
     }
     return 0;
 }
 
 int msw::CCockpitBossBallPower::LifeGaugeInWait()
 {
-    bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(sPowerPane[0].nGauge);
+    for (long i = 0; i < TEAM_NUM; i++) {
+        bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(sPowerPane[i].nGauge);
 
-    if (pObj != 0) {
-        pObj->PlayAnimation(ANIM_POWER_IN_WAIT, 1.0f, 0.0f, 0, 1, 1);
+        if (pObj != 0) {
+            pObj->PlayAnimation(ANIM_POWER_IN_WAIT, 1.0f, 0.0f, 0, 1, 1);
+        }
     }
     return 0;
 }
@@ -1076,12 +1121,16 @@ int msw::CCockpitBossBallPower::SetBallPowerState(long nTeam, long nState)
 
     long nAnim;
 
-    if (nState == 1) {
-        nAnim = ANIM_POWER_UP;
-    } else if (nState == 2) {
-        nAnim = ANIM_POWER_UP2;
-    } else {
-        nAnim = ANIM_POWER_NORMAL;
+    switch (nState) {
+        case 1:
+            nAnim = ANIM_POWER_UP;
+            break;
+        case 2:
+            nAnim = ANIM_POWER_UP2;
+            break;
+        default:
+            nAnim = ANIM_POWER_NORMAL;
+            break;
     }
     m_pPaneAccessor->PlayAnimation(sPowerPane[nTeam].nText, nAnim, 1.0f, 0.0f, recursive, reset);
     return 0;
@@ -1092,12 +1141,13 @@ void msw::CCockpitBossBallPower::ChangeTextFont(long nPane, int bColor)
     // Looked up and not used.
     bcs::G2D::CPaneCtrl *pPaneCtrl = GetLytObj();
 
-    if (CLytCtrl::GetInstance() == 0) {
+    CLytCtrl *pLytCtrl = CLytCtrl::GetInstance();
+
+    if (pLytCtrl == 0) {
         return;
     }
 
-    nw4r::lyt::ResourceAccessor *pResAccessor =
-        CLytCtrl::GetInstance()->GetLayoutResourceAccesor(0, sPowerLayoutNames[0]);
+    nw4r::lyt::ResourceAccessor *pResAccessor = pLytCtrl->GetLayoutResourceAccesor(0, sPowerLayoutNames[0]);
 
     if (pResAccessor == 0) {
         return;

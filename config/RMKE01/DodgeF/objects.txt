@@ -54,3 +54,4 @@ Matching game/dodge/CComDrvDodgeDD.cpp
 Matching game/dodge/CStageDodgeDOD55.cpp
 Matching game/dodge/CQPanelManDodge.cpp
 Equivalent game/dodge/CItemBallBombDodge.cpp
+Equivalent game/dodge/CChrCoreDodgeKoopa.cpp

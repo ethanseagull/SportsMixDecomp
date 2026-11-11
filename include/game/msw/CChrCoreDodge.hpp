@@ -807,6 +807,13 @@ namespace msw {
         public:
             CChrCoreDodgeKoopa();
             virtual ~CChrCoreDodgeKoopa();
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual float SubStateArtsShotGetTrickMotFrame_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD6C
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD80
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD94
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
     };
 
     // Size 0x930.

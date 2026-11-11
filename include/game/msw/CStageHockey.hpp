@@ -2,6 +2,8 @@
 #define MSW_CSTAGEHOCKEY_HPP_
 
 #include "game/msw/CStageHockey01.hpp"
+#include "game/msw/CStageHockey04.hpp"
+#include "game/msw/CStageHockey07.hpp"
 #include "game/msw/CStageHockey17.hpp"
 #include "game/msw/CStageManHockey.hpp"
 
@@ -16,7 +18,7 @@ namespace msw {
     // The destructors are declared so that they are the key functions: this
     // header must not make a unit emit the vtables.
 
-    // Stages 01 and 17 have their own headers.
+    // Stages 01, 07 and 17 have their own headers.
 
     class CStageHockey02 : public CStageManHockey {
         public:
@@ -36,14 +38,7 @@ namespace msw {
             unsigned char m_Unk218[0xA0]; // size 0x2B8
     };
 
-    class CStageHockey04 : public CStageManHockey {
-        public:
-            CStageHockey04(bcs::CTask *pParent);
-            virtual ~CStageHockey04();
-
-        private:
-            unsigned char m_Unk218[0xA4C]; // size 0xC64
-    };
+    // Stage 04 has its own header, game/msw/CStageHockey04.hpp.
 
     class CStageHockey05 : public CStageManHockey {
         public:
@@ -52,15 +47,6 @@ namespace msw {
 
         private:
             unsigned char m_Unk218[0x87C]; // size 0xA94
-    };
-
-    class CStageHockey07 : public CStageManHockey {
-        public:
-            CStageHockey07(bcs::CTask *pParent);
-            virtual ~CStageHockey07();
-
-        private:
-            unsigned char m_Unk218[0x10]; // size 0x228
     };
 
     class CStageHockey09 : public CStageManHockey {

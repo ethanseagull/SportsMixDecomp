@@ -528,13 +528,13 @@ game/dodge/CCameraDodgeBD.cpp:
 
 game/dodge/CStageDodge04.cpp:
 	.text       start:0x000AB294 end:0x000AB8A4
-	.rodata     start:0x00006AE0 end:0x00006BB0
+	.rodata     start:0x00006AE0 end:0x00006C10
 	.data       start:0x00021110 end:0x000215E0
 	.bss        start:0x00000C28 end:0x00000C30
 
 game/dodge/CStgGmk_Pylon_Act_Dodge.cpp:
 	.text       start:0x000AB8A4 end:0x000AC36C
-	.rodata     start:0x00006BB0 end:0x00006C58
+	.rodata     start:0x00006C10 end:0x00006C58
 	.data       start:0x000215E0 end:0x00021A00
 
 game/dodge/CLockCursorDodge.cpp:

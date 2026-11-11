@@ -1007,10 +1007,10 @@ void msw::CCockpitBasketHarapeko::CreateCountUp(bcs::G2D::CPaneCtrl *pPaneCtrl)
         return;
     }
 
-    nw4r::lyt::Pane *pNullSrc = m_pPaneAccessor->GetPane(PANE_ca);
     nw4r::lyt::Pane *pTextSrc = m_pPaneAccessor->GetPane(PANE_ca_t);
     nw4r::lyt::Pane *pFrameSrc = m_pPaneAccessor->GetPane(PANE_F_Null);
     nw4r::lyt::Pane *pPicASrc = m_pPaneAccessor->GetPane(PANE_f_01);
+    nw4r::lyt::Pane *pNullSrc = m_pPaneAccessor->GetPane(PANE_ca);
     nw4r::lyt::Pane *pPicBSrc = m_pPaneAccessor->GetPane(PANE_f_02);
 
     if (pNullSrc == 0 || pTextSrc == 0 || pFrameSrc == 0 || pPicASrc == 0 || pPicBSrc == 0) {
@@ -1033,9 +1033,9 @@ void msw::CCockpitBasketHarapeko::CreateCountUp(bcs::G2D::CPaneCtrl *pPaneCtrl)
     long nPlayerNum = m_nPlayerNum;
 
     for (long i = 0; i < nPlayerNum; i++, pPlayerPane++) {
-        const unsigned char *pNullPane = pPlayerPane->nCountUpNull;
         const unsigned char *pTextPane = pPlayerPane->nCountUpText;
         const unsigned char *pFramePane = pPlayerPane->nCountUpFrame;
+        const unsigned char *pNullPane = pPlayerPane->nCountUpNull;
         const unsigned char *pPicAPane = pPlayerPane->nCountUpPicA;
         const unsigned char *pPicBPane = pPlayerPane->nCountUpPicB;
 
@@ -1145,8 +1145,8 @@ long msw::CCockpitBasketHarapeko::SetScore(long nPlayer, long nScore, int bAnim,
     static const int recursive = 1;
 
     const PlayerPane &rPane = s_PlayerPane[nPlayer];
-    long nShowPane;
     long nHidePane;
+    long nShowPane;
 
     if (nScore >= 100) {
         nShowPane = rPane.nScore100;
@@ -1441,6 +1441,7 @@ long msw::CCockpitBasketHarapeko::SetTeamFaceIcon(bcs::G2D::CPaneCtrl *pPaneCtrl
 
 void msw::CCockpitBasketHarapeko::CreateCrownIcon(bcs::G2D::CPaneCtrl *pPaneCtrl)
 {
+    nw4r::lyt::Pane *pPictureSrc;
     static const int animUse = 1;
 
     if (pPaneCtrl == 0) {
@@ -1468,7 +1469,7 @@ void msw::CCockpitBasketHarapeko::CreateCrownIcon(bcs::G2D::CPaneCtrl *pPaneCtrl
     pNullSrc->SetScale(scale);
     pNullSrc->SetLocationAdjust(false);
 
-    nw4r::lyt::Pane *pPictureSrc = m_pPaneAccessor->GetPane(PANE_crown);
+    pPictureSrc = m_pPaneAccessor->GetPane(PANE_crown);
 
     if (pPictureSrc == 0) {
         return;

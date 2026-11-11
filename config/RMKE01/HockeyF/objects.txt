@@ -27,3 +27,5 @@ Equivalent game/hockey/CCollManHockey.cpp
 Matching game/hockey/CComDrvHockey.cpp
 Matching game/hockey/CStageHockey01.cpp
 Equivalent game/hockey/CBallMarkerHockey.cpp
+Equivalent game/hockey/CStageHockey07.cpp
+Matching game/hockey/CStageHockey04.cpp

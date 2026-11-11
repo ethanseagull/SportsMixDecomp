@@ -1,6 +1,7 @@
 #ifndef MSW_CSTGGMK_PYLON_HPP_
 #define MSW_CSTGGMK_PYLON_HPP_
 
+#include "bcs/FVEC3.hpp"
 #include "game/msw/CStgGmk.hpp"
 
 namespace msw {
@@ -34,6 +35,40 @@ namespace msw {
 
         private:
             long m_nMdlIdx; // 0x12C, which model of the table (only one)
+    };
+
+    // One pylon, the gimmick that CStgGmk_PylonCluster places. A DOL class,
+    // size 0x78 (CStgGmk_Pylon_Dodge, allocated at 0x78, adds nothing). The
+    // order of the virtual functions follows __vt__Q23msw19CStgGmk_Pylon_Dodge
+    // (DodgeF). DodgeF emits weak copies of NewDrv, GetRadius, GetVel, GetPos
+    // and GetDefaultPos, so those are inline in the original; their bodies
+    // are not written yet. Return types not visible in a body are guesses.
+    class CStgGmk_Pylon : public CStgGmk {
+        public:
+            CStgGmk_Pylon(bcs::CTask *pParent, int);
+            virtual ~CStgGmk_Pylon();
+            virtual void Main();
+            virtual void Disp();
+            virtual unsigned long CalcSum() const;
+            virtual CStgDrv *NewDrv(long heap);
+            virtual void OnPostCreate();
+            virtual void OnSceneEntry();
+            virtual void OnSceneLeave();
+
+            virtual void SetDefaultPos(const bcs::FVEC3 &rPos);
+            virtual const bcs::FVEC3 &GetDefaultPos() const;
+            virtual void Respawn();
+            virtual bool IsActive() const;
+            virtual void Inactivate();
+            virtual bool IsLanding() const;
+            virtual void SetAccel(const bcs::FVEC3 &rAccel);
+            virtual bcs::FVEC3 GetPos() const;
+            virtual bcs::FVEC3 GetVel() const;
+            virtual float GetRadius() const;
+
+        private:
+            unsigned long m_Unk68;   // 0x68
+            bcs::FVEC3 m_DefaultPos; // 0x6C
     };
 }
 

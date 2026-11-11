@@ -406,7 +406,8 @@ int msw::SelectMenu::CWiFiFrindVS::Set()
                 swprintf(message, MESSAGE_TEXT_LEN, GetMessageLabelString("WifiConnectMessage", "FVS_ENT_00"),
                          pFriend->m_Name);
                 SetTextPaneString(PANE_TEXT_MESSAGE, message, -1);
-                SetTextPaneString(PANE_TEXT_NAME, pFriend->m_Name, -1);
+                const wchar_t *pName = pFriend->m_Name;
+                SetTextPaneString(PANE_TEXT_NAME, pName, -1);
 
                 // The friend's Mii, rendered into a picture pane of the
                 // size of PANE_MII.
@@ -423,9 +424,7 @@ int msw::SelectMenu::CWiFiFrindVS::Set()
                 menu::CreateMiiPicturePane(&texObj, pLytObj, m_pPaneAccessor->GetPane(PANE_MII), "RENDER_MII");
                 m_pMiiRender->SetDispState(1);
 
-                wchar_t num[NUM_TEXT_LEN];
-                swprintf(num, NUM_TEXT_LEN, L"%d", pData->m_nWinNum);
-                m_pPaneAccessor->SetTextBoxString(PANE_TEXT_NUM, num, wcslen(num));
+                SetTextPaneString(PANE_TEXT_NUM, 0, pData->m_nWinNum);
 
                 pSelectMenu->Build(OBJ_TROFY);
                 CTrofy *pTrofy = static_cast<CTrofy *>(pSelectMenu->FindObj(OBJ_TROFY));
@@ -465,9 +464,9 @@ inline void msw::SelectMenu::CWiFiFrindVS::SetTextPaneString(long nPane, const w
         swprintf(num, NUM_TEXT_LEN, L"%d", nValue);
         m_pPaneAccessor->SetTextBoxString(nPane, num, wcslen(num));
     } else {
-        nw4r::lyt::Pane *pPane = (unsigned long)nPane < m_pPaneAccessor->m_nNum
-                                     ? m_pPaneAccessor->GetPane(m_pPaneAccessor->GetPaneName(nPane), recursive, 0)
-                                     : 0;
+        CMenuPaneAccessor *pAccessor = m_pPaneAccessor;
+        nw4r::lyt::Pane *pPane =
+            (unsigned long)nPane < pAccessor->m_nNum ? pAccessor->GetPane(pAccessor->GetPaneName(nPane), recursive, 0) : 0;
         if (pPane != 0) {
             m_pPaneAccessor->SetTextBoxString(nPane, pText, wcslen(pText));
         }

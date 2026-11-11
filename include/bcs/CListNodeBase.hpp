@@ -32,11 +32,29 @@ namespace bcs {
                 }
             }
 
+            // (name guessed) The next node, or null after the last one.
+            CListNodeBase *GetNext() const { return m_pNext; }
+
         private:
             CListNodeBase *m_pNext; // 0x00
             CListNodeBase *m_pPrev; // 0x04 (guessed)
             CListBase *m_pList;     // 0x08
-            unsigned char m_Unk0C[0x4];
+
+        public:
+            // The vptr is at 0x0C: the data members are declared before the
+            // first virtual function. HockeyF's CStageHockey07 calls the
+            // fourth virtual function of msw::CNpcBossPackun::CMudBomb
+            // through the slot after these (vtable of
+            // CNpcBossPackunHockeyBase::CMudBombHockey: the node's part holds
+            // the destructor, PreLink, PostLink, PreUnlink, PostUnlink). The
+            // modules emit all five as weak functions; the four hooks are
+            // empty (4 bytes each), the destructor's body (0x60 bytes) is not
+            // written yet.
+            virtual ~CListNodeBase();
+            virtual void PreLink() {}
+            virtual void PostLink() {}
+            virtual void PreUnlink() {}
+            virtual void PostUnlink() {}
     };
 
     // (name and layout guessed) The head of a list as the loops above read
@@ -50,6 +68,35 @@ namespace bcs {
             CListNodeBase *m_pFirst; // 0x00
             unsigned char m_Unk04[0xC];
             CListNodeBase m_End;     // 0x10
+    };
+
+    // (guessed) A list of T, a class with CListNodeBase as a base; the
+    // nodes are converted to T and back. The DOL names instances of it
+    // (bcs::CList<bcs::CPoolNode<...>>). The two steps are what HockeyF's
+    // CStageHockey07 inlines to walk the mud bombs: the first T, or null
+    // for an empty list; the T after pObj (the first one for null), or null
+    // after the last one.
+    template <class T>
+    class CList : public CListBase {
+        public:
+            T *GetFirst()
+            {
+                CListNodeBase *pNode = CListBase::GetFirst();
+                if (pNode != GetEnd()) {
+                    return static_cast<T *>(pNode);
+                }
+                return 0;
+            }
+
+            T *GetNext(T *pObj)
+            {
+                if (pObj == 0) {
+                    return GetFirst();
+                }
+                CListNodeBase *pNext = pObj->GetNext();
+                bool bValid = pNext != 0 && pNext != static_cast<T *>(GetEnd());
+                return bValid ? static_cast<T *>(pNext) : 0;
+            }
     };
 }
 

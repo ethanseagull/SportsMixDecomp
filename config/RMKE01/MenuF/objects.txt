@@ -29,7 +29,8 @@ Equivalent game/menu/CChrCaption.cpp
 Equivalent game/menu/CPlusMinus.cpp
 Equivalent game/menu/CPlayMode.cpp
 Equivalent game/menu/CTeam.cpp
-NonMatching game/menu/CPlayerInfo.cpp
+Equivalent game/menu/CPlayerInfo.cpp
 Equivalent game/menu/CPartySelect.cpp
-NonMatching game/menu/CPlayerSelect.cpp
-NonMatching game/menu/CWiFiFrindVS.cpp
+NonMatching game/menu/CBgMdl.cpp
+Equivalent game/menu/CPlayerSelect.cpp
+Equivalent game/menu/CWiFiFrindVS.cpp

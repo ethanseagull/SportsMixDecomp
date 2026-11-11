@@ -30,6 +30,45 @@ namespace msw {
     extern float BASKET_PRM_S02_BIG_ITEM_POP_DIST;
     extern float BASKET_PRM_S02_BIG_ITEM_POP_POS_X;
 
+    // Stage 06, the lit stage, listed in CStageBasket06::GetPrmTbl.
+    extern float BASKET_PRM_S06_MOVE_SPEED;
+    extern float BASKET_PRM_S06_MOVE_SPEED_SHOOT_CATCH;
+    extern float BASKET_PRM_S06_MOVE_ROTATE_RATE;
+    extern float BASKET_PRM_S06_MOVE_HEIGHT;
+    extern float BASKET_PRM_S06_MOVE_Y_SP_MIN;
+    extern float BASKET_PRM_S06_MOVE_Y_SP_MAX;
+    extern long BASKET_PRM_S06_BALL_HOLD_MOVE;
+    extern float BASKET_PRM_S06_CATCH1_COL_R;
+    extern float BASKET_PRM_S06_CATCH1_COL_HEIGHT;
+    extern float BASKET_PRM_S06_CATCH2_COL_RADIUS;
+    extern float BASKET_PRM_S06_PUSH1_COL_SIZE_R;
+    extern float BASKET_PRM_S06_PUSH1_COL_SIZE_HEIGHT;
+    extern float BASKET_PRM_S06_DAMAGE_COLL_BALL_R;
+    extern long BASKET_PRM_S06_DAMAGE_COLL_TYPE;
+    extern float BASKET_PRM_S06_BW_ALPHA_RATE;
+    extern float BASKET_PRM_S06_ALPHA_TEST_NEAR_RANG;
+    extern float BASKET_PRM_S06_ALPHA_TEST_FAR_RANG;
+    extern long BASKET_PRM_S06_PASS_CALL_WAIT_MINUTES;
+    extern long BASKET_PRM_S06_PASS_RANDUM_PARCENT;
+    extern long BASKET_PRM_S06_PASS_MISS_TO_HAPPY_COUNT;
+    extern float BASKET_PRM_S06_LOOSE_BALL_GET_DIST;
+    extern long BASKET_PRM_S06_CUT_APPEND_MINUTES;
+    extern float BASKET_PRM_S06_RIGHT_OFF_MOVE_R1;
+    extern float BASKET_PRM_S06_RIGHT_OFF_MOVE_R2;
+    extern float BASKET_PRM_S06_RIGHT_OFF_MOVE_R1_HEIGHT;
+    extern long BASKET_PRM_S06_LIGHT_SWITCH_CNT;
+    extern float BASKET_PRM_S06_LIGHT_ON_TIME; // seconds
+    extern long BASKET_PRM_S06_FLASH_COLOR_R;
+    extern long BASKET_PRM_S06_FLASH_COLOR_G;
+    extern long BASKET_PRM_S06_FLASH_COLOR_B;
+    extern long BASKET_PRM_S06_FLASH_COLOR_A;
+    extern float BASKET_PRM_S06_FLASH_TIME;
+    extern float BASKET_PRM_S06_FLASH_GAIN;
+    extern float BASKET_PRM_S06_FLASH_DECAY;
+    extern long BASKET_PRM_S06_DBG_MAIN_PROC_ENABLE;
+    extern long BASKET_PRM_S06_DBG_TARGET_DISP;
+    extern long BASKET_PRM_S06_PUSH1_COL_DBG_ENABLE;
+
     // Hungry Boss Packun stage 70: the boss's tables, listed in
     // CStageBasketHungryBossPackun70::GetPrmTbl. (meaning not known)
     extern long BASKET_PRM_S70_STATE0_TBL0_IDX;

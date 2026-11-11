@@ -8,6 +8,10 @@ namespace msw {
     class CBall;
     class CChrCore;
     class CItem;
+    class CQPanel;
+
+    class CChrObstacle;
+    class CDropCoin;
 
     // The computer players' manager. A DOL class; each game module derives
     // its own (CComManVolleyGame, CComManBasketGame, CComManHockey, ...) and
@@ -88,6 +92,13 @@ namespace msw {
             // its position.
             static unsigned long QPanel_GetNear(const bcs::FVEC3 &rPos, unsigned long nKindBits);
             static bcs::FVEC3 QPanel_GetPos(unsigned long nPanel);
+            // (added for BossF game/boss/CComDrvBoss.cpp) The panel itself;
+            // null when it is gone.
+            static CQPanel *QPanel_GetPtr(unsigned long nPanel);
+            // (DOL; added for BossF game/boss/CComDrvBoss.cpp) Walks the
+            // obstacles: the first one after pPrev (null: the first), null
+            // at the end.
+            static CChrObstacle *ObstacleSearch(CChrObstacle *pPrev);
             // The nearest falling green shell (0: none), whether it is
             // active, and its position.
             static unsigned long FallGShell_GetNear(const bcs::FVEC3 &rPos);
@@ -112,6 +123,43 @@ namespace msw {
             static float GetStageCourtCenterX(long nCourt);
             static float GetStageCourtCenterZ(long nCourt);
             static long GetNearBestPos2on3(const bcs::FVEC3 *pMy, const bcs::FVEC3 *pTarget, long nIdx);
+
+            // (DOL; added for BasketF game/basket/CComManBasketGame.cpp;
+            // return types guessed) The instance (g_pInstance); whether the
+            // court has an invisible wall at the view (the collision's
+            // IsEnableViewColl_), its Z in the court's frame, and the side it
+            // closes (0: the back line, 1: the front line); walks of the "?"
+            // panels.
+            static CComMan *GetInstance();
+            static int IsEnableViewColl();
+            static float GetViewCollPosZ();
+            static long GetViewCollTargetDir();
+            static CQPanel *QPanel_GetFirst();
+            static CQPanel *QPanel_GetNext(CQPanel *pPanel);
+
+            // (DOL; added for VolleyF game/volley/CComDrvVolleyRR.cpp; return
+            // types and meanings guessed) The court a world position is on;
+            // the outer edges of the stage beyond court nCourt and the front
+            // and back of the court itself, in the world.
+            static long GetCourtIdxByWorldPos(const bcs::FVEC3 &rPos);
+            static float GetStageOuterWorldLeft(long nCourt);
+            static float GetStageOuterWorldRight(long nCourt);
+            static float GetStageOuterWorldFront(long nCourt);
+            static float GetStageOuterWorldBack(long nCourt);
+            static float GetStageCourtWorldFront(long nCourt);
+            static float GetStageCourtWorldBack(long nCourt);
+            // Clears bit nChr of rBits; the character nearest to rPos among
+            // those of nBits (negative for none).
+            static void ResetEnableBit(unsigned long &rBits, long nChr);
+            static long GetNearChrBase(const bcs::FVEC3 &rPos, unsigned long nBits);
+            // The coins lying on the court: walk them, look one up by its
+            // task id (null when it is gone), its position, and the
+            // character nearest to it among nBits.
+            static CDropCoin *DropCoin_GetFirst();
+            static CDropCoin *DropCoin_GetNext(CDropCoin *pCoin);
+            static CDropCoin *DropCoin_GetPtr(unsigned long nId);
+            static bcs::FVEC3 DropCoin_GetPos(const CDropCoin *pCoin);
+            static long DropCoin_GetNearChr(const CDropCoin *pCoin, unsigned long nBits);
 
             static CComMan *g_pInstance;
     };

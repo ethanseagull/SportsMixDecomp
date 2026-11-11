@@ -115,7 +115,9 @@ namespace msw {
                 // 0x1C, copied from the tournament's work by
                 // TournamentRule::SetupGame (meaning not known)
                 long m_nUnk1C;
-                unsigned char m_Unk20[0x24 - 0x20];
+                // 0x20 (meaning not known): BasketF's computer players
+                // take a fixed shot time while it is not above 0.
+                float m_fUnk20;
                 // 0x24 (name and meaning guessed): a game time in frames;
                 // HockeyF's fire pillars (stage 86) change their timing
                 // when it falls below HOCKEY_PRM_S86_FIRE_TIME1/2 seconds.
@@ -375,6 +377,9 @@ namespace msw {
             // The colour of team nTeam: the byte at g_GameWork + 0x80 +
             // nTeam, read unsigned. The radar uses it as an index of four.
             static long GetTeamColorIdx(long nTeam);
+            // (DOL; added for MenuF's msw::CTopMenuChr, which gives team n
+            // colour n) Sets the colour of team nTeam.
+            static void SetTeamColorIdx(long nTeam, long nColor);
             // The result of team nTeam: the byte at g_GameWork + 0xFC + nTeam,
             // read unsigned. What the values mean is not known;
             // CTmGameHandler::_SetBattleWin takes it and _IsBattleWin tests
@@ -428,6 +433,11 @@ namespace msw {
             // Passes a message to the running game's virtual at vtable
             // offset 0x3C, if there is a game.
             static void SendMessage(long nMsg, long, long, long);
+            // (DOL, static; added for BossF game/boss/unit_5FF80.cpp,
+            // meanings guessed) Empties team nTeam's arts gauge; turns the
+            // loose ball mode on or off.
+            static void ClearTeamArtsGauge(long nTeam);
+            static void SetLooseBallModeFlag(int bOn);
             // (DOL, static; added for BasketF game/basket/CChrManBasket.cpp;
             // return types and parameter meanings guessed) Fades the
             // background in (fFrom, fFrames); the shot clock's length and

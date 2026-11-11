@@ -46,6 +46,19 @@ namespace msw {
             // (name guessed) The model's shadow, or null.
             bcs::CMdlShadow *GetShadow() const { return m_pShadow; }
 
+            // (DOL; added for MenuF's game/menu/CTopMenuChrObj.cpp; names of
+            // the arguments and return types guessed)
+            // Builds the model of the top menu's character of kind nKind.
+            void CreateTopMenuObj(nw4r::g3d::ResFile file, long nKind, long);
+            // Builds a Mii's model for the player info screens.
+            void CreatePlayerInfoObj(nw4r::g3d::ResFile file, RFLStoreData &rData, unsigned long nFlag, long);
+            // (SetDispEnable, declared above: MenuF's callers pass 1 for
+            // bShadow. SetFaceAnmType, above: the face expression, 1 to 7.)
+            // The gold version of the model.
+            void EnableGoldModel(int bGold);
+            // The size of a Mii's head.
+            void SetMiiHeadScale(float fScale);
+
             // The trigger callback of the model's motion; pUser is the model.
             static void CallbackMotTrg(const bcs::CAnmObjMotBase::MOT_TRG *pTrg, void *pUser);
 

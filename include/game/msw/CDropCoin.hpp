@@ -48,6 +48,8 @@ namespace msw {
             // Throws the coin so that it lands at rTarget after fFrame frames
             // (at least 1), going up to fTopY.
             void DoParabolaThrow(const bcs::FVEC3 &rTarget, float fTopY, float fFrame);
+            // (inline; added for VolleyF game/volley/CComDrvVolleyRR.cpp)
+            const bcs::FVEC3 &GetPos() const { return m_vPos; }
 
         private:
             void CreateMdl_();

@@ -10,6 +10,7 @@ BasketF CalcPos___Q33msw11CC09_BASKET14CBoundMushroomFv near 99.4 register choic
 BasketF CallbackBallCatch___Q23msw19CNpcGhostBasketBaseFPQ23msw13CCollBodyUnitPQ23msw5CBall near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CallbackBodyPush___Q23msw19CNpcGhostBasketBaseFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 97.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CallbackMotTrg___Q23msw20CChrCoreBasketKuromaFPCQ33bcs14CAnmObjMotBase7MOT_TRG near 99.7 instruction order only (addi for the ResMdl temporary)
+BasketF CanbeShootState___Q23msw17CComManBasketGameCFl near 95.5 register choice only: the level float is in f1 in the original, f0 here, inside inlined GetComLvF_/GetBaseComLvF_
 BasketF CheckArtsChrInput__Q23msw16CChrDrvPadBasketFPCQ33msw7CChrDrv8_CHR_MSG unverified 80.0 80.0%: float constants via one base register instead of the original's per-literal lis (pool-off stand-in could not stay in the shared CChrDrvPad header); extra field reloads in the original; not proven.
 BasketF CheckCmd___Q23msw16CChrDrvPadBasketCFll unverified 98.5 98.5% after the shared CChrDrvPad header dropped the pool-off stand-in (it lowered BossF/HockeyF/VolleyF pad drivers): float constants via one base register instead of per-literal lis; otherwise as before.
 BasketF CheckCurveDir___Q23msw14CBallManBasketCFfRCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 87.0 stack slots of the vector temporaries and the scheduling order of the two side checks; same calls, constants and 0/4/2 result logic
@@ -57,6 +58,8 @@ BasketF GetJustShotTimingMax___Q23msw13CChrManBasketCFPCQ23msw14CChrCoreBasket n
 BasketF GetJustShotTimingMax___Q23msw14CBallManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3PCQ23msw5CBall near 96.5 stack slots, registers, and the queue head and tail loaded in the other order; same calls and constants
 BasketF GetJustShotTimingMin___Q23msw13CChrManBasketCFPCQ23msw14CChrCoreBasket near 98.1 stack slots of the vector temporaries differ; the distance table (0, 5.5, 11) sits before the 5.5 literal in our .rodata instead of after it; same values
 BasketF GetJustShotTimingMin___Q23msw14CBallManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3PCQ23msw5CBall near 96.5 stack slots, registers, and the queue head and tail loaded in the other order; same calls and constants
+BasketF GetMemBer__Q23msw17CComManBasketGameFlPPCQ23msw8CChrCorellPCQ23msw8CChrCore near 99.5 register allocation only
+BasketF GetMemberNoBadCondition__Q23msw17CComManBasketGameFlPPCQ23msw8CChrCorellPCQ23msw8CChrCore near 99.6 register allocation only
 BasketF GetMoveTgtPosRand__Q23msw19CNpcGhostBasketBaseCFv near 94.2 94.2%: local int table reached through the float-pool base instead of its own lis; registers.
 BasketF GetPanelParam_Cycle__Q23msw14CStageBasket10CFl near 99.0 99.0%: fcmpu operands swapped (equality), bss table relocation name
 BasketF GetPanelParam_Interval__Q23msw14CStageBasket10CFl near 99.0 99.0%: fcmpu operands swapped (equality), bss table relocation name
@@ -69,6 +72,7 @@ BasketF GetParam_FlashColor__Q23msw14CStageBasket16CFv unverified 63.3 Same valu
 BasketF GetParam_TTOffset__Q23msw14CStageBasket17CFv near 99.2 register choice inside the inlined FVEC3LenSq zero check of BCS_Vec_Normalize
 BasketF GetRotY_Pos1ToPos2XZ__Q23msw13CChrManBasketFRCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 100.0 constant offset only: the original .rodata has 8 more bytes (static fDist and 5.0 of the stripped Util_SearchAerialPassmeetTo_), so one sdata2 load is 0x68 vs 0x60; same constant
 BasketF GetShotParam___Q23msw21CItemBallBasketGShellCFRQ33msw11BALL_BASKET10SHOT_PARAM near 99.8 99.8%: fmadds operand order only.
+BasketF HitCheckTrain__Q23msw17CComManBasketGameFRQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 99.7 original reloads lo.z from its stack slot inside the z swap, ours reuses the register holding the same value
 BasketF InRectAndRad___Q23msw13CChrManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3fff near 99.9 lfs offsets into .rodata differ only: the original's .rodata has 8 more bytes (fDist static and a 5.0 of the stripped Util_SearchAerialPassmeetTo_) before these constants
 BasketF IsRide__Q33msw14CStageBasket1010CPanelInfoCFRCQ23bcs5FVEC3 near 94.8 94.8%: stack vector stores in a different order
 BasketF LookAt__Q23msw7CStgObjFRCQ23bcs5FVEC3 near 97.9 97.9%: weak inline; the two psq_l/ps_sub operands land in f0/f1 swapped (operand order inside the shared bcs::FVEC3Sub helper). Float registers only.

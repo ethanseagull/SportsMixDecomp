@@ -14,6 +14,12 @@ namespace msw {
             CComDrvBasketGame();
             virtual ~CComDrvBasketGame();
 
+            // (added for game/basket/CComManBasketGame.cpp; return types
+            // guessed) The frame rate of a dunk, and the message that the
+            // ghost caught a shot.
+            float GetDunkFrameRate() const;
+            void MsgShootCatchToGhost();
+
         protected:
             unsigned char m_Unk170[0x688 - 0x170];
     };

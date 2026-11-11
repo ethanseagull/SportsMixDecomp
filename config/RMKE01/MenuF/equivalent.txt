@@ -1,4 +1,5 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
+MenuF CalcView___Q23msw8CBBoxObjFlPCQ23bcs6FMTX34 near 99.3 register numbering inside the paired-single FVEC3Add pair; same instructions
 MenuF ChangePict__Q33msw10SelectMenu9CRuleInfoFv near 98.1 register choice and instruction order only (accessor/texture registers swapped around the inline GetPane)
 MenuF ChangeTab__Q33msw10SelectMenu11CPlayerInfoFl unverified 77.7 range check written as cmpwi 0/blt + cmpwi 5/bge in the original, one cmplwi 4/bgt in ours, and ours keeps the .rodata base (table and the 1.0f/0.0f literals) in a saved register where the original uses one lis each; same table, constants and call. Tried: static local table (93.7%, but adds a @LOCAL@ object the original lacks), ||, nested ifs, ternary
 MenuF CharSel_CancelLastDecideChara__Q23msw11CSelectMenuFv near 96.9 register allocation only: the loop counter, the hoisted zero and the pointer copies are numbered in another order; same instructions
@@ -15,6 +16,8 @@ MenuF CheckFrindStat__Q33msw10SelectMenu11CFriendInfoFv near 99.9 register alloc
 MenuF CheckPageChange__Q33msw10SelectMenu7CMiiSelFv near 99.6 99.6%: register choice only
 MenuF ClearSign__Q33msw10SelectMenu8CChrSignFl near 99.2 register choice only: three saved registers (task, list, kind|0x80000000) permuted
 MenuF CreateChrMenuObj__Q33msw10SelectMenu9CCourtChrFllll13RFLDataSourcell near 99.1 incoming arguments copied to saved registers in another order
+MenuF CtorStateDecide__Q23msw14CTopMenuChrObjFv near 96.7 register choice only (flags word in r4 vs r0)
+MenuF CtorStateIdle__Q23msw14CTopMenuChrObjFv unverified 45.9 PlayMotion(MOT_IDLE, loop, 1.0f, 0.0f): original loads 1.0f and 0.0f before the motion null check and keeps 0.0f in one register for the compare and the frame argument; ours loads after the check and reloads 0.0f. Same call and values; below 85% only because the function is 17 instructions
 MenuF Cup_Loop__Q23msw11CSelectMenuFv near 98.5 float constants reached from one kept base register instead of lis/@l each; single beq+b vs bne for the same test; register swaps in the inlined _TabChange and Cup_OkButtonOut; cmpwi vs cmplwi on a zero-extended byte compared with 1 (same result)
 MenuF Cup_OkButton__Q23msw11CSelectMenuFv near 99.3 register allocation only (pad index and cancel flag swapped)
 MenuF DispCharaStatus__Q33msw10SelectMenu12CCharaStatusFv near 99.5 register allocation only
@@ -41,6 +44,10 @@ MenuF HitCheck__Q33msw10SelectMenu10CPartyInfoFPQ23bcs5FVEC3 near 98.0 original 
 MenuF HitCheck__Q33msw10SelectMenu9CCourtTabFPQ23bcs5FVEC3 near 98.9 register choice only; regs search no gain
 MenuF IndividualSelect__Q33msw10SelectMenu9CBackIconFl near 99.5 identical code; only the jump table symbol name differs (anonymous vs jumptable_2_data_11D8)
 MenuF Initialize__Q33msw10SelectMenu6CBgChrFv near 97.4 register choice (one li 0 instead of a reused zero register) and stack slots of the colour temporaries
+MenuF LoopStateActive__Q23msw14CTopMenuChrObjFv near 92.6 PlayMotion helper: original loads the 0.0f/1.0f constants before the motion null check and reuses the 0.0f register for the frame argument; ours loads them after the check and reloads 0.0f; same calls and values
+MenuF LoopStateDecide__Q23msw14CTopMenuChrObjFv unverified 77.1 PlayMotion constant loads placed after the null check (original hoists 0.0f/1.0f and reuses the register); same calls and values
+MenuF LoopStateToIdle__Q23msw14CTopMenuChrObjFv near 94.0 PlayMotion helper constant loads placed after the null check (original hoists them and reuses the 0.0f register); same calls and values
+MenuF Main__Q23msw14CTopMenuChrObjFv near 98.6 one load of m_pMdl scheduled after the three rotation loads instead of between them; same operations
 MenuF Main__Q23msw18CDepthOfFieldValueFv unverified 81.8 same operations and constants (0.0f, 1.0f, 2.5); the original loads each float constant with its own lis/lfs pair while ours keeps the .rodata base in r31 (this moves to r30, one more saved register) and the scheduling around pow() shifts. No behavioural difference seen, but under the 85% bar; what makes the compiler skip the base register is not known
 MenuF Main__Q33msw10SelectMenu11CBackgroundFv near 98.8 two saved registers swapped (first pane object and animation number); regs search no gain
 MenuF Main__Q33msw10SelectMenu11CFriendInfoFv near 100.0 load order of the two operands of the m_fTrofyWait != 0.0f compare (equality, symmetric)
@@ -62,6 +69,7 @@ MenuF MovieControl__Q33msw10SelectMenu11CGameSelectFv near 99.9 register choice 
 MenuF MovieControl__Q33msw10SelectMenu14CPartyHelpPageFv near 99.9 one register choice (r3 vs r4) for the layout handle before CLytManager::GetObject
 MenuF NoFriendInfo_Loop__Q23msw11CSelectMenuFv near 97.9 register choice and word-load order in the friend roster copy
 MenuF PlayMode_Loop0__Q23msw11CSelectMenuFv near 99.9 register choice only: the register holding the next mode (0xD/0xE)
+MenuF PrepareDecideAnim__Q23msw11CTopMenuChrFv unverified 83.6 original re-reads the flags word and repeats the select test inside CTopMenuChrObj::PrepareDecide before setting bits 0xC; ours folds the repeated test (same result single-threaded)
 MenuF Remove__Q33msw10SelectMenu7CCupChrFv near 94.1 cup handle addressed as addi base,4 plus 0x64 instead of 0x68 directly (same address); register order
 MenuF Remove__Q33msw10SelectMenu9CCourtChrFv near 98.9 register choice and instruction order only
 MenuF RuleInfo_Loop__Q23msw11CSelectMenuFv near 97.9 switch range check on the tab button ids: the original recomputes nBtnKindId-0x8010/0x8020 (addi) in the case body, ours reuses the value from the range compare; one instruction and register choice only, same calls and arguments
@@ -172,7 +180,11 @@ MenuF WifiWait_Loop__Q23msw11CSelectMenuFv near 96.8 Same calls, constants, memo
 MenuF _GetUsedCursol__Q23msw11CSelectMenuFl near 98.9 operand order of the final commutative or
 MenuF _SetCupBit__Q23msw11CSelectMenuFl near 96.4 register allocation and instruction order only
 MenuF _SetStarMii__Q23msw11CSelectMenuFl near 99.9 stack slots of the two 8-byte RFLCreateID copies swapped (sp+8 / sp+0x10)
+MenuF __ct__Q23msw14CMiiRenderBaseFPQ23bcs5CTaskR12RFLStoreDatallUl near 95.6 the motion file's argument copy is stored before the GetMdl_NodeExInfo call instead of after it; same values passed to CAnmMotion::Create
+MenuF __ct__Q23msw14CTopMenuChrObjFPQ23bcs5CTaskl near 98.6 stack slots of the by-value pointer-to-member copies and of the null-state copy differ (inline nesting of InitState); same code otherwise
+MenuF __ct__Q23msw17CPlayerInfoRenderFPQ23bcs5CTaskR12RFLStoreDatall near 99.9 stack slots of the by-value pointer-to-member copies differ; same code otherwise
 MenuF __ct__Q23msw5CMenuFPQ23bcs5CTask near 99.8 stack slot order only: inline CFsm() null-PTMF temporary at sp+0x8 vs sp+0xE0, state-table temporaries shifted by 0xC
 MenuF __dt__Q33msw10SelectMenu9CCourtChrFv near 99.1 register choice only; regs search no gain
 MenuF __sinit_\CBgMdl_cpp near 99.8 only the offsets of the float literals inside the .rodata pool differ (the original pool also holds the literals of the stripped CBgMdl functions); same constants, stores and stack temporaries
 MenuF __sinit_\CCourtChr_cpp near 99.8 register choice only
+MenuF __sinit_\CTopMenuChrObj_cpp near 97.5 two registers swapped in the static initialiser; same stores

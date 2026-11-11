@@ -121,7 +121,14 @@ namespace msw {
             void SetShotClockCount_(long nCount, long);
 
         private:
-            unsigned char m_Unk150[0x274 - sizeof(CGame)];
+            unsigned char m_Unk150[0x1C0 - sizeof(CGame)];
+        public:
+            // 0x1C0 (meaning not known): CComManBasketGame::CanbeShootState_
+            // lets a computer team shoot while it is above a level parameter.
+            float m_fUnk1C0;
+
+        private:
+            unsigned char m_Unk1C4[0x274 - 0x1C4];
     };
 }
 

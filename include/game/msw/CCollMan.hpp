@@ -76,6 +76,10 @@ namespace msw {
             static int DetectMapHit(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, float &rTime, const bcs::FVEC3 &rFrom,
                                     const bcs::FVEC3 &rTo, float fRadius, long, unsigned long);
             static int CheckMapInner(const bcs::FVEC3 &rPos, float fRadius, unsigned long);
+            // HockeyF's CStgGmk_Pinball_Act_Hockey::WallHitCheck compares the
+            // result unsigned with 0x20 and 0x40 (a goal post hit).
+            static unsigned long DetectBallGoalIn(long &rGoal, bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal,
+                                                  const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius);
             static void SetArtsExColl(long n);
             // (DOL) The ground attribute under rPos (the stage's
             // GetFloorAttribute) into rAttr and the floor's flow there (its
@@ -93,6 +97,12 @@ namespace msw {
             static float GetClosestP_SegmentSegment(const bcs::FVEC3 &rA0, const bcs::FVEC3 &rA1,
                                                     const bcs::FVEC3 &rB0, const bcs::FVEC3 &rB1, float &rT,
                                                     float &rS, bcs::FVEC3 &rClosestA, bcs::FVEC3 &rClosestB);
+            // (added for BossF game/boss/CComDrvBoss.cpp; meaning read from its
+            // use) Where segment rFrom-rTo first touches the capsule of radius
+            // fRadius around rCap0-rCap1, in rHit; not zero when it does.
+            static int DetectHitPos_SegmentCapsule(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo,
+                                                   const bcs::FVEC3 &rCap0, const bcs::FVEC3 &rCap1, float fRadius,
+                                                   bcs::FVEC3 &rHit);
             // The point of segment r0-r1 closest to rPoint; returns the
             // square of the distance.
             static float GetClosestP_PointSegment(const bcs::FVEC3 &rPoint, const bcs::FVEC3 &r0,

@@ -32,7 +32,11 @@ namespace msw {
                 long m_nStep;     // 0x04
                 float m_fTime;    // 0x08
                 float m_fTime2;   // 0x0C
-                unsigned char m_Unk10[0x1C - 0x10];
+                unsigned char m_Unk10[0x18 - 0x10];
+                // 0x18 (name guessed): frames since the action started;
+                // BossF's CComDrvBoss gives up an action after a while.
+                float m_fActTime;
+
             };
 
             CComDrv(long nArg);
@@ -147,9 +151,31 @@ namespace msw {
             // given up.)
             void ActCallLookTarget();
             void ActCallLookTarget(const bcs::FVEC3 &rPos);
+            // (DOL; added for VolleyF game/volley/CComDrvVolleyRR.cpp) Turn
+            // to face the front.
+            void ActCallLookFront();
             // (DOL) A random number between fMin and fMax (RandRangeF below
             // is the other generator; which is which is not known).
             float RandRange(float fMin, float fMax) const;
+
+            // (DOL; added for BossF game/boss/CComDrvBoss.cpp) How many actions
+            // are entered (1: the one starting is the first); whether the
+            // character holds an item it can throw.
+            long GetEntryActNum() const;
+            // (DOL; BossF tests its lowest bit for a coin toss) A random number.
+            long RandI() const;
+            // (DOL; added for BossF game/boss/unit_51CE4.cpp, meanings guessed)
+            // A random number from 0 to 1; the action running now (negative
+            // for none); runs the action machinery for a frame, not zero when
+            // the action's loop function is to be called; whether team nTeam
+            // (-1: the driver's) holds the ball; sets alarm nAlarm (OnAlarm0..3)
+            // to go off after fFrame frames.
+            float RandF() const;
+            long GetCurrentActType() const;
+            int ActMain();
+            int IsMyTeamHoldBall(long nTeam) const;
+            void SetAlarm(long nAlarm, float fFrame);
+            int IsHaveMyStockItem() const;
 
             // (DOL; added for VolleyF's CComDrvVolleyGame units; return types
             // and meanings guessed from the names and the callers)
@@ -240,7 +266,10 @@ namespace msw {
             CBall *m_pBall;
             // The size 0x170 is where CComDrvHockey's own members start;
             // the DOL's functions use members up to 0x16C.
-            unsigned char m_Unk114[0x160 - 0x114];
+            // 0x114 (name guessed): where that ball is (BossF's CComDrvBoss
+            // runs to it).
+            bcs::FVEC3 m_BallPos;
+            unsigned char m_Unk120[0x160 - 0x120];
             // 0x160 to 0x16C (names guessed): the obstacle a gimmick
             // driver is turning round (VolleyF CComDrvVolleyRR::
             // GetPosTurnAroundGimmick). Kind: -1 none, 1 a character, 2 an

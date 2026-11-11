@@ -16,6 +16,11 @@ namespace bcs {
     // weight pTbl gives it.
     long BCS_LotProbability(const long *pTbl, long nNum);
 
+    // (DOL; added for BossF game/boss/CComDrvBoss.cpp, parameter names and
+    // meaning guessed) Which side of the line from (x0, z0) to (x1, z1) the
+    // point (x, z) is on: negative, zero on the line, or positive.
+    long BCS_Util_IsPointSide(float x, float z, float x0, float z0, float x1, float z1);
+
     // In the DOL (added for BasketF game/basket/CChrManBasket.cpp;
     // parameter meanings guessed). Not zero when rPos lies in the face
     // spanned from rFrom to rTo with the two widths, in the XZ plane.

@@ -100,6 +100,13 @@ namespace msw {
             // Shows a bomb blast at rPos, scaled by fScale. What the two longs
             // select is not known; the boss bomb passes 0 and 0x48. (return
             // type guessed)
+            // (DOL; added for BasketF game/basket/CComManBasketGame.cpp) The
+            // instance, and the walk of the items on the field (static: the
+            // DOL bodies take no object).
+            static CGimmickMan *GetInstance();
+            static CItem *ItemGetFirst();
+            static CItem *ItemGetNext(CItem *pItem);
+
             static void EffectBombExplosionCreate(const bcs::FVEC3 &rPos, long, float fScale, long);
             // (DOL) The instance's EffectCoinGetCreate_. (return type guessed)
             static void EffectCoinGetCreate(const bcs::FVEC3 &rPos, DROP_COIN::CoinType type);

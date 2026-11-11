@@ -43,6 +43,13 @@ namespace bcs {
     int BCS_GetSegLineToSegLineCross(float *pX, float *pZ, float x0, float z0, float x1, float z1, float x2,
                                      float z2, float x3, float z3);
 
+    // (added for BasketF game/basket/CComManBasketGame.cpp; meaning guessed
+    // from the name) The crossing point (*pX, *pZ) of the line through
+    // (x0, z0)-(x1, z1) with the segment (x2, z2)-(x3, z3); not zero when
+    // there is one. In the DOL.
+    int BCS_GetLineToSegLineCross(float *pX, float *pZ, float x0, float z0, float x1, float z1, float x2,
+                                  float z2, float x3, float z3);
+
     // (argument names guessed) The same with length 1. In the DOL.
     void BCS_VecOneZ_RotY(FVEC3 &rOut, float rotY);
     // (added for the DOL's pinball ball) The unit X vector turned by rotY.

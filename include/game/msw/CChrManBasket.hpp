@@ -121,6 +121,9 @@ namespace msw {
             // 1, meaning not known).
             void ResetClockOver_();
             void SetFlagAC(unsigned long nFlag) { m_nFlagAC |= nFlag; }
+            // (name guessed; inline in CComManBasketGame::GetBaseShootPoint)
+            // Bit 0x10 of m_nFlagAC: the game has no shot clock.
+            unsigned long IsNoShotClock() const { return m_nFlagAC & 0x10; }
 
             // Added for game/basket/CComManBasket.cpp (return types
             // guessed). Not zero when the boss Packun has been made.

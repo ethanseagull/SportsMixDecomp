@@ -6,6 +6,7 @@
 #include "game/msw/CStageHockey07.hpp"
 #include "game/msw/CStageHockey17.hpp"
 #include "game/msw/CStageHockeyCrushSkate85.hpp"
+#include "game/msw/CStageHockeyCrushSkate86.hpp"
 #include "game/msw/CStageHockeyCrushSkate87.hpp"
 #include "game/msw/CStageHockey10.hpp"
 #include "game/msw/CStageManHockey.hpp"
@@ -104,17 +105,6 @@ namespace msw {
 
         private:
             unsigned char m_Unk218[0x1C]; // size 0x234
-    };
-
-    // The CrushSkate stages (85 to 87).
-
-    class CStageHockeyCrushSkate86 : public CStageManHockey {
-        public:
-            CStageHockeyCrushSkate86(bcs::CTask *pParent);
-            virtual ~CStageHockeyCrushSkate86();
-
-        private:
-            unsigned char m_Unk218[0x400]; // size 0x618
     };
 
 }

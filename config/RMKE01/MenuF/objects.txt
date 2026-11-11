@@ -45,3 +45,6 @@ Equivalent game/menu/CPartyMEHelpBossPackun.cpp
 Equivalent game/menu/CBgChr.cpp
 Equivalent game/menu/CEntry.cpp
 Equivalent game/menu/CCourtTab.cpp
+Equivalent game/menu/CCharaStatus.cpp
+Equivalent game/menu/CFriendCode.cpp
+NonMatching game/menu/CFriendInfo.cpp

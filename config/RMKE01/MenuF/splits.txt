@@ -216,12 +216,12 @@ game/menu/CEntry.cpp:
 	.data       start:0x00004878 end:0x000049C8
 
 game/menu/CFriendCode.cpp:
-	.text       start:0x000356AC end:0x000376B4
+	.text       start:0x000356AC end:0x00037264
 	.rodata     start:0x00007C80 end:0x00007DA8
 	.data       start:0x000049C8 end:0x00004AD8
 
 game/menu/CFriendInfo.cpp:
-	.text       start:0x000376B4 end:0x0003CC04
+	.text       start:0x00037264 end:0x0003CC04
 	.rodata     start:0x00007DA8 end:0x00008070
 	.data       start:0x00004AD8 end:0x00004D38
 
@@ -273,11 +273,12 @@ game/menu/CCourtTab.cpp:
 game/menu/CCharaStatus.cpp:
 	.text       start:0x0005522C end:0x000566AC
 	.rodata     start:0x0000AD40 end:0x0000B6B0
-	.data       start:0x00006310 end:0x00007410
+	.data       start:0x00006310 end:0x000073F0
 
 game/menu/CButtonEntry.cpp:
 	.text       start:0x000566AC end:0x00056C40
 	.rodata     start:0x0000B6B0 end:0x0000B6D0
+	.data       start:0x000073F0 end:0x00007410
 
 game/menu/CSaveSelect.cpp:
 	.text       start:0x00056C40 end:0x0005B400

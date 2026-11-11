@@ -168,6 +168,16 @@ namespace msw {
             virtual void SE_Update(float);
             virtual CSESlot::CPosFunc *SE_GetDefaultFunc() { return 0; }
     };
+
+    // (purpose and names guessed) Supplies the position of a sound that
+    // follows something: the slot asks GetPos each time. The vptr is at
+    // 0x00. Layout from the DOL's msw::CStage04Base::CCartNode::CPosFunc
+    // (vtable lbl_8048E500: the destructor, then GetPos).
+    class CStgSeSlot::CSESlot::CPosFunc {
+        public:
+            virtual ~CPosFunc() {}
+            virtual void GetPos(bcs::FVEC3 *pPos) = 0;
+    };
 }
 
 #endif /* !MSW_CSTGSESLOT_HPP_ */

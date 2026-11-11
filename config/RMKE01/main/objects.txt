@@ -16,6 +16,7 @@ Equivalent game/msw/CCockpitChrIcon2D.cpp
 Equivalent game/bcs/dwc/CDwcFriend.cpp
 Equivalent game/bcs/CMdlShadow.cpp
 Equivalent game/bcs/CMusicData.cpp
+Equivalent game/msw/CStage04Base.cpp
 Matching game/msw/CMenuPadInfo.cpp
 Matching game/msw/CStageNet.cpp
 Matching game/msw/CStage01Base.cpp

@@ -69,6 +69,7 @@ main SetChrIconImpl__Q23msw17CCockpitChrIcon2DFlRCQ23bcs5FVEC3l near 99.8 99.8%:
 main SetDefaultCursorFlag__Q23msw18CCockpitButtonInfoFl near 98.7 register allocation and scheduling only: same branchless per-pad select, the original allocates the leader-compare temporaries in other registers
 main SetDispFlag__Q33msw7cockpit10CEffectSetFi near 99.8 register allocation only (loop pointer and EF manager swap r8/r10); declaration-order search no gain
 main SetTimeValue__Q33msw7cockpit10CTimeCountFPQ23msw17CMenuPaneAccessorfilllli near 99.6 register allocation only (three saved registers permuted); declaration-order search no gain in 24 tries
+main Stage04_RegistCart__Q23msw12CStage04BaseFPQ23bcs7CMdlObjl near 98.9 98.9%: node index and CStgSeSlot* swap registers; register choice only
 main StartZone__Q23msw26CStgGmk_WaterPillarClusterFl near 98.7 float register choice only, in the inlined paired-single add and the delay value
 main Start__Q23msw15CGameScoredViewFl near 99.7 register choice only: pointer registers of the two inlined paired-single vector adds
 main WriteBack__Q33bcs3dwc14CDwcFriendListFPC18DWCstAccFriendDataUxllPCvl unverified 75.0 75%: SetStorageData inlined here, called with bl in the original; original also normalises the first IsValid() to bool (two cntlzw/srwi) - same behaviour, inlining decision only

@@ -764,7 +764,7 @@ game/msw/CCokcpitMenuDataList.cpp:
 	.bss        start:0x804D8FC8 end:0x804D8FE8
 
 game/msw/CStage04Base.cpp:
-	.text       start:0x80261D14 end:0x80262098
+	.text       start:0x80261D14 end:0x802623A8
 
 game/msw/CStageRotBase.cpp:
 	.text       start:0x80262D10 end:0x80263688

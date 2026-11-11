@@ -39,6 +39,8 @@ namespace nw4r {
                 void SetPosition(const math::VEC3 &rPos);
                 void SetPosture(const PostureInfo &rInfo);
                 void SetOrtho(float top, float bottom, float left, float right, float near, float far);
+                // The view matrix (world to camera).
+                void GetCameraMtx(math::MTX34 *pMtx) const;
 
             private:
                 CameraData *mCamData; // 0x00

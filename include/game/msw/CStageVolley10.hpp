@@ -37,7 +37,10 @@ namespace msw {
                 TEAM_ROW_NUM = 3
             };
 
-            // A matrix that starts as the identity.
+            // A matrix that starts as the identity. GetPanelMtx_ returns it by
+            // value: the original builds the result in the caller's buffer and
+            // runs this constructor first, which a plain FMTX34 return does not
+            // reproduce (a guess at the original's type, behaviour unchanged).
             struct MTX : public bcs::FMTX34 {
                 MTX() { PSMTXIdentity(m); }
             };

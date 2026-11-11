@@ -11,6 +11,11 @@ namespace nw4r {
 
         // Width and height of a pane.
         struct Size {
+            Size() {}
+            // Copies member by member: the game copies a Size with two
+            // lfs/stfs pairs (CWiFiFrindVS::Set), not with lwz/stw.
+            Size(const Size &rOther) : width(rOther.width), height(rOther.height) {}
+
             float width;  // 0x00
             float height; // 0x04
         };

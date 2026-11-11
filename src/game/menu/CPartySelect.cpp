@@ -376,6 +376,8 @@ void msw::SelectMenu::CPartySelect::Disp()
 
 int msw::SelectMenu::CPartySelect::Set()
 {
+    CMenuPartList *pMenuPartList;
+    const char *pFileName;
     if (m_pPaneAccessor != 0) {
         return 0;
     }
@@ -386,7 +388,7 @@ int msw::SelectMenu::CPartySelect::Set()
         return -1;
     }
 
-    const char *pFileName = pSelectMenu->GetArchiveFileName(pSelectMenu->GetLoadArchiveFileId(-1));
+    pFileName = pSelectMenu->GetArchiveFileName(pSelectMenu->GetLoadArchiveFileId(-1));
     nw4r::lyt::ArcResourceAccessor *pAccessor =
         pLytCtrl->NewArcResourceAccessor(pFileName, pSelectMenu->GetArchiveRootFolderName(1));
     if (pAccessor != 0) {
@@ -401,7 +403,7 @@ int msw::SelectMenu::CPartySelect::Set()
             SetTextBoxFromMessage(pPaneCtrl);
             pPaneCtrl->SetSortZ(100.0f);
 
-            CMenuPartList *pMenuPartList = new CMenuPartList;
+            pMenuPartList = new CMenuPartList;
 
             pMenuPartList->m_pPaneAccessor = m_pPaneAccessor;
 

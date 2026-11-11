@@ -42,7 +42,7 @@ Equivalent game/volley/CStageVolley09.cpp
 Equivalent game/volley/CStageVolley15.cpp
 Matching game/volley/CStageVolley12.cpp
 Equivalent game/volley/CStageVolley16.cpp
-Equivalent game/volley/CStageVolley42.cpp
+Matching game/volley/CStageVolley42.cpp
 NonMatching game/volley/CStageVolley03.cpp
 Equivalent game/volley/CStageVolley05.cpp
 Equivalent game/volley/StageVolley11.cpp flags=noauto

@@ -27,6 +27,11 @@ namespace msw {
             long SetCountPoint(long *pPoint0, long *pPoint1, long nPeriod);
             long SetTextNext(long nNum, long nPeriod);
             long SetTotalPoint(long nTotal0, long nTotal1);
+
+        private:
+            void StateControl();
+            // nAnim is 4 (in) or 5 (out), for every score and lamp pane.
+            void SetAnimResultWin(long nAnim);
     };
 }
 

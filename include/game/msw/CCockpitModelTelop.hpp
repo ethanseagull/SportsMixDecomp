@@ -23,6 +23,11 @@ namespace msw {
             // effect nEffectId. Return type guessed.
             void SetEffect(long nSlot, long nEffectId);
 
+            // (no symbol; inlined into SendEvent, the out-of-line copy was
+            // stripped by the link) Sets the animation rate of the effects
+            // of slot 0.
+            void SetAnmRate(float fRate);
+
         protected:
             long m_nType;               // 0x60, the constructor argument
             unsigned long m_hEffect[2]; // 0x64, effect handles, 0 when none

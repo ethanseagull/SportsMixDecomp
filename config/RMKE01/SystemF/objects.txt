@@ -3,3 +3,5 @@
 # Read by configure.py. Set a status with tools/decomp/mark.py; add a unit by
 # adding a line (port_unit.py and autopilot.py do it themselves).
 Matching game/msw/CMainStepEx.cpp
+Matching game/system/module.cpp
+Matching game/system/CSystemTest.cpp

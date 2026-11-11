@@ -21,7 +21,7 @@ namespace msw {
     // __ct__Q23msw17CStgGmk_Pylon_ActFPQ23msw7CStgGmk. Each game module
     // derives its own class from it to supply the parameters.
     //
-    // The order of the new virtual functions (IsAlive to SetPushVel)
+    // The order of the new virtual functions (IsAlive to DtorState_FALL)
     // follows __vt__Q23msw23CStgGmk_Pylon_Act_Dodge (DodgeF); they are
     // reached through the vptr at 0x008, after the CFsmQueue part.
     // SE_GetSlotNum overrides CStgSeSlot's, so it also gets a slot of its
@@ -29,9 +29,10 @@ namespace msw {
     // game/dodge/CStgGmk_Pylon_Act_Dodge.cpp emits weak copies of the
     // functions with bodies here, in reverse order of these declarations
     // (so the overrides without a slot of their own are declared where that
-    // order needs them). The DOL has no body for the parameters that every
-    // module supplies, so they are pure. Return types not visible in a body
-    // are guesses.
+    // order needs them). The DOL supplies defaults for every parameter
+    // (game/msw/CStgGmk_Pylon.cpp); the ones no module calls have no name in
+    // the DOL. SetPushVel is DodgeF's own (the DOL vtable ends at
+    // DtorState_FALL). Return types not visible in a body are guesses.
     class CStgGmk_Pylon_Act : public CStgGmkAct, public bcs::CFsmQueue<CStgGmk_Pylon_Act> {
         public:
             // The states of the queue, in the order of the state hooks.
@@ -59,30 +60,30 @@ namespace msw {
             virtual void Inactivate() { Sleep(-1.0f); }                   // 0x1A8
             virtual void Sleep(float frame);                              // 0x1AC
             virtual bool IsSleep() const;                                 // 0x1B0
-            virtual float GetParam_MdlRadius() const = 0;                 // 0x1B4
-            virtual float GetParam_MdlHeight() const = 0;                 // 0x1B8
-            virtual float GetParam_Radius() const = 0;                    // 0x1BC
-            virtual float GetParam_Height() const = 0;                    // 0x1C0
+            virtual float GetParam_MdlRadius() const;                     // 0x1B4
+            virtual float GetParam_MdlHeight() const;                     // 0x1B8
+            virtual float GetParam_Radius() const;                        // 0x1BC
+            virtual float GetParam_Height() const;                        // 0x1C0
             virtual float GetParam_Height2() const;                       // 0x1C4
             virtual long GetParam_PushRank() const;                       // 0x1C8
-            virtual long GetParam_PushPower() const = 0;                  // 0x1CC
-            virtual float GetParam_PushResist() const = 0;                // 0x1D0
-            virtual float GetParam_Acc() const = 0;                       // 0x1D4
-            virtual float GetParam_Dec() const = 0;                       // 0x1D8
+            virtual long GetParam_PushPower() const;                      // 0x1CC
+            virtual float GetParam_PushResist() const;                    // 0x1D0
+            virtual float GetParam_Acc() const;                           // 0x1D4
+            virtual float GetParam_Dec() const;                           // 0x1D8
             virtual float GetParam_Resist() const;                        // 0x1DC
             virtual float GetParam_VelLimit() const;                      // 0x1E0
             virtual float GetParam_Gravity() const;                       // 0x1E4
-            virtual float GetParam_Interval() const = 0;                  // 0x1E8
+            virtual float GetParam_Interval() const;                      // 0x1E8
             virtual void GetParam_CourtRect(float *pLeft, float *pRight, float *pFront,
                                             float *pBack) const;          // 0x1EC
             virtual void GetParam_OuterRect(float *pLeft, float *pRight, float *pFront,
                                             float *pBack) const;          // 0x1F0
             virtual long GetParam_MdlIdx() const;                         // 0x1F4
-            virtual long GetParam_Effect(long type) const = 0;            // 0x1F8
+            virtual long GetParam_Effect(long type) const;                // 0x1F8
             virtual long GetParam_SE(long type) const;                    // 0x1FC
-            virtual float GetParam_MaxLife() const = 0;                   // 0x200
+            virtual float GetParam_MaxLife() const;                       // 0x200
             virtual float GetParam_LocOffsetZ() const { return 0.0f; }    // 0x204
-            virtual float GetParam_FieldMargin() const = 0;               // 0x208
+            virtual float GetParam_FieldMargin() const { return 0.0f; }           // 0x208
             virtual bool GetParam_IsEnableAreaCheck() const { return true; } // 0x20C
             // The turn per frame while falling over (3 degrees).
             virtual float GetParam_FallRot() const { return 0.05235988f; } // 0x210
@@ -95,11 +96,11 @@ namespace msw {
             virtual long SE_GetSlotNum() const { return 1; }              // 0x220
             virtual void ApplyLocRnd();                                   // 0x224
             virtual void UpdateColl();                                    // 0x228
-            virtual bool CheckCollBg(bcs::FVEC3 &rPos, bcs::FVEC3 &rVel, const bcs::FVEC3 &,
+            virtual int CheckCollBg(bcs::FVEC3 &rPos, bcs::FVEC3 &rVel, const bcs::FVEC3 &,
                                      const bcs::FVEC3 &);                 // 0x22C
             virtual bool IsInvincible() const { return m_fInvincibleTime > 0.0f; } // 0x230
             virtual void DoDamage(CCollBodyUnit *pBody, CBall *pBall);    // 0x234
-            virtual void OnDamage(CCollBodyUnit *pBody, CBall *pBall);    // 0x238
+            virtual void OnDamage(CCollBodyUnit *pBody, CBall *pBall) {}  // 0x238
             virtual void OnLanding() {}                                   // 0x23C
             virtual bool IsEnableDefColl() const { return false; }        // 0x240
             virtual float GetLife() const { return m_fLife; }             // 0x244
@@ -137,19 +138,21 @@ namespace msw {
             virtual void CtorState_FALL();
             virtual void LoopState_FALL();
             virtual void DtorState_FALL();                                // 0x2B0
-            // Sets the pylon sliding along rVel (name from the symbol).
-            virtual void SetPushVel(const bcs::FVEC3 &rVel);              // 0x2B4
 
         private:
             CBodyCollision m_BodyColl;    // 0x1D4 (name guessed)
             CDefCollision m_DefColl;      // 0x1E0 (name guessed)
-            float m_Unk1EC;               // 0x1EC
+            // 0x1EC (name guessed): frames left in the state (STANDBY,
+            // BREAK, INACTIVE).
+            float m_fStateTime;
             int m_bAlive;                 // 0x1F0 (IsAlive)
-            unsigned long m_Unk1F4;       // 0x1F4
+            // 0x1F4 (name guessed): set once the pylon is between the court's
+            // side lines; from then on LoopState_MOVE keeps it there.
+            int m_bInCourt;
             float m_fLife;                // 0x1F8 (GetLife, DecLife)
             float m_fMaxLife;             // 0x1FC (GetMaxLife)
             float m_fInvincibleTime;      // 0x200 (IsInvincible while above zero; name guessed)
-            float m_Unk204;               // 0x204
+            float m_fPushSeWait;          // 0x204 (name guessed): frames until the push sound may play again
     };
 }
 

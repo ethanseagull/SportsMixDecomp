@@ -77,6 +77,9 @@ namespace msw {
             // guessed from the names)
             void SetRadiusAll(float fRadius);
             void SetIndexAll(long nIndex);
+            // (DOL fn_80108168, before SetIndexAll; name guessed) The same
+            // for unit index only.
+            void SetIndex(long index, long nIndex);
             void SetNoHitFlagAll(unsigned long flag);
             void SetMyNoHitFlagAll(unsigned long flag);
 

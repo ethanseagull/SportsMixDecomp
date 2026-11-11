@@ -25,6 +25,9 @@ namespace msw {
 
             // The part whose current kind id is nBtnKindId, or null.
             CMenuPartBase *FindObjectByCurrentBtnKindId(unsigned short nBtnKindId);
+            // (added for game/menu/CEntry.cpp; return type guessed) The
+            // part with id nId (its index in the list), or null.
+            CMenuPartBase *FindObject(long nId);
             // The current kind id of the button under *pPos, or 0. The
             // return type is a guess (the function loads a 16-bit member).
             long CheckHitButton(bcs::FVEC3 *pPos);

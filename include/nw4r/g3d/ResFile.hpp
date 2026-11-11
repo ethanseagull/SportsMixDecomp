@@ -41,8 +41,12 @@ namespace nw4r {
                 ResAnmClr GetResAnmClr(const char *pName) const;
                 ResAnmTexSrt GetResAnmTexSrt(const char *pName) const;
                 ResMdl GetResMdl(const char *pName) const;
+                // (DOL; added for VolleyF game/volley/CBallTargetMarker.cpp)
+                ResAnmTexPat GetResAnmTexPat(const char *pName) const;
                 // DOL functions (MenuF msw::SelectMenu::CCourtChr).
                 ResTex GetResTex(const char *pName) const;
+                // (added for MenuF game/menu/CRuleInfo.cpp)
+                ResTex GetResTex(unsigned long index) const;
                 unsigned long GetResTexNumEntries() const;
 
                 // DOL functions; the three calls a file needs before use,

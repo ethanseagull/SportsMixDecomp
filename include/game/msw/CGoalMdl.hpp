@@ -62,8 +62,12 @@ namespace msw {
             // The per-node motion settings of the model, by stage; none here.
             virtual const bcs::CAnmObjMotBase::NODE_EX_INFO *GetNodeExInfo() const { return 0; } // 0x130
 
-        private:
+        protected:
+            // 0x12C, the goal's model variant; it numbers the model names
+            // (CGoalObjHockey::NewMdl passes the goal's sub-type on).
             long m_nSubType;                       // 0x12C
+
+        private:
             unsigned char m_Unk130[0x340 - 0x130]; // 0x130
     };
 }

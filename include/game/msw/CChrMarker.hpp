@@ -3,6 +3,7 @@
 
 #include "bcs/CFsm.hpp"
 #include "bcs/CTask.hpp"
+#include "nw4r/g3d/ResFile.hpp"
 
 namespace bcs {
     class CMdlObj;
@@ -64,6 +65,13 @@ namespace msw {
             // passed for it). A member function, though it does not use
             // this.
             bcs::BCS_Color GetColor_(long nIdx);
+
+            // (DOL, static; name from the DOL) The resource file of the
+            // marker models (HockeyF's CShootMarker loads its models from it).
+            static nw4r::g3d::ResFile GetRsrcPack();
+            // (DOL, static) The marker colour of team nTeam (VolleyF's
+            // CBallTargetMarkerRhythmReceive tints its mark with it).
+            static bcs::BCS_Color GetTeamColor(long nTeam);
 
         protected:
             unsigned long m_nFlag; // 0x7C, bit 1: view check enabled

@@ -5,8 +5,7 @@
 
 namespace msw {
 
-    // The goal model of the hockey game (HockeyF, game/hockey/CGoalMdlHockey.cpp,
-    // not written yet), size 0x340 (CGoalObj17::NewMdl and
+    // The goal model of the hockey game (HockeyF, game/hockey/CGoalMdlHockey.cpp), size 0x340 (CGoalObj17::NewMdl and
     // msw::CGoalObjHockey::NewMdl allocate it), all of it msw::CGoalMdl's.
     class CGoalMdlHockey : public CGoalMdl {
         public:

@@ -37,6 +37,9 @@ namespace bcs {
         // colours with one store each.
         explicit BCS_Color(unsigned long rgba) : nw4r::ut::Color(rgba) {}
     };
+
+    // (DOL; meaning read from the name) c0 blended towards c1 by rate.
+    BCS_Color BCS_Color_Lerp(BCS_Color c0, BCS_Color c1, float rate);
 }
 
 #endif /* !BCS_BCS_COLOR_HPP_ */

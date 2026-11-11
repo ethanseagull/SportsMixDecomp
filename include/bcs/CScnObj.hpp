@@ -243,6 +243,14 @@ namespace bcs {
             long GetDrawPriorityXlu() const { return m_nDrawPriorityXlu; }
             // (name guessed) The handle GetScnObj takes.
             unsigned long GetHandle() const { return m_nHandle; }
+            // (name guessed) The mask at 0xEE that CScnObjGather::Add tests
+            // against its cull mask; VolleyF's CBallTargetMarker sets it per
+            // view in UpdateViewFlag_.
+            void SetViewFlag(unsigned short nFlag) { m_UnkEE = nFlag; }
+            // (name guessed) Sets the value at 0x104 that the draw sort uses;
+            // VolleyF's CBallTargetMarkerRhythmReceive sets it itself, with
+            // flag 0x80000 on.
+            void SetSortValue(float fValue) { m_fSortValue = fValue; }
 
             // (names guessed) Inline in the modules.
             void OnFlag(unsigned long flag) { m_nFlag |= flag; }

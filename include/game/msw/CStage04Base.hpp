@@ -1,6 +1,8 @@
 #ifndef MSW_CSTAGE04BASE_HPP_
 #define MSW_CSTAGE04BASE_HPP_
 
+#include "bcs/CListNodeBase.hpp"
+
 namespace bcs {
     class CMdlObj;
 }
@@ -18,15 +20,19 @@ namespace msw {
     // virtual functions is that of its DOL vtable (lbl_8048E4B0).
     class CStage04Base {
         public:
+            // (name guessed) One cart: plays the cart's sound when it comes
+            // past the camera. Defined in game/msw/CStage04Base.cpp.
+            class CCartNode;
+
             CStage04Base(CStageMan *pStage);
 
         private:
-            CStageMan *m_pStage;          // 0x00
-            // 0x04: an object of 0x28 bytes with its own vptr at 0x24 and a
-            // bcs::CListNodeBase at 0x10 (the DOL constructor builds it in
-            // place); not mapped. 0x28 of it is cleared by
-            // Stage04_ReleaseCart.
-            unsigned char m_Unk04[0x28];
+            CStageMan *m_pStage;              // 0x00
+            // 0x04 (name guessed): the carts Stage04_RegistCart made, updated
+            // by Stage04_Main and released by Stage04_ReleaseCart (Clear,
+            // through the list's vptr at 0x28). Its own vtable is
+            // lbl_8048E4C8.
+            bcs::CList<CCartNode> m_CartList;
 
         public:
             virtual ~CStage04Base();

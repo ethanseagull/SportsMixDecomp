@@ -12,6 +12,7 @@ namespace msw {
     // vtable lies between theirs and the RR items' in .data.
     class CItemManVolleyRR : public CItemManVolley {
         public:
+            CItemManVolleyRR(bcs::CTask *pParent) : CItemManVolley(pParent) {}
             virtual ~CItemManVolleyRR() {}
 
             virtual CItem *CreateThrowItem(long kind, const bcs::FVEC3 &pos);

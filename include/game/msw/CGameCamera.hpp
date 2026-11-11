@@ -49,9 +49,9 @@ namespace msw {
             static void Finalize();
             static CGameCamera *GetInstance(long view);
             static long GetInstanceNum();
-            // (return type guessed) Whether the camera looks from behind
-            // the goal; the modules' goal models (BasketF CGoalMdlBasket,
-            // HockeyF CGoalMdlHockey) call it with no object.
+            // Static (the DOL body takes no object and returns 1). HockeyF's
+            // CGoalMdlHockey::NewMdl gives the goal a fading model when it
+            // is true.
             static int IsBehindCamera();
 
             // One camera per view, made by each sport's Initialize.

@@ -101,6 +101,8 @@ namespace msw {
             static void EffectBombExplosionCreate(const bcs::FVEC3 &rPos, long, float fScale, long);
             // (DOL) The instance's EffectCoinGetCreate_. (return type guessed)
             static void EffectCoinGetCreate(const bcs::FVEC3 &rPos, DROP_COIN::CoinType type);
+            // (DOL) The instance's QPanelChoicePopupItem_. (return type guessed)
+            static long QPanelChoicePopupItem(long nPlayer, int n);
             // (DOL) The instance's CreateItem_: an item of type nType at rPos.
             static CItem *CreateItem(long nType, const bcs::FVEC3 &rPos);
             // DOL, static: AllReset_ on the instance.

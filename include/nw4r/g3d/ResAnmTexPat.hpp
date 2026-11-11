@@ -4,6 +4,7 @@
 #include "nw4r/db/Panic.hpp"
 #include "nw4r/g3d/ResDic.hpp"
 #include "nw4r/g3d/ResAnmTexSrt.hpp" // AnmPolicy
+#include "revolution/gx/GXTexture.h" // _GXTexFmt
 
 namespace nw4r {
     namespace g3d {
@@ -43,6 +44,12 @@ namespace nw4r {
                 explicit ResTex(void *p = 0) : m_pData(static_cast<ResTexData *>(p)) {}
 
                 bool IsValid() const { return m_pData != 0; }
+
+                // (added for MenuF game/menu/CRuleInfo.cpp) What
+                // GXInitTexObj and GXInitTexObjLOD need for the texture.
+                bool GetTexObjParam(void **ppImage, unsigned short *pWidth, unsigned short *pHeight,
+                                    _GXTexFmt *pFormat, float *pMinLod, float *pMaxLod,
+                                    unsigned char *pMipmap) const;
 
             private:
                 ResTexData *m_pData; // 0x00

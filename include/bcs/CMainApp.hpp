@@ -30,6 +30,10 @@ namespace bcs {
             // stand for is not known, 0 gives the slower text scroll).
             static GXRenderModeObj *GetRenderModeObj();
             static unsigned char GetRegionLanguage();
+            // (added for MenuF game/menu/CTopMenu.cpp; return type
+            // guessed) Non-zero when the console's parental controls forbid
+            // messaging with others.
+            static int CheckPCMessageRestriction();
     };
 }
 

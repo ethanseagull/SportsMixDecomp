@@ -639,10 +639,7 @@ game/msw/CStgGmk_WaveCluster.cpp:
 	.text       start:0x80213BF0 end:0x80215280
 
 game/msw/CStage02Base.cpp:
-	.text       start:0x80215608 end:0x80215FD0
-
-game/msw/CStage02Base/CSplashEff.cpp:
-	.text       start:0x80216080 end:0x80216460
+	.text       start:0x80215608 end:0x802167A0
 
 game/msw/CStage01Base.cpp:
 	.text       start:0x80217A9C end:0x80217AF0
@@ -687,14 +684,11 @@ game/msw/CStage17Base.cpp:
 game/msw/CStage17Base/CTurnTable.cpp:
 	.text       start:0x80228674 end:0x8022870C
 
-game/msw/menu/CDispTaskLink.cpp:
-	.text       start:0x802294CC end:0x80229584
-	.data       start:0x8048A2D4 end:0x8048A2E8
+game/msw/menu/CDispTaskList.cpp:
+	.text       start:0x802294CC end:0x802299B4
+	.data       start:0x8048A2C8 end:0x8048A2E8
 	.sdata      start:0x805BFED8 end:0x805BFEDC
 	.sdata2     start:0x805C5340 end:0x805C5348
-
-game/msw/menu/CDispTaskList.cpp:
-	.text       start:0x80229584 end:0x80229930
 
 game/msw/CStgGmkClusterImpl.cpp:
 	.text       start:0x8022AA68 end:0x8022AE60
@@ -764,7 +758,7 @@ game/msw/CCokcpitMenuDataList.cpp:
 	.bss        start:0x804D8FC8 end:0x804D8FE8
 
 game/msw/CStage04Base.cpp:
-	.text       start:0x80261D14 end:0x80262098
+	.text       start:0x80261D14 end:0x802623A8
 
 game/msw/CStageRotBase.cpp:
 	.text       start:0x80262D10 end:0x80263688

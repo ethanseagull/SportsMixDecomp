@@ -314,6 +314,42 @@ namespace msw {
                                                     CSelectMenuLayoutBase *pObj);
             void Court_CameraReverse();
 
+            // Added for MenuF game/menu/CRuleInfo.cpp. The steps of the
+            // rules screen (SelectMenu::CRuleInfo), and the party game
+            // information step it returns to (argument meaning guessed).
+            void RuleInfo_In();
+            void RuleInfo_Loop();
+            void RuleInfo_Out();
+            void PartyInfo_ChangeStateInit(long nMode);
+
+            // Added for MenuF game/menu/CTopMenu.cpp (names of the
+            // arguments guessed). The steps of the top menu
+            // (SelectMenu::CTopMenu with the character table of
+            // SelectMenu::CBgChr), and what they call.
+            // Plays the name tag animation of character table slot nSlot,
+            // selected or not.
+            void _SetTagNameAnim(long nSlot, int bSelect);
+            void TopMenu_In();
+            void TopMenu_Loop();
+            void TopMenu_DemoStep();
+            void TopMenu_In2();
+            void TopMenu_LoopStep0();
+            // Lights the name tag of sport nChara (a character table
+            // place) and turns the characters to it.
+            void TopMenu_SelectAnim(long nChara);
+            void TopMenu_ChangeStateInit(long nMode, long nUnk);
+            void TopMenu_LoopStep1();
+            void TopMenu_LoopStep10();
+            void TopMenu_LoopStep11();
+            void TopMenu_Out();
+            // Queues the camera turn to place nPos; bReverse turns the
+            // other way, bMix with the fifth (mix) sport open.
+            void Top_SetTurnCamera(long nPos, int bReverse, int bMix);
+            void TopMenu_BackPlaterSelect();
+            // Defined in another MenuF file. The game kind of character
+            // table place nChara.
+            unsigned char _GetGameModeByBgChrId(unsigned char nChara);
+
             // Data, added for the same unit. The class is 0xAB8 bytes (the
             // size layout.py finds); only two members are named so far.
             // The second polymorphic part mentioned above (a `@68@` thunk)
@@ -422,7 +458,11 @@ namespace msw {
             // select screen.
             unsigned char m_Unk27D;
         private:
-            unsigned char m_Unk27E[0x2];     // 0x27E
+            unsigned char m_Unk27E;          // 0x27E
+        public:
+            // 0x27F. (added for game/menu/CTopMenu.cpp) When non-zero the
+            // top menu clears the stage behind it.
+            unsigned char m_Unk27F;
         public:
             // 0x280. The player number of each pad that has entered, 0xFF
             // for the others.
@@ -536,7 +576,13 @@ namespace msw {
             // The step of FriendMatchChancelCheck.
             long m_nCancelStep;
         private:
-            unsigned char m_UnkA10[0x4C];    // 0xA10
+            unsigned char m_UnkA10[0x4];     // 0xA10
+        public:
+            // 0xA14. (added for game/menu/CTopMenu.cpp; name guessed) The
+            // sport TopMenu_SelectAnim last lit, -1 for none.
+            long m_nTopSelectChara;
+        private:
+            unsigned char m_UnkA18[0x44];    // 0xA18
         public:
             // 0xA5C. (added for game/menu/CEntry.cpp; name guessed) Set by
             // Entry_In when the camera is still moving in; cleared once
@@ -593,6 +639,10 @@ namespace msw {
     // the return type and argument names are guesses). Stores the number
     // of cups of game kind nGame in *pCount.
     long _GetCupCount(long nGame, unsigned char *pCount);
+
+    // Defined in another MenuF file (added for game/menu/CTopMenu.cpp;
+    // return type guessed). Whether the fifth (mix) sport is open.
+    int _IsOpenMixSportsFlag();
 }
 
 #endif /* !CSELECTMENU_HPP_ */

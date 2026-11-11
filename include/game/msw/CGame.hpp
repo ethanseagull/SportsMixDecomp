@@ -409,6 +409,9 @@ namespace msw {
             // The goal team nTeam attacks: the byte at g_GameWork + 0x88 +
             // nTeam, read unsigned. (return type guessed)
             static long GetTargetGoalIdx(long nTeam);
+            // (DOL; added for BasketF game/basket/CStageBasket10.cpp; return
+            // type guessed) The team whose goal view n shows.
+            static long GetViewTargetTeam(long n);
             // DOL. The yaw (radians) of goal nGoal. (added for BasketF
             // CChrDrvPadBasket; meaning guessed from the name)
             static float GetGoalYRot(long nGoal);

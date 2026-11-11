@@ -20,13 +20,13 @@ namespace msw {
     void CStage10Base::CTelopDispBase::Init(long nTeam, const CPanelInfoBase *pPanel)
     {
         long nGoal = CGame::GetTargetGoalIdx(nTeam & 1);
-        bcs::FVEC3 offset = GetDispOffset();
+        bcs::FVEC3 offset = GetOffsetPos();
         bcs::FVEC3 pos = CGame::GetGoalPos(nGoal);
         long nKind = FindKind(pPanel);
 
         bcs::FVEC3Add(&pos, &pos, &offset);
-        Open(nTeam, pos, nKind);
-        m_fTime = GetDispTime();
+        DoDisp(nTeam, &pos, nKind);
+        m_fTime = GetDispFrame();
         m_bActive = 1;
     }
 
@@ -53,7 +53,7 @@ namespace msw {
         CCockpit::CloseTelopMiniPos(1);
     }
 
-    bcs::FVEC3 CStage10Base::CTelopDispBase::GetDispOffset() const
+    bcs::FVEC3 CStage10Base::CTelopDispBase::GetOffsetPos() const
     {
         return bcs::FVEC3(0.0f, 1.0f, 0.0f);
     }

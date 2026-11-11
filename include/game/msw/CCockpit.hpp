@@ -78,6 +78,9 @@ namespace msw {
             // the mini telop of every split view (objects 0x100D on).
             // msw::CStage10Base::CTelopDispBase::Erase passes 1.
             static void CloseTelopMiniPos(int bUnk);
+            // (DOL; added for BasketF game/basket/CStageBasket10.cpp; return
+            // type guessed) Shows the points icon nKind for team nTeam at *pPos.
+            static void SetShootPtsIcon(long nTeam, const bcs::FVEC3 *pPos, long nKind);
             // (name guessed; DOL fn_80137A34, not inline) The result word
             // at 0x70.
             long GetUnk70() const;

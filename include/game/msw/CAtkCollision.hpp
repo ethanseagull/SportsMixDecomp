@@ -51,6 +51,17 @@ namespace msw {
             void SetIndexAll(long nIndex);
             void SetEnableAll();
 
+            // Per unit (added for game/msw/CStgGmk_Trolley.cpp; DOL
+            // functions, argument meanings guessed). SetPos2 is the other
+            // end of a capsule.
+            void SetCollType(long index, long type);
+            void SetTargetFlag(long index, unsigned long nFlag);
+            void SetAtkType(long index, unsigned long nType);
+            void SetEnable(long index);
+            void SetRadius(long index, float fRadius);
+            void SetPos(long index, const bcs::FVEC3 &rPos);
+            void SetPos2(long index, const bcs::FVEC3 &rPos);
+
         private:
             unsigned long m_Unk00[3];
     };

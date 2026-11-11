@@ -91,6 +91,11 @@ namespace msw {
             void SetBallCatchCallback(long index, BallCatchCallback pFunc, void *pArg);
             void SetYRot(long index, float fRotY);
             float GetRadius(long index) const;
+            // (added for game/msw/CStgGmk_Trolley.cpp) SetBodyDisable is
+            // the DOL's fn_80107E04 (clears bit 0 of the unit's flags at
+            // 0xA2, the one SetBodyEnable sets).
+            void SetBodyDisable(long index);
+            void SetCatchDisable(long index);
 
         private:
             unsigned long m_Unk00[3];

@@ -28,6 +28,18 @@ namespace msw {
             void OnFlag10(unsigned short flag) { m_nFlag10 |= flag; }
             void OffFlag10(unsigned short flag) { m_nFlag10 &= ~flag; }
             void OnFlagA0(unsigned long flag) { m_nFlagA0 |= flag; }
+            void OffFlagA0(unsigned long flag) { m_nFlagA0 &= ~flag; }
+            // (name guessed) The yaw of the unit, brought into [0, 2 pi).
+            void SetRotY(float rot)
+            {
+                while (rot > 6.2831855f) {
+                    rot -= 6.2831855f;
+                }
+                while (rot < 0.0f) {
+                    rot += 6.2831855f;
+                }
+                m_fRotY = rot;
+            }
             // (names guessed) Inline in BasketF's CChrCoreBasketYoshi:
             // both set to the bit of the owner's player number.
             void SetNoHitFlag(unsigned long flag) { m_nNoHitFlag = flag; }
@@ -42,7 +54,9 @@ namespace msw {
             unsigned long m_nMyNoHitFlag; // 0x20
             unsigned char m_Unk24[0x38];
             bcs::FVEC3 m_Size;           // 0x5C
-            unsigned char m_Unk68[0x38];
+            unsigned char m_Unk68[0x18];
+            float m_fRotY;               // 0x80 (SetRotY)
+            unsigned char m_Unk84[0x1C];
             unsigned long m_nFlagA0;     // 0xA0
     };
 }

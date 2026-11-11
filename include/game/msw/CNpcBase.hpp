@@ -101,6 +101,19 @@ namespace msw {
             // BasketF to make the goal follow the boss.
             const bcs::FVEC3 &GetPos() const { return m_vPos; }
             const bcs::FVEC3 &GetRot() const { return m_vRot; }
+            // (names guessed) Inline in msw::CStgGmk_Trolley_Mdl (DOL),
+            // which places its heyho; the yaw is brought into [0, 2 pi).
+            void SetPos(const bcs::FVEC3 &rPos) { m_vPos = rPos; }
+            void SetRotY(float rot)
+            {
+                while (rot > 6.2831855f) {
+                    rot -= 6.2831855f;
+                }
+                while (rot < 0.0f) {
+                    rot += 6.2831855f;
+                }
+                m_vRot.y = rot;
+            }
 
         protected:
             unsigned char m_Unk34[0x48 - 0x34];

@@ -73,6 +73,11 @@ namespace msw {
             // words not known; msw::CDropCoin passes 3, 0, 0; return type
             // guessed)
             static void SimpleEffect(long nId, const bcs::FVEC3 &rPos, unsigned long, unsigned long, unsigned long);
+            // (DOL; added for game/msw/CStgGmk_Trolley.cpp) The same on
+            // scene object pObj (may be null) and at *pPos; the trolley
+            // passes 0, 3, 0, 0, 0 for the five words.
+            static void SimpleEffect(long nId, const bcs::CScnObj *pObj, const bcs::FVEC3 *pPos, unsigned long,
+                                     unsigned long, unsigned long, unsigned long, unsigned long);
 
             // Added for game/msw/cockpit/CMissionCount.cpp: the same for an
             // effect attached to a layout pane object (static as well; the

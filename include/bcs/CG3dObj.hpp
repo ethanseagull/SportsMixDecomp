@@ -8,6 +8,9 @@ namespace bcs {
     // bcs::CMdlObj and bcs::CAnmMatClr.
     class CG3dObj {
         public:
+            // Inline: the animation constructors store the null parent
+            // directly.
+            CG3dObj() : m_pParent(0) {}
             virtual ~CG3dObj();           // 0x08
             // 0x0C to 0x18: names from the vtable of
             // msw::SelectMenu::CCourtBallMdlObj in MenuF (return types guessed).

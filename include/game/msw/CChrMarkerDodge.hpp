@@ -7,7 +7,7 @@ namespace msw {
 
     // The character markers of the dodge game (DodgeF), all in
     // game/dodge/CChrMarkerDodge.cpp. None adds members to CChrMarker (size
-    // 0x9C). The classes are declared in this order because the original
+    // 0xA0). The classes are declared in this order because the original
     // emits their vtables in the reverse order.
 
     // The plain marker. It only replaces the two checks that decide when

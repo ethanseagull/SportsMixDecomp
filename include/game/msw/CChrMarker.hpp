@@ -11,7 +11,7 @@ namespace bcs {
 
 namespace msw {
 
-    // The marker shown above a character. A DOL class, size 0x9C:
+    // The marker shown above a character. A DOL class, size 0xA0:
     // bcs::CTask at 0x00, bcs::CFsm<CChrMarker> at 0x34 (vptr at 0x78), own
     // members from 0x7C (read from the constructor in the DOL). Each game
     // module derives its own marker from it.
@@ -76,6 +76,10 @@ namespace msw {
             long m_Unk90;          // 0x90, fourth constructor argument
             float m_Unk94;         // 0x94
             float m_Unk98;         // 0x98
+            // 0x9C: nothing known writes it, but every module allocates its
+            // derived markers (CChrMarkerBoss, Dodge, Hockey, Volley) with
+            // 0xA0 bytes, and none of them adds members.
+            unsigned long m_Unk9C;
     };
 }
 

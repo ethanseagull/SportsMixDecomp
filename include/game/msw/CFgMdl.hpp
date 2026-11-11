@@ -38,7 +38,15 @@ namespace msw {
             // (name not known) HockeyF's CStageHockey02 passes 1 for its
             // parasols.
             virtual void Unk170(int);                          // 0x170
-            // More virtual functions follow (to 0x184).
+            // (names and signatures not known) The DOL's fn_80151AEC,
+            // fn_80173688, fn_80173894, fn_80173DB4 and fn_80173DC4;
+            // declared so that derived classes' own virtuals start at 0x188
+            // (msw::CGoalMdl::CMdlObj_Goal).
+            virtual void Unk174();                             // 0x174
+            virtual void Unk178();                             // 0x178
+            virtual void Unk17C();                             // 0x17C
+            virtual void Unk180();                             // 0x180
+            virtual void Unk184();                             // 0x184
 
             // (guessed) Inline in the modules: VolleyF's stage and BasketF's
             // CNpcGhostBasketBase::NewMdlObj_ both call the two functions in

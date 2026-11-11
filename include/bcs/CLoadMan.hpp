@@ -42,6 +42,17 @@ namespace bcs {
             static void LoadAsync(const FILE_INPUT *pFile, long nUnk);
             static void UnLoad(const FILE_INPUT *pFile, long nUnk);
             static void *GetRes(const FILE_INPUT *pFile);
+            // (added for DOL game/bcs/CMiiMan.cpp; names and argument
+            // meanings guessed) DOL fn_8004C0A8 builds a FILE_INPUT from its
+            // arguments (path, m_nId, m_nFlags, 0x106 = 4, 0x108, 0x10A,
+            // 0x10C) and starts loading it; bcs::CMiiMan passes 0, 0, 0x101,
+            // -0x20, 2. fn_8004D4D0 is non-zero once the file has loaded
+            // (its entry's state is 2); fn_8004D130 returns the word at 0x118
+            // of the file's entry (perhaps the size).
+            static void Load(const char *pPath, unsigned long nId, unsigned short nFlags, short nUnk108,
+                             short nAlign, short nUnk10C);
+            static int IsLoadEnd(const char *pPath, unsigned long nId);
+            static unsigned long GetSize(const char *pPath, unsigned long nId);
     };
 }
 

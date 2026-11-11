@@ -1728,7 +1728,7 @@ SubStateArtsShotFireBullet___Q23msw19CChrCoreBasketDiddyFPQ33msw14CChrCoreBasket
 ThrowBanana___Q23msw19CChrCoreBasketDiddyFv = .text:0x0005110C; // type:function size:0x25C scope:global
 __dt__Q33msw11CC08_BASKET17CcBoomerangBasketFv = .text:0x00051368; // type:function size:0x58 scope:global
 SetCollParam___Q43msw6CC_CMN5DIDDY11CcBoomerangFv = .text:0x000513C0; // type:function size:0x4 scope:global
-fn_4_513C4 = .text:0x000513C4; // type:function size:0x14
+__sinit_\CChrCoreBasketDiddy_cpp = .text:0x000513C4; // type:function size:0x14 scope:local
 @148@__dt__Q33msw11CC08_BASKET17CcBoomerangBasketFv = .text:0x000513D8; // type:function size:0x8 scope:global
 __ct__Q23msw20CChrCoreBasketDonkeyFv = .text:0x000513E0; // type:function size:0x3C scope:global
 __dt__Q23msw20CChrCoreBasketDonkeyFv = .text:0x0005141C; // type:function size:0x58 scope:global
@@ -1780,7 +1780,7 @@ SubStateArtsShotPlayTrickMotion___Q23msw19CChrCoreBasketKoopaFPQ33msw14CChrCoreB
 SubStateArtsShotPlayLoopMotion___Q23msw19CChrCoreBasketKoopaFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x00053BB4; // type:function size:0x40 scope:global
 SubStateArtsShotPlayArtsShotMotion___Q23msw19CChrCoreBasketKoopaFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x00053BF4; // type:function size:0x4C scope:global
 SubStateArtsShotFireBullet___Q23msw19CChrCoreBasketKoopaFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICKl = .text:0x00053C40; // type:function size:0x224 scope:global
-fn_4_53E64 = .text:0x00053E64; // type:function size:0x14
+__sinit_\CChrCoreBasketKoopa_cpp = .text:0x00053E64; // type:function size:0x14 scope:local
 __ct__Q23msw21CChrCoreBasketKoopaJrFv = .text:0x00053E78; // type:function size:0x3C scope:global
 __dt__Q23msw21CChrCoreBasketKoopaJrFv = .text:0x00053EB4; // type:function size:0x58 scope:global
 SubStateArtsShotIsReadyArtsShot___Q23msw21CChrCoreBasketKoopaJrFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x00053F0C; // type:function size:0x134 scope:global
@@ -2091,7 +2091,7 @@ SubStateArtsShotIsReadyArtsShot___Q23msw19CChrCoreBasketPeachFPQ33msw14CChrCoreB
 SubStateArtsShotPlayTrickMotion___Q23msw19CChrCoreBasketPeachFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x0006C1C4; // type:function size:0x40 scope:global
 SubStateArtsShotPlayArtsShotMotion___Q23msw19CChrCoreBasketPeachFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x0006C204; // type:function size:0x40 scope:global
 SubStateArtsShotFireBullet___Q23msw19CChrCoreBasketPeachFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICKl = .text:0x0006C244; // type:function size:0x3D0 scope:global
-fn_4_6C614 = .text:0x0006C614; // type:function size:0x14
+__sinit_\CChrCoreBasketPeach_cpp = .text:0x0006C614; // type:function size:0x14 scope:local
 __ct__Q23msw21CChrCoreBasketSabotenFv = .text:0x0006C628; // type:function size:0x3C scope:global
 __dt__Q23msw21CChrCoreBasketSabotenFv = .text:0x0006C664; // type:function size:0x58 scope:global
 CtorStateAirTrick__Q23msw21CChrCoreBasketSabotenFv = .text:0x0006C6BC; // type:function size:0x4 scope:global

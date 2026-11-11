@@ -129,11 +129,11 @@ game/volley/CChrCoreVolleyLuigi.cpp:
 	.data       start:0x00009470 end:0x0000A200
 
 game/volley/CChrCoreVolleyMario.cpp:
-	.text       start:0x00063104 end:0x00063388
+	.text       start:0x00063104 end:0x00063288
 	.data       start:0x0000A200 end:0x0000AF90
 
 game/volley/unit_63388.cpp:
-	.text       start:0x00063388 end:0x00067E3C
+	.text       start:0x00063288 end:0x00067E3C
 	.rodata     start:0x00002040 end:0x000020B0
 	.data       start:0x0000AF90 end:0x0000AFA0
 

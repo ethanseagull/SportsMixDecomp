@@ -23,7 +23,7 @@ namespace msw {
     // are guesses.
     class CStgGmkClusterImpl {
         private:
-            unsigned long m_Unk00; // 0x00
+            unsigned long m_bCreated; // 0x00, set by CreateGmk, cleared by DeleteGmk (name guessed)
             bcs::CTask *m_pParent; // 0x04
             CStgGmk **m_ppGmk;     // 0x08, GetTblSize() gimmicks (type guessed)
             long m_nTblSize;       // 0x0C
@@ -51,6 +51,16 @@ namespace msw {
             virtual void OnPreDeleteGmk() {}
             virtual void OnUpdate(float rate) {}
             virtual unsigned long OnCalcSum() const { return 0; }
+
+        private:
+            // (name guessed) Inline helper of the DOL bodies: gimmick idx
+            // of the table. It calls GetTblSize and ignores the result,
+            // what is left of a range check in this build.
+            CStgGmk *At(long idx) const
+            {
+                (void)GetTblSize();
+                return m_ppGmk[idx];
+            }
     };
 
     // (name guessed) A cluster of gimmicks of class T: supplies NewGmk.

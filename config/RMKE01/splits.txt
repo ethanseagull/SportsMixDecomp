@@ -98,10 +98,10 @@ game/bcs/CMdlShadow.cpp:
 	.text       start:0x8005FFA0 end:0x80060344
 
 game/bcs/CMiiMan.cpp:
-	.text       start:0x80068954 end:0x80068D44
+	.text       start:0x8006832C end:0x800695C8
 
 game/bcs/CMovie.cpp:
-	.text       start:0x80069604 end:0x8006A15C
+	.text       start:0x800695C8 end:0x8006A15C
 
 game/bcs/CPadWI.cpp:
 	.text       start:0x800708F0 end:0x8007109C
@@ -691,7 +691,8 @@ game/msw/menu/CDispTaskList.cpp:
 	.sdata2     start:0x805C5340 end:0x805C5348
 
 game/msw/CStgGmkClusterImpl.cpp:
-	.text       start:0x8022AA68 end:0x8022AE60
+	.text       start:0x8022A9C4 end:0x8022AF18
+	.data       start:0x8048A3F0 end:0x8048A440
 
 game/msw/CChrObstacle.cpp:
 	.text       start:0x8022C900 end:0x8022C9C8

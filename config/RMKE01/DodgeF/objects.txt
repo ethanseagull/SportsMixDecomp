@@ -45,9 +45,14 @@ Equivalent game/dodge/CChrCoreDodgeKinopio.cpp
 Equivalent game/dodge/CChrCoreDodgeKuroma.cpp
 Equivalent game/dodge/CChrCoreDodgeSaboten.cpp
 Matching game/dodge/CChrCoreDodgeWaluigi.cpp
+Matching game/dodge/CChrCoreDodgeMii00.cpp
+Matching game/dodge/CChrCoreDodgeMii01.cpp
 Equivalent game/dodge/CEffectCoinGet.cpp
 Equivalent game/dodge/CStgGmk_Trolley_Act_Dodge.cpp
 Matching game/dodge/CStgGmk_Case_Act_Dodge.cpp
 Matching game/dodge/CComDrvDodgeDD.cpp
 Matching game/dodge/CStageDodgeDOD55.cpp
 Matching game/dodge/CQPanelManDodge.cpp
+Equivalent game/dodge/CItemBallBombDodge.cpp
+Equivalent game/dodge/CChrCoreDodgeKoopa.cpp
+Matching game/dodge/CStageDodgeDOD56.cpp

@@ -32,6 +32,8 @@ namespace nw4r {
                 // (DOL) The material of that name; an invalid handle if
                 // there is none.
                 ResMat GetResMat(ResName name) const;
+                // (DOL; added for VolleyF game/volley/CBallTargetMarker.cpp)
+                ResMat GetResMat(int index) const;
                 // (DOL) The node of that name; an invalid handle if there is
                 // none.
                 ResNode GetResNode(const char *pName) const;

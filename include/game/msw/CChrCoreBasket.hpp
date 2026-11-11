@@ -117,6 +117,10 @@ namespace msw {
             // slot nSlot.
             void SetCollBodyPushType_(CChrCore::BODY_COLL_SIZE_SET_TYPE type, float);
             void Util_ShootBall(long nSlot, float, long, long);
+            // (added for game/basket/CChrCoreBasketKoopa.cpp; meaning
+            // guessed from the name) Turns on the attack collision of the
+            // lay-up.
+            void SetCCLayUpAtkCol();
 
             // Overrides of CChrCore's virtuals, in vtable order (the slots of
             // __vt__Q23msw14CChrCoreBasket, read from BasketF, that name
@@ -714,6 +718,72 @@ namespace msw {
             virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
             virtual void SubStateArtsShotShootBall_(STATE_WORK_AIR_TRICK *pWork); // 0xD04
             virtual int SubStateArtsShotIsEndArtsShotAfter_(STATE_WORK_AIR_TRICK *pWork); // 0xD0C
+    };
+
+    // Bowser: his lay-up has an attack collision, and his special shot
+    // breathes a fireball (CC_CMN::KOOPA::CcFireBall) from his mouth at the
+    // goal. (size not known)
+    class CChrCoreBasketKoopa : public CChrCoreBasket {
+        public:
+            CChrCoreBasketKoopa();
+            virtual ~CChrCoreBasketKoopa();
+            virtual void CallbackMotTrg_AtkOn_(long, long);            // 0xC80
+            virtual void CallbackMotTrg_AtkOff_(long, long);           // 0xC84
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual float SubStateArtsShotGetTrickMotFrame_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCC4
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *pWork, long); // 0xCE4
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
+
+        protected:
+            unsigned char m_Unk5E8[0x5EC - 0x5E8];
+            unsigned long m_nUnk5EC;   // 0x5EC (meaning not known), cleared by the constructor
+    };
+
+    // Peach: her special shot throws a fan of five heart bombs
+    // (CC_CMN::PEACH::CcHeartBomb) at the goal. (size not known; no members
+    // of its own found)
+    class CChrCoreBasketPeach : public CChrCoreBasket {
+        public:
+            CChrCoreBasketPeach();
+            virtual ~CChrCoreBasketPeach();
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *pWork, long); // 0xCE4
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
+    };
+
+    // Diddy Kong: his special shot throws a banana boomerang
+    // (CC_CMN::DIDDY::CcBoomerang) from his option model. (size not known;
+    // at least 0x5F0)
+    class CChrCoreBasketDiddy : public CChrCoreBasket {
+        public:
+            CChrCoreBasketDiddy();
+            virtual ~CChrCoreBasketDiddy();
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCBC
+            virtual void SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCC0
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *pWork, long); // 0xCE4
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
+
+        protected:
+            // Throws the boomerang, unless one is still out.
+            void ThrowBanana_();
+
+            unsigned char m_Unk5E8[0x5EC - 0x5E8];
+            // 0x5EC (name guessed): task id of a boomerang still out, 0 for
+            // none; nothing in this unit sets it.
+            unsigned long m_hBanana;
     };
 }
 

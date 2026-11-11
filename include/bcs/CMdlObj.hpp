@@ -152,6 +152,8 @@ namespace bcs {
 
                     bool IsValid() const { return m_pData != 0; }
                     nw4r::g3d::ResTexObj GetResTexObj(int nIndex);
+                    // (DOL; added for VolleyF game/volley/CBallTargetMarker.cpp)
+                    nw4r::g3d::ResMatTevColor GetResMatTevColor(int nIndex);
 
                 private:
                     void *m_pData;                 // 0x00

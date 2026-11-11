@@ -164,6 +164,9 @@ namespace msw {
             // (name guessed) Sets bits of m_nBasketFlag; BasketF's ghost
             // sets 0x10000 on the ball it passes.
             void OnBasketFlag(unsigned long nBit) { m_nBasketFlag |= nBit; }
+            // (name guessed; added for game/basket/CChrManBasket.cpp, which
+            // tests bit 0x200000 of a passed ball)
+            unsigned long GetBasketFlag() const { return m_nBasketFlag; }
             // Drops the item behaviour pItem from the ball (the bomb calls
             // it on itself when it goes off).
             void DetachItemEffect(CItemBall *pItem);

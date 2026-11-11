@@ -17,6 +17,10 @@ namespace msw {
         // on the top menu, and whether it has finished showing it.
         int IsDispMenuTop();
         int IsDispMenuEnd();
+        // (added for BasketF game/basket/CGameBasketHungryBossPackun.cpp;
+        // return type and meaning guessed) Checks the unlocks of party game
+        // stage nStage; the party game passes 1.
+        void CheckParty(long nStage, int);
     }
 }
 

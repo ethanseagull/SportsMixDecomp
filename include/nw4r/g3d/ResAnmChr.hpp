@@ -14,6 +14,8 @@ namespace nw4r {
             long toChrDataDic;       // 0x10: offset of the node dictionary (name guessed)
             unsigned char unk14[0xC];
             unsigned short numFrame; // 0x20 (name guessed)
+            unsigned short unk22;    // 0x22
+            long policy;             // 0x24 (name guessed) 1: the animation loops (compared signed)
         };
 
         // The result of one node of a skeletal animation at one frame:
@@ -55,6 +57,9 @@ namespace nw4r {
                 }
 
                 int GetNumFrame() const { return ref().numFrame; }
+                // (name guessed after nw4r's AnmPolicy) 1 for a looping
+                // animation; inline in msw::CEventModel (DOL).
+                long GetAnmPolicy() const { return ref().policy; }
 
                 // (name guessed) The dictionary of the animated nodes, by
                 // node name; inline in msw::CEvNodeData.

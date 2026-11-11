@@ -28,8 +28,14 @@ namespace msw {
             virtual float GetAttackRange() const;
             virtual int IsAttackEnd() const;
 
+            // (added for BossF game/boss/CComDrvBoss.cpp, name guessed) The
+            // kind of obstacle; the Behemoth's meteors are 0x12.
+            long GetObstacleType() const { return m_nObstacleType; }
+
         protected:
-            unsigned char m_Unk34[0x44 - 0x34];
+            unsigned char m_Unk34[0x3C - 0x34];
+            long m_nObstacleType;        // 0x3C, see GetObstacleType
+            unsigned char m_Unk40[0x44 - 0x40];
             bcs::FVEC3 m_Pos;            // 0x44
             unsigned char m_Unk50[0x4];
             float m_fRotY;               // 0x54

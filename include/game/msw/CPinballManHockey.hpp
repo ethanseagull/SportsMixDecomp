@@ -1,26 +1,31 @@
 #ifndef MSW_CPINBALLMANHOCKEY_HPP_
 #define MSW_CPINBALLMANHOCKEY_HPP_
 
+#include "bcs/New.hpp"
 #include "game/msw/CPinballMan.hpp"
+#include "game/msw/CStgGmk_Pinball_Hockey.hpp"
 
 namespace msw {
 
     // The pinball manager of hockey stage 12 (CStageHockey12 makes one at
     // 0x218). Size 0x54: adds no data to CPinballMan. Its constructor is
     // inline (CStageHockey12's constructor stores the vtable after
-    // CPinballMan's constructor). Its functions and vtable are in DodgeF's
-    // game/hockey/CStgGmk_Pinball_Act_Hockey.cpp as weak copies, so they are
-    // inline in the original; declared out of line here until that unit is
-    // written (GetMaxNum gives 0x20, the GetParam_* read
-    // HOCKEY_PRM_S12_BALL_*).
+    // CPinballMan's constructor). The vtable and the functions are in
+    // HockeyF's game/hockey/CStgGmk_Pinball_Act_Hockey.cpp: GetWinTeam and
+    // the GetParam_* (the HOCKEY_PRM_S12_BALL_* parameters) out of line, the
+    // destructor, GetMaxNum and NewGmk as weak copies after them (reverse
+    // order of the declarations).
     class CPinballManHockey : public CPinballMan {
         public:
             CPinballManHockey() {}
-            virtual ~CPinballManHockey();
+            virtual ~CPinballManHockey() {}
 
-            virtual long GetMaxNum() const;
+            virtual long GetMaxNum() const { return 0x20; }
             virtual long GetWinTeam() const;
-            virtual CStgGmk_Pinball *NewGmk(bcs::CTask *pParent, int arg);
+            virtual CStgGmk_Pinball *NewGmk(bcs::CTask *pParent, int arg)
+            {
+                return new (1) CStgGmk_Pinball_Hockey(pParent, arg);
+            }
             virtual long GetParam_BallNum() const;
             virtual float GetParam_InitialInterval() const;
             virtual float GetParam_Interval() const;

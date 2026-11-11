@@ -132,6 +132,15 @@ namespace bcs {
             int AttachAnmObj(CAnmObj *pAnmObj, AnmObjType type);
             // Returns the animation that was in the slot.
             CAnmObj *DetachAnmObj(AnmObjType type);
+            // (DOL fn_8005A790, unnamed) Detaches pAnmObj from whichever slot
+            // holds it; returns 0 when no slot does. (return meaning guessed)
+            int DetachAnmObj(CAnmObj *pAnmObj);
+            // (DOL fn_80058E40, fn_800590F0, fn_800593A8, unnamed; names
+            // guessed) What ObjProc does for tasks 4 (view matrix), 6 and 7
+            // (the opaque and the translucent draw).
+            void ProcCalcView(unsigned long nArg, void *pArg);
+            void ProcDrawOpa(unsigned long nArg, void *pArg);
+            void ProcDrawXlu(unsigned long nArg, void *pArg);
             CAnmObj *GetAnmObj(AnmObjType type);
             // (DOL; meaning guessed from the name and BasketF's
             // CChrCoreBasketYoshi, which negates the motion id when it is
@@ -144,6 +153,9 @@ namespace bcs {
             CAnmObj *GetAnmObjChr() const { return m_pAnmObjChr; }
             CAnmObj *GetAnmObjMatClr() const { return m_pAnmObjMatClr; }
             CAnmObj *GetAnmObjTexSrt() const { return m_pAnmObjTexSrt; }
+            // (names guessed) The texture pattern and the shape slots.
+            CAnmObj *GetAnmObjTexPat() const { return m_pAnmObj3; }
+            CAnmObj *GetAnmObjShp() const { return m_pAnmObj5; }
 
             // (DOL) Access to the copied material nMat of a model. Size
             // about 0x34 (layout.py: fields up to 0x30); only the first word

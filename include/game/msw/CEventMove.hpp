@@ -41,8 +41,12 @@ namespace msw {
             // SetMoveFlip write these through the model. (names guessed)
             bcs::FVEC3 m_vOffset;        // 0x04
             bcs::FVEC3 m_vOffsetRot;     // 0x10
-            bcs::FVEC3 m_vUnk1C;         // 0x1C (written by fn_801143B0)
-            unsigned char m_Unk28[0x24]; // 0x28
+            bcs::FVEC3 m_vPathRot;       // 0x1C: rotation of the path (only y is used; CEventModel::SetMovePathRot)
+            // What the path gave at the frame set last (SetFrame), or what
+            // the model had before the step (UpdateFrame).
+            bcs::FVEC3 m_vPos;           // 0x28
+            bcs::FVEC3 m_vRot;           // 0x34
+            bcs::FVEC3 m_vScale;         // 0x40
             float m_fFrame;              // 0x4C (name guessed)
             float m_fEndFrame;           // 0x50 (name guessed) length of the node path
             CEventModel *m_pModel;       // 0x54

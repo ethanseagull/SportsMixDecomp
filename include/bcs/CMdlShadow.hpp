@@ -28,6 +28,15 @@ namespace bcs {
             // Sets the byte at 0x1CC; msw::CDropCoin clears it for a coin
             // that rises out of the ground.
             void SetEnable(bool bEnable);
+            // (0x80060C0C and 0x80060C4C, unnamed in the DOL; names guessed)
+            // The shadow's alpha, 0 to 1; msw::CEvDemoMdlChr fades it with
+            // the model.
+            void SetAlpha(float fAlpha);
+            float GetAlpha() const;
+            // (name guessed) Sets the float at 0x200, the height of the
+            // floor the shadow falls on (msw::CEventModel sets it from its
+            // floor object).
+            void SetFloorY(float fY) { m_Unk200 = fY; }
 
             // (DOL, 0x80060A14; vtable 0x80467710 slot 0x1C) Not written yet.
             virtual void ObjProc(unsigned long, unsigned long, void *);

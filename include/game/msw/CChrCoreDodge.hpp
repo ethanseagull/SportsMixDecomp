@@ -904,13 +904,24 @@ namespace msw {
     };
 
     // Size 0x934.
+    // The Slime: his special shot shows three slimes on him
+    // (CC16_DODGE::CcSquadFactoryDodge), then sends three slimes
+    // (CC16_DODGE::CcSlimeSquadDodge) to circle in the other team's court.
     class CChrCoreDodgeSlime : public CChrCoreDodge {
         public:
             CChrCoreDodgeSlime();
             virtual ~CChrCoreDodgeSlime();
+            virtual void Reset_();                                     // 0x384
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual void SubStateArtsShotStartTrick_(STATE_WORK_AIR_TRICK_CMN *); // 0xD5C
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD80
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD94
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
 
         protected:
-            unsigned char m_Unk930[0x934 - 0x930];
+            unsigned long m_hSquadFactory; // 0x930, task id of the CcSquadFactoryDodge
     };
 
     // Size 0x934.

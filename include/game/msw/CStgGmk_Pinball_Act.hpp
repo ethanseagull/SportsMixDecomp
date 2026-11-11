@@ -142,7 +142,9 @@ namespace msw {
             virtual void LoopState_INACTIVE();
             virtual void DtorState_INACTIVE();                            // 0x2A8
 
-        private:
+        protected:
+            // (protected: HockeyF's CStgGmk_Pinball_Act_Hockey::UpdateColl
+            // changes m_BodyColl)
             CBodyCollision m_BodyColl;     // 0x1D4: 0 the ball, 1 its push volume
             CAtkCollision m_AtkColl;       // 0x1E0
             CDefCollision m_DefColl;       // 0x1EC
@@ -155,8 +157,6 @@ namespace msw {
             float m_fInvincibleTime;       // 0x210 (IsInvincible while above zero; name guessed)
             float m_fGrowTime;             // 0x214, frames grown (GetCurRadius)
             float m_fGrowTimeMax;          // 0x218, frames to grow to full size
-
-        protected:
             float m_fShotAngle;            // 0x21C (name guessed; read by VolleyF's GetShotAngle)
     };
 }

@@ -8,6 +8,9 @@ namespace msw {
     class CTournament {
         public:
             static void Initialize(long);
+            // (added for BasketF game/basket/CGameBasketHungryBossPackun.cpp;
+            // return type guessed) Not zero while a tournament game runs.
+            static int IsTournamentGame();
             static int IsExtraMatchGame(); // returns 0 or 1; type guessed
             static int IsMixTournamentGame(); // type guessed
             // The byte at 0x1054 of the tournament's work area.

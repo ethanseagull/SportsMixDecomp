@@ -36,3 +36,4 @@ Equivalent game/dodge/CStageDodge15.cpp
 Equivalent game/dodge/CChrManDodge.cpp
 Equivalent game/dodge/CStageDodge09.cpp
 Equivalent game/dodge/CCockpitDodge.cpp
+NonMatching game/dodge/CStageDodge11.cpp

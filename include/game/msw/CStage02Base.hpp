@@ -91,13 +91,10 @@ namespace msw {
 
         private:
             // (name guessed) The list of splash effects, size 0x28: a
-            // bcs::CListBase, one word, then its own vptr at 0x24. Its
+            // bcs::CListBase (its node count at 0x20, its vptr at 0x24). Its
             // functions are in the DOL (vtable lbl_80488664; the slot at 0x10
             // runs the splashes with the wave cluster). Not mapped further.
             class CSplashList : public bcs::CListBase {
-                private:
-                    unsigned long m_Unk20; // 0x20
-
                 public:
                     virtual ~CSplashList();
             };

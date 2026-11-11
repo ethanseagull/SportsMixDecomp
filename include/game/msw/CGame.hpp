@@ -317,6 +317,9 @@ namespace msw {
             // (meaning guessed) The task new objects of the running game are
             // created under (BossF's bomb explosions).
             static bcs::CTask *GetTempParent();
+            // (DOL, static; argument meanings not known: DodgeF's bomb blasts
+            // pass a quake number and -1, -1)
+            static void StartCameraQuake(long, long, long);
             // (DOL; meaning of the argument not known, CDropCoinMan passes
             // 1) Non-zero while the game is in its main loop state.
             static int IsMainLoopState(int);

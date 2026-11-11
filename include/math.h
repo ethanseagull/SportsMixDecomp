@@ -18,6 +18,16 @@ inline float fmodf(float x, float y)
 {
     return (float)fmod(x, y);
 }
+
+// Inline, as in the compiler's own library: one fabs instruction.
+inline double fabs(double x)
+{
+#ifdef __MWERKS__
+    return __fabs(x);
+#else
+    return x < 0.0 ? -x : x;
+#endif
+}
 #endif
 
 #endif /* !MATH_H_ */

@@ -11,9 +11,10 @@ namespace msw {
     // members: each class has the size of its DOL base. The overrides are
     // those of the DodgeF vtables (__vt__Q23msw18CItemDodgeMushroom, ...).
     //
-    // Destructors: CItemDodgeBomb's is defined in a .cpp (it sits among the
-    // ordinary functions); the others are emitted as weak functions after
-    // the code, so they are inline.
+    // Destructors: all are inline. CItemDodgeBomb's sits among the ordinary
+    // functions because the inline base destructor is emitted just before
+    // the first destructor that needs it (CItemDodgeBombDD_Base's, which
+    // inlines it); the others are emitted as weak functions after the code.
 
     class CItemDodgeMushroom : public CItemMushroom {
         public:
@@ -39,7 +40,7 @@ namespace msw {
     class CItemDodgeBomb : public CItemBomb {
         public:
             CItemDodgeBomb(CItemMan *pMan) : CItemBomb(pMan) {}
-            virtual ~CItemDodgeBomb();
+            virtual ~CItemDodgeBomb() {}
 
             virtual void ExParamUpdate_();
             virtual long GetParamThrowType() const;

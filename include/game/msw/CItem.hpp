@@ -74,7 +74,7 @@ namespace msw {
             virtual void DoDetach();
             virtual float GetThrowDir(const bcs::FVEC3 &, float, int, long) const;
             virtual void DoThrow(const bcs::FVEC3 &, unsigned long, long, long, int);
-            virtual void DoParabolaThrow(const bcs::FVEC3 &, float, float);
+            virtual int DoParabolaThrow(const bcs::FVEC3 &, float, float); // returns non-zero when the throw started (DodgeF tests it)
             virtual void DoDrop(const bcs::FVEC3 &, int, int);
             virtual void DoPress();
             virtual void DoDestroy();
@@ -87,7 +87,7 @@ namespace msw {
             virtual bool IsInfinityLife() const { return false; }
             virtual bool IsStateThrow() const;
             virtual float GetBombExplodeRestFrameDD() const { return 0.0f; }
-            virtual bool CallbackBodyPush_(CCollBodyUnit *, CCollBodyUnit *, bcs::FVEC3 *);
+            virtual void CallbackBodyPush_(CCollBodyUnit *, CCollBodyUnit *, bcs::FVEC3 *); // void: the DOL body leaves r3 as it is
             virtual bool CallbackBodyDamage_(CCollBodyUnit *, const CCollAtkUnit *, const bcs::FVEC3 &);
             virtual void ExParamUpdate_(); // 0x98
             virtual float GetParamDropLife() const { return m_fParamDropLife; }
@@ -166,6 +166,22 @@ namespace msw {
             // Sets the map collision code the item tests against (DOL;
             // DodgeF's shells pass 0 before their DOL DoThrowInit).
             void SetMapDetectCode(long code);
+            // (DOL; argument meanings not known; DodgeF's bombs pass 3, 0, 1, 0x20)
+            void CreateMdlObj(long, unsigned long, int, long);
+            // (DOL) Creates `num` body collisions.
+            void CollBodyCreate(long num);
+            // (DOL) Turns pushing of body collision `index` on or off.
+            void CollBodySetPushEnable(long index, int enable);
+            // (DOL; argument meanings not known)
+            void AnimPlay(long nAnim, int, float, float);
+            // (DOL) Moves the item by its velocity.
+            void DoMove();
+            // (DOL; argument meanings not known: DodgeF passes 0.1 and pi/4)
+            void DoShakeInit(float, float);
+            // (DOL) Removes the item.
+            void DoDelete();
+            // (DOL) Sets the Y rotation of the item's model.
+            void SetRotY(float rad);
 
             // DOL. (return types guessed from CComManVolleyRR::IsExistItemBall,
             // which tests the first and third and compares the second with a
@@ -201,18 +217,26 @@ namespace msw {
             float m_fParamBC;               // 0xBC, (meaning unknown)
             float m_fParamC0;               // 0xC0, (meaning unknown)
             float m_fExplosionCollSize;     // 0xC4
-            unsigned char m_UnkC8[0xD8 - 0xC8];
+            bcs::CMdlObj *m_pMdl;           // 0xC8, (name guessed) the item's model
+            unsigned char m_UnkCC[4];
+            bcs::CMdlObj *m_pMdlSub;        // 0xD0, (name guessed) a second model (DodgeF's bombs tint both)
+            unsigned char m_UnkD4[4];
             // 0xD8, state bits. 0x100: has touched the ground (IsTouchDown
             // returns it for a thrown item; VolleyF's banana stops spinning).
             unsigned long m_nFlag;
-            unsigned char m_UnkDC[0xF8 - 0xDC];
+            unsigned char m_UnkDC[0xE2 - 0xDC];
+            short m_nSubStep;               // 0xE2, (name guessed) step inside the current state
+            unsigned char m_UnkE4[4];
+            float m_fStateTimer;            // 0xE8, (name guessed) frames left in the current state
+            unsigned char m_UnkEC[0xF8 - 0xEC];
             bcs::FVEC3 m_vPos;              // 0xF8, read through GetPos
             unsigned char m_Unk104[0x11C - 0x104];
             bcs::FVEC3 m_vMove;             // 0x11C, copy of m_vVelocity at the throw (name guessed)
             bcs::FVEC3 m_vVelocity;         // 0x128
             unsigned char m_Unk134[0x15C - 0x134];
             float m_fGravity;               // 0x15C (name guessed)
-            unsigned char m_Unk160[0x170 - 0x160];
+            float m_fUnk160;                // 0x160, (meaning unknown) DodgeF's bombs set -0.5 on the throw
+            unsigned char m_Unk164[0x170 - 0x164];
             CAtkCollision m_AtkColl;        // 0x170
             CBodyCollision m_BodyColl;      // 0x17C
             unsigned char m_Unk188[0x190 - 0x188];

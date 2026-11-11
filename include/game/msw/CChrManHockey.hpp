@@ -2,6 +2,7 @@
 #define MSW_CCHRMANHOCKEY_HPP_
 
 #include "bcs/FVEC3.hpp"
+#include "game/msw/CChr1on1MarkerHockey.hpp"
 #include "game/msw/CChrMan.hpp"
 #include "game/msw/CShootMarker.hpp"
 

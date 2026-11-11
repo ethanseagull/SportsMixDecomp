@@ -63,6 +63,13 @@ class CGoalObj : public msw::CStgGmk {
         virtual void RingHit();                                          // 0x120
         virtual bcs::CScnObj *GetMdlObj(int idx);                        // 0x124
         virtual const bcs::CScnObj *GetMdlObj(int idx) const;            // 0x128
+
+        // From the end of msw::CStgGmk (0x68); the constructor stores 0 at
+        // 0x68 and 1 at 0x6C (meanings not known) and its idx at 0x70.
+        unsigned char m_Unk68[0x70 - 0x68];
+        // 0x70, the constructor's idx: the goal's side. HockeyF's
+        // CGoalMdlHockey::NewMdl turns the fading model by it.
+        long m_nGoalIdx;
 };
 
 #endif /* !CGOALOBJ_HPP_ */

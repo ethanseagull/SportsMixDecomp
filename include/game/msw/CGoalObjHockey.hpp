@@ -52,9 +52,9 @@ namespace msw {
             virtual void DunkCancel();
 
         private:
-            // From the end of msw::CStgGmk (0x68); where CGoalObj's own
-            // members end is not known.
-            unsigned char m_Unk68[0x6498 - 0x68];
+            // From the end of CGoalObj's mapped members (0x74); where
+            // CGoalObj's own members end is not known.
+            unsigned char m_Unk74[0x6498 - 0x74];
     };
 }
 

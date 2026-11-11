@@ -62,3 +62,4 @@ Equivalent game/menu/unit_4BB48.cpp
 Equivalent game/menu/CTournamentLoad.cpp
 Equivalent game/menu/CRuleSel.cpp
 Equivalent game/menu/CMiiSel.cpp
+Equivalent game/menu/unit_6EE84.cpp

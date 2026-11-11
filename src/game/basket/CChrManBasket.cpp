@@ -723,7 +723,7 @@ CChrCore *CChrManBasket::Util_SearchPassmeetTo_(long nChr, float fRotY, bcs::FVE
             // Over a jumping receiver the pass goes higher.
             float fHeight = 0.0f;
             if (pRet->GetStatusFlag() & 0x8000) {
-                fHeight = Clamp(pRet->GetUnk1AC() - 1.0f, fHeight, 2.0f);
+                fHeight = Clamp(pRet->GetScaleBase() - 1.0f, fHeight, 2.0f);
             } else if ((pRet->GetStatusFlag() & 1) == 1) {
                 fHeight = Clamp(1.1f * GetFrameRateF() * 0.033333335f + fHeight, 0.0f, 1.1f);
             }

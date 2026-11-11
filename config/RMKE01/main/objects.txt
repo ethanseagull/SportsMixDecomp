@@ -67,3 +67,12 @@ Equivalent game/msw/CCockpitButtonInfo.cpp
 Equivalent game/msw/CStgGmk_Pinball.cpp
 Equivalent game/msw/CC_CMN/LUIGI/CcOvacuumForce.cpp
 Equivalent game/msw/CCockpitModelTelop.cpp
+Equivalent game/msw/vm/CVMScript.cpp
+Equivalent game/msw/CEventChrCore.cpp
+Equivalent game/msw/CEventDemo.cpp
+Equivalent game/msw/CDefCollision.cpp
+NonMatching game/msw/CEventMove.cpp
+Equivalent game/bcs/CAnmMatClr.cpp
+Equivalent game/bcs/CCameraMan.cpp
+Equivalent game/bcs/CCameraAnmCalc.cpp
+Matching game/bcs/CListNodeBase.cpp

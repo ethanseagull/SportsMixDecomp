@@ -7,7 +7,7 @@
 #include "game/msw/CStageHockey17.hpp"
 #include "game/msw/CStageHockeyCrushSkate85.hpp"
 #include "game/msw/CStageHockeyCrushSkate87.hpp"
-#include "game/msw/CStage10Base.hpp"
+#include "game/msw/CStageHockey10.hpp"
 #include "game/msw/CStageManHockey.hpp"
 
 namespace msw {
@@ -21,7 +21,7 @@ namespace msw {
     // The destructors are declared so that they are the key functions: this
     // header must not make a unit emit the vtables.
 
-    // Stages 01, 07, 17, 85 and 87 have their own headers.
+    // Stages 01, 07, 10, 17, 85 and 87 have their own headers.
 
     class CStageHockey02 : public CStageManHockey {
         public:
@@ -59,24 +59,6 @@ namespace msw {
 
         private:
             unsigned char m_Unk218[0x28]; // size 0x240
-    };
-
-    // Made with -1 (meaning not known).
-    class CStageHockey10 : public CStageManHockey {
-        public:
-            CStageHockey10(bcs::CTask *pParent, long);
-            virtual ~CStageHockey10();
-
-            // Of the running stage, which must be this one (used by
-            // CComManHockeyGame; meanings guessed): the number of panels,
-            // the panel after pPanel (the first for 0), and whether the
-            // fever time is on.
-            static long GetPanelMaxNum();
-            static CStage10Base::CPanelInfoBase *GetNextPanel(const CStage10Base::CPanelInfoBase *pPanel);
-            static int IsNowFeverTime();
-
-        private:
-            unsigned char m_Unk218[0x464]; // size 0x67C
     };
 
     class CStageHockey11 : public CStageManHockey {

@@ -79,6 +79,9 @@ def main():
     a.add_argument("function")
     a.add_argument("reason")
     a.add_argument("--unverified", action="store_true")
+    a.add_argument("--tailcall", action="store_true",
+                   help="near below the floor: the only difference is a tail call vs a framed call to the "
+                        "same function, confirmed by a reviewer (notes/decisions.md)")
     ls = sub.add_parser("list")
     ls.add_argument("--module")
     sub.add_parser("check")
@@ -100,7 +103,13 @@ def main():
             sys.exit("give a real reason: what differs and why it cannot change behaviour")
         cls = "unverified" if args.unverified else "near"
         floor = UNVERIFIED_MIN if args.unverified else NEAR_MIN
-        if score < floor:
+        if args.tailcall:
+            if args.unverified:
+                sys.exit("--tailcall records a near entry; drop --unverified")
+            if "reviewer" not in args.reason.lower():
+                sys.exit("--tailcall needs the reviewer's confirmation in the reason (say 'reviewer confirmed')")
+            args.reason = "tail call vs framed call only: " + args.reason.strip()
+        elif score < floor:
             hint = "" if args.unverified else f"; below {NEAR_MIN:.0f}% use --unverified"
             sys.exit(f"score is {score:.1f}%, under the {floor:.0f}% floor for '{cls}'{hint}")
         entries[(args.module, args.function)] = (cls, score, args.reason.strip())

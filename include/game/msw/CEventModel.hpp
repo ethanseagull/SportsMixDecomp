@@ -211,6 +211,17 @@ namespace msw {
             // 0x64 times fFrame. (description read from the DOL body)
             void _UpdateAlpha(float fFrame);
 
+            // (name guessed) Sets the bits nMask of the flags when b is
+            // non-zero, else clears them.
+            void _SetFlag(unsigned long nMask, int b)
+            {
+                if (b) {
+                    m_nFlag |= nMask;
+                } else {
+                    m_nFlag &= ~nMask;
+                }
+            }
+
             // (name guessed) The model's alpha now, 0 to 1.
             float GetAlpha() const { return m_fAlpha; }
             long GetVoiceId(long n) const
@@ -221,7 +232,18 @@ namespace msw {
                 return -1;
             }
 
-        private:
+            // (fn_80112994, unnamed in the DOL; name guessed) The animation
+            // number of motion nMot: |nMot| itself while bit 0x800 of the
+            // flags is set, else the motion table's entry, made positive.
+            long _GetResAnimNo(long nMot) const;
+            // (fn_80112B24, unnamed in the DOL; name guessed) Moves the
+            // sequence at 0x4C on by nStep entries (back to the entry at
+            // 0x56 at its end) and plays that entry, fFrame added to its
+            // start frame.
+            void _NextMotion(short nStep, float fFrame);
+
+        protected:
+            // (protected for msw::CEventChrCore, which reads them directly)
             bcs::FVEC3 m_vPos;            // 0x04 (name guessed)
             bcs::FVEC3 m_vRot;            // 0x10 (name guessed) radians
             bcs::FVEC3 m_vScale;          // 0x1C (name guessed) see SetScale
@@ -237,7 +259,7 @@ namespace msw {
             unsigned char m_Unk50[4];     // 0x50
             short m_nMotIndex;            // 0x54 (name guessed) entry of the sequence
             short m_nUnk56;               // 0x56
-            unsigned char m_Unk58[4];     // 0x58
+            float m_fAnimSpeed;           // 0x58 (name guessed) see CEventChrCore::SetAnimSpeed
             float m_fAlpha;               // 0x5C (name guessed) see _UpdateAlpha
             float m_fAlphaTarget;         // 0x60 (name guessed)
             float m_fAlphaSpeed;          // 0x64 (name guessed)
@@ -246,7 +268,11 @@ namespace msw {
             // their own members from 0xB0.
             unsigned char m_Unk68[0x3C];  // 0x68
             nw4r::g3d::ResFile m_resFile; // 0xA4 (name guessed) see GetResFile
-            unsigned char m_UnkA8[0x8];   // 0xA8
+            // The move and the move action linked to the model (see
+            // SetLinkMove, SetLinkAction); bits 0x1 and 0x2 of the flags say
+            // the model owns them, bit 0x4 that it owns the move's node path.
+            CEventMove *m_pMove;          // 0xA8
+            CEventMoveAction *m_pAction;  // 0xAC
     };
 }
 

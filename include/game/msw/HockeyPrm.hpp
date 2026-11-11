@@ -162,6 +162,42 @@ namespace msw {
     extern long HOCKEY_PRM_S04_PYLON_LOC_PAT_TYPE;
     extern long HOCKEY_PRM_S04_PYLON_LOC_PAT_NO;
 
+    // Stage 10, the panel stage (CStageHockey10): the order of the stage's
+    // parameter table (GetPrmTbl).
+    extern float HOCKEY_PRM_S10_PANEL_RESPAWN_TIME;
+    extern float HOCKEY_PRM_S10_PANEL_RESPAWN_RND;
+    extern float HOCKEY_PRM_S10_PANEL_SIZE_A;
+    extern float HOCKEY_PRM_S10_PANEL_CYCLE_A;
+    extern float HOCKEY_PRM_S10_PANEL_LIFE_A;
+    extern float HOCKEY_PRM_S10_PANEL_LIFE_RND_A;
+    extern float HOCKEY_PRM_S10_PANEL_SIZE_B;
+    extern float HOCKEY_PRM_S10_PANEL_SIZE_END_B;
+    extern long HOCKEY_PRM_S10_PANEL_RATE_BEG_B;
+    extern long HOCKEY_PRM_S10_PANEL_RATE_END_B;
+    extern float HOCKEY_PRM_S10_PANEL_LIFE_B;
+    extern float HOCKEY_PRM_S10_PANEL_LIFE_RND_B;
+    extern float HOCKEY_PRM_S10_PANEL_SIZE_C;
+    extern float HOCKEY_PRM_S10_PANEL_CYCLE_C;
+    extern float HOCKEY_PRM_S10_PANEL_LIFE_C;
+    extern float HOCKEY_PRM_S10_PANEL_LIFE_RND_C;
+    extern float HOCKEY_PRM_S10_PANEL_SIZE_Q;
+    extern float HOCKEY_PRM_S10_PANEL_LIFE_Q;
+    extern float HOCKEY_PRM_S10_PANEL_LIFE_RND_Q;
+    extern float HOCKEY_PRM_S10_BONUS_START_TIME_0;
+    extern float HOCKEY_PRM_S10_BONUS_START_TIME_1;
+    extern float HOCKEY_PRM_S10_BONUS_START_TIME_2;
+    extern float HOCKEY_PRM_S10_BONUS_START_TIME_3;
+    extern float HOCKEY_PRM_S10_BONUS_START_TIME_4;
+    extern float HOCKEY_PRM_S10_PANEL_INTERVAL_D;
+    extern float HOCKEY_PRM_S10_PANEL_LIFE_D;
+    extern float HOCKEY_PRM_S10_PANEL_LIFE_RND_D;
+    extern float HOCKEY_PRM_S10_PANEL_SIZE_E;
+    extern float HOCKEY_PRM_S10_PANEL_SPEED0_E;
+    extern float HOCKEY_PRM_S10_PANEL_SPEED1_E;
+    extern float HOCKEY_PRM_S10_PANEL_INTERVAL_E;
+    extern long HOCKEY_PRM_S10_PANEL_SET;
+    extern float HOCKEY_PRM_S10_PANEL_SIZE_D; // not in the table
+
     // Stage 11.
     extern float HOCKEY_PRM_S11_COURT_INIT_WAIT;
     extern float HOCKEY_PRM_S11_COURT_WAIT;

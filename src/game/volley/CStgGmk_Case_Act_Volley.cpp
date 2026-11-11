@@ -56,6 +56,10 @@ void msw::CStgGmk_Case_Act_Volley::OnBallCatch(CCollBodyUnit *pBody, CBall *pBal
         FsmqChangeState(3);
     }
     pBall->SetVolleyAnyHitMode(0, 0);
+    // (guess) A dead use of CStgAct::GetSrt: the original emits its weak copy
+    // right after this function, so something here used it (likely
+    // stripped code). No code results.
+    (void)CStgAct::GetSrt();
 }
 
 msw::CStgGmk_Case_Act_Volley::~CStgGmk_Case_Act_Volley()

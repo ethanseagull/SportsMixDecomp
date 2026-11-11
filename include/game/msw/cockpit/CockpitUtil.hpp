@@ -46,6 +46,15 @@ namespace msw {
         // names guessed): the special-shot telop of pane nPane; the four
         // panes after it are the telop's parts. The coder passes -1.0f to
         // hide it.
+        // Added for VolleyF game/volley/CCockpitVolley.cpp (return types
+        // and argument names guessed): the number of split views (the
+        // cockpits make the second view's objects when it is above 1), and
+        // pText0, pSep and pText1 joined into pBuf (nLen characters);
+        // returns pBuf.
+        long GetViewSplitNum();
+        const wchar_t *GetMergeString(wchar_t *pBuf, long nLen, const wchar_t *pText0, const wchar_t *pText1,
+                                      const wchar_t *pSep);
+
         void SetSPGaugeTelop(CMenuPaneAccessor *pAccessor, long nPane, long nPane1, long nPane2, long nPane3,
                              long nPane4, float fRate);
     }

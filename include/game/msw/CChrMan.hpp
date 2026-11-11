@@ -116,6 +116,9 @@ namespace msw {
             // null when there is no manager or the index is out of range.
             // Static: it finds the instance itself.
             static CChrCore *GetChrCore(long nChr);
+            // (DOL, static; added for BossF game/boss/CChrCoreBossMethod.cpp)
+            // The leader of team nTeam.
+            static CChrCore *GetTeamLeader(long nTeam);
             // The number of characters: the word at 0x50 of the instance,
             // zero when there is none. Static, like GetChrCore.
             static long GetChrCoreNum();

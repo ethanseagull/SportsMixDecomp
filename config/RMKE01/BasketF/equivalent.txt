@@ -7,10 +7,7 @@ BasketF AllSetState___Q23msw29CChrManBasketHungryBossPackunFlll near 99.9 regist
 BasketF ArrowSignalCheck__Q23msw16CChrMarkerBasketFv near 99.2 99.2%: user-team/character-team registers swapped only (same as HockeyF sibling)
 BasketF Bubble_CalcCreatePos__Q23msw14CStageBasket11Fv near 98.8 register numbering only
 BasketF CalcPos___Q33msw11CC09_BASKET14CBoundMushroomFv near 99.4 register choice around the paired-single court-offset add
-BasketF CallbackBallCatch2__Q23msw19CNpcGhostBasketBaseFPQ23msw13CCollBodyUnitPQ23msw5CBallPv near 99.6 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CallbackBallCatch___Q23msw19CNpcGhostBasketBaseFPQ23msw13CCollBodyUnitPQ23msw5CBall near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
-BasketF CallbackBallDamage___Q23msw19CNpcGhostBasketBaseFPQ23msw5CBallPCQ23msw12CCollAtkUnitRCQ23bcs5FVEC3 near 99.7 register choice / schedule only (UpDateCollBody_: argument load order).
-BasketF CallbackBodyDamage___Q23msw19CNpcGhostBasketBaseFPQ23msw13CCollBodyUnitPCQ23msw12CCollAtkUnitRCQ23bcs5FVEC3 near 99.7 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CallbackBodyPush___Q23msw19CNpcGhostBasketBaseFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 97.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CallbackMotTrg___Q23msw20CChrCoreBasketKuromaFPCQ33bcs14CAnmObjMotBase7MOT_TRG near 99.7 instruction order only (addi for the ResMdl temporary)
 BasketF CheckArtsChrInput__Q23msw16CChrDrvPadBasketFPCQ33msw7CChrDrv8_CHR_MSG unverified 80.0 80.0%: float constants via one base register instead of the original's per-literal lis (pool-off stand-in could not stay in the shared CChrDrvPad header); extra field reloads in the original; not proven.
@@ -74,7 +71,6 @@ BasketF GetRotY_Pos1ToPos2XZ__Q23msw13CChrManBasketFRCQ23bcs5FVEC3RCQ23bcs5FVEC3
 BasketF GetShotParam___Q23msw21CItemBallBasketGShellCFRQ33msw11BALL_BASKET10SHOT_PARAM near 99.8 99.8%: fmadds operand order only.
 BasketF InRectAndRad___Q23msw13CChrManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3fff near 99.9 lfs offsets into .rodata differ only: the original's .rodata has 8 more bytes (fDist static and a 5.0 of the stripped Util_SearchAerialPassmeetTo_) before these constants
 BasketF IsRide__Q33msw14CStageBasket1010CPanelInfoCFRCQ23bcs5FVEC3 near 94.8 94.8%: stack vector stores in a different order
-BasketF IsValid__Q33bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>6HandleCFv near 96.4 instruction order only
 BasketF LookAt__Q23msw7CStgObjFRCQ23bcs5FVEC3 near 97.9 97.9%: weak inline; the two psq_l/ps_sub operands land in f0/f1 swapped (operand order inside the shared bcs::FVEC3Sub helper). Float registers only.
 BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketLuigiFv near 99.8 r3/r4 swapped in the inlined FsmqGetWork_; same as HockeyF Luigi
 BasketF LoopStateAirTrick__Q23msw21CChrCoreBasketSabotenFv near 95.4 bool (flag&4)!=0 via extrwi vs double cntlzw (same value), one redundant b, fmadds operand order, stack slots/registers
@@ -110,7 +106,6 @@ BasketF Main___Q23msw14CStageBasket05Ff near 95.3 95.3%: IsGameFlag0 test is clr
 BasketF Main___Q23msw28CStageBasketHungryBossPackunFf near 99.6 99.6%, float registers only: the three rotation floats copied to the stack use f0/f1/f2 for z/y/x in the original and f2/f1/f0 in ours; loads, stores, offsets and calls identical
 BasketF Main___Q23msw30CStageBasketHungryBossPackun71Ff near 95.1 register choice (savegpr_19 vs 20), indexed vs stepped-pointer addressing of m_aFloorFlow/m_a3PointPos/m_apFloorNode, two swapped stack slots, load order, and g_GameWork flag bit test as double cntlzw vs clrlwi. (same branch)
 BasketF MethdPass__Q23msw16CChrDrvPadBasketFv unverified 93.4 93.4% after the shared CChrDrvPad header dropped the pool-off stand-in (it lowered BossF/HockeyF/VolleyF pad drivers): float constants via one base register instead of per-literal lis; otherwise as before.
-BasketF MethdSetPassCatchState__Q23msw19CNpcGhostBasketBaseFPQ23msw5CBallRCQ23bcs5FVEC3l near 99.5 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF MethdShoot__Q23msw16CChrDrvPadBasketFv unverified 88.3 88.3% after the shared CChrDrvPad header dropped the pool-off stand-in (it lowered BossF/HockeyF/VolleyF pad drivers): float constants via one base register instead of per-literal lis; otherwise as before.
 BasketF MethdTrickMove__Q23msw16CChrDrvPadBasketFv unverified 81.9 81.9%: float constants via one base register instead of the original's per-literal lis (pool-off stand-in could not stay in the shared CChrDrvPad header); extra field reloads in the original; not proven.
 BasketF MovePos___Q33msw11CC09_BASKET14CBoundMushroomFf near 99.6 fmadds multiplicands swapped (register choice)

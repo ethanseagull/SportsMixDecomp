@@ -39,7 +39,6 @@ DodgeF GetParam_FlashColor__Q23msw13CStageDodge16CFv unverified 63.3 Same values
 DodgeF GetPosTurnAroundGimmick__Q23msw16CComDrvDodgeGameFRQ23bcs5FVEC3 near 96.0 96.0%: equivalent branch form: the two Obstacle_GetPosTurnAroundObstacle calls (normal/special) laid out in opposite order; all else identical
 DodgeF GetTeamOuterFieldBack__Q23msw13CStageDodge03CFll near 99.8 register choice / operand order only.
 DodgeF GetTeamOuterFieldBack__Q23msw13CStageDodge11CFll near 99.8 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
-DodgeF IsValid__Q33bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>6HandleCFv near 96.4 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
 DodgeF ItemBall_GetEscPosFromBall__Q23msw16CComDrvDodgeGameCFRQ23bcs5FVEC3l near 98.7 98.7%: float register choice/order around the range sum only
 DodgeF LoopStateAirTrick__Q23msw18CChrCoreDodgeLuigiFv near 99.6 r3/r4 swapped in the inlined FsmqGetWork_ (queue head vs work pointer); same as HockeyF Luigi
 DodgeF LoopStateThrow__Q23msw21CItemDodgeBombDD_BaseFv near 95.8 95.8%: original converts the flash grey level with a quantized psq_st (u8, clamps); ours uses a plain (unsigned char) cast, same value for the in-range 55..255 it computes; frame 0x30 vs 0x20, colour bytes stored in another order, two extra frsp on single values, two constants loaded in the other order.

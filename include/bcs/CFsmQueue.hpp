@@ -187,10 +187,22 @@ namespace bcs {
             // there, out of line as FsmqSetState__Q23bcs35CFsmQueue<Q23msw16CNpcBehemothBoss>Fl
             // in BossF, which gives this overload its name) Drops the queue
             // and runs state, as FsmqChangeState; returns the state's
-            // cleared work memory (null without one).
+            // cleared work memory (null without one). Written on
+            // FsmqPushState: BossF's CChrCoreBossMethod.cpp gets the original
+            // register allocation only that way (CNpcGhostBasketBase does not
+            // change).
             void *FsmqSetState(long state)
             {
                 FsmqClear();
+                return FsmqPushState(state);
+            }
+
+            // (name guessed; added for BossF game/boss/CChrCoreBossMethod.cpp,
+            // where it is inline) Queues state after the others, as
+            // FsmqPush, and returns its cleared work memory (null without
+            // one). FsmqSetState is FsmqClear followed by this.
+            void *FsmqPushState(long state)
+            {
                 int bEmpty = FsmqIsEmpty();
                 long tail = m_nQueueTail;
                 long next = FsmqWrap(tail + 1, m_nQueueSize);
@@ -207,6 +219,15 @@ namespace bcs {
                     BCS_CpuClear(pWork, m_nWorkSize);
                 }
                 return pWork;
+            }
+
+            // (name guessed; inline in BossF's CChrCoreBoss::MethdTimeOver)
+            // Drops the states queued after the one now running.
+            void FsmqCutQueue()
+            {
+                if (!FsmqIsEmpty()) {
+                    m_nQueueTail = FsmqWrap(m_nQueueHead + 1, m_nQueueSize);
+                }
             }
 
             // (name guessed; BasketF) The work memory of queue entry idx;

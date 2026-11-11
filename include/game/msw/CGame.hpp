@@ -499,6 +499,11 @@ namespace msw {
             // meaning guessed from the name): not zero while an arts event is
             // asked for and has not started yet.
             static int IsReqArtsEvent();
+            // (DOL, static; added for BossF game/boss/CChrCoreBossMethod.cpp;
+            // meanings guessed from the names) The arts gauge of team nTeam
+            // (1.0 is full); puts the leaders' faces on the cockpit again.
+            static float GetTeamArtsGauge(long nTeam);
+            static void SetCockpitFaceIcon();
             // Added for VolleyF game/volley/CChrManVolley.cpp (DOL, static;
             // return types guessed). SetOffenseTeam makes team nTeam the one
             // attacking (CChrManVolley::StartArtsEvent_ passes the team of the

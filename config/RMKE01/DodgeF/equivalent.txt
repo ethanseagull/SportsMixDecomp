@@ -7,7 +7,9 @@ DodgeF CoinInWait__Q23msw17CCockpitDodgeCoinFv near 99.0 register choice only: l
 DodgeF CoinIn__Q23msw17CCockpitDodgeCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 DodgeF CoinOutWait__Q23msw17CCockpitDodgeCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 DodgeF CoinOut__Q23msw17CCockpitDodgeCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
+DodgeF CreateMiniTelop__Q23msw13CCockpitDodgeFllPQ23bcs5FVEC3 near 98.9 98.9%: float registers given to bcs::FVEC3Add's paired-single block; same loads, ps_add, stores.
 DodgeF DetectMapHit___Q23msw13CCollManDodgeFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 87.4 87.4%: branches, calls, constants, offsets and stack layout match; ours addresses the float constants through a kept .rodata base register (r31) instead of lis per load, which costs one more saved register (_savegpr_19 vs _20) and shifts registers/scheduling after it
+DodgeF GameResult_In__Q23msw13CCockpitDodgeFv near 99.0 99.0%: register choice for the period words and result pointers.
 DodgeF GetExplosionParam__Q23msw14CItemDodgeBombFRfRfRfRlRlRUl near 99.7 99.7%: the two registers of the team-number compare are swapped.
 DodgeF GetFarPosBall___Q23msw13CBallManDodgeFRCQ23bcs5FVEC3 near 99.1 99.1%: loop counter and best-ball pointer swap saved registers r29/r30; instructions and order otherwise identical (register allocation only)
 DodgeF GetNearPosBall___Q23msw13CBallManDodgeFRCQ23bcs5FVEC3 near 99.1 99.1%: loop counter and best-ball pointer swap saved registers r29/r30; instructions and order otherwise identical (register allocation only)
@@ -32,10 +34,12 @@ DodgeF ScoreOut__Q23msw17CCockpitDodgeCoinFv near 99.0 register choice only: loo
 DodgeF SendMessage__Q23msw13CStageDodge09Fllll near 95.5 95.5%: instruction order only in the else branch of message 0x25 (this+0x244, fmr and vptr load hoisted above the RandRange ternary); constants, slots and ids match.
 DodgeF SendMessage__Q23msw13CStageDodge15Fllll near 99.8 99.8%: instructions and relocation targets identical (objdump); objdiff scores the 0.0f literal reference differently.
 DodgeF SendMessage__Q23msw15CEventDemoDodgeFllll near 99.2 99.2%: register choice only (identical after renumbering)
+DodgeF SetChrIcon__Q23msw13CCockpitDodgeFlllPCQ23bcs5FVEC3 near 99.6 99.6%: loop counter and icon pointer swap registers.
 DodgeF SetCoinValue__Q23msw17CCockpitDodgeCoinFll near 98.9 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 DodgeF SetCountNum__Q23msw24CCockpitDodgePauseResultFl near 99.2 registers only (as CCockpitBasketPauseResult::SetCountNum): the pane accessor and the computed show flag swap r30/r31; same instructions, order and stack frame
 DodgeF SetDamageDemoType__Q23msw11EvDemoDodgeFll near 98.7 98.7%: register choice only (identical after renumbering)
 DodgeF SetDamegeCamera__Q23msw15CEventDemoDodgeFll near 99.8 99.8%: case 0 swaps the parent and task registers; regs search no gain
+DodgeF SetLifeGaugeState__Q23msw13CCockpitDodgeFlllll near 99.9 99.9%: one register for the OrDie object pointer.
 DodgeF Set__Q23msw17CCockpitDodgeCoinFv near 99.3 register choice only (as CCockpitHockeyCoin::Set)
 DodgeF StartDamageDemo__Q23msw11EvDemoDodgeFv near 97.8 97.8%: the original keeps a cmpwi 1/beq to the switch end for the empty case 1 plus one dead b; equivalent branch form
 DodgeF UpdateMdl__Q23msw13CStageDodge13FUlf near 98.1 register choice and common-subexpression reuse only (as CStageBasket13::UpdateMdl): in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls

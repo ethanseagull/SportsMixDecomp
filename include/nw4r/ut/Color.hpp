@@ -1,6 +1,8 @@
 #ifndef NW4R_UT_COLOR_HPP_
 #define NW4R_UT_COLOR_HPP_
 
+#include "revolution/gx/GXStruct.h"
+
 namespace nw4r {
     namespace ut {
 
@@ -23,6 +25,11 @@ namespace nw4r {
             ~Color() {}
 
             void SetWhite() { *reinterpret_cast<unsigned long *>(this) = 0xFFFFFFFF; }
+
+            // The colour as GX takes it (added for the DOL's
+            // game/msw/CGameExDemoBase.cpp, which passes colours to
+            // GXSetTevColor).
+            operator GXColor() const { return *reinterpret_cast<const GXColor *>(this); }
         };
     }
 }

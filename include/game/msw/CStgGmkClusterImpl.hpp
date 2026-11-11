@@ -1,6 +1,8 @@
 #ifndef MSW_CSTGGMKCLUSTERIMPL_HPP_
 #define MSW_CSTGGMKCLUSTERIMPL_HPP_
 
+#include "bcs/New.hpp"
+
 namespace bcs {
     class CTask;
 }
@@ -27,6 +29,8 @@ namespace msw {
             long m_nTblSize;       // 0x0C
 
         public:
+            // (fn_8022A9C4, unnamed in the DOL)
+            CStgGmkClusterImpl(bcs::CTask *pParent);
             virtual ~CStgGmkClusterImpl();
             virtual long GetMaxNum() const = 0;
             virtual void CreateGmk();
@@ -40,10 +44,27 @@ namespace msw {
             virtual long GetTblSize() const { return m_nTblSize; }
             virtual CStgGmk *GetGmk_(long idx);
             virtual const CStgGmk *GetGmk_(long idx) const;
-            virtual void OnPostCreateGmk();
+            // OnPostCreateGmk and OnUpdate are empty inline functions: the
+            // DOL vtable of this class (lbl_8048A3F0) holds the weak copies
+            // that game/msw/CStgGmk_WaterPillarCluster.cpp emits.
+            virtual void OnPostCreateGmk() {}
             virtual void OnPreDeleteGmk() {}
-            virtual void OnUpdate(float rate);
+            virtual void OnUpdate(float rate) {}
             virtual unsigned long OnCalcSum() const { return 0; }
+    };
+
+    // (name guessed) A cluster of gimmicks of class T: supplies NewGmk.
+    // Evidence: msw::CStgGmk_WaterPillarCluster's constructor stores a
+    // vtable between CStgGmkClusterImpl's and its own (DOL lbl_8047F5E0,
+    // GetMaxNum still pure), whose NewGmk makes a CStgGmk_WaterPillar with
+    // its constructor inlined, and the file emits the class's implicit
+    // destructor (fn_80194A5C).
+    template <class T>
+    class CStgGmkCluster : public CStgGmkClusterImpl {
+        public:
+            CStgGmkCluster(bcs::CTask *pParent) : CStgGmkClusterImpl(pParent) {}
+
+            virtual CStgGmk *NewGmk(long heap) const { return new (heap) T(GetParent()); }
     };
 }
 

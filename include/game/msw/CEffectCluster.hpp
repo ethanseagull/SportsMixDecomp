@@ -41,6 +41,12 @@ namespace msw {
             // word at 0xA4.
             void Set2D(int b2D);
 
+            // (name guessed; the DOL's fn_801234B4) Sets the alpha of every
+            // effect of the cluster, through a member pointer like
+            // CallEffectFunc. msw::CStgGmk_WaterPillar_Act::OnUpdate fades
+            // its effects with it.
+            void SetAlpha(float fAlpha);
+
             // (name guessed) Calls pFunc with nArg on each effect of the
             // cluster that still exists. Inline in the DOL's
             // msw::cockpit::CEffectSet::SetDispFlag; the cluster's own
@@ -52,6 +58,19 @@ namespace msw {
                     bcs::EF::CEffect *pEffect = pManager->GetEffect(m_Effect[i].m_hEffect);
                     if (pEffect != 0) {
                         (pEffect->*pFunc)(nArg);
+                    }
+                }
+            }
+
+            // The same for a member taking a float (MenuF msw::SelectMenu::
+            // CCourtChr::CreateChrMenuObj).
+            void CallEffectFunc(void (bcs::EF::CEffect::*pFunc)(float), float fArg)
+            {
+                bcs::EF::CManager *pManager = bcs::EF::CManager::GetInstance();
+                for (long i = 0; i < m_nEffectNum; i++) {
+                    bcs::EF::CEffect *pEffect = pManager->GetEffect(m_Effect[i].m_hEffect);
+                    if (pEffect != 0) {
+                        (pEffect->*pFunc)(fArg);
                     }
                 }
             }

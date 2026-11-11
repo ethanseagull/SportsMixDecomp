@@ -362,14 +362,10 @@ game/basket/CItemBasketRShell.cpp:
 	.data       start:0x00015680 end:0x00015928
 
 game/basket/CCockpitBasket.cpp:
-	.text       start:0x000818AC end:0x00084B20
-	.rodata     start:0x00004728 end:0x00004778
-	.data       start:0x00015928 end:0x00015D58
-
-game/basket/unit_84B20.cpp:
-	.text       start:0x00084B20 end:0x00084B8C
+	.text       start:0x000818AC end:0x00084B8C
 	.ctors      start:0x000000A8 end:0x000000AC
-	.rodata     start:0x00004778 end:0x00004780
+	.rodata     start:0x00004728 end:0x00004780
+	.data       start:0x00015928 end:0x00015D58
 	.bss        start:0x00000378 end:0x00000380
 
 game/basket/CCockpitBasketCoder.cpp:

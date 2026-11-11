@@ -9,6 +9,7 @@ extern "C" {
 double pow(double x, double y);
 double ceil(double x);
 double fmod(double x, double y);
+double tan(double x);
 
 #ifdef __cplusplus
 }
@@ -29,8 +30,8 @@ inline double fabs(double x)
 #endif
 }
 
-// The float version (inline, as in the compiler's own library): one fabs
-// instruction, with no rounding to single.
+// The float version. Inline, one fabs instruction without the rounding
+// (frsp) the double version needs (DodgeF CChrManDodge::Util_SearchPassTo_).
 inline float fabsf(float x)
 {
 #ifdef __MWERKS__

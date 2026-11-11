@@ -47,6 +47,18 @@ namespace msw {
             long GetChr() const { return m_nChr; }
             long GetSub() const { return m_nSub; }
             void SetId(long nId) { m_nId = nId; }
+            // (names guessed) Used by msw::SelectMenu::CCourtChr.
+            void SetSub(long nSub) { m_nSub = nSub; }
+            RFLDataSource GetSource() const { return m_Source; }
+            long GetMiiIndex() const { return m_Unk1C; }
+            unsigned long GetEffectHandle() const { return m_hEffect; }
+            // Whether the character's effect is wanted (m_Unk2C).
+            unsigned char GetEffectFlag() const { return m_Unk2C; }
+            void SetEffectFlag(unsigned char bEffect) { m_Unk2C = bEffect; }
+            // The last AnimPlayMot's motion, flag and rate.
+            long GetMot() const { return m_nMot; }
+            long GetMotFlag() const { return m_nMotFlag; }
+            float GetMotRate() const { return m_fMotRate; }
 
         private:
             nw4r::ut::Link m_Link;  // 0x00, in msw::CChrMenuCtrl's list

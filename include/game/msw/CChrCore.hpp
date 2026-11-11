@@ -978,6 +978,28 @@ namespace msw {
             void SetTeamNo(long nTeam);
             void SetPadID(long nPad);
             void GetPos(bcs::FVEC3 &rPos);
+
+            // Added for DodgeF game/dodge/CChrManDodge.cpp (all in the DOL;
+            // parameter names guessed). The yaw (radians) from pos towards
+            // the character, in the XZ plane (see GetRotY_ToPosXZ).
+            float GetRotY_FromPosXZ(const bcs::FVEC3 &pos) const;
+            // Not zero when the character is within fRadius of pos in the XZ
+            // plane (meaning guessed from the name).
+            int IsInnerXZ(const bcs::FVEC3 &pos, float fRadius);
+            // (names guessed) Inline in the modules: CChrManDodge reads the
+            // members directly.
+            long GetDriverIdx() const { return m_nDriver; }
+            CChrCore *GetPassCheckChr() const { return m_pPassCheckChr; }
+            void SetRotY(float fRotY);
+            // (meanings guessed) Hides or shows the character for an event.
+            void SetEvtHidden(int bHidden, int);
+            // (fn_800DF580, unnamed in the DOL; name guessed) Stores the rate
+            // clamped to [0, 1] at 0x514.
+            void SetSeVolume(float fRate);
+            // (fn_800DE0B8, unnamed in the DOL; name guessed) Clamps the rate
+            // to [0, 1] and passes it on to CGameSnd::SetVoiceVolume for the
+            // character's player.
+            void SetVoiceVolume(float fRate, float);
             // (names guessed) Inline in the modules: the character managers
             // write the members directly.
             void SetCamNo(long nCam) { m_nCamNo = nCam; }
@@ -990,11 +1012,18 @@ namespace msw {
             // The position, as a reference to the member (GetPos(FVEC3 &)
             // copies it).
             const bcs::FVEC3 &GetPos();
+            // The same for a const character (GetPos__Q23msw8CChrCoreCFv;
+            // msw::CStgGmk_WaterPillarCluster::OnUpdate in the DOL).
+            const bcs::FVEC3 &GetPos() const;
             float GetRotY() const;
             // The goal the character's team attacks, as a point.
             const bcs::FVEC3 &GetTargetGoalPos() const;
             // The distance to rPos in the XZ plane.
             float GetDist_ToPosXZ(const bcs::FVEC3 &rPos) const;
+            // (name guessed; the DOL's fn_800E1E1C) The distance to rPos.
+            float GetDist_ToPos(const bcs::FVEC3 &rPos) const;
+            // (name guessed) See m_PrevPos.
+            const bcs::FVEC3 &GetPrevPos() const { return m_PrevPos; }
             // The yaw (radians) from the character towards pChr.
             float GetRotY_ToChr(const CChrCore *pChr) const;
             // Frame, motion id and play of animation slot nSlot (the
@@ -1039,8 +1068,6 @@ namespace msw {
             void GetNodePos(const char *pName, bcs::FVEC3 &rPos) const;
             void GetVNodePos(long nNode, bcs::FVEC3 &rPos) const;
             const bcs::FVEC3 &GetRot();
-            // The yaw from the character towards a point, in the XZ plane.
-            float GetRotY_FromPosXZ(const bcs::FVEC3 &pos) const;
             // Turns towards fRotY by fRate of the difference.
             void RotateYRate_(float fRotY, float fRate);
             int IsAnimEnd(unsigned long nSlot) const;
@@ -1059,7 +1086,6 @@ namespace msw {
             unsigned long Eff_CreateAttachAuto(long nSlot, long nEff, unsigned long);
             // Stops the effect in slot nSlot.
             void Eff_Stop(long nSlot);
-            void SetRotY(float fRotY);
             // The length in frames of motion nMotId.
             float AnimGetResFrameNum(long nMotId) const;
             // Takes ball hBall (its handle) into the character's hand.
@@ -1106,7 +1132,11 @@ namespace msw {
             // motions and turns (AnimPlay, RotateYRate_ read it);
             // CChrCoreVolleyLuigi turns its vacuum by it times m_fFrameStep.
             float m_fTimeScale;
-            unsigned char m_Unk7C[0x90 - 0x7C];
+            // 0x7C (name guessed): the position of the previous frame;
+            // msw::CStgGmk_WaterPillar_Act::OnBodyPush (DOL) pushes the
+            // character back by its movement since.
+            bcs::FVEC3 m_PrevPos;
+            unsigned char m_Unk88[0x90 - 0x88];
             // 0x90 (name guessed): the character's model; IsDisable is true
             // while it is null. CChrManHockey::ArtsStart_ fades it out.
             bcs::CMdlObj *m_pMdl;
@@ -1118,7 +1148,12 @@ namespace msw {
             unsigned long m_nDispFlag;
             unsigned char m_UnkF4[4];
             int m_bStarPlayer;           // 0xF8, see IsStarPlayer
-            unsigned char m_UnkFC[0x78];
+            unsigned char m_UnkFC[0x168 - 0xFC];
+            // 0x168 (name guessed): set by the DOL's SetPassCheckMode(CChrCore *,
+            // CBall *); DodgeF's CChrManDodge::Util_SearchChgLeader_ reads it
+            // from the character that passed the ball, as the receiver.
+            CChrCore *m_pPassCheckChr;
+            unsigned char m_Unk16C[0x174 - 0x16C];
             signed char m_nChrId;        // 0x174, a character number (meaning guessed; signed, see GetChrTypeID)
             // 0x175 (name guessed): the character's colour variant, read
             // signed (CChrCoreBossSlime::Reset_ picks its colour from it).

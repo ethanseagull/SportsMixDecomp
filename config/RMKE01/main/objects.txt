@@ -19,7 +19,7 @@ Matching game/msw/CCockpitResultTime.cpp
 Matching game/msw/CEffectTableList.cpp
 Equivalent game/msw/menu/CDispTaskLink.cpp
 NonMatching game/msw/CArrowSignalBase.cpp
-Matching game/msw/CStgGmk_WaterPillar_Drv.cpp
+Equivalent game/msw/CStgGmk_WaterPillar.cpp
 NonMatching game/msw/CStage17Base/CTurnTable.cpp
 Matching game/msw/CCockpitPartMove.cpp
 Matching game/msw/CMenuLinkList.cpp
@@ -39,4 +39,4 @@ NonMatching game/msw/CEffectTable.cpp
 Matching game/msw/CoinRes.cpp
 NonMatching game/bcs/CAnmTexSrt.cpp
 NonMatching game/bcs/CAnmTexPat.cpp
-NonMatching game/msw/CGameExDemoBase.cpp
+Equivalent game/msw/CGameExDemoBase.cpp

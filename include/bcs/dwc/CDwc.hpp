@@ -34,6 +34,11 @@ namespace bcs {
                 void SetReadyFromMatchEnd();
                 int IsMatchPlay() const;
                 void CloseMatching();
+                // Added for BasketF game/basket/CCockpitBasket.cpp (return
+                // types guessed). Whether a connection is up; sends nSize
+                // bytes of pData as this player's data.
+                int IsConnect() const;
+                void SetMySingleDataA(const void *pData, long nSize);
         };
     }
 }

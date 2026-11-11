@@ -42,6 +42,13 @@ namespace nw4r {
             }
         };
 
+        // An axis-aligned box. Added for MenuF game/menu/CBgChr.cpp (the
+        // screen boxes of the top menu's characters).
+        struct AABB {
+            VEC3 min; // 0x00
+            VEC3 max; // 0x0C
+        };
+
         // A 3x4 matrix, row by row; column 3 is the translation. Added for
         // HockeyF game/hockey/CCockpitHockeyCoin.cpp (a pane's global
         // matrix, copied as words).
@@ -50,6 +57,10 @@ namespace nw4r {
             float _10, _11, _12, _13;
             float _20, _21, _22, _23;
         };
+
+        // (DOL) *pOut = *pM scaled by *pS. Added for the DOL's
+        // msw::CStgSrt::GetMtx.
+        MTX34 *MTX34Scale(MTX34 *pOut, const MTX34 *pM, const VEC3 *pS);
     }
 }
 

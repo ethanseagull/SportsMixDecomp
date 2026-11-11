@@ -49,6 +49,10 @@ namespace msw {
             // fn_8017AE5C: the stage number, with 0x51 read as 0x50 and
             // 0x5B, 0x64 and 0x65 as 0x5A.
             static long GetSndStage();
+            // Added for MenuF game/menu/CCourtChr.cpp (names and return type
+            // guessed). Whether the top-menu character nChr is unlocked;
+            // CCourtChr passes the ball index and -1.
+            static int IsUnlockTopMenuChr(long nChr, long nUnk);
     };
 }
 

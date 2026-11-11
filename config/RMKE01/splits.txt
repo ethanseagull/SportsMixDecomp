@@ -426,21 +426,12 @@ game/msw/CGameVib.cpp:
 game/msw/CLoadData.cpp:
 	.text       start:0x8018E808 end:0x801902CC
 
-game/msw/CStgGmk_WaterPillar_Mdl.cpp:
-	.text       start:0x80190CF8 end:0x80190F08
-
-game/msw/CStgGmk_WaterPillar_Act.cpp:
-	.text       start:0x80191024 end:0x80193DE8
-
-game/msw/CStgGmk_WaterPillar_Drv.cpp:
-	.text       start:0x80194370 end:0x80194404
-	.data       start:0x8047F718 end:0x8047F740
-
 game/msw/CStgGmk_WaterPillar.cpp:
-	.text       start:0x80194408 end:0x801949CC
-
-game/msw/CStgGmk_WaterPillarCluster.cpp:
-	.text       start:0x801949D0 end:0x80195CD8
+	.text       start:0x80190CF8 end:0x801960B4
+	.rodata     start:0x8043D048 end:0x8043D098
+	.data       start:0x8047F358 end:0x8047FB70
+	.sdata      start:0x805BFD60 end:0x805BFD78
+	.sdata2     start:0x805C3718 end:0x805C3788
 
 game/bcs/CMusicData.cpp:
 	.text       start:0x801960B4 end:0x80196424

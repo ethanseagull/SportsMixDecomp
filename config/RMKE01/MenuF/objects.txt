@@ -39,3 +39,7 @@ Equivalent game/menu/CCupChr.cpp
 Equivalent game/menu/CMenu.cpp
 Equivalent game/menu/CTitle.cpp
 Equivalent game/menu/CBackground.cpp
+Equivalent game/menu/CCharaLevelStar.cpp
+Equivalent game/menu/CCourtChr.cpp
+Equivalent game/menu/CPartyMEHelpBossPackun.cpp
+Equivalent game/menu/CBgChr.cpp

@@ -3,6 +3,9 @@
 
 #include "bcs/CFsmQueue.hpp"
 #include "bcs/FVEC3.hpp"
+#include "game/msw/CAtkCollision.hpp"
+#include "game/msw/CBodyCollision.hpp"
+#include "game/msw/CDefCollision.hpp"
 #include "game/msw/CStgGmkAct.hpp"
 
 namespace msw {
@@ -15,6 +18,13 @@ namespace msw {
     // objects among them; the constructor calls CBodyCollision's,
     // CAtkCollision's and CDefCollision's). Constructor
     // __ct__Q23msw23CStgGmk_WaterPillar_ActFPQ23msw7CStgGmk.
+    //
+    // States (the numbers are the state table's; names of the states
+    // without a symbol are guesses): 0 RESET (back to the default position,
+    // then STOP), 1 WAIT (Interval frames, then PRESTART while automatic),
+    // 2 PRESTART (warning), 3 START (the water stands for StayTime frames),
+    // 4 STAY (not entered by the DOL's code), 5 END (the water falls), 6
+    // STOP (off).
     //
     // The order of the new virtual functions (GetParam_Radius to
     // DtorState_START) follows __vt__Q23msw29CStgGmk_WaterWorks_Hockey_Act
@@ -33,10 +43,10 @@ namespace msw {
             virtual void OnInit();
             virtual void OnUpdate(float rate);
             virtual void OnBodyPush(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush);
-            virtual void OnBodyDamage(CCollBodyUnit *pBody, const CCollAtkUnit *pAtk, const bcs::FVEC3 &rPos);
+            virtual unsigned long OnBodyDamage(CCollBodyUnit *pBody, const CCollAtkUnit *pAtk, const bcs::FVEC3 &rPos);
             virtual void OnBallCatch(CCollBodyUnit *pBody, CBall *pBall);
-            virtual void OnReflectHit(const CCollDefUnit *pDef, const CBall *pBall, bcs::FVEC3 &rPos,
-                                      bcs::FVEC3 &rVel);
+            virtual unsigned long OnReflectHit(const CCollDefUnit *pDef, const CBall *pBall, bcs::FVEC3 &rPos,
+                                               bcs::FVEC3 &rVel);
             virtual unsigned long OnCalcSum() const;
 
             virtual float GetParam_Radius() const = 0;
@@ -70,7 +80,7 @@ namespace msw {
             virtual void SetVisibleAll(int bVisible);
             virtual void WaterSuspend();
             virtual void WaterResume();
-            virtual bool IsWaterSuspend() const;
+            virtual int IsWaterSuspend() const;
             virtual bool CheckWaterCap() const;
             virtual void WaterStartAnim_();
             virtual void WaterEndAnim_();
@@ -84,9 +94,32 @@ namespace msw {
             virtual void DtorState_START();
 
         private:
-            unsigned char m_Unk1D4[0x34]; // 0x1D4, the collision objects among others (not mapped)
+            // The states without a symbol in the DOL (names guessed).
+            void CtorState_RESET();
+            void LoopState_RESET();
+            void DtorState_RESET();
+            void CtorState_WAIT();
+            void LoopState_WAIT();
+            void DtorState_WAIT();
+            void CtorState_STAY();
+            void LoopState_STAY();
+            void DtorState_STAY();
+            void CtorState_END();
+            void LoopState_END();
+            void DtorState_END();
+            void CtorState_STOP();
+            void LoopState_STOP();
+            void DtorState_STOP();
+
+            CBodyCollision m_BodyColl;    // 0x1D4
+            CAtkCollision m_AtkColl;      // 0x1E0
+            CDefCollision m_DefColl;      // 0x1EC
+            float m_fTimer;               // 0x1F8, frames in the state (counting up or down)
+            float m_fCollTimer;           // 0x1FC, frames before the water collides
+            int m_bCollEnable;            // 0x200, see UpdateColl
+            int m_bSuspend;               // 0x204, see WaterSuspend
             int m_bAuto;                  // 0x208
-            unsigned long m_Unk20C;       // 0x20C
+            unsigned long m_nTopNode;     // 0x20C, index of the model's top node (OnInit)
     };
 }
 

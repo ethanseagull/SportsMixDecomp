@@ -19,13 +19,18 @@ namespace msw {
             bcs::CScnObj *GetScnObj() const { return m_pScnObj; }
             // (name guessed) The list of the model's nodes.
             CStageMdlNodeList *GetNodeList() const { return m_pNodeList; }
+            // (name guessed) The halfword at 0x2C.
+            unsigned short GetUnk2C() const { return m_Unk2C; }
 
         private:
             unsigned char m_Unk00[0x4];     // 0x00
             bcs::CScnObj *m_pScnObj;        // 0x04
             unsigned char m_Unk08[0xC];     // 0x08
             CStageMdlNodeList *m_pNodeList; // 0x14 (name guessed)
-            unsigned char m_Unk18[0x10B0];  // 0x18
+            unsigned char m_Unk18[0x14];    // 0x18
+            unsigned short m_Unk2C;         // 0x2C (meaning not known; HockeyF's
+                                            // CStageHockey05 turns only models with 0)
+            unsigned char m_Unk2E[0x109A];  // 0x2E
 
         public:
             virtual void Unk08();

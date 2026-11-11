@@ -198,6 +198,12 @@ namespace msw {
     extern float HOCKEY_PRM_S12_BALL_DOWN_TIME;
     extern float HOCKEY_PRM_S12_BALL_HIT_DECAY;
 
+    // Stage 85 (the crush skate stages, CStageHockeyCrushSkate*), floor 0.
+    extern float HOCKEY_PRM_S85_FLOOR0_CYCLE;
+    extern float HOCKEY_PRM_S85_FLOOR0_STOP_TIME;
+    extern float HOCKEY_PRM_S85_FLOOR0_STOP_TIME_RND;
+    extern float HOCKEY_PRM_S85_FLOOR0_CHR_FLOW_VEL;
+
     // Stage 15.
     extern float HOCKEY_PRM_S15_CASE_INTERVAL;
     extern float HOCKEY_PRM_S15_CASE_POS_Y;

@@ -15,16 +15,20 @@ namespace msw {
     //
     // INCOMPLETE: only what the VolleyF CComManVolley units call is here.
     //  - The object is the vptr alone (CComManVolleyGame is allocated with
-    //    4 bytes). The DOL has no vtable of this class, so its two virtual
-    //    functions are taken as pure; the destructor is inline and empty
-    //    (the derived destructors call nothing).
+    //    4 bytes). The destructor is inline and empty (the derived
+    //    destructors call nothing). The DOL keeps no vtable of this class,
+    //    and the modules that build a derived instance (VolleyF
+    //    CComManVolleyGame) emit none either, so Clear and Main are taken to
+    //    be declared out of line here (their definitions and the vtable,
+    //    unused, were stripped from the DOL): declared pure or inline, the
+    //    vtable would be emitted weak in every such module.
     //  - Nearly everything else is static: the DOL bodies take no `this`.
     //    Return types are guesses except where a caller shows them.
     class CComMan {
         public:
             virtual ~CComMan() {}
-            virtual void Clear() = 0;
-            virtual void Main(float fFrame) = 0;
+            virtual void Clear();
+            virtual void Main(float fFrame);
 
             // (DOL) Reads entry nId of the computer parameter table for
             // level nLevel. (meaning of the arguments guessed)

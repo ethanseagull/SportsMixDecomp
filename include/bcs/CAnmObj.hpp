@@ -36,11 +36,17 @@ namespace bcs {
             virtual int VFunc3C() const;                                // 0x3C, bit 2
             virtual int IsEnd() const;                                  // 0x40, bit 3
 
+            // (names guessed) Inline in MenuF's msw::CChrMenuCtrl::CreateMdlObj,
+            // which sets bit 3 of the word at 0x08 after Create.
+            void OnFlag(unsigned long flag) { m_nAnmFlag |= flag; }
+
         protected:
             void OffAnmFlag(unsigned long flag) { m_nAnmFlag &= ~flag; }
 
         private:
-            unsigned long m_nAnmFlag; // 0x08 (name guessed)
+            // 0x08 (name guessed). The class ends here: the 0x34-byte
+            // material animations add bcs::CAnmObjMat's second base at 0x0C.
+            unsigned long m_nAnmFlag;
     };
 }
 

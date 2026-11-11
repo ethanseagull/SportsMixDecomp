@@ -748,10 +748,7 @@ namespace msw {
             param.pMove->PushRoute(pWait, 2, 0.0f, 0.0f);
         } else {
             // Jump down at most 4 ...
-            float fLength = 4.0f;
-            if (!(route.fLength > fLength)) {
-                fLength = route.fLength;
-            }
+            float fLength = route.fLength > 4.0f ? 4.0f : route.fLength;
             bcs::BCS_VecZ_RotY(route.vEnd, fLength, route.fRotY);
             route.fLength = fLength;
             bcs::FVEC3Add(&route.vEnd, &route.vEnd, &route.vStart);
@@ -972,7 +969,7 @@ namespace msw {
         AddShipOffset(vOffset, pAnim);
 
         pMan->SetSceneData(pModel->GetResFile());
-        short nCamera = pMan->GetSceneCameraIndex(0, pAnim->pAnim);
+        long nCamera = pMan->GetSceneCameraIndex(0, pAnim->pAnim);
         if (nCamera == -1) {
             return;
         }
@@ -1038,7 +1035,7 @@ namespace msw {
         }
 
         // The ship's own camera.
-        short nCamera = pMan->GetSceneCameraIndex(0, pAnim->pAnim);
+        long nCamera = pMan->GetSceneCameraIndex(0, pAnim->pAnim);
         if (nCamera == -1) {
             return;
         }
@@ -1052,12 +1049,13 @@ namespace msw {
     void CTournamentRouteMan_Stage33::_ShipAnimNodeAp(unsigned long ulData, long nPoint, float fParam,
                                                       unsigned long ulParam, long nEvent, int bDisp)
     {
+        CEventModel *pSea;
         static const long nEffSlot = 1;
 
         const SHIP_ANIM *pAnim = reinterpret_cast<const SHIP_ANIM *>(ulData);
         const SHIP_EFFECT *pEffect = &s_ShipEffect[pAnim->nEffect];
         CTournamentMan *pMan = CTournamentMan::GetInstance();
-        CEventModel *pSea = pMan->GetObjModel(0x33);
+        pSea = pMan->GetObjModel(0x33);
         CEventModel *pModel = pMan->GetObjModel(pAnim->nObjAp);
         if (pAnim->nObjAp == -1) {
             if (pSea != 0) {
@@ -1137,8 +1135,8 @@ namespace msw {
             case 0x14: { // where the rainbow roads start
                 const TournamentWork::POINT_INFO *pPoint = TournamentWork::GetPointInfo(nParam);
                 if (pPoint->HasViewPos()) {
-                    m_vRainbowPos.Set(pPoint->GetViewOfsX() + pPoint->vPos.x, 0.0f,
-                                      2.0f * -(pPoint->nViewZ - 0x16) + pPoint->vPos.z);
+                    float fOfsZ = 2.0f * -(pPoint->nViewZ - 0x16);
+                    m_vRainbowPos.Set(pPoint->GetViewOfsX() + pPoint->vPos.x, 0.0f, fOfsZ + pPoint->vPos.z);
                 }
                 nParam = ulParam;
             }
@@ -1206,7 +1204,7 @@ namespace msw {
             case 0x16: { // a character slides down a rainbow road
                 static const long nEffSlot = 0;
 
-                long nRoad = nParam & 0xF;
+                unsigned long nRoad = nParam & 0xF;
                 int bRight = (nParam >> 5) & 1;
                 int bRev = (nParam >> 4) & 1;
                 CEventModel *pRoad = pMan->GetObjModel(nRoad + (bRight ? 0xC : 5));
@@ -1248,7 +1246,8 @@ namespace msw {
             case 0x17: { // ... and arrives
                 static const long nEffSlot = 0;
 
-                CEventModel *pChr = pMan->GetObjModel((nParam & 0xF) + 0x2C);
+                unsigned long nRoad = nParam & 0xF;
+                CEventModel *pChr = pMan->GetObjModel(nRoad + 0x2C);
                 unsigned long hEffect = pChr->GetEffcetHandle(nEffSlot);
                 if (hEffect != 0) {
                     CEffectCluster *pEffect = CEffectCtrl::GetInstance()->FindList(hEffect);
@@ -1302,13 +1301,13 @@ namespace msw {
                 break;
             }
             case 0xD: { // a bridge turns with the character on it
-                long nBridge = (nParam & 0xF) + 0x1F;
+                long nBridgeNo = nParam & 0xF;
                 char szAnim[64];
                 sprintf(szAnim, "rot_bridge_%s90", (nParam & 0x20) ? "R" : "L");
-                float fNumFrame = _StageAnimNode(szAnim, nBridge, fParam, ulParam, 0xE, 0.0f, 0, 1);
-                _StageAttachChr(nBridge, ulParam, m_nUnk08, 1);
-                _StageSe(0xE45, nBridge, fParam, ulParam, -1);
-                _AddTimer(0x2F, m_nTimerGroup, fNumFrame + m_fTimer - 20.0f, nBridge, fParam, ulParam);
+                float fNumFrame = _StageAnimNode(szAnim, nBridgeNo + 0x1F, fParam, ulParam, 0xE, 0.0f, 0, 1);
+                _StageAttachChr(nBridgeNo + 0x1F, ulParam, m_nUnk08, 1);
+                _StageSe(0xE45, nBridgeNo + 0x1F, fParam, ulParam, -1);
+                _AddTimer(0x2F, m_nTimerGroup, fNumFrame + m_fTimer - 20.0f, nBridgeNo + 0x1F, fParam, ulParam);
                 break;
             }
             case 0x2F:
@@ -1394,10 +1393,11 @@ namespace msw {
                 break;
             }
             case 0x3F5: { // the rainbow glow on character ulParam
+                long nSlot = ulParam + 0x15;
                 CEventModel *pChr = pMan->GetChrModel(ulParam);
-                CEffectCluster *pEffect = pMan->GetEffect(ulParam + 0x15);
+                CEffectCluster *pEffect = pMan->GetEffect(nSlot);
                 if (pEffect == 0) {
-                    pEffect = pMan->SetEffect(ulParam + 0x15, 0x57A, 1, 0, 0);
+                    pEffect = pMan->SetEffect(nSlot, 0x57A, 1, 0, 0);
                 }
                 if (pEffect != 0) {
                     pEffect->SetTranslate(&pChr->GetPos());
@@ -1406,13 +1406,14 @@ namespace msw {
                 break;
             }
             case 0x3F3: {
+                long nSlot = ulParam + 0x15;
                 CEventModel *pChr = pMan->GetChrModel(ulParam);
-                CEffectCluster *pEffect = pMan->GetEffect(ulParam + 0x15);
+                CEffectCluster *pEffect = pMan->GetEffect(nSlot);
                 if (pEffect == 0) {
-                    pEffect = pMan->SetEffect(ulParam + 0x15, 0x579, 1, 0, 0);
-                    long nSlot = pMan->GetSeSlot(0x19, 0x119);
-                    if (nSlot != -1) {
-                        pMan->PlaySe(0xE53, (const bcs::FVEC3 *)0, nSlot, 0.0f, 1.0f, 0.0f, 1);
+                    pEffect = pMan->SetEffect(nSlot, 0x579, 1, 0, 0);
+                    long nSeSlot = pMan->GetSeSlot(0x19, 0x119);
+                    if (nSeSlot != -1) {
+                        pMan->PlaySe(0xE53, (const bcs::FVEC3 *)0, nSeSlot, 0.0f, 1.0f, 0.0f, 1);
                     }
                 }
                 if (pEffect != 0) {
@@ -1441,10 +1442,11 @@ namespace msw {
                 break;
             }
             case 0x2D: {
+                long nSlot = ulParam + 0x15;
                 CEventModel *pObj = pMan->GetObjModel(nParam);
-                CEffectCluster *pEffect = pMan->GetEffect(ulParam + 0x15);
+                CEffectCluster *pEffect = pMan->GetEffect(nSlot);
                 if (pEffect == 0) {
-                    pEffect = pMan->SetEffect(ulParam + 0x15, 0x579, 1, 0, 0);
+                    pEffect = pMan->SetEffect(nSlot, 0x579, 1, 0, 0);
                     _StageSe(0xE53, nParam, fParam, ulParam, -1);
                 }
                 if (pEffect != 0) {

@@ -1,6 +1,8 @@
 #ifndef BCS_BCS_COLOR_HPP_
 #define BCS_BCS_COLOR_HPP_
 
+#include "nw4r/ut/Color.hpp"
+
 namespace bcs {
 
     // An RGBA colour, four bytes, passed by value to the DOL's drawing and
@@ -11,31 +13,18 @@ namespace bcs {
     // and then given its four bytes (DodgeF game/dodge/CChrMarkerDodge.cpp,
     // BasketF CBallMarkerBasket), so the four-byte constructor starts from
     // white too. (member names guessed)
-    struct BCS_Color {
-        unsigned char r;
-        unsigned char g;
-        unsigned char b;
-        unsigned char a;
-
-        // The empty destructor is what makes the compiler return a colour
-        // through a hidden pointer, as msw::CChrMarker::GetColor_ does
-        // (VolleyF CChrMarkerVolleyJump); without it a four-byte struct
-        // comes back in r3.
-        ~BCS_Color() {}
-
-        BCS_Color() { SetWhite(); }
-
-        // A copy moves the colour as one word (VolleyF CChrMarkerVolleyJump
-        // passes GetColor_'s result on that way); the implicit copy would
-        // move the four bytes one by one.
-        BCS_Color(const BCS_Color &c)
-        {
-            *reinterpret_cast<unsigned long *>(this) = *reinterpret_cast<const unsigned long *>(&c);
-        }
+    // Derives from nw4r::ut::Color: MenuF game/menu/CChrMenuCtrl emits
+    // nw4r::ut::Color's weak destructor next to its BCS_Color tables, and its
+    // static initialiser is reproduced exactly only with this base.
+    struct BCS_Color : nw4r::ut::Color {
+        // The base's empty destructor is what makes the compiler return a
+        // colour through a hidden pointer, as msw::CChrMarker::GetColor_ does
+        // (VolleyF CChrMarkerVolleyJump); without one a four-byte struct
+        // comes back in r3. The base also copies the colour as one word.
+        BCS_Color() {}
 
         BCS_Color(unsigned char cr, unsigned char cg, unsigned char cb, unsigned char ca)
         {
-            SetWhite();
             r = cr;
             g = cg;
             b = cb;
@@ -46,9 +35,7 @@ namespace bcs {
         // 0xRRGGBBAA, and stored as a word:
         // msw::SelectMenu::CCourtBallMdlObj::SetGoldColor (MenuF) builds its
         // colours with one store each.
-        explicit BCS_Color(unsigned long rgba) { *reinterpret_cast<unsigned long *>(this) = rgba; }
-
-        void SetWhite() { *reinterpret_cast<unsigned long *>(this) = 0xFFFFFFFF; }
+        explicit BCS_Color(unsigned long rgba) : nw4r::ut::Color(rgba) {}
     };
 }
 

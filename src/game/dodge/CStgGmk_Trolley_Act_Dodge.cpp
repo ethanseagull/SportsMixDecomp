@@ -46,11 +46,11 @@ long msw::CStgGmk_Trolley_Act_Dodge::GetParam_TrolleyPatValidNum() const
 }
 
 // (meaning guessed) Index of a raw location: each of the ten rows starts
-// 20 entries after the previous one, the first at 149. The original checks
+// 20 entries after the previous one, the first at 161. The original checks
 // the row against 40, not 10, so rows 10 to 39 read past the table.
 long msw::CStgGmk_Trolley_Act_Dodge::GetLocRawTblIdx(long row, long idx) const
 {
-    const long tbl[] = { 149, 169, 189, 209, 229, 249, 269, 289, 309, 329 };
+    const long tbl[] = { 161, 181, 201, 221, 241, 261, 281, 301, 321, 341 };
     long rowLen = tbl[1] - tbl[0];
 
     if (row < 0 || row >= 40 || idx < 0 || idx >= rowLen) {

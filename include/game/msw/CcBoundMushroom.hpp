@@ -38,7 +38,7 @@ namespace msw {
                                     float fScale, long nCourt, bcs::BCS_Color color, long nPlayer);
                     virtual ~CcBoundMushroom();
                     virtual void Main();
-                    virtual void SendMessage(long, long, long, long);
+                    virtual long SendMessage(long, long, long, long);
                     virtual float GetAttackRadius() const;
                     virtual float GetAttackRange() const;
                     virtual int IsAttackEnd() const;

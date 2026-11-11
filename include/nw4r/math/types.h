@@ -61,6 +61,17 @@ namespace nw4r {
         // (DOL) *pOut = *pM scaled by *pS. Added for the DOL's
         // msw::CStgSrt::GetMtx.
         MTX34 *MTX34Scale(MTX34 *pOut, const MTX34 *pM, const VEC3 *pS);
+
+        // (DOL) *pOut = the rotation about X, Y and Z by the three angles,
+        // given in units of 1/256 of a turn. Added for bcs::CScnObj::CalcRootMtx.
+        MTX34 *MTX34RotXYZFIdx(MTX34 *pOut, float fIdxX, float fIdxY, float fIdxZ);
+
+        // The same with the angles in radians (256 / 2 pi = 40.743664 units
+        // per radian). Inline in bcs::CScnObj::CalcRootMtx.
+        inline MTX34 *MTX34RotXYZRad(MTX34 *pOut, float fRadX, float fRadY, float fRadZ)
+        {
+            return MTX34RotXYZFIdx(pOut, 40.743664f * fRadX, 40.743664f * fRadY, 40.743664f * fRadZ);
+        }
     }
 }
 

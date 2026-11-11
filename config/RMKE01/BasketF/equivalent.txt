@@ -28,10 +28,12 @@ BasketF CtorStateDisappears__Q23msw19CNpcGhostBasketBaseFv near 99.6 register ch
 BasketF CtorStateMotPlay__Q23msw19CNpcGhostBasketBaseFv near 98.9 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CtorStateMove__Q23msw19CNpcGhostBasketBaseFv near 99.7 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CtorStatePursuit__Q23msw19CNpcGhostBasketBaseFv near 98.4 register choice / schedule only (UpDateCollBody_: argument load order).
+BasketF CtorStateSmashCut__Q23msw19CChrCoreBasketYoshiFv near 99.5 instruction order and registers only
 BasketF DetectMapHit___Q23msw14CCollManBasketFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 98.4 98.4%, schedule only: the 0.0f load at entry is scheduled later and the two-court gap calculation assigns float registers differently; constants, calls, memory accesses and branch targets identical
 BasketF GameResult_In__Q23msw14CCockpitBasketFv near 99.0 99.0%: register choice only.
 BasketF GetBgCollRadiusXZ__Q23msw16CBallBasketFruitCFv near 99.3 float register choice for 0.23f and the scale array
 BasketF GetBgCollRadius__Q23msw16CBallBasketFruitCFv near 99.3 float register choice for 0.23f and the scale array
+BasketF GetEffectUnit__Q23msw19CChrCoreBasketYoshiFl near 89.7 same values/order into the static YOSHI_COL_SET array; only the array base addressing (stwu @l vs separate addi) and one more saved register differ
 BasketF GetFirstLookInfo_MultiPlay__Q23msw15CCameraBasketHBFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 99.7 99.7%, registers only: in the character loop the z*scale product and pos.x swap float registers
 BasketF GetFloorFlow__Q23msw30CStageBasketHungryBossPackun72CFRQ23bcs5FVEC3RCQ23bcs5FVEC3Q33msw9CStageMan9FLOW_TYPE near 99.6 load order of the direction constant and m_fMove before the fmuls
 BasketF GetJustShotTimingMax___Q23msw14CBallManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3PCQ23msw5CBall near 96.5 stack slots, registers, and the queue head and tail loaded in the other order; same calls and constants
@@ -44,6 +46,7 @@ BasketF GetParam_TTOffset__Q23msw14CStageBasket17CFv near 99.2 register choice i
 BasketF GetShotParam___Q23msw21CItemBallBasketGShellCFRQ33msw11BALL_BASKET10SHOT_PARAM near 99.8 99.8%: fmadds operand order only.
 BasketF LookAt__Q23msw7CStgObjFRCQ23bcs5FVEC3 near 97.9 97.9%: weak inline; the two psq_l/ps_sub operands land in f0/f1 swapped (operand order inside the shared bcs::FVEC3Sub helper). Float registers only.
 BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketLuigiFv near 99.8 r3/r4 swapped in the inlined FsmqGetWork_; same as HockeyF Luigi
+BasketF LoopStateAirTrick__Q23msw21CChrCoreBasketSabotenFv near 95.4 bool (flag&4)!=0 via extrwi vs double cntlzw (same value), one redundant b, fmadds operand order, stack slots/registers
 BasketF LoopStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateCatch__Q23msw19CNpcGhostBasketBaseFv near 99.6 one dead branch.
 BasketF LoopStateDisappears__Q23msw19CNpcGhostBasketBaseFv near 99.8 register choice / schedule only (UpDateCollBody_: argument load order).
@@ -54,6 +57,7 @@ BasketF LoopStatePassCatch__Q23msw19CNpcGhostBasketBaseFv near 99.7 register cho
 BasketF LoopStatePass__Q23msw19CNpcGhostBasketBaseFv unverified 99.3 99.3%: original calls MethdSetPassCatchJumpWaitFrame (CChrCoreBasket slot 0xA78, (FVEC3&, float)) without loading f1, so the float it passes is whatever f1 held; ours passes the pass frame.
 BasketF LoopStatePursuit__Q23msw19CNpcGhostBasketBaseFv near 99.8 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateSleep__Q23msw19CNpcGhostBasketBaseFv near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
+BasketF LoopStateSmashCut__Q23msw19CChrCoreBasketYoshiFv near 85.9 control flow, calls, constants and fields match; ours keeps one .rodata base register where the original reloads lis/@l per constant (toolchain.md literal pooling), and cmpwi vs mr. on IsAnmFlipPlay
 BasketF LoopStateSmashCut__Q23msw21CChrCoreBasketKinopioFv near 98.5 two local vectors in different stack slots; register renumbering and load order
 BasketF MainCamera_Normal__Q23msw15CCameraBasketHBFv near 98.5 98.5%, schedule: after the second CalcCurveBlend the two fmr come in the other order and y goes to another saved float register; m_Unk280/m_Unk110 loaded in the other order at the end; calls, constants and memory accesses identical
 BasketF MainFunc__Q23msw19CNpcGhostBasketBaseFv near 98.9 register choice / schedule only (UpDateCollBody_: argument load order).

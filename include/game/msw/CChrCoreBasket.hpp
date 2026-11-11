@@ -1,6 +1,7 @@
 #ifndef MSW_CCHRCOREBASKET_HPP_
 #define MSW_CCHRCOREBASKET_HPP_
 
+#include "bcs/BCS_Color.hpp"
 #include "bcs/FVEC3.hpp"
 #include "game/msw/CC_DATA.hpp"
 #include "game/msw/CChrCore.hpp"
@@ -15,7 +16,11 @@ namespace msw {
         // INCOMPLETE: only what the character units read; names guessed.
         class CC_PARAM_BASKET2 {
             public:
-                unsigned char m_Unk000[0x210];
+                unsigned char m_Unk000[0x1E8];
+                // 0x1E8: the frames Yoshi's smash cut holds its second step
+                // (CChrCoreBasketYoshi::CtorStateSmashCut).
+                long m_nSmashCutHoldFrame;
+                unsigned char m_Unk1EC[0x210 - 0x1EC];
                 // 0x210: the height of Toad's trick jump
                 // (CChrCoreBasketKinopio::SubStateArtsShotSetTrickJumpParam_).
                 float m_fArtsJumpHeight;
@@ -68,6 +73,30 @@ namespace msw {
             float GetAtkDownFrame(long nKind) const;
             float GetAtkVanishPower(long nKind) const;
             long GetAirTrickMotID(AIR_TIRCK_FLOW flow, int bAlt);
+
+            // Added for game/basket/CChrCoreBasketSaboten.cpp (BasketF;
+            // return types and meanings guessed from the names and calls).
+            // The effect slots of the special move (values not known).
+            enum ARTS_EFF_SLOT {};
+            void ArtsEff_CreateAttachAuto(ARTS_EFF_SLOT slot, long nEff);
+            void ArtsEff_CreateAttach(ARTS_EFF_SLOT slot, long nEff, unsigned long nNode, unsigned long);
+            void ArtsEff_Stop(ARTS_EFF_SLOT slot);
+            void ArtsEff_StopAll();
+            void ArtsEff_PlayAttackSign();
+            void PlaySeSPStart();
+            // The radius of the three-point line.
+            float GetCourt3PointSize() const;
+            // The goal the team attacks, moved along Z, and its ring.
+            bcs::FVEC3 GetTargetGoalPosOffZ_() const;
+            bcs::FVEC3 GetTargetGoalRing_() const;
+            // Steps of the air trick shared by the characters.
+            void SubStateAirTrickCmnCtor_();
+            void SubStateAirTrickMove_(STATE_WORK_AIR_TRICK *pWork, float, float);
+            void SubStateAirTrickCmnDunk_(STATE_WORK_AIR_TRICK *pWork);
+            void SubBSplineMove_(float fFrame, float fFrameNum, float &rRate, float fLen, float fRotY, float,
+                                 const bcs::FVEC3 &rOfs);
+            // Blocks pChr's air trick dunk when it runs into this one.
+            void CheckAirTrickDunkBlock_(CChrCore *pChr);
 
             // Overrides of CChrCore's virtuals, in vtable order (the slots of
             // __vt__Q23msw14CChrCoreBasket, read from BasketF, that name
@@ -346,7 +375,9 @@ namespace msw {
             virtual void *GetCcParam_() const;                         // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual const CHR_CORE_BASKET::CC_PARAM_BASKET2 *GetCcParam2_() const; // 0xCA4
-            virtual void GetSpSetBackPos(bcs::FVEC3 &) const;          // 0xCA8
+            // (return type from CChrCoreBasketSaboten's: 1 when it wrote a
+            // position)
+            virtual int GetSpSetBackPos(bcs::FVEC3 &) const;           // 0xCA8
             virtual void UpDateCollBody3_();                           // 0xCAC
             virtual void UpdateCollAtk_();                             // 0xCB0
             virtual void SubStateArtsShotStartTrick_(STATE_WORK_AIR_TRICK *); // 0xCB4
@@ -401,11 +432,30 @@ namespace msw {
 
     // (field names guessed; only what the character units read is mapped)
     struct CChrCoreBasket::STATE_WORK_AIR_TRICK {
-        unsigned char m_Unk00[0x8];
+        // 0x00-0x04: three motions of the trick (GetAirTrickMotID of flows
+        // 7, 8 and 15; the cactus stores them, SubStateAirTrickCmnDunk_
+        // presumably plays them).
+        short m_nMotId[3];
+        unsigned char m_Unk06[0x8 - 0x6];
         unsigned long m_nFlag;         // 0x08, bit 9 set while Luigi's vacuum pulls
-        unsigned char m_Unk0C[0x28 - 0xC];
+        // 0x0C-0x24, as the cactus's trick uses them (names guessed): the
+        // frames of the move so far and in all, the motion frame of the last
+        // update, a wait, the length and the place on the curve of the move
+        // (SubBSplineMove_, SubStateAirTrickMove_).
+        float m_fMoveFrame;            // 0x0C
+        float m_fMoveFrameNum;         // 0x10
+        unsigned char m_Unk14[0x18 - 0x14];
+        float m_fMoveUnk18;            // 0x18, the speed of the move, or the last motion frame
+        float m_fWaitFrame;            // 0x1C
+        float m_fMoveLen;              // 0x20
+        float m_fMoveRate;             // 0x24
         float m_fRotY;                 // 0x28, the yaw the trick turns to
-        unsigned char m_Unk2C[0x48 - 0x2C];
+        unsigned char m_Unk2C[0x30 - 0x2C];
+        // 0x30: the cactus's speed per frame, or the point the move ends at.
+        bcs::FVEC3 m_MoveVec;
+        unsigned char m_Unk3C[0x40 - 0x3C];
+        long m_nStep;                  // 0x40, the step of the trick (state numbers 0 to 0x12)
+        unsigned char m_Unk44[0x48 - 0x44];
         float m_fJumpUnk;              // 0x48, passed on to CChrCore::m_fJumpUnk224
         bcs::FVEC3 m_TargetPos;        // 0x4C, where the trick moves to
         float m_fUnk58;
@@ -426,11 +476,16 @@ namespace msw {
 
     // (field names guessed; only what the character units read is mapped)
     struct CChrCoreBasket::STATE_WORK_SMASH_CUT {
-        unsigned char m_Unk00[0x10];
+        long m_nStep;                  // 0x00, the step of the cut (Yoshi: 0 to 4)
+        unsigned char m_Unk04[0x10 - 0x4];
         // 0x10: not negative while Toad may put his mushroom down
-        // (meaning guessed).
+        // (meaning guessed); Yoshi adds the frame step to it.
         float m_fUnk10;
-        unsigned char m_Unk14[0x2C - 0x14];
+        unsigned char m_Unk14[0x18 - 0x14];
+        float m_fHoldFrame;            // 0x18, Yoshi: the frames his second step is held
+        float m_fRotY;                 // 0x1C, Yoshi: the yaw he turns to
+        float m_fAnimSpeed;            // 0x20, Yoshi: the speed of his motions
+        unsigned char m_Unk24[0x2C - 0x24];
         float m_fRadius;               // 0x2C, the reach of the cut (Toad's mushroom takes it as its size)
     };
 
@@ -487,6 +542,61 @@ namespace msw {
 
         protected:
             unsigned long m_hReceiver; // 0x5E8 (name guessed), task id of the smash cut's mushroom, 0 for none
+    };
+
+    // Yoshi: his smash cut is a tongue lash in four motions; his jump block
+    // shows an effect turned with him.
+    class CChrCoreBasketYoshi : public CChrCoreBasket {
+        public:
+            // Two colours of the point light of Yoshi's effects, per colour
+            // variant (names guessed).
+            struct YOSHI_COL_SET {
+                bcs::BCS_Color m_Color0;
+                bcs::BCS_Color m_Color1;
+            };
+
+            CChrCoreBasketYoshi();
+            virtual ~CChrCoreBasketYoshi();
+            virtual void DtorStateJumpShoot();                         // 0x550
+            virtual void DtorStateDunk();                              // 0x598
+            virtual void CtorStateJumpBlock();                         // 0x5F0
+            virtual void LoopStateJumpBlock();                         // 0x5F4
+            virtual void DtorStateJumpBlock();                         // 0x5F8
+            virtual void CtorStateSmashCut();                          // 0x608
+            virtual void LoopStateSmashCut();                          // 0x60C
+            virtual void DtorStateSmashCut();                          // 0x610
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
+            virtual void SubStateArtsShotShootBall_(STATE_WORK_AIR_TRICK *pWork); // 0xD04
+
+            // The colours of colour variant nColor (0 to 3; the caller
+            // clamps it). CChrCoreBasket's jump block and smash cut set them
+            // on Yoshi's effects.
+            static const YOSHI_COL_SET *GetEffectUnit(long nColor);
+    };
+
+    // The cactus: his special shot is a dunk; on the way up he fires a
+    // needle (CC13_BASKET::CcSabotenNeedleBasket), and anyone of the other
+    // team in the way of the dunk is blocked.
+    class CChrCoreBasketSaboten : public CChrCoreBasket {
+        public:
+            CChrCoreBasketSaboten();
+            virtual ~CChrCoreBasketSaboten();
+            virtual int IsAirTrickDunkMode() const;                    // 0x88
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void LoopStateAirTrick();                          // 0x588
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush); // 0xC54
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual int GetSpSetBackPos(bcs::FVEC3 &rPos) const;       // 0xCA8
+
+        protected:
+            // 0x5E8 (name guessed): where the cactus puts the others back
+            // during his dunk (GetSpSetBackPos).
+            bcs::FVEC3 m_SetBackPos;
     };
 }
 

@@ -1,0 +1,163 @@
+#ifndef ALGORITHM_
+#define ALGORITHM_
+
+// The part of the C++ library's <algorithm> the game uses. Written for this
+// project from the game's own instances (bcs::CScnObjGather::Sort,
+// VolleyF's msw::VO_RR::CRhythmReceiveMan): a quicksort whose two pivot
+// candidates are moved by a rotating offset, with a selection sort for
+// ranges of up to 20 elements.
+
+namespace std {
+
+    template <class T>
+    inline void iter_swap(T *a, T *b)
+    {
+        T tmp = *a;
+        *a = *b;
+        *b = tmp;
+    }
+
+    template <class ForwardIt, class Compare>
+    inline ForwardIt min_element(ForwardIt first, ForwardIt last, Compare comp)
+    {
+        ForwardIt min = first;
+
+        if (first != last) {
+            for (ForwardIt it = first + 1; it != last; ++it) {
+                if (comp(*it, *min)) {
+                    min = it;
+                }
+            }
+        }
+        return min;
+    }
+
+    template <class Compare, class RandomIt>
+    inline void __selection_sort(RandomIt first, RandomIt last, Compare comp)
+    {
+        if (first != last) {
+            for (RandomIt end = last - 1; first != end; ++first) {
+                RandomIt min = min_element<RandomIt, Compare>(first, last, comp);
+                if (min != first) {
+                    iter_swap(min, first);
+                }
+            }
+        }
+    }
+
+    // Sorts *a, *b, *c so that the median ends up in *c.
+    template <class Compare, class RandomIt>
+    void __sort132(RandomIt a, RandomIt b, RandomIt c, Compare comp)
+    {
+        bool bCNotBelowA = !comp(*c, *a);
+        bool bBNotBelowC = !comp(*b, *c);
+
+        if (bCNotBelowA && bBNotBelowC) {
+            return;
+        }
+        if (!bCNotBelowA && !bBNotBelowC) {
+            iter_swap(a, b);
+            return;
+        }
+        if (comp(*b, *a)) {
+            iter_swap(a, b);
+        }
+        if (bCNotBelowA) {
+            iter_swap(b, c);
+        } else {
+            iter_swap(a, c);
+        }
+    }
+
+    template <class RandomIt, class Compare>
+    void sort(RandomIt first, RandomIt last, Compare comp)
+    {
+        static int shuffle_range = -4;
+
+        for (;;) {
+            int len = last - first;
+
+            if (len <= 1) {
+                return;
+            }
+            if (len <= 20) {
+                __selection_sort<Compare &>(first, last, comp);
+                return;
+            }
+
+            RandomIt m1 = first + (len / 4 + shuffle_range % 5);
+            if (++shuffle_range >= 5) {
+                shuffle_range = -4;
+            }
+            RandomIt m2 = first + (3 * len / 4 + shuffle_range % 5);
+            if (++shuffle_range >= 5) {
+                shuffle_range = -4;
+            }
+            RandomIt pivot = last - 1;
+            __sort132<Compare &, RandomIt>(m1, m2, pivot, comp);
+
+            RandomIt i = first;
+            RandomIt j = pivot;
+            while (comp(*i, *pivot)) {
+                ++i;
+            }
+            while (i != --j && !comp(*j, *pivot)) {
+            }
+            if (i < j) {
+                iter_swap(i, j);
+                ++i;
+                for (;;) {
+                    while (comp(*i, *pivot)) {
+                        ++i;
+                    }
+                    while (!comp(*--j, *pivot)) {
+                    }
+                    if (!(i < j)) {
+                        break;
+                    }
+                    iter_swap(i, j);
+                    ++i;
+                }
+            }
+
+            if (i == first) {
+                // Nothing is below the pivot: gather the elements equal to
+                // the smallest one at the front and go on with the rest.
+                iter_swap(i, pivot);
+                ++i;
+                j = last - 1;
+                if (!comp(*first, *j)) {
+                    while (i != last && !comp(*first, *i)) {
+                        ++i;
+                    }
+                    if (i < j) {
+                        iter_swap(i, j);
+                    }
+                }
+                if (i < j) {
+                    for (;;) {
+                        while (!comp(*first, *i)) {
+                            ++i;
+                        }
+                        while (comp(*first, *--j)) {
+                        }
+                        if (!(i < j)) {
+                            break;
+                        }
+                        iter_swap(i, j);
+                        ++i;
+                    }
+                }
+                first = i;
+            } else if (i - first < last - i) {
+                sort<RandomIt, Compare &>(first, i, comp);
+                first = i;
+            } else {
+                sort<RandomIt, Compare &>(i, last, comp);
+                last = i;
+            }
+        }
+    }
+}
+
+#endif /* !ALGORITHM_ */

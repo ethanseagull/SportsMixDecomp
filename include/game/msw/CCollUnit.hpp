@@ -28,13 +28,19 @@ namespace msw {
             void OnFlag10(unsigned short flag) { m_nFlag10 |= flag; }
             void OffFlag10(unsigned short flag) { m_nFlag10 &= ~flag; }
             void OnFlagA0(unsigned long flag) { m_nFlagA0 |= flag; }
+            // (names guessed) Inline in BasketF's CChrCoreBasketYoshi:
+            // both set to the bit of the owner's player number.
+            void SetNoHitFlag(unsigned long flag) { m_nNoHitFlag = flag; }
+            void SetMyNoHitFlag(unsigned long flag) { m_nMyNoHitFlag = flag; }
 
         private:
             unsigned char m_Unk00[0x10];
             unsigned short m_nFlag10;    // 0x10
             unsigned char m_Unk12[6];
             unsigned long m_nShape;      // 0x18, the pillar sets 4
-            unsigned char m_Unk1C[0x40];
+            unsigned long m_nNoHitFlag;  // 0x1C (names guessed)
+            unsigned long m_nMyNoHitFlag; // 0x20
+            unsigned char m_Unk24[0x38];
             bcs::FVEC3 m_Size;           // 0x5C
             unsigned char m_Unk68[0x38];
             unsigned long m_nFlagA0;     // 0xA0

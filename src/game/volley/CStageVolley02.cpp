@@ -121,6 +121,11 @@ void msw::CStageVolley02::OnSceneEntry()
     Stage02_OnSceneEntry();
 }
 
+void msw::CStageVolley02::OnGimmickReset()
+{
+    Stage02_OnGimmickReset();
+}
+
 long msw::CStageVolley02::GetFloorAttribute(const bcs::FVEC3 &rPos, FLOW_TYPE type) const
 {
     return Stage02_GetFloorAttribute(rPos);
@@ -142,11 +147,6 @@ long msw::CStageVolley02::GetHitMaterial(const bcs::FVEC3 &rPos) const
 void msw::CStageVolley02::SendMessage(long msg, long arg1, long arg2, long arg3)
 {
     CStageManVolley::SendMessage(msg, arg1, arg2, arg3);
-}
-
-void msw::CStageVolley02::OnGimmickReset()
-{
-    Stage02_OnGimmickReset();
 }
 
 void msw::CStageVolley02::OnSoundEvent(long event)

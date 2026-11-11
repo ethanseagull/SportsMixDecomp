@@ -17,11 +17,19 @@ namespace msw {
             // CGameExDemoBase's functions).
             virtual long GetObjType() const { return 1; }
             virtual void ObjProc(unsigned long, unsigned long, void *); // 0x1C, fn_8025478C
-            // 0x10C: the slot holds fn_8003B574 (body not looked at yet).
+            // TODO: the original vtable is 0x10C bytes (no slot 0x10C) and
+            // slots 0x10-0x18 and 0x54-0x108 hold overrides (fn_800269xx,
+            // fn_8003B5xx; fn_8003B574 is slot 0x108), so this class likely
+            // derives from an unknown class between it and bcs::CScnObj.
+            // Declared only so the class is not abstract; not defined yet.
             virtual void UpdateFrame(float);
 
             // Stores rate clamped to [0, 1] and n.
             void SetPosRate(float rate, int n);
+
+            // (name guessed; fn_8025486C) Draws the captured screen split in
+            // two halves slid apart by the rate, for ObjProc task 7.
+            void Draw();
 
         private:
             float m_fPosRate; // 0x118

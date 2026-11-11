@@ -12,4 +12,12 @@ typedef struct _GXRenderModeObj {
     unsigned char m_Unk08[0x34];
 } GXRenderModeObj;
 
+// An RGBA colour as GX takes it (passed by value).
+typedef struct _GXColor {
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+    unsigned char a;
+} GXColor;
+
 #endif /* !REVOLUTION_GX_GXSTRUCT_H_ */

@@ -37,7 +37,11 @@ namespace msw {
             CCollAtkUnit *m_pAtkUnit; // 0x34, created by Create_
             unsigned char m_Unk38[0x50 - 0x38];
             float m_fRadius;          // 0x50, (name guessed) the size of the blast
-            unsigned char m_Unk54[0x7C - 0x54];
+            unsigned char m_Unk54[0x68 - 0x54];
+            float m_fUnk68;           // 0x68, (meaning unknown) DodgeF's CreateEffect_ sets 25, 15 or 35
+            unsigned char m_Unk6C[4];
+            float m_fUnk70;           // 0x70, (meaning unknown) DodgeF's CreateEffect_ sets 6, 4 or 10
+            unsigned char m_Unk74[0x7C - 0x74];
     };
 }
 

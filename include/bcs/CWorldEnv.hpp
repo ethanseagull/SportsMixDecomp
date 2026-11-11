@@ -7,6 +7,14 @@ namespace bcs {
     // in the DOL take the view number in r3.
     class CWorldEnv {
         public:
+            // How the screen is split into views. Named in the mangled names
+            // of bcs::CRenderMan::ReqPushViewSplitType and
+            // ReqPopViewSplitType; only 0 (taken to be one full-screen view)
+            // is passed so far. (enumerator names guessed)
+            enum ViewSplitType {
+                VIEW_SPLIT_1
+            };
+
             static void SetViewFovy(long view, float fovy);
             static float GetViewFovy(long view);
             // How many views the screen is split into. Return type guessed.
@@ -15,6 +23,10 @@ namespace bcs {
             // 1 selects the second set of camera data in the tournament
             // (msw::CTournamentCamera::GetDataMode). Type guessed.
             static long m_vatViewAspectType;
+            // (added for HockeyF CChrManHockey::SetCamIdAssign_) How the
+            // screen is split: 1 and 2 two views, 3 four views (guessed from
+            // the camera tables chosen by it). Type guessed.
+            static long m_vstViewSplitType;
     };
 }
 

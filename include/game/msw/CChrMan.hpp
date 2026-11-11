@@ -111,6 +111,11 @@ namespace msw {
             static void SetChrMarkerDisp(int bDisp);
             // DOL. The instance, or null.
             static CChrMan *GetInstance();
+            // DOL, static. Not zero when the instance exists.
+            static int IsActive();
+            // DOL, static. The character of team nTeam that has the ball,
+            // or null. (BasketF's CStageBasket09 passes 0)
+            static CChrCore *Util_SearchHaveBallChr(long nTeam);
             // DOL, static. The next NPC of kind `nKind` after pPrev (the
             // first with a null pPrev), or null. (parameter meanings guessed
             // from the callers: BasketF's CChrManBasket::GetBossPackun_ walks
@@ -124,6 +129,13 @@ namespace msw {
             // Passes a message to the NPCs. BasketF's CBallBasketFruit sends
             // (0xB, 0, -1, ball number, 0) when a fruit on a string explodes.
             static void NpcSendMessage(long nMsg, long, long, long, long);
+            // (fn_800EE528, fn_800EE570, unnamed in the DOL) The static
+            // wrappers of DecideScoredViewLookChr_ and GetScoredViewLookChr_.
+            // The DOL's CGameScoredView keeps the second's result as a
+            // character index (compared with 0, passed to GetChrCore), so it
+            // is declared here as long.
+            static void DecideScoredViewLookChr(long nTeam);
+            static long GetScoredViewLookChr(long nTeam);
 
         protected:
             unsigned char m_Unk34[0x50 - 0x34]; // two nw4r::ut::List at 0x34 and 0x40, a word at 0x4C

@@ -33,6 +33,14 @@ namespace msw {
             void SetBodyDamageCallbackAll(BodyDamageCallback pFunc, void *pArg);
             void SetBallCatchCallbackAll(BallCatchCallback pFunc, void *pArg);
 
+            // (DOL; used by DodgeF's bombs, argument meanings guessed)
+            void SetPushRank(long index, long rank);
+            void SetPushPower(long index, long power);
+            void SetBodyEnable(long index);
+            void SetTargetFlag(long index, unsigned long flag);
+            void SetRadius(long index, float radius);
+            void SetBodyDisableAll();
+
         private:
             unsigned long m_Unk00[3];
     };

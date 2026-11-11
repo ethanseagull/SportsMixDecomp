@@ -1,6 +1,8 @@
 #ifndef CCOCKPITHOCKEY_HPP_
 #define CCOCKPITHOCKEY_HPP_
 
+#include "bcs/FVEC3.hpp"
+
 namespace msw {
 
     // The hockey game's cockpit (size 0x21C, 82 member functions; HockeyF
@@ -18,6 +20,13 @@ namespace msw {
             static long CreateObj(long nObjId, long nParam);
             static void SetPartMove(long, long nMove);
             static void SetRadarIconDisp(int bDisp);
+            // Added for game/hockey/CChrManHockey.cpp (CFighting; static,
+            // parameter meanings guessed): the fight gauge of team nTeam,
+            // its icon over a fighter (at *pPos), the icon's removal and the
+            // gauge's fill ratio.
+            static void SetFightGaugeIcon(long nTeam, const bcs::FVEC3 *pPos);
+            static void ClearFightGaugeIcon(long nTeam, int);
+            static void SetFightGaugeRatio(long nTeam, float fRatio);
     };
 }
 

@@ -1194,14 +1194,16 @@ namespace msw {
 
     long CTournamentMan::GetEffectSlot(long nFirst, long nLast)
     {
+        unsigned long hEffect;
         for (long i = nFirst; i < nLast; i++) {
             if (static_cast<unsigned long>(i) <= EFFECT_MAX - 1) {
-                unsigned long hEffect = m_aEffect[i];
-                if (hEffect == 0) {
-                    return i;
-                }
-                if (CEffectCtrl::GetInstance()->FindList(hEffect) == 0) {
-                    m_aEffect[i] = 0;
+                hEffect = m_aEffect[i];
+                if (hEffect != 0) {
+                    if (CEffectCtrl::GetInstance()->FindList(hEffect) == 0) {
+                        m_aEffect[i] = 0;
+                        return i;
+                    }
+                } else {
                     return i;
                 }
             }
@@ -1211,9 +1213,11 @@ namespace msw {
 
     CEffectCluster *CTournamentMan::GetEffect(long nSlot)
     {
-        unsigned long hEffect = GetEffectHandle(nSlot);
-        if (hEffect != 0) {
-            return CEffectCtrl::GetInstance()->FindList(hEffect);
+        if (static_cast<unsigned long>(nSlot) <= EFFECT_MAX - 1) {
+            unsigned long hEffect = m_aEffect[nSlot];
+            if (hEffect != 0) {
+                return CEffectCtrl::GetInstance()->FindList(hEffect);
+            }
         }
         return 0;
     }
@@ -1315,11 +1319,12 @@ namespace msw {
     long CTournamentMan::GetSeSlot(long nFirst, long nLast)
     {
         for (long i = nFirst; i < nLast; i++) {
-            if (m_aSe[i] == 0) {
-                return i;
-            }
-            if (bcs::CTaskMan::GetTask(m_aSe[i]) == 0) {
-                m_aSe[i] = 0;
+            if (m_aSe[i] != 0) {
+                if (bcs::CTaskMan::GetTask(m_aSe[i]) == 0) {
+                    m_aSe[i] = 0;
+                    return i;
+                }
+            } else {
                 return i;
             }
         }
@@ -1413,8 +1418,12 @@ namespace msw {
     {
         // The settings come in pairs: the first for data mode 1 (see
         // CTournamentCamera::GetDataMode), the second for the other.
-        TournamentData::CAMERA_INFO info = CTournamentCamera::GetDataMode() == 1 ? *GetCameraInfo(nCamera)
-                                                                                  : *GetCameraInfo(nCamera + 1);
+        TournamentData::CAMERA_INFO info;
+        if (CTournamentCamera::GetDataMode() == 1) {
+            info = *GetCameraInfo(nCamera);
+        } else {
+            info = *GetCameraInfo(nCamera + 1);
+        }
         m_pCamera->SetValueCamera(info, vPos);
     }
 
@@ -1423,8 +1432,12 @@ namespace msw {
         bcs::FVEC3 vPos;
         TournamentWork::GetPointViewPos(vPos, nPoint);
         long n = nCamera + TournamentWork::GetPointInfo(nPoint)->nCamera;
-        TournamentData::CAMERA_INFO info =
-            CTournamentCamera::GetDataMode() == 1 ? *GetCameraInfo(n) : *GetCameraInfo(n + 1);
+        TournamentData::CAMERA_INFO info;
+        if (CTournamentCamera::GetDataMode() == 1) {
+            info = *GetCameraInfo(n);
+        } else {
+            info = *GetCameraInfo(n + 1);
+        }
         m_pCamera->SetValueCamera(info, vPos);
     }
 
@@ -1453,17 +1466,18 @@ namespace msw {
     int CTournamentMan::SetDataSceneCamera(long nGroup, short nStart, float fFrame, unsigned long ulFlag)
     {
         short nCamera = GetSceneCameraIndex(nGroup, nStart);
-        if (nCamera == -1) {
-            return 1;
+        if (nCamera != -1) {
+            m_pNodeData->SetResAnm(
+                CEvNodeData::_GetResAnm(m_SceneFile, m_pCameraAnm->GetSceneInfo(nCamera).pName));
+            m_pCameraAnm->SetData(nCamera, 0);
+            fFrame = fFrame >= 0.0f ? fFrame : m_pCameraAnm->GetEndFrame();
+            m_pCameraAnm->m_vPosOffset = m_vSceneOffset;
+            m_pCameraAnm->m_vAtOffset = m_vSceneOffset;
+            m_pCameraAnm->Play(ulFlag, 1.0f, fFrame);
+            m_nSceneCamera = nCamera + 1;
+            return 0;
         }
-        m_pNodeData->SetResAnm(m_SceneFile, m_pCameraAnm->GetSceneInfo(nCamera).pName);
-        m_pCameraAnm->SetData(nCamera, 0);
-        fFrame = fFrame >= 0.0f ? fFrame : m_pCameraAnm->GetEndFrame();
-        m_pCameraAnm->m_vPosOffset = m_vSceneOffset;
-        m_pCameraAnm->m_vAtOffset = m_vSceneOffset;
-        m_pCameraAnm->Play(ulFlag, 1.0f, fFrame);
-        m_nSceneCamera = nCamera + 1;
-        return 0;
+        return 1;
     }
 
     int CTournamentMan::SetCameraActive(short nMode)

@@ -60,8 +60,10 @@ namespace msw {
             // Not zero for a dummy ball (CBallBasketDummy).
             int IsDummyBall_(const CBall *pBall) const;
             // Makes a dummy ball with the lowest free ball number and adds
-            // it to the manager's table. (static: the body takes no object)
-            static void CreateDummyBall_();
+            // it to the manager's table; returns it (CBallMan::AddBall's
+            // result; CChrCoreBasketWaluigi uses it). (static: the body
+            // takes no object)
+            static CBall *CreateDummyBall_();
             // (meaning of the result guessed) Whether a ball curving round a
             // circle of radius fArg + fRadius between rFrom and rTo stays on
             // the court: 0 when both sides do, 4 when only the right one

@@ -24,6 +24,10 @@ namespace msw {
                 // 0x210: the height of Toad's trick jump
                 // (CChrCoreBasketKinopio::SubStateArtsShotSetTrickJumpParam_).
                 float m_fArtsJumpHeight;
+                unsigned char m_Unk214[0x240 - 0x214];
+                // 0x240 (name guessed): Waluigi's special shot gives each of
+                // its balls this value / 60 (CBallBasket::SetArtsShotUnk).
+                float m_fArtsBallUnk240;
         };
     }
 
@@ -79,6 +83,10 @@ namespace msw {
             // smash cut sets kind 0 when he lands.
             enum SET_EFFECT_TYPE_BASKET {};
             void Util_SetEffect_(SET_EFFECT_TYPE_BASKET type);
+
+            // (added for game/basket/CChrCoreBasketWaluigi.cpp) Sets
+            // pWork->m_fShotFrame from the current motion's shot trigger.
+            void SubStateArtsShotDoGetBallShotTrg_(STATE_WORK_AIR_TRICK *pWork);
 
             // Added for game/basket/CChrCoreBasketSaboten.cpp (BasketF;
             // return types and meanings guessed from the names and calls).
@@ -472,9 +480,12 @@ namespace msw {
         float m_fTrickFrame;           // 0x90, the frames of the current step
         // 0x94: the frames of the current step so far (the Black Mage).
         float m_fTrickCount;
-        unsigned char m_Unk98[0xA0 - 0x98];
+        unsigned char m_Unk98[0x9C - 0x98];
+        float m_fAnimSpeed;            // 0x9C, the speed of the trick motions (Waluigi)
         long m_nUnkA0;                 // 0xA0, (meaning not known) below 1 the shot motion stops twice
-        unsigned char m_UnkA4[0x4];
+        // 0xA4: the frame of the shot motion the ball leaves at
+        // (SubStateArtsShotDoGetBallShotTrg_ sets it).
+        float m_fShotFrame;
         long m_nUnkA8;                 // 0xA8, Luigi sets 40
         unsigned char m_UnkAC[0x4];
         // 0xB0: the yaw the shot aims at; negative for straight at the goal
@@ -641,6 +652,41 @@ namespace msw {
             unsigned long m_hMagic;    // 0x5E8, task id of the strike (CcKuromaMagicMgr), 0 for none
             unsigned long m_hSmash;    // 0x5EC, task id of the smash cut's spell, 0 for none
             unsigned long m_hEffect;   // 0x5F0, the effect on the option model's item node
+    };
+    // Waluigi: his special shot throws three copies of the ball
+    // (CBallManBasket::CreateDummyBall_) from the hands of his option model
+    // before the shot with the ball itself. (size not known; at least 0x5F4)
+    class CChrCoreBasketWaluigi : public CChrCoreBasket {
+        public:
+            // The three copies, and the four hand nodes (the last for the ball).
+            enum { ARTS_BALL_NUM = 3, ARTS_BALL_NODE_NUM = ARTS_BALL_NUM + 1 };
+
+            CChrCoreBasketWaluigi();
+            virtual ~CChrCoreBasketWaluigi();
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual float SubStateArtsShotGetTrickMotFrame_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCC4
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF0
+            virtual void SubStateArtsShotStartArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCF4
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
+            virtual int SubStateArtsShotIsEndArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xD00
+            virtual void SubStateArtsShotPlayLandMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xD14
+
+        protected:
+            // Makes the three copies and hangs them and the ball from the
+            // option model's hands.
+            void CreateArtsBall_();
+            // Throws copy nIndex (0 to 2).
+            void ShotArtsBall_(long nIndex);
+            // (inline helper, name guessed) Removes the copies not thrown.
+            void DeleteArtsBall_();
+
+            // 0x5E8: task ids of the three copies, 0 once thrown or gone.
+            unsigned long m_ahArtsBall[ARTS_BALL_NUM];
     };
 }
 

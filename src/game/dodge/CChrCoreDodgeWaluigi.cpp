@@ -52,9 +52,9 @@ void msw::CChrCoreDodgeWaluigi::DivideBallCreate()
 {
     static const char *node_tbl[DIVIDE_BALL_NUM] = {
         "SP_item_01",
-        "SP_item_02",
-        "SP_item_03",
         "SP_item_04",
+        "SP_item_03",
+        "SP_item_02",
     };
     static const bcs::FVEC3 ofs_tbl[DIVIDE_BALL_NUM] = {
         bcs::FVEC3(-0.44f, 0.0f, 0.0f),

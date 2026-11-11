@@ -139,7 +139,7 @@ int msw::CBallManBasket::IsDummyBall_(const CBall *pBall) const
     return static_cast<const CBallBasket *>(pBall)->IsDummy();
 }
 
-void msw::CBallManBasket::CreateDummyBall_()
+msw::CBall *msw::CBallManBasket::CreateDummyBall_()
 {
     long nBallNo;
     nBallNo = GetInstance()->GetUseEnableIndex_();
@@ -147,7 +147,7 @@ void msw::CBallManBasket::CreateDummyBall_()
 
     pBall->Create(-1, 0x40);
     pBall->Reset();
-    CBallMan::AddBall(pBall);
+    return CBallMan::AddBall(pBall);
 }
 
 long msw::CBallManBasket::CheckCurveDir_(float fArg, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo,

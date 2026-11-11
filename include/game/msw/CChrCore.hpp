@@ -1098,6 +1098,9 @@ namespace msw {
             // (BasketF's CChrCoreBasketSaboten tests the result: 4 for one
             // of its messages.)
             long DriverSendMessage(CChrDrv::MSG_ID id, long, long, unsigned long, unsigned long);
+            // (DOL; added for BasketF CChrCoreBasketWaluigi, return type
+            // guessed) Sends message id to every character's driver.
+            void Util_SendMsgToAll(CChrDrv::MSG_ID id, long, long, unsigned long, unsigned long);
 
             // Added for BossF game/boss/CChrCoreBoss<Name>.cpp (all in the
             // DOL; return types and parameter meanings guessed).

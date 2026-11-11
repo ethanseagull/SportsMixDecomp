@@ -259,11 +259,12 @@ void msw::CStageBasketHungryBossPackun71::Main_(float frame)
             offset.z = -wave * depth;
         }
         SetTeamCourtOffset(i, offset);
-        bcs::FVEC3Sub(&m_aFloorFlow[i], &offset, &prev);
+        bcs::FVEC3 &flow = m_aFloorFlow[i];
+        bcs::FVEC3Sub(&flow, &offset, &prev);
 
         // The floor sound starts when the floors turn round and when they
         // leave the middle.
-        float flowZ = m_aFloorFlow[i].z;
+        float flowZ = flow.z;
         float prevZ = prev.z;
         if ((i == 0 && flowZ * prevZ < 0.0f) || (__fabsf(prevZ) < 0.001f && __fabsf(flowZ) >= 0.001f)) {
             SE_Play(4, 0xDAB, 0.0f, 0);

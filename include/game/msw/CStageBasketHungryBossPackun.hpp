@@ -35,13 +35,7 @@ namespace msw {
             virtual const bcs::FVEC3 &GetBoardPos(long goal) const { return CStageManBasket::GetBoardPos(0); }
             virtual const bcs::FVEC3 &GetGoalVec(long goal) const { return CStageManBasket::GetGoalVec(0); }
             // Plays sound event 0 on message 0x12 (meaning not known).
-            virtual void SendMessage(long msg, long arg1, long arg2, long arg3)
-            {
-                CStageManBasket::SendMessage(msg, arg1, arg2, arg3);
-                if (msg == 0x12) {
-                    OnSoundEvent(0);
-                }
-            }
+            virtual void SendMessage(long msg, long arg1, long arg2, long arg3);
             virtual void Main_(float frame);
             virtual const STAGE::MDL_GEN_RULE *GetMdlGenRule_() const;
             virtual float GetBaseCourtWidth_() const;

@@ -55,30 +55,24 @@ namespace {
         }
         return rad;
     }
-
-    // (guessed helper) A random number between two bounds given in either
-    // order.
-    inline long RandRangeSorted(long a, long b)
-    {
-        long nMin = a;
-        long nMax = b;
-
-        if (a > b) {
-            nMin = b;
-            nMax = a;
-        }
-        return bcs::BCS_RandRange(nMin, nMax);
-    }
 }
 
 inline float msw::CBallBasketFruit::RandLife() const
 {
+    // The two bounds may come in either order: they are sorted before the
+    // draw.
     long nMin = (m_nFruitFlag & FRUIT_FLAG_ON_CHR) ? BASKET_PRM_COMMON_HUNGRY_CHR_BALL_LIFE_MIN
                                                    : BASKET_PRM_COMMON_HUNGRY_STRING_BALL_LIFE_MIN;
+    long nLo = nMin;
     long nMax = (m_nFruitFlag & FRUIT_FLAG_ON_CHR) ? BASKET_PRM_COMMON_HUNGRY_CHR_BALL_LIFE_MAX
                                                    : BASKET_PRM_COMMON_HUNGRY_STRING_BALL_LIFE_MAX;
+    long nHi = nMax;
 
-    return RandRangeSorted(nMin, nMax);
+    if (nMin > nMax) {
+        nLo = nMax;
+        nHi = nMin;
+    }
+    return bcs::BCS_RandRange(nLo, nHi);
 }
 
 msw::CBallBasketFruit::CBallBasketFruit(bcs::CTask *pParent, long nBallNo, long nKind)

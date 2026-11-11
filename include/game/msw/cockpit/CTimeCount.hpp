@@ -45,8 +45,9 @@ namespace msw {
 
             public:
                 // Declared after the data: MWCC puts the vptr where the
-                // first virtual function is declared.
-                virtual ~CTimeCount() {}
+                // first virtual function is declared. The destructor calls
+                // Finalize (seen in the emitted copies in BasketF CCockpitBasketCoder).
+                virtual ~CTimeCount() { Finalize(); }
         };
     }
 }

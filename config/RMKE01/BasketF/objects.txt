@@ -35,7 +35,7 @@ Matching game/basket/unit_DA0C8.cpp
 Matching game/basket/unit_DA2CC.cpp
 Equivalent game/basket/CStageBasketHungryBossPackun.cpp
 Matching game/basket/CStageBasketHungryBossPackun70.cpp
-NonMatching game/basket/CStageBasketHungryBossPackun71.cpp
-NonMatching game/basket/CStageBasketHungryBossPackun72.cpp
-NonMatching game/basket/CCockpitBasketHarapeko.cpp
-NonMatching game/basket/CBallBasketFruit.cpp
+Equivalent game/basket/CStageBasketHungryBossPackun71.cpp
+Equivalent game/basket/CStageBasketHungryBossPackun72.cpp
+Equivalent game/basket/CCockpitBasketHarapeko.cpp
+Equivalent game/basket/CBallBasketFruit.cpp

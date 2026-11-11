@@ -147,3 +147,11 @@ void msw::CStageBasketHungryBossPackun::CreateGoal()
         }
     }
 }
+
+void msw::CStageBasketHungryBossPackun::SendMessage(long msg, long arg1, long arg2, long arg3)
+{
+    CStageManBasket::SendMessage(msg, arg1, arg2, arg3);
+    if (msg == 0x12) {
+        OnSoundEvent(0);
+    }
+}

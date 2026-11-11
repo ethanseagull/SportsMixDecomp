@@ -43,10 +43,16 @@ namespace msw {
                 m_anm = anm;
             }
 
-            // Length of the animation in frames, 0 without one.
-            float GetNumFrame() const;
+            // (name guessed; DOL 0x801FD59C) Whether the animation has a
+            // node nId.
+            virtual bool IsEnable(long nId);
             // Position and rotation of node nId at frame fFrame.
-            void GetResult(bcs::FVEC3 &pos, bcs::FVEC3 &rot, float fFrame, long nId);
+            virtual void GetResult(bcs::FVEC3 &pos, bcs::FVEC3 &rot, float fFrame, long nId);
+            // (DOL, 0x801FDA04 and 0x801FDDA8; signatures from the base)
+            virtual void GetResultVec(bcs::FVEC3 &pos, bcs::FVEC3 &rot, bcs::FVEC3 &vec, float fFrame, long nId);
+            virtual void GetResultEx(bcs::FVEC3 &pos, bcs::FVEC3 &rot, bcs::FVEC3 &vec, float fFrame, long nId);
+            // Length of the animation in frames, 0 without one.
+            virtual float GetNumFrame() const;
 
         private:
             nw4r::g3d::ResAnmChr m_anm; // 0x04

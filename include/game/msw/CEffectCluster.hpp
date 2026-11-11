@@ -30,6 +30,9 @@ namespace msw {
             // models of the cluster; an entry may be null.
             long GetMdlObjNum();
             bcs::CMdlObj *GetMdlObj(long nIndex);
+            // (DOL; added for VolleyF game/volley/CChrCoreVolleyKinopio.cpp)
+            // Moves the cluster in the draw order by fOffset.
+            void SetZSortOffset(float fOffset);
 
             // (name guessed; the DOL's fn_801233FC) Called with 1 on a
             // cluster just attached to a layout pane object. Calls a member

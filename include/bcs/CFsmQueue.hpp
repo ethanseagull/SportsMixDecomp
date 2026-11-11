@@ -56,6 +56,20 @@ namespace bcs {
             }
 
             long GetState() const { return FsmqGetState(); }
+
+            // The work memory of the state at the head of the queue; null
+            // when nothing is queued or the queue has no work memory. (name
+            // from BasketF, which emits it out of line)
+            void *FsmqGetWork_() const
+            {
+                if (FsmqIsEmpty()) {
+                    return 0;
+                }
+                if (m_pWorkQueue == 0 || m_nWorkSize == 0) {
+                    return 0;
+                }
+                return (char *)m_pWorkQueue + m_nWorkSize * m_nQueueHead;
+            }
     };
 }
 

@@ -17,6 +17,23 @@ namespace msw {
             // The colour of Toad's (Kinopio's) extra model for colour
             // variant nColor (BossF game/boss/CChrCoreBossKinopio.cpp).
             static bcs::BCS_Color GetChrOptColor_Kinopio(long nColor);
+
+            // (added for VolleyF game/volley/CChrCoreVolleyKinopio.cpp;
+            // contents not known) How an extra model of a special move is
+            // made, for character nChr in game mode nMode.
+            struct ARTS_OPT_CREATE_INFO;
+            static const ARTS_OPT_CREATE_INFO *GetArtsOptionMdl_CreateInfo(long nChr, long nMode);
+
+            // (field names guessed) The characters' movement parameters.
+            struct CHR_PARAM {
+                // A move to a point over a number of frames.
+                struct MOVE_PARAM {
+                    long m_nType;            // 0x00
+                    float m_fFrame;          // 0x04
+                    float m_fFrameMax;       // 0x08
+                    float m_fDist;           // 0x0C
+                };
+            };
     };
 }
 

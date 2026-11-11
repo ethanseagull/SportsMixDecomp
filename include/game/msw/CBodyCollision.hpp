@@ -56,6 +56,8 @@ namespace msw {
             void SetTargetFlag(long index, unsigned long flag);
             void SetRadius(long index, float radius);
             void SetBodyDisableAll();
+            // (added for VolleyF's CC09_VOLLEY::CcKinopioBoundMushroom)
+            void SetHitEffectFrameAll(float fFrame);
 
         private:
             unsigned long m_Unk00[3];

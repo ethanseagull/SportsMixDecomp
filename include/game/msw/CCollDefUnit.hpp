@@ -17,8 +17,14 @@ namespace msw {
 
             void SetReflectHitCallback(ReflectHitCallback pCallback, void *pArg);
 
+            // (name guessed) The kind of defence the unit is, read signed
+            // (CChrCoreVolleyKinopio's block reacts to kinds 0, 2 and 3).
+            long GetKind() const { return m_nKind; }
+
         private:
-            unsigned char m_Unk00[0xAC];         // 0x00
+            unsigned char m_Unk00[0x14];         // 0x00
+            signed char m_nKind;                 // 0x14
+            unsigned char m_Unk15[0xAC - 0x15];  // 0x15
             ReflectHitCallback m_pReflectHitCallback; // 0xAC
             void *m_pReflectHitArg;              // 0xB0
     };

@@ -5,6 +5,7 @@
 #include "bcs/CFsmQueue.hpp"
 #include "bcs/FVEC3.hpp"
 #include "game/msw/CChrDrv.hpp"
+#include "nw4r/g3d/ResFile.hpp"
 
 struct _GXTexObj;
 
@@ -52,6 +53,13 @@ namespace msw {
             // Kinds of effect for Util_SetEffect / Util_AttachEffect (values not known).
             enum SET_EFFECT_TYPE {};
             enum ATTACH_EFFECT_TYPE {};
+            // (added for VolleyF game/volley/CChrCoreVolleyKinopio.cpp;
+            // contents not known) The work of a move in a fixed direction
+            // (Util_SetDirMoveParam), and how the body collision is sized.
+            struct DIR_MOVE {
+                unsigned char m_Unk00[0x20];
+            };
+            enum BODY_COLL_SIZE_SET_TYPE {};
 
             CChrCore();
             virtual ~CChrCore();                                     // 0x08
@@ -1056,6 +1064,33 @@ namespace msw {
             float AnimGetResFrameNum(long nMotId) const;
             // Takes ball hBall (its handle) into the character's hand.
             void AttachBall(long hBall, long, float, unsigned long);
+            // Plays sound nSe of the character's action table.
+            void SE_PlayWrapAct(long nSe, unsigned long, long);
+            // Knocks the character back (flags nFlag) towards fRotY.
+            void SetHookDamage(unsigned long nFlag, float fRotY, float, float, long, float, long, long, long, long);
+            // A model and an animation file of the character's extra
+            // model (Toad's mushrooms); invalid when there is none.
+            nw4r::g3d::ResFile GetChrOptResFile();
+            nw4r::g3d::ResFile GetChrOptMotResFile();
+            // The court the character's team attacks, and the goal it
+            // defends (0 or 1).
+            long GetTargetCourtIdx() const;
+            long GetGuardGoalIdx() const;
+            // Moves the character along its jump; nMode not known.
+            void Util_DoJumpMoveEX(int nMode);
+            // Sets a jump of fFrame frames from height fFrom.
+            void Util_SetJumpParam(float fFrame, float fFrom, float, float);
+            void Util_SetDirMoveParam(DIR_MOVE &rMove, float);
+            int Eff_IsAlive(long nSlot) const;
+            // Stops the effect in slot nSlot at once.
+            void Eff_StopForce(long nSlot);
+            void AnimSetSpeed(unsigned long nSlot, float fSpeed);
+            unsigned long PlaySePos(long nSe, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
+            void SetMoveMotStep_(long nStep);
+            // The body collision's push settings.
+            void SetCollBodyPushPower_(long nPower);
+            void SetCollBodyPushType_(BODY_COLL_SIZE_SET_TYPE type, float);
+            void SetCollBodyPushRank_(long nRank);
 
         protected:
             unsigned long m_Unk60;
@@ -1100,7 +1135,23 @@ namespace msw {
             // 0x186 (name guessed): the model node effects attach to by
             // default (the volley characters pass it to Eff_CreateAttach).
             unsigned short m_nEffNode;
-            unsigned char m_Unk188[0x230 - 0x188];
+            unsigned char m_Unk188[0x190 - 0x188];
+            // 0x190 (name guessed): a second model node for effects
+            // (CChrCoreVolleyYoshi's block and spike effects attach there).
+            unsigned short m_nEffNodeSub;
+            unsigned char m_Unk192[0x20C - 0x192];
+            // 0x20C (name guessed): the vertical speed of a jump (negative
+            // while falling; CChrCoreVolleyKinopio's block jump tests it).
+            float m_fJumpVelY;
+            unsigned char m_Unk210[0x224 - 0x210];
+            // 0x224, 0x228 (names guessed): two jump values the air tricks
+            // set next to Util_SetJumpParam.
+            float m_fJumpUnk224;
+            float m_fJumpUnk228;
+            // 0x22C (name guessed): the step of the jump move
+            // (Util_DoJumpMoveEX); 2 and up once the character has landed.
+            signed char m_nJumpStep;
+            unsigned char m_Unk22D[0x230 - 0x22D];
             // 0x230 (name guessed): the level CComMan::GetDatF reads the
             // computer's parameters for (CComManVolleyGame::GetConditionHandicapDis).
             long m_nComLevel;

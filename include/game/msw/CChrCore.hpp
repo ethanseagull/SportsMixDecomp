@@ -925,15 +925,6 @@ namespace msw {
             // DOL. The yaw (radians) from the character towards a point,
             // in the XZ plane.
             float GetRotY_ToPosXZ(const bcs::FVEC3 &pos) const;
-            // DOL (added for game/msw/CC_CMN/SLIME/CcSquadFactory.cpp). The
-            // model and motion files of the character's option models (the
-            // slime's squad); a null handle when there are none.
-            nw4r::g3d::ResFile GetChrOptResFile();
-            nw4r::g3d::ResFile GetChrOptMotResFile();
-            // DOL. Plays sound nSe at *pPos (at the character when null).
-            // Argument meanings as bcs::CSndTask::Play (guessed).
-            void PlaySePos(long nSe, const bcs::FVEC3 *pPos, unsigned long nArg2, long nArg3, float fArg4,
-                           float fVolume, float fArg6);
 
             // (names guessed) Inline in the original; the module reads the
             // members directly (CChrMarkerBoss::AppearCheck loads the byte
@@ -1110,7 +1101,7 @@ namespace msw {
             // Knocks the character back (flags nFlag) towards fRotY.
             void SetHookDamage(unsigned long nFlag, float fRotY, float, float, long, float, long, long, long, long);
             // A model and an animation file of the character's extra
-            // model (Toad's mushrooms); invalid when there is none.
+            // model (Toad's mushrooms, the slime's squad); invalid when there is none.
             nw4r::g3d::ResFile GetChrOptResFile();
             nw4r::g3d::ResFile GetChrOptMotResFile();
             // The court the character's team attacks, and the goal it

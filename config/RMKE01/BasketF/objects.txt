@@ -72,3 +72,4 @@ Matching game/basket/CChrCoreBasketDiddy.cpp
 Equivalent game/basket/CCockpitBasketResult.cpp
 Equivalent game/basket/CComManBasket.cpp
 Equivalent game/basket/CGoalObjBasket.cpp
+Equivalent game/basket/CGimmickManBasket.cpp

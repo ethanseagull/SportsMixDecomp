@@ -13,6 +13,9 @@ namespace msw {
             // Inline: the binary has it after CItemMan's inline virtuals and
             // it stores no vtable pointer, so the vtable's key function is
             // CreateItem and CItemManBasket.cpp emits the vtable.
+            // Inline (CGimmickManBasket::Initialize_ calls CItemMan's
+            // constructor and stores the vtable itself); size 0x344.
+            CItemManBasket(bcs::CTask *pParent) : CItemMan(pParent) {}
             virtual ~CItemManBasket() {}
 
             virtual CItem *CreateItem(long kind, const bcs::FVEC3 &pos);

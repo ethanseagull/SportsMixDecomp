@@ -20,6 +20,8 @@ namespace msw {
             virtual void EffectCoinGetCreate_(const bcs::FVEC3 &, DROP_COIN::CoinType);
             virtual void EffectCoinScoreCreate_(const bcs::FVEC3 &, const bcs::FVEC3 &, long);
             virtual long FloorHitCheck_(const bcs::FVEC3 &, long);
+            // New here, not in CGimmickMan (its slot follows FloorHitCheck_);
+            // -1 when there is no coin to pop.
             virtual long QPanelChoicePopupCoin_(long);
 
             // Creates the instance and returns it.

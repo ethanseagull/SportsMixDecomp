@@ -35,6 +35,7 @@ BasketF CtorStateMove__Q23msw19CNpcGhostBasketBaseFv near 99.7 register choice /
 BasketF CtorStatePursuit__Q23msw19CNpcGhostBasketBaseFv near 98.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CtorStateSmashCut__Q23msw19CChrCoreBasketYoshiFv near 99.5 instruction order and registers only
 BasketF DetectMapHit___Q23msw14CCollManBasketFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 98.4 98.4%, schedule only: the 0.0f load at entry is scheduled later and the two-court gap calculation assigns float registers differently; constants, calls, memory accesses and branch targets identical
+BasketF EffectCoinGetCreate___Q23msw17CGimmickManBasketFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 95.4 95.4%: original reloads m_pMdl before CreateAttachEffect (no store between), 2*20 multiply scheduled differently; register/schedule only, same difference as the recorded Volley/Hockey/Dodge copies
 BasketF GameResult_In__Q23msw14CCockpitBasketFv near 99.0 99.0%: register choice only.
 BasketF GetBgCollRadiusXZ__Q23msw16CBallBasketFruitCFv near 99.3 float register choice for 0.23f and the scale array
 BasketF GetBgCollRadius__Q23msw16CBallBasketFruitCFv near 99.3 float register choice for 0.23f and the scale array
@@ -74,6 +75,8 @@ BasketF Main__Q23msw14CGoalMdlBasketFf near 98.0 98.0%: schedule only; one mr pl
 BasketF Main__Q23msw18CCockpitBasketCoinFv near 98.8 register choice only (as CCockpitHockeyCoin::Main): loop counters and pointer temporaries in different saved registers
 BasketF Main__Q33msw11CC09_BASKET17CcKinopioReceiverFv near 99.6 register choice for one load
 BasketF Main__Q33msw11CC17_BASKET18CcKuromaLockonUnitFv near 96.4 scheduling: m_hEffect loaded before CEffectCtrl::GetInstance() in the original (Hockey/Volley/Dodge same)
+BasketF Main__Q33msw14GIMMICK_BASKET14CEffectCoinGetFv near 99.0 99.0%: register/schedule only, same difference as the recorded Volley/Hockey/Dodge copies
+BasketF Main__Q33msw14GIMMICK_BASKET16CEffectCoinScoreFv near 98.8 98.8%: register/schedule only, same difference as the recorded Volley/Hockey/Dodge copies
 BasketF Main___Q23msw14CStageBasket05Ff near 95.3 95.3%: IsGameFlag0 test is clrlwi + double cntlzw in the original, one clrlwi. in ours (same bit, same branch); raft loop addresses three arrays by this + i*stride where ours advances a pointer, two more saved GPRs and a 0x10 larger frame. Addressing and registers only.
 BasketF Main___Q23msw28CStageBasketHungryBossPackunFf near 99.6 99.6%, float registers only: the three rotation floats copied to the stack use f0/f1/f2 for z/y/x in the original and f2/f1/f0 in ours; loads, stores, offsets and calls identical
 BasketF Main___Q23msw30CStageBasketHungryBossPackun71Ff near 95.1 register choice (savegpr_19 vs 20), indexed vs stepped-pointer addressing of m_aFloorFlow/m_a3PointPos/m_apFloorNode, two swapped stack slots, load order, and g_GameWork flag bit test as double cntlzw vs clrlwi. (same branch)
@@ -128,6 +131,7 @@ BasketF UpdateMdl__Q23msw14CStageBasket13FUlf near 98.1 register choice and comm
 BasketF __ct__Q23msw14CStageBasket11FPQ23bcs5CTask near 99.9 instruction order only
 BasketF __ct__Q23msw16CChrDrvPadBasketFv unverified 84.3 84.3%: float constants via one base register instead of the original's per-literal lis (pool-off stand-in could not stay in the shared CChrDrvPad header); extra field reloads in the original; not proven.
 BasketF __ct__Q23msw19CItemBallBasketBombFPQ23msw5CBall near 98.8 98.8%: original reloads m_pMdl before CreateAttachEffect; ours reuses the checked value (nothing stored between).
+BasketF __ct__Q33msw14GIMMICK_BASKET16CEffectCoinScoreFPQ23bcs5CTaskRCQ23bcs5FVEC3fl near 99.5 99.5%: float register choice, one load scheduled; register/schedule only, same difference as the recorded Volley/Hockey/Dodge copies
 BasketF __dt__Q23bcs106CPool<Q33msw7STAGE1113CStgRndAnmObj,Q23bcs42CPoolNode<Q33msw7STAGE1113CStgRndAnmObj,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction order only
 BasketF __dt__Q23bcs41CFixedPool<Ul,32,Q23bcs15CPoolNode<Ul,0>>Fv near 98.8 instruction order only
 BasketF __dt__Q23bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction order only

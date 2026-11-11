@@ -92,8 +92,10 @@ namespace msw {
             virtual void EffectCoinGetCreate_(const bcs::FVEC3 &, DROP_COIN::CoinType);
             virtual void EffectCoinScoreCreate_(const bcs::FVEC3 &, const bcs::FVEC3 &, long);
             virtual long FloorHitCheck_(const bcs::FVEC3 &, long);
-            // -1 when there is no coin to pop (CGimmickManBoss's version).
-            virtual long QPanelChoicePopupCoin_(long);
+            // FloorHitCheck_ is the last slot: the DOL's vtable of
+            // CGimmickMan and BasketF's __vt__Q23msw17CGimmickManBasket end
+            // with it. QPanelChoicePopupCoin_ is a new virtual of the
+            // Boss/Dodge/Hockey/Volley managers (declared in each of them).
 
             // Shows a bomb blast at rPos, scaled by fScale. What the two longs
             // select is not known; the boss bomb passes 0 and 0x48. (return

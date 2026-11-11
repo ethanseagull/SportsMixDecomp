@@ -18,6 +18,8 @@ namespace msw {
             virtual long QPanelChoicePopupItem_(long, int);
             virtual long QPanelCheck_(const bcs::FVEC3 &, long, int, int, int, long *, CItem **);
             virtual void EffectCoinGetCreate_(const bcs::FVEC3 &, DROP_COIN::CoinType);
+            // New here, not in CGimmickMan (its slot follows FloorHitCheck_);
+            // -1 when there is no coin to pop.
             virtual long QPanelChoicePopupCoin_(long);
 
             // Creates the instance and returns it.

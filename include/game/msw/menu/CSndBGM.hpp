@@ -26,6 +26,10 @@ namespace msw {
 
                 static CSndBGM s_Instance;
 
+                // (name guessed; inline, no symbol; added for
+                // game/menu/CTitle.cpp) The sound task of the music playing.
+                unsigned long GetTaskId() const { return m_nTaskId; }
+
             private:
                 // Values of m_nState.
                 enum {

@@ -2,6 +2,7 @@
 #define BCS_G2D_CTEXTBOXDL_HPP_
 
 #include "nw4r/lyt/TextBox.hpp"
+#include "nw4r/ut/Rect.h"
 
 namespace bcs {
     namespace G2D {
@@ -11,6 +12,11 @@ namespace bcs {
         class CTextBoxDL : public nw4r::lyt::TextBox {
             public:
                 static const nw4r::ut::detail::RuntimeTypeInfo typeInfo;
+
+                // Added for MenuF game/menu/CBackground.cpp: the rectangle
+                // the text takes, ignoring line feeds (name from the
+                // symbol; returned by value).
+                nw4r::ut::Rect GetTextDrawRectNoLineFeed();
         };
     }
 }

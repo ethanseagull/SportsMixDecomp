@@ -7,8 +7,8 @@ namespace bcs {
 
     // A scene object drawn from prebuilt GX display lists, one for the
     // opaque pass and one for the translucent pass. A DOL class. It
-    // overrides only ObjProc; its vtable (lbl_80466BB8) keeps
-    // CScnObj::UpdateFrame null, so it is abstract. Members from 0x118 are
+    // overrides only ObjProc; its vtable (lbl_80466BB8) ends at 0x108 like
+    // bcs::CScnObj's (the zero word after it is padding). Members from 0x118 are
     // read from the constructor and the setters; the names are guesses.
     class CGDLObj : public CScnObj {
         public:

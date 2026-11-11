@@ -2568,7 +2568,7 @@ SubStateArtsShotPlayTrickMotion___Q23msw18CChrCoreDodgePeachFPQ33msw13CChrCoreDo
 SubStateArtsShotPlayLoopMotion___Q23msw18CChrCoreDodgePeachFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x00069678; // type:function size:0x4 scope:global
 SubStateArtsShotPlayArtsShotMotion___Q23msw18CChrCoreDodgePeachFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x0006967C; // type:function size:0x40 scope:global
 SubStateArtsShotFireBullet___Q23msw18CChrCoreDodgePeachFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl = .text:0x000696BC; // type:function size:0x3DC scope:global
-fn_6_69A98 = .text:0x00069A98; // type:function size:0x14
+__sinit_\CChrCoreDodgePeach_cpp = .text:0x00069A98; // type:function size:0x14 scope:local
 __ct__Q23msw20CChrCoreDodgeSabotenFv = .text:0x00069AAC; // type:function size:0x3C scope:global
 __dt__Q23msw20CChrCoreDodgeSabotenFv = .text:0x00069AE8; // type:function size:0x58 scope:global
 SubStateArtsShotSetTrickJumpParam___Q23msw20CChrCoreDodgeSabotenFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl = .text:0x00069B40; // type:function size:0xE0 scope:global

@@ -43,7 +43,7 @@ Equivalent game/dodge/CChrCoreDodgeMario.cpp
 Matching game/dodge/CStageDodge17.cpp
 Equivalent game/dodge/CChrCoreDodgeKinopio.cpp
 Equivalent game/dodge/CChrCoreDodgeKuroma.cpp
-Equivalent game/dodge/CChrCoreDodgeSaboten.cpp
+Matching game/dodge/CChrCoreDodgeSaboten.cpp
 Matching game/dodge/CChrCoreDodgeWaluigi.cpp
 Matching game/dodge/CChrCoreDodgeMii00.cpp
 Matching game/dodge/CChrCoreDodgeMii01.cpp
@@ -55,6 +55,7 @@ Matching game/dodge/CStageDodgeDOD55.cpp
 Matching game/dodge/CQPanelManDodge.cpp
 Equivalent game/dodge/CItemBallBombDodge.cpp
 Equivalent game/dodge/CChrCoreDodgeKoopa.cpp
+Equivalent game/dodge/CChrCoreDodgePeach.cpp
 Matching game/dodge/CStageDodgeDOD56.cpp
 Matching game/dodge/CStageDodgeDOD57.cpp
 Equivalent game/dodge/CHaikyuManDD.cpp

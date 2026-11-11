@@ -5,16 +5,19 @@
 
 namespace msw {
 
+    class CNpcHeyho;
     class CStgGmk;
 
-    // (purpose guessed from the names) A model of the trolley of stage 17
-    // (msw::CStgGmk_Trolley), with the "heyho" riders (CreateHeyho,
+    // (purpose guessed from the names) A car of the trolley of stage 17
+    // (msw::CStgGmk_Trolley), with a "heyho" riding it (CreateHeyho,
     // DispHeyho, ...). A DOL class, size 0x13C, vtable lbl_80489960:
     // CStgMdl at 0x000, own members from 0x12C. Constructor
     // __ct__Q23msw19CStgGmk_Trolley_MdlFPQ23msw7CStgGmkl.
     //
-    // The virtual functions follow __vt__Q23msw26CStgGmk_Trolley_Mdl_Volley
-    // (VolleyF); return types of the DOL ones are guesses.
+    // The names of the new virtual functions are those of VolleyF's weak
+    // copies (CStgGmk_Trolley_Mdl_Volley overrides the three
+    // GetParam_Mdl* sizes); the inline ones are emitted after their first
+    // caller in game/msw/CStgGmk_Trolley.cpp or in its weak tail.
     class CStgGmk_Trolley_Mdl : public CStgMdl {
         public:
             CStgGmk_Trolley_Mdl(CStgGmk *pParent, long idx);
@@ -26,25 +29,29 @@ namespace msw {
             virtual bcs::CMdlObj *NewMdl(long heap) const;
             virtual void OnPostCreate();
 
-            // (weak in VolleyF's CStgGmk_Trolley_Act_Volley.cpp)
-            virtual void SetMdlIdx(long idx) { m_nMdlIdx = idx; }
-            virtual void SetMdlType(long type) { m_Unk130 = type; }
-            virtual long GetMdlType() const { return m_Unk130; }
-            virtual void SetHeyhoParam(int, float, float);
-            virtual float GetParam_MdlWidth() const;
-            virtual float GetParam_MdlHeight() const;
-            virtual float GetParam_MdlDepth() const;
-            virtual long GetMdlIdx() const { return m_nMdlIdx; }
-            virtual void CreateHeyho();
-            virtual void DeleteHeyho();
-            virtual void DispHeyho(int bDisp);
-            virtual void *GetHeyho();
+            virtual void SetMdlIdx(long idx) { m_nMdlIdx = idx; }                     // 0x124
+            // The car's type: 0 for the first car, 2 for the others; 3 is
+            // a car whose heyho throws coins (see RebuildMdl). Types 2 and 3
+            // carry a heyho.
+            virtual void SetMdlType(long type) { m_nMdlType = type; }                 // 0x128
+            virtual long GetMdlType() const { return m_nMdlType; }                    // 0x12C
+            virtual void SetHeyhoParam(int bCoin, float distMin, float distMax);      // 0x130
+            // The size of the model as built, which Main scales to the
+            // actor's GetParam_Mdl* sizes.
+            virtual float GetParam_MdlWidth() const;                                  // 0x134
+            virtual float GetParam_MdlHeight() const;                                 // 0x138
+            virtual float GetParam_MdlDepth() const;                                  // 0x13C
+            virtual long GetMdlIdx() const { return m_nMdlIdx; }                      // 0x140
+            virtual void CreateHeyho();                                               // 0x144
+            virtual void DeleteHeyho();                                               // 0x148
+            virtual void DispHeyho(int bDisp);                                        // 0x14C
+            virtual CNpcHeyho *GetHeyho();                                            // 0x150
 
         private:
-            long m_nMdlIdx;          // 0x12C (GetMdlIdx)
-            long m_Unk130;           // 0x130, the model type (GetMdlType): 2 for every model but the first, which has 0
-            void *m_pUnk134;         // 0x134, null until CreateHeyho
-            float m_fUnk138;         // 0x138
+            long m_nMdlIdx;              // 0x12C (GetMdlIdx)
+            long m_nMdlType;             // 0x130, 2 for every car but the first, which has 0
+            unsigned long m_nHeyhoId;    // 0x134, task id of the heyho; 0 until CreateHeyho
+            float m_fHeyhoWait;          // 0x138, frames before the heyho shows again after a scene entry
     };
 }
 

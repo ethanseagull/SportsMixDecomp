@@ -31,8 +31,21 @@ namespace msw {
             void OffFlag10(unsigned short flag) { m_nFlag10 &= ~flag; }
             void OnFlagA0(unsigned long flag) { m_nFlagA0 |= flag; }
             void OffFlagA0(unsigned long flag) { m_nFlagA0 &= ~flag; }
-            // (name guessed; VolleyF's CStgGmk_Trolley_Act_Volley) Radians, 0 to 2 pi.
+            // (name guessed; VolleyF's CStgGmk_Trolley_Act_Volley) Radians, 0 to
+            // 2 pi: the callers wrap the angle first.
             void SetRotY(float rot) { m_fRotY = rot; }
+            // (name guessed; inline in game/msw/CStgGmk_Trolley.cpp, DOL)
+            // The same, first bringing the angle into [0, 2 pi).
+            void SetRotYWrapped(float rot)
+            {
+                while (rot > 6.2831855f) {
+                    rot -= 6.2831855f;
+                }
+                while (rot < 0.0f) {
+                    rot += 6.2831855f;
+                }
+                m_fRotY = rot;
+            }
             // (names guessed) Inline in BasketF's CChrCoreBasketYoshi:
             // both set to the bit of the owner's player number.
             void SetNoHitFlag(unsigned long flag) { m_nNoHitFlag = flag; }
@@ -50,7 +63,7 @@ namespace msw {
             unsigned char m_Unk38[0x24];
             bcs::FVEC3 m_Size;           // 0x5C
             unsigned char m_Unk68[0x18];
-            float m_fRotY;               // 0x80 (name guessed)
+            float m_fRotY;               // 0x80 (SetRotY)
             unsigned char m_Unk84[0x1C];
             unsigned long m_nFlagA0;     // 0xA0
     };

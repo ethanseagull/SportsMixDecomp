@@ -97,6 +97,12 @@ namespace msw {
             static float GetClosestP_SegmentSegment(const bcs::FVEC3 &rA0, const bcs::FVEC3 &rA1,
                                                     const bcs::FVEC3 &rB0, const bcs::FVEC3 &rB1, float &rT,
                                                     float &rS, bcs::FVEC3 &rClosestA, bcs::FVEC3 &rClosestB);
+            // (added for BossF game/boss/CComDrvBoss.cpp; meaning read from its
+            // use) Where segment rFrom-rTo first touches the capsule of radius
+            // fRadius around rCap0-rCap1, in rHit; not zero when it does.
+            static int DetectHitPos_SegmentCapsule(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo,
+                                                   const bcs::FVEC3 &rCap0, const bcs::FVEC3 &rCap1, float fRadius,
+                                                   bcs::FVEC3 &rHit);
             // The point of segment r0-r1 closest to rPoint; returns the
             // square of the distance.
             static float GetClosestP_PointSegment(const bcs::FVEC3 &rPoint, const bcs::FVEC3 &r0,

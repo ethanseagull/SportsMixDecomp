@@ -53,12 +53,12 @@ static const float s_CoinGetRotSpeedEnd = bcs::DEG_TO_RAD(10.0f);
 // function; the names are guesses.
 static inline float Twice(float value)
 {
-    return value * 2.0f;
+    return 2.0f * value;
 }
 
 static inline float PerFrame(float perSecond)
 {
-    return perSecond * (1.0f / 60.0f);
+    return (1.0f / 60.0f) * perSecond;
 }
 
 // (guessed helper) rad brought into [0, 2 pi].
@@ -82,7 +82,8 @@ inline msw::GIMMICK_BOSS::CEffectCoinGet::CEffectCoinGet(bcs::CTask *pParent, co
     m_fWait = 42.0f;
     m_fTopY = rPos.y + 2.3f;
     m_fRotSpeed = s_CoinGetRotSpeedStart;
-    bcs::BCS_Phys_CalcYVG(Twice(20.0f), rPos.y, rPos.y, m_fTopY, m_Vel.y, m_fGravity);
+    float fFrame = 20.0f;
+    bcs::BCS_Phys_CalcYVG(Twice(fFrame), rPos.y, rPos.y, m_fTopY, m_Vel.y, m_fGravity);
     if (m_pMdl != 0) {
         m_hEffect = CEffectCtrl::CreateAttachEffect(0x56A, m_pMdl, 0, 0, 0, 0, 0, 3, 0, 0, 0);
     }
@@ -147,7 +148,10 @@ void msw::CGimmickManBoss::EffectCoinGetCreate_(const bcs::FVEC3 &rPos, DROP_COI
 void msw::CGimmickManBoss::EffectCoinScoreCreate_(const bcs::FVEC3 &rPos, const bcs::FVEC3 &, long nNum)
 {
     if (nNum > 0) {
-        bcs::FVEC3 center(rPos.x, 0.0f, rPos.z);
+        bcs::FVEC3 center;
+        center.x = rPos.x;
+        center.z = rPos.z;
+        center.y = 0.0f;
 
         if (nNum > 16) {
             nNum = 16;
@@ -194,8 +198,8 @@ void msw::GIMMICK_BOSS::CEffectCoinGet::Main()
                 bcs::FVEC3 move;
 
                 bcs::FVEC3Scale(&move, &m_Vel, rate);
-                move.y += 0.5f * (dv * rate);
                 m_Vel.y += dv;
+                move.y += 0.5f * (dv * rate);
                 bcs::FVEC3Add(&pos, &pos, &move);
                 if (m_Vel.y < 0.0f) {
                     m_Vel.y = 0.0f;
@@ -216,8 +220,8 @@ void msw::GIMMICK_BOSS::CEffectCoinGet::Main()
                 bcs::FVEC3 move;
 
                 bcs::FVEC3Scale(&move, &m_Vel, rate);
-                move.y += 0.5f * (dv * rate);
                 m_Vel.y += dv;
+                move.y += 0.5f * (dv * rate);
                 bcs::FVEC3Add(&pos, &pos, &move);
                 break;
             }
@@ -229,7 +233,8 @@ void msw::GIMMICK_BOSS::CEffectCoinGet::Main()
             m_Vel.y *= -0.5f;
         }
         m_pMdl->m_vTrans = pos;
-        m_pMdl->m_fRotY = NormalizeRad(m_pMdl->m_fRotY + m_fRotSpeed * rate);
+        float turn = m_fRotSpeed * rate;
+        m_pMdl->m_fRotY = NormalizeRad(m_pMdl->m_fRotY + turn);
         float scale = 1.9f * m_fScale;
         m_pMdl->m_vScale.Set(scale, scale, scale);
         if (m_fLife < 4.0f) {
@@ -249,19 +254,23 @@ msw::GIMMICK_BOSS::CEffectCoinScore::CEffectCoinScore(bcs::CTask *pParent, const
     m_fLife = 70.0f;
     m_fLife += bcs::BCS_OrgRandMax(1.0f);
     m_fScale = 0.0f;
-    m_fRotSpeed = bcs::DEG_TO_RAD(23.0f);
+    float fRotSpeed = 23.0f;
+    m_fRotSpeed = bcs::DEG_TO_RAD(fRotSpeed);
     m_fScale = m_fScale > 1.0f ? 1.0f : (m_fScale < 0.0f ? 0.0f : m_fScale);
     m_fScaleSpeed = 0.0625f;
     if (m_pMdl != 0) {
         m_pMdl->OnFlag(bcs::CScnObj::FLAG_HIDE_40 | bcs::CScnObj::FLAG_HIDE_80);
-        m_pMdl->m_fRotY = NormalizeRad(bcs::BCS_OrgRandMax(2.0f * 3.14159265f));
+        float fRandRotY = bcs::BCS_OrgRandMax(2.0f * 3.14159265f);
+        bcs::CMdlObj *pMdl = m_pMdl;
+        pMdl->m_fRotY = NormalizeRad(fRandRotY);
         float scale = 1.1f * m_fScale;
         m_pMdl->m_vScale.Set(scale, scale, scale);
     }
     m_fDelay = nIdx;
-    bcs::BCS_VecZ_RotY(m_Vel, PerFrame(2.0f), NormalizeRad(fRotY));
+    float fSpeed = 2.0f;
+    bcs::BCS_VecZ_RotY(m_Vel, PerFrame(fSpeed), NormalizeRad(fRotY));
     m_Vel.y = 8.0f / 60.0f;
-    m_Vel.y += PerFrame(bcs::BCS_OrgRandMax(4.0f));
+    m_Vel.y += (1.0f / 60.0f) * bcs::BCS_OrgRandMax(4.0f);
     m_fGravity = -0.3f / 60.0f;
 }
 
@@ -292,7 +301,9 @@ void msw::GIMMICK_BOSS::CEffectCoinScore::Main()
         m_fScale += m_fScaleSpeed * rate;
         m_fScale = m_fScale > 1.0f ? 1.0f : (m_fScale < 0.0f ? 0.0f : m_fScale);
     }
-    m_fRotSpeed += bcs::DEG_TO_RAD(0.0f) * rate;
+    // The turning speed does not change (an acceleration of 0 degrees).
+    float fRotAcc = 0.0f;
+    m_fRotSpeed += bcs::DEG_TO_RAD(fRotAcc) * rate;
 
     if (m_pMdl != 0) {
         bcs::FVEC3 pos = m_pMdl->m_vTrans;
@@ -310,7 +321,8 @@ void msw::GIMMICK_BOSS::CEffectCoinScore::Main()
             m_Vel.y *= -0.5f;
         }
         m_pMdl->m_vTrans = pos;
-        m_pMdl->m_fRotY = NormalizeRad(m_pMdl->m_fRotY + m_fRotSpeed * rate);
+        float turn = m_fRotSpeed * rate;
+        m_pMdl->m_fRotY = NormalizeRad(m_pMdl->m_fRotY + turn);
         float scale = 1.1f * m_fScale;
         m_pMdl->m_vScale.Set(scale, scale, scale);
         if (m_fLife < 8.0f) {

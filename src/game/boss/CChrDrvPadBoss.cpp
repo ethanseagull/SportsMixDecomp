@@ -362,6 +362,7 @@ void CChrDrvPadBoss::MainOnBall_(_CHR_MSG *)
 
 void CChrDrvPadBoss::MainOffBall_(_CHR_MSG *)
 {
+    float fPower;
     float fDir = -1.0f;
     float fCamRot = m_pChr->GetCamRotY();
 
@@ -464,7 +465,7 @@ void CChrDrvPadBoss::MainOffBall_(_CHR_MSG *)
 
     if (GetStickDir() >= 0.0f) {
         float fRunDir = RoundRad(fCamRot + m_fStickDir);
-        float fPower = m_fStickPower;
+        fPower = m_fStickPower;
         m_pChr->MethdSliding(fRunDir);
         m_pChr->MethdRun(fRunDir, fPower);
     }

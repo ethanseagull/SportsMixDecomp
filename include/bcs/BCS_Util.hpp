@@ -14,6 +14,11 @@ namespace bcs {
     // weight pTbl gives it.
     long BCS_LotProbability(const long *pTbl, long nNum);
 
+    // (DOL; added for BossF game/boss/CComDrvBoss.cpp, parameter names and
+    // meaning guessed) Which side of the line from (x0, z0) to (x1, z1) the
+    // point (x, z) is on: negative, zero on the line, or positive.
+    long BCS_Util_IsPointSide(float x, float z, float x0, float z0, float x1, float z1);
+
     // In the DOL. Clears size bytes at p, 32 bytes at a time.
     void BCS_CpuClear32(void *p, unsigned long size);
 

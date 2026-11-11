@@ -25,7 +25,11 @@ Equivalent game/boss/CCockpitBossCoin.cpp
 Equivalent game/boss/CCockpitBossCoder.cpp
 Matching game/boss/CEventDemoBoss.cpp
 Equivalent game/boss/CCameraBoss.cpp
-NonMatching game/boss/CComDrvBoss.cpp
+Equivalent game/boss/unit_4F0C4.cpp
+Equivalent game/boss/CComDrvBoss.cpp
+Matching game/boss/unit_51CE4.cpp
+Matching game/boss/unit_52300.cpp
+Matching game/boss/unit_52680.cpp
 Matching game/boss/CChrCoreBossLuigi.cpp
 Equivalent game/boss/CChrCoreBossMethod.cpp
 Matching game/boss/CChrCoreBossMii00.cpp

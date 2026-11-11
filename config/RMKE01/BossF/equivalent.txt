@@ -1,4 +1,7 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
+BossF ActLoopShoot__Q23msw11CComDrvBossFv near 99.3 register numbering inside the inlined paired-single helpers (FVEC3LenSq, FVEC3Add); 0.0f is read from another slot of unit_4F0C4's float pool (same value, pool order differs); same instructions otherwise
+BossF ActLoopStickAttack__Q23msw11CComDrvBossFv near 99.3 register numbering inside the inlined paired-single helpers (FVEC3LenSq, FVEC3Add); 0.0f is read from another slot of unit_4F0C4's float pool (the original pool has a 0.0f right after 4.0f, ours after 5.5f; same value); same instructions otherwise
+BossF ActLoopThrowItem__Q23msw11CComDrvBossFv near 99.3 register numbering inside the inlined paired-single helpers (FVEC3LenSq, FVEC3Add); 0.0f is read from another slot of unit_4F0C4's float pool (same value, pool order differs); same instructions otherwise
 BossF AddCoinValue__Q23msw16CCockpitBossCoinFlll near 99.0 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 BossF CanbeSpike__Q23msw12CChrCoreBossCFi near 99.9 f29/f30 swapped (base height vs prediction frame); register choice only
 BossF ChangeTextFont__Q23msw21CCockpitBossBallPowerFli near 97.0 register allocation only (nPane and the pane accessor temporaries swap registers); same calls, constants, loads, stores and branches
@@ -12,6 +15,9 @@ BossF EffectCoinScoreCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3RCQ23bcs5FVE
 BossF FireReceiver___Q23msw18CChrCoreBossKuromaFv near 98.2 delete-flag test clrlwi. vs clrlwi/cntlzw/srwi (same predicate); store order/stack slots of DetectMapHit locals; register numbering
 BossF FireReceiver___Q23msw19CChrCoreBossKinopioFv near 98.1 float registers in x*x+z*z and scheduling of the paired-single address setup
 BossF GetFirstLookInfo_MultiPlay__Q23msw11CCameraBossFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 92.6 stack slots, registers and stfsux addressing of the position table; same calls and constants
+BossF GetHomePos__Q23msw11CComDrvBossFRQ23bcs5FVEC3 near 99.4 inlined ShoudEscFromBoss loads the queue tail before the head; register numbering in the inlined paired-single helpers; same instructions otherwise
+BossF GetHomeRandPosBase__Q23msw11CComDrvBossFRQ23bcs5FVEC3ff near 98.9 register numbering and operand order of the commutative ps_add in the inlined FVEC3Add; one float register swapped; same instructions otherwise
+BossF GetHomeRandPos__Q23msw11CComDrvBossFRQ23bcs5FVEC3 near 99.3 inlined ShoudEscFromBoss loads the queue tail before the head; register numbering in the inlined paired-single helpers; same instructions otherwise
 BossF GetLenHosei__Q23msw11CCameraBossFRCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 96.3 stack slots and registers (saves from r16 instead of r17); same calls and constants
 BossF GetTargetInfo__Q23msw21CCockpitBossBallPowerFlRQ23bcs5FVEC3RQ34nw4r3lyt4Size near 97.4 instruction order only: the addi of the sPowerPane address is scheduled after the subf instead of before
 BossF LifeGaugeInWait__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
@@ -33,6 +39,7 @@ BossF MethdShootStance__Q23msw12CChrCoreBossFfi near 99.8 r3/r4 swapped in the i
 BossF MethdSideStep__Q23msw12CChrCoreBossFff near 99.0 the two float parameters kept in f30/f31 the other way round; register choice only
 BossF MethdTimeOver__Q23msw12CChrCoreBossFl near 98.4 after the switch ours reloads m_nQueueTail (0x1C) where the original reuses the register; nothing writes it in between, so same value; rest register renumbering
 BossF MethdTurnOver__Q23msw12CChrCoreBossFl near 99.5 r7/r8 swapped in the inlined queue push; register choice only
+BossF NormalizeCanMoveWorldPos__Q23msw11CComDrvBossCFRQ23bcs5FVEC3 near 97.5 float register allocation (radius sum, inlined FVEC3LenSq, final adds); same instructions and stack slots
 BossF OnMsgN__Q23msw14CChrDrvPadBossFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG near 99.7 float register choice only (512.0f in f2 vs f3 in case 0x97)
 BossF SetBallPowerState__Q23msw21CCockpitBossBallPowerFll near 99.0 only the rodata offset of sPowerPane differs (0x8e8 vs 0x910): the original .rodata holds 0x28 more bytes of @LOCAL@ statics from dead-stripped inline helpers (GaugeBossLineAnim, LifeGaugeAnim, CoinBackAnim, BossLifeGaugeIn, SetSPGaugeAnim); same table, same code
 BossF SetBallPowerValueColor__Q23msw21CCockpitBossBallPowerFli near 86.7 instruction order only: the addi of the sPowerPane address is scheduled before the subf instead of after
@@ -56,6 +63,7 @@ BossF TrgDamage___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.
 BossF TrgGoalIn___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
 BossF TrgReceive___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
 BossF TrgShootStart___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
+BossF UpdateHomePos__Q23msw11CComDrvBossFv near 94.3 first loop: the original indexes the three local tables and the two member arrays with base+offset counters (lfsx, add), ours steps pointers; hence one saved GPR more (r21) and a 0x10 larger frame in the original; register numbering elsewhere; same operations in the same order
 BossF __ct__Q23msw11CCameraBossFl near 99.6 register allocation only
 BossF __ct__Q23msw17CItemBallBossBombFPQ23msw5CBall near 98.5 original reloads m_pMdl before CreateAttachEffect; ours reuses the value from the null check (same field, nothing written between)
 BossF __ct__Q23msw21CBallTargetMarkerBossFPQ23bcs5CTaskUli near 99.8 stack slots of the inlined SetState ptmf temporaries differ; same stores and values

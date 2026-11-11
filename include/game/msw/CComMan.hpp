@@ -8,6 +8,8 @@ namespace msw {
     class CBall;
     class CChrCore;
     class CItem;
+    class CQPanel;
+    class CChrObstacle;
 
     // The computer players' manager. A DOL class; each game module derives
     // its own (CComManVolleyGame, CComManBasketGame, CComManHockey, ...) and
@@ -88,6 +90,13 @@ namespace msw {
             // its position.
             static unsigned long QPanel_GetNear(const bcs::FVEC3 &rPos, unsigned long nKindBits);
             static bcs::FVEC3 QPanel_GetPos(unsigned long nPanel);
+            // (added for BossF game/boss/CComDrvBoss.cpp) The panel itself;
+            // null when it is gone.
+            static CQPanel *QPanel_GetPtr(unsigned long nPanel);
+            // (DOL; added for BossF game/boss/CComDrvBoss.cpp) Walks the
+            // obstacles: the first one after pPrev (null: the first), null
+            // at the end.
+            static CChrObstacle *ObstacleSearch(CChrObstacle *pPrev);
             // The nearest falling green shell (0: none), whether it is
             // active, and its position.
             static unsigned long FallGShell_GetNear(const bcs::FVEC3 &rPos);

@@ -56,7 +56,9 @@ namespace msw {
             // 0x54 to 0x70 (added for BasketF game/basket/CNpcGhostBasketBase.cpp;
             // names from __vt__Q23msw19CNpcGhostBasketBase, return types
             // guessed except where noted).
-            virtual void GetBodyCollInfo(bcs::FVEC3 &, bcs::FVEC3 &);     // 0x54
+            // (returns the body's radius: BossF's CComDrvBoss adds it to a
+            // character's size; the two points are the body capsule's ends)
+            virtual float GetBodyCollInfo(bcs::FVEC3 &, bcs::FVEC3 &);    // 0x54
             virtual void MainFunc();                                    // 0x58
             virtual void DispFunc();                                    // 0x5C
             virtual void CallbackMotTrg_(const bcs::CAnmObjMotBase::MOT_TRG *); // 0x60

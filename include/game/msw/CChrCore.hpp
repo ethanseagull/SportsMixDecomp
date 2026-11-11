@@ -1061,6 +1061,11 @@ namespace msw {
             float GetDist_ToPosXZ(const bcs::FVEC3 &rPos) const;
             // (name guessed; the DOL's fn_800E1E1C) The distance to rPos.
             float GetDist_ToPos(const bcs::FVEC3 &rPos) const;
+            // (name guessed; the DOL's fn_800E1EC4) The square of it.
+            float GetDist_ToPosSq(const bcs::FVEC3 &rPos) const;
+            // (name guessed; the DOL's fn_800E19D4) The pitch (radians) of
+            // the line from rPos up to the character.
+            float GetRotX_FromPos(const bcs::FVEC3 &rPos) const;
             // (name guessed) See m_PrevPos.
             const bcs::FVEC3 &GetPrevPos() const { return m_PrevPos; }
             // The yaw (radians) from the character towards pChr.

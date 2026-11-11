@@ -29,6 +29,20 @@ namespace msw {
     extern float DODGE_PRM_S02_BIG_ITEM_POP_COME_FRM;
     extern float DODGE_PRM_S02_BIG_ITEM_POP_DIST;
     extern float DODGE_PRM_S02_BIG_ITEM_POP_POS_X;
+
+    // Stage 04, the pylon stage (the pylon models, actors and cluster).
+    extern float DODGE_PRM_S04_PYLON_MDL_RADIUS;
+    extern float DODGE_PRM_S04_PYLON_MDL_HEIGHT;
+    extern float DODGE_PRM_S04_PYLON_RADIUS;
+    extern float DODGE_PRM_S04_PYLON_HEIGHT;
+    extern float DODGE_PRM_S04_PYLON_LIFE;
+    extern float DODGE_PRM_S04_PYLON_FIELD_MARGIN;
+    extern long DODGE_PRM_S04_PYLON_PUSH_POWER;
+    extern float DODGE_PRM_S04_PYLON_PUSH_RESIST;
+    extern float DODGE_PRM_S04_PYLON_ACC;
+    extern float DODGE_PRM_S04_PYLON_DEC;
+    extern long DODGE_PRM_S04_PYLON_LOC_PAT_TYPE;
+    extern long DODGE_PRM_S04_PYLON_LOC_PAT_NO;
 }
 
 #endif /* !MSW_DODGEPRM_HPP_ */

@@ -114,7 +114,11 @@ namespace msw {
                 // panel gives no coin; with bit 0 of 0x1C8 set the panels pop up
                 // again without waiting. (meanings and names guessed)
                 unsigned long m_nUnk40;    // 0x40
-                unsigned char m_Unk44[0x152 - 0x44];
+                unsigned char m_Unk44[0x151 - 0x44];
+                // 0x151 (meaning not known): BasketF's CStageBasket05 starts
+                // its heavy raft swing on any turn of the rafts while it is
+                // not zero, and otherwise waits for the camera's side.
+                unsigned char m_Unk151;
                 // 0x152 (name guessed): how many goals the court has
                 // (HockeyF CCollManHockey loops over them).
                 unsigned char m_nGoalNum;
@@ -129,7 +133,11 @@ namespace msw {
                 // view for 0, 4 for 3, else 2 (name guessed). The volley coin
                 // cockpit places its counters only for 0.
                 long m_nViewSplit;
-                unsigned char m_Unk1D0[0x638 - 0x1D0];
+                unsigned char m_Unk1D0[0x430 - 0x1D0];
+                // 0x430 (meaning not known): DodgeF's CStageDodge04 places
+                // its background at 14 * (m_nUnk430 % 3 - 1) in x.
+                long m_nUnk430;
+                unsigned char m_Unk434[0x638 - 0x434];
             };
 
             CGame(bcs::CTask *pParent, GAME_MODE mode);

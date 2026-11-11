@@ -8,6 +8,7 @@ extern "C" {
 // Only what is used so far.
 double pow(double x, double y);
 double ceil(double x);
+double floor(double x);
 double fmod(double x, double y);
 double tan(double x);
 

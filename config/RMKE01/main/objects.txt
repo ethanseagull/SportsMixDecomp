@@ -7,6 +7,7 @@ Matching game/msw/CGameAccInput.cpp
 Matching game/msw/LayoutTask.cpp
 Matching game/msw/CCollDefUnit.cpp
 NonMatching game/msw/CNowLoading.cpp
+Equivalent game/msw/CEvNodeData.cpp
 Matching game/msw/CMenuPadInfo.cpp
 Matching game/msw/CStageNet.cpp
 Matching game/msw/CStage01Base.cpp
@@ -44,3 +45,7 @@ Matching game/msw/CoinRes.cpp
 NonMatching game/bcs/CAnmTexSrt.cpp
 NonMatching game/bcs/CAnmTexPat.cpp
 Equivalent game/msw/CGameExDemoBase.cpp
+Equivalent game/msw/CStage10Base/CTelopDispBase.cpp
+Matching game/msw/CCokcpitMenuDataList.cpp
+Equivalent game/msw/CCockpitWindowInfo.cpp
+Equivalent game/msw/CCockpitButtonInfo.cpp

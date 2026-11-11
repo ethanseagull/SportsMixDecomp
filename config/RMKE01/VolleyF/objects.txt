@@ -12,7 +12,7 @@ Equivalent game/volley/CCollManVolley.cpp
 Equivalent game/volley/CChrMarkerVolleyJump.cpp
 Equivalent game/volley/CStageMan.cpp
 Matching game/volley/CComManVolley.cpp
-NonMatching game/volley/CComManVolleyRR.cpp
+Equivalent game/volley/CComManVolleyRR.cpp
 Equivalent game/volley/CItemManVolley.cpp
 Matching game/volley/CCockpitVolleyModelTelop.cpp
 Matching game/volley/CStgGmk_Wave_Volley.cpp
@@ -27,10 +27,10 @@ Matching game/volley/CComDrvVolley.cpp
 Matching game/volley/CStageVolley01.cpp
 Equivalent game/volley/CCockpitChrIcon2DVolley.cpp
 Matching game/volley/unit_CA990.cpp
-NonMatching game/volley/CItemBallVolleyBomb.cpp
+Equivalent game/volley/CItemBallVolleyBomb.cpp
 Equivalent game/volley/CChrDrvPadVolley.cpp
 Equivalent game/volley/CChrManVolley.cpp
-Equivalent game/volley/CChrCoreVolleyLuigi.cpp
+Matching game/volley/CChrCoreVolleyLuigi.cpp
 Equivalent game/volley/CChrCoreVolleyYoshi.cpp
 Equivalent game/volley/CChrCoreVolleyKinopio.cpp
 Equivalent game/volley/CChrCoreVolleyKuroma.cpp

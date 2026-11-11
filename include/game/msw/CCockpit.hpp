@@ -74,6 +74,23 @@ namespace msw {
             // word (m_Result); static like the above. The friend match
             // screen waits for 1000.
             static long GetResult();
+            // (name and argument guessed; DOL fn_8013A534, static) Closes
+            // the mini telop of every split view (objects 0x100D on).
+            // msw::CStage10Base::CTelopDispBase::Erase passes 1.
+            static void CloseTelopMiniPos(int bUnk);
+            // (name guessed; DOL fn_80137A34, not inline) The result word
+            // at 0x70.
+            long GetUnk70() const;
+            // (names guessed; inline, no symbol; added for
+            // game/msw/CCokcpitMenuDataList.cpp) Set the result words:
+            // SetResults both of them, like the static ClearResult does on
+            // the task; SetUnk70 the one at 0x70 alone.
+            void SetResults(long nResult)
+            {
+                m_Unk70 = nResult;
+                m_Result = nResult;
+            }
+            void SetUnk70(long nValue) { m_Unk70 = nValue; }
             // (added for DodgeF game/dodge/CCockpitDodge.cpp; static, return
             // type and argument names guessed) Places mini telop nObjId (a
             // CCockpitTelopMiniPos) at world position rPos as seen by camera

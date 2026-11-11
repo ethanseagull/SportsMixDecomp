@@ -62,6 +62,11 @@ namespace msw {
             // Deletes m_pPaneAccessor, if any (return type guessed).
             void DeletePaneAccessor();
 
+        private:
+            // (added for game/msw/CCockpitButtonInfo.cpp) Its
+            // ButtonParameterInitialize sets m_nDefaultBtnKindId.
+            friend class CCockpitButtonInfo;
+
         protected:
             // The owner as a CCockpit (CMenuLinkBase::m_Unk10), as
             // CSelectMenuLayoutBase::GetSelectMenu does for the menus. No such

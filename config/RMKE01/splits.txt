@@ -374,7 +374,7 @@ game/msw/CStage10Base/CPanelInfoBase.cpp:
 	.text       start:0x80157DF4 end:0x8015A738
 
 game/msw/CStage10Base/CTelopDispBase.cpp:
-	.text       start:0x8015A7BC end:0x8015AA48
+	.text       start:0x8015A7BC end:0x8015AB9C
 
 game/msw/CStageMan.cpp:
 	.text       start:0x8015FFB0 end:0x80165134
@@ -599,10 +599,10 @@ game/bcs/G2D/CLineStripDL.cpp:
 	.text       start:0x801EC8D4 end:0x801ECC84
 
 game/msw/CCockpitButtonInfo.cpp:
-	.text       start:0x801ECF8C end:0x801ED254
+	.text       start:0x801ECE98 end:0x801ED5D0
 
 game/msw/CCockpitWindowInfo.cpp:
-	.text       start:0x801ED65C end:0x801ED918
+	.text       start:0x801ED5D0 end:0x801EDA50
 
 game/msw/CCockpitMenuBase.cpp:
 	.text       start:0x801EDF8C end:0x801EEA0C
@@ -764,7 +764,10 @@ game/msw/CGamePadCheck.cpp:
 	.text       start:0x8025FBCC end:0x802616DC
 
 game/msw/CCokcpitMenuDataList.cpp:
-	.text       start:0x802619A4 end:0x80261C48
+	.text       start:0x80261900 end:0x80261D14
+	.ctors      start:0x8042D278 end:0x8042D27C
+	.data       start:0x8048E498 end:0x8048E4B0
+	.bss        start:0x804D8FC8 end:0x804D8FE8
 
 game/msw/CStage04Base.cpp:
 	.text       start:0x80261D14 end:0x80262098

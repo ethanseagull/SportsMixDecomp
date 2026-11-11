@@ -136,13 +136,13 @@ namespace msw {
     {
     }
 
-    bool CItemBallVolleyGShell::TrgShootStart_()
+    long CItemBallVolleyGShell::TrgShootStart_()
     {
         m_nTrgFlag |= 1 << (TRG_SHOOT_START + 1);
         return false;
     }
 
-    bool CItemBallVolleyGShell::TrgChrHit_()
+    long CItemBallVolleyGShell::TrgChrHit_()
     {
         if (IsShot()) {
             BreakShell(this, 0, SE_SHELL_BREAK);
@@ -151,7 +151,7 @@ namespace msw {
         return false;
     }
 
-    bool CItemBallVolleyGShell::TrgGoalIn_()
+    long CItemBallVolleyGShell::TrgGoalIn_()
     {
         long nSe = SE_SHELL_BREAK;
         if (IsShot()) {
@@ -161,7 +161,7 @@ namespace msw {
         return true;
     }
 
-    bool CItemBallVolleyGShell::TrgFreeMode_()
+    long CItemBallVolleyGShell::TrgFreeMode_()
     {
         if (IsShot()) {
             BreakShell(this, 0, SE_SHELL_BREAK);
@@ -170,23 +170,22 @@ namespace msw {
         return false;
     }
 
-    // The original returns 4 when the ball has not been shot; with the bool
-    // return type of CItemBall's triggers that cannot be written here.
-    bool CItemBallVolleyGShell::TrgDamage_()
+    // Returns 4 when the ball has not been shot.
+    long CItemBallVolleyGShell::TrgDamage_()
     {
         if (IsShot()) {
             BreakShell(this, 0, SE_SHELL_BREAK);
             return true;
         }
-        return true; // 4 in the original
+        return 4;
     }
 
-    bool CItemBallVolleyGShell::TrgDestroy_()
+    long CItemBallVolleyGShell::TrgDestroy_()
     {
         return CItemBall::TrgDestroy_();
     }
 
-    bool CItemBallVolleyGShell::TrgReceive_()
+    long CItemBallVolleyGShell::TrgReceive_()
     {
         if (IsShot()) {
             BreakShell(this, 0, SE_SHELL_BREAK);
@@ -195,7 +194,7 @@ namespace msw {
         return false;
     }
 
-    bool CItemBallVolleyGShell::TrgBlock_()
+    long CItemBallVolleyGShell::TrgBlock_()
     {
         if (IsShot()) {
             BreakShell(this, 0, SE_SHELL_BREAK);
@@ -288,13 +287,13 @@ namespace msw {
     {
     }
 
-    bool CItemBallVolleyRShell::TrgShootStart_()
+    long CItemBallVolleyRShell::TrgShootStart_()
     {
         m_nTrgFlag |= 1 << (TRG_SHOOT_START + 1);
         return false;
     }
 
-    bool CItemBallVolleyRShell::TrgChrHit_()
+    long CItemBallVolleyRShell::TrgChrHit_()
     {
         if (IsShot()) {
             BreakShell(this, 1, SE_SHELL_BREAK);
@@ -303,7 +302,7 @@ namespace msw {
         return false;
     }
 
-    bool CItemBallVolleyRShell::TrgGoalIn_()
+    long CItemBallVolleyRShell::TrgGoalIn_()
     {
         long nSe = SE_SHELL_BREAK;
         if (IsShot()) {
@@ -313,7 +312,7 @@ namespace msw {
         return true;
     }
 
-    bool CItemBallVolleyRShell::TrgFreeMode_()
+    long CItemBallVolleyRShell::TrgFreeMode_()
     {
         if (IsShot()) {
             BreakShell(this, 1, SE_SHELL_BREAK);
@@ -322,22 +321,21 @@ namespace msw {
         return false;
     }
 
-    // Returns 4 in the original when not shot; see the green shell.
-    bool CItemBallVolleyRShell::TrgDamage_()
+    long CItemBallVolleyRShell::TrgDamage_()
     {
         if (IsShot()) {
             BreakShell(this, 1, SE_SHELL_BREAK);
             return true;
         }
-        return true; // 4 in the original
+        return 4;
     }
 
-    bool CItemBallVolleyRShell::TrgDestroy_()
+    long CItemBallVolleyRShell::TrgDestroy_()
     {
         return CItemBall::TrgDestroy_();
     }
 
-    bool CItemBallVolleyRShell::TrgReceive_()
+    long CItemBallVolleyRShell::TrgReceive_()
     {
         if (IsShot()) {
             BreakShell(this, 1, SE_SHELL_BREAK);
@@ -346,7 +344,7 @@ namespace msw {
         return false;
     }
 
-    bool CItemBallVolleyRShell::TrgBlock_()
+    long CItemBallVolleyRShell::TrgBlock_()
     {
         if (IsShot()) {
             BreakShell(this, 1, SE_SHELL_BREAK);
@@ -483,7 +481,7 @@ namespace msw {
     }
 
     // The first call only marks the bomb as shot; any later one sets it off.
-    bool CItemBallVolleyBomb::TrgShootStart_()
+    long CItemBallVolleyBomb::TrgShootStart_()
     {
         if (m_bShot != 0) {
             Explode_(1);
@@ -493,7 +491,7 @@ namespace msw {
         return CItemBall::TrgShootStart_();
     }
 
-    bool CItemBallVolleyBomb::TrgReceive_()
+    long CItemBallVolleyBomb::TrgReceive_()
     {
         if (IsShot()) {
             Explode_(1);
@@ -502,7 +500,7 @@ namespace msw {
         return false;
     }
 
-    bool CItemBallVolleyBomb::TrgBlock_()
+    long CItemBallVolleyBomb::TrgBlock_()
     {
         if (IsShot()) {
             Explode_(1);
@@ -511,20 +509,19 @@ namespace msw {
         return false;
     }
 
-    bool CItemBallVolleyBomb::TrgGoalIn_()
+    long CItemBallVolleyBomb::TrgGoalIn_()
     {
         Explode_(1);
         return true;
     }
 
-    // Returns 4 in the original when not shot; see the green shell.
-    bool CItemBallVolleyBomb::TrgDamage_()
+    long CItemBallVolleyBomb::TrgDamage_()
     {
         if (IsShot()) {
             Explode_(0);
             return true;
         }
-        return true; // 4 in the original
+        return 4;
     }
 
     long CItemBallVolleyBomb::GetVolleyPassTailEffect(long, long, long) const
@@ -620,49 +617,49 @@ namespace msw {
     {
     }
 
-    bool CItemBallVolleyToadstool::TrgShootStart_()
+    long CItemBallVolleyToadstool::TrgShootStart_()
     {
         m_nTrgFlag |= 1 << (TRG_SHOOT_START + 1);
         return false;
     }
 
-    bool CItemBallVolleyToadstool::TrgChrHit_()
+    long CItemBallVolleyToadstool::TrgChrHit_()
     {
         m_nTrgFlag &= ~(1 << (TRG_SHOOT_START + 1));
         return true;
     }
 
-    bool CItemBallVolleyToadstool::TrgGoalIn_()
+    long CItemBallVolleyToadstool::TrgGoalIn_()
     {
         m_nTrgFlag &= ~(1 << (TRG_SHOOT_START + 1));
         return true;
     }
 
-    bool CItemBallVolleyToadstool::TrgFreeMode_()
+    long CItemBallVolleyToadstool::TrgFreeMode_()
     {
         m_nTrgFlag &= ~(1 << (TRG_SHOOT_START + 1));
         return true;
     }
 
-    bool CItemBallVolleyToadstool::TrgDamage_()
+    long CItemBallVolleyToadstool::TrgDamage_()
     {
         m_nTrgFlag &= ~(1 << (TRG_SHOOT_START + 1));
         return true;
     }
 
-    bool CItemBallVolleyToadstool::TrgDestroy_()
+    long CItemBallVolleyToadstool::TrgDestroy_()
     {
         m_nTrgFlag &= ~(1 << (TRG_SHOOT_START + 1));
         return CItemBall::TrgDestroy_();
     }
 
-    bool CItemBallVolleyToadstool::TrgReceive_()
+    long CItemBallVolleyToadstool::TrgReceive_()
     {
         m_nTrgFlag &= ~(1 << (TRG_SHOOT_START + 1));
         return true;
     }
 
-    bool CItemBallVolleyToadstool::TrgBlock_()
+    long CItemBallVolleyToadstool::TrgBlock_()
     {
         m_nTrgFlag &= ~(1 << (TRG_SHOOT_START + 1));
         return true;
@@ -756,43 +753,43 @@ namespace msw {
     {
     }
 
-    bool CItemBallVolleyStar::TrgShootStart_()
+    long CItemBallVolleyStar::TrgShootStart_()
     {
         m_nTrgFlag |= 1 << (TRG_SHOOT_START + 1);
         return false;
     }
 
-    bool CItemBallVolleyStar::TrgChrHit_()
+    long CItemBallVolleyStar::TrgChrHit_()
     {
         return true;
     }
 
-    bool CItemBallVolleyStar::TrgGoalIn_()
+    long CItemBallVolleyStar::TrgGoalIn_()
     {
         return true;
     }
 
-    bool CItemBallVolleyStar::TrgFreeMode_()
+    long CItemBallVolleyStar::TrgFreeMode_()
     {
         return true;
     }
 
-    bool CItemBallVolleyStar::TrgDamage_()
+    long CItemBallVolleyStar::TrgDamage_()
     {
         return true;
     }
 
-    bool CItemBallVolleyStar::TrgDestroy_()
+    long CItemBallVolleyStar::TrgDestroy_()
     {
         return CItemBall::TrgDestroy_();
     }
 
-    bool CItemBallVolleyStar::TrgReceive_()
+    long CItemBallVolleyStar::TrgReceive_()
     {
         return true;
     }
 
-    bool CItemBallVolleyStar::TrgBlock_()
+    long CItemBallVolleyStar::TrgBlock_()
     {
         return true;
     }
@@ -876,49 +873,48 @@ namespace msw {
     {
     }
 
-    bool CItemBallVolleyBanana::TrgShootStart_()
+    long CItemBallVolleyBanana::TrgShootStart_()
     {
         m_nTrgFlag |= 1 << (TRG_SHOOT_START + 1);
         return false;
     }
 
-    bool CItemBallVolleyBanana::TrgChrHit_()
+    long CItemBallVolleyBanana::TrgChrHit_()
     {
-        return IsShot();
+        return IsShot() != 0;
     }
 
-    bool CItemBallVolleyBanana::TrgGoalIn_()
+    long CItemBallVolleyBanana::TrgGoalIn_()
     {
         return true;
     }
 
-    bool CItemBallVolleyBanana::TrgFreeMode_()
+    long CItemBallVolleyBanana::TrgFreeMode_()
     {
-        return IsShot();
+        return IsShot() != 0;
     }
 
-    // Returns 4 in the original when not shot; see the green shell.
-    bool CItemBallVolleyBanana::TrgDamage_()
+    long CItemBallVolleyBanana::TrgDamage_()
     {
         if (IsShot()) {
             return true;
         }
-        return true; // 4 in the original
+        return 4;
     }
 
-    bool CItemBallVolleyBanana::TrgDestroy_()
+    long CItemBallVolleyBanana::TrgDestroy_()
     {
         return CItemBall::TrgDestroy_();
     }
 
-    bool CItemBallVolleyBanana::TrgReceive_()
+    long CItemBallVolleyBanana::TrgReceive_()
     {
-        return IsShot();
+        return IsShot() != 0;
     }
 
-    bool CItemBallVolleyBanana::TrgBlock_()
+    long CItemBallVolleyBanana::TrgBlock_()
     {
-        return IsShot();
+        return IsShot() != 0;
     }
 
     unsigned long CItemBallVolleyBanana::GetVolleyReceiveReaction(long, unsigned long reaction) const
@@ -960,11 +956,9 @@ namespace msw {
         return EFFECT_TAIL_BANANA;
     }
 
-    // The original returns 0x40 once shot and 0 before; with the bool return
-    // type of the triggers only the truth value can be written here.
-    bool CItemBallVolleyBanana::TrgPreparationTouch_()
+    long CItemBallVolleyBanana::TrgPreparationTouch_()
     {
-        return IsShot() != 0; // 0x40 in the original when shot
+        return IsShot() ? 0x40 : 0;
     }
 
     // Change effect --------------------------------------------------------

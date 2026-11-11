@@ -62,6 +62,9 @@ namespace nw4r {
                 ResAnmTexSrt GetResAnmTexSrt(int index) const;
                 ResAnmTexPat GetResAnmTexPat(int index) const;
                 int HasResAnmChr() const;
+                // (DOL; named after GetResTexNumEntries) Number of skeletal
+                // animations in the file.
+                unsigned long GetResAnmChrNumEntries() const;
                 int HasResAnmClr() const;
                 int HasResAnmTexSrt() const;
                 int HasResAnmTexPat() const;

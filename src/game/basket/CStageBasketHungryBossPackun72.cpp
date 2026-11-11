@@ -159,35 +159,39 @@ void msw::CStageBasketHungryBossPackun72::ConveyorUpdate(float frame)
 {
     BELT &rBelt = m_aBelt[0];
 
-    if (IsGimmickStop()) {
-        rBelt.m_nDir = BELT::DIR_STOP;
-    }
+    for (long i = 0; i < BELT_NUM; i++) {
+        BELT &rCurBelt = m_aBelt[i];
 
-    // The speed is in units per second.
-    float speed = S72_CV_PRM(SPEED) / 60.0f;
-    if (rBelt.m_nDir == BELT::DIR_FRONT) {
-        rBelt.m_fTargetSpeed = speed;
-    } else if (rBelt.m_nDir == BELT::DIR_BACK) {
-        rBelt.m_fTargetSpeed = -speed;
-    } else {
-        rBelt.m_fTargetSpeed = 0.0f;
-    }
+        if (IsGimmickStop()) {
+            rCurBelt.m_nDir = BELT::DIR_STOP;
+        }
 
-    // The belt changes speed by 1/60 a frame.
-    float beltSpeed = rBelt.m_fSpeed;
-    if (beltSpeed < rBelt.m_fTargetSpeed) {
-        beltSpeed += 1.0f / 60.0f;
-        if (rBelt.m_fTargetSpeed < beltSpeed) {
-            beltSpeed = rBelt.m_fTargetSpeed;
+        // The speed is in units per second.
+        float speed = S72_CV_PRM(SPEED) / 60.0f;
+        if (rCurBelt.m_nDir == BELT::DIR_FRONT) {
+            rCurBelt.m_fTargetSpeed = speed;
+        } else if (rCurBelt.m_nDir == BELT::DIR_BACK) {
+            rCurBelt.m_fTargetSpeed = -speed;
+        } else {
+            rCurBelt.m_fTargetSpeed = 0.0f;
         }
-    } else if (beltSpeed > rBelt.m_fTargetSpeed) {
-        beltSpeed -= 1.0f / 60.0f;
-        if (rBelt.m_fTargetSpeed > beltSpeed) {
-            beltSpeed = rBelt.m_fTargetSpeed;
+
+        // The belt changes speed by 1/60 a frame.
+        float beltSpeed = rCurBelt.m_fSpeed;
+        if (beltSpeed < rCurBelt.m_fTargetSpeed) {
+            beltSpeed += 1.0f / 60.0f;
+            if (rCurBelt.m_fTargetSpeed < beltSpeed) {
+                beltSpeed = rCurBelt.m_fTargetSpeed;
+            }
+        } else if (beltSpeed > rCurBelt.m_fTargetSpeed) {
+            beltSpeed -= 1.0f / 60.0f;
+            if (rCurBelt.m_fTargetSpeed > beltSpeed) {
+                beltSpeed = rCurBelt.m_fTargetSpeed;
+            }
         }
+        rCurBelt.m_fMove = beltSpeed * frame;
+        SetBeltSpeed(i, beltSpeed);
     }
-    rBelt.m_fMove = beltSpeed * frame;
-    SetBeltSpeed(0, beltSpeed);
 
     if (!IsGimmickStop()) {
         switch (m_nState) {
@@ -209,20 +213,23 @@ void msw::CStageBasketHungryBossPackun72::ConveyorUpdate(float frame)
 
                     // 0: either way, 1: the other way from the last run,
                     // 2: back, 3: front.
-                    switch (S72_CV_PRM(DIR)) {
-                        case 0:
-                            m_aBelt[0].m_nDir = bcs::BCS_RandRange(0L, 1L) == 0 ? BELT::DIR_FRONT : BELT::DIR_BACK;
-                            break;
-                        case 1:
-                            m_aBelt[0].m_nDir =
-                                m_aBelt[0].m_nPrevDir == BELT::DIR_FRONT ? BELT::DIR_BACK : BELT::DIR_FRONT;
-                            break;
-                        case 2:
-                            m_aBelt[0].m_nDir = BELT::DIR_BACK;
-                            break;
-                        case 3:
-                            m_aBelt[0].m_nDir = BELT::DIR_FRONT;
-                            break;
+                    for (long i = 0; i < BELT_NUM; i++) {
+                        switch (S72_CV_PRM(DIR)) {
+                            case 0:
+                                m_aBelt[i].m_nDir =
+                                    bcs::BCS_RandRange(0L, 1L) != 0 ? BELT::DIR_BACK : BELT::DIR_FRONT;
+                                break;
+                            case 1:
+                                m_aBelt[i].m_nDir =
+                                    m_aBelt[i].m_nPrevDir == BELT::DIR_FRONT ? BELT::DIR_BACK : BELT::DIR_FRONT;
+                                break;
+                            case 2:
+                                m_aBelt[i].m_nDir = BELT::DIR_BACK;
+                                break;
+                            case 3:
+                                m_aBelt[i].m_nDir = BELT::DIR_FRONT;
+                                break;
+                        }
                     }
                 }
                 break;
@@ -299,9 +306,11 @@ void msw::CStageBasketHungryBossPackun72::OnTurnInit()
 void msw::CStageBasketHungryBossPackun72::OnGimmickReset()
 {
     if (!(CGame::g_GameWork.m_nFlag18 & 8)) {
-        m_aBelt[0].m_nDir = BELT::DIR_STOP;
-        m_aBelt[0].m_fSpeed = 0.0f;
-        SetBeltSpeed(0, 0.0f);
+        for (long i = 0; i < BELT_NUM; i++) {
+            m_aBelt[i].m_nDir = BELT::DIR_STOP;
+            m_aBelt[i].m_fSpeed = 0.0f;
+            SetBeltSpeed(i, 0.0f);
+        }
     }
     m_fTimer = 0.0f;
     SE_Stop(4, 0.0f);
@@ -310,6 +319,14 @@ void msw::CStageBasketHungryBossPackun72::OnGimmickReset()
 long msw::CStageBasketHungryBossPackun72::GetFloorAttribute(const bcs::FVEC3 &rPos, FLOW_TYPE type) const
 {
     return 2;
+}
+
+// (guessed helper) The flow direction of a belt along z: belt 0 runs the
+// other way from its animation (see SetBeltSpeed). The original multiplies by
+// the 1.0f, so the sign came from something like this.
+static inline float GetBeltDir(long i)
+{
+    return i == 0 ? 1.0f : -1.0f;
 }
 
 void msw::CStageBasketHungryBossPackun72::GetFloorFlow(bcs::FVEC3 &rFlow, const bcs::FVEC3 &rPos,
@@ -324,7 +341,7 @@ void msw::CStageBasketHungryBossPackun72::GetFloorFlow(bcs::FVEC3 &rFlow, const 
             // The area flags are not used. (kept for the call the original
             // makes)
             GetAreaFlagByPos(rPos, 3);
-            rFlow.Set(0.0f, 0.0f, 1.0f * m_aBelt[0].m_fMove);
+            rFlow.Set(0.0f, 0.0f, GetBeltDir(0) * m_aBelt[0].m_fMove);
             break;
         default:
             rFlow.Set(0.0f, 0.0f, 0.0f);

@@ -27,6 +27,7 @@ Equivalent game/basket/CCockpitBasketPauseResult.cpp
 Equivalent game/basket/CCockpitBasketCoin.cpp
 Equivalent game/basket/CBallManBasket.cpp
 Matching game/basket/CComDrvBasket.cpp
+Matching game/basket/unit_7E8FC.cpp
 Matching game/basket/CBallMarkerBasket.cpp
 Matching game/basket/CHBData.cpp
 Matching game/basket/CCockpitBasketBonusTime.cpp

@@ -1068,6 +1068,10 @@ namespace msw {
             long GetComLevelWork() const { return m_nComLevel; }
             // DOL. The computer level of the character's team (see above).
             long GetComLevel() const;
+            // DOL. Added for BasketF game/basket/unit_7E8FC.cpp (meaning
+            // guessed from the name): not zero while the move assist drives the
+            // character; the computer then starts no action of its own.
+            int IsMoveAssist() const;
 
             // Added for BasketF game/basket/CChrDrvPadBasket.cpp (all in the
             // DOL; return types guessed). Not zero while the character is in

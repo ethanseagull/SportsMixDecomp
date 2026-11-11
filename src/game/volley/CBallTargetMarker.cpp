@@ -67,6 +67,18 @@ namespace {
         pObj->m_vTrans.z = z;
     }
 
+    // Stand-in for an unknown user of -1 and 0.23, which the original keeps
+    // in .rodata before Main's first constant; 0.23 has no reader in the
+    // unit (likely stripped code). See notes/decisions.md, "Unreferenced data
+    // kept by dead references".
+    inline void UnusedReferences(float f)
+    {
+        if (f == -1.0f) {
+        }
+        if (f == 0.23f) {
+        }
+    }
+
     inline float Clamp01(float x)
     {
         return x > 1.0f ? 1.0f : (x < 0.0f ? 0.0f : x);
@@ -357,6 +369,7 @@ void msw::CBallTargetMarker::PushBack_(int bOn)
 int msw::CBallTargetMarker::CheckAppear_()
 {
     CBall *pBall = GetBall(m_nBallHandle);
+    UnusedReferences(m_fAppearRate);
 
     if (pBall == 0) {
         return 1;

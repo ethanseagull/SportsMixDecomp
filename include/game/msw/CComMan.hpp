@@ -10,6 +10,7 @@ namespace msw {
     class CItem;
     class CQPanel;
     class CChrObstacle;
+    class CDropCoin;
 
     // The computer players' manager. A DOL class; each game module derives
     // its own (CComManVolleyGame, CComManBasketGame, CComManHockey, ...) and
@@ -121,6 +122,30 @@ namespace msw {
             static float GetStageCourtCenterX(long nCourt);
             static float GetStageCourtCenterZ(long nCourt);
             static long GetNearBestPos2on3(const bcs::FVEC3 *pMy, const bcs::FVEC3 *pTarget, long nIdx);
+
+            // (DOL; added for VolleyF game/volley/CComDrvVolleyRR.cpp; return
+            // types and meanings guessed) The court a world position is on;
+            // the outer edges of the stage beyond court nCourt and the front
+            // and back of the court itself, in the world.
+            static long GetCourtIdxByWorldPos(const bcs::FVEC3 &rPos);
+            static float GetStageOuterWorldLeft(long nCourt);
+            static float GetStageOuterWorldRight(long nCourt);
+            static float GetStageOuterWorldFront(long nCourt);
+            static float GetStageOuterWorldBack(long nCourt);
+            static float GetStageCourtWorldFront(long nCourt);
+            static float GetStageCourtWorldBack(long nCourt);
+            // Clears bit nChr of rBits; the character nearest to rPos among
+            // those of nBits (negative for none).
+            static void ResetEnableBit(unsigned long &rBits, long nChr);
+            static long GetNearChrBase(const bcs::FVEC3 &rPos, unsigned long nBits);
+            // The coins lying on the court: walk them, look one up by its
+            // task id (null when it is gone), its position, and the
+            // character nearest to it among nBits.
+            static CDropCoin *DropCoin_GetFirst();
+            static CDropCoin *DropCoin_GetNext(CDropCoin *pCoin);
+            static CDropCoin *DropCoin_GetPtr(unsigned long nId);
+            static bcs::FVEC3 DropCoin_GetPos(const CDropCoin *pCoin);
+            static long DropCoin_GetNearChr(const CDropCoin *pCoin, unsigned long nBits);
 
             static CComMan *g_pInstance;
     };

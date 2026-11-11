@@ -28,6 +28,7 @@ VolleyF FireReceiver___Q23msw21CChrCoreVolleyKinopioFv near 98.1 float registers
 VolleyF GameGuideDispCheck___Q23msw13CChrManVolleyFv near 99.7 register allocation only in the line-message loop
 VolleyF GamePartyResult_In__Q23msw14CCockpitVolleyFv near 99.3 register allocation only (string base and CMessage instance registers swapped)
 VolleyF GameResult_In__Q23msw14CCockpitVolleyFv near 99.1 register allocation only (result-score block), as HockeyF's near copy
+VolleyF GetAssignRainbowBall__Q23msw15CComDrvVolleyRRCFv near 99.1 zero constant shared between nFreeBits and loop index (one register) and one register renumbering; same logic
 VolleyF GetAssumedTeamCourtOffset___Q23msw14CStageVolley05CFflRQ23bcs5FVEC3 near 99.8 99.8%: operand order of two commutative fmuls (sin*width, (cos-1)*depth) only.
 VolleyF GetDispScale__Q23msw17CBallMarkerVolleyCFv near 98.6 fmadds multiplicand order swapped (rate * diff vs diff * rate, same result)
 VolleyF GetFirstLookInfo_MultiPlay__Q23msw15CCameraVolleyRRFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 99.7 registers only: in the character loop the z*scale product and pos.x swap float registers and the pos.z/scale load order differs (as CCameraHockeyCS/CCameraBasketHB); same loads, stores and branches
@@ -38,6 +39,7 @@ VolleyF GetParam_FlashColor__Q23msw14CStageVolley15CFv unverified 63.3 Same valu
 VolleyF GetParam_FlashColor__Q23msw14CStageVolley16CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2 bytes); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
 VolleyF GetParam_ShotAngle__Q23msw17CPinballManVolleyCFv near 98.3 load order of the two factors only (the original loads the parameter first); same product
 VolleyF GetPosTurnAroundGimmick__Q23msw17CComDrvVolleyGameFRQ23bcs5FVEC3 near 95.1 the two Obstacle_GetPosTurnAroundObstacle calls of the first-turn obstacle branch are laid out in the other order (equivalent branch form) (95.1%)
+VolleyF GetShoudGetDropCoin__Q23msw15CComDrvVolleyRRCFv near 96.7 register choice, loop-pointer init order and float pool offsets shifted by 4 (unit pool layout); same values, same logic
 VolleyF GetValidPtr__Q23msw15CComManVolleyRRFl near 97.0 last test: original branches past li r3,0 to mr r3,r31 (bne); ours lays the two returns out the other way (beq). Same results on both paths; 4 source forms tried
 VolleyF GetVolleySpikeParam__Q23msw21CItemBallVolleyBananaCFRQ43msw4BALL6VOLLEY14SPIKE_SHOT_ARG near 96.0 field 0x18 gets 1 or 2: original branches, ours a branchless select with the same value
 VolleyF GetVolleySpikeParam__Q23msw21CItemBallVolleyRShellCFRQ43msw4BALL6VOLLEY14SPIKE_SHOT_ARG near 96.1 field 0x18 gets 1 or 2: original branches, ours a branchless select with the same value

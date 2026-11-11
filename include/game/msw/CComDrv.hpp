@@ -151,6 +151,9 @@ namespace msw {
             // given up.)
             void ActCallLookTarget();
             void ActCallLookTarget(const bcs::FVEC3 &rPos);
+            // (DOL; added for VolleyF game/volley/CComDrvVolleyRR.cpp) Turn
+            // to face the front.
+            void ActCallLookFront();
             // (DOL) A random number between fMin and fMax (RandRangeF below
             // is the other generator; which is which is not known).
             float RandRange(float fMin, float fMax) const;

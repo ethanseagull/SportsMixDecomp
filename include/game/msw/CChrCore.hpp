@@ -320,7 +320,9 @@ namespace msw {
             virtual float GetTargetGoalZLength() const;               // 0x32C
             virtual float GetGuardGoalXLength() const;                // 0x330
             virtual float GetGuardGoalZLength() const;                // 0x334
-            virtual void CheckMapHit(bcs::FVEC3 &, const bcs::FVEC3 &, const bcs::FVEC3 &); // 0x338
+            // (int: VolleyF's CComDrvVolleyRR takes the first FVEC3, the
+            // stopping point, when it is not zero; arguments: out, from, to)
+            virtual int CheckMapHit(bcs::FVEC3 &, const bcs::FVEC3 &, const bcs::FVEC3 &); // 0x338
             virtual float GetCollSize_BodyDamage() const;             // 0x33C (float: CComManVolleyRR::IsExistItemBall)
             virtual float GetCollSize_BodyPush() const;               // 0x340
             virtual void GetAlleyoopPassTargetPos(bcs::FVEC3 &, bcs::FVEC3 &, bcs::FVEC3 &) const; // 0x344
@@ -1027,6 +1029,8 @@ namespace msw {
             // Added for BossF game/boss/CCockpitBossCoder.cpp (name guessed),
             // see m_nCtrlPlayerNo.
             long GetCtrlPlayerNo() const { return m_nCtrlPlayerNo; }
+            // (name guessed; added for VolleyF game/volley/CComDrvVolleyRR.cpp)
+            float GetUnk26C() const { return m_fUnk26C; }
             // Not zero for the star player of a team (names guessed). The
             // parameter files of the sports modules call it, so it is inline
             // and emitted there.
@@ -1503,7 +1507,11 @@ namespace msw {
             float m_fUnk264;
             // 0x268 (meaning not known): copied into the receive state's work.
             float m_fUnk268;
-            unsigned char m_Unk26C[0x284 - 0x26C];
+            // 0x26C (meaning not known): VolleyF's CComDrvVolleyRR keeps
+            // the character this far (plus 0.01) inside the stage's edges, so
+            // likely a body radius.
+            float m_fUnk26C;
+            unsigned char m_Unk270[0x284 - 0x270];
             // 0x284 (meaning not known): cleared at the end of a game.
             float m_fUnk284;
             unsigned char m_Unk288[0x574 - 0x288];

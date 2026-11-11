@@ -393,10 +393,18 @@ game/volley/CCameraVolleyRR.cpp:
 	.rodata     start:0x00008588 end:0x000085E8
 	.data       start:0x0001C1F8 end:0x0001C240
 
+game/volley/unit_B0780.cpp:
+	.text       start:0x000B0780 end:0x000B0C50
+	.rodata     start:0x000085E8 end:0x00008618
+
 game/volley/CComDrvVolleyRR.cpp:
-	.text       start:0x000B0780 end:0x000B19F0
-	.rodata     start:0x000085E8 end:0x00008668
+	.text       start:0x000B0C50 end:0x000B16D4
+	.rodata     start:0x00008618 end:0x00008648
 	.data       start:0x0001C240 end:0x0001C3E0
+
+game/volley/unit_B16D4.cpp:
+	.text       start:0x000B16D4 end:0x000B19F0
+	.rodata     start:0x00008648 end:0x00008668
 
 game/volley/CComManVolleyRR.cpp:
 	.text       start:0x000B19F0 end:0x000B1EEC

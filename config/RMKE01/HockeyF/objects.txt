@@ -68,6 +68,7 @@ Equivalent game/hockey/CChrCoreHockeyDiddy.cpp
 Equivalent game/hockey/CCameraHockeyCS.cpp
 Matching game/hockey/CStageHockeyCrushSkate87.cpp
 Equivalent game/hockey/CStageHockeyCrushSkate85.cpp
+Equivalent game/hockey/CStageHockeyCrushSkate86.cpp
 Equivalent game/hockey/CGoalObjHockey.cpp
 Matching game/hockey/CStgGmk_FirePillar_Hockey_Act.cpp
 Equivalent game/hockey/CComManHockeyCS.cpp

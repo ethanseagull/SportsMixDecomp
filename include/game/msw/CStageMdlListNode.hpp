@@ -39,7 +39,8 @@ namespace msw {
             virtual void Unk40();
             virtual void Unk44();
             virtual void Unk48();
-            virtual void Unk4C();
+            // 0x4C (name guessed) Sets the playback rate of animation anm (-1: all).
+            virtual void SetRate(long anm, float rate);
             virtual void Unk50();
             virtual void Unk54();
             virtual void Unk58();

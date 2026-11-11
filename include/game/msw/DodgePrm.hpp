@@ -90,6 +90,17 @@ namespace msw {
     extern float DODGE_PRM_S07_PACKUN_EXPLODE_SIZE_Y;
     extern float DODGE_PRM_S07_PACKUN_EXPLODE_SCALE_FCTR;
 
+    // Stage 09, the conveyor belt stage. Times are in seconds, speeds in
+    // world units per frame.
+    extern float DODGE_PRM_S09_CV_SPEED;
+    extern float DODGE_PRM_S09_CV_ACC_SPEED;
+    extern float DODGE_PRM_S09_CV_JUMP_ACC_FOLLOW;
+    extern float DODGE_PRM_S09_CV_JUMP_ACC_AGAINST;
+    extern float DODGE_PRM_S09_EV_INTERVAL;
+    extern float DODGE_PRM_S09_EV_TIME;
+    extern float DODGE_PRM_S09_CV_ACC_TIME;
+    extern float DODGE_PRM_S09_CV_PRE_ACC_TIME;
+
     // Stage 12, the pinball stage (CStageDodge12::GetPrmTbl and
     // CPinballManDodge).
     extern float DODGE_PRM_S12_BALL_SIZE;

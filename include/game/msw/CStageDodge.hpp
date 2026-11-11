@@ -14,6 +14,7 @@
 #include "game/msw/CStageDodge16.hpp"
 #include "game/msw/CStageDodge17.hpp"
 #include "game/msw/CStageDodgeDOD55.hpp"
+#include "game/msw/CStageDodgeDOD56.hpp"
 #include "game/msw/CStageManDodge.hpp"
 
 namespace msw {
@@ -64,14 +65,7 @@ namespace msw {
     // The DOD stages (55-57). Stage 55 has its own header,
     // game/msw/CStageDodgeDOD55.hpp.
 
-    class CStageDodgeDOD56 : public CStageManDodge {
-        public:
-            CStageDodgeDOD56(bcs::CTask *pParent);
-            virtual ~CStageDodgeDOD56();
-
-        private:
-            unsigned char m_Unk244[0x8C]; // size 0x2D0
-    };
+    // Stage 56 has its own header, game/msw/CStageDodgeDOD56.hpp.
 
     class CStageDodgeDOD57 : public CStageManDodge {
         public:

@@ -33,6 +33,16 @@ namespace msw {
     // guesses.
     class CStgGmk_Trolley_Act : public CStgGmkAct, public bcs::CFsmQueue<CStgGmk_Trolley_Act> {
         public:
+            // The states of the queue, in the order of the state hooks.
+            enum STATE {
+                STATE_DEFAULT,
+                STATE_STANDBY,
+                STATE_MOVE,
+                STATE_BREAK,
+                STATE_RESPAWN,
+                STATE_INACTIVE
+            };
+
             CStgGmk_Trolley_Act(CStgGmk *pParent);
             virtual ~CStgGmk_Trolley_Act();
 

@@ -14,4 +14,8 @@ void *operator new(unsigned long size, long nArg, long nArg2);
 // it, passing 0.
 void *operator new[](unsigned long size, long nArg);
 
+// (added for DOL game/bcs/CMiiMan.cpp) The array form of the three-argument
+// one (__nwa__FUlll); bcs::CMiiMan passes 0x101 (or 1) and 0x20 or -0x20.
+void *operator new[](unsigned long size, long nArg, long nArg2);
+
 #endif /* !BCS_NEW_HPP_ */

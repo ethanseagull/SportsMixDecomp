@@ -18,13 +18,18 @@ namespace msw {
     //
     // The order of the virtual functions follows __vt__Q23msw13CStageDodge15
     // (DodgeF). The modules emit weak copies of the functions with bodies
-    // here; the GetParam_* functions and NewCase a module class overrides
-    // have no DOL default with a name, so they are declared pure. Field
-    // names and the return types not visible in a body are guesses.
+    // here. The GetParam_* defaults that the sports' stage 15 classes all
+    // override are kept only where DodgeF's CStageDodgeDOD56 emits them;
+    // NewCase has no default and is declared pure. Field names and the
+    // return types not visible in a body are guesses.
     class CStage15Base : public CStageRotBase {
         public:
             CStage15Base();
             virtual ~CStage15Base();
+
+            // CStageRotBase's, declared again here (no new slot): the
+            // modules' thunks for it come before those of this class.
+            virtual const CStageMan *GetStageMan() const = 0;
 
             virtual bool IsRotReady_() const;
 
@@ -57,8 +62,8 @@ namespace msw {
 
             // Tuning, given by the sport's stage. Times are in frames.
             virtual long GetParam_CaseNum() const { return 3; }           // 0xC4
-            virtual float GetParam_CaseWidth() const = 0;                 // 0xC8
-            virtual float GetParam_CaseOffsetZ() const = 0;               // 0xCC
+            virtual float GetParam_CaseWidth() const { return 1.0f; }     // 0xC8
+            virtual float GetParam_CaseOffsetZ() const { return 1.0f; }   // 0xCC
             // BasketF emits this default (4.0f) weak: CStageBasket15 misspells
             // its override (GetParam_CaseSpacnigZ), so the base one is used.
             virtual float GetParam_CaseSpacingZ() const { return 4.0f; }  // 0xD0
@@ -70,14 +75,17 @@ namespace msw {
                 GetStageMan()->GetGroundRect(pLeft, pRight, pFront, pBack);
             }
             virtual long GetParam_CaseBreakDelayRange() const { return 10; } // 0xD8
-            virtual bcs::BCS_Color GetParam_FlashColor() const = 0;       // 0xDC
-            virtual float GetParam_FlashFrm() const = 0;                  // 0xE0
-            virtual float GetParam_FlashGain() const = 0;                 // 0xE4
-            virtual float GetParam_FlashDecay() const = 0;                // 0xE8
+            virtual bcs::BCS_Color GetParam_FlashColor() const            // 0xDC
+            {
+                return bcs::BCS_Color(0xFFFF0050);
+            }
+            virtual float GetParam_FlashFrm() const { return 80.0f; }     // 0xE0
+            virtual float GetParam_FlashGain() const { return 2.0f; }     // 0xE4
+            virtual float GetParam_FlashDecay() const { return 5.0f; }    // 0xE8
             virtual float GetParam_FlashNum() const { return 2.0f; }      // 0xEC
             virtual long GetParam_Effect(long type) const { return -1; }  // 0xF0
-            virtual float GetParam_RainyInterval() const = 0;             // 0xF4
-            virtual float GetParam_RainyTime() const = 0;                 // 0xF8
+            virtual float GetParam_RainyInterval() const { return 1200.0f; } // 0xF4
+            virtual float GetParam_RainyTime() const { return 1200.0f; }  // 0xF8
 
             // The cases.
             virtual CStgGmk_Case *NewCase() = 0;                          // 0xFC

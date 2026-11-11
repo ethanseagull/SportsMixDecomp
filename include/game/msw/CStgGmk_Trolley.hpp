@@ -19,6 +19,7 @@ namespace msw {
         public:
             CStgGmk_Trolley_Drv(CStgGmk *pParent);
             virtual ~CStgGmk_Trolley_Drv();
+            virtual void Main(float rate);
     };
 
     // (purpose guessed from the names) The trolley of stage 17, made by
@@ -50,7 +51,8 @@ namespace msw {
             virtual void SetRunDist(float dist) { m_fRunDist = dist; }
             virtual float GetRunDist() const { return m_fRunDist; }
             virtual void Respawn();
-            virtual bool IsActive() const;
+            // The actor's IsAlive (an int: no conversion to bool).
+            virtual int IsActive() const;
             virtual void Inactivate();
             // The position of the actor; zero without one.
             virtual bcs::FVEC3 GetPos() const
@@ -71,6 +73,9 @@ namespace msw {
             virtual float GetBodyWidth() const { return GetTrolleyAct()->GetBodyTotalWidth(); }
             virtual float GetBodyDepth() const { return GetTrolleyAct()->GetBodyTotalDepth(); }
 
+            // The DOL emits this one after NewDrv; the per-sport classes
+            // override it with their own actors.
+            virtual CStgAct *NewAct(long heap) { return new (heap) CStgGmk_Trolley_Act(this); }
             virtual CStgDrv *NewDrv(long heap) { return new (heap) CStgGmk_Trolley_Drv(this); }
 
         private:
@@ -79,8 +84,9 @@ namespace msw {
             {
                 return static_cast<const CStgGmk_Trolley_Act *>(GetAct());
             }
+            CStgGmk_Trolley_Act *GetTrolleyAct() { return static_cast<CStgGmk_Trolley_Act *>(GetAct()); }
 
-            unsigned long m_Unk68;   // 0x68
+            int m_Unk68;             // 0x68, the second argument of the constructor
             bcs::FVEC3 m_DefaultPos; // 0x6C
             float m_fDefaultRotY;    // 0x78
             float m_fRunDist;        // 0x7C

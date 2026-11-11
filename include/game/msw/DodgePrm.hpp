@@ -268,6 +268,11 @@ namespace msw {
     extern float DODGE_PRM_S17_HEYHO_C_DIST_MAX;
     extern float DODGE_PRM_S17_OUTER_DEPTH;
     extern float DODGE_PRM_S17_OUTER_FRONT;
+    extern float DODGE_PRM_S56_SHIP_CYCLE;
+    extern float DODGE_PRM_S56_SHIP_ROT_ANGLE;
+    extern float DODGE_PRM_S56_SHIP_STOP_TIME;
+    extern float DODGE_PRM_S56_SHIP_STOP_TIME_RND;
+    extern float DODGE_PRM_S56_CHR_FLOW_VEL;
 }
 
 #endif /* !MSW_DODGEPRM_HPP_ */

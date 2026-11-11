@@ -57,6 +57,10 @@ namespace nw4r {
             float _10, _11, _12, _13;
             float _20, _21, _22, _23;
         };
+
+        // (DOL) *pOut = *pM scaled by *pS. Added for the DOL's
+        // msw::CStgSrt::GetMtx.
+        MTX34 *MTX34Scale(MTX34 *pOut, const MTX34 *pM, const VEC3 *pS);
     }
 }
 

@@ -9,6 +9,7 @@ namespace bcs {
 
 namespace msw {
 
+    class CEffectCluster;
     class CStgMdl;
 
     // A fixed set of effect slots owned by a stage actor, the effect
@@ -41,7 +42,9 @@ namespace msw {
                                                          unsigned long node, const bcs::FVEC3 *pOfs, int, int, int,
                                                          unsigned long flag);
             virtual unsigned long Eff_GetHandle(long slot);
-            virtual bcs::CTask *Eff_GetObject(long slot);
+            // The effect of a slot (msw::CStgGmk_WaterPillar_Act::OnUpdate
+            // in the DOL calls CEffectCluster::SetAlpha on it).
+            virtual CEffectCluster *Eff_GetObject(long slot);
             virtual void Eff_Stop(long slot);
             virtual void Eff_Erase(long slot);
             virtual void Eff_StopAll();

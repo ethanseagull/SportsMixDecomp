@@ -1,6 +1,8 @@
 #ifndef BCS_CWORLDENV_HPP_
 #define BCS_CWORLDENV_HPP_
 
+#include "bcs/FVEC3.hpp"
+
 namespace bcs {
 
     // Only the members used so far. Both functions are static: their bodies
@@ -14,6 +16,15 @@ namespace bcs {
             enum ViewSplitType {
                 VIEW_SPLIT_1
             };
+
+            // (name guessed) The camera data of a view. Only the eye
+            // position is mapped (msw::CStgGmk_WaterPillar_Act::OnUpdate in
+            // the DOL fades the pillar's effects by the distance to it).
+            struct CameraData {
+                unsigned char m_Unk00[0x74];
+                FVEC3 m_Eye; // 0x74 (name guessed)
+            };
+            static CameraData *GetViewCameraData(long view);
 
             static void SetViewFovy(long view, float fovy);
             static float GetViewFovy(long view);

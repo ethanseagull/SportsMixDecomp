@@ -40,6 +40,13 @@ namespace msw {
             virtual float GetFrame(ANM_IDX idx) const;                         // 0x40
             virtual void VFunc44();                                            // 0x44
             virtual float GetTotalFrame(ANM_IDX idx) const;                    // 0x48
+            virtual void VFunc4C();                                            // 0x4C
+            virtual void VFunc50();                                            // 0x50
+            virtual void VFunc54();                                            // 0x54
+            virtual void VFunc58();                                            // 0x58
+            // (name and meaning guessed) Whether the animation idx has
+            // ended; msw::CStgGmk_WaterPillar_Act (DOL) passes 1 and -9.
+            virtual bool IsEnd(long idx) const;                                // 0x5C
     };
 }
 

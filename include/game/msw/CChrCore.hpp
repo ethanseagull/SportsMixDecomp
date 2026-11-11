@@ -790,6 +790,10 @@ namespace msw {
             const bcs::FVEC3 &GetTargetGoalPos() const;
             // The distance to rPos in the XZ plane.
             float GetDist_ToPosXZ(const bcs::FVEC3 &rPos) const;
+            // (name guessed; the DOL's fn_800E1E1C) The distance to rPos.
+            float GetDist_ToPos(const bcs::FVEC3 &rPos) const;
+            // (name guessed) See m_PrevPos.
+            const bcs::FVEC3 &GetPrevPos() const { return m_PrevPos; }
             // The yaw (radians) from the character towards pChr.
             float GetRotY_ToChr(const CChrCore *pChr) const;
             // Frame, motion id and play of animation slot nSlot (the
@@ -806,7 +810,12 @@ namespace msw {
             unsigned long m_Unk60;
             CChrDrv *m_pDriver[2];       // 0x64 (count guessed from the index's place)
             long m_nDriver;              // 0x6C, index of the driver in use, negative for none
-            unsigned char m_Unk70[0x90 - 0x70];
+            unsigned char m_Unk70[0x7C - 0x70];
+            // 0x7C (name guessed): the position of the previous frame;
+            // msw::CStgGmk_WaterPillar_Act::OnBodyPush (DOL) pushes the
+            // character back by its movement since.
+            bcs::FVEC3 m_PrevPos;
+            unsigned char m_Unk88[0x90 - 0x88];
             // 0x90 (name guessed): the character's model; IsDisable is true
             // while it is null. CChrManHockey::ArtsStart_ fades it out.
             bcs::CMdlObj *m_pMdl;

@@ -152,7 +152,8 @@ namespace msw {
             virtual int CanbeVolleyReceiveVariation() const;                    // 0x118
             virtual int CanbeVolleySpikeVariation() const;                      // 0x11C
             virtual int CanebVolleyTouch(long) const;                           // 0x120 (spelt so in the symbol)
-            virtual int CanbeVolleyPickup(long) const;                          // 0x124
+            // Inline: a weak copy (li r3, 0) is in five modules.
+            virtual int CanbeVolleyPickup(long) const { return 0; }             // 0x124
             virtual long GetVolleyReceiveReaction(unsigned long, long) const;   // 0x128
             virtual long GetVolleyBlockReaction(unsigned long, long) const;     // 0x12C
             virtual long GetVolleyReceiveStaggerFrame(long) const;              // 0x130
@@ -416,6 +417,7 @@ namespace msw {
             int IsDestroyOnReset() const { return m_nFlag & FLAG_DESTROY_ON_RESET; }
             // (name guessed)
             const bcs::FVEC3 &GetPos() const { return m_Pos; }
+            const bcs::FVEC3 &GetTargetPos() const { return m_vTargetPos; }
             // (name guessed)
             const bcs::FVEC3 &GetOffsetPos() const { return m_OffsetPos; }
             // (name guessed)
@@ -505,7 +507,11 @@ namespace msw {
             // 0xB4, a second scene object, deleted with the model (name
             // guessed; CBallBasketFruit sets bits 0xC0 of its flags)
             bcs::CScnObj *m_pSubObj;
-            unsigned char m_UnkB8[0x40];   // 0xB8
+            unsigned char m_UnkB8[0x28];   // 0xB8
+            // 0xE0 (name guessed): where the ball will come down; VolleyF's
+            // CBallTargetMarker puts its marker there.
+            bcs::FVEC3 m_vTargetPos;
+            unsigned char m_UnkEC[0xC];    // 0xEC
             bcs::FVEC3 m_Pos;              // 0xF8
             unsigned char m_Unk104[0x0C];  // 0x104
             bcs::FVEC3 m_Velocity;         // 0x110 (name guessed)

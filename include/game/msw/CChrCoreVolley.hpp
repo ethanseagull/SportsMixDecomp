@@ -322,6 +322,11 @@ namespace msw {
             void CheckBallTargetRangeSpike_(bcs::FVEC3 &rPos, long nCourt);
             void SetTargetMarkerEnable_(long nType, const bcs::FVEC3 &rPos, long);
             void SetTargetMarkerDisable_();
+            // (added for game/volley/CChrCoreVolleyMoogle.cpp; DOL, meanings
+            // guessed) The yaw towards the spike's target (and the target in
+            // *pPos when not null); the yaw a block faces for pBall.
+            float GetSpikeTargetPosRot_(bcs::FVEC3 *pPos) const;
+            float GetBlockLookDir_(const CBall *pBall) const;
             void Util_ArtsShootBall_(CBall *pBall, const bcs::FVEC3 &rPos);
 
         protected:
@@ -381,7 +386,7 @@ namespace msw {
         float m_fUnk20;              // 0x20
         CC_DATA::CHR_PARAM::MOVE_PARAM m_MoveParam; // 0x24
         CChrCore::DIR_MOVE m_DirMove; // 0x34
-        unsigned char m_Unk44[0x54 - 0x44];
+        CChrCore::ROT_LERP1 m_RotLerp; // 0x44, the turn (RotateYParam_)
         long m_nTrickStep;           // 0x54
         float m_fTrickFrame;         // 0x58, the length of the trick
         float m_fTrickCount;         // 0x5C, frames of it done
@@ -395,6 +400,7 @@ namespace msw {
         float m_fAdsorbFrameMax;     // 0x78
         bcs::FVEC3 m_AdsorbOfs;      // 0x7C
         bcs::FVEC3 m_ShootPos;       // 0x88, where the arts shot goes
+        long m_nAfterStep;           // 0x94, the step after the shot (SubStateAirTrickIsEndArtsShotAfter_)
     };
 
     // (field names guessed)
@@ -419,6 +425,12 @@ namespace msw {
         public:
             CChrCoreVolleyMario();
             virtual ~CChrCoreVolleyMario();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
+            virtual void Reset_();                                     // 0x384
+            virtual void SubStateSpikeDoSmashSpikeEffect_(STATE_WORK_SPIKE *); // 0xCEC
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual void SubStateAirTrickPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xD38
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
     };
 
     // Luigi's air trick pulls the ball in with his vacuum
@@ -462,6 +474,17 @@ namespace msw {
         public:
             CChrCoreVolleyPeach();
             virtual ~CChrCoreVolleyPeach();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
+            virtual void SubStateSpikeDoSmashSpikeEffect_(STATE_WORK_SPIKE *); // 0xCEC
+            virtual void SubStateAirTrickSetTrickMoveParam_(STATE_WORK_AIR_TRICK *, long); // 0xD00
+            virtual float SubStateAirTrickGetTrickRotFrame_(STATE_WORK_AIR_TRICK *); // 0xD0C
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+
+        protected:
+            // Throws the heart bombs (CC_CMN::PEACH::CcHeartBomb).
+            void SubStateAirTrickFireHeartBomb_();
     };
 
     class CChrCoreVolleyDaisy : public CChrCoreVolley {
@@ -584,6 +607,16 @@ namespace msw {
         public:
             CChrCoreVolleyMoogle();
             virtual ~CChrCoreVolleyMoogle();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
+            virtual void SubStateBlockJumpDoJumpMove_(STATE_WORK_BLOCK_JUMP *); // 0xCC0
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual void SubStateAirTrickStartBallAdsorb_(STATE_WORK_AIR_TRICK *, CBall *); // 0xD24
+            virtual float SubStateAirTrickGetBallAdsorbFrame_(STATE_WORK_AIR_TRICK *); // 0xD28
+            virtual void SubStateAirTrickTrgBallAdsorbEnd_(STATE_WORK_AIR_TRICK *); // 0xD30
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+            virtual void SubStateAirTrickShootBall_(STATE_WORK_AIR_TRICK *); // 0xD4C
+            virtual int SubStateAirTrickIsEndArtsShotAfter_(STATE_WORK_AIR_TRICK *); // 0xD54
     };
 
     class CChrCoreVolleySaboten : public CChrCoreVolley {
@@ -713,12 +746,22 @@ namespace msw {
         public:
             CChrCoreVolleyMii00();
             virtual ~CChrCoreVolleyMii00();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual void SubStateAirTrickPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xD38
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
     };
 
     class CChrCoreVolleyMii01 : public CChrCoreVolley {
         public:
             CChrCoreVolleyMii01();
             virtual ~CChrCoreVolleyMii01();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual void SubStateAirTrickPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xD38
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
     };
 }
 

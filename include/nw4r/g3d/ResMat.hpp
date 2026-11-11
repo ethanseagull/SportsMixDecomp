@@ -2,6 +2,8 @@
 #define NW4R_G3D_RESMAT_HPP_
 
 #include "nw4r/db/Panic.hpp"
+#include "revolution/gx/GXEnum.h"
+#include "revolution/gx/GXStruct.h"
 
 namespace nw4r {
     namespace g3d {
@@ -43,6 +45,21 @@ namespace nw4r {
         // Handle to the texture objects of a material: one pointer.
         // Minimal declaration written for this project (MenuF
         // msw::SelectMenu::CCourtChr::GetResTexObj returns one in r3).
+        // A material's TEV colour block (added for VolleyF
+        // game/volley/CBallTargetMarker.cpp; only what it uses).
+        class ResMatTevColor {
+            public:
+                explicit ResMatTevColor(void *pData = 0) : m_pData(pData) {}
+
+                bool IsValid() const { return m_pData != 0; }
+
+                // DOL.
+                void GXGetTevColor(_GXTevRegID reg, _GXColor *pColor) const;
+
+            private:
+                void *m_pData; // 0x00
+        };
+
         class ResTexObj {
             public:
                 explicit ResTexObj(void *pData = 0) : m_pData(pData) {}

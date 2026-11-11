@@ -585,12 +585,13 @@ game/dodge/CGameDodgeDodgeOrDie.cpp:
 	.ctors      start:0x000000C4 end:0x000000C8
 	.rodata     start:0x00008880 end:0x00008988
 	.data       start:0x00024588 end:0x00024CA0
-	.bss        start:0x00000CD0 end:0x00000D50
+	.bss        start:0x00000CD0 end:0x00000D40
 
 game/dodge/CHaikyuManDD.cpp:
 	.text       start:0x000CA078 end:0x000CA4D8
 	.ctors      start:0x000000C8 end:0x000000CC
 	.rodata     start:0x00008988 end:0x00008998
+	.bss        start:0x00000D40 end:0x00000D50
 
 game/dodge/CCockpitDodgePause.cpp:
 	.text       start:0x000CA4D8 end:0x000CABC4

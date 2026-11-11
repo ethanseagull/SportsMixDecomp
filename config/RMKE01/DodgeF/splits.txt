@@ -545,13 +545,13 @@ game/dodge/CStageDodge16.cpp:
 	.bss        start:0x00000C58 end:0x00000C60
 
 game/dodge/unit_BB47C.cpp:
-	.text       start:0x000BB47C end:0x000BD7F8
+	.text       start:0x000BB47C end:0x000BD7CC
 	.ctors      start:0x000000C0 end:0x000000C4
 	.rodata     start:0x00007A78 end:0x00007AB8
 	.bss        start:0x00000C60 end:0x00000C68
 
-game/dodge/unit_BD7F8.cpp:
-	.text       start:0x000BD7F8 end:0x000BE1FC
+game/dodge/CComDrvDodgeGameOffRun.cpp:
+	.text       start:0x000BD7CC end:0x000BE1FC
 	.rodata     start:0x00007AB8 end:0x00007AE8
 
 game/dodge/unit_BE1FC.cpp:

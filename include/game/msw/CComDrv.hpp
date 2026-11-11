@@ -111,6 +111,27 @@ namespace msw {
             unsigned long CalcWorkBaseMaxSize() const;
             // DOL. The work of the action running now (zero for none).
             void *GetCurrentActWork();
+            // (DOL; added for DodgeF game/dodge/CComDrvDodgeGameOffRun.cpp,
+            // return types guessed) Starts action nAct and returns its work
+            // (the caller fills in the action's arguments); ends the action
+            // running now, nResult telling how it went (0 done, 1 given up,
+            // as the callers use it).
+            void *EntryAct(long nAct);
+            void ReturnAct(long nResult);
+            // (DOL) Start the common actions: wait nFrame frames, turn to
+            // the target or to rPos.
+            void ActCallWait(float fFrame);
+            void ActCallLookTarget();
+            void ActCallLookTarget(const bcs::FVEC3 &rPos);
+            // (DOL) Random numbers between fMin and fMax (two generators;
+            // which is which is not known).
+            float RandRange(float fMin, float fMax) const;
+            float RandRangeF(float fMin, float fMax) const;
+            // (DOL) Not zero when a pad driver exists for this character
+            // (meaning guessed from the name); the computer level as a
+            // float, as CComMan::GetDatF takes it.
+            int IsExistPadDrv() const;
+            float GetComLvF() const;
 
             // DOL. The common actions, one per frame while running; derived
             // drivers list them in their action tables (g_ActFuncMap).
@@ -127,13 +148,23 @@ namespace msw {
             void ActLoopJumpBlock();
 
         protected:
-            unsigned char m_Unk04[0x60];
+            // 0x04 (name guessed): flags. The off-ball runs of DodgeF's
+            // CComDrvDodgeGame clear bit 2 and m_fUnk54 before turning to
+            // their target.
+            unsigned long m_nFlag;
+            unsigned char m_Unk08[0x54 - 0x08];
+            float m_fUnk54; // 0x54
+            unsigned char m_Unk58[0x64 - 0x58];
             // 0x64 (name guessed): the driven character's team. HockeyF
             // passes it to CComManHockey::GetKeeperCore, VolleyF compares it
             // with GameWork::GetUserTeam.
             long m_nMyTeam;
             CChrCore *m_pChr; // 0x68, the character driven
-            unsigned char m_Unk6C[0x110 - 0x6C];
+            unsigned char m_Unk6C[0x70 - 0x6C];
+            // 0x70 (name guessed): the character's position, which DodgeF
+            // hands to CComMan::GetZtoCenter.
+            bcs::FVEC3 m_ChrPos;
+            unsigned char m_Unk7C[0x110 - 0x7C];
             // 0x110 (name guessed): the ball the driver follows, set by
             // UpdateInfo; VolleyF hands it to CComManVolley.
             CBall *m_pBall;

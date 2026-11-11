@@ -26,8 +26,41 @@ namespace msw {
             CComDrvDodgeGame();
             virtual ~CComDrvDodgeGame();
 
+            // Added for game/dodge/CComDrvDodgeGameOffRun.cpp. The off-ball
+            // runs (to a charge spot, forward, back, sideways, to a
+            // character) and waiting for a catch in the infield.
+            void ActCallOffRunCharge();
+            void ActLoopOffRunCharge();
+            void ActCallOffRunFront();
+            void ActLoopOffRunFront();
+            void ActCallOffRunBack();
+            void ActLoopOffRunBack();
+            void ActCallOffRunSide();
+            void ActLoopOffRunSide();
+            void ActCallOffRunChr(long nChr, float fSpeed);
+            void ActLoopOffRunChr();
+            void ActCallInFieldCatchWait();
+            void ActLoopInFieldCatchWait();
+
+            // Defined in game/dodge/CComDrvDodgeGame.cpp and the files after
+            // it (return types guessed).
+            void ActCallBaseWait(float fFrame);
+            void SetOffStanceMode(long nMode);
+            void GetOffRunChargePos(bcs::FVEC3 &rPos) const;
+            void GetOffRunFrontPos(bcs::FVEC3 &rPos) const;
+            void GetOffRunBackPos(bcs::FVEC3 &rPos) const;
+            void GetOffRunSidePos(bcs::FVEC3 &rPos) const;
+            // What to do once at the charge spot: 0 shoot when charged,
+            // 2..8 pass or shoot (see ActLoopOffRunCharge).
+            long LotActChargeAfterOffRunCharge() const;
+            CChrCore *GetPassTargetChrCore() const;
+
         protected:
-            unsigned char m_Unk170[0x264 - 0x170];
+            unsigned char m_Unk170[0x204 - 0x170];
+            // 0x204 (name guessed): set before a shot at the end of the
+            // charge run, 1 for the follow-up actions 2 and 6.
+            long m_nShootKind;
+            unsigned char m_Unk208[0x264 - 0x208];
     };
 
     // INCOMPLETE: the computer driver of the party game "dodge or die"

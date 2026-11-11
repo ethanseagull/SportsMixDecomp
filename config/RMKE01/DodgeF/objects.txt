@@ -63,3 +63,4 @@ Equivalent game/dodge/CChrCoreDodgeMoogle.cpp
 Matching game/dodge/CChrCoreDodgeDonkey.cpp
 Matching game/dodge/CChrCoreDodgeDiddy.cpp
 Equivalent game/dodge/CCameraDodgeBD.cpp
+Matching game/dodge/CComDrvDodgeGameOffRun.cpp

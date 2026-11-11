@@ -53,6 +53,12 @@ namespace msw {
             // the world.
             static bcs::FVEC3 GetChrPos(const CChrCore *pChr);
             static bcs::FVEC3 GetChrWorldPos(const CChrCore *pChr);
+            // (DOL; added for DodgeF game/dodge/CComDrvDodgeGameOffRun.cpp)
+            // The same for character number nChr; and the distance of rPos
+            // from the court's centre line along Z (meaning guessed from the
+            // name).
+            static bcs::FVEC3 GetChrPos(long nChr);
+            static float GetZtoCenter(const bcs::FVEC3 &rPos);
 
             // (DOL) Walks the items that have been thrown.
             static CItem *ThrowItem_GetFirst();

@@ -15,7 +15,6 @@ main CallbackBodyPush___Q23msw14CItemToadstoolFPQ23msw13CCollBodyUnitPQ23msw13CC
 main ChangeRes__Q23bcs10CAnmTexPatFQ34nw4r3g3d6ResMdlQ34nw4r3g3d12ResAnmTexPat near 94.6 resource pointer reloaded once where the original reuses it while setting up the frame (TexPat Create also loads res in another order); calls, constants, offsets identical
 main ChangeRes__Q23bcs10CAnmTexSrtFQ34nw4r3g3d6ResMdlQ34nw4r3g3d12ResAnmTexSrt near 94.6 resource pointer reloaded once where the original reuses it while setting up the frame (TexPat Create also loads res in another order); calls, constants, offsets identical
 main CheckBound___Q23msw9CDropCoinFv unverified 94.5 star-piece bit tested via cntlzw/srwi bool in the original, rlwinm. in ours; original reloads m_nFlag after the reflection, ours keeps it in a register (no store between); rest register choice
-main CheckWaterCap__Q23msw23CStgGmk_WaterPillar_ActCFv near 99.3 register allocation only (loop counter/result)
 main ChgDemoDisp__Q23msw9CItemBallFi near 98.2 98.2%: diff.py class schedule; the null test and flag set/clear blocks are laid out in the opposite branch order with registers renumbered; same loads, stores and calls
 main ClearChrIconImpl__Q23msw17CCockpitChrIcon2DFlil near 98.9 98.9%: r23-r26 assigned in a different order; register-only
 main ClearChrIcon__Q23msw17CCockpitChrIcon2DFlil near 99.1 99.1%: register choice only

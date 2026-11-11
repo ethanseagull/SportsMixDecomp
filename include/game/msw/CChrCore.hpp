@@ -827,7 +827,9 @@ namespace msw {
             virtual int MethdRebirth();                                // 0xB74
             virtual void ArtsOptAliveCheck_();                         // 0xB78
             virtual void *GetArtsOpt() const;                         // 0xB7C
-            virtual void *GetArtsOptMdl() const;                      // 0xB80
+            // The model of the character's extra object (DodgeF's Waluigi
+            // attaches balls to its nodes), or null.
+            virtual bcs::CMdlObj *GetArtsOptMdl() const;              // 0xB80
             virtual void ArtsOptCreate(int, int, int);                 // 0xB84
             virtual void ArtsOptDestroy();                             // 0xB88
             virtual void ArtsOptSetDisp(int);                          // 0xB8C
@@ -1100,6 +1102,9 @@ namespace msw {
             // (BasketF's CChrCoreBasketSaboten tests the result: 4 for one
             // of its messages.)
             long DriverSendMessage(CChrDrv::MSG_ID id, long, long, unsigned long, unsigned long);
+            // (DOL; added for BasketF CChrCoreBasketWaluigi, return type
+            // guessed) Sends message id to every character's driver.
+            void Util_SendMsgToAll(CChrDrv::MSG_ID id, long, long, unsigned long, unsigned long);
 
             // Added for BossF game/boss/CChrCoreBoss<Name>.cpp (all in the
             // DOL; return types and parameter meanings guessed).
@@ -1144,6 +1149,10 @@ namespace msw {
             void SE_PlayMove(long nSlot, long nSe, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
             // Stops the effect in slot nSlot.
             void Eff_Stop(long nSlot);
+            // (DOL; added for DodgeF CChrCoreDodgeWaluigi) The play speed of
+            // the motion in slot nSlot, and of the effect in slot nSlot.
+            float AnimGetSpeed(unsigned long nSlot) const;
+            void Eff_SetSpeed(long nSlot, float fSpeed);
             // The length in frames of motion nMotId.
             float AnimGetResFrameNum(long nMotId) const;
             // Added for BasketF game/basket/CChrCoreBasketKinopio.cpp (DOL;
@@ -1181,13 +1190,20 @@ namespace msw {
             // Util_SetJumpParam, by fStep frames; sound nSe in sound slot
             // nSlot, and stops that slot (fading over fFrames).
             void SetPos(const bcs::FVEC3 &rPos);
-            void Util_DoJumpMove(float fStep);
+            // (added for BasketF CChrCoreBasketKuroma) Moves the character by rMove.
+            void AddPos(const bcs::FVEC3 &rMove);
+            // (BasketF CChrCoreBasketKuroma reads the result: not zero once
+            // the jump has ended, meaning guessed.)
+            int Util_DoJumpMove(float fStep);
             void SE_Play(long nSlot, long nSe, unsigned long, long, float, float, float);
             void SE_Stop(long nSlot, float fFrames);
             void AnimSetSpeed(unsigned long nSlot, float fSpeed);
             // Plays sound nSe at pPos (null: at the character). (BasketF had
             // it returning void; VolleyF's return type kept.)
             unsigned long PlaySePos(long nSe, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
+            // The same at rPos (PlaySePos__Q23msw8CChrCoreFlRCQ23bcs5FVEC3Ullfff,
+            // BasketF CChrCoreBasketKuroma; return type guessed).
+            unsigned long PlaySePos(long nSe, const bcs::FVEC3 &rPos, unsigned long, long, float, float, float);
             void SetMoveMotStep_(long nStep);
             // The body collision's push settings.
             void SetCollBodyPushPower_(long nPower);

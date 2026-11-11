@@ -27,6 +27,9 @@ namespace bcs {
     // In the DOL. As BCS_RandRange(float, float), from the generator of
     // BCS_OrgRandMax.
     float BCS_OrgRandRange(float min, float max);
+    // In the DOL (added for MenuF game/menu/CWiFiGame.cpp). Seeds the
+    // generator.
+    void BCS_SRand(unsigned long nSeed);
 }
 
 #endif /* !BCS_BCS_RAND_HPP_ */

@@ -42,3 +42,5 @@ Matching game/hockey/CStageHockey03.cpp
 Equivalent game/hockey/CStageHockey12.cpp
 Equivalent game/hockey/CStageHockey15.cpp
 Matching game/hockey/CStageManHockey.cpp
+Equivalent game/hockey/CStageHockey17.cpp
+Equivalent game/hockey/CStageHockey09.cpp

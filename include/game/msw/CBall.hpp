@@ -16,6 +16,7 @@ namespace nw4r {
 
 namespace bcs {
     class CMdlObj;
+    class CScnGroup;
     class CScnObj;
     struct BCS_Color;
 }
@@ -427,6 +428,24 @@ namespace msw {
             // DOL. The ball's offset from the hand of the character holding
             // it (VolleyF's CChrCoreVolleyLuigi lifts it while it comes in).
             void SetAttachPos(const bcs::FVEC3 &rOfs, int);
+            // (DOL; added for DodgeF CChrCoreDodgeWaluigi, return types
+            // guessed) Puts the ball at rPos at once; attaches it to node
+            // nNode of pMdl; frees it again.
+            void WarpPos(const bcs::FVEC3 &rPos);
+            void Attach(bcs::CMdlObj *pMdl, unsigned long nNode, float, unsigned long, unsigned long, bcs::CScnGroup *);
+            void Detach();
+            // (DOL; added for BasketF CChrCoreBasketWaluigi) With 1 the
+            // ball is destroyed when the game resets (FLAG_DESTROY_ON_RESET).
+            void SetDestroyOnReset(int bOn);
+            // (names guessed) The ball's turn.
+            const Quaternion &GetRot() const { return m_Rot; }
+            void SetRot(const Quaternion &rRot)
+            {
+                m_Rot.x = rRot.x;
+                m_Rot.y = rRot.y;
+                m_Rot.z = rRot.z;
+                m_Rot.w = rRot.w;
+            }
             // DOL (name from the symbol). Stops the trail effect behind the
             // ball (VolleyF's CChrCoreVolleySiroma, once it is pulled in).
             void StopTailEffect();

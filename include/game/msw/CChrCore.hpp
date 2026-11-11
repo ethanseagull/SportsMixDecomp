@@ -696,6 +696,9 @@ namespace msw {
             long GetChrId() const { return (unsigned char)m_nChrId; }
             unsigned long GetStatusFlag() const { return m_nStatusFlag; }
             unsigned long GetDispFlag() const { return m_nDispFlag; }
+            // (name guessed) The flag word at 0xEC; BasketF's
+            // CChrDrvPadBasket ignores the pad while bit 25 or 27 is set.
+            unsigned long GetFlagEC() const { return m_UnkEC; }
             // (name guessed) BossF's CEventDemoBoss::CreateDemo sets bit 2
             // (no drawing) on each character the demo replaces by a model.
             void OnDispFlag(unsigned long nBit) { m_nDispFlag |= nBit; }
@@ -782,6 +785,9 @@ namespace msw {
             // The position, as a reference to the member (GetPos(FVEC3 &)
             // copies it).
             const bcs::FVEC3 &GetPos();
+            // The const overload, also in the DOL (BasketF's
+            // CChrDrvPadBasket::MethdTrickMove calls it).
+            const bcs::FVEC3 &GetPos() const;
             float GetRotY() const;
             // The goal the character's team attacks, as a point.
             const bcs::FVEC3 &GetTargetGoalPos() const;
@@ -799,11 +805,35 @@ namespace msw {
             bcs::CMdlObj *GetMdl() const { return m_pMdl; }
             long GetComLevel() const { return m_nComLevel; }
 
+            // Added for BasketF game/basket/CChrDrvPadBasket.cpp (all in the
+            // DOL; return types guessed). Not zero while the character is in
+            // the named step of its play.
+            int IsStepCatch() const;
+            int IsStepPassCatch() const;
+            int IsStepTrickMove() const;
+            int IsStepAirTrick() const;
+            int IsStepNormalShoot() const;
+            int IsStepCatchDunk() const;
+            // Not zero when the character holds a stocked item.
+            int IsHaveStockItem() const;
+            // The yaw (radians) towards the goal the character attacks.
+            float GetRotY_ToGoal() const;
+            // Plays sound nId at pPos (null: at the character).
+            void PlaySePos(long nId, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
+
         protected:
             unsigned long m_Unk60;
             CChrDrv *m_pDriver[2];       // 0x64 (count guessed from the index's place)
             long m_nDriver;              // 0x6C, index of the driver in use, negative for none
-            unsigned char m_Unk70[0x90 - 0x70];
+        public:
+            // 0x70, 0x74 (names guessed; added for BasketF
+            // game/basket/CChrDrvPadBasket.cpp, which reads both directly):
+            // the yaw in radians that the pad's stick direction is added to,
+            // and the frames one update advances (the driver's timers add it).
+            float m_fRotY;
+            float m_fFrameStep;
+        protected:
+            unsigned char m_Unk78[0x90 - 0x78];
             // 0x90 (name guessed): the character's model; IsDisable is true
             // while it is null. CChrManHockey::ArtsStart_ fades it out.
             bcs::CMdlObj *m_pMdl;
@@ -838,6 +868,13 @@ namespace msw {
             // The rest, up to the size of 0x574: the DOL constructor writes
             // up to 0x570 and CChrCoreBoss's own members start at 0x574.
             unsigned char m_Unk234[0x574 - 0x234];
+    };
+
+    // The work the MethdRDB slots take. Only the first word is known: BasketF's
+    // CChrDrvPadBasket clears it on the stack before the call (one word of
+    // stack, so the size may be just that). (member name guessed)
+    struct CChrCore::INPUT_WORK {
+        long m_nUnk00;
     };
 }
 

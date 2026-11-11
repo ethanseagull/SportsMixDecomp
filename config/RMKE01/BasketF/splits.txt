@@ -278,14 +278,10 @@ game/basket/CChrCoreBasketYoshi.cpp:
 	.bss        start:0x00000228 end:0x00000260
 
 game/basket/CChrDrvPadBasket.cpp:
-	.text       start:0x0007451C end:0x00078C44
-	.rodata     start:0x00001CB8 end:0x00001D38
-	.data       start:0x000146F8 end:0x00014878
-
-game/basket/CChrDrvPad.cpp:
-	.text       start:0x00078C44 end:0x00078C68
+	.text       start:0x0007451C end:0x00078C68
 	.ctors      start:0x00000090 end:0x00000094
-	.rodata     start:0x00001D38 end:0x00001D40
+	.rodata     start:0x00001CB8 end:0x00001D40
+	.data       start:0x000146F8 end:0x00014878
 	.bss        start:0x00000260 end:0x00000310
 
 game/basket/CChrManBasket.cpp:

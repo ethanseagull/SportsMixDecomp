@@ -69,6 +69,12 @@ namespace msw {
             void SetBodyDisableAll();
             // (added for VolleyF's CC09_VOLLEY::CcKinopioBoundMushroom)
             void SetHitEffectFrameAll(float fFrame);
+            // (added for BasketF's CC09_BASKET::CcKinopioReceiver; meanings
+            // guessed from the names)
+            void SetRadiusAll(float fRadius);
+            void SetIndexAll(long nIndex);
+            void SetNoHitFlagAll(unsigned long flag);
+            void SetMyNoHitFlagAll(unsigned long flag);
 
             // Added for BasketF game/basket/CNpcGhostBasketBase.cpp (all in
             // the DOL; argument meanings guessed). The ghost makes four

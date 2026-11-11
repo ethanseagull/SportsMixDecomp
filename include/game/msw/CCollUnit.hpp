@@ -19,7 +19,14 @@ namespace msw {
             // (names guessed) Inline in msw::CStgGmk_WaterPillar_Act.
             void SetShape(unsigned long shape) { m_nShape = shape; }
             void SetSize(const bcs::FVEC3 &rSize) { m_Size = rSize; }
+            void SetSize(float x, float y, float z)
+            {
+                m_Size.x = x;
+                m_Size.y = y;
+                m_Size.z = z;
+            }
             void OnFlag10(unsigned short flag) { m_nFlag10 |= flag; }
+            void OffFlag10(unsigned short flag) { m_nFlag10 &= ~flag; }
             void OnFlagA0(unsigned long flag) { m_nFlagA0 |= flag; }
 
         private:

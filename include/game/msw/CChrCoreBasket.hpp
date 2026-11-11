@@ -74,6 +74,12 @@ namespace msw {
             float GetAtkVanishPower(long nKind) const;
             long GetAirTrickMotID(AIR_TIRCK_FLOW flow, int bAlt);
 
+            // (added for game/basket/CChrCoreBasketKuroma.cpp; values not
+            // known) Kinds of effect for Util_SetEffect_; the Black Mage's
+            // smash cut sets kind 0 when he lands.
+            enum SET_EFFECT_TYPE_BASKET {};
+            void Util_SetEffect_(SET_EFFECT_TYPE_BASKET type);
+
             // Added for game/basket/CChrCoreBasketSaboten.cpp (BasketF;
             // return types and meanings guessed from the names and calls).
             // The effect slots of the special move (values not known).
@@ -464,7 +470,9 @@ namespace msw {
         CChrCore::ROT_LERP1 m_RotLerp; // 0x7C, the turn (SubStateArtsShotCalcRotParam_)
         long m_nTrickStep;             // 0x8C, the step of the trick (Toad: 0 to 2)
         float m_fTrickFrame;           // 0x90, the frames of the current step
-        unsigned char m_Unk94[0xA0 - 0x94];
+        // 0x94: the frames of the current step so far (the Black Mage).
+        float m_fTrickCount;
+        unsigned char m_Unk98[0xA0 - 0x98];
         long m_nUnkA0;                 // 0xA0, (meaning not known) below 1 the shot motion stops twice
         unsigned char m_UnkA4[0x4];
         long m_nUnkA8;                 // 0xA8, Luigi sets 40
@@ -597,6 +605,42 @@ namespace msw {
             // 0x5E8 (name guessed): where the cactus puts the others back
             // during his dunk (GetSpSetBackPos).
             bcs::FVEC3 m_SetBackPos;
+    };
+
+    // The Black Mage: his smash cut is a step back while a spell
+    // (CC17_BASKET::CcKuromaSmash) flies to the ball holder of the other
+    // team; his special shot puts a lock-on mark on every character of the
+    // other team and strikes them all a while later.
+    class CChrCoreBasketKuroma : public CChrCoreBasket {
+        public:
+            CChrCoreBasketKuroma();
+            virtual ~CChrCoreBasketKuroma();
+            virtual void Reset_();                                     // 0x384
+            virtual void CtorStateJumpUpper();                         // 0x434
+            virtual void DtorStateJumpUpper();                         // 0x43C
+            virtual void CtorStateLayUp();                             // 0x56C
+            virtual void DtorStateLayUp();                             // 0x574
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void CtorStateSmashCut();                          // 0x608
+            virtual void LoopStateSmashCut();                          // 0x60C
+            virtual void CallbackMotTrg_(const bcs::CAnmObjMotBase::MOT_TRG *pTrg); // 0xC44
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
+            virtual void SubStateArtsShotPlayLandMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xD14
+            virtual void SubStateArtsShotPlayLandEffect_(STATE_WORK_AIR_TRICK *pWork); // 0xD18
+
+        protected:
+            // (inline helper, name guessed) Deletes the strike task, if any.
+            void ReleaseMagic_();
+
+            // (names guessed)
+            unsigned long m_hMagic;    // 0x5E8, task id of the strike (CcKuromaMagicMgr), 0 for none
+            unsigned long m_hSmash;    // 0x5EC, task id of the smash cut's spell, 0 for none
+            unsigned long m_hEffect;   // 0x5F0, the effect on the option model's item node
     };
 }
 

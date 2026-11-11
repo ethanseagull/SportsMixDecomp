@@ -30,6 +30,7 @@ namespace msw {
 
             CChrCoreDodge();
             virtual ~CChrCoreDodge();
+            virtual long GetQueueWorkSize() const;                   // 0x10
             virtual void Reset_();                                     // 0x384
             virtual void CtorStateAirTrick();                          // 0x584
             virtual void LoopStateAirTrick();                          // 0x588
@@ -103,9 +104,9 @@ namespace msw {
             virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
             virtual void SubStateArtsShotReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD9C
             virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA0
-            virtual void UnkDA4();
+            virtual void SubStateArtsShotStartArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA4
             virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
-            virtual void UnkDAC();
+            virtual int SubStateArtsShotIsEndArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xDAC
             virtual void SubStateArtsShotShootBall_(STATE_WORK_AIR_TRICK_CMN *); // 0xDB0
             virtual void UnkDB4();
             virtual void UnkDB8();
@@ -217,7 +218,8 @@ namespace msw {
             virtual void UnkF54();
             virtual void UnkF58();
             virtual void UnkF5C();
-            virtual void UnkF60();
+            // (return type guessed) Throws pBall at rPos.
+            virtual void Util_ShootBall(CBall *pBall, const bcs::FVEC3 &rPos, long, long); // 0xF60
             virtual void UnkF64();
             virtual void UnkF68();
             virtual void UnkF6C();
@@ -255,7 +257,7 @@ namespace msw {
             virtual void UnkFEC();
             virtual void UnkFF0();
             virtual void UnkFF4();
-            virtual void UnkFF8();
+            virtual long GetMotIDType_SideStep() const; // 0xFF8
             virtual void UnkFFC();
             virtual void Unk1000();
             virtual void Unk1004();
@@ -363,6 +365,9 @@ namespace msw {
             virtual void Unk119C();
 
         protected:
+            // (return type guessed) Takes the ball for the arts shot.
+            int SubStateArtsShotDoGetBallShotTrg_(STATE_WORK_AIR_TRICK_CMN *pWork);
+
             unsigned char m_Unk574[0x930 - 0x574];
     };
 
@@ -398,6 +403,7 @@ namespace msw {
         unsigned char m_Unk11C[0x4];
         float m_fAnimSpeed;            // 0x120
         long m_nArtsLevel;             // 0x124
+        float m_fShotFrame;            // 0x128, the frame of the shot motion the ball leaves at (name guessed)
     };
 
     // Size 0x968.
@@ -482,13 +488,37 @@ namespace msw {
     };
 
     // Size 0x940.
+    // His special shot splits the ball into four (the "divide balls"),
+    // attached to the nodes of his extra model and thrown one by one.
     class CChrCoreDodgeWaluigi : public CChrCoreDodge {
         public:
+            enum { DIVIDE_BALL_NUM = 4 };
+
             CChrCoreDodgeWaluigi();
             virtual ~CChrCoreDodgeWaluigi();
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual float SubStateArtsShotGetTrickMotFrame_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD6C
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD80
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA0
+            virtual void SubStateArtsShotStartArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA4
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
+            virtual int SubStateArtsShotIsEndArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xDAC
+            virtual void SubStateArtsShotPlayLandMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDC0
+            virtual long GetMotIDType_SideStep() const;                // 0xFF8
+            virtual void DivideBallCreate();                           // 0x11A0
+            virtual CBall *DivideBallGet(long nIndex);                 // 0x11A4
+            virtual const CBall *DivideBallGet(long nIndex) const;     // 0x11A8
+            virtual void DivideBallDelete(long nIndex);                // 0x11AC
+            virtual void ReleaseBallDelete(long nIndex);               // 0x11B0
+            virtual void DivideBallDeleteAll();                        // 0x11B4
 
         protected:
-            unsigned char m_Unk930[0x940 - 0x930];
+            // The three copies made by CBallMan::AddBall and, last, the
+            // original ball.
+            CBall *m_apDivideBall[DIVIDE_BALL_NUM]; // 0x930
     };
 
     // Size 0x930.

@@ -14,6 +14,7 @@ namespace msw {
     // to 11. Size of CItemManDodge.
     class CItemManDodgeDD : public CItemManDodge {
         public:
+            CItemManDodgeDD(bcs::CTask *pParent) : CItemManDodge(pParent) {}
             virtual ~CItemManDodgeDD() {}
 
             virtual CItem *CreateThrowItem(long kind, const bcs::FVEC3 &pos);

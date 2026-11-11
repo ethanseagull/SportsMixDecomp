@@ -111,6 +111,12 @@ namespace msw {
                                  const bcs::FVEC3 &rOfs);
             // Blocks pChr's air trick dunk when it runs into this one.
             void CheckAirTrickDunkBlock_(CChrCore *pChr);
+            // Added for game/basket/CChrCoreBasketMoogle.cpp (names from the
+            // module's imports; parameter meanings guessed). The body
+            // collision's push settings, and the shot of the ball with sound
+            // slot nSlot.
+            void SetCollBodyPushType_(CChrCore::BODY_COLL_SIZE_SET_TYPE type, float);
+            void Util_ShootBall(long nSlot, float, long, long);
 
             // Overrides of CChrCore's virtuals, in vtable order (the slots of
             // __vt__Q23msw14CChrCoreBasket, read from BasketF, that name
@@ -472,9 +478,9 @@ namespace msw {
         unsigned char m_Unk44[0x48 - 0x44];
         float m_fJumpUnk;              // 0x48, passed on to CChrCore::m_fJumpUnk224
         bcs::FVEC3 m_TargetPos;        // 0x4C, where the trick moves to
-        float m_fUnk58;
+        float m_fUnk58;                // 0x58, the frame of the move by m_MoveParam (the Moogle)
         CC_DATA::CHR_PARAM::MOVE_PARAM m_MoveParam; // 0x5C
-        unsigned char m_Unk6C[0x7C - 0x6C];
+        CChrCore::DIR_MOVE m_DirMove;  // 0x6C
         CChrCore::ROT_LERP1 m_RotLerp; // 0x7C, the turn (SubStateArtsShotCalcRotParam_)
         long m_nTrickStep;             // 0x8C, the step of the trick (Toad: 0 to 2)
         float m_fTrickFrame;           // 0x90, the frames of the current step
@@ -491,6 +497,8 @@ namespace msw {
         // 0xB0: the yaw the shot aims at; negative for straight at the goal
         // (Luigi's target marker sets it).
         float m_fTargetRotY;
+        // 0xB4 (name guessed): the step after the shot (the Moogle: 0 to 2).
+        long m_nAfterStep;
     };
 
     // (field names guessed; only what the character units read is mapped)
@@ -687,6 +695,25 @@ namespace msw {
 
             // 0x5E8: task ids of the three copies, 0 once thrown or gone.
             unsigned long m_ahArtsBall[ARTS_BALL_NUM];
+    };
+
+    // The Moogle: his jump to the upper floor keeps a small body
+    // collision, and his special shot has its own motions after the ball
+    // has left. (size not known; no members of its own found)
+    class CChrCoreBasketMoogle : public CChrCoreBasket {
+        public:
+            CChrCoreBasketMoogle();
+            virtual ~CChrCoreBasketMoogle();
+            virtual void CtorStateJumpUpper();                         // 0x434
+            virtual void LoopStateJumpUpper();                         // 0x438
+            virtual void DtorStateJumpUpper();                         // 0x43C
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
+            virtual void SubStateArtsShotShootBall_(STATE_WORK_AIR_TRICK *pWork); // 0xD04
+            virtual int SubStateArtsShotIsEndArtsShotAfter_(STATE_WORK_AIR_TRICK *pWork); // 0xD0C
     };
 }
 

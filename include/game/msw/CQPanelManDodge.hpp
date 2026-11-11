@@ -1,6 +1,7 @@
 #ifndef MSW_CQPANELMANDODGE_HPP_
 #define MSW_CQPANELMANDODGE_HPP_
 
+#include "game/msw/CQPanel.hpp"
 #include "game/msw/CQPanelMan.hpp"
 
 namespace msw {
@@ -19,10 +20,28 @@ namespace msw {
             virtual CQPanel *CreatePanel_(const bcs::FVEC3 &, const bcs::FVEC3 &, PANEL_POP_INFO *, long);
             virtual void SetupItemPopRate_();
             virtual long ChoiceItemPopRateTblIdx_(long) const;
-            virtual const void *GetPopupGroupData_(long) const;
+            virtual const POPUP_GROUP *GetPopupGroupData_(long) const;
 
         private:
             unsigned char m_Unk9A8[0xC24 - 0x9A8]; // 0x9A8
+    };
+
+    // A panel of the dodgeball game, size 0xF4 (nothing added). Built only
+    // by CQPanelManDodge::CreatePanel_, which inlines the constructor.
+    class CQPanelDodge : public CQPanel {
+        public:
+            CQPanelDodge(CQPanelMan *pMan, bcs::CScnGroup *pGroup, const bcs::FVEC3 &rPos,
+                         const bcs::FVEC3 &rRot, CQPanelMan::PANEL_POP_INFO *pInfo, long nIdx)
+                : CQPanel(pMan, pGroup, rPos, rRot, pInfo, nIdx)
+            {
+            }
+            virtual ~CQPanelDodge();
+            virtual float GetSize() const;
+            virtual long DoAccess(const bcs::FVEC3 &rPos, long nChr, unsigned long nFlag, long &rItem,
+                                  CItem **ppItem);
+            virtual float GetLifeTime() const;
+            virtual float GetFirstPopupWaitTime() const;
+            virtual float GetNextPopupWaitTime() const;
     };
 
     // The "?" panels of the dodgeball party game ("Dodge or Die"). Same size

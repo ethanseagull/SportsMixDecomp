@@ -92,8 +92,9 @@ namespace bcs {
             virtual void ResetLightSelector();                                              // 0x114
 
             // Builds the model from mdl. (meaning of the last two arguments
-            // not known; msw::CTournamentChip passes 0 and 1)
-            void Create(nw4r::g3d::ResMdl mdl, unsigned long, long);
+            // not known; msw::CTournamentChip passes 0 and 1) Returns 0 on
+            // failure (bcs::CMdlShadow::Create tests it with cmpwi).
+            int Create(nw4r::g3d::ResMdl mdl, unsigned long, long);
             // Sets the depth test of every material. (parameter names
             // guessed from GXSetZMode)
             void MatSetZModeAll(unsigned char bCompare, _GXCompare func, unsigned char bUpdate);

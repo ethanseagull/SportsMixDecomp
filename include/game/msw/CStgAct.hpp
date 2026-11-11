@@ -28,7 +28,7 @@ namespace msw {
     // from Init to SE_GetDefaultFunc, which overrides CStgSeSlot's and so
     // gets a slot of its own at the place it is declared (after the
     // Regist* functions). The modules emit weak copies of GetParent,
-    // GetSrt, SetMdl, SetFrameRateF, GetFrameRateF, OnAttackHit, OnCalcSum
+    // GetSrt, SetMdl, SetFrameRateF, GetFrameRateF, OnInit, OnAttackHit, OnCalcSum
     // and SE_GetDefaultFunc, so these are inline in the original; bodies are
     // given where the copy shows them plainly. Return types not visible in a
     // body are guesses.
@@ -51,7 +51,7 @@ namespace msw {
             virtual float GetFrameRateF() const { return m_fFrameRate; }
             virtual void UpdateMdlMtx();
             virtual void EventNotify(long event, void *pArg);
-            virtual void OnInit();
+            virtual void OnInit() {}
             virtual void OnUpdate(float rate);
             virtual void OnAttackHit(const CCollAtkUnit *pAtk, const CCollBodyUnit *pBody, const bcs::FVEC3 &rPos,
                                      unsigned long flag)

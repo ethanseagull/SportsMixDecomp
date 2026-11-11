@@ -2,6 +2,7 @@
 #define BCS_DWC_CDWCFRIEND_HPP_
 
 #include "dwc.h"
+#include "string.h"
 
 namespace bcs {
     namespace dwc {
@@ -24,7 +25,7 @@ namespace bcs {
                     unsigned char m_bMatchChallenge; // 0x07, asks for a friend match
                     long m_Unk08;                   // 0x08
                     long m_Unk0C;                   // 0x0C
-                    long m_Unk10;                   // 0x10
+                    unsigned long m_Unk10;          // 0x10, smallest wins in SearchFriendMatchChallengerAll
                     long m_Unk14;                   // 0x14
                     long m_Unk18;                   // 0x18
                     unsigned char m_Unk1C[8];       // 0x1C
@@ -44,6 +45,35 @@ namespace bcs {
 
                 // m_Data starts with this word when it holds the game's data.
                 enum { STORAGE_MAGIC = 0x75C9E14A };
+
+                // fn_800B4AC4 and fn_800B4B6C (unnamed). CDwcFriendList
+                // allocates 32 of them with new[] (vtable 0x8046A848).
+                CDwcFriend();
+                virtual ~CDwcFriend();
+
+                // (inline; name guessed) Empties the entry.
+                void Clear()
+                {
+                    memset(GetFriendData(), 0, sizeof(DWCstAccFriendData));
+                    m_nFriendCode = 0;
+                    m_nIndex = -1;
+                    m_Unk1C = -1;
+                    m_nFlags = 0;
+                    memset(m_Name, 0, sizeof(m_Name));
+                    m_nOnlineStat = 0;
+                    memset(&m_Status, 0, sizeof(m_Status));
+                    memset(m_Data, 0, sizeof(m_Data));
+                    m_nDataSize = 0;
+                    m_Unk5E4 = 0;
+                }
+
+                // (inline; name guessed) Makes the entry friend nCode, in slot
+                // nIndex with number nNo. 0 when the code gives no valid
+                // friend data.
+                int Entry(unsigned long long nCode, long nIndex, long nNo);
+                // (inline; name guessed) m_Status.m_Unk10 of a friend asking
+                // for a match, else 0.
+                unsigned long GetMatchChallengeKey() const;
 
                 // Whether this friend has asked for a match (reads the byte
                 // at 0x47).
@@ -101,7 +131,7 @@ namespace bcs {
                     return m_nOnlineStat;
                 }
 
-                unsigned char m_Unk00[0x4];  // 0x00
+                // 0x00: vptr
                 // 0x04 to 0x17. (added for MenuF game/menu/CFriendCode.cpp;
                 // names guessed) Copied into the save data's friend roster.
                 long m_Unk04;                // 0x04
@@ -129,7 +159,8 @@ namespace bcs {
                 // bytes are kept in the save data.
                 unsigned char m_Data[0x500];
                 long m_nDataSize;            // 0x5E0, bytes in m_Data
-                long m_Unk5E4;               // 0x5E4
+                // 0x5E4. The sort key CDwcFriendList::Sort computes.
+                long m_Unk5E4;
         };
     }
 }

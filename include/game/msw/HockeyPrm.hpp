@@ -162,6 +162,23 @@ namespace msw {
     extern long HOCKEY_PRM_S04_PYLON_LOC_PAT_TYPE;
     extern long HOCKEY_PRM_S04_PYLON_LOC_PAT_NO;
 
+    // Stage 11.
+    extern float HOCKEY_PRM_S11_COURT_INIT_WAIT;
+    extern float HOCKEY_PRM_S11_COURT_WAIT;
+    extern float HOCKEY_PRM_S11_COURT_ANGLE;
+    extern float HOCKEY_PRM_S11_COURT_ROT_SPEED;
+    extern float HOCKEY_PRM_S11_COURT_ROT_ACC;
+    extern float HOCKEY_PRM_S11_CHR_FLOW_SPEED;
+    extern float HOCKEY_PRM_S11_BUBBLE_SCALE;
+    extern float HOCKEY_PRM_S11_BUBBLE_PRESTART;
+    extern float HOCKEY_PRM_S11_BUBBLE_JUMP_HEIGHT;
+    extern float HOCKEY_PRM_S11_BUBBLE_JUMP_FRM;
+    extern float HOCKEY_PRM_S11_BUBBLE_JUMP_DOF_FRM;
+    extern float HOCKEY_PRM_S11_BUBBLE_DOWN_FRM;
+    extern float HOCKEY_PRM_S11_BUBBLE_INIT_INTERVAL;
+    extern float HOCKEY_PRM_S11_BUBBLE_INTERVAL;
+    extern float HOCKEY_PRM_S11_BUBBLE_ZONE_Z;
+
     // Stage 12.
     extern float HOCKEY_PRM_S12_BALL_KICK_POW;
     extern float HOCKEY_PRM_S12_BALL_GUIDE_DECAY;

@@ -114,7 +114,11 @@ namespace msw {
                 // panel gives no coin; with bit 0 of 0x1C8 set the panels pop up
                 // again without waiting. (meanings and names guessed)
                 unsigned long m_nUnk40;    // 0x40
-                unsigned char m_Unk44[0x160 - 0x44];
+                unsigned char m_Unk44[0x152 - 0x44];
+                // 0x152 (name guessed): how many goals the court has
+                // (HockeyF CCollManHockey loops over them).
+                unsigned char m_nGoalNum;
+                unsigned char m_Unk153[0x160 - 0x153];
                 // 0x160: counted by tournament mission 0x3E (HockeyF) and
                 // passed to the coin mission (0x4E) check after a basket
                 // (BasketF); meaning not known.
@@ -305,6 +309,9 @@ namespace msw {
             // (meaning guessed) The task new objects of the running game are
             // created under (BossF's bomb explosions).
             static bcs::CTask *GetTempParent();
+            // (DOL; meaning of the argument not known, CDropCoinMan passes
+            // 1) Non-zero while the game is in its main loop state.
+            static int IsMainLoopState(int);
 
             // The three below are static in the DOL: their bodies index
             // g_GameWork with the argument. (return types guessed)
@@ -356,9 +363,23 @@ namespace msw {
             // The goal team nTeam attacks: the byte at g_GameWork + 0x88 +
             // nTeam, read unsigned. (return type guessed)
             static long GetTargetGoalIdx(long nTeam);
+            // (DOL, static) The position of goal nGoal. (return type guessed)
+            static const bcs::FVEC3 &GetGoalPos(long nGoal);
+            // DOL, static. The direction goal nGoal faces (out of the goal,
+            // in the ground plane; HockeyF CCollManHockey).
+            static const bcs::FVEC3 &GetGoalDir(long nGoal);
+            // (DOL, static; argument meanings guessed from BasketF's
+            // CBallBasketFruit::TrgGoalIn_: shooter, team, shoot type, ball
+            // kind, a float, the goal's position)
+            static void TrgGoalIn(long nChr, long nTeam, long nShootType, long nKind, float, const bcs::FVEC3 &rGoalPos);
             // Whether player nPlayer's character is the hockey keeper (bit 1
             // of the byte at g_GameWork + 0x58 + nPlayer). (return type guessed)
             static int IsCharEx_HockeyKeeper(long nPlayer);
+            // (name guessed; the DOL's fn_8018C300, after SetPadDefaultType)
+            // The byte at g_GameWork + 0x198 + nPad, read signed. The
+            // cockpit's special-shot input prompt reads 1 as a nunchaku, 0 as
+            // a remote alone and -1 as "ask CMenuPad".
+            static long GetPadDefaultType(long nPad);
 
             // Not zero when team nTeam may still take an item. (DOL)
             static int CanbeTeamItemPush(long nTeam);
@@ -373,6 +394,8 @@ namespace msw {
             static void StartSlowEffect(float, float, float, float);
             static void StopSlowEffect();
             static int IsNowSlowEffect();
+            // DOL, static. Not zero while an arts (special move) event plays (guess).
+            static int IsArtsEventMode();
             // (fn_8017D558, unnamed in the DOL) IsNowBonusTime_ on the
             // running game, zero without one.
             static int IsNowBonusTime();

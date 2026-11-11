@@ -2,7 +2,6 @@
 #   <Matching|Equivalent|NonMatching> <source path under src/> [pch=<name>]
 # Read by configure.py. Set a status with tools/decomp/mark.py; add a unit by
 # adding a line (port_unit.py and autopilot.py do it themselves).
-Matching game/msw/cockpit/CSPGaugeInputDisp.cpp
 Matching game/msw/CDataWork.cpp
 Matching game/msw/CGameAccInput.cpp
 Matching game/msw/LayoutTask.cpp
@@ -13,13 +12,12 @@ Matching game/msw/CStageNet.cpp
 Matching game/msw/CStage01Base.cpp
 Matching game/msw/CStgDrv.cpp
 Matching game/bcs/G2D/CTexMap.cpp
-Matching game/msw/CDropCoin.cpp
+NonMatching game/msw/CDropCoinMan.cpp
 NonMatching game/msw/CGameSpeedCtrl.cpp
 Matching game/msw/menu/CStateSave.cpp
 Matching game/msw/CCockpitResultTime.cpp
 Matching game/msw/CEffectTableList.cpp
-NonMatching game/msw/CEffectCoinGetBase.cpp
-NonMatching game/msw/menu/CDispTaskLink.cpp
+Equivalent game/msw/menu/CDispTaskLink.cpp
 NonMatching game/msw/CArrowSignalBase.cpp
 Matching game/msw/CStgGmk_WaterPillar_Drv.cpp
 NonMatching game/msw/CStage17Base/CTurnTable.cpp
@@ -27,9 +25,9 @@ Matching game/msw/CCockpitPartMove.cpp
 Matching game/msw/CMenuLinkList.cpp
 Matching game/msw/CStgGmkAct.cpp
 Matching game/bcs/CWifiPadBase.cpp
-NonMatching game/msw/CGameBGM.cpp
+NonMatching game/msw/CGameSnd.cpp
 NonMatching game/bcs/CGDLObj.cpp
-NonMatching game/msw/cockpit/CSPGauge.cpp
+NonMatching game/msw/cockpit/CMissionCount.cpp
 Matching game/msw/CEvDemoRes/_CHR_INFO.cpp
 NonMatching game/msw/CItemShellCmn.cpp
 Matching game/msw/vm/CVMCpu.cpp

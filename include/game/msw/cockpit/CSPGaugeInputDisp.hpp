@@ -2,24 +2,36 @@
 #define MSW_COCKPIT_CSPGAUGEINPUTDISP_HPP_
 
 namespace msw {
+
+    class CMenuPaneAccessor;
+
     namespace cockpit {
 
-        // The input prompt shown on the special-shot gauge. Only the eight
-        // bytes its three functions touch are known; field names follow
-        // SetParam's argument order.
+        // The input prompt shown on the special-shot gauge: which buttons to
+        // press, for a remote held alone or with a nunchaku. Lives in the
+        // DOL (game/msw/cockpit/CMissionCount.cpp). Size 0xC, vptr at 0x08
+        // (its vtable and inline destructor are emitted by the modules).
+        // Field names follow SetParam's argument order and SetDispAnim.
         class CSPGaugeInputDisp {
             public:
                 void Initialize();
                 void Finalize();
-                void SetParam(unsigned char kind, unsigned short frame0, unsigned char alpha,
-                              unsigned short frame1, unsigned short frame2);
+                void SetParam(unsigned char nTeam, unsigned short nPane, unsigned char nAnim,
+                              unsigned short nNunchakuPane, unsigned short nRemotePane);
+                // Shows the prompt for the pad of team nTeam's player (when
+                // bDisp is set and a pad drives him), else hides it.
+                void SetDispAnim(CMenuPaneAccessor *pAccessor, int bDisp);
 
             private:
-                unsigned short m_Frame0; // 0x00
-                unsigned short m_Frame1; // 0x02
-                unsigned short m_Frame2; // 0x04
-                unsigned char m_Kind;    // 0x06
-                unsigned char m_Alpha;   // 0x07
+                unsigned short m_nPane;         // 0x00, the prompt
+                unsigned short m_nNunchakuPane; // 0x02, shown with a nunchaku
+                unsigned short m_nRemotePane;   // 0x04, shown for a remote alone
+                unsigned char m_nTeam;          // 0x06, passed to CGame::GetTeamColorIdx
+                unsigned char m_nAnim;          // 0x07, played on m_nPane; 0xFF after Initialize
+
+            public:
+                // vptr at 0x08: declared after the data.
+                virtual ~CSPGaugeInputDisp() {}
         };
     }
 }

@@ -23,3 +23,7 @@ Equivalent game/volley/CCockpitVolleyPause.cpp
 Equivalent game/volley/CStageVolley13.cpp
 Equivalent game/volley/CCockpitVolleyCoin.cpp
 Equivalent game/volley/CCockpitVolleyPauseResult.cpp
+Matching game/volley/CComDrvVolley.cpp
+Matching game/volley/CStageVolley01.cpp
+Equivalent game/volley/CCockpitChrIcon2DVolley.cpp
+Matching game/volley/unit_CA990.cpp

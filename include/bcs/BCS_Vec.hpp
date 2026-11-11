@@ -20,6 +20,20 @@ namespace bcs {
     // In the DOL.
     void BCS_Vec_RotY(FVEC3 &rOut, const FVEC3 &rIn, float rotY);
 
+    // (argument names and meaning guessed) The foot of the perpendicular
+    // from rPos to the line through rLinePos along rLineDir, in rOut; not
+    // zero when there is one. In the DOL.
+    int BCS_GetPosToLineCross(FVEC3 &rOut, const FVEC3 &rPos, const FVEC3 &rLinePos, const FVEC3 &rLineDir);
+
+    // (argument names and meaning guessed) The crossing point (*pX, *pZ)
+    // of the segments (x0, z0)-(x1, z1) and (x2, z2)-(x3, z3) in the XZ
+    // plane; not zero when they cross. In the DOL.
+    int BCS_GetSegLineToSegLineCross(float *pX, float *pZ, float x0, float z0, float x1, float z1, float x2,
+                                     float z2, float x3, float z3);
+
+    // (argument names guessed) The same with length 1. In the DOL.
+    void BCS_VecOneZ_RotY(FVEC3 &rOut, float rotY);
+
     // The three routines below are inline in the modules and written in
     // paired-single assembly in the original (x and y as a pair, z alone; the
     // compiler does not produce these instructions from float code). They are
@@ -177,6 +191,30 @@ namespace bcs {
             psq_l x, 0(p), 1, 0
             ps_madd work, x, x, yz
             ps_sum0 work, work, yz, yz
+        }
+        return work;
+    }
+
+    // (name guessed) The dot product of two vectors. Paired-single assembly
+    // in the original like FVEC3LenSq (y and z as a pair, x alone); most
+    // likely NW4R's VEC3Dot. Written from what msw::CDropCoin's bounce
+    // (game/msw/CDropCoinMan.cpp) shows after inlining.
+    inline float FVEC3Dot(register const FVEC3 *p1, register const FVEC3 *p2)
+    {
+        register float yz1;
+        register float yz2;
+        register float x1;
+        register float x2;
+        register float work;
+
+        asm {
+            psq_l yz1, 4(p1), 0, 0
+            psq_l yz2, 4(p2), 0, 0
+            ps_mul yz1, yz1, yz2
+            psq_l x1, 0(p1), 1, 0
+            psq_l x2, 0(p2), 1, 0
+            ps_madd x2, x1, x2, yz1
+            ps_sum0 work, x2, yz1, yz1
         }
         return work;
     }

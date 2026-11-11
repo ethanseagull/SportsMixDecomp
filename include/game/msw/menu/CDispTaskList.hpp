@@ -18,6 +18,13 @@ namespace msw {
             public:
                 CDispTaskLink();
 
+                // (names guessed; no symbols) Inline in the modules: BasketF's
+                // CCockpitBasketHarapeko fills a new task through them before
+                // CDispTaskList::PushBack.
+                void SetKind(unsigned long nKind) { m_nKind = nKind; }
+                void SetPane(long nPane) { m_Unk18 = nPane; }
+                void SetPos(const bcs::FVEC3 &rPos) { m_Pos = rPos; }
+
             private:
                 // Ids are handed out from 1 and never 0. (name guessed)
                 static unsigned long s_nNextId;
@@ -28,11 +35,11 @@ namespace msw {
                 // SelectMenu sign and caption tasks keep a pane index in
                 // m_Unk18 and their step in m_Unk1C.
                 nw4r::ut::Link m_Link;  // 0x00
-                unsigned long m_nKind;  // 0x08
+                unsigned long m_nKind;  // 0x08, what CDispTaskList::FindNextKindObj looks for
                 unsigned long m_nId;    // 0x0C
                 long m_bEnd;            // 0x10
                 long m_nFrame;          // 0x14, counted by DispLoop
-                long m_Unk18;           // 0x18
+                long m_Unk18;           // 0x18, a pane index in the derived tasks seen so far
                 long m_Unk1C;           // 0x1C
                 bcs::FVEC3 m_Pos;       // 0x20
 
@@ -64,6 +71,7 @@ namespace msw {
                 void PushBack(CDispTaskLink *pLink);
                 void RemoveAll();
                 CDispTaskLink *FindNextKindObj(unsigned long nKind, CDispTaskLink *pPrev);
+                void RemoveObject(const CDispTaskLink *pLink);
         };
     }
 }

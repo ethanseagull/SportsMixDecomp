@@ -46,8 +46,8 @@ namespace msw {
             virtual void QPanelSetItemPopRate_(const CQPanelMan::ITEM_POP_SET_ARG *, long);
             virtual long QPanelGetPopupItemTypeNum_(long);
             virtual long QPanelGetSubstituteItem_(long);
-            virtual CDropCoin *CreateDropCoin_(const bcs::FVEC3 &, long);
-            virtual CDropCoin *CreateBuryCoin_(const bcs::FVEC3 &, const bcs::FVEC3 &, long);
+            virtual long CreateDropCoin_(const bcs::FVEC3 &, long); // returns the number of coins made
+            virtual long CreateBuryCoin_(const bcs::FVEC3 &, const bcs::FVEC3 &, long); // the number made
             virtual CDropCoin *CreateCoinSimple_();
             virtual void DropCoinPickup_(const bcs::FVEC3 &, float, float, void (*)(const CDropCoin *, void *),
                                          void *);

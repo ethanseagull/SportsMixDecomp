@@ -5,6 +5,7 @@
 #include "bcs/CUnivTask.hpp"
 #include "bcs/FVEC3.hpp"
 #include "revolution/gx/GXEnum.h"
+#include "revolution/mtx.h"
 
 namespace nw4r {
     namespace g3d {
@@ -15,6 +16,7 @@ namespace nw4r {
 
 namespace bcs {
     class CMdlObj;
+    class CScnObj;
     struct BCS_Color;
 }
 
@@ -267,9 +269,9 @@ namespace msw {
             virtual int IsOffensive() const;                                                        // 0x2EC
             virtual int CanbeCatch() const;                                                         // 0x2F0
             virtual void SetNoCatchCount(long);                                                     // 0x2F4
-            virtual long GetNoCatchCount() const;                                                   // 0x2F8
+            virtual float GetNoCatchCount() const;                                                  // 0x2F8 (float: CBallBasket's is an lfs)
             virtual float GetGoalInRate() const;                                                    // 0x2FC
-            virtual long GetDefCounter() const;                                                     // 0x300
+            virtual float GetDefCounter() const;                                                    // 0x300 (float: CBallBasket's is an lfs)
             virtual void SetShotChrIdx(long);                                                       // 0x304
             virtual long GetShotChrIdx() const;                                                     // 0x308
             virtual void SetPassChrIdx(long);                                                       // 0x30C
@@ -391,7 +393,7 @@ namespace msw {
             virtual void LoopStateGoal();                                                           // 0x4DC
             virtual void DtorStateGoal();                                                           // 0x4E0
             virtual void CallbackAttackHit_(const CCollAtkUnit *, const CCollBodyUnit *, const bcs::FVEC3 &, unsigned long);// 0x4E4
-            virtual void CallbackBodyDamage_(const CCollAtkUnit *, const bcs::FVEC3 &);             // 0x4E8
+            virtual long CallbackBodyDamage_(const CCollAtkUnit *, const bcs::FVEC3 &);             // 0x4E8 (long: the DOL's returns 2)
             virtual void CallbackBodyPush_(CCollBodyUnit *, CCollBodyUnit *, bcs::FVEC3 *);         // 0x4EC
             virtual void SetBound_(const bcs::FVEC3 &);                                             // 0x4F0
 
@@ -420,6 +422,12 @@ namespace msw {
             void SetBallNo(long nBallNo) { m_nBallNo = nBallNo; }
             // DOL.
             void SetPos(const bcs::FVEC3 *pPos);
+            // DOL. The model the ball is attached to, or null.
+            bcs::CScnObj *GetAttachMdlObj() const;
+            // (names guessed) Two more bits of m_nFlag that the basket and
+            // hockey ball markers read; what they stand for is not known.
+            int IsFlag4() const { return m_nFlag & 0x4; }
+            int IsFlag100000() const { return m_nFlag & 0x100000; }
             // (names guessed) msw::CItemBall attaches its model to the
             // ball's; msw::CItemBallShellWreck sends the wreck off along the
             // velocity.
@@ -428,20 +436,46 @@ namespace msw {
             // (fn_800C7660, name guessed) Calls UpdateDisp_; msw::CItemBall
             // calls it when the item shows or hides its demo display.
             void UpdateDisp();
+            // (DOL; return types guessed) Used by BasketF's
+            // msw::CBallBasketFruit.
+            void TrgItemEffect_(long);
+            void AdjustGravity_();
+            void SetAlphaRate(float fRate);
+            void SetCollPushRadius(float fRadius);
+            void SetCollBodyRadius(float fRadius);
+            void SetCollCatchRadius(float fRadius);
+            void SetScale(float fScale);
 
         protected:
             unsigned long m_nFlag;         // 0x94
             long m_nBallNo;                // 0x98, the ball's place in CBallMan's table
-            unsigned char m_Unk9C[0x14];   // 0x9C
+            unsigned char m_Unk9C[0x8];    // 0x9C
+            // (names guessed) Per-frame steps: the DOL sets both to the same
+            // value; CBallBasket counts its timers down by them and passes
+            // m_fMoveRate to FuncMove_.
+            float m_fFrameRate;            // 0xA4
+            float m_fMoveRate;             // 0xA8
+            unsigned char m_UnkAC[0x4];    // 0xAC
             bcs::CMdlObj *m_pMdlObj;       // 0xB0, the ball's model (name guessed)
-            unsigned char m_UnkB4[0x44];   // 0xB4
+            // 0xB4, a second scene object, deleted with the model (name
+            // guessed; CBallBasketFruit sets bits 0xC0 of its flags)
+            bcs::CScnObj *m_pSubObj;
+            unsigned char m_UnkB8[0x40];   // 0xB8
             bcs::FVEC3 m_Pos;              // 0xF8
             unsigned char m_Unk104[0x0C];  // 0x104
             bcs::FVEC3 m_Velocity;         // 0x110 (name guessed)
             unsigned char m_Unk11C[0x18];  // 0x11C
             // 0x134 (name guessed from CBall::ClearOffsetPos, which writes it)
             bcs::FVEC3 m_OffsetPos;
-            unsigned char m_Unk140[0x1D8]; // 0x140
+            Quaternion m_Rot;              // 0x140, the ball's turn (name guessed)
+            bcs::FVEC3 m_vRotAxis;         // 0x150 (name guessed)
+            unsigned char m_Unk15C[0x4];   // 0x15C
+            float m_fGravity;              // 0x160 (name guessed; passed to CBallBasket::FuncMove_)
+            unsigned char m_Unk164[0x5C];  // 0x164
+            long m_nShootType;             // 0x1C0, returned by GetDodgeShootType (name guessed)
+            unsigned char m_Unk1C4[0xC];   // 0x1C4
+            float m_fAlphaRate;            // 0x1D0 (name guessed; SetAlphaRate's value)
+            unsigned char m_Unk1D4[0x144]; // 0x1D4
     };
 }
 

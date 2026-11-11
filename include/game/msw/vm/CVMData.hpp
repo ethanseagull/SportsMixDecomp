@@ -11,6 +11,15 @@ namespace msw {
         // guessed)
         class CVMData {
             public:
+                // Inline: the TourF copies are weak functions.
+                CVMData() : m_Unk00(0), m_pUnk1C(0), m_Unk20(0) { Init(); }
+                ~CVMData() { Init(); }
+
+                // (return types guessed) Loads script file nFile, and binds
+                // data file nFile to the script loaded.
+                void Load(long nFile);
+                void BindData(long nFile);
+
                 // 0xC bytes: one entry of the function table at 0x14.
                 struct FUNCTION_TAG {
                     unsigned char m_Unk00[2];
@@ -39,6 +48,7 @@ namespace msw {
                 void *m_pUnk1C;           // 0x1C, freed with delete[] by Init
                 unsigned long m_Unk20;
                 long m_nUnk24;             // 0x24: FindFunctionTag hashes the name when it is above 0x10
+                unsigned long m_Unk28;     // 0x28 (size 0x2C: msw::CTournamentMan allocates an array of them)
         };
     }
 }

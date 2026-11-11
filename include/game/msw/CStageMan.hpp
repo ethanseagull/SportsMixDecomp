@@ -1,6 +1,7 @@
 #ifndef MSW_CSTAGEMAN_HPP_
 #define MSW_CSTAGEMAN_HPP_
 
+#include "bcs/CListNodeBase.hpp"
 #include "bcs/CPool.hpp"
 #include "bcs/CUnivTask.hpp"
 #include "bcs/FVEC3.hpp"
@@ -573,6 +574,29 @@ namespace msw {
             CStageMdl *(*m_pNewMdl)(CStageMan *, long, bcs::CRegex &); // 0x10
         };
     }
+}
+
+namespace msw {
+
+    // (layout guessed from the loops of CStageMan::SetDispByTag and HockeyF
+    // CStageHockey01::SwitchAudienceMdl_) A group of the stage's models, 0x28
+    // bytes: a list whose nodes carry a CStageMdl at 0x10.
+    class CStageMan::CMdlGroup {
+        public:
+            class CNode : public bcs::CListNodeBase {
+                public:
+                    CStageMdl *GetMdl() const { return m_pMdl; }
+
+                private:
+                    CStageMdl *m_pMdl; // 0x10
+            };
+
+            bcs::CListBase &GetList() { return m_List; }
+
+        private:
+            bcs::CListBase m_List;      // 0x00
+            unsigned char m_Unk20[0x8]; // 0x20
+    };
 }
 
 #endif /* !MSW_CSTAGEMAN_HPP_ */

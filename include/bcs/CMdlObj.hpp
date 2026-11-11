@@ -26,6 +26,8 @@ namespace bcs {
             };
 
             CMdlObj();
+            // (DOL) The model built from mdl at once, as Create does.
+            CMdlObj(nw4r::g3d::ResMdl mdl, unsigned long, long);
             virtual ~CMdlObj();
             // The overrides, named by the vtable of
             // msw::SelectMenu::CCourtBallMdlObj in MenuF. Return types guessed.

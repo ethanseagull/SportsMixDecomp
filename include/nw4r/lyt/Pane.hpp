@@ -7,6 +7,8 @@
 namespace nw4r {
     namespace lyt {
 
+        class Material;
+
         // Width and height of a pane.
         struct Size {
             float width;  // 0x00
@@ -20,7 +22,7 @@ namespace nw4r {
         //
         // Offsets are what the game's own code shows (msw::CRadarIcon2D in
         // the DOL and its classes in the modules): translation at 0x2C,
-        // scale at 0x44, size at 0x4C, global matrix at 0x84, alpha at 0xB8,
+        // rotation at 0x38, scale at 0x44, size at 0x4C, global matrix at 0x84, alpha at 0xB8,
         // flags at 0xBB, name at 0xBC; TextBox's members start at 0xD8.
         // Member and function names follow the public ogws decompilation's
         // description of nw4r::lyt::Pane (from memory, no code copied).
@@ -54,7 +56,9 @@ namespace nw4r {
                 virtual void Unk5C();
                 virtual void Unk60();
                 virtual void Unk64();
-                virtual void Unk68();
+                // 0x68 (VolleyF game/volley/CCockpitChrIcon2DVolley.cpp: a
+                // picture pane's material). Constness guessed.
+                virtual Material *GetMaterial() const;
                 virtual void Unk6C();
 
                 void SetSize(const Size &rSize) { mSize = rSize; }
@@ -72,11 +76,30 @@ namespace nw4r {
                 {
                     mFlag = (unsigned char)((mFlag & 0xFE) | (bVisible ? 1 : 0));
                 }
+                // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp (SetRotate
+                // also for VolleyF game/volley/CCockpitChrIcon2DVolley.cpp).
+                void SetRotate(const math::VEC3 &rRotate) { mRotate = rRotate; }
+                void SetScale(const math::VEC2 &rScale) { mScale = rScale; }
+                // Bit 2 of the flags (name from the ogws description).
+                void SetLocationAdjust(bool bAdjust)
+                {
+                    mFlag = (unsigned char)((mFlag & 0xFB) | (bAdjust ? 4 : 0));
+                }
+                // Added for game/msw/cockpit/CMissionCount.cpp (C3DCoin::AttachPane).
+                bool IsVisible() const { return mFlag & 1; }
+                // Bit 2 of the flags: the pane's position is adjusted to the
+                // screen's aspect ratio (C3DCoin::AttachPane scales x then).
+                bool IsLocationAdjust() const { return (mFlag & 4) != 0; }
+                const math::VEC3 &GetTranslate() const { return mTranslate; }
+                Pane *GetParent() const { return mpParent; }
 
             private:
-                unsigned char m_Unk04[0x28];
+                unsigned char m_Unk04[0x8];
+                Pane *mpParent;              // 0x0C, null at the root
+                unsigned char m_Unk10[0x1C];
                 math::VEC3 mTranslate;       // 0x2C
-                unsigned char m_Unk38[0x14];
+                math::VEC3 mRotate;          // 0x38
+                math::VEC2 mScale;           // 0x44
                 Size mSize;                  // 0x4C
                 unsigned char m_Unk54[0x30];
                 math::MTX34 mGlbMtx;         // 0x84

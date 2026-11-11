@@ -25,6 +25,9 @@ Equivalent game/basket/CCockpitBasketPause.cpp
 Equivalent game/basket/CStageBasket13.cpp
 Equivalent game/basket/CCockpitBasketPauseResult.cpp
 Equivalent game/basket/CCockpitBasketCoin.cpp
+Equivalent game/basket/CBallManBasket.cpp
+Matching game/basket/CComDrvBasket.cpp
+Equivalent game/basket/CBallMarkerBasket.cpp
 Matching game/basket/CHBData.cpp
 Matching game/basket/CCockpitBasketBonusTime.cpp
 Matching game/basket/CComManBasketHB.cpp
@@ -32,3 +35,7 @@ Matching game/basket/unit_DA0C8.cpp
 Matching game/basket/unit_DA2CC.cpp
 Equivalent game/basket/CStageBasketHungryBossPackun.cpp
 Matching game/basket/CStageBasketHungryBossPackun70.cpp
+NonMatching game/basket/CStageBasketHungryBossPackun71.cpp
+NonMatching game/basket/CStageBasketHungryBossPackun72.cpp
+NonMatching game/basket/CCockpitBasketHarapeko.cpp
+NonMatching game/basket/CBallBasketFruit.cpp

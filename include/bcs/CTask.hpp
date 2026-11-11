@@ -29,6 +29,9 @@ namespace bcs {
             // test the bit on every task they get from CTaskMan::GetTask.
             int IsDelete() const { return m_nFlag & 1; }
 
+            // (name guessed) The task given to the constructor.
+            CTask *GetParent() const { return m_pParent; }
+
             // (name guessed) Replaces the word at 0x08. The CTask constructor
             // leaves 0xFCFF there, bcs::CCamera's 0xFC00, and
             // msw::CTournamentCamera's stores 0xFC01.

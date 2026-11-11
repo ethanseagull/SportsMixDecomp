@@ -26,12 +26,23 @@ namespace msw {
             // Call CalcFrame after them.
             void SetUpFrame(float fUp) { m_fUp = fUp; }
             void SetDownFrame(float fDown) { m_fDown = fDown; }
+            // (name and meaning guessed) Two shape values of the jump that
+            // Stage33's airship routes set before CalcFrame (1 and 0.7 onto
+            // a ship, 0.1 and 100 off it).
+            void SetJumpParam(float f50, float f54)
+            {
+                m_fUnk50 = f50;
+                m_fUnk54 = f54;
+            }
 
         protected:
             unsigned char m_Unk34[0x8]; // 0x34
             float m_fUp;                // 0x3C
             float m_fDown;              // 0x40
-            unsigned char m_Unk44[0x1C]; // 0x44
+            unsigned char m_Unk44[0xC]; // 0x44
+            float m_fUnk50;             // 0x50
+            float m_fUnk54;             // 0x54
+            unsigned char m_Unk58[0x8]; // 0x58
     }; // size 0x60
 }
 

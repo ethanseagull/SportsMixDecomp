@@ -19,6 +19,10 @@ namespace msw {
             // Makes the boss Packun nIdx at rPos (the Hungry Boss Packun
             // stages call it for the boss that carries goal 0).
             CNpcBossPackun *CreateBossPackun_(const bcs::FVEC3 &rPos, long nIdx);
+
+            // The instance as this class (guessed inline: the callers call
+            // CChrMan::GetInstance and use the result directly).
+            static CChrManBasket *GetInstance() { return static_cast<CChrManBasket *>(CChrMan::GetInstance()); }
     };
 }
 

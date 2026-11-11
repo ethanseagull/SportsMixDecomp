@@ -74,6 +74,20 @@ namespace msw {
             void GameMode_LoopStep2();
             void GameMode_LoopStep100();
             void GameMode_LoopStep101();
+            // (added for game/menu/CTournamentLoad.cpp) The other steps of
+            // the game mode screen (SelectMenu::CMode) and of the window
+            // that offers to continue a saved tournament
+            // (SelectMenu::CTournamentLoad).
+            void GameMode_In();
+            void GameMode_Loop();
+            void GameMode_LoopStep0();
+            void GameMode_LoopStep30();
+            void GameMode_Out();
+            void GameMode_TournamentCheckConnectPad();
+            void GameMode_TournamentBackCheck();
+            // Defined in another MenuF file (return type guessed). The
+            // option kind of the rules of the current game.
+            long RuleSel_GetOptionKindId();
             // The steps of the "how to play" screen (SelectMenu::CHowTo).
             void HowTo_In();
             void HowTo_Loop();
@@ -141,6 +155,61 @@ namespace msw {
             void FriendVS_Out();
             void CancelVsFriend();
             void FriendVSWait_SendSetStep(long nStep);
+
+            // Added for MenuF game/menu/unit_4BB48.cpp (the game's file name
+            // is SelectMenuWiFiWait.cpp; return types guessed where the
+            // callers drop the result). The steps of the Wi-Fi match-making
+            // screen (anybody match), and what they call.
+            void WifiWait_In();
+            void WifiWait_Loop();
+            void WifiWait_Out();
+            // Puts the player's rating in the current game kind (the mean
+            // of the four for none) into m_MySingleData.
+            void WifiWait_SetGameSkill();
+            // Settles the game kind and the stage from both players' data.
+            void WifiWait_GameModeStage();
+            void WifiWait_SelectStage();
+            // 1 when both players have sent the same stage; otherwise picks
+            // one of the two, sends it and returns 0.
+            long WifiWait_StageCheck();
+            // 1 when every player has sent step nStep or a later one, 0 when
+            // not yet, -1 when the match is lost.
+            long WifiWait_Agreement(long nStep);
+            // Sends m_MySingleData to the other player.
+            void WifiWait_SendSetStep();
+            // The trophy (0 to 4) of Wi-Fi rating nSkill.
+            long CheckSkillToTrophy(short nSkill);
+            // The steps of the friend match's set-up (after
+            // SelectMenu::CWiFiFrindVS), and what they call.
+            void FriendVSWait_In();
+            void FriendVSWait_Loop();
+            void FriendVSWait_Out();
+            long FriendVSWait_Agreement(long nStep);
+            // Shows the guest what the host is choosing.
+            void FriendVSWait_Message();
+            // (no symbols; names guessed) Inline in game/menu/unit_4BB48.cpp:
+            // the parts of m_MySingleData both match-making screens fill
+            // the same way, and the copy of both players' data into the
+            // game once they agree.
+            void WiFi_SetMyName();
+            void WiFi_SetMy2P();
+            void WiFi_SetMyRecord();
+            void WiFi_SetMyChara();
+            void WiFi_SetUpMatchPlayers();
+            // Defined in other MenuF files (return types and argument names
+            // guessed).
+            long GetTeamPlayerNum();
+            void WifiCourt_SetUpDisplay();
+            void Court_EndCamera();
+            // A random stage: its index and its sub-index.
+            void Court_RandomSelect(long &rStage, long &rStageSub);
+            // The second player's Mii and name in a two-player Wi-Fi game.
+            RFLStoreData WiFi_Get2PMiiStoreData();
+            wchar_t *WiFi_Get2PMiiName();
+            // The Mii of character slot nIndex: its create id (returned as
+            // the 8 bytes of an RFLCreateID) and its data source.
+            unsigned long long Mii_GetMiiCreateId(long nIndex);
+            RFLDataSource Mii_GetMiiDataSource(long nIndex);
 
             // Added for MenuF game/menu/CFriendList.cpp. The steps of the
             // friend roster screen (SelectMenu::CFriendList), and the help
@@ -428,8 +497,12 @@ namespace msw {
             // 0x258. 0 to 3: picks the colour animation of the how-to
             // screen and is passed to CTournament::Tutorial.
             long m_nGameKind;
+            // 0x25C. (name guessed; added for game/menu/unit_4BB48.cpp) The
+            // game kind the Wi-Fi match-making screen was entered with
+            // (negative: none); it then builds the court of that game.
+            long m_nWifiGameKind;
         private:
-            unsigned char m_Unk25C[0x8];     // 0x25C
+            unsigned char m_Unk260[0x4];     // 0x260
         public:
             // 0x264. (name guessed; added for game/menu/CScoreTop.cpp) A
             // saved m_nGameKind: the score book keeps the game kind it was
@@ -454,7 +527,15 @@ namespace msw {
             unsigned char m_nPrevStageSub;   // 0x26F
             unsigned char m_nStage;          // 0x270
             unsigned char m_nPrevStage;      // 0x271
-            unsigned char m_Unk272[0x9];     // 0x272
+            unsigned char m_Unk272[0x2];     // 0x272
+            // 0x274 to 0x279. (names guessed; added for
+            // game/menu/unit_4BB48.cpp) m_nGameKind, m_nStageSub and
+            // m_nStage as the Wi-Fi match-making screen found them; put
+            // back when it is left.
+            long m_nWifiSavedGameKind;       // 0x274
+            unsigned char m_nWifiSavedStageSub; // 0x278
+            unsigned char m_nWifiSavedStage; // 0x279
+            unsigned char m_Unk27A;          // 0x27A
         public:
             unsigned char m_Unk27B;          // 0x27B
         private:
@@ -525,13 +606,45 @@ namespace msw {
             // Size 0x1EC. (added for game/menu/CWiFiGame.cpp; names
             // guessed) What each side of a friend match sends the other
             // (bcs::dwc::CDwc::SetMySingleDataA, GetSingleDataA).
+            // (game/menu/unit_4BB48.cpp) The match-making screens fill
+            // the rest.
             struct WiFiSingleData {
-                unsigned char m_Unk00[4];    // 0x00
+                // 0x00. A hash of a name (dwc::CGameDwc::Makehash) telling
+                // which screen sent the data.
+                long m_nHash;
                 unsigned char m_nRole;       // 0x04, compared with m_bStarMii
-                unsigned char m_Unk05[3];    // 0x05
+                unsigned char m_Unk05;       // 0x05, cleared by FriendVSWait_Loop
+                unsigned char m_Unk06[2];    // 0x06
                 long m_nBtnKindId;           // 0x08, the button the host's cursor is on
                 unsigned long m_nInput;      // 0x0C, the host's decide input
-                unsigned char m_Unk10[0x1DC]; // 0x10
+                long m_nStep;                // 0x10, the step the sender has reached
+                unsigned long m_nSeed;       // 0x14, a random seed both players use
+                wchar_t m_Name[0xC];         // 0x18, the player's name
+                wchar_t m_Name2P[0xC];       // 0x30, the second player's
+                RFLStoreData m_StoreData;    // 0x48, the player's Mii
+                RFLStoreData m_StoreData2P;  // 0x94, the second player's
+                long m_nPlayerNum;           // 0xE0, players on this side
+                long m_nGameKind;            // 0xE4, -1 for any
+                long m_nSkill;               // 0xE8, the Wi-Fi rating
+                unsigned char m_nTrophy[4];  // 0xEC, per sport (CheckSkillToTrophy)
+                long m_nStage;               // 0xF0, 0xFF for any
+                long m_nStageSub;            // 0xF4, 0xFF for any
+                // 0xF8 to 0x1E4. The three characters: CharaSelectParam's
+                // m_nChara, m_nCharaSub and m_Unk13[0], and the Mii of
+                // each that is one.
+                unsigned char m_nChara[3];
+                unsigned char m_nCharaSub[3];
+                unsigned char m_nCharaUnk[3];
+                RFLStoreData m_CharaMii[3];
+                // 0x1E5. CMenuPad::GetPadStyle of pads 0 and 1.
+                unsigned char m_nPadStyle[2];
+                unsigned char m_Unk1E7[2];   // 0x1E7
+                // 0x1E9. The character change options of the save data:
+                // bit 0 basketball, bit 2 dodgeball, bit 3 hockey.
+                unsigned char m_nChrChangeFlags;
+                // 0x1EA. SAVE_DATA_PLAYER::m_Unk5D1F.
+                unsigned char m_Unk1EA;
+                unsigned char m_Unk1EB;      // 0x1EB
             };
 
             union {
@@ -542,8 +655,22 @@ namespace msw {
                 // (game/menu/CWiFiGame.cpp).
                 WiFiSingleData m_MySingleData;
             };
+        public:
+            // 0x948 to 0x95B. (names guessed; added for
+            // game/menu/unit_4BB48.cpp) The Wi-Fi match-making state.
+            // The number of players whose data is compared (2).
+            long m_nWifiPlayerNum;           // 0x948
+            // Frames spent waiting for an opponent.
+            float m_fWifiMatchTime;          // 0x94C
+            // Passed to bcs::dwc::CDwc::StartAnybodyMatching; cleared after a
+            // minute of waiting when the match is limited to Australia.
+            long m_bWifiMatchLimit;          // 0x950
         private:
-            unsigned char m_Unk948[0x14];    // 0x948
+            unsigned char m_Unk954[0x4];     // 0x954
+        public:
+            // Set when the matching is started again: the wait window is
+            // still open.
+            long m_bWifiRetry;               // 0x958
         public:
             // 0x95C. (name guessed; added for game/menu/CTeam.cpp) Frames
             // left before the team screen takes stick input again.
@@ -567,8 +694,12 @@ namespace msw {
             // 0x988. (name guessed; added for game/menu/CPlusMinus.cpp)
             // Non-zero when _SetStarMii gives Miis.
             long m_bStarMii;
+            // 0x98C. (name guessed; added for game/menu/unit_4BB48.cpp) Bit
+            // 0 and bit 1: FriendVSWait_Message has shown its first and its
+            // second message.
+            unsigned char m_nFriendVSMessage;
         private:
-            unsigned char m_Unk98C[0x74];    // 0x98C
+            unsigned char m_Unk98D[0x73];    // 0x98D
         public:
             long m_UnkA00;                   // 0xA00
             // 0xA04, 0xA08. (names guessed; added for
@@ -588,8 +719,11 @@ namespace msw {
             // 0xA14. (added for game/menu/CTopMenu.cpp; name guessed) The
             // sport TopMenu_SelectAnim last lit, -1 for none.
             long m_nTopSelectChara;
+            // 0xA18. (name guessed; added for game/menu/unit_4BB48.cpp)
+            // When 1, WifiWait_In sets up the court and the camera first.
+            long m_bWifiWaitCourt;
         private:
-            unsigned char m_UnkA18[0x44];    // 0xA18
+            unsigned char m_UnkA1C[0x40];    // 0xA1C
         public:
             // 0xA5C. (added for game/menu/CEntry.cpp; name guessed) Set by
             // Entry_In when the camera is still moving in; cleared once

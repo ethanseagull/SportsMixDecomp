@@ -5,6 +5,9 @@
 #include "game/msw/CStageHockey04.hpp"
 #include "game/msw/CStageHockey07.hpp"
 #include "game/msw/CStageHockey17.hpp"
+#include "game/msw/CStageHockeyCrushSkate85.hpp"
+#include "game/msw/CStageHockeyCrushSkate87.hpp"
+#include "game/msw/CStage10Base.hpp"
 #include "game/msw/CStageManHockey.hpp"
 
 namespace msw {
@@ -18,7 +21,7 @@ namespace msw {
     // The destructors are declared so that they are the key functions: this
     // header must not make a unit emit the vtables.
 
-    // Stages 01, 07 and 17 have their own headers.
+    // Stages 01, 07, 17, 85 and 87 have their own headers.
 
     class CStageHockey02 : public CStageManHockey {
         public:
@@ -63,6 +66,14 @@ namespace msw {
         public:
             CStageHockey10(bcs::CTask *pParent, long);
             virtual ~CStageHockey10();
+
+            // Of the running stage, which must be this one (used by
+            // CComManHockeyGame; meanings guessed): the number of panels,
+            // the panel after pPanel (the first for 0), and whether the
+            // fever time is on.
+            static long GetPanelMaxNum();
+            static CStage10Base::CPanelInfoBase *GetNextPanel(const CStage10Base::CPanelInfoBase *pPanel);
+            static int IsNowFeverTime();
 
         private:
             unsigned char m_Unk218[0x464]; // size 0x67C
@@ -114,14 +125,6 @@ namespace msw {
     };
 
     // The CrushSkate stages (85 to 87).
-    class CStageHockeyCrushSkate85 : public CStageManHockey {
-        public:
-            CStageHockeyCrushSkate85(bcs::CTask *pParent);
-            virtual ~CStageHockeyCrushSkate85();
-
-        private:
-            unsigned char m_Unk218[0xA5C]; // size 0xC74
-    };
 
     class CStageHockeyCrushSkate86 : public CStageManHockey {
         public:
@@ -132,14 +135,6 @@ namespace msw {
             unsigned char m_Unk218[0x400]; // size 0x618
     };
 
-    class CStageHockeyCrushSkate87 : public CStageManHockey {
-        public:
-            CStageHockeyCrushSkate87(bcs::CTask *pParent);
-            virtual ~CStageHockeyCrushSkate87();
-
-        private:
-            unsigned char m_Unk218[0x40]; // size 0x258
-    };
 }
 
 #endif /* !MSW_CSTAGEHOCKEY_HPP_ */

@@ -22,16 +22,18 @@ namespace msw {
     // __ct__Q23msw19CStgGmk_Pinball_ActFPQ23msw7CStgGmk. Each game module
     // derives its own class from it to supply the parameters.
     //
-    // The order of the new virtual functions (IsAlive to DtorState_INACTIVE)
-    // follows __vt__Q23msw25CStgGmk_Pinball_Act_Dodge (DodgeF); they are
-    // reached through the vptr at 0x008, after the CFsmQueue part.
+    // The order of the new virtual functions (IsAlive to
+    // GetParam_BallKickPower) follows __vt__Q23msw25CStgGmk_Pinball_Act_Dodge
+    // (DodgeF) and __vt__Q23msw26CStgGmk_Pinball_Act_Volley (VolleyF); they
+    // are reached through the vptr at 0x008, after the CFsmQueue part.
     // SE_GetSlotNum overrides CStgSeSlot's, so it also gets a slot of its
     // own where it is declared. The DOL has no body for the parameters that
-    // every module supplies (GetParam_Radius and others below), so they are
-    // pure. DodgeF's game/dodge/CStgGmk_Pinball_Act_Dodge.cpp emits weak
-    // copies of IsAlive, SE_GetSlotNum, GetParam_LocOffsetZ, IsInvincible,
-    // SetInvincible and IsEnableDefColl, so they are inline here. Return
-    // types not visible in a body are guesses.
+    // every module supplies (GetParam_Radius and others below); they are
+    // declared plain virtual, not pure, so that a module's class need not
+    // override all of them. DodgeF and VolleyF emit weak copies of IsAlive,
+    // SE_GetSlotNum, GetParam_LocOffsetZ, IsInvincible, SetInvincible and
+    // IsEnableDefColl, so they are inline here. Return types not visible in
+    // a body are guesses.
     class CStgGmk_Pinball_Act : public CStgGmkAct, public bcs::CFsmQueue<CStgGmk_Pinball_Act> {
         public:
             // The states of the queue, in the order of the state hooks.
@@ -67,33 +69,33 @@ namespace msw {
             virtual void SE_PlayByParam(long type, const bcs::FVEC3 &rPos); // 0x1C0
             virtual float GetCurRadius() const;                           // 0x1C4
             virtual float GetParam_InitRadius() const;                    // 0x1C8
-            virtual float GetParam_Radius() const = 0;                    // 0x1CC
-            virtual float GetParam_Height() const = 0;                    // 0x1D0
-            virtual float GetParam_CollRadius() const = 0;                // 0x1D4
-            virtual float GetParam_CollHeight() const = 0;                // 0x1D8
-            virtual float GetParam_AtkCollRadius() const = 0;             // 0x1DC
-            virtual float GetParam_Dec() const = 0;                       // 0x1E0
-            virtual float GetParam_KickPower() const = 0;                 // 0x1E4
-            virtual float GetParam_Speed() const = 0;                     // 0x1E8
-            virtual float GetParam_VelLimit() const = 0;                  // 0x1EC
+            virtual float GetParam_Radius() const;                        // 0x1CC
+            virtual float GetParam_Height() const;                        // 0x1D0
+            virtual float GetParam_CollRadius() const;                    // 0x1D4
+            virtual float GetParam_CollHeight() const;                    // 0x1D8
+            virtual float GetParam_AtkCollRadius() const;                 // 0x1DC
+            virtual float GetParam_Dec() const;                           // 0x1E0
+            virtual float GetParam_KickPower() const;                     // 0x1E4
+            virtual float GetParam_Speed() const;                         // 0x1E8
+            virtual float GetParam_VelLimit() const;                      // 0x1EC
             virtual float GetParam_Gravity() const;                       // 0x1F0
-            virtual float GetParam_Interval() const = 0;                  // 0x1F4
+            virtual float GetParam_Interval() const;                      // 0x1F4
             virtual void GetParam_CourtRect(float *pLeft, float *pRight, float *pFront,
                                             float *pBack) const;          // 0x1F8
             virtual void GetParam_OuterRect(float *pLeft, float *pRight, float *pFront,
                                             float *pBack) const;          // 0x1FC
             virtual long GetParam_MdlIdx() const;                         // 0x200
-            virtual long GetParam_Effect(long type) const = 0;            // 0x204
+            virtual long GetParam_Effect(long type) const;                // 0x204
             virtual long GetParam_SE(long type) const;                    // 0x208
             virtual float GetParam_MaxLife() const;                       // 0x20C
             virtual float GetParam_LocOffsetZ() const { return 0.0f; }    // 0x210
-            virtual float GetParam_ForceAcc() const = 0;                  // 0x214
-            virtual bool GetParam_EndLineEnabled() const = 0;             // 0x218
-            virtual float GetParam_GuideWidth() const = 0;                // 0x21C
-            virtual float GetParam_GuideDepth() const = 0;                // 0x220
-            virtual bool GetParam_GuideBoundEnabled() const;              // 0x224
-            virtual float GetParam_GuideDecay() const = 0;                // 0x228
-            virtual float GetParam_AtkHitEffectFrame() const = 0;         // 0x22C
+            virtual float GetParam_ForceAcc() const;                      // 0x214
+            virtual long GetParam_EndLineEnabled() const;                 // 0x218
+            virtual float GetParam_GuideWidth() const;                    // 0x21C
+            virtual float GetParam_GuideDepth() const;                    // 0x220
+            virtual long GetParam_GuideBoundEnabled() const;              // 0x224
+            virtual float GetParam_GuideDecay() const;                    // 0x228
+            virtual float GetParam_AtkHitEffectFrame() const;             // 0x22C
             virtual float GetParam_HitCameraQuake() const;                // 0x230
             virtual void UpdateColl();                                    // 0x234
             virtual void OnDamage(CCollBodyUnit *pBody, CBall *pBall);    // 0x238
@@ -101,13 +103,12 @@ namespace msw {
             virtual void SetInvincible(float time) { m_fInvincibleTime = time; }   // 0x240
             virtual bool IsEnableDefColl() const { return false; }        // 0x244
             // The direction the ball was shot in (radians).
-            virtual float GetShotAngle() const = 0;                       // 0x248
+            virtual float GetShotAngle() const;                           // 0x248
             virtual bool WallHitCheck(bcs::FVEC3 *pPos, bcs::FVEC3 *pVel, const bcs::FVEC3 &, const bcs::FVEC3 &,
                                       const bcs::FVEC3 &);                // 0x24C
             virtual bool WallHitCheckSub(bcs::FVEC3 *pPos, bcs::FVEC3 *pVel, const bcs::FVEC3 &, const bcs::FVEC3 &,
                                          float, const bcs::FVEC3 &, const bcs::FVEC3 &, const bcs::FVEC3 &,
                                          float) const;                    // 0x250
-            // The effect of a kick at rPos.
             virtual void KickHitEffect(const bcs::FVEC3 &rPos);           // 0x254
             virtual void CtorState_DEFAULT();                             // 0x258
             virtual void LoopState_DEFAULT();
@@ -130,6 +131,9 @@ namespace msw {
             virtual void CtorState_INACTIVE();
             virtual void LoopState_INACTIVE();
             virtual void DtorState_INACTIVE();                            // 0x2A8
+            // The push a ball that hits this one gets. The DOL has no body;
+            // DodgeF and VolleyF both put it last in their vtables.
+            virtual float GetParam_BallKickPower() const;                 // 0x2AC
 
         private:
             CBodyCollision m_BodyColl;    // 0x1D4 (name guessed)

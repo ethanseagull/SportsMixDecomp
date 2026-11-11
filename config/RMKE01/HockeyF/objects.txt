@@ -66,3 +66,12 @@ Equivalent game/hockey/CStgGmk_Case_Act_Hockey.cpp
 Matching game/hockey/CQPanelHockey.cpp
 Equivalent game/hockey/CChrCoreHockeyDiddy.cpp
 Equivalent game/hockey/CCameraHockeyCS.cpp
+Matching game/hockey/CStageHockeyCrushSkate87.cpp
+Equivalent game/hockey/CStageHockeyCrushSkate85.cpp
+Equivalent game/hockey/CGoalObjHockey.cpp
+Matching game/hockey/CStgGmk_FirePillar_Hockey_Act.cpp
+Equivalent game/hockey/CComManHockeyCS.cpp
+Equivalent game/hockey/CComManHockeyGame.cpp
+Equivalent game/hockey/CCockpitHockeyIconFightGauge.cpp
+Equivalent game/hockey/CCockpitHockeyResult.cpp
+Equivalent game/hockey/CChrCoreHockeyKoopaJr.cpp

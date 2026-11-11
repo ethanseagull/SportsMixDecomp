@@ -58,3 +58,5 @@ Equivalent game/menu/CTrofy.cpp
 Equivalent game/menu/CTopMenu.cpp
 Equivalent game/menu/CPartyInfo.cpp
 Equivalent game/menu/CCupSelectTab.cpp
+Equivalent game/menu/unit_4BB48.cpp
+Equivalent game/menu/CTournamentLoad.cpp

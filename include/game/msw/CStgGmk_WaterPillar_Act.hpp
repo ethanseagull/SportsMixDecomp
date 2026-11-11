@@ -111,6 +111,7 @@ namespace msw {
             void LoopState_STOP();
             void DtorState_STOP();
 
+        protected:
             CBodyCollision m_BodyColl;    // 0x1D4
             CAtkCollision m_AtkColl;      // 0x1E0
             CDefCollision m_DefColl;      // 0x1EC

@@ -2,6 +2,7 @@
 #define CGOALOBJ_HPP_
 
 #include "bcs/CMdlObj.hpp"
+#include "game/msw/CGoalMdl.hpp"
 #include "game/msw/CStgGmk.hpp"
 
 // A goal on the court: a stage gimmick with a ring and a board that can be
@@ -78,7 +79,16 @@ class CGoalObj : public msw::CStgGmk {
         virtual void SetDefaultOffset(const bcs::FVEC3 &rOffset) { m_DefaultOffset = rOffset; } // 0xE4
         virtual const bcs::FVEC3 &GetDefaultOffset() const { return m_DefaultOffset; } // 0xE8
         virtual unsigned long GetMdlHandle() const;                                    // 0xEC
-        virtual long GetRingNodeIdx() const;                                           // 0xF0
+        // The ring's node in the goal model (model 1). Inline: weak copies in
+        // HockeyF's CGoalObjHockey.cpp and BasketF's CChrCoreBasket unit.
+        virtual long GetRingNodeIdx() const                                           // 0xF0
+        {
+            const msw::CGoalMdl *pMdl = static_cast<const msw::CGoalMdl *>(GetMdl(1));
+            if (pMdl == 0) {
+                return 0;
+            }
+            return pMdl->m_nRingNodeIdx;
+        }
         virtual const bcs::FVEC3 &GetRingPos() const { return m_RingPos; }             // 0xF4
         virtual const bcs::FVEC3 &GetBoardPos() const { return m_BoardPos; }           // 0xF8
         virtual const bcs::FVEC3 &GetBoardVec() const { return m_BoardVec; }           // 0xFC
@@ -86,7 +96,8 @@ class CGoalObj : public msw::CStgGmk {
         virtual void CrushStart();                                                     // 0x104
         virtual void CrushEnd();                                                       // 0x108
         virtual void GoalIn() {}                                                       // 0x10C
-        virtual void DunkStart(DUNK_POW pow, const bcs::FVEC3 &rPos);                  // 0x110
+        // (meaning of the result not known) HockeyF's override returns 1.0f.
+        virtual float DunkStart(DUNK_POW pow, const bcs::FVEC3 &rPos);                 // 0x110
         virtual void DunkRelease();                                                    // 0x114
         virtual void DunkCancel();                                                     // 0x118
         virtual int IsNowDunkMot() const;                                              // 0x11C

@@ -25,6 +25,11 @@ namespace msw {
             long SetCountScore(long *pScore0, long *pScore1, long nPeriod, long nNum);
             long SetTextNext(long nNum, long nPeriod);
             long SetTotalPoint(long nTotal0, long nTotal1);
+
+            // Steps the page's in and out animation (m_nState).
+            void StateControl();
+            // Queues animation nAnim (in or out) on the score panes.
+            void SetAnimResultWin(long nAnim);
     };
 }
 

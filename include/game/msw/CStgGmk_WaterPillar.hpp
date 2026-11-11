@@ -68,7 +68,7 @@ namespace msw {
 
             virtual unsigned long GetMdlNum() const { return 1; }
 
-        private:
+        protected:
             // The actor is always a CStgGmk_WaterPillar_Act. (name guessed)
             CStgGmk_WaterPillar_Act *GetPillarAct()
             {
@@ -79,6 +79,7 @@ namespace msw {
                 return static_cast<const CStgGmk_WaterPillar_Act *>(GetAct());
             }
 
+        private:
             bcs::FVEC3 m_DefaultPos; // 0x68
     };
 

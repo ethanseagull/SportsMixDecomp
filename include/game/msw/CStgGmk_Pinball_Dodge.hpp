@@ -31,13 +31,11 @@ namespace msw {
             virtual float GetParam_VelLimit() const;
             virtual float GetParam_Dec() const;
             virtual float GetParam_ForceAcc() const;
-            virtual bool GetParam_EndLineEnabled() const;
+            virtual long GetParam_EndLineEnabled() const;
             virtual float GetParam_GuideWidth() const;
             virtual float GetParam_GuideDepth() const;
             virtual float GetParam_GuideDecay() const;
             virtual float GetParam_KickPower() const;
-            // A new function of this class (the last slot of its vtable):
-            // the push a ball that hits this one gets.
             virtual float GetParam_BallKickPower() const;
             virtual long GetParam_Effect(long type) const;
             virtual float GetParam_AtkHitEffectFrame() const;

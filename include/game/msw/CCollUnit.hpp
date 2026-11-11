@@ -15,6 +15,8 @@ namespace msw {
             void SetCollKind(long kind);
             void SetCollType(long type);
             void SetPos(const bcs::FVEC3 &rPos);
+            // (name guessed; VolleyF's CStgGmk_Pinball_Act_Volley)
+            const bcs::FVEC3 &GetPos() const { return m_Pos; }
 
             // (names guessed) Inline in msw::CStgGmk_WaterPillar_Act.
             void SetShape(unsigned long shape) { m_nShape = shape; }
@@ -28,6 +30,22 @@ namespace msw {
             void OnFlag10(unsigned short flag) { m_nFlag10 |= flag; }
             void OffFlag10(unsigned short flag) { m_nFlag10 &= ~flag; }
             void OnFlagA0(unsigned long flag) { m_nFlagA0 |= flag; }
+            void OffFlagA0(unsigned long flag) { m_nFlagA0 &= ~flag; }
+            // (name guessed; VolleyF's CStgGmk_Trolley_Act_Volley) Radians, 0 to
+            // 2 pi: the callers wrap the angle first.
+            void SetRotY(float rot) { m_fRotY = rot; }
+            // (name guessed; inline in game/msw/CStgGmk_Trolley.cpp, DOL)
+            // The same, first bringing the angle into [0, 2 pi).
+            void SetRotYWrapped(float rot)
+            {
+                while (rot > 6.2831855f) {
+                    rot -= 6.2831855f;
+                }
+                while (rot < 0.0f) {
+                    rot += 6.2831855f;
+                }
+                m_fRotY = rot;
+            }
             // (names guessed) Inline in BasketF's CChrCoreBasketYoshi:
             // both set to the bit of the owner's player number.
             void SetNoHitFlag(unsigned long flag) { m_nNoHitFlag = flag; }
@@ -40,9 +58,13 @@ namespace msw {
             unsigned long m_nShape;      // 0x18, the pillar sets 4
             unsigned long m_nNoHitFlag;  // 0x1C (names guessed)
             unsigned long m_nMyNoHitFlag; // 0x20
-            unsigned char m_Unk24[0x38];
+            unsigned char m_Unk24[8];
+            bcs::FVEC3 m_Pos;            // 0x2C (name guessed)
+            unsigned char m_Unk38[0x24];
             bcs::FVEC3 m_Size;           // 0x5C
-            unsigned char m_Unk68[0x38];
+            unsigned char m_Unk68[0x18];
+            float m_fRotY;               // 0x80 (SetRotY)
+            unsigned char m_Unk84[0x1C];
             unsigned long m_nFlagA0;     // 0xA0
     };
 }

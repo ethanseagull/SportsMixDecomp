@@ -17,6 +17,7 @@ namespace msw {
     class CStgGmk_Pinball_Drv : public CStgDrv {
         public:
             CStgGmk_Pinball_Drv(CStgGmk *pParent);
+            virtual ~CStgGmk_Pinball_Drv();
     };
 
     // One ball of a sport's stage 12, the gimmick that CPinballMan makes. A
@@ -24,7 +25,8 @@ namespace msw {
     // CStgGmk_Pinball_Dodge at 0x78; it sets only the vtable). The actor is
     // a msw::CStgGmk_Pinball_Act. The order of the virtual functions follows
     // __vt__Q23msw21CStgGmk_Pinball_Dodge (DodgeF), so that IsActive is at
-    // 0xBC. DodgeF's game/dodge/CStgGmk_Pinball_Act_Dodge.cpp emits weak
+    // 0xBC; the overrides of CStgGmk's follow __vt__Q23msw22CStgGmk_Pinball_Volley.
+    // DodgeF's game/dodge/CStgGmk_Pinball_Act_Dodge.cpp and VolleyF emit weak
     // copies of GetRadius, GetVel, GetPos, GetDefaultPos and SetDefaultPos
     // (reverse order of the declarations), so those are inline. Return
     // types not visible in a body are guesses.
@@ -32,6 +34,7 @@ namespace msw {
         public:
             CStgGmk_Pinball(bcs::CTask *pParent, int arg);
             virtual ~CStgGmk_Pinball();
+            // (DOL overrides, listed from __vt__Q23msw22CStgGmk_Pinball_Volley)
             virtual void Main();
             virtual void Disp();
             virtual CStgMdl *NewMdl(long heap, unsigned long idx);
@@ -70,8 +73,8 @@ namespace msw {
                 return static_cast<const CStgGmk_Pinball_Act *>(GetAct());
             }
 
-            int m_Unk68;             // 0x68, the second argument of the constructor
-            bcs::FVEC3 m_DefaultPos; // 0x6C
+            int m_Unk68;                 // 0x68, the second argument of the constructor
+            bcs::FVEC3 m_DefaultPos;     // 0x6C (GetDefaultPos)
     };
 }
 

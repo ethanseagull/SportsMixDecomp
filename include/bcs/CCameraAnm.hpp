@@ -33,6 +33,9 @@ namespace bcs {
             void SetData(nw4r::g3d::ResFile file);
             // Selects the scene animation `pName` of the file given to SetData.
             void SetResAnmScn(const char *pName);
+            // (added for VolleyF CPerfectDemoVolley) Lets a paused animation
+            // play on.
+            void Resume();
             // Selects which camera of that scene animation is played.
             void SetResAnmScnCamera(long nCamera);
             // flag bits 0 and 1 come from msw::CCameraMenuBG::AnimInfo.
@@ -59,7 +62,7 @@ namespace bcs {
 
             // (names guessed) The scene cameras; entry nCamera, or the
             // default entry when there is no such camera.
-            short GetSceneNum() const { return m_nSceneNum; }
+            long GetSceneNum() const { return m_nSceneNum; }
             const SCENE_INFO &GetSceneInfo(long nCamera) const
             {
                 if (m_pSceneInfo != 0 && nCamera >= 0 && nCamera < m_nSceneNum) {

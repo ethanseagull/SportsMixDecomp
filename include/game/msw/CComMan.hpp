@@ -78,6 +78,22 @@ namespace msw {
             // Bit masks of characters: bit nChr of nBits.
             static int IsEnableBit(unsigned long nBits, long nChr);
             static void SetEnableBit(unsigned long &rBits, long nChr);
+            // Added for HockeyF game/hockey/CComManHockeyGame.cpp (DOL;
+            // meanings and return types guessed).
+            // The index in pTarget (nTargetNum positions) that the nMyNum
+            // positions of pMy should take, for my position nMyIdx; negative
+            // for none.
+            static long GetNearBestPosBaseEx(const bcs::FVEC3 *pMy, const bcs::FVEC3 *pTarget, long nMyNum,
+                                             long nTargetNum, long nMyIdx);
+            // The nearest "?" panel of the kinds in nKindBits (0: none) and
+            // its position.
+            static unsigned long QPanel_GetNear(const bcs::FVEC3 &rPos, unsigned long nKindBits);
+            static bcs::FVEC3 QPanel_GetPos(unsigned long nPanel);
+            // The nearest falling green shell (0: none), whether it is
+            // active, and its position.
+            static unsigned long FallGShell_GetNear(const bcs::FVEC3 &rPos);
+            static int FallGShell_IsEnable(unsigned long nShell);
+            static bcs::FVEC3 FallGShell_GetPos(unsigned long nShell);
 
             static CComMan *g_pInstance;
     };

@@ -59,3 +59,8 @@ Equivalent game/volley/CChrCoreVolleyDonkey.cpp
 Equivalent game/volley/CChrCoreVolleySaboten.cpp
 Equivalent game/volley/CChrCoreVolleyDiddy.cpp
 Matching game/volley/CComManVolleyGame.cpp
+Equivalent game/volley/CStgGmk_Trolley_Act_Volley.cpp
+Equivalent game/volley/CStgGmk_Pinball_Act_Volley.cpp
+Equivalent game/volley/CCameraVolleyRR.cpp
+Equivalent game/volley/CChrParasiteBanana.cpp
+Equivalent game/volley/CPerfectDemoVolley.cpp

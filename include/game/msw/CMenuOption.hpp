@@ -15,6 +15,12 @@ namespace msw {
             long GetMenuParameterId(long nKind, long nSub);
             void SetMenuParameterId(long nKind, long nSub, long nId);
             const wchar_t *GetMenuParameterText(long nKind, long nSub, long nId);
+            // (added for MenuF game/menu/CTournamentLoad.cpp; names and
+            // return types guessed) Loads the options of player nPlayer
+            // at difficulty nLevel, and sets up the game from option kind
+            // nKind.
+            void GetPlayerSaveData(long nPlayer, long nLevel);
+            void SetGameParameter(long nKind);
 
             static CMenuOption s_Instance;
     };

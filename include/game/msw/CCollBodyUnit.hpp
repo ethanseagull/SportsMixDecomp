@@ -22,9 +22,12 @@ namespace msw {
             // CChrMan::GetChrCore for an owner of kind 1.
             signed char m_nOwnerIdx;
             unsigned char m_Unk15[0x17];
-            // 0x2C (name guessed): the unit's position. DodgeF's
-            // msw::CStgGmk_Pinball_Act_Dodge::OnDamage reads it.
-            bcs::FVEC3 m_vPos;
+            // 0x2C (name guessed): the unit's position; VolleyF's
+            // CStgGmk_Pinball_Act_Volley::OnBallCatch and DodgeF's
+            // msw::CStgGmk_Pinball_Act_Dodge::OnDamage read it.
+            bcs::FVEC3 m_Pos;
+
+            const bcs::FVEC3 &GetPos() const { return m_Pos; }
 
             // (name guessed) Inline: DodgeF compares the byte as a signed int.
             long GetOwnerKind() const { return m_nOwnerKind; }

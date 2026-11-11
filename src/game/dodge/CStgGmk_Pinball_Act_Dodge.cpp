@@ -4,7 +4,9 @@
 // file also holds the stage's pinball manager, msw::CPinballManDodge, and
 // the weak copies of the inline functions of the classes whose vtables it
 // emits (CPinballMan, CStgGmk_Pinball, CStgGmk_Pinball_Dodge,
-// CStgGmk_Pinball_Act).
+// CStgGmk_Pinball_Act). CPinballMan's are defined out of line at the end
+// instead, in the same order (as in VolleyF), so that the stage units that
+// include its header do not change.
 #include "game/msw/CStgGmk_Pinball_Dodge.hpp"
 #include "bcs/BCS_Math.hpp"
 #include "bcs/BCS_Vec.hpp"
@@ -55,7 +57,7 @@ msw::CStgGmk_Pinball_Act_Dodge::~CStgGmk_Pinball_Act_Dodge()
 void msw::CStgGmk_Pinball_Act_Dodge::OnDamage(CCollBodyUnit *pBody, CBall *pBall)
 {
     CStgSrt *pSrt = GetSrt();
-    bcs::FVEC3 bodyPos = pBody->m_vPos;
+    bcs::FVEC3 bodyPos = pBody->GetPos();
     bcs::FVEC3 ballPos = pBall->GetPos();
     bcs::FVEC3 vel = pSrt->GetVel();
     float speed = bcs::FVEC3Len(&vel) + GetParam_BallKickPower();
@@ -145,7 +147,7 @@ float msw::CStgGmk_Pinball_Act_Dodge::GetParam_ForceAcc() const
     return DODGE_PRM_S12_BALL_FORCE_ACC;
 }
 
-bool msw::CStgGmk_Pinball_Act_Dodge::GetParam_EndLineEnabled() const
+long msw::CStgGmk_Pinball_Act_Dodge::GetParam_EndLineEnabled() const
 {
     return false;
 }
@@ -237,4 +239,40 @@ float msw::CPinballManDodge::GetParam_ShotAngle() const
 long msw::CPinballManDodge::GetParam_ShotSideRate() const
 {
     return DODGE_PRM_S12_BALL_SIDE_RATE;
+}
+
+void msw::CPinballMan::MechaCancel()
+{
+    GetMecha()->Cancel();
+}
+
+void msw::CPinballMan::MechaReset()
+{
+    GetMecha()->Reset();
+}
+
+void msw::CPinballMan::SetMechaMdl(CStageMdlListNode *pNode)
+{
+    GetMecha()->SetMdl(pNode);
+}
+
+msw::CStgGmk_Pinball *msw::CPinballMan::GetGmk(long idx)
+{
+    if (m_ppGmk != 0) {
+        return m_ppGmk[idx];
+    }
+    return 0;
+}
+
+const msw::CStgGmk_Pinball *msw::CPinballMan::GetGmk(long idx) const
+{
+    if (m_ppGmk != 0) {
+        return m_ppGmk[idx];
+    }
+    return 0;
+}
+
+const bcs::FVEC3 &msw::CPinballMan::GetDefaultPos() const
+{
+    return m_vDefaultPos;
 }

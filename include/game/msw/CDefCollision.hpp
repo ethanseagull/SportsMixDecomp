@@ -19,6 +19,8 @@ namespace msw {
             CCollUnit *GetColl(long index) const;
             void SetEnableAll();
             void SetDisableAll();
+            // (added for VolleyF's CStgGmk_Trolley_Act_Volley)
+            void SetReflectDisableAll();
 
         private:
             unsigned long m_Unk00[3];

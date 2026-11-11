@@ -43,7 +43,7 @@ DodgeF OnCtorNormalShoot__Q23msw19CItemBallSmallDodgeFv near 99.3 register numbe
 DodgeF OnCtorNormalShoot__Q23msw20CItemBallBananaDodgeFv near 99.4 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF OnCtorNormalShoot__Q23msw20CItemBallGShellDodgeFv near 99.4 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF OnCtorNormalShoot__Q23msw20CItemBallRShellDodgeFv near 99.4 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
-DodgeF OnDamage__Q23msw25CStgGmk_Pinball_Act_DodgeFPQ23msw13CCollBodyUnitPQ23msw5CBall near 98.4 98.4%: float/pointer register numbering, and 'ble body; b skip' vs 'bgt skip' (same for NaN); constants, calls, accesses, stack identical
+DodgeF OnDamage__Q23msw25CStgGmk_Pinball_Act_DodgeFPQ23msw13CCollBodyUnitPQ23msw5CBall near 98.1 98.1%: float/pointer register numbering, 'ble body; b skip' vs 'bgt skip' (same for NaN), and the inline CStgSrt::SetVel's bit-1 flag test as rlwinm. vs extrwi. (same bit; the shared inline uses &2, which VolleyF and the Pylon want); constants, calls, accesses, stack identical
 DodgeF OnGimmickCancel__Q23msw13CStageDodge05Fv near 99.1 99.1%: float register allocation only.
 DodgeF OnGimmickReset__Q23msw13CStageDodge05Fv near 99.2 99.2%: float register allocation only.
 DodgeF OnPostAppendNode__Q23msw13CStageDodge12FPCQ33msw5STAGE12MDL_GEN_RULERQ23bcs6CRegexPQ23msw17CStageMdlListNodeRQ34nw4r3g3d7ResFileRQ23msw4CArnl near 99.8 99.8%: the two case-local sscanf result variables have their stack slots (0x8/0xC) swapped. No behaviour change.
@@ -69,7 +69,7 @@ DodgeF SetCountNum__Q23msw24CCockpitDodgePauseResultFl near 99.2 registers only 
 DodgeF SetDamageDemoType__Q23msw11EvDemoDodgeFll near 98.7 98.7%: register choice only (identical after renumbering)
 DodgeF SetDamegeCamera__Q23msw15CEventDemoDodgeFll near 99.8 99.8%: case 0 swaps the parent and task registers; regs search no gain
 DodgeF SetLifeGaugeState__Q23msw13CCockpitDodgeFlllll near 99.9 99.9%: one register for the OrDie object pointer.
-DodgeF SetPushVel__Q23msw23CStgGmk_Pylon_Act_DodgeFRCQ23bcs5FVEC3 near 98.8 98.8%: bit-1 flag test as extrwi. vs rlwinm. (same bit; Pinball's original uses extrwi.), two addi for stack vectors swapped
+DodgeF SetPushVel__Q23msw23CStgGmk_Pylon_Act_DodgeFRCQ23bcs5FVEC3 near 99.6 99.6%: two addi for stack vectors swapped
 DodgeF SetVelocity__Q23msw18CItemBallBombDodgeFv near 99.3 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF Set__Q23msw17CCockpitDodgeCoinFv near 99.3 register choice only (as CCockpitHockeyCoin::Set)
 DodgeF StartDamageDemo__Q23msw11EvDemoDodgeFv near 97.8 97.8%: the original keeps a cmpwi 1/beq to the switch end for the empty case 1 plus one dead b; equivalent branch form

@@ -86,6 +86,24 @@ namespace msw {
     extern float DODGE_PRM_S07_PACKUN_EXPLODE_SIZE;
     extern float DODGE_PRM_S07_PACKUN_EXPLODE_SIZE_Y;
     extern float DODGE_PRM_S07_PACKUN_EXPLODE_SCALE_FCTR;
+
+    // Stage 12, the pinball stage (CStageDodge12::GetPrmTbl and
+    // CPinballManDodge).
+    extern float DODGE_PRM_S12_BALL_SIZE;
+    extern float DODGE_PRM_S12_BALL_COLLSIZE;
+    extern float DODGE_PRM_S12_BALL_SPEED;
+    extern float DODGE_PRM_S12_BALL_SPEED_LIMIT;
+    extern float DODGE_PRM_S12_BALL_KICK_POW;
+    extern float DODGE_PRM_S12_BALL_BALL_KICK_POW;
+    extern float DODGE_PRM_S12_BALL_DECEL;
+    extern float DODGE_PRM_S12_BALL_GUIDE_DECAY;
+    extern float DODGE_PRM_S12_BALL_FORCE_ACC;
+    extern float DODGE_PRM_S12_BALL_INIT_SLEEP;
+    extern float DODGE_PRM_S12_BALL_INTERVAL;
+    extern float DODGE_PRM_S12_BALL_ANGLE;
+    extern float DODGE_PRM_S12_BALL_SIDE_RATE;
+    extern long DODGE_PRM_S12_BALL_NUM;
+    extern float DODGE_PRM_S12_BALL_DOWN_TIME;
 }
 
 #endif /* !MSW_DODGEPRM_HPP_ */

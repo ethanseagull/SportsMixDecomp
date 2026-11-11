@@ -14,6 +14,7 @@ DodgeF Main___Q23msw13CStageDodge05Ff near 96.2 96.2%: register choice; raft loo
 DodgeF OnCalcSum__Q23msw13CStageDodge07CFv near 97.7 97.7%: ours adds one redundant empty-list check (cmpwi/beq) before jumping to the loop's own test; same result.
 DodgeF OnGimmickCancel__Q23msw13CStageDodge05Fv near 99.1 99.1%: float register allocation only.
 DodgeF OnGimmickReset__Q23msw13CStageDodge05Fv near 99.2 99.2%: float register allocation only.
+DodgeF OnPostAppendNode__Q23msw13CStageDodge12FPCQ33msw5STAGE12MDL_GEN_RULERQ23bcs6CRegexPQ23msw17CStageMdlListNodeRQ34nw4r3g3d7ResFileRQ23msw4CArnl near 99.8 99.8%: the two case-local sscanf result variables have their stack slots (0x8/0xC) swapped. No behaviour change.
 DodgeF PopDamageLife__Q23msw15CEventDemoDodgeFi near 99.5 99.5%: character number and telop id in swapped registers inside the out-telop inline
 DodgeF ResetDamageDemo__Q23msw11EvDemoDodgeFv near 99.1 99.1%: register choice only (identical after renumbering)
 DodgeF ScoreBoard_Loop__Q23msw18CCockpitDodgePauseFv near 98.0 register allocation only (as CCockpitBasketPause::ScoreBoard_Loop): the original reuses the table-pointer register for the third result page, ours takes one more saved register (stmw/lmw); same loads, stores, calls and branches

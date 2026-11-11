@@ -19,8 +19,8 @@ Equivalent game/boss/CRadarIcon2DBoss.cpp
 Matching game/boss/CCockpitBossPause.cpp
 Matching game/boss/CItemManBoss.cpp
 Matching game/boss/CC_PARAM_BOSS.cpp
-NonMatching game/boss/CEffectCoinScore.cpp
-NonMatching game/boss/CQPanelManBoss.cpp
+Equivalent game/boss/CEffectCoinScore.cpp
+Matching game/boss/CQPanelManBoss.cpp
 Equivalent game/boss/CCockpitBossCoin.cpp
 Equivalent game/boss/CCockpitBossCoder.cpp
 Matching game/boss/CEventDemoBoss.cpp

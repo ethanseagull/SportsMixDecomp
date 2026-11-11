@@ -7,6 +7,8 @@ BossF CreateCharaIcon__Q23msw16CRadarIcon2DBossFPQ33msw12CRadarIcon2D14ICON_PARA
 BossF CreateMiniTelop__Q23msw12CCockpitBossFllPQ23bcs5FVEC3 near 99.0 register choice and load order inside the inlined paired-single FVEC3Add (pos + offset); same operation; DodgeF copy differs the same way
 BossF CtorStateJumpShoot__Q23msw12CChrCoreBossFv near 86.9 float constants loaded through the side step's pool base register instead of lis/lfs each: the jump shot is a second file in the original (unit to be split at .text 0x63EA4); compiled alone the body is the original's up to register choice
 BossF CtorStateSideStep__Q23msw12CChrCoreBossFv near 99.8 register allocation/order only
+BossF EffectCoinGetCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 95.4 original reloads m_pMdl before CreateAttachEffect (no store in between, same value) and schedules the 2*20 multiply later; same as the recorded Volley/Hockey/Dodge/Basket copies
+BossF EffectCoinScoreCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3RCQ23bcs5FVEC3l near 97.9 register choice only (loop counter and clamped count swap registers; one mr scheduled differently)
 BossF FireReceiver___Q23msw18CChrCoreBossKuromaFv near 98.2 delete-flag test clrlwi. vs clrlwi/cntlzw/srwi (same predicate); store order/stack slots of DetectMapHit locals; register numbering
 BossF FireReceiver___Q23msw19CChrCoreBossKinopioFv near 98.1 float registers in x*x+z*z and scheduling of the paired-single address setup
 BossF GetFirstLookInfo_MultiPlay__Q23msw11CCameraBossFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 92.6 stack slots, registers and stfsux addressing of the position table; same calls and constants
@@ -24,6 +26,8 @@ BossF MainCamera__Q23msw11CCameraBossFv near 97.8 stack slots and one temporary 
 BossF MainOffBall___Q23msw14CChrDrvPadBossFPQ33msw7CChrDrv8_CHR_MSG near 100.0 float register choice only (stick power f2 vs f0); objdiff shows 100%
 BossF MainOnBall___Q23msw14CChrDrvPadBossFPQ33msw7CChrDrv8_CHR_MSG near 99.9 float register choice only (camera yaw in f0 vs f1)
 BossF Main__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
+BossF Main__Q33msw12GIMMICK_BOSS14CEffectCoinGetFv near 99.0 register choice only (stack-vector address registers, paired-single temporaries); same as the Dodge/Volley/Hockey/Basket copies
+BossF Main__Q33msw12GIMMICK_BOSS16CEffectCoinScoreFv near 98.8 register choice only (fmadds operand order of a product by a zero speed, stack-vector address registers); same as the Volley/Basket copies
 BossF MethdChgLeader__Q23msw12CChrCoreBossFv near 99.7 abs() result in r3 instead of r0; register choice only
 BossF MethdShootStance__Q23msw12CChrCoreBossFfi near 99.8 r3/r4 swapped in the inlined FsmqGetWork_ (queue head vs work-queue pointer); register choice only
 BossF MethdSideStep__Q23msw12CChrCoreBossFff near 99.0 the two float parameters kept in f30/f31 the other way round; register choice only
@@ -55,4 +59,5 @@ BossF TrgShootStart___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of th
 BossF __ct__Q23msw11CCameraBossFl near 99.6 register allocation only
 BossF __ct__Q23msw17CItemBallBossBombFPQ23msw5CBall near 98.5 original reloads m_pMdl before CreateAttachEffect; ours reuses the value from the null check (same field, nothing written between)
 BossF __ct__Q23msw21CBallTargetMarkerBossFPQ23bcs5CTaskUli near 99.8 stack slots of the inlined SetState ptmf temporaries differ; same stores and values
+BossF __ct__Q33msw12GIMMICK_BOSS16CEffectCoinScoreFPQ23bcs5CTaskRCQ23bcs5FVEC3fl near 99.4 float register choice, one m_pMdl load scheduled differently (no store in between); same as the Basket/Hockey copies
 BossF __dt__Q23msw11CChrManBossFv near 99.1 loop counter and byte offset swap registers (r29/r30); same instructions otherwise

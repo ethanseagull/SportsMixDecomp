@@ -152,6 +152,18 @@ namespace msw {
             void FriendList_Out();
             void FriendList_LineMessage(long nBtnKindId);
 
+            // Added for MenuF game/menu/CWiFiGame.cpp (return types
+            // guessed). The steps of the Wi-Fi game selection screen
+            // (SelectMenu::CWiFiGame), the game and play mode button
+            // nBtnKindId selects, and the steps of the Wi-Fi top screen.
+            void WifiGame_In();
+            void WifiGame_Loop();
+            void WifiGame_Out();
+            void WifiGame_SetPlayStyle(long nBtnKindId);
+            void WifiTop_In();
+            void WifiTop_Loop();
+            void WifiTop_Out();
+
             // Added for MenuF game/menu/CPlusMinus.cpp (defined there; the
             // return types and argument names are guesses). Whether pad
             // nPad uses a cursor (either of two flags of CMenuPadInfo).
@@ -463,9 +475,26 @@ namespace msw {
         private:
             unsigned char m_Unk714[0x48];    // 0x714
         public:
-            // 0x75C. (added for game/menu/CWiFiFrindVS.cpp) 0x1EC bytes
-            // FriendVS_Loop clears before the friend match starts.
-            unsigned char m_FriendVSWaitWork[0x1EC];
+            // Size 0x1EC. (added for game/menu/CWiFiGame.cpp; names
+            // guessed) What each side of a friend match sends the other
+            // (bcs::dwc::CDwc::SetMySingleDataA, GetSingleDataA).
+            struct WiFiSingleData {
+                unsigned char m_Unk00[4];    // 0x00
+                unsigned char m_nRole;       // 0x04, compared with m_bStarMii
+                unsigned char m_Unk05[3];    // 0x05
+                long m_nBtnKindId;           // 0x08, the button the host's cursor is on
+                unsigned long m_nInput;      // 0x0C, the host's decide input
+                unsigned char m_Unk10[0x1DC]; // 0x10
+            };
+
+            union {
+                // 0x75C. (added for game/menu/CWiFiFrindVS.cpp) 0x1EC bytes
+                // FriendVS_Loop clears before the friend match starts.
+                unsigned char m_FriendVSWaitWork[0x1EC];
+                // The same bytes as this player's WiFiSingleData
+                // (game/menu/CWiFiGame.cpp).
+                WiFiSingleData m_MySingleData;
+            };
         private:
             unsigned char m_Unk948[0x14];    // 0x948
         public:

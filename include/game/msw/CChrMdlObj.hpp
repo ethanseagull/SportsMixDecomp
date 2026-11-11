@@ -25,6 +25,22 @@ namespace msw {
             // Hides or shows a Mii's face. (return type guessed)
             void SetMiiNoFace(int bNoFace);
 
+            // (DOL; added for MenuF's game/menu/CTopMenuChrObj.cpp; names of
+            // the arguments and return types guessed)
+            // Builds the model of the top menu's character of kind nKind.
+            void CreateTopMenuObj(nw4r::g3d::ResFile file, long nKind, long);
+            // Builds a Mii's model for the player info screens.
+            void CreatePlayerInfoObj(nw4r::g3d::ResFile file, RFLStoreData &rData, unsigned long nFlag, long);
+            // Shows or hides the model (meaning of the second argument not
+            // known; 1 in both callers).
+            void SetDispEnable(int bDisp, int);
+            // The expression of the face (1 to 7).
+            void SetFaceAnmType(long nType);
+            // The gold version of the model.
+            void EnableGoldModel(int bGold);
+            // The size of a Mii's head.
+            void SetMiiHeadScale(float fScale);
+
             // The trigger callback of the model's motion; pUser is the model.
             static void CallbackMotTrg(const bcs::CAnmObjMotBase::MOT_TRG *pTrg, void *pUser);
 

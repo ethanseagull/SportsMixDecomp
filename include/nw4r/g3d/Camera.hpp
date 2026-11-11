@@ -45,6 +45,9 @@ namespace nw4r {
                 // the camera's viewport, projection and scissor into GX.
                 void GXSetViewport() const;
                 void GXSetProjection() const;
+                // (DOL; added for MenuF's msw::CBBoxObj) The screen position
+                // of the point rPos.
+                void Project(math::VEC3 *pOut, const math::VEC3 &rPos) const;
                 void GXSetScissor() const;
                 void GXSetScissorBoxOffset() const;
 

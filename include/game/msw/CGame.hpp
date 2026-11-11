@@ -364,6 +364,9 @@ namespace msw {
             // The colour of team nTeam: the byte at g_GameWork + 0x80 +
             // nTeam, read unsigned. The radar uses it as an index of four.
             static long GetTeamColorIdx(long nTeam);
+            // (DOL; added for MenuF's msw::CTopMenuChr, which gives team n
+            // colour n) Sets the colour of team nTeam.
+            static void SetTeamColorIdx(long nTeam, long nColor);
             // The result of team nTeam: the byte at g_GameWork + 0xFC + nTeam,
             // read unsigned. What the values mean is not known;
             // CTmGameHandler::_SetBattleWin takes it and _IsBattleWin tests

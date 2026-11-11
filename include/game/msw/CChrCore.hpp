@@ -959,6 +959,18 @@ namespace msw {
             // (name guessed) BossF's CEventDemoBoss::CreateDemo sets bit 2
             // (no drawing) on each character the demo replaces by a model.
             void OnDispFlag(unsigned long nBit) { m_nDispFlag |= nBit; }
+            // (name guessed) msw::CEventChrCore::SetDisp clears bit 2 again.
+            void OffDispFlag(unsigned long nBit) { m_nDispFlag &= ~nBit; }
+            // (fn_800E0A68, fn_800E0A90, unnamed in the DOL; names and
+            // meanings guessed) Clear bit 23 or bit 24 of the flag word at
+            // 0xEC when bEnable is set, set it otherwise. Called by
+            // msw::CEventChrCore::_UpdateFlags with bits 18 and 19 of the
+            // event model's flags.
+            void SetEnableFlagEC23(int bEnable);
+            void SetEnableFlagEC24(int bEnable);
+            // (fn_800DFAEC, unnamed in the DOL; name guessed) Sets the
+            // rotation of the character's model (msw::CEventChrCore::_SetRot).
+            void SetRot(const bcs::FVEC3 &rRot);
 
             // The texture of the character's radar icon; null when
             // IsDisable() is true. In the DOL. (that the pointer is to a
@@ -1146,6 +1158,11 @@ namespace msw {
             int IsAnimEnd(unsigned long nSlot) const;
             void SetMoveMotType(long nType);
             void PlayVoice(long nVoice, unsigned long);
+            // (added for msw::CEventChrCore; return types and parameter
+            // meanings guessed) Plays sound nSe; whether motion nMotId of
+            // the event slot loops.
+            unsigned long PlaySe(long nSe, unsigned long, long, float, float, float);
+            int IsAnimResLoopType(long nMotId) const;
             int IsInvincible() const;
             // The ball the character holds.
             CBall *GetAttachBall() const;

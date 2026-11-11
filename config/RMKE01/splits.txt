@@ -224,7 +224,8 @@ game/msw/CEventMove.cpp:
 	.text       start:0x80114BF4 end:0x80114D94
 
 game/msw/CEventChrCore.cpp:
-	.text       start:0x8011722C end:0x80117758
+	.text       start:0x8011722C end:0x801177F4
+	.data       start:0x8046F318 end:0x8046F3CC
 
 game/msw/CEventScene.cpp:
 	.text       start:0x801177F4 end:0x8011970C
@@ -234,6 +235,9 @@ game/msw/CSceneCalc.cpp:
 
 game/msw/CEventDemo.cpp:
 	.text       start:0x80119B00 end:0x80119FAC
+	.sdata      start:0x805BFBA0 end:0x805BFBA8
+	.sbss       start:0x805C0C00 end:0x805C0C08
+	.sdata2     start:0x805C2A70 end:0x805C2A78
 
 game/msw/EvDemo.cpp:
 	.text       start:0x8011D564 end:0x8011D800
@@ -609,7 +613,8 @@ game/msw/vm/CVMCpu.cpp:
 	.text       start:0x801FADC4 end:0x801FAEFC
 
 game/msw/vm/CVMScript.cpp:
-	.text       start:0x801FAF78 end:0x801FB3FC
+	.text       start:0x801FAF78 end:0x801FB608
+	.data       start:0x80487028 end:0x80487048
 
 game/msw/CEventNodeBase.cpp:
 	.text       start:0x801FC05C end:0x801FC65C

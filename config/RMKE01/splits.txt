@@ -639,10 +639,7 @@ game/msw/CStgGmk_WaveCluster.cpp:
 	.text       start:0x80213BF0 end:0x80215280
 
 game/msw/CStage02Base.cpp:
-	.text       start:0x80215608 end:0x80215FD0
-
-game/msw/CStage02Base/CSplashEff.cpp:
-	.text       start:0x80216080 end:0x80216460
+	.text       start:0x80215608 end:0x802167A0
 
 game/msw/CStage01Base.cpp:
 	.text       start:0x80217A9C end:0x80217AF0

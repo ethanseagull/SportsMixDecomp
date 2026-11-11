@@ -54,7 +54,8 @@ namespace msw {
             {
                 return m_WavePos0.x < m_WavePos1.x ? m_WavePos0 : m_WavePos1;
             }
-            virtual const bcs::FVEC3 &GetWaveVelocityByPos(const bcs::FVEC3 &rPos) const;
+            // Returned by value (the DOL body fills the caller's copy).
+            virtual bcs::FVEC3 GetWaveVelocityByPos(const bcs::FVEC3 &rPos) const;
             virtual CStgGmk_Wave *GetNewWave();
             virtual const CStgGmk_Wave *GetNewWave() const;
             virtual CStgGmk_Wave *GetOldWave();

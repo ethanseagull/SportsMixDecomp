@@ -476,6 +476,30 @@ namespace msw {
     extern float BASKET_PRM_S07_MUD_TBL1_POS_Z0;
     extern float BASKET_PRM_S07_MUD_TBL1_POS_X1;
     extern float BASKET_PRM_S07_MUD_TBL2_POS_Z2;
+
+    // Stage 16, the star piece stage. Times are in seconds.
+    extern float BASKET_PRM_S16_DROP_AREA_Z;
+    extern long BASKET_PRM_S16_MAX_NUM;
+    extern float BASKET_PRM_S16_POP_TIME;
+    extern float BASKET_PRM_S16_POP_TIME_RND;
+    extern float BASKET_PRM_S16_POP_POS_Y;
+    extern float BASKET_PRM_S16_DROP_SPEED;
+    extern float BASKET_PRM_S16_DROP_ANGLE;
+    extern long BASKET_PRM_S16_BOUND_NUM;
+    extern float BASKET_PRM_S16_BOUND_REDUCE_Y;
+    extern float BASKET_PRM_S16_BOUND_REDUCE_XZ;
+    extern long BASKET_PRM_S16_ADD_COIN_0;
+    extern float BASKET_PRM_S16_WARP_INTERVAL;
+    extern float BASKET_PRM_S16_WARP_TIME;
+    extern float BASKET_PRM_S16_WARP_SPEED;
+    extern float BASKET_PRM_S16_WARP_BLUR_SHIFT;
+    extern long BASKET_PRM_S16_FLASH_COLOR_R;
+    extern long BASKET_PRM_S16_FLASH_COLOR_G;
+    extern long BASKET_PRM_S16_FLASH_COLOR_B;
+    extern long BASKET_PRM_S16_FLASH_COLOR_A;
+    extern float BASKET_PRM_S16_FLASH_TIME;
+    extern float BASKET_PRM_S16_FLASH_GAIN;
+    extern float BASKET_PRM_S16_FLASH_DECAY;
 }
 
 #endif /* !MSW_BASKETPRM_HPP_ */

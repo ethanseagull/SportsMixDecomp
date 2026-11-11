@@ -5,7 +5,7 @@ namespace msw {
 
         void CVMCpu::Reset()
         {
-            OnReset();
+            ResetBind();
             m_nSP = 0;
             m_nFP = 0;
             m_pPC = 0;
@@ -13,7 +13,7 @@ namespace msw {
             m_nUnk1C = 0;
         }
 
-        void CVMCpu::OnReset()
+        void CVMCpu::ResetBind()
         {
         }
 

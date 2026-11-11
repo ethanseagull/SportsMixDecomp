@@ -34,9 +34,10 @@ namespace msw {
             short nTarget;         // 0x02, the count that clears the mission
             short nCount;          // 0x04, the current count
             short nPrevCount;      // 0x06, nCount before the last change
-            unsigned char m_Unk08[4];
+            short nUnk08;          // 0x08, cleared by TourF's CTmScript
+            unsigned char m_Unk0A[2];
             float fCountTime;      // 0x0C, the float the count functions store
-            unsigned char m_Unk10[4];
+            long nUnk10;           // 0x10, cleared by TourF's CTmScript
         };
         typedef RULE_INFO MISSION_INFO;
 
@@ -46,27 +47,37 @@ namespace msw {
             // The sport (CGame::GAME_MODE) of the match.
             long GetGameMode() const { return nFlags06 & 7; }
 
-            unsigned char m_Unk00[6];
+            // 0x00: the map point of the match; 0x01, 0x02: the points the
+            // two teams come from (TourF CTmScript's script calls
+            // SetMatchMake and MatchMake). (names guessed)
+            unsigned char nPoint;
+            unsigned char aTeamPoint[2];
+            unsigned char m_Unk03[3];
             // 0x06: bits 0-2 the sport; with 0x20 set the match is played on
-            // stage 1.
+            // stage 1; 0x10 once CTmScript::SetupMatch has turned the
+            // sports over; bits 6-7 from the script's SetMatchUnlock (0x80:
+            // the stage comes from an unlock).
             unsigned char nFlags06;
             signed char nRound;      // 0x07, passed to CGame::SetRound
             short nComLevel;         // 0x08, the computer teams' level in percent
             signed char nStage;      // 0x0A, the stage; TournamentRule::SetupGame writes back the one chosen
             unsigned char nRule;     // 0x0B, the match's rule script (CTmScript); 0 for none
-            unsigned char m_Unk0C;
-            // 0x0D, 0x0E: which side the user's team plays on, read by
-            // TournamentRule (0 with 0x0D clear, 1 with 0x0D set and 0x0E
-            // clear). (meaning guessed)
+            // 0x0C: 0 for an unused match; 0x80 played, 0x40 closed, 0x08
+            // mission cleared, 0x10 and 0x20 set by the script's
+            // MatchMake/SecretMake. (name guessed)
+            unsigned char nState;
+            // 0x0D, 0x0E: the two teams of the match (CTmScript::
+            // SetupMatch stores them; the user's team is 0), read by
+            // TournamentRule to see which side the user's team plays on.
             signed char nSideFlag0D;
             signed char nSideFlag0E;
-            unsigned char m_Unk0F;
+            signed char nWinTeam;    // 0x0F, the team that won; -1 before (name guessed)
         };
 
         // One team of the tournament, 0x24 bytes (GetTeamInfo indexes them by
         // 0x24). (member names guessed)
         struct TEAM_INFO {
-            unsigned char m_Unk00[0x10];
+            float fUnk00[4];             // 0x00, cleared by TourF CTmScript's CreateTeamMission
             // 0x10: the last routes the team moved along, oldest first,
             // 0 for none (msw::CTournamentMan::PushMoveRoute). A route
             // number of 0x100 and up is route n - 0x100 run backwards.
@@ -75,13 +86,20 @@ namespace msw {
             // 0x1B, per member: bits 0-1 the colour; with bit 7 set, bits 5-6
             // the player number that controls the member.
             unsigned char aCharFlag[3];
-            unsigned char m_Unk1E;
+            // 0x1E: the map point the team moves to next (CTmScript's
+            // SetMoveTarget and MatchMake). (name guessed)
+            unsigned char nTargetPoint;
             unsigned char nPoint;        // 0x1F, the map point the team is on; 0xFF: not on the map
-            unsigned char m_Unk20[2];
+            // 0x20: set to 1 for the team that moves first in turn mode 1
+            // (CTmScript::_OpSysCallTurnMode). (name guessed)
+            unsigned char nTurn;
+            unsigned char m_Unk21;
             // 0x22, bit 1: set by TourF's Stage33 while a member of the
             // team rides an airship. (name and meaning guessed)
             unsigned char nFlag22;
-            unsigned char m_Unk23;
+            // 0x23: in a mixed tournament, the sport the team's matches are
+            // played in; -1: none. (name guessed)
+            signed char nGameMode;
 
             // (name guessed) The route the team moved along last, 0 for none.
             unsigned short GetLastRoute() const
@@ -108,8 +126,30 @@ namespace msw {
         struct POINT_INFO;
         struct ROUTE_INFO;
 
+        // One item setting of the match's panels (TourF CTmScript::
+        // SetupPanel), 4 bytes. (names guessed)
+        struct PANEL_INFO {
+            short nItem;   // 0x00
+            short nValue;  // 0x02, -1 for none
+        };
+
+        // One item parameter of the match (CTmScript::SetupItemParam), 8
+        // bytes; the value is an integer or a float, by parameter. (names
+        // guessed)
+        struct ITEM_PARAM {
+            short nItem;   // 0x00, -1 for none
+            short nParam;  // 0x02
+            union {
+                long i;
+                float f;
+            };             // 0x04
+        };
+
         struct TOURNAMENT_INFO {
-            unsigned char m_Unk0000[0x20];
+            // 0x0000: per sport, one bit per character the level scripts
+            // (CTmScript::SetupInitial) give a team, by
+            // CUnlockFlags::GetCharFlagPos. (name guessed)
+            unsigned long long aLevelCharFlag[4];
             // The texts of the next match's mission, from CNameMesg's
             // "_C", "_L" and "_H" mission strings, with their @...@ tags
             // replaced by TournamentRule. (names guessed)
@@ -117,14 +157,32 @@ namespace msw {
             wchar_t szMissionText[0x200];    // 0x0220, "_L", on one line
             wchar_t szMissionHelp[0x200];    // 0x0620, "_H"
             RULE_INFO aMission[16];          // 0x0A20
-            unsigned char m_Unk0B60[0xCA1 - 0xB60];
+            PANEL_INFO aPanel[16];           // 0x0B60
+            ITEM_PARAM aItemParam[32];       // 0x0BA0
+            unsigned char m_Unk0CA0;
             signed char nUnkCA1;             // 0x0CA1, passed to CGame::EnableRuleOptionFlag(0x100, ...)
             unsigned char m_Unk0CA2[4];
             signed char nUnkCA6;             // 0x0CA6, copied to CGame::GameWork 0x1C
             unsigned char m_Unk0CA7[0xCAC - 0xCA7];
             PLAYER_INFO aPlayer[3];          // 0x0CAC
             wchar_t aPlayerName[3][0x20];    // 0x0D9C
-            unsigned char m_Unk0E5C[0x1052 - 0xE5C];
+            unsigned char m_Unk0E5C[0xF7C - 0xE5C];
+            // 0x0F7C: flags of the scripts, kept by BackupFlags (TourF
+            // CTmScript); the last one says whether the user's team won.
+            // (names guessed)
+            signed char aFlag[0x40];
+            // 0x0FBC: flags kept over the tournament, 0x20 per cup; the
+            // first of a cup is set once its first-time script has run.
+            signed char aFirstFlag[0x80];
+            unsigned char m_Unk103C;
+            // 0x103D-0x103F: teams passed to SetLeaderNoUnlock by the
+            // script's UnlockOpen (kinds 5, 4 and 3). (name guessed)
+            signed char aLeaderTeam[3];
+            // 0x1040: the order of the teams in turn mode 1, -1 for none.
+            // (names guessed)
+            signed char aTurnTeam[16];
+            signed char nTurnIndex;          // 0x1050
+            signed char nTurnMode;           // 0x1051
             // 0x1052, what CTournament::GetPlayerMax returns (set by
             // CTournament::SetPlayType)
             signed char nPlayerMax;
@@ -142,11 +200,17 @@ namespace msw {
             // 0x1064: the colour the map is drawn in, faded towards by
             // msw::CTournamentMan::UpdateFrame. (name guessed)
             bcs::BCS_Color mapColor;
-            const POINT_INFO *pPointInfo; // 0x1068, the map points of the stage
-            const ROUTE_INFO *pRouteInfo; // 0x106C, the routes between them
+            // The tables of the map, owned by TourF msw::CTmScript, which
+            // fills them from the stage's script and writes to them.
+            POINT_INFO *pPointInfo; // 0x1068, the map points of the stage
+            ROUTE_INFO *pRouteInfo; // 0x106C, the routes between them
             // 0x1070: the camera settings of the stage, two per camera kind
             // (the second for the other screen aspect). (name guessed)
-            const TournamentData::CAMERA_INFO *pCameraInfo;
+            TournamentData::CAMERA_INFO *pCameraInfo;
+            // 0x1074: the sports of a mixed tournament in the order their
+            // matches come; CTmScript::SetupMatch takes the first and turns
+            // the list. (name guessed)
+            signed char aGameModeOrder[4];
         };
 
         // One point of the tournament map, 0x14 bytes. (names guessed)
@@ -156,7 +220,11 @@ namespace msw {
             // 2 units with x from -16 and z negated; 0xFF for none.
             unsigned char nViewX;
             unsigned char nViewZ;
-            unsigned char m_Unk0E[3];
+            // 0x0E-0x10: set from the stage script (CTmScript's
+            // SetPointData); -1, -1 and 0 by default.
+            signed char m_Unk0E;
+            signed char m_Unk0F;
+            unsigned char m_Unk10;
             // 0x11: 0x10, 0x08 and 0x04 are passed on by CRouteBigGunOut
             // (TourF) as bits 0, 1 and 2 of a timer parameter.
             unsigned char nFlag;
@@ -238,6 +306,15 @@ namespace msw {
         long SelectFastRouteBasic(unsigned char nGoal, unsigned short *pRoute, long nNum, long nMove,
                                   _MOVE_POINT *pMove, float fRand);
 
+        // (return types and names guessed) The characters the tournament
+        // has used in sport nGameMode, and the character member nNo of team
+        // nTeam plays. Used by TourF CTmScript.
+        unsigned long long GetUsedChar(long nGameMode, int nUnk);
+        long GetSettingChar(long nTeam, long nNo);
+        // Makes the leader of team nTeam a character that is not unlocked.
+        // (meaning and names guessed)
+        void SetLeaderNoUnlock(long nTeam, long nChar, unsigned long nFlag);
+
         // Both return the address of the same object. (reference or pointer
         // is a guess; so is the const of the first)
         const TOURNAMENT_INFO &GetTournamentInfo();
@@ -267,6 +344,26 @@ namespace msw {
         inline const ROUTE_INFO *GetRouteInfo(long nRoute)
         {
             const TOURNAMENT_INFO &info = GetTournamentInfo();
+            if (nRoute >= 0) {
+                return &info.pRouteInfo[nRoute];
+            }
+            return info.pRouteInfo;
+        }
+
+        // Writable copies of the two above (TourF CTmScript). (names
+        // guessed)
+        inline POINT_INFO *PointInfo(long nPoint)
+        {
+            TOURNAMENT_INFO &info = TournamentInfo();
+            if (nPoint >= 0) {
+                return &info.pPointInfo[nPoint];
+            }
+            return info.pPointInfo;
+        }
+
+        inline ROUTE_INFO *RouteInfo(long nRoute)
+        {
+            TOURNAMENT_INFO &info = TournamentInfo();
             if (nRoute >= 0) {
                 return &info.pRouteInfo[nRoute];
             }

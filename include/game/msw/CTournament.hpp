@@ -12,6 +12,9 @@ namespace msw {
             static int IsMixTournamentGame(); // type guessed
             // The byte at 0x1054 of the tournament's work area.
             static long GetGameMode();
+            // (added for TourF CTmScript; description guessed) The sport of
+            // the tournament, a fixed one for a mixed tournament.
+            static long GetGameModeNoMix();
             // The cup being played (0 to 3). (description guessed)
             static long GetCup();
             // The game mode of the stage: GetGameMode, mapped when it is 5.

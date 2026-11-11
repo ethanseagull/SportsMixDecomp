@@ -49,6 +49,10 @@ namespace msw {
             static void Finalize();
             static CGameCamera *GetInstance(long view);
             static long GetInstanceNum();
+            // Static (the DOL body takes no object and returns 1). HockeyF's
+            // CGoalMdlHockey::NewMdl gives the goal a fading model when it
+            // is true.
+            static int IsBehindCamera();
 
             // One camera per view, made by each sport's Initialize.
             static CGameCamera *g_pInstance[4];

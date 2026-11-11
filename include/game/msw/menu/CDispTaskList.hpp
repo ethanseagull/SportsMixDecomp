@@ -49,11 +49,12 @@ namespace msw {
                 virtual void Disp(CMenuPaneAccessor *pAccessor, long);
         };
 
-        // Size 0x10, vptr at 0x0C. Lives in the DOL. Nothing of it is used
-        // yet; it is here for the layout of the classes that hold one.
+        // Size 0x10, vptr at 0x0C. Lives in the DOL
+        // (src/game/msw/menu/CDispTaskList.cpp): an owning list of
+        // CDispTaskLink; removing a task deletes it.
         class CDispTaskList {
             private:
-                unsigned char m_Unk00[0xC]; // 0x00: a nw4r::ut::List
+                nw4r::ut::List m_List; // 0x00
 
             public:
                 CDispTaskList();

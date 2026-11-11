@@ -39,7 +39,7 @@ namespace msw {
             // (name guessed) A splash effect that follows the waves: a list
             // node, size 0x28. DOL class; its constructor, destructor, Main,
             // Kick, Stop, Erase, StopAll, EraseAll and GetEffId are in the
-            // DOL (game/msw/CStage02Base/CSplashEff.cpp); the position
+            // DOL (game/msw/CStage02Base.cpp); the position
             // accessors are inline (the modules emit them weak).
             class CSplashEff : public bcs::CListNodeBase {
                 public:
@@ -59,9 +59,27 @@ namespace msw {
                     virtual long GetEffId(long type) const;
 
                 private:
-                    long m_Unk10;                // 0x10, the constructor's first argument
-                    unsigned char m_Unk14[0x8];  // 0x14, two 4-byte objects with a DOL constructor and destructor (effect handles?)
-                    bcs::FVEC3 m_vPos;           // 0x1C
+                    // (name guessed) The handle of one attached effect,
+                    // stopped when the handle goes. Its functions are
+                    // defined in game/msw/CStage02Base.cpp (the DOL's
+                    // fn_80216074 and fn_80216014).
+                    class CEffHandle {
+                        public:
+                            CEffHandle();
+                            ~CEffHandle();
+                            void Stop();
+                            void Erase();
+
+                            unsigned long m_hEffect; // 0x00
+                    };
+
+                    // (name guessed) Picks the effects GetEffId gives: 0, 1
+                    // or 2 (the constructor's first argument).
+                    long m_nKind;               // 0x10
+                    // The effects of the two kinds (0: flow towards -x,
+                    // 1: towards +x).
+                    CEffHandle m_aEffect[2];    // 0x14
+                    bcs::FVEC3 m_vPos;          // 0x1C
             };
 
             // (name guessed) A splash with one fixed effect, size 0x30: the
@@ -91,12 +109,18 @@ namespace msw {
 
         private:
             // (name guessed) The list of splash effects, size 0x28: a
-            // bcs::CListBase (its node count at 0x20, its vptr at 0x24). Its
-            // functions are in the DOL (vtable lbl_80488664; the slot at 0x10
-            // runs the splashes with the wave cluster). Not mapped further.
-            class CSplashList : public bcs::CListBase {
+            // bcs::CList (its node count at 0x20, its vptr at 0x24; the
+            // template's own weak destructor and vtable are unreferenced),
+            // vtable lbl_80488664. Its functions are in the DOL
+            // (game/msw/CStage02Base.cpp).
+            class CSplashList : public bcs::CList<CSplashEff> {
                 public:
+                    // Deletes every splash.
                     virtual ~CSplashList();
+                    // Runs every splash with the wave cluster.
+                    virtual void Main(float frame, const CStgGmk_WaveCluster *pCluster);
+                    virtual void StopAll();
+                    virtual void EraseAll();
             };
 
             bcs::CTask *m_pParent;                 // 0x00

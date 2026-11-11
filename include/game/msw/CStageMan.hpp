@@ -569,7 +569,7 @@ namespace msw {
         struct MDL_GEN_RULE {
             const char *m_pPattern;                                      // 0x00
             long m_nId;                                                  // 0x04, the next table in an end entry
-            unsigned long m_Unk08;                                       // 0x08
+            long m_Unk08;                                                // 0x08 (1 for the stage 02 splash models)
             unsigned long m_Unk0C;                                       // 0x0C
             CStageMdl *(*m_pNewMdl)(CStageMan *, long, bcs::CRegex &); // 0x10
         };

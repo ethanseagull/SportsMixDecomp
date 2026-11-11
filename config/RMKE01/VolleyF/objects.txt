@@ -46,3 +46,6 @@ Equivalent game/volley/CStageVolley42.cpp
 NonMatching game/volley/CStageVolley03.cpp
 Equivalent game/volley/CStageVolley05.cpp
 NonMatching game/volley/CStageVolley11.cpp
+Equivalent game/volley/CStgGmk_Case_Act_Volley.cpp
+Equivalent game/volley/CGimmickManVolley.cpp
+NonMatching game/volley/CBallTargetMarker.cpp

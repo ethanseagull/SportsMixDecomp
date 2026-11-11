@@ -17,6 +17,8 @@ Equivalent game/bcs/dwc/CDwcFriend.cpp
 Equivalent game/bcs/CMdlShadow.cpp
 Equivalent game/bcs/CMusicData.cpp
 Equivalent game/msw/CStage04Base.cpp
+Equivalent game/msw/menu/CDispTaskList.cpp
+Equivalent game/msw/CStage02Base.cpp
 Matching game/msw/CMenuPadInfo.cpp
 Matching game/msw/CStageNet.cpp
 Matching game/msw/CStage01Base.cpp
@@ -27,7 +29,6 @@ NonMatching game/msw/CGameSpeedCtrl.cpp
 Matching game/msw/menu/CStateSave.cpp
 Matching game/msw/CCockpitResultTime.cpp
 Matching game/msw/CEffectTableList.cpp
-Equivalent game/msw/menu/CDispTaskLink.cpp
 NonMatching game/msw/CArrowSignalBase.cpp
 Equivalent game/msw/CStgGmk_WaterPillar.cpp
 NonMatching game/msw/CStage17Base/CTurnTable.cpp

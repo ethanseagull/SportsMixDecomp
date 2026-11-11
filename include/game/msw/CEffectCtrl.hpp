@@ -88,6 +88,8 @@ namespace msw {
             // removes the effect at once; Stop lets it end.
             static void EraseAttachEffect(unsigned long hEffect);
             static void StopAttachEffect(unsigned long hEffect);
+            // (DOL; used by msw::CEventModel::StopEffectForce)
+            static void StopAttachEffectForce(unsigned long hEffect);
 
             // The cluster with handle hEffect, null when there is none.
             CEffectCluster *FindList(unsigned long hEffect);

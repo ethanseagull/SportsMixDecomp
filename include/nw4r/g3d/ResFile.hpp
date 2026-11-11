@@ -4,6 +4,7 @@
 #include "nw4r/db/Panic.hpp"
 #include "nw4r/g3d/ResAnmChr.hpp"
 #include "nw4r/g3d/ResAnmClr.hpp"
+#include "nw4r/g3d/ResAnmShp.hpp"
 #include "nw4r/g3d/ResAnmTexPat.hpp"
 #include "nw4r/g3d/ResAnmTexSrt.hpp"
 #include "nw4r/g3d/ResMdl.hpp"
@@ -43,6 +44,9 @@ namespace nw4r {
                 ResMdl GetResMdl(const char *pName) const;
                 // (DOL; added for VolleyF game/volley/CBallTargetMarker.cpp)
                 ResAnmTexPat GetResAnmTexPat(const char *pName) const;
+                // (DOL fn_80408540, unnamed; name after the others; used by
+                // msw::CEventModel)
+                ResAnmShp GetResAnmShp(const char *pName) const;
                 // DOL functions (MenuF msw::SelectMenu::CCourtChr).
                 ResTex GetResTex(const char *pName) const;
                 // (added for MenuF game/menu/CRuleInfo.cpp)

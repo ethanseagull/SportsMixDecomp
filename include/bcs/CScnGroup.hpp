@@ -21,6 +21,11 @@ namespace bcs {
 
             // Adds pObj to the group. (return type guessed: the DOL body
             // returns nothing the callers read)
+            // (DOL) CScnObj's pure slot 0x10C, so that the group can be
+            // created (VolleyF CcSiromaMagicCircle news one); what it does
+            // for a group is not known.
+            virtual void UpdateFrame(float);
+
             void AppendChild(CScnObj *pObj);
             // fn_80043174 (name guessed). Takes the last child out of the
             // group and returns it, or null if there is none.

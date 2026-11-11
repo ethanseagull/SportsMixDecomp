@@ -28,6 +28,7 @@ namespace msw {
     class CCollBodyUnit;
     class CCollDefUnit;
     class CDropCoin;
+    class CEffectCluster;
     class CItem;
     class CQPanel;
 
@@ -1092,7 +1093,9 @@ namespace msw {
             // DOL. The yaw towards the goal the character's team defends.
             float GetGuardGoalYRot() const;
             // DOL. Sends message id to the character's driver.
-            void DriverSendMessage(CChrDrv::MSG_ID id, long, long, unsigned long, unsigned long);
+            // (BasketF's CChrCoreBasketSaboten tests the result: 4 for one
+            // of its messages.)
+            long DriverSendMessage(CChrDrv::MSG_ID id, long, long, unsigned long, unsigned long);
 
             // Added for BossF game/boss/CChrCoreBoss<Name>.cpp (all in the
             // DOL; return types and parameter meanings guessed).
@@ -1125,6 +1128,16 @@ namespace msw {
                                            unsigned long);
             // An effect attached to the character's default node.
             unsigned long Eff_CreateAttachAuto(long nSlot, long nEff, unsigned long);
+            // Added for VolleyF game/volley/CChrCoreVolleySiroma.cpp (DOL;
+            // return types guessed). An effect at a point kept in slot nSlot;
+            // a jump of fFrame frames (three-value form); lets the held ball
+            // go; the position as a pointer; a sound that follows pPos.
+            unsigned long Eff_CreateSimple(long nSlot, long nEff, const bcs::FVEC3 &pos, float fRotY, unsigned long,
+                                           unsigned long, unsigned long);
+            void Util_SetJumpParam(float fFrame, float fFrom, float);
+            void DetachBall();
+            const bcs::FVEC3 *GetPosPtr();
+            void SE_PlayMove(long nSlot, long nSe, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
             // Stops the effect in slot nSlot.
             void Eff_Stop(long nSlot);
             // The length in frames of motion nMotId.
@@ -1158,6 +1171,15 @@ namespace msw {
             int Eff_IsAlive(long nSlot) const;
             // Stops the effect in slot nSlot at once.
             void Eff_StopForce(long nSlot);
+            // Added for BasketF game/basket/CChrCoreBasketSaboten.cpp (DOL;
+            // return types and parameter meanings guessed). Moves the
+            // character to rPos; one step of the jump set by
+            // Util_SetJumpParam, by fStep frames; sound nSe in sound slot
+            // nSlot, and stops that slot (fading over fFrames).
+            void SetPos(const bcs::FVEC3 &rPos);
+            void Util_DoJumpMove(float fStep);
+            void SE_Play(long nSlot, long nSe, unsigned long, long, float, float, float);
+            void SE_Stop(long nSlot, float fFrames);
             void AnimSetSpeed(unsigned long nSlot, float fSpeed);
             // Plays sound nSe at pPos (null: at the character). (BasketF had
             // it returning void; VolleyF's return type kept.)
@@ -1167,6 +1189,10 @@ namespace msw {
             void SetCollBodyPushPower_(long nPower);
             void SetCollBodyPushType_(BODY_COLL_SIZE_SET_TYPE type, float);
             void SetCollBodyPushRank_(long nRank);
+            // Added for BasketF game/basket/CChrCoreBasketYoshi.cpp (DOL;
+            // return type guessed). The effect in slot nSlot; null when
+            // there is none.
+            CEffectCluster *Eff_GetCluster(long nSlot);
 
         protected:
             unsigned long m_Unk60;
@@ -1202,7 +1228,12 @@ namespace msw {
             unsigned long m_nDispFlag;
             unsigned char m_UnkF4[4];
             int m_bStarPlayer;           // 0xF8, see IsStarPlayer
-            unsigned char m_UnkFC[0x168 - 0xFC];
+            unsigned char m_UnkFC[0x150 - 0xFC];
+            // 0x150 (name guessed): the id of a ball task; the White Mage's
+            // magic circle (VolleyF CC15_VOLLEY::CcSiromaMagicCircle) waits
+            // on it until the ball is shot.
+            unsigned long m_hBall;
+            unsigned char m_Unk154[0x168 - 0x154];
             // 0x168 (name guessed): set by the DOL's SetPassCheckMode(CChrCore *,
             // CBall *); DodgeF's CChrManDodge::Util_SearchChgLeader_ reads it
             // from the character that passed the ball, as the receiver.
@@ -1225,11 +1256,17 @@ namespace msw {
             // character; the cockpits pick the "1P" to "4P" label with it
             // when IsPadCtrl() is set. Read signed.
             signed char m_nCtrlPlayerNo;
-            unsigned char m_Unk17D[0x186 - 0x17D];
+            unsigned char m_Unk17D[0x184 - 0x17D];
+            // 0x184 (name guessed): a model node for effects
+            // (CChrCoreBasketYoshi's jump block effect attaches there).
+            unsigned short m_nEffNodeBlock;
             // 0x186 (name guessed): the model node effects attach to by
             // default (the volley characters pass it to Eff_CreateAttach).
             unsigned short m_nEffNode;
-            unsigned char m_Unk188[0x190 - 0x188];
+            // 0x188 (name guessed): another model node for effects
+            // (CChrCoreBasketSaboten's dunk effect attaches there).
+            unsigned short m_nEffNodeDunk;
+            unsigned char m_Unk18A[0x190 - 0x18A];
             // 0x190 (name guessed): a second model node for effects
             // (CChrCoreVolleyYoshi's block and spike effects attach there).
             unsigned short m_nEffNodeSub;
@@ -1237,7 +1274,11 @@ namespace msw {
             // 0x20C (name guessed): the vertical speed of a jump (negative
             // while falling; CChrCoreVolleyKinopio's block jump tests it).
             float m_fJumpVelY;
-            unsigned char m_Unk210[0x224 - 0x210];
+            unsigned char m_Unk210[0x218 - 0x210];
+            // 0x218 (name guessed): the gravity of a jump; the White Mage's
+            // air trick sets it after Util_SetJumpParam.
+            float m_fJumpGravity;
+            unsigned char m_Unk21C[0x224 - 0x21C];
             // 0x224, 0x228 (names guessed): two jump values the air tricks
             // set next to Util_SetJumpParam.
             float m_fJumpUnk224;

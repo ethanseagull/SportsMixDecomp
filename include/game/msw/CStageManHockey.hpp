@@ -15,6 +15,9 @@ namespace msw {
             CStageManHockey(bcs::CTask *pParent);
             virtual ~CStageManHockey();
 
+            // Makes the stage manager of stage stageNo (CStageFactoryHockey).
+            static CStageManHockey *CreateInstance(bcs::CTask *pParent, long stageNo);
+
             // Overrides are declared in the order of their vtable slots; the
             // new virtual functions follow in the order of
             // __vt__Q23msw15CStageManHockey. The bodies given are the ones
@@ -67,8 +70,10 @@ namespace msw {
             virtual void OnSoundEvent(long) {}
 
         private:
-            CGoalObj *m_pGoal[2];          // 0x1FC, made by CreateGoal
-            unsigned char m_Unk204[0xC];   // 0x204
+            // 0x1FC: the goals made by CreateGoal (two; GetGoal's callers
+            // ask for up to four, and the constructor clears four).
+            CGoalObj *m_pGoal[4];
+            long m_nBallTeam;              // 0x20C, the team holding the ball (name guessed), -1 for none
             // 0x210 and 0x214 (names guessed): the node RegistRotNode
             // registers and its angle, for UpdateRotNode.
             CStageMdlListNode *m_pRotNode;

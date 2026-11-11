@@ -309,10 +309,38 @@ namespace msw {
             void Util_GetGuardCourtRect_(bcs::FVEC4 &rRect);
             void ClearMoveParamWork_(CC_DATA::CHR_PARAM::MOVE_PARAM &rParam);
             void SubStateAirTrickDoJumpMove_(STATE_WORK_AIR_TRICK *pWork);
+            // Added for game/volley/CChrCoreVolleySiroma.cpp (DOL; return
+            // types guessed). The ball can be caught around the character's
+            // root; the receive pose for a direction and the state that
+            // takes the ball on; the target of an arts shot, kept in range;
+            // the target marker shown and hidden; the ball shot at rPos.
+            void SetBallCatchEnableRoot_(float fRange, float, const bcs::FVEC3 &pos);
+            float GetReceiveBaseDir_();
+            long GetReceivePoseDir_(float fDir);
+            STATE_WORK_RECEIVE *SetStateReceive_(CBall *pBall, long, long nPose);
+            void Util_ArtsShootGetTargetPos_(bcs::FVEC3 &rPos, int);
+            void CheckBallTargetRangeSpike_(bcs::FVEC3 &rPos, long nCourt);
+            void SetTargetMarkerEnable_(long nType, const bcs::FVEC3 &rPos, long);
+            void SetTargetMarkerDisable_();
+            void Util_ArtsShootBall_(CBall *pBall, const bcs::FVEC3 &rPos);
 
         protected:
             // Not mapped yet; size 0x964.
-            unsigned char m_Unk574[0x888 - 0x574];
+            unsigned char m_Unk574[0x768 - 0x574];
+            // 0x768 (name guessed): where a ball pulled in by an air trick
+            // sits relative to the hand (CChrCoreVolleySiroma copies it).
+            bcs::FVEC3 m_AdsorbOfs;
+            unsigned char m_Unk774[0x794 - 0x774];
+            // 0x794 (name guessed, as in CChrCoreBoss): the height of each
+            // receive pose the ball is taken at.
+            float m_afReceiveHeight[8];
+            unsigned char m_Unk7B4[0x838 - 0x7B4];
+            // 0x838, 0x868 (names guessed): the target marker's position,
+            // and a value CChrCoreVolleySiroma sets with the marker.
+            bcs::FVEC3 m_TargetMarkerPos;
+            unsigned char m_Unk844[0x868 - 0x844];
+            float m_fTargetMarkerUnk868;
+            unsigned char m_Unk86C[0x888 - 0x86C];
             // 0x888, 0x88C (names guessed): cleared when a block is hit
             // (CChrCoreVolleyKuroma::SubStateBlockJumpBlockHit_).
             float m_fBlockUnk888;
@@ -337,13 +365,16 @@ namespace msw {
         unsigned char m_Unk34[0x58 - 0x34];
         long m_nReceiveType;         // 0x58, passed to ReceiveBall_
         long m_nFlickType;           // 0x5C, passed instead when the ball is flicked away
-        unsigned char m_Unk60[0xD4 - 0x60];
+        unsigned char m_Unk60[0xC8 - 0x60];
+        bcs::FVEC3 m_BallPos;        // 0xC8, where the ball is taken
         float m_afCountWork[2];      // 0xD4, see CChrCoreVolley::m_afCountWork
     };
 
     // (field names guessed; only what the character units read is mapped)
     struct CChrCoreVolley::STATE_WORK_AIR_TRICK {
-        unsigned char m_Unk00[0xC];
+        unsigned char m_Unk00[0x4];
+        unsigned long m_nFlag;       // 0x04, bit 0 once the ball is shot
+        unsigned char m_Unk08[0x4];
         float m_fJumpUnk;            // 0x0C, for CChrCore::m_fJumpUnk224
         bcs::FVEC3 m_TargetPos;      // 0x10, where the trick goes to
         float m_fRotY;               // 0x1C
@@ -353,15 +384,16 @@ namespace msw {
         long m_nTrickStep;           // 0x54
         float m_fTrickFrame;         // 0x58, the length of the trick
         float m_fTrickCount;         // 0x5C, frames of it done
-        unsigned char m_Unk60[0x4];
+        float m_fAdsorbUnk60;        // 0x60, passed to AttachBall
         float m_fAnimSpeed;          // 0x64
         long m_nArtsLevel;           // 0x68
         unsigned char m_Unk6C[0x4];
         short m_nAdsorbStep;         // 0x70
-        unsigned char m_Unk72[0x2];
+        short m_bAdsorbEnd;          // 0x72, set once the pull is over
         float m_fAdsorbFrame;        // 0x74
         float m_fAdsorbFrameMax;     // 0x78
         bcs::FVEC3 m_AdsorbOfs;      // 0x7C
+        bcs::FVEC3 m_ShootPos;       // 0x88, where the arts shot goes
     };
 
     // (field names guessed)
@@ -568,13 +600,52 @@ namespace msw {
             unsigned char m_Unk964[0x970 - 0x964]; // allocated with 0x970 bytes
     };
 
+    // The White Mage: her block puts a light wall up over the net, her
+    // diving receive catches the ball with a spell, and her air trick draws
+    // a magic circle (CC15_VOLLEY::CcSiromaMagicCircle) on the target
+    // marker that shrinks onto the point the ball is shot at.
     class CChrCoreVolleySiroma : public CChrCoreVolley {
         public:
             CChrCoreVolleySiroma();
             virtual ~CChrCoreVolleySiroma();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
+            virtual void Reset_();                                     // 0x384
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void DtorStateSpike();                             // 0x5D4
+            virtual void SubStateBlockJumpCollSet_(STATE_WORK_BLOCK_JUMP *); // 0xCAC
+            virtual int SubStateBlockIsNormalType_() const { return 0; } // 0xCB0
+            virtual int SubStateBlockIsJumpType_() const { return 0; } // 0xCB4
+            virtual int SubStateBlockIsNoFlickType_() const { return 1; } // 0xCB8
+            virtual void SubStateBlockJumpActStart_(STATE_WORK_BLOCK_JUMP *); // 0xCCC
+            virtual int SubStateBlockJumpIsActEnd_(STATE_WORK_BLOCK_JUMP *); // 0xCD0
+            virtual int SubStateBlockJumpActEnd_(STATE_WORK_BLOCK_JUMP *);  // 0xCD4
+            virtual void SubStateBlockJumpBlockHit_(const CCollDefUnit *); // 0xCE0
+            virtual void SubStateSpikeDoSmashSpikeJumpEffect_(STATE_WORK_SPIKE *); // 0xCE8
+            virtual void SubStateSpikeDoSmashSpikeEffect_(STATE_WORK_SPIKE *); // 0xCEC
+            virtual void SubStateSpikeDoLandStart_(STATE_WORK_SPIKE *); // 0xCF0
+            virtual void SubStateAirTrickSetTrickMoveParam_(STATE_WORK_AIR_TRICK *, long); // 0xD00
+            virtual float SubStateAirTrickGetTrickRotFrame_(STATE_WORK_AIR_TRICK *); // 0xD0C
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual void SubStateAirTrickStartTMDisp_(STATE_WORK_AIR_TRICK *); // 0xD18
+            virtual void SubStateAirTrickStartBallAdsorb_(STATE_WORK_AIR_TRICK *, CBall *); // 0xD24
+            virtual float SubStateAirTrickGetBallAdsorbFrame_(STATE_WORK_AIR_TRICK *); // 0xD28
+            virtual void SubStateAirTrickDoBallAdsorb_(STATE_WORK_AIR_TRICK *); // 0xD2C
+            virtual void SubStateAirTrickTrgBallAdsorbEnd_(STATE_WORK_AIR_TRICK *); // 0xD30
+            virtual void SubStateAirTrickPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xD38
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+            virtual int SubStateAirTrickIsEndArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD48
+            virtual void SubStateAirTrickShootBall_(STATE_WORK_AIR_TRICK *); // 0xD4C
+            virtual void SubStateAirTrickStartArtsHitback_(STATE_WORK_AIR_TRICK *); // 0xD50
+            virtual int SubStateReceiveDoProcDiveReceive_(STATE_WORK_RECEIVE *); // 0xD6C (not zero when the state is over)
 
         protected:
-            unsigned long m_Unk964; // allocated with 0x968 bytes
+            // (inline helper, name guessed) Deletes the magic circle task
+            // and forgets it.
+            void ReleaseMagic_();
+
+            // (name guessed; allocated with 0x968 bytes) The air trick's
+            // CC15_VOLLEY::CcSiromaMagicCircle task id, 0 for none.
+            unsigned long m_hMagic; // 0x964
     };
 
     class CChrCoreVolleySlime : public CChrCoreVolley {

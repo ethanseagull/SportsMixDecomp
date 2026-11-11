@@ -448,6 +448,10 @@ namespace msw {
             static int IsNowSlowEffect();
             // DOL, static. Not zero while an arts (special move) event plays (guess).
             static int IsArtsEventMode();
+            // DOL, static (added for BasketF game/basket/CChrCoreBasketSaboten.cpp;
+            // meaning guessed from the name): not zero while an arts event is
+            // asked for and has not started yet.
+            static int IsReqArtsEvent();
             // Added for VolleyF game/volley/CChrManVolley.cpp (DOL, static;
             // return types guessed). SetOffenseTeam makes team nTeam the one
             // attacking (CChrManVolley::StartArtsEvent_ passes the team of the

@@ -49,6 +49,8 @@ namespace msw {
     extern float HOCKEY_PRM_S03_WC_LOC_RADIUS;
     extern long HOCKEY_PRM_S03_WC_LOC_NUM;
     extern long HOCKEY_PRM_S03_WC_LOC_NUM_PER_GRP;
+    extern long HOCKEY_PRM_S03_WATER_SLOWDOWN_RATE;
+    extern long HOCKEY_PRM_S03_DEB_DRAW_INFO; // in .bss
 
     // Stage 07, the boss Packun stage (CStageHockey07): the order of the
     // stage's parameter table (GetPrmTbl).
@@ -159,6 +161,92 @@ namespace msw {
     extern float HOCKEY_PRM_S04_PYLON_DEC;
     extern long HOCKEY_PRM_S04_PYLON_LOC_PAT_TYPE;
     extern long HOCKEY_PRM_S04_PYLON_LOC_PAT_NO;
+
+    // Stage 12.
+    extern float HOCKEY_PRM_S12_BALL_KICK_POW;
+    extern float HOCKEY_PRM_S12_BALL_GUIDE_DECAY;
+    extern float HOCKEY_PRM_S12_BALL_FORCE_ACC;
+    extern long HOCKEY_PRM_S12_BALL_END_LINE;
+    extern float HOCKEY_PRM_S12_BALL_SIZE;
+    extern float HOCKEY_PRM_S12_BALL_COLLSIZE;
+    extern float HOCKEY_PRM_S12_BALL_SPEED;
+    extern float HOCKEY_PRM_S12_BALL_SPEED_LIMIT;
+    extern float HOCKEY_PRM_S12_BALL_BALL_KICK_POW;
+    extern float HOCKEY_PRM_S12_BALL_DECEL;
+    extern float HOCKEY_PRM_S12_BALL_INIT_SLEEP;
+    extern float HOCKEY_PRM_S12_BALL_INTERVAL;
+    extern float HOCKEY_PRM_S12_BALL_ANGLE;
+    extern float HOCKEY_PRM_S12_BALL_SIDE_RATE;
+    extern long HOCKEY_PRM_S12_BALL_NUM;
+    extern float HOCKEY_PRM_S12_BALL_DOWN_TIME;
+    extern float HOCKEY_PRM_S12_BALL_HIT_DECAY;
+
+    // Stage 15.
+    extern float HOCKEY_PRM_S15_CASE_INTERVAL;
+    extern float HOCKEY_PRM_S15_CASE_POS_Y;
+    extern float HOCKEY_PRM_S15_CASE_LIFE_0;
+    extern float HOCKEY_PRM_S15_CASE_LIFE_1;
+    extern float HOCKEY_PRM_S15_CASE_LIFE_2;
+    extern long HOCKEY_PRM_S15_GOAL_MOVE;
+    extern float HOCKEY_PRM_S15_CASE_WIDTH;
+    extern float HOCKEY_PRM_S15_CASE_DEPTH;
+    extern float HOCKEY_PRM_S15_CASE_HEIGHT;
+    extern float HOCKEY_PRM_S15_CASE_OFFSET_Z;
+    extern float HOCKEY_PRM_S15_CASE_SPACING_Z;
+    extern float HOCKEY_PRM_S15_CASE_ACC_0;
+    extern float HOCKEY_PRM_S15_CASE_DEC_0;
+    extern float HOCKEY_PRM_S15_CASE_DEC_RND_0;
+    extern float HOCKEY_PRM_S15_CASE_VEL_0;
+    extern float HOCKEY_PRM_S15_CASE_ACC_1;
+    extern float HOCKEY_PRM_S15_CASE_DEC_1;
+    extern float HOCKEY_PRM_S15_CASE_DEC_RND_1;
+    extern float HOCKEY_PRM_S15_CASE_VEL_1;
+    extern float HOCKEY_PRM_S15_CASE_ACC_2;
+    extern float HOCKEY_PRM_S15_CASE_DEC_2;
+    extern float HOCKEY_PRM_S15_CASE_DEC_RND_2;
+    extern float HOCKEY_PRM_S15_CASE_VEL_2;
+    extern float HOCKEY_PRM_S15_RAINY_INTERVAL;
+    extern float HOCKEY_PRM_S15_RAINY_TIME;
+    extern float HOCKEY_PRM_S15_SHIP_CYCLE;
+    extern float HOCKEY_PRM_S15_SHIP_ROT_ANGLE;
+    extern float HOCKEY_PRM_S15_SHIP_STOP_TIME;
+    extern float HOCKEY_PRM_S15_SHIP_STOP_TIME_RND;
+    extern float HOCKEY_PRM_S15_CHR_FLOW_VEL;
+    extern float HOCKEY_PRM_S15_GOAL_FLOW_VEL;
+    extern long HOCKEY_PRM_S15_FLASH_COLOR_R;
+    extern long HOCKEY_PRM_S15_FLASH_COLOR_G;
+    extern long HOCKEY_PRM_S15_FLASH_COLOR_B;
+    extern long HOCKEY_PRM_S15_FLASH_COLOR_A;
+    extern float HOCKEY_PRM_S15_FLASH_TIME;
+    extern float HOCKEY_PRM_S15_FLASH_GAIN;
+    extern float HOCKEY_PRM_S15_FLASH_DECAY;
+    extern float HOCKEY_PRM_S15_KARON_SCALE;
+    extern float HOCKEY_PRM_S15_KARON_COLL_SCALE;
+    extern float HOCKEY_PRM_S15_KARON_SPEED;
+
+    // Stage 16.
+    extern float HOCKEY_PRM_S16_POP_TIME_RND;
+    extern float HOCKEY_PRM_S16_DROP_AREA_Z;
+    extern long HOCKEY_PRM_S16_MAX_NUM;
+    extern float HOCKEY_PRM_S16_POP_TIME;
+    extern float HOCKEY_PRM_S16_POP_POS_Y;
+    extern float HOCKEY_PRM_S16_DROP_SPEED;
+    extern float HOCKEY_PRM_S16_DROP_ANGLE;
+    extern long HOCKEY_PRM_S16_BOUND_NUM;
+    extern float HOCKEY_PRM_S16_BOUND_REDUCE_Y;
+    extern float HOCKEY_PRM_S16_BOUND_REDUCE_XZ;
+    extern long HOCKEY_PRM_S16_ADD_COIN_0;
+    extern float HOCKEY_PRM_S16_WARP_INTERVAL;
+    extern float HOCKEY_PRM_S16_WARP_TIME;
+    extern float HOCKEY_PRM_S16_WARP_SPEED;
+    extern float HOCKEY_PRM_S16_WARP_BLUR_SHIFT;
+    extern long HOCKEY_PRM_S16_FLASH_COLOR_R;
+    extern long HOCKEY_PRM_S16_FLASH_COLOR_G;
+    extern long HOCKEY_PRM_S16_FLASH_COLOR_B;
+    extern long HOCKEY_PRM_S16_FLASH_COLOR_A;
+    extern float HOCKEY_PRM_S16_FLASH_TIME;
+    extern float HOCKEY_PRM_S16_FLASH_GAIN;
+    extern float HOCKEY_PRM_S16_FLASH_DECAY;
 }
 
 #endif /* !MSW_HOCKEYPRM_HPP_ */

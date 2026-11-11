@@ -1,6 +1,11 @@
 #include "game/msw/CChrCoreDodge.hpp"
 
+#include "bcs/BCS_Math.hpp"
 #include "game/msw/CEffectCtrl.hpp"
+
+// 60 degrees in radians; unused here, as in the other DodgeF chr cores
+// (most likely from a header they all include).
+static const float s_Unk60Deg = bcs::DEG_TO_RAD(60.0f);
 
 // The original's .rodata for this file is an unread "hoos_top" (the node
 // name Luigi's vacuum uses), most likely from a pointer defined in a header
@@ -43,4 +48,9 @@ void msw::CChrCoreDodgeMario::SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR
 
     Eff_Stop(0x14);
     Eff_CreateAttachAuto(0x15, 0x63, 3);
+}
+
+void msw::CChrCoreDodgeMario::DtorStateAirTrick()
+{
+    CChrCoreDodge::DtorStateAirTrick();
 }

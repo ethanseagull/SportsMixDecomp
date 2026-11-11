@@ -55,3 +55,5 @@ Equivalent game/basket/CItemBallBasketBomb.cpp
 Equivalent game/basket/CChrCoreBasketLuigi.cpp
 Equivalent game/basket/CStageBasket17.cpp
 Equivalent game/basket/CChrCoreBasketKinopio.cpp
+Equivalent game/basket/CChrCoreBasketYoshi.cpp
+Equivalent game/basket/CChrCoreBasketSaboten.cpp

@@ -36,3 +36,4 @@ Matching game/hockey/CChrCoreHockeyYoshi.cpp
 Equivalent game/hockey/CChrCoreHockeyLuigi.cpp
 Equivalent game/hockey/CChrCoreHockeyKinopio.cpp
 Equivalent game/hockey/CChrCoreHockeyKuroma.cpp
+Equivalent game/hockey/CCockpitHockeyCoder.cpp

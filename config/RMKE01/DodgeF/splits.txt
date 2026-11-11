@@ -208,11 +208,16 @@ game/dodge/CChrCoreDodgeKuroma.cpp:
 	.bss        start:0x00000990 end:0x00000998
 
 game/dodge/CChrCoreDodgeLuigi.cpp:
-	.text       start:0x0005C89C end:0x0005D2D0
+	.text       start:0x0005C89C end:0x0005D16C
 	.ctors      start:0x00000044 end:0x00000048
-	.rodata     start:0x00000E30 end:0x00000EB0
-	.data       start:0x0000AEB0 end:0x0000D208
+	.rodata     start:0x00000E30 end:0x00000EA0
+	.data       start:0x0000AEB0 end:0x0000C068
 	.bss        start:0x00000998 end:0x000009A0
+
+game/dodge/CChrCoreDodgeMario.cpp:
+	.text       start:0x0005D16C end:0x0005D2D0
+	.rodata     start:0x00000EA0 end:0x00000EB0
+	.data       start:0x0000C068 end:0x0000D208
 
 game/dodge/unit_5D2D0.cpp:
 	.text       start:0x0005D2D0 end:0x0005D394

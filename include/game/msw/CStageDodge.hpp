@@ -12,6 +12,7 @@
 #include "game/msw/CStageDodge12.hpp"
 #include "game/msw/CStageDodge15.hpp"
 #include "game/msw/CStageDodge16.hpp"
+#include "game/msw/CStageDodge17.hpp"
 #include "game/msw/CStageManDodge.hpp"
 
 namespace msw {
@@ -57,18 +58,7 @@ namespace msw {
 
     // Stage 16 has its own header, game/msw/CStageDodge16.hpp.
 
-    class CStageDodge17 : public CStageManDodge {
-        public:
-            CStageDodge17(bcs::CTask *pParent);
-            virtual ~CStageDodge17();
-
-            // Static: CEventDemoDodge::CameraEvent leaves r3 unset. Stage
-            // 0x11 (GameWork::GetStage) is the one with the trolley.
-            static void TrolleyForceReset();
-
-        private:
-            unsigned char m_Unk244[0x5C]; // size 0x2A0
-    };
+    // Stage 17 has its own header, game/msw/CStageDodge17.hpp.
 
     // The DOD stages (55-57); 55 adds nothing to CStageManDodge.
     class CStageDodgeDOD55 : public CStageManDodge {

@@ -76,3 +76,4 @@ Equivalent game/bcs/CAnmMatClr.cpp
 Equivalent game/bcs/CCameraMan.cpp
 Equivalent game/bcs/CCameraAnmCalc.cpp
 Matching game/bcs/CListNodeBase.cpp
+Equivalent game/msw/CStgGmk_Wave.cpp

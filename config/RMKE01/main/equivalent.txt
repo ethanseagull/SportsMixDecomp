@@ -37,17 +37,21 @@ main CtorState_DEFAULT__Q23msw17CStgGmk_Pylon_ActFv near 99.4 registers inside t
 main CtorState_MOVE__Q23msw17CStgGmk_Pylon_ActFv near 92.3 original keeps the local CGmkRef in memory (dead vptr store at sp+8, parent read back); ours in a register, so FVEC3 temporaries' stack slots shift
 main CtorState_MOVE__Q23msw19CStgGmk_Pinball_ActFv near 98.9 rlwinm. vs extrwi. for the same bit (CStgSrt::GetRotMtx), one stack slot
 main CtorState_RESPAWN__Q23msw19CStgGmk_Pinball_ActFv near 99.7 register allocation/order only (diff.py: registers/schedule)
+main CtorState_STANDBY__Q23msw16CStgGmk_Wave_ActFv near 99.6 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main CtorState_STANDBY__Q23msw17CStgGmk_Pylon_ActFv near 99.5 registers inside the inlined CFsmQueue helpers
 main CtorState_START__Q23msw23CStgGmk_WaterPillar_ActFv near 99.7 register allocation only (argument registers of the effect calls)
 main CtorState_STAY__Q23msw23CStgGmk_WaterPillar_ActFv near 99.3 register allocation only
+main CtorState_WAVE__Q23msw16CStgGmk_Wave_ActFv near 99.9 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main DeleteJointObj__Q23bcs7CScnObjFv unverified 73.2 73.2%: inlining depth only (AppendDelayDeleteObject inlined one level deeper here); byte-identical under Wii/1.5 and 1.7
 main Disp__Q33msw31@unnamed@CCockpitChrIcon2D_cpp@12CChrIconTaskFPQ23msw17CMenuPaneAccessorl near 99.3 99.3%: register numbering only (GetPaneObj bound check r6/r0 vs r0/r3; FVEC3Add float registers)
 main DoHoming___Q23msw11CItemRShellFv near 97.8 register allocation and scheduling only (original reloads velocity temporaries from the stack; quaternion setup order)
 main DoParabolaThrow__Q23msw9CDropCoinFRCQ23bcs5FVEC3ff near 99.2 float register choice only
+main DoPopItem__Q23msw16CStgGmk_Wave_ActFv near 99.3 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main DrawDebug__Q23msw19CStgGmk_Pinball_MdlFl near 99.9 register allocation/order only (diff.py: registers/schedule)
 main DrawOutline___Q23bcs7CMiiManFPUslll near 88.2 88.2%: original recomputes the row start with mullw each outer iteration, ours strength-reduces to a w*4 step; one more saved register shifts numbering; arithmetic identical
 main Draw__Q23msw18CGameExDemoMaskObjFv near 96.6 screen width/height read with lha where the original has lhz+extsh (same value); otherwise register choice and scheduling of the -1 colour and the write-gather vertex stores
 main DropCoinPickup__Q23msw12CDropCoinManFRCQ23bcs5FVEC3ffPFPCQ23msw9CDropCoinPv_vPv near 97.5 register choice; (flag & 0x4306) == 0 tested via cntlzw bool in the original, direct masked branch in ours (equivalent)
+main FindWave__Q23msw19CStgGmk_WaveClusterCFRQ23bcs5FVEC3RQ23bcs5FVEC3f near 99.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main Force___Q43msw6CC_CMN5LUIGI14CcOvacuumForceFf near 99.2 float callee-saved register allocation only
 main GetAttachName__Q23msw18CEffectAttachTableCFl near 91.8 prologue order only: the original saves r31 before loading m_ppName, ours after; same instructions otherwise, registers renumbered
 main GetButtonSECode__Q23msw18CCockpitButtonInfoFll unverified 77.2 below 85%: the validity test branches the other way (original falls through to return the invalid value, ours to the load); same instructions otherwise
@@ -56,6 +60,12 @@ main GetCenterPos__Q23msw19CStgGmk_Trolley_ActCFv near 99.2 instruction order of
 main GetCenterPos__Q23msw26CStgGmk_WaterPillarClusterCFv near 99.0 float register choice only in the inlined paired-single FVEC3Add
 main GetMenuResultId__Q23msw18CCockpitButtonInfoFl unverified 74.4 below 85%: the validity test branches the other way (original falls through to return the invalid value, ours to the load); same instructions otherwise
 main GetMusicFrame__Q23msw8CGameSndFv near 98.8 98.8%: float registers f0/f1 swapped in the 60*pos/rate expression; same operations and order
+main GetNewWave__Q23msw19CStgGmk_WaveClusterCFv near 98.7 register choice only (diff.py: registers)
+main GetNewWave__Q23msw19CStgGmk_WaveClusterFv near 98.7 register choice only (diff.py: registers)
+main GetNextWave__Q23msw19CStgGmk_WaveClusterCFPCQ23msw12CStgGmk_Wave near 98.8 register choice only (diff.py: registers)
+main GetNextWave__Q23msw19CStgGmk_WaveClusterFPCQ23msw12CStgGmk_Wave near 98.8 register choice only (diff.py: registers)
+main GetOldWave__Q23msw19CStgGmk_WaveClusterCFv near 98.7 register choice only (diff.py: registers)
+main GetOldWave__Q23msw19CStgGmk_WaveClusterFv near 98.7 register choice only (diff.py: registers)
 main GetPlayerMelodyDisMax__Q23bcs10CMusicDataCFll near 98.4 98.4%: r6/r7 swapped between the running total and the data pointer in the inlined GetPlayerMelodyDataTop loop; register choice only
 main GetPlayerMelodyDisMin__Q23bcs10CMusicDataCFll near 98.4 98.4%: r6/r7 swapped between the running total and the data pointer in the inlined GetPlayerMelodyDataTop loop; register choice only
 main GetPlayerMelodyFlag__Q23bcs10CMusicDataCFll near 98.4 98.4%: r6/r7 swapped between the running total and the data pointer in the inlined GetPlayerMelodyDataTop loop; register choice only
@@ -82,9 +92,11 @@ main LoopState_FALL__Q23msw17CStgGmk_Pylon_ActFv near 99.9 register numbering on
 main LoopState_MOVE__Q23msw19CStgGmk_Pinball_ActFv near 99.5 two stack slots swapped, float register choice
 main LoopState_MOVE__Q23msw19CStgGmk_Trolley_ActFv near 93.1 the AABB corners are copied as floats instead of words, stack slots and the order of two address computations; same values
 main LoopState_SLEEP__Q23msw19CStgGmk_Pinball_ActFv near 99.7 register allocation/order only (diff.py: registers/schedule)
+main LoopState_STANDBY__Q23msw16CStgGmk_Wave_ActFv near 99.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main LoopState_STANDBY__Q23msw17CStgGmk_Pylon_ActFv near 99.7 registers inside the inlined CFsmQueue helpers
 main LoopState_START__Q23msw23CStgGmk_WaterPillar_ActFv near 99.8 register allocation only in the inlined FsmqChangeState
 main LoopState_STAY__Q23msw23CStgGmk_WaterPillar_ActFv near 99.7 register allocation only in the inlined FsmqChangeState
+main LoopState_WAVE__Q23msw16CStgGmk_Wave_ActFv near 99.8 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main MainBury___Q23msw9CDropCoinFv near 99.9 one fmadds with its multiplied operands swapped (commutative)
 main MainMove___Q23msw9CDropCoinFv near 97.7 register choice in the inlined reflection; -3.0f constant loaded earlier in the original
 main Main__Q23msw11CPinballManFf near 99.1 register allocation/order only (diff.py: registers/schedule)
@@ -140,6 +152,9 @@ main UpdateColl__Q23msw19CStgGmk_Trolley_ActFv near 97.1 stack slots of the SetP
 main UpdateFrame__Q23msw10CEventMoveFf near 99.1 paired-single register choice and the stack slots of the two difference temporaries only
 main UpdateGmkPos__Q23msw13CPinballMechaFv near 99.6 register allocation/order only (diff.py: registers/schedule)
 main UpdateMdlMtx__Q23msw19CStgGmk_Trolley_ActFv near 97.9 the first inlined CStgSrt matrix rebuild tests its flag bits through computed bools (neg/or/srwi, extrwi.) where ours tests them directly; stack slots
+main UpdateParam__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
+main UpdateWavePos__Q23msw16CStgGmk_Wave_ActFf near 99.3 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
+main UpdateWaveTimer__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main WallHitCheckSub__Q23msw19CStgGmk_Pinball_ActCFPQ23bcs5FVEC3PQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3fRCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 88.8 end-point loops indexed (lwzx/lfsx) in original vs pointer walk; regs/schedule; immediates are stack offsets
 main WallHitCheck__Q23msw19CStgGmk_Pinball_ActFPQ23bcs5FVEC3PQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 97.4 one extra compare on side>=0 before the shared goal call, float regs in bounds check
 main WriteBack__Q33bcs3dwc14CDwcFriendListFPC18DWCstAccFriendDataUxllPCvl unverified 75.0 75%: SetStorageData inlined here, called with bl in the original; original also normalises the first IsValid() to bool (two cntlzw/srwi) - same behaviour, inlining decision only
@@ -163,6 +178,7 @@ main __ct__Q23msw21CItemBallChangeEffectFPQ23bcs5CTaskUl near 87.9 87.9%: the rl
 main __ct__Q23msw23CStgGmk_WaterPillar_ActFPQ23msw7CStgGmk near 100.0 objdiff 100% but stack slots of two temporaries (a 3-word copy and three float stores) are swapped; same values and instructions
 main __ct__Q33msw4menu13CDispTaskLinkFv near 96.1 96.1%: the original loads s_nNextId twice back to back (one copy feeds the increment, one the id); ours loads it once. Redundant read of a plain counter with nothing in between, so the value is the same; 10 source shapes tried on two models
 main __dt__Q23bcs10CMdlShadowFv unverified 77.9 77.9%: calls ~CMdlObj where the original inlines it (same-file inline: the original file runs from CMdlObj ~0x80054FDC to ~0x80065F30); own body identical
+main __dt__Q23msw16CStgGmk_Wave_ActFv unverified 79.4 79.4%: original calls CStgAct dtor and touches 5 more fields (incl. +0x64) with an extra null check; ours calls CStgGmkAct dtor - base dtor chain / inlined member destruction not reproduced
 main __dt__Q23msw17CStgGmk_Pylon_ActFv unverified 81.2 original inlines ~CStgGmkAct (vtable reset, DeleteBallCollProxy, ~CStgAct); ours calls it out of line (as Pinball)
 main __dt__Q23msw19CStgGmk_Pinball_ActFv unverified 81.9 original inlines ~CStgGmkAct (vtables, slot 0x184 DeleteBallCollProxy, ~CStgAct); ours calls ~CStgGmkAct out of line, same effects
 main __dt__Q23msw19CStgGmk_Trolley_ActFv near 85.7 calls the DOL's weak msw::CStgGmkAct destructor (0x8014B558) instead of inlining the same body (vtable stores, DeleteBallCollProxy, ~CStgAct); an inline definition in CStgGmkAct.hpp changes HockeyF's weak function order

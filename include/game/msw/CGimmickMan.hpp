@@ -107,6 +107,13 @@ namespace msw {
             static long QPanelChoicePopupItem(long nPlayer, int n);
             // (DOL) The instance's CreateItem_: an item of type nType at rPos.
             static CItem *CreateItem(long nType, const bcs::FVEC3 &rPos);
+            // (DOL, static; added for game/msw/CStgGmk_Wave.cpp) The
+            // instance's CreateBuryCoin_: nNum coins buried in the rectangle
+            // from rMin to rMax; 0 without an instance.
+            static long CreateBuryCoin(const bcs::FVEC3 &rMin, const bcs::FVEC3 &rMax, long nNum);
+            // (DOL, static; added for game/msw/CStgGmk_Wave.cpp) The
+            // instance's CreateDriftItem_; null without an instance.
+            static CItem *CreateDriftItem(long nType, const bcs::FVEC3 &rMin, const bcs::FVEC3 &rMax, float, float);
             // DOL, static: AllReset_ on the instance.
             static void AllReset();
             // (DOL, static; added for BasketF

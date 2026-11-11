@@ -29,6 +29,13 @@ namespace msw {
             static bcs::FVEC3 vInvalidWavePos;
             static bcs::FVEC3 vInvalidWaveVel;
 
+            // The states of the queue, in the order of the state hooks.
+            enum STATE {
+                STATE_DEFAULT,
+                STATE_STANDBY, // asleep (Sleep), hidden
+                STATE_WAVE     // the wave's animation runs
+            };
+
             CStgGmk_Wave_Act(CStgGmk *pParent);
             virtual ~CStgGmk_Wave_Act();
 
@@ -68,7 +75,8 @@ namespace msw {
             virtual long GetParam_SE(long type) const;
             virtual long GetParam_PopCoinNum(long type) const;
             virtual void GetParam_CourtRect(float &rLeft, float &rRight, float &rFront, float &rBack) const;
-            virtual const bcs::FVEC3 &GetParam_CoinPopPosOfs() const;
+            // How far along x from the wave the coins come up.
+            virtual float GetParam_CoinPopPosOfs() const;
             virtual long GetParam_PopItemNum(long type) const;
             virtual float GetParam_PopItemDelay(long type) const;
             virtual float GetParam_PopItemComeFrame(long type) const;
@@ -91,14 +99,16 @@ namespace msw {
 
         private:
             float m_fAge;            // 0x1D4
-            float m_Unk1D8;          // 0x1D8
+            float m_fSleepTimer;     // 0x1D8, the frames given to Sleep (name guessed)
             long m_bAlive;           // 0x1DC
             long m_nWaveType;        // 0x1E0
             long m_nNextWaveType;    // 0x1E4
             long m_bWave;            // 0x1E8, not zero while m_WavePos/m_WaveVel are valid (name guessed)
             bcs::FVEC3 m_WavePos;    // 0x1EC
             bcs::FVEC3 m_WaveVel;    // 0x1F8
-            unsigned long m_Unk204;  // 0x204
+            // 0x204, the model's node "n_atari" the wave is at; -1 without
+            // one (name guessed)
+            long m_nAtariNode;
     };
 }
 

@@ -27,10 +27,15 @@ namespace bcs {
             virtual int VFunc3C() const;                                // 0x3C, bit 2
             virtual int IsEnd() const;                                  // 0x40, bit 3
 
+            // (names guessed) Inline in MenuF's msw::CChrMenuCtrl::CreateMdlObj,
+            // which sets bit 3 of the word at 0x08 after Create.
+            void OnFlag(unsigned long flag) { m_nFlag |= flag; }
+
         private:
-            // 0x08 to 0x34. Where this class ends and bcs::CAnmMatClr and
+            unsigned long m_nFlag;       // 0x08 (name guessed)
+            // 0x0C to 0x34. Where this class ends and bcs::CAnmMatClr and
             // bcs::CAnmTexSrt (both 0x34 bytes) begin is not known.
-            unsigned char m_Unk08[0x2C];
+            unsigned char m_Unk0C[0x28];
     };
 }
 

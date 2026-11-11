@@ -59,6 +59,9 @@ namespace bcs {
             void Play(long idx, unsigned long flag, float rate, float blend, float frame);
             // Clears bit 0 of the word at 0x18.
             void Stop();
+            // (DOL; parameter names guessed) Calls pFunc with pUser for each
+            // trigger the motion passes.
+            void SetTrgCallback(void (*pFunc)(const MOT_TRG *pTrg, void *pUser), void *pUser);
 
         private:
             unsigned char m_Unk34[0x18]; // 0x34

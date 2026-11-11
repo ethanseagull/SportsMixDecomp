@@ -2367,7 +2367,7 @@ SubStateArtsShotReadyArtsShot___Q23msw18CChrCoreDodgeMarioFPQ33msw13CChrCoreDodg
 SubStateArtsShotPlayLoopMotion___Q23msw18CChrCoreDodgeMarioFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x0005D244; // type:function size:0x40 scope:global
 SubStateArtsShotPlayArtsShotMotion___Q23msw18CChrCoreDodgeMarioFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x0005D284; // type:function size:0x4C scope:global
 DtorStateAirTrick__Q23msw18CChrCoreDodgeMarioFv = .text:0x0005D2D0; // type:function size:0x4 scope:global
-fn_6_5D2D4 = .text:0x0005D2D4; // type:function size:0x14
+__sinit_\CChrCoreDodgeMario_cpp = .text:0x0005D2D4; // type:function size:0x14 scope:local
 CanbeRun__Q23msw13CChrCoreDodgeFv = .text:0x0005D2E8; // type:function size:0xAC scope:global
 MethdRun__Q23msw13CChrCoreDodgeFff = .text:0x0005D394; // type:function size:0x3A4 scope:global
 CanbeQuickTurnState__Q23msw13CChrCoreDodgeFv = .text:0x0005D738; // type:function size:0x44 scope:global

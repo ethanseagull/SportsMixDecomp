@@ -30,3 +30,5 @@ Matching game/dodge/CStageDodge04.cpp
 Equivalent game/dodge/CStageDodge07.cpp
 Equivalent game/dodge/CStageDodge05.cpp
 Equivalent game/dodge/CStageDodge12.cpp
+Matching game/dodge/CStageDodge02.cpp
+Equivalent game/dodge/CStageDodge16.cpp

@@ -7,6 +7,7 @@
 #include "game/msw/CStageBasket06.hpp"
 #include "game/msw/CStageBasket07.hpp"
 #include "game/msw/CStageBasket13.hpp"
+#include "game/msw/CStageBasket16.hpp"
 #include "game/msw/CStageBasket17.hpp"
 #include "game/msw/CStageBasketHungryBossPackun70.hpp"
 #include "game/msw/CStageBasketHungryBossPackun71.hpp"
@@ -70,15 +71,6 @@ namespace msw {
 
         private:
             unsigned char m_Unk218[0x8C]; // size 0x2A4
-    };
-
-    class CStageBasket16 : public CStageManBasket {
-        public:
-            CStageBasket16(bcs::CTask *pParent);
-            virtual ~CStageBasket16();
-
-        private:
-            unsigned char m_Unk218[0x1C]; // size 0x234
     };
 
     // Stage 31: BasketF's own CStageManTournament (its constructor is in

@@ -20,10 +20,10 @@ game/bcs/CAnmBlendMotion.cpp:
 	.text       start:0x8000A5B4 end:0x8000D044
 
 game/bcs/CAnmTexSrt.cpp:
-	.text       start:0x8000D22C end:0x8000D414
+	.text       start:0x8000D1EC end:0x8000DCE8
 
 game/bcs/CAnmTexPat.cpp:
-	.text       start:0x8000DD28 end:0x8000DF1C
+	.text       start:0x8000DCE8 end:0x8000E830
 
 game/bcs/CAnmMatClr.cpp:
 	.text       start:0x8000F670 end:0x8000F7D4
@@ -744,7 +744,10 @@ game/msw/Unlock.cpp:
 	.text       start:0x80250028 end:0x80250FE0
 
 game/msw/CGameExDemoBase.cpp:
-	.text       start:0x80254F88 end:0x80255190
+	.text       start:0x8025380C end:0x8025599C
+	.rodata     start:0x8044B820 end:0x8044B860
+	.data       start:0x8048D408 end:0x8048D598
+	.sdata2     start:0x805C5CD0 end:0x805C5D78
 
 game/msw/CNpcBombCannon.cpp:
 	.text       start:0x8025599C end:0x80256614

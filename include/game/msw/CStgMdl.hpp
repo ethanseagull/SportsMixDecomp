@@ -1,16 +1,18 @@
 #ifndef MSW_CSTGMDL_HPP_
 #define MSW_CSTGMDL_HPP_
 
+#include "bcs/CMdlRef.hpp"
+#include "bcs/CMdlShadow.hpp"
 #include "bcs/CScnObj.hpp"
+#include "bcs/FMTX34.hpp"
+#include "bcs/New.hpp"
+#include "game/msw/CLoadData.hpp"
 #include "game/msw/CStageAnm.hpp"
+#include "revolution/mtx.h"
 #include "nw4r/g3d/ResFile.hpp"
 
 namespace bcs {
-    struct FMTX34;
-    class CAnmObj;
     class CMdlObj;
-    class CMdlRef;
-    class CMdlShadow;
 }
 
 namespace msw {
@@ -92,37 +94,50 @@ namespace msw {
             CStgMdl(CStgObj *pParent);
 
         private:
-            CStgObj *m_pParent;           // 0x00
-            unsigned char m_Unk04[0x124]; // 0x04
+            CStgObj *m_pParent;          // 0x00
+            unsigned long m_nIndex;      // 0x04
+            bcs::CMdlObj *m_pMdlObj;     // 0x08, also the scene object
+            bcs::CMdlShadow *m_pShadow;  // 0x0C
+            bcs::CMdlRef *m_pRef;        // 0x10
+            CStageAnm *m_pAnm;           // 0x14
+            unsigned char m_Unk18[0xC8]; // 0x18
+            unsigned short m_nLayer;     // 0xE0
+            unsigned char m_UnkE2[0x12]; // 0xE2
+            int m_bSceneEntry;           // 0xF4
+            bcs::FMTX34 m_Mtx;           // 0xF8
 
         public:
             virtual ~CStgMdl();
             virtual void Create();
-            virtual void Create(long res, const MDL_PARAM *pParam);
+            // Create from pParam in the resource file res (CLoadData).
+            virtual void Create(long res, const MDL_PARAM *pParam)
+            {
+                Create(CGenericGimmickCreator(CLoadData::GetRes(res), pParam));
+            }
             virtual void Create(const CCreator &rCreator);
             virtual void DeleteMdl();
-            virtual void SetIndex(unsigned long idx);
-            virtual unsigned long GetIndex() const;
+            virtual void SetIndex(unsigned long idx) { m_nIndex = idx; }
+            virtual unsigned long GetIndex() const { return m_nIndex; }
             virtual void Main(float rate);
             virtual void Commit();
-            virtual CStgObj *GetParent();
-            virtual const CStgObj *GetParent() const;
+            virtual CStgObj *GetParent() { return m_pParent; }
+            virtual const CStgObj *GetParent() const { return m_pParent; }
             virtual void SceneEntry();
             virtual void SceneLeave();
-            virtual bool IsSceneEntry() const;
-            virtual void SetMtx(const bcs::FMTX34 &rMtx);
-            virtual const bcs::FMTX34 &GetMtx() const;
-            virtual unsigned short GetLayer() const;
-            virtual void SetLayer(unsigned short layer);
+            virtual int IsSceneEntry() const { return m_bSceneEntry; }
+            virtual void SetMtx(const bcs::FMTX34 &rMtx) { PSMTXCopy(rMtx.m, m_Mtx.m); }
+            virtual const bcs::FMTX34 &GetMtx() const { return m_Mtx; }
+            virtual unsigned short GetLayer() const { return m_nLayer; }
+            virtual void SetLayer(unsigned short layer) { m_nLayer = layer; }
             virtual void SetDrawPriority(long opa, long xlu);
-            virtual bcs::CScnObj *GetScnObj();
-            virtual const bcs::CScnObj *GetScnObj() const;
-            virtual bcs::CMdlObj *GetMdlObj();
-            virtual const bcs::CMdlObj *GetMdlObj() const;
-            virtual bcs::CMdlShadow *GetMdlShadow();
-            virtual const bcs::CMdlShadow *GetMdlShadow() const;
-            virtual bcs::CMdlRef *GetMdlRef();
-            virtual const bcs::CMdlRef *GetMdlRef() const;
+            virtual bcs::CScnObj *GetScnObj() { return m_pMdlObj; }
+            virtual const bcs::CScnObj *GetScnObj() const { return m_pMdlObj; }
+            virtual bcs::CMdlObj *GetMdlObj() { return m_pMdlObj; }
+            virtual const bcs::CMdlObj *GetMdlObj() const { return m_pMdlObj; }
+            virtual bcs::CMdlShadow *GetMdlShadow() { return m_pShadow; }
+            virtual const bcs::CMdlShadow *GetMdlShadow() const { return m_pShadow; }
+            virtual bcs::CMdlRef *GetMdlRef() { return m_pRef; }
+            virtual const bcs::CMdlRef *GetMdlRef() const { return m_pRef; }
             virtual void SetVisible(int bVisible);
             virtual void AttachToMdl(CStgMdl *pMdl, long node, bcs::CScnObj::AttachMode mode);
             virtual void DetachFromMdl();
@@ -141,9 +156,21 @@ namespace msw {
             virtual void SetAnmEx(unsigned long anm, unsigned long);
             virtual void CancelAnm();
             virtual void ResetAnm();
-            virtual float GetAnmFrame(CStageAnm::ANM_IDX idx) const;
-            virtual void SetAnmFrame(float frame);
-            virtual float GetAnmTotalFrame(CStageAnm::ANM_IDX idx) const;
+            virtual float GetAnmFrame(CStageAnm::ANM_IDX idx) const
+            {
+                return m_pAnm ? m_pAnm->GetFrame(idx) : 0.0f;
+            }
+            // Sets the frame of every animation.
+            virtual void SetAnmFrame(float frame)
+            {
+                if (m_pAnm) {
+                    m_pAnm->SetFrame(-1, frame);
+                }
+            }
+            virtual float GetAnmTotalFrame(CStageAnm::ANM_IDX idx) const
+            {
+                return m_pAnm ? m_pAnm->GetTotalFrame(idx) : 0.0f;
+            }
             virtual void SetAnmSpeed(float speed);
             virtual bool IsAnmEnd(unsigned long);
             virtual bool IsAnmEndAll(unsigned long);
@@ -151,24 +178,36 @@ namespace msw {
             virtual bool IsAnmLoopedAll(unsigned long);
             virtual bool IsAnmLoop(unsigned long);
             virtual bool IsAnmLoopAll(unsigned long);
-            virtual bool IsAnmExist(unsigned long anm, CStageAnm::ANM_IDX idx) const;
-            virtual unsigned long GetCurAnmId(CStageAnm::ANM_IDX idx) const;
-            virtual bcs::CAnmObj *GetAnmObj();
-            virtual const bcs::CAnmObj *GetAnmObj() const;
+            virtual bool IsAnmExist(unsigned long anm, CStageAnm::ANM_IDX idx) const
+            {
+                const CStageAnm *pAnm = GetAnmObj();
+                if (pAnm && pAnm->IsAnmExist(anm, idx)) {
+                    return true;
+                }
+                return false;
+            }
+            virtual unsigned long GetCurAnmId(CStageAnm::ANM_IDX idx) const
+            {
+                const CStageAnm *pAnm = GetAnmObj();
+                return pAnm ? pAnm->GetCurAnmId(idx) : 0;
+            }
+            virtual CStageAnm *GetAnmObj() { return m_pAnm; }
+            virtual const CStageAnm *GetAnmObj() const { return m_pAnm; }
             virtual bcs::CMdlObj *NewMdl(long heap) const;
-            virtual bcs::CMdlShadow *NewShadowMdl(long heap) const;
-            virtual bcs::CMdlRef *NewRefMdl(long heap) const;
+            virtual bcs::CMdlShadow *NewShadowMdl(long heap) const { return new (heap) bcs::CMdlShadow; }
+            virtual bcs::CMdlRef *NewRefMdl(long heap) const { return new (heap) bcs::CMdlRef; }
             virtual void AnmArgPush_();
             virtual void AnmArgPop_();
             virtual const void *AnmArgFront_() const;
             virtual void AnmArgClear_();
             virtual bool AnmArgIsEmpty_() const;
             virtual void AnmQueueUpdate_();
-            virtual void OnPreCreate();
-            virtual void OnPostCreate();
-            virtual void OnSceneEntry();
-            virtual void OnSceneLeave();
-            virtual void OnUpdate(float rate);
+            // Hooks; OnPreCreate returns true to go on with Create.
+            virtual bool OnPreCreate() { return true; }
+            virtual void OnPostCreate() {}
+            virtual void OnSceneEntry() {}
+            virtual void OnSceneLeave() {}
+            virtual void OnUpdate(float rate) {}
     };
 }
 

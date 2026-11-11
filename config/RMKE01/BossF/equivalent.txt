@@ -12,6 +12,10 @@ BossF FireReceiver___Q23msw19CChrCoreBossKinopioFv near 98.1 float registers in 
 BossF GetFirstLookInfo_MultiPlay__Q23msw11CCameraBossFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 92.6 stack slots, registers and stfsux addressing of the position table; same calls and constants
 BossF GetLenHosei__Q23msw11CCameraBossFRCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 96.3 stack slots and registers (saves from r16 instead of r17); same calls and constants
 BossF GetTargetInfo__Q23msw21CCockpitBossBallPowerFlRQ23bcs5FVEC3RQ34nw4r3lyt4Size near 97.4 instruction order only: the addi of the sPowerPane address is scheduled after the subf instead of before
+BossF LifeGaugeInWait__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
+BossF LifeGaugeIn__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
+BossF LifeGaugeOutWait__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
+BossF LifeGaugeOut__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
 BossF LoopStateJumpShoot__Q23msw12CChrCoreBossFv near 87.5 float constants loaded through the side step's pool base register instead of lis/lfs each: the jump shot is a second file in the original (unit to be split at .text 0x63EA4); compiled alone the body is the original's up to register choice (r4/r5 in the queue wrap)
 BossF LoopStateSideStep__Q23msw12CChrCoreBossFv near 98.9 register allocation/order only
 BossF LoopStateSleep__Q23msw21CBallTargetMarkerBossFv near 99.7 x and z of the ball position swap float registers
@@ -19,6 +23,7 @@ BossF MainCamera_Normal__Q23msw11CCameraBossFv near 85.6 stack layout, the origi
 BossF MainCamera__Q23msw11CCameraBossFv near 97.8 stack slots and one temporary copy the original keeps; same calls, constants and accesses
 BossF MainOffBall___Q23msw14CChrDrvPadBossFPQ33msw7CChrDrv8_CHR_MSG near 100.0 float register choice only (stick power f2 vs f0); objdiff shows 100%
 BossF MainOnBall___Q23msw14CChrDrvPadBossFPQ33msw7CChrDrv8_CHR_MSG near 99.9 float register choice only (camera yaw in f0 vs f1)
+BossF Main__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
 BossF MethdChgLeader__Q23msw12CChrCoreBossFv near 99.7 abs() result in r3 instead of r0; register choice only
 BossF MethdShootStance__Q23msw12CChrCoreBossFfi near 99.8 r3/r4 swapped in the inlined FsmqGetWork_ (queue head vs work-queue pointer); register choice only
 BossF MethdSideStep__Q23msw12CChrCoreBossFff near 99.0 the two float parameters kept in f30/f31 the other way round; register choice only
@@ -28,6 +33,7 @@ BossF OnMsgN__Q23msw14CChrDrvPadBossFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_M
 BossF SetBallPowerState__Q23msw21CCockpitBossBallPowerFll near 99.0 only the rodata offset of sPowerPane differs (0x8e8 vs 0x910): the original .rodata holds 0x28 more bytes of @LOCAL@ statics from dead-stripped inline helpers (GaugeBossLineAnim, LifeGaugeAnim, CoinBackAnim, BossLifeGaugeIn, SetSPGaugeAnim); same table, same code
 BossF SetBallPowerValueColor__Q23msw21CCockpitBossBallPowerFli near 86.7 instruction order only: the addi of the sPowerPane address is scheduled before the subf instead of after
 BossF SetBallPowerValue__Q23msw21CCockpitBossBallPowerFls unverified 82.2 instruction order only (82%, short function): the sPowerPane addi, the accessor load and li r6,0 are scheduled in a different order; same instructions otherwise
+BossF SetBossLifePercent__Q23msw17CCockpitBossCoderFf near 100.0 frameMax 30.0f sits at a different .rodata offset (0x7A8 vs 0x780, same value); instructions identical otherwise
 BossF SetCoinValue__Q23msw16CCockpitBossCoinFll near 98.9 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 BossF SetEndEffect__Q23msw25CItemBallChangeEffectBossFv near 21.7 tail call vs framed call only: only difference: original calls bcs::CTaskMan::GetTask inside a 0x10 frame, ours tail-calls it (same callee, same lwz 0x34 argument, result returned unchanged); reviewer confirmed
 BossF SetFaceIcon__Q23msw17CCockpitBossCoderFPQ33bcs3G2D9CPaneCtrl near 96.3 instruction order and registers only: the chrNo array copy and the m_nPlayerNum load are scheduled differently; same calls, constants, loads, stores and branches
@@ -41,6 +47,11 @@ BossF Set__Q23msw21CCockpitBossBallPowerFv near 99.9 register allocation only: t
 BossF SetupGame__Q23msw17CCockpitBossCoderFv near 99.7 register allocation only: the SetOutTelop loop counter gets a different register; same calls, constants, loads, stores and branches
 BossF SubStateReceiveDoProcDiveReceive___Q23msw17CChrCoreBossYoshiFPQ33msw12CChrCoreBoss18STATE_WORK_RECEIVE near 99.8 two float registers swapped
 BossF SubStateReceiveDoProcDiveReceive___Q23msw18CChrCoreBossSiromaFPQ33msw12CChrCoreBoss18STATE_WORK_RECEIVE near 86.8 float constants loaded through one kept base register instead of lis/lfs each (same addresses); the extra saved GPR renumbers registers
+BossF TrgBlock___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
+BossF TrgDamage___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
+BossF TrgGoalIn___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
+BossF TrgReceive___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
+BossF TrgShootStart___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
 BossF __ct__Q23msw11CCameraBossFl near 99.6 register allocation only
 BossF __ct__Q23msw17CItemBallBossBombFPQ23msw5CBall near 98.5 original reloads m_pMdl before CreateAttachEffect; ours reuses the value from the null check (same field, nothing written between)
 BossF __ct__Q23msw21CBallTargetMarkerBossFPQ23bcs5CTaskUli near 99.8 stack slots of the inlined SetState ptmf temporaries differ; same stores and values

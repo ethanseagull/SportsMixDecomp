@@ -136,6 +136,16 @@ namespace bcs {
                 return 0;
             }
 
+            // (name guessed) The same as GetFirst, written as one
+            // expression: bcs::CPool<...>::Create (every module's stage 11
+            // and DodgeF's CChrCoreDodge) compiles from this form, the mud
+            // bomb walks of CStage<Mode>07 from GetFirst's.
+            T *Front()
+            {
+                CListNodeBase *pNode = CListBase::GetFirst();
+                return pNode == GetEnd() ? 0 : static_cast<T *>(pNode);
+            }
+
             T *GetNext(T *pObj)
             {
                 if (pObj == 0) {
@@ -149,7 +159,7 @@ namespace bcs {
             // (name guessed) Takes the first node out of the list.
             void PopFront()
             {
-                T *pFirst = GetFirst();
+                T *pFirst = Front();
                 if (pFirst != 0) {
                     pFirst->Unlink();
                 }

@@ -116,7 +116,7 @@ namespace bcs {
                     // CPoolNode<unsigned long, 0> pool (its address is taken
                     // in msw::STAGE11::CBgFirePillarCluster::PushBack),
                     // inline in CStageBasket13.
-                    bool IsValid() const { return m_pPool != 0 && GetNode() != 0; }
+                    bool IsValid() const { return m_pPool != 0 && m_pPool->GetNode(m_nId) != 0; }
 
                 private:
                     CPool *m_pPool;      // 0x00
@@ -128,6 +128,12 @@ namespace bcs {
 
             // Takes a free node and returns a handle to it (a handle with
             // id 0, which matches no node, when none is free).
+            //
+            // Create and GetHandle are not inline. The original calls both
+            // (Create from PushBack and from DodgeF's CChrCoreDodge, GetHandle
+            // from Create) wherever they are used; the stage 11 files are
+            // compiled with `flags=noauto` (-inline noauto) so that ours do
+            // too, see notes/toolchain.md.
             Handle Create();
             // A handle to the node with this id.
             Handle GetHandle(unsigned long id);
@@ -203,8 +209,8 @@ namespace bcs {
     template <typename T, typename TNode, typename TLock>
     typename CPool<T, TNode, TLock>::Handle CPool<T, TNode, TLock>::Create()
     {
-        TNode *pNode = m_FreeList.GetFirst();
         unsigned long id = 0;
+        TNode *pNode = m_FreeList.Front();
         if (pNode != 0) {
             m_FreeList.PopFront();
             pNode->Link(m_UsedList.GetEnd());

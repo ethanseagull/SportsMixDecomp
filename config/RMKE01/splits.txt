@@ -643,17 +643,11 @@ game/msw/CStage01Base.cpp:
 	.text       start:0x80217A9C end:0x80217AF0
 	.data       start:0x80488818 end:0x80488828
 
-game/msw/CStgGmk_Pylon_Mdl.cpp:
-	.text       start:0x80217F10 end:0x80218098
-
-game/msw/CStgGmk_Pylon_Act.cpp:
-	.text       start:0x80218248 end:0x8021B670
-
 game/msw/CStgGmk_Pylon.cpp:
-	.text       start:0x8021B70C end:0x8021BB68
-
-game/msw/CStgGmk_PylonCluster.cpp:
-	.text       start:0x8021BB6C end:0x8021C3CC
+	.text       start:0x80217F10 end:0x8021C96C
+	.rodata     start:0x804453F0 end:0x80445420
+	.data       start:0x80488838 end:0x804890C8
+	.sdata2     start:0x805C5138 end:0x805C51A0
 
 game/msw/menu/CStateSave.cpp:
 	.text       start:0x8021C96C end:0x8021CA0C

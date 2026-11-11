@@ -424,6 +424,9 @@ namespace msw {
             int IsScored() const { return m_nFlag & FLAG_SCORED; }
             // (names guessed) The ball's place in CBallMan's table.
             long GetBallNo() const { return m_nBallNo; }
+            // (DOL; added for DodgeF CComDrvDodgeGame) The item kind of an
+            // item ball (CItem::KIND_*; 3, a bomb, is what DodgeF tests).
+            long GetItemBallType() const;
             void SetBallNo(long nBallNo) { m_nBallNo = nBallNo; }
             // DOL.
             void SetPos(const bcs::FVEC3 *pPos);

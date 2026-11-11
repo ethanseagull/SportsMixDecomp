@@ -101,7 +101,32 @@ namespace msw {
             long RunCorrect_GetPosTurnAroundChr(bcs::FVEC3 &rPos, long nChr, long nDir) const;
             long Item_GetItemToTarget(const bcs::FVEC3 &rPos) const;
             long Item_GetPosTurnAroundItem(bcs::FVEC3 &rPos, unsigned long nItem, long nDir, int) const;
-            void Item_GetViewPointPosFromItem(bcs::FVEC3 &rPos) const;
+            // (int: DodgeF's CComDrvDodgeGame::GetViewPointPosForRunEx tests it)
+            int Item_GetViewPointPosFromItem(bcs::FVEC3 &rPos) const;
+            // (DOL; added for DodgeF game/dodge/CComDrvDodgeGameGimmick.cpp,
+            // return types guessed from how it uses them) The action at the
+            // root of the action stack; the item about to hit the character
+            // (a task id, zero for none) and the position to escape it to;
+            // the obstacle (handle, zero for none) about to hit the
+            // character or in the way of rPos, of the kinds in nMask, and how
+            // to escape it or go round it; whether an obstacle handle is a
+            // special one; the left and right edges of the character's court;
+            // an escape position rPos corrected for what is around it.
+            long GetRootActType() const;
+            CBall *GetActiveBall() const;
+            unsigned long Item_GetItemToHitMe() const;
+            int Item_GetEscPosFromItem(bcs::FVEC3 &rPos, unsigned long nItem) const;
+            unsigned long Obstacle_GetObstacleToHitMe(unsigned long nMask) const;
+            int Obstacle_GetEscPosFromObstacle(bcs::FVEC3 &rPos, unsigned long nObstacle, int) const;
+            unsigned long Obstacle_GetObstacleToTarget(const bcs::FVEC3 &rPos, unsigned long nMask) const;
+            int Obstacle_IsSpObstacleHandle(unsigned long nObstacle) const;
+            long Obstacle_GetPosTurnAroundObstacle(bcs::FVEC3 &rPos, unsigned long nObstacle, long nDir, int) const;
+            float GetMyCourtLeft() const;
+            float GetMyCourtRight() const;
+            void RunCorrect_RenewEscPos(bcs::FVEC3 &rPos, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rDir, float fLen) const;
+            // DOL. A world position brought into the court's own frame
+            // (passes the long on as Local2World does).
+            bcs::FVEC3 World2Local(const bcs::FVEC3 &rPos, long) const;
             // DOL. A random number below nMax. (range guessed from the name;
             // BasketF tests RandMaxI(999) < 20)
             long RandMaxI(long nMax) const;
@@ -164,7 +189,10 @@ namespace msw {
             // 0x70 (name guessed): the character's position, which DodgeF
             // hands to CComMan::GetZtoCenter.
             bcs::FVEC3 m_ChrPos;
-            unsigned char m_Unk7C[0x110 - 0x7C];
+            // 0x7C (name guessed): the character's position in the world;
+            // DodgeF's gimmick escapes measure from it.
+            bcs::FVEC3 m_ChrWorldPos;
+            unsigned char m_Unk88[0x110 - 0x88];
             // 0x110 (name guessed): the ball the driver follows, set by
             // UpdateInfo; VolleyF hands it to CComManVolley.
             CBall *m_pBall;

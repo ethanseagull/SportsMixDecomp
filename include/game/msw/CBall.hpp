@@ -434,6 +434,18 @@ namespace msw {
             void WarpPos(const bcs::FVEC3 &rPos);
             void Attach(bcs::CMdlObj *pMdl, unsigned long nNode, float, unsigned long, unsigned long, bcs::CScnGroup *);
             void Detach();
+            // (DOL; added for BasketF CChrCoreBasketWaluigi) With 1 the
+            // ball is destroyed when the game resets (FLAG_DESTROY_ON_RESET).
+            void SetDestroyOnReset(int bOn);
+            // (names guessed) The ball's turn.
+            const Quaternion &GetRot() const { return m_Rot; }
+            void SetRot(const Quaternion &rRot)
+            {
+                m_Rot.x = rRot.x;
+                m_Rot.y = rRot.y;
+                m_Rot.z = rRot.z;
+                m_Rot.w = rRot.w;
+            }
             // DOL (name from the symbol). Stops the trail effect behind the
             // ball (VolleyF's CChrCoreVolleySiroma, once it is pulled in).
             void StopTailEffect();

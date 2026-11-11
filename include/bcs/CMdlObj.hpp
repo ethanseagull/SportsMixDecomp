@@ -30,6 +30,10 @@ namespace bcs {
             // (DOL) The model built from mdl at once, as Create does.
             CMdlObj(nw4r::g3d::ResMdl mdl, unsigned long, long);
             virtual ~CMdlObj();
+            // (added for game/msw/CCockpitChrIcon2D.cpp; return type and the
+            // meaning of the second argument guessed) A scene matrix of the
+            // model with its position.
+            void GetScnMtxPos(FMTX34 *pMtx, unsigned long nUnk, CScnObj::ScnObjMtxType type) const;
             // The overrides, named by the vtable of
             // msw::SelectMenu::CCourtBallMdlObj in MenuF. Return types guessed.
             virtual long GetObjType() const;                                                // 0x0C

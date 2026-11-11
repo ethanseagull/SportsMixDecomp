@@ -59,3 +59,5 @@ Equivalent game/basket/CChrCoreBasketYoshi.cpp
 Equivalent game/basket/CChrCoreBasketSaboten.cpp
 Equivalent game/basket/CChrCoreBasketKuroma.cpp
 Equivalent game/basket/CStgGmk_Trolley_Act_Basket.cpp
+Equivalent game/basket/CChrCoreBasketWaluigi.cpp
+NonMatching game/basket/CStageBasket11.cpp

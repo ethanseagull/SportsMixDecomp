@@ -247,6 +247,84 @@ namespace msw {
     extern float HOCKEY_PRM_S16_FLASH_TIME;
     extern float HOCKEY_PRM_S16_FLASH_GAIN;
     extern float HOCKEY_PRM_S16_FLASH_DECAY;
+
+    // Stage 09, the conveyor belt stage (CStageHockey09): belts (CV_*),
+    // containers (OBJ_*, CONTAINER_*, BOMB_*, TREASURE_*). Times are in
+    // seconds.
+    extern float HOCKEY_PRM_S09_EV_INTERVAL;
+    extern float HOCKEY_PRM_S09_CV_STOP_TIME;
+    extern float HOCKEY_PRM_S09_CV_ACC_TIME;
+    extern float HOCKEY_PRM_S09_CV_PRE_ACC_TIME;
+    extern float HOCKEY_PRM_S09_CV_POS;
+    extern float HOCKEY_PRM_S09_CV_WIDTH;
+    extern float HOCKEY_PRM_S09_CV_SPEED_0;
+    extern float HOCKEY_PRM_S09_CV_ACC_SPEED_0;
+    extern float HOCKEY_PRM_S09_OBJ_INTERVAL;
+    extern float HOCKEY_PRM_S09_OBJ_BOMB_RATE;
+    extern float HOCKEY_PRM_S09_TREASURE_INTERVAL;
+    extern long HOCKEY_PRM_S09_TREASURE_NUM;
+    extern float HOCKEY_PRM_S09_TREASURE_RUN_TIME;
+    extern float HOCKEY_PRM_S09_CONTAINER_WIDTH;
+    extern float HOCKEY_PRM_S09_CONTAINER_HEIGHT;
+    extern float HOCKEY_PRM_S09_CONTAINER_DEC_RND;
+    extern float HOCKEY_PRM_S09_CONTAINER_VEL;
+    extern float HOCKEY_PRM_S09_CONTAINER_INTERVAL;
+    extern long HOCKEY_PRM_S09_CONTAINER_BOX_TYPE;
+    extern float HOCKEY_PRM_S09_CONTAINER_LIFE;
+    extern float HOCKEY_PRM_S09_CONTAINER_OFFSET_X;
+    extern float HOCKEY_PRM_S09_BOMB_SIZE;
+    extern float HOCKEY_PRM_S09_BOMB_EXPLODE_SIZE;
+    extern float HOCKEY_PRM_S09_BOMB_EXPLODE_EFF_SCALE;
+    extern float HOCKEY_PRM_S09_BOMB_EXPLODE_TIME;
+    extern float HOCKEY_PRM_S09_TREASURE_WIDTH;
+    extern float HOCKEY_PRM_S09_TREASURE_HEIGHT;
+    extern long HOCKEY_PRM_S09_TREASURE_COIN_NUM;
+    extern float HOCKEY_PRM_S09_EV_INTERVAL_RND; // in .bss
+    extern long HOCKEY_PRM_S09_CV_DIR_0; // in .bss
+    extern float HOCKEY_PRM_S09_CONTAINER_DEC; // in .bss
+
+    // Stage 17, the turntable and trolley stage (CStageHockey17). Times are
+    // in seconds, speeds in degrees per second, rates in percent.
+    extern float HOCKEY_PRM_S17_TT_INIT_STOP_TIME;
+    extern float HOCKEY_PRM_S17_TT_STOP_TIME;
+    extern float HOCKEY_PRM_S17_TT_ROT_TIME;
+    extern float HOCKEY_PRM_S17_TT_SPEED;
+    extern long HOCKEY_PRM_S17_TT_DIR;
+    extern float HOCKEY_PRM_S17_TT_ACC_TIME;
+    extern float HOCKEY_PRM_S17_TT_RADIUS;
+    extern float HOCKEY_PRM_S17_TT_OPEN_RATE;
+    extern float HOCKEY_PRM_S17_TT_WARN_TIME;
+    extern float HOCKEY_PRM_S17_TT_WARN_AFTER_TIME;
+    extern float HOCKEY_PRM_S17_TT_WARN_SE_STOP_TIME;
+    extern float HOCKEY_PRM_S17_TROLLEY_RATE;
+    extern float HOCKEY_PRM_S17_TROLLEY_PRE_WAIT;
+    extern float HOCKEY_PRM_S17_TROLLEY_SPEED;
+    extern long HOCKEY_PRM_S17_TROLLEY_NUM_MIN;
+    extern long HOCKEY_PRM_S17_TROLLEY_NUM_MAX;
+    extern float HOCKEY_PRM_S17_TROLLEY_LOC_OFFSET;
+    extern float HOCKEY_PRM_S17_TROLLEY_WIDTH;
+    extern float HOCKEY_PRM_S17_TROLLEY_DEPTH;
+    extern float HOCKEY_PRM_S17_TROLLEY_HEIGHT;
+    extern float HOCKEY_PRM_S17_TROLLEY_ATK_WIDTH;
+    extern float HOCKEY_PRM_S17_TROLLEY_ATK_DEPTH;
+    extern float HOCKEY_PRM_S17_TROLLEY_ATK_HEIGHT;
+    extern float HOCKEY_PRM_S17_TROLLEY_MDL_WIDTH;
+    extern float HOCKEY_PRM_S17_TROLLEY_MDL_DEPTH;
+    extern float HOCKEY_PRM_S17_TROLLEY_MDL_HEIGHT;
+    extern float HOCKEY_PRM_S17_HEYHO_COIN_RATE;
+    extern float HOCKEY_PRM_S17_HEYHO_B_DIST_MIN;
+    extern float HOCKEY_PRM_S17_HEYHO_B_DIST_MAX;
+    extern float HOCKEY_PRM_S17_HEYHO_C_DIST_MIN;
+    extern float HOCKEY_PRM_S17_HEYHO_C_DIST_MAX;
+    extern float HOCKEY_PRM_S17_GOAL_X1_LENGTH;
+    extern float HOCKEY_PRM_S17_GOAL_RADIUS;
+    extern float HOCKEY_PRM_S17_TT_STOP_TIME_RND; // in .bss
+    extern float HOCKEY_PRM_S17_TT_ROT_TIME_RND; // in .bss
+    extern float HOCKEY_PRM_S17_TROLLEY_INIT_RATE; // in .bss
+    extern long HOCKEY_PRM_S17_TROLLEY_DIR_TYPE; // in .bss
+    extern long HOCKEY_PRM_S17_TROLLEY_PAT_TYPE; // in .bss
+    extern long HOCKEY_PRM_S17_TROLLEY_PAT_NO; // in .bss
+    extern long HOCKEY_PRM_S17_DEB_RELOAD; // in .bss
 }
 
 #endif /* !MSW_HOCKEYPRM_HPP_ */

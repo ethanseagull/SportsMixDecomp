@@ -134,7 +134,7 @@ game/bcs/dwc/CDwcFriendList.cpp:
 	.text       start:0x800B3E14 end:0x800B4AC0
 
 game/bcs/dwc/CDwcFriend.cpp:
-	.text       start:0x800B4BAC end:0x800B4F08
+	.text       start:0x800B4BAC end:0x800B4F14
 
 game/bcs/CWifiPadBase.cpp:
 	.text       start:0x800C1558 end:0x800C16C0
@@ -749,7 +749,7 @@ game/msw/CNameMesg.cpp:
 	.text       start:0x802567D8 end:0x80258548
 
 game/msw/CCockpitChrIcon2D.cpp:
-	.text       start:0x80258E04 end:0x80259130
+	.text       start:0x802589D0 end:0x802593A0
 
 game/msw/CCockpitPauseLayoutBase.cpp:
 	.text       start:0x8025C344 end:0x8025C3F4

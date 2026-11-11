@@ -54,6 +54,10 @@ namespace bcs {
                 // guessed). The data player nAid last sent with
                 // SetMySingleDataA.
                 const void *GetSingleDataA(long nAid) const;
+                // fn_800B1ED0 (unnamed; name and return type guessed): asks
+                // the storage server for the public data of friend nIndex.
+                // Returns 0 when there is no storage connection.
+                int LoadFriendStorage(long nIndex);
         };
     }
 }

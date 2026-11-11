@@ -13,6 +13,9 @@ VolleyF DetectMapHit___Q33msw28@unnamed@CCollManVolley_cpp@19CCollManVolleyParty
 VolleyF FireReceiver___Q23msw20CChrCoreVolleyKuromaFv near 98.2 as the boss sibling: flag-test form, local store order/stack slots, registers
 VolleyF FireReceiver___Q23msw21CChrCoreVolleyKinopioFv near 98.1 float registers and order of the paired-single normalise (as the boss sibling)
 VolleyF GameGuideDispCheck___Q23msw13CChrManVolleyFv near 99.7 register allocation only in the line-message loop
+VolleyF GetParam_FlashColor__Q23msw14CStageVolley06CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2 bytes); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
+VolleyF GetParam_FlashColor__Q23msw14CStageVolley15CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2 bytes); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
+VolleyF GetParam_FlashColor__Q23msw14CStageVolley16CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2 bytes); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
 VolleyF GetValidPtr__Q23msw15CComManVolleyRRFl near 97.0 last test: original branches past li r3,0 to mr r3,r31 (bne); ours lays the two returns out the other way (beq). Same results on both paths; 4 source forms tried
 VolleyF GetVolleySpikeParam__Q23msw21CItemBallVolleyBananaCFRQ43msw4BALL6VOLLEY14SPIKE_SHOT_ARG near 96.0 field 0x18 gets 1 or 2: original branches, ours a branchless select with the same value
 VolleyF GetVolleySpikeParam__Q23msw21CItemBallVolleyRShellCFRQ43msw4BALL6VOLLEY14SPIKE_SHOT_ARG near 96.1 field 0x18 gets 1 or 2: original branches, ours a branchless select with the same value
@@ -29,6 +32,8 @@ VolleyF Main__Q33msw11CC17_VOLLEY18CcKuromaLockonUnitFv near 96.4 m_hEffect load
 VolleyF Main__Q33msw23@unnamed@CStageMan_cpp@18CStageVolleyFigureFv near 99.6 in m_fRotY + PI the original loads m_fRotY before the PI constant; f0/f1 swapped, same arithmetic
 VolleyF MovePos___Q33msw11CC09_VOLLEY22CcKinopioBoundMushroomFf near 99.6 multiply operands of one fmadds swapped (commutative)
 VolleyF OnMsgN__Q23msw16CChrDrvPadVolleyFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG near 99.5 literal pool order of 512.0f/0.2f in case 0x97; same values loaded
+VolleyF OnPostInitialize__Q23msw14CStageVolley42Fv near 99.9 Stack layout only: the CameraData local sits at 0x60 instead of 0x5C (frame 0x180 vs 0x170); same calls, constants and stores.
+VolleyF OnTurnInit__Q23msw14CStageVolley09Fv unverified 72.0 Instruction order only: the original loads the stop time and its 60.0 factor before choosing the random direction; same calls and arguments. 72%, so not near.
 VolleyF PlayAnim__Q23msw19CCockpitVolleyCoderFli near 99.0 register allocation only (set-count loops)
 VolleyF ScoreBoard_Loop__Q23msw19CCockpitVolleyPauseFv near 98.0 register allocation only (as CCockpitBasketPause::ScoreBoard_Loop): the original reuses the table-pointer register for the third result page, ours takes one more saved register (stmw/lmw); same loads, stores, calls and branches
 VolleyF ScoreInWait__Q23msw18CCockpitVolleyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
@@ -36,6 +41,7 @@ VolleyF ScoreIn__Q23msw18CCockpitVolleyCoinFv near 99.0 register choice only: lo
 VolleyF ScoreOutWait__Q23msw18CCockpitVolleyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 VolleyF ScoreOut__Q23msw18CCockpitVolleyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 VolleyF SearchPersonalBall__Q23msw15CComManVolleyRRFPCQ23msw8CChrCorei near 99.8 cmpw operand order / register choice only
+VolleyF SendMessage__Q23msw14CStageVolley09Fllll near 93.2 Instruction order only in the stop-and-restart branch: the random direction (3 or 4) is chosen before the vtable load in the original; same calls and arguments.
 VolleyF SetCoinValue__Q23msw18CCockpitVolleyCoinFll near 98.9 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 VolleyF SetCountNum__Q23msw25CCockpitVolleyPauseResultFl near 99.2 registers only (as CCockpitBasketPauseResult::SetCountNum): the pane accessor and the computed show flag swap r30/r31; same instructions, order and stack frame
 VolleyF SetFaceIcon__Q23msw19CCockpitVolleyCoderFPQ33bcs3G2D9CPaneCtrlllPCQ23msw8CChrCore near 99.2 register allocation, and Pane::SetVisible(IsStarPlayer()) inserts the bit with the operands the other way round (same flag byte)
@@ -57,6 +63,9 @@ VolleyF SubStateBlockJumpIsActEnd___Q23msw21CChrCoreVolleyKinopioFPQ33msw14CChrC
 VolleyF SubStateReceiveDoProcDiveReceive___Q23msw19CChrCoreVolleyYoshiFPQ33msw14CChrCoreVolley18STATE_WORK_RECEIVE near 99.8 f2/f3 swapped in the angle wrap (same as the boss sibling)
 VolleyF SubStateReceiveDoProcDiveReceive___Q23msw20CChrCoreVolleySiromaFPQ33msw14CChrCoreVolley18STATE_WORK_RECEIVE near 99.7 register allocation only (angle wrap loop)
 VolleyF UpdateMdl__Q23msw14CStageVolley13FUlf near 98.1 register choice and common-subexpression reuse only (as CStageBasket13::UpdateMdl): in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls
+VolleyF UpdateWaterPos___Q23msw14CStageVolley03Ff near 99.8 Register choice and two swapped stores of the same temporary vector (y and z written to 0x18/0x1C in the other order); same values.
+VolleyF Water_GetCenterPos__Q23msw14CStageVolley03CFRQ23bcs5FVEC3 unverified 76.3 The original sums and scales the vector with paired-single instructions (an inline vector helper); ours does it per component. Same result, but the code differs, 76%.
+VolleyF Water_Start__Q23msw14CStageVolley03Fl near 90.8 Instruction order and register choice only (loads of VOLLEY_PRM_S03_PAT0_NUM and m_fStayTime hoisted differently); same calls, arguments and branches.
 VolleyF _SendMessage__Q23msw20CTmGameHandlerVolleyFllll near 99.9 r28/r29 swapped in cases 0x12/0x54 (score temp, score pointer, period byte); instructions, constants, calls and branches otherwise identical
 VolleyF __ct__Q23msw19CItemBallVolleyBombFPQ23msw5CBall near 98.5 original reloads m_pMdl before CreateAttachEffect; ours reuses the null-checked value (same field, nothing stored between)
 VolleyF __ct__Q33msw11CC15_VOLLEY19CcSiromaMagicCircleFPQ23bcs5CTaskPQ23msw8CChrCoreRCQ23bcs5FVEC3Ul near 99.9 stack slots of the pointer-to-member temporaries only

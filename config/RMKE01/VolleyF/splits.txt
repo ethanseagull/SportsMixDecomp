@@ -294,13 +294,13 @@ game/volley/CStgEffectSlot.cpp:
 game/volley/CStageVolley02.cpp:
 	.text       start:0x0008BD50 end:0x0008C3E0
 	.rodata     start:0x00006018 end:0x00006230
-	.data       start:0x000179F0 end:0x00017F90
+	.data       start:0x000179F0 end:0x00017F78
 	.bss        start:0x00000590 end:0x00000598
 
 game/volley/CStageVolley03.cpp:
 	.text       start:0x0008C3E0 end:0x0008D960
 	.rodata     start:0x00006230 end:0x00006310
-	.data       start:0x00017F90 end:0x00018400
+	.data       start:0x00017F78 end:0x00018400
 	.bss        start:0x00000598 end:0x000005B0
 
 game/volley/CStageVolley05.cpp:
@@ -318,13 +318,13 @@ game/volley/CStageVolley06.cpp:
 game/volley/CStageVolley09.cpp:
 	.text       start:0x00090398 end:0x00090F8C
 	.rodata     start:0x00006540 end:0x00006638
-	.data       start:0x00018DD8 end:0x00019460
+	.data       start:0x00018DD8 end:0x000193D0
 	.bss        start:0x000005C0 end:0x000005C8
 
 game/volley/CStageVolley10.cpp:
 	.text       start:0x00090F8C end:0x000950DC
 	.rodata     start:0x00006638 end:0x00006880
-	.data       start:0x00019460 end:0x00019A00
+	.data       start:0x000193D0 end:0x00019A00
 	.bss        start:0x000005C8 end:0x000005D0
 
 game/volley/CStageVolley11.cpp:
@@ -528,8 +528,11 @@ game/volley/CNpcGhostVolley.cpp:
 game/volley/CStageVolley16.cpp:
 	.text       start:0x000C9B6C end:0x000CA124
 	.rodata     start:0x00009528 end:0x00009670
-	.data       start:0x0001FA40 end:0x000202E0
+	.data       start:0x0001FA40 end:0x0001FFD8
 	.bss        start:0x00000920 end:0x00000978
+
+game/volley/VolleyPrm.cpp:
+	.data       start:0x0001FFD8 end:0x000202E0
 
 game/volley/CCockpitChrIcon2DVolley.cpp:
 	.text       start:0x000CA124 end:0x000CA990

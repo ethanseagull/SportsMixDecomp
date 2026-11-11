@@ -117,7 +117,9 @@ namespace msw {
     // The order of the virtual functions follows the DOL vtable (and
     // __vt__Q23msw13CStageDodge11 from 0x448). The modules emit weak copies
     // of the functions with bodies here; the DOL defaults of the ones a
-    // module class overrides have no name, so they are declared pure. Field
+    // module class overrides have no name, so they are declared pure
+    // (BasketF's CStageBasket11 overrides fewer, and its weak copies gave
+    // the bodies of the rest). Field
     // names, return types not visible in a body and the meaning of the
     // court status values are guesses.
     class CStage11Base {
@@ -174,7 +176,8 @@ namespace msw {
             virtual long GetCourtMoveLevel() const { return m_nCourtMoveLevel; }            // 0x44
             virtual long GetCourtRotLevel() const { return m_fCourtRotLevel; }              // 0x48
             virtual void SetCourtRotLevel_(long level) { m_fCourtRotLevel = level; }        // 0x4C
-            virtual void AddCourtRotLevel_(long n) = 0;                                     // 0x50
+            // The default (BasketF's weak copy) sets the level rather than adding to it.
+            virtual void AddCourtRotLevel_(long n) { m_fCourtRotLevel = n; }                // 0x50
             virtual void ResetCourtRotLevel_() { m_fCourtRotLevel = 0.0f; }                 // 0x54
             virtual float GetCurCourtCenter_() const { return m_fCurCourtCenter; }          // 0x58
             virtual float GetCurCourtRotX_() const { return m_fCurCourtRotX; }              // 0x5C
@@ -189,7 +192,7 @@ namespace msw {
             virtual void Bubble_Init();                                                     // 0x74
             virtual void Bubble_Reset();                                                    // 0x78
             virtual void Bubble_Update(float frame);                                        // 0x7C
-            virtual void Bubble_CalcCreatePos();                                            // 0x80
+            virtual bcs::FVEC3 Bubble_CalcCreatePos();                                      // 0x80, returns the position (BasketF)
             virtual void Bubble_Create();                                                   // 0x84
             virtual bool Bubble_IsReady() const;                                            // 0x88
             virtual void Bubble_InitCourt() { m_nBubbleCourt = bcs::BCS_RandMax(1L); }      // 0x8C
@@ -204,24 +207,24 @@ namespace msw {
             virtual void OnCtorCourtStatusChange(COURT_STATUS status) {}                    // 0xA4
             virtual void OnLoopCourtStatusChange(COURT_STATUS status) {}                    // 0xA8
             virtual void OnDtorCourtStatusChange(COURT_STATUS status) {}                    // 0xAC
-            virtual void OnCenterMoveBegin(long team) = 0;                                  // 0xB0
-            virtual void OnCenterMoveEnd(long team) = 0;                                    // 0xB4
+            virtual void OnCenterMoveBegin(long team) {}                                    // 0xB0
+            virtual void OnCenterMoveEnd(long team) {}                                      // 0xB4
 
             // Tuning, given by the sport's stage. Angles in radians, speeds
             // per frame.
             virtual float GetParam_CourtAngle() const = 0;                                  // 0xB8
             virtual float GetParam_CourtRotSpeed() const = 0;                               // 0xBC
             virtual float GetParam_CourtRotAcc() const = 0;                                 // 0xC0
-            virtual long GetParam_CourtRotDiv() const = 0;                                  // 0xC4
+            virtual long GetParam_CourtRotDiv() const { return 1; }                         // 0xC4
             virtual float GetParam_ChrFlowSpeed() const = 0;                                // 0xC8
-            virtual float GetParam_CenterMoveSpeed() const = 0;                             // 0xCC
-            virtual float GetParam_CenterMoveAcc() const = 0;                               // 0xD0
+            virtual float GetParam_CenterMoveSpeed() const { return 0.033333335f; }         // 0xCC, 2 per second
+            virtual float GetParam_CenterMoveAcc() const { return 0.0016666667f; }          // 0xD0, 0.1 per second
             virtual float GetParam_CourtCenterRange() const = 0;                            // 0xD4
-            virtual long GetParam_CourtCenterDiv() const = 0;                               // 0xD8
+            virtual long GetParam_CourtCenterDiv() const { return 3; }                      // 0xD8
             virtual float GetParam_CourtRotLimit() const { return 0.2617994f; }             // 0xDC, 15 degrees
             virtual float GetParam_CourtCenterFixRate() const { return 0.5f; }              // 0xE0
             virtual float GetParam_BubbleGroundHeight() const { return 5.0f; }              // 0xE4
-            virtual float GetParam_BubbleZoneZ() const = 0;                                 // 0xE8
+            virtual float GetParam_BubbleZoneZ() const { return 2.0f; }                     // 0xE8
             virtual float GetParam_BubbleZoneR() const { return 4.0f; }                     // 0xEC
             virtual float GetParam_BubbleZoneAngle() const { return 1.2217305f; }           // 0xF0, 70 degrees
             virtual float GetParam_BubbleInitInterval() const = 0;                          // 0xF4

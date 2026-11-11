@@ -4,11 +4,15 @@ HockeyF AllSetState___Q33msw14CHR_MAN_HOCKEY15CChrManHockeyCSFlll near 99.5 regi
 HockeyF AutoMoveTargetMarkerPos__Q23msw19CChrCoreHockeyLuigiFv near 99.7 register choice only (inlined FsmqGetWork_ head/work pointer, some float registers)
 HockeyF CalcPos___Q33msw11CC09_HOCKEY22CcKinopioBoundMushroomFv near 99.4 register choice/scheduling in paired-single FVEC3Add and angle wraps (as VolleyF)
 HockeyF CheckStickParam__Q23msw16CChrDrvPadHockeyFv near 96.4 float register choice and one swapped independent store/load pair
+HockeyF ConveyorUpdate__Q23msw14CStageHockey09Ff near 99.9 99.9%: register choice only (bomb flag held in r21 vs r10); same instructions and order otherwise
+HockeyF Conveyor_OnStart__Q23msw14CStageHockey09FlQ43msw12CStage09Base9CConveyor8FLOW_DIRif near 98.8 98.8%: register choice and load order of the two EV_INTERVAL globals before BCS_RandMax; same arithmetic and calls
 HockeyF CreateGoal__Q23msw14CStageHockey07Fv near 99.3 99.3%: boss position vector (X, 0.0f, Z) loaded in a different order into the same stack vector; same values
 HockeyF DetectBallGoalIn___Q23msw14CCollManHockeyFRlRQ23bcs5FVEC3RQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 92.8 stack slots and scheduling; goalPos loaded twice where the original copies it once (ps_mr); guardian pointer strength-reduced differently; same constants, calls, accesses and branches
 HockeyF DetectBallGoalOut___Q23msw14CCollManHockeyFRlRQ23bcs5FVEC3RQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 96.9 stack slots and 4 redundant float reloads; same constants, calls, field accesses and branch targets
 HockeyF DetectGoalHit___Q23msw14CCollManHockeyFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 93.1 stack slot layout plus one dead copy of a temporary vector the original makes; same constants, calls, field accesses and branch targets
 HockeyF DetectMapHit___Q23msw14CCollManHockeyFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 96.2 register numbering, order of a few float instructions in the camera-edge test and two redundant reloads of 'to'; same constants, calls, field accesses and branch targets
+HockeyF GetFloorAttribute__Q23msw14CStageHockey09CFRCQ23bcs5FVEC3Q33msw9CStageMan9FLOW_TYPE near 98.3 98.3%: float register choice for halfWidth/offset (commutative fadds operand order); same compares and branches
+HockeyF GetFloorFlow__Q23msw14CStageHockey09CFRQ23bcs5FVEC3RCQ23bcs5FVEC3Q33msw9CStageMan9FLOW_TYPE near 99.8 99.8%: rPos.y/rPos.z loaded and stored to the stack vector in a different order; same values
 HockeyF GetParam_FlashColor__Q23msw14CStageHockey15CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06/15 and DodgeF 15.
 HockeyF GetParam_FlashColor__Q23msw14CStageHockey16CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06/16 and DodgeF 15/16.
 HockeyF GoalFlowUpdate__Q23msw14CStageHockey15Ff near 99.7 register numbering only (identical after renumbering), 99.7%
@@ -21,6 +25,7 @@ HockeyF MainOffense___Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG unverifi
 HockeyF Main__Q23msw18CCockpitHockeyCoinFv near 98.8 register choice only: the loop counters and the pane-accessor temporary sit in r27/r28, the original's first loop counter in r30; same instructions otherwise
 HockeyF Main__Q23msw19CCockpitHockeyCoderFv near 99.4 register allocation only (loop counter and table pointer swap registers); same instructions and memory accesses
 HockeyF Main__Q33msw11CC17_HOCKEY18CcKuromaLockonUnitFv near 96.4 m_hEffect loaded before vs after CEffectCtrl::GetInstance() (scheduling)
+HockeyF Main___Q23msw14CStageHockey17Ff near 90.3 90.3%: register allocation (one saved GPR fewer: _savegpr_23 vs 22), the AABB corners copied with lfs/stfs instead of lwz/stw (same bytes; our nw4r::math::VEC3 is not a POD), and abDoorOpen[i] addressed by a moving pointer instead of base+offset stwx; same calls, constants and branches
 HockeyF MethdPassCall___Q23msw16CChrDrvPadHockeyFl near 99.7 load order of queue head/tail and the two team bytes
 HockeyF MovePos___Q33msw11CC09_HOCKEY22CcKinopioBoundMushroomFf near 99.6 register choice in three fmadds (as VolleyF)
 HockeyF OnMsgMain__Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG near 99.9 register choice for the character pointer

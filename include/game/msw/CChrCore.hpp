@@ -1042,6 +1042,10 @@ namespace msw {
             // CChrDrvPadBasket::MethdTrickMove calls it too).
             const bcs::FVEC3 &GetPos() const;
             float GetRotY() const;
+            // (added for game/msw/CCockpitChrIcon2D.cpp; return type from
+            // the stfs of f1) The height of the trans node, for icons over
+            // the character.
+            float GetTransNodeHeight() const;
             // The goal the character's team attacks, as a point.
             const bcs::FVEC3 &GetTargetGoalPos() const;
             // The distance to rPos in the XZ plane.
@@ -1098,6 +1102,9 @@ namespace msw {
             // (BasketF's CChrCoreBasketSaboten tests the result: 4 for one
             // of its messages.)
             long DriverSendMessage(CChrDrv::MSG_ID id, long, long, unsigned long, unsigned long);
+            // (DOL; added for BasketF CChrCoreBasketWaluigi, return type
+            // guessed) Sends message id to every character's driver.
+            void Util_SendMsgToAll(CChrDrv::MSG_ID id, long, long, unsigned long, unsigned long);
 
             // Added for BossF game/boss/CChrCoreBoss<Name>.cpp (all in the
             // DOL; return types and parameter meanings guessed).

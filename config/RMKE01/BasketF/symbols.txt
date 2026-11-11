@@ -2202,7 +2202,7 @@ SubStateArtsShotPlayLoopMotion___Q23msw21CChrCoreBasketWaluigiFPQ33msw14CChrCore
 SubStateArtsShotPlayArtsShotMotion___Q23msw21CChrCoreBasketWaluigiFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x00071724; // type:function size:0xDC scope:global
 SubStateArtsShotPlayLandMotion___Q23msw21CChrCoreBasketWaluigiFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x00071800; // type:function size:0x54 scope:global
 ShotArtsBall___Q23msw21CChrCoreBasketWaluigiFl = .text:0x00071854; // type:function size:0x11C scope:global
-fn_4_71970 = .text:0x00071970; // type:function size:0x14
+__sinit_\CChrCoreBasketWaluigi_cpp = .text:0x00071970; // type:function size:0x14 scope:local
 __ct__Q23msw19CChrCoreBasketWarioFv = .text:0x00071984; // type:function size:0x3C scope:global
 __dt__Q23msw19CChrCoreBasketWarioFv = .text:0x000719C0; // type:function size:0x58 scope:global
 CallbackMotTrg_AtkOn___Q23msw19CChrCoreBasketWarioFll = .text:0x00071A18; // type:function size:0x34 scope:global
@@ -7273,7 +7273,7 @@ __vt__Q23msw20CChrCoreBasketSiroma = .data:0x00010288; // type:object size:0xD98
 __vt__Q33msw11CC16_BASKET18CcSlimeSquadBasket = .data:0x00011020; // type:object size:0x98 scope:global
 __vt__Q33msw11CC16_BASKET20CcSquadFactoryBasket = .data:0x000110B8; // type:object size:0x20 scope:global
 __vt__Q23msw19CChrCoreBasketSlime = .data:0x000110D8; // type:object size:0xD50 scope:global
-lbl_4_data_11E28 = .data:0x00011E28; // type:object size:0x10 data:4byte
+s_ArtsBallNode = .data:0x00011E28; // type:object size:0x10 scope:local data:4byte
 __vt__Q23msw21CChrCoreBasketWaluigi = .data:0x00011E38; // type:object size:0xD50 scope:global
 __vt__Q33msw11CC05_BASKET15CcWarioSmokeMgr = .data:0x00012B88; // type:object size:0x28 scope:global
 __vt__Q33msw11CC05_BASKET16CcWarioSmokeUnit = .data:0x00012BB0; // type:object size:0x18 scope:global

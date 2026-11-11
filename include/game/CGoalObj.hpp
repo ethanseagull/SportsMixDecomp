@@ -24,8 +24,10 @@ class CGoalObj : public msw::CStgGmk {
 
         CGoalObj(bcs::CTask *pParent, long idx);
         virtual ~CGoalObj();
+        virtual void Main();
 
         virtual void SetPos(const bcs::FVEC3 &rPos);
+        virtual void OnPostCreate();
         virtual void OnEntranceDemoStart();
         virtual void OnPeriodInit();
         virtual void OnTurnInit();

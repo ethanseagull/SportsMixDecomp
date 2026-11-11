@@ -1,11 +1,13 @@
 #include "bcs/CScnGroup.hpp"
 #include "bcs/CHandleTable.hpp"
 #include "bcs/CScnObjGather.hpp"
+#include "bcs/CFrustum.hpp"
 #include "bcs/BCS_Vec.hpp"
 #include "bcs/New.hpp"
 #include "FastCast.hpp"
 #include "nw4r/math/types.h"
 #include "revolution/mtx.h"
+#include <algorithm>
 
 namespace bcs {
 
@@ -118,8 +120,8 @@ namespace bcs {
         , m_fSortValue(0.0f)
         , m_pGroupPrev(0)
         , m_pGroupNext(0)
-        , m_Unk110(0)
-        , m_Unk114(0)
+        , m_pGatherOpaNext(0)
+        , m_pGatherXluNext(0)
     {
         m_nHandle = s_pHandleTable->Register(this);
         PSMTXIdentity(m_Mtx[SCNOBJMTXTYPE_ROOT].m);
@@ -754,5 +756,179 @@ namespace bcs {
                 }
                 break;
         }
+    }
+
+    CScnObjGather::CScnObjGather(CScnObj **ppOpa, CScnObj **ppXlu, unsigned long nMax)
+        : m_nCullMask(0)
+    {
+        Init(ppOpa, ppXlu, nMax);
+    }
+
+    CScnObjGather::~CScnObjGather()
+    {
+        Init(0, 0, 0);
+    }
+
+    int CScnObjGather::Add(CScnObj *pObj, int bOpa, int bXlu, const CFrustum *pFrustum)
+    {
+        int result;
+
+        // Flag 0x400000 (meaning guessed): culled in this gather.
+        pObj->OffFlag(0x400000);
+        if (pObj->m_UnkEE & m_nCullMask) {
+            pObj->OnFlag(0x400000);
+            return 2;
+        }
+        if (pObj->GetAlphaRate() == 0) {
+            return 1;
+        }
+
+        result = 0;
+        if (pFrustum != 0 && (pObj->m_nFlag & 0x10000)) {
+            nw4r::math::AABB box;
+            pObj->GetBoundingBox(&box);
+            int nHit = pFrustum->IntersectAABB_Ex(&box);
+            if (nHit == 0) {
+                pObj->OnFlag(0x400000);
+                return 2;
+            }
+            if (nHit == 1) {
+                result = 1;
+            }
+        }
+
+        if (bOpa) {
+            if (m_nOpaNum < m_nMax) {
+                m_ppOpa[m_nOpaNum++] = pObj;
+                SetGatherOpaJoint(pObj);
+            } else {
+                return result;
+            }
+        }
+        if (bXlu) {
+            if (m_nXluNum < m_nMax) {
+                m_ppXlu[m_nXluNum++] = pObj;
+                SetGatherXluJoint(pObj);
+            } else {
+                return result;
+            }
+        }
+        return result;
+    }
+
+    void CScnObjGather::SetGatherOpaJoint(CScnObj *pObj)
+    {
+        pObj->SetFlag(0x100000, 1);
+        if (pObj->m_pJointObj != 0) {
+            SetGatherOpaJoint(pObj->m_pJointObj);
+        }
+    }
+
+    void CScnObjGather::SetGatherXluJoint(CScnObj *pObj)
+    {
+        pObj->SetFlag(0x200000, 1);
+        if (pObj->m_pJointObj != 0) {
+            SetGatherXluJoint(pObj->m_pJointObj);
+        }
+    }
+
+    void CScnObjGather::Sort()
+    {
+        std::sort(m_ppOpa, m_ppOpa + m_nOpaNum, CompareOpa);
+        std::sort(m_ppXlu, m_ppXlu + m_nXluNum, CompareXlu);
+        Link();
+    }
+
+    int CScnObjGather::CompareOpa(const CScnObj *pA, const CScnObj *pB)
+    {
+        long nPriorityA = pA->GetDrawPriorityOpa();
+        long nPriorityB = pB->GetDrawPriorityOpa();
+
+        if (nPriorityA == nPriorityB) {
+            float fDiff = pA->GetValueForSortOpa() - pB->GetValueForSortOpa();
+            if (fDiff == 0.0f) {
+                return pA < pB;
+            }
+            return fDiff < 0.0f;
+        }
+        return nPriorityA < nPriorityB;
+    }
+
+    int CScnObjGather::CompareXlu(const CScnObj *pA, const CScnObj *pB)
+    {
+        long nPriorityA = pA->GetDrawPriorityXlu();
+        long nPriorityB = pB->GetDrawPriorityXlu();
+
+        if (nPriorityA == nPriorityB) {
+            float fDiff = pA->GetValueForSortXlu() - pB->GetValueForSortXlu();
+            if (fDiff == 0.0f) {
+                return pA < pB;
+            }
+            return fDiff < 0.0f;
+        }
+        return nPriorityA < nPriorityB;
+    }
+
+    void CScnObjGather::DrawOpa(void *pArg, unsigned long nArg)
+    {
+        for (CScnObj *pObj = m_pOpaHead; pObj != 0; pObj = pObj->m_pGatherOpaNext) {
+            pObj->ObjProc(6, nArg, pArg);
+            ClearGatherOpaJoint(pObj);
+        }
+    }
+
+    void CScnObjGather::ClearGatherOpaJoint(CScnObj *pObj)
+    {
+        pObj->SetFlag(0x100000, 0);
+        if (pObj->m_pJointObj != 0) {
+            ClearGatherOpaJoint(pObj->m_pJointObj);
+        }
+    }
+
+    void CScnObjGather::DrawXlu(void *pArg, unsigned long nArg)
+    {
+        for (CScnObj *pObj = m_pXluHead; pObj != 0; pObj = pObj->m_pGatherXluNext) {
+            pObj->ObjProc(7, nArg, pArg);
+            ClearGatherXluJoint(pObj);
+        }
+    }
+
+    void CScnObjGather::ClearGatherXluJoint(CScnObj *pObj)
+    {
+        pObj->SetFlag(0x200000, 0);
+        if (pObj->m_pJointObj != 0) {
+            ClearGatherXluJoint(pObj->m_pJointObj);
+        }
+    }
+
+    void CScnObjGather::Link()
+    {
+        unsigned long i;
+
+        m_pOpaHead = 0;
+        m_pXluHead = 0;
+        if (m_nOpaNum != 0) {
+            m_pOpaHead = m_ppOpa[0];
+            for (i = 0; i < m_nOpaNum - 1; i++) {
+                m_ppOpa[i]->m_pGatherOpaNext = m_ppOpa[i + 1];
+            }
+            m_ppOpa[m_nOpaNum - 1]->m_pGatherOpaNext = 0;
+        }
+        if (m_nXluNum != 0) {
+            m_pXluHead = m_ppXlu[0];
+            for (i = 0; i < m_nXluNum - 1; i++) {
+                m_ppXlu[i]->m_pGatherXluNext = m_ppXlu[i + 1];
+            }
+            m_ppXlu[m_nXluNum - 1]->m_pGatherXluNext = 0;
+        }
+    }
+
+    // The original has this as an inline in the class (a weak copy at the
+    // very end of the file, emitted with CG3dObj's vtable). Defined here
+    // instead so that the units emitting vtables derived from CG3dObj do
+    // not each get a weak copy.
+    long CG3dObj::GetObjType() const
+    {
+        return 0;
     }
 }

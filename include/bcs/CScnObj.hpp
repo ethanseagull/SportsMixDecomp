@@ -62,6 +62,9 @@ namespace bcs {
 
             CScnObj();
             virtual ~CScnObj();
+            // 0x0C: 1 for a plain scene object (inline; the original's weak
+            // copy is at 0x8001E508).
+            virtual long GetObjType() const { return 1; }
             virtual void ObjProc(unsigned long, unsigned long, void *);    // 0x1C
             virtual int ForEach(ForEachFunc pFunc, void *pArg, int);       // 0x20
             virtual float GetValueForSortOpa() const;                      // 0x24
@@ -234,6 +237,10 @@ namespace bcs {
             // (name guessed) Whether any bit of flag is set. Inline in
             // CalcSortValue (the double cntlzw of a bool result).
             bool TestFlag(unsigned long flag) const { return (m_nFlag & flag) != 0; }
+            // (names guessed) The draw priorities SetDrawPriority stores.
+            // bcs::CScnObjGather compares them as signed longs.
+            long GetDrawPriorityOpa() const { return m_nDrawPriorityOpa; }
+            long GetDrawPriorityXlu() const { return m_nDrawPriorityXlu; }
             // (name guessed) The handle GetScnObj takes.
             unsigned long GetHandle() const { return m_nHandle; }
 
@@ -378,8 +385,10 @@ namespace bcs {
             // bcs::CScnGroup holding this object.
             CScnObj *m_pGroupPrev;              // 0x108
             CScnObj *m_pGroupNext;              // 0x10C
-            unsigned long m_Unk110;             // 0x110
-            unsigned long m_Unk114;             // 0x114
+            // (names guessed) The links of the opaque and the translucent
+            // draw list bcs::CScnObjGather builds after sorting.
+            CScnObj *m_pGatherOpaNext;          // 0x110
+            CScnObj *m_pGatherXluNext;          // 0x114
 
             // (names guessed) The table of handles (lbl_805C0890) and the
             // handles queued by AppendDelayDeleteObject (lbl_805C0894,
@@ -389,6 +398,7 @@ namespace bcs {
             static unsigned long s_nDelayDeleteNum;
 
             friend class CScnGroup;
+            friend class CScnObjGather;
     };
 }
 

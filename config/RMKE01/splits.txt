@@ -68,7 +68,7 @@ game/bcs/G2D/CLytResource.cpp:
 	.text       start:0x800401A0 end:0x80040B70
 
 game/bcs/CScnObj.cpp:
-	.text       start:0x80041888 end:0x80043898
+	.text       start:0x80041888 end:0x80044B00
 
 game/bcs/CGDLObj.cpp:
 	.text       start:0x80044B00 end:0x80044BD4

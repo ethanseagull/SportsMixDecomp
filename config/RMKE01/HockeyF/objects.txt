@@ -44,7 +44,7 @@ Equivalent game/hockey/CStageHockey15.cpp
 Matching game/hockey/CStageManHockey.cpp
 Equivalent game/hockey/CStageHockey17.cpp
 Equivalent game/hockey/CStageHockey09.cpp
-NonMatching game/hockey/CStageHockey11.cpp
+Equivalent game/hockey/CStageHockey11.cpp flags=noauto
 Equivalent game/hockey/CStgGmk_Trolley_Act_Hockey.cpp
 Equivalent game/hockey/CChrCoreHockeyWaluigi.cpp
 Matching game/hockey/CStageMan.cpp

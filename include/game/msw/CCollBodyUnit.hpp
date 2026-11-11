@@ -1,6 +1,10 @@
 #ifndef MSW_CCOLLBODYUNIT_HPP_
 #define MSW_CCOLLBODYUNIT_HPP_
 
+namespace bcs {
+    struct FVEC3;
+}
+
 namespace msw {
 
     // One body collision unit. A DOL class.
@@ -16,6 +20,11 @@ namespace msw {
 
             // (name guessed) Inline: DodgeF compares the byte as a signed int.
             long GetOwnerKind() const { return m_nOwnerKind; }
+
+            // (DOL; added for BossF game/boss/CChrCoreBossKinopio.cpp) Calls
+            // the push callback of this unit for a push by pOther; pPush is
+            // the push vector or null.
+            void DoBodyPushCallback(CCollBodyUnit *pOther, bcs::FVEC3 *pPush);
     };
 }
 

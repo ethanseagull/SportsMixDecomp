@@ -28,6 +28,17 @@ inline double fabs(double x)
     return x < 0.0 ? -x : x;
 #endif
 }
+
+// The float version (inline, as in the compiler's own library): one fabs
+// instruction, with no rounding to single.
+inline float fabsf(float x)
+{
+#ifdef __MWERKS__
+    return __fabsf(x);
+#else
+    return x < 0.0f ? -x : x;
+#endif
+}
 #endif
 
 #endif /* !MATH_H_ */

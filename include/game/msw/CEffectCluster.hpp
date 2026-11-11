@@ -6,6 +6,7 @@
 #include "bcs/FVEC3.hpp"
 
 namespace bcs {
+    class CMdlObj;
     namespace EF {
         class CEffect;
     }
@@ -25,6 +26,10 @@ namespace msw {
             void SetFadeoutTime(float fFrame);
             long GetEffectNum();
             bcs::EF::CEffect *GetEffect(long nIndex);
+            // (DOL; added for BossF game/boss/CChrCoreBossKinopio.cpp) The
+            // models of the cluster; an entry may be null.
+            long GetMdlObjNum();
+            bcs::CMdlObj *GetMdlObj(long nIndex);
 
             // (name guessed; the DOL's fn_801233FC) Called with 1 on a
             // cluster just attached to a layout pane object. Calls a member

@@ -17,6 +17,22 @@ namespace msw {
     // words are not mapped.
     class CBodyCollision {
         public:
+            // Added for BossF game/boss/CChrCoreBossKinopio.cpp (DOL;
+            // argument meanings guessed): nUnit units of collision kind
+            // nKind.
+            CBodyCollision(long, long nUnit, long nKind, unsigned long);
+            ~CBodyCollision();
+            void SetTargetFlagAll(unsigned long flag);
+            void SetPushRankAll(long rank);
+            void SetPushPowerAll(long power);
+            void SetPosAll(const bcs::FVEC3 &pos);
+            void AddPosXZAll(const bcs::FVEC3 &pos, const bcs::FVEC3 &move);
+            void SetSizeAll(float fRadius, float fHeight, float);
+            void SetPushEnableAll();
+            void SetEnableAll();
+            // Recomputes the bounding boxes after a move.
+            void CalcAABBAll();
+
             // Target flags of every unit: set all to `flag`, or add `flag`.
             void ResetTargetFlagAll(unsigned long flag);
             void AddTargetFlagAll(unsigned long flag);

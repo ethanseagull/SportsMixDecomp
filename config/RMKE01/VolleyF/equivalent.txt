@@ -92,10 +92,13 @@ VolleyF SetChrIcon__Q23msw14CCockpitVolleyFlllPCQ23bcs5FVEC3PCv near 99.8 regist
 VolleyF SetCoinSpecialAnim__Q23msw14CCockpitVolleyFli near 99.8 register allocation only
 VolleyF SetCoinValue__Q23msw18CCockpitVolleyCoinFll near 98.9 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 VolleyF SetCountNum__Q23msw25CCockpitVolleyPauseResultFl near 99.2 registers only (as CCockpitBasketPauseResult::SetCountNum): the pane accessor and the computed show flag swap r30/r31; same instructions, order and stack frame
+VolleyF SetCountPoint__Q23msw20CCockpitVolleyResultFPlPll near 99.6 register allocation only (float temporaries of the count speed swapped, saved pane pointer r17 vs r18)
+VolleyF SetCountScore__Q23msw20CCockpitVolleyResultFPlPlll near 98.4 register allocation only (float temporaries of the count speed and the saved pane pointer/limit registers swapped)
 VolleyF SetFaceIcon__Q23msw19CCockpitVolleyCoderFPQ33bcs3G2D9CPaneCtrlllPCQ23msw8CChrCore near 99.2 register allocation, and Pane::SetVisible(IsStarPlayer()) inserts the bit with the operands the other way round (same flag byte)
 VolleyF SetHeightObjState___Q23msw17CBallTargetMarkerFv near 98.7 float register choice and scheduling; .rodata offsets shifted because -1.0f/0.23f sit after 1.0f in ours (0.23f has no known user)
 VolleyF SetHeightObjState___Q23msw30CBallTargetMarkerRhythmReceiveFv near 98.4 float register choice and block order of the clamp; .rodata offsets shifted (-1.0f/0.23f placement)
 VolleyF SetIconFace__Q23msw23CCockpitChrIcon2DVolleyFll near 99.1 register allocation only: one more callee-saved register (_savegpr_25 vs _savegpr_26), so the frame is 0x60 instead of 0x50; same calls, constants and accesses
+VolleyF SetPerfectIcon__Q23msw20CCockpitVolleyResultFPlPll near 99.6 register allocation only (float temporaries of the count speed swapped)
 VolleyF SetSPContrllerDisp__Q23msw14CCockpitVolleyFll near 99.8 register allocation only
 VolleyF SetSPGaugeRatio__Q23msw14CCockpitVolleyFlff near 99.8 register allocation only (gauge pointer in r0 vs a saved register)
 VolleyF SetSPGauge__Q23msw21CCockpitVolleySPGaugeFlf near 99.1 99.1%, registers only: the 0x43300000 conversion word and the array offset swap r0/r3
@@ -104,6 +107,7 @@ VolleyF SetScoreValue__Q23msw19CCockpitVolleyCoderFll unverified 81.2 same contr
 VolleyF SetServeScoreAnim__Q23msw18CCockpitVolleyCoinFl near 99.1 register choice only: loop counter and pane-accessor temporary swap r27/r28
 VolleyF SetTeamScore__Q23msw14CCockpitVolleyFv near 99.6 register allocation only (score and coder pointer swapped in the inlined SetTeamScore(long,long,int))
 VolleyF SetTelop3DScoreCount__Q23msw14CCockpitVolleyFllllllllil near 99.3 order of the constant stores into SET_PARAM only (same values and offsets), as HockeyF's near copy
+VolleyF SetTextNext__Q23msw20CCockpitVolleyResultFll near 99.2 register allocation only
 VolleyF Set__Q23msw18CCockpitVolleyCoinFv near 99.4 register choice / schedule only (as CCockpitHockeyCoin::Set)
 VolleyF Set__Q23msw19CCockpitVolleyCoderFv near 99.8 register allocation only: the label loop's table pointer and accessor temporaries swap saved registers; same calls, constants, loads, stores and branches
 VolleyF Set__Q23msw21CCockpitVolleySPGaugeFv near 93.6 93.6%: the layout layer (6 when m_nType is 1, else 0) is computed once before the inlined NewPaneCtrl in ours; the original recomputes the same compare at each of its two uses (AddObject, CreateLayoutObject). The rest is register numbering; calls, constants, tables and loops are the same (.rodata 100%)

@@ -174,9 +174,9 @@ BasketF __ct__Q23msw14CStageBasket11FPQ23bcs5CTask near 99.9 instruction order o
 BasketF __ct__Q23msw16CChrDrvPadBasketFv unverified 84.3 84.3%: float constants via one base register instead of the original's per-literal lis (pool-off stand-in could not stay in the shared CChrDrvPad header); extra field reloads in the original; not proven.
 BasketF __ct__Q23msw19CItemBallBasketBombFPQ23msw5CBall near 98.8 98.8%: original reloads m_pMdl before CreateAttachEffect; ours reuses the checked value (nothing stored between).
 BasketF __ct__Q33msw14GIMMICK_BASKET16CEffectCoinScoreFPQ23bcs5CTaskRCQ23bcs5FVEC3fl near 99.5 99.5%: float register choice, one load scheduled; register/schedule only, same difference as the recorded Volley/Hockey/Dodge copies
-BasketF __dt__Q23bcs106CPool<Q33msw7STAGE1113CStgRndAnmObj,Q23bcs42CPoolNode<Q33msw7STAGE1113CStgRndAnmObj,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction order only
-BasketF __dt__Q23bcs41CFixedPool<Ul,32,Q23bcs15CPoolNode<Ul,0>>Fv near 98.8 instruction order only
-BasketF __dt__Q23bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction order only
+BasketF __dt__Q23bcs106CPool<Q33msw7STAGE1113CStgRndAnmObj,Q23bcs42CPoolNode<Q33msw7STAGE1113CStgRndAnmObj,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
+BasketF __dt__Q23bcs41CFixedPool<Ul,32,Q23bcs15CPoolNode<Ul,0>>Fv near 98.8 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
+BasketF __dt__Q23bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
 BasketF __dt__Q23msw13CChrManBasketFv near 99.1 register allocation/instruction order only
 BasketF __dt__Q23msw14CStageBasket11Fv near 99.0 instruction order only
-BasketF __dt__Q33msw7STAGE1120CBgFirePillarClusterFv near 98.1 instruction order only
+BasketF __dt__Q33msw7STAGE1120CBgFirePillarClusterFv near 98.1 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants

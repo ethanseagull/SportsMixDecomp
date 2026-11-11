@@ -61,6 +61,7 @@ DodgeF OnCtorNormalShoot__Q23msw20CItemBallRShellDodgeFv near 99.4 register numb
 DodgeF OnDamage__Q23msw25CStgGmk_Pinball_Act_DodgeFPQ23msw13CCollBodyUnitPQ23msw5CBall near 98.1 98.1%: float/pointer register numbering, 'ble body; b skip' vs 'bgt skip' (same for NaN), and the inline CStgSrt::SetVel's bit-1 flag test as rlwinm. vs extrwi. (same bit; the shared inline uses &2, which VolleyF and the Pylon want); constants, calls, accesses, stack identical
 DodgeF OnGimmickCancel__Q23msw13CStageDodge05Fv near 99.1 99.1%: float register allocation only.
 DodgeF OnGimmickReset__Q23msw13CStageDodge05Fv near 99.2 99.2%: float register allocation only.
+DodgeF OnPostAppendNode__Q23msw13CStageDodge11FPCQ33msw5STAGE12MDL_GEN_RULERQ23bcs6CRegexPQ23msw17CStageMdlListNodeRQ34nw4r3g3d7ResFileRQ23msw4CArnl near 100.0 constant offsets only: three .rodata loads 4 bytes apart from the original (section layout of the unit's .rodata), same constants and code
 DodgeF OnPostAppendNode__Q23msw13CStageDodge12FPCQ33msw5STAGE12MDL_GEN_RULERQ23bcs6CRegexPQ23msw17CStageMdlListNodeRQ34nw4r3g3d7ResFileRQ23msw4CArnl near 99.8 99.8%: the two case-local sscanf result variables have their stack slots (0x8/0xC) swapped. No behaviour change.
 DodgeF OnTurnInit__Q23msw13CStageDodge09Fv unverified 50.4 50.4% on 35 instructions: schedule only (original loads EV_TIME, the 60.0f constant and the base vptr before the RandRange ternary); same calls, args and slots. Two models, autopilot and an inline-argument form tried.
 DodgeF PopDamageLife__Q23msw15CEventDemoDodgeFi near 99.5 99.5%: character number and telop id in swapped registers inside the out-telop inline
@@ -114,10 +115,10 @@ DodgeF UpdatePos___Q33msw13CStageDodge0310CWaterInfoFv near 90.6 float registers
 DodgeF Util_SearchArtsPassTo___Q23msw12CChrManDodgeFl near 99.1 99.1%: register allocation only (same as CChrManHockey's).
 DodgeF Util_SearchPassmeetTo___Q23msw12CChrManDodgeFlfRQ23bcs5FVEC3 near 99.2 99.2%: two stack-address registers swapped; team byte sign-extended in place.
 DodgeF __ct__Q23msw13CStageDodge11FPQ23bcs5CTask near 99.9 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
-DodgeF __dt__Q23bcs106CPool<Q33msw7STAGE1113CStgRndAnmObj,Q23bcs42CPoolNode<Q33msw7STAGE1113CStgRndAnmObj,0>,Q33bcs4pool6NoLock>Fv near 98.9 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
-DodgeF __dt__Q23bcs41CFixedPool<Ul,32,Q23bcs15CPoolNode<Ul,0>>Fv near 98.8 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
-DodgeF __dt__Q23bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>Fv near 98.9 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
+DodgeF __dt__Q23bcs106CPool<Q33msw7STAGE1113CStgRndAnmObj,Q23bcs42CPoolNode<Q33msw7STAGE1113CStgRndAnmObj,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
+DodgeF __dt__Q23bcs41CFixedPool<Ul,32,Q23bcs15CPoolNode<Ul,0>>Fv near 98.8 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
+DodgeF __dt__Q23bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
 DodgeF __dt__Q23msw12CChrManDodgeFv near 99.1 99.1%: loop registers r29/r30 swapped.
 DodgeF __dt__Q23msw13CStageDodge11Fv near 99.0 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
-DodgeF __dt__Q33msw7STAGE1120CBgFirePillarClusterFv near 98.1 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
+DodgeF __dt__Q33msw7STAGE1120CBgFirePillarClusterFv near 98.1 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
 DodgeF __sinit_\CChrCoreDodgeSlime_cpp near 99.4 register allocation only (the colour words and the array base pointer in other GPRs); same stores, values and offsets

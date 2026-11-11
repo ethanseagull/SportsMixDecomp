@@ -37,6 +37,9 @@ typedef struct _GXTexObj {
 
 void GXInitTexObj(GXTexObj *pObj, void *pImage, unsigned short nWidth, unsigned short nHeight, GXTexFmt format,
                   GXTexWrapMode wrapS, GXTexWrapMode wrapT, unsigned char bMipmap);
+// Added for the DOL's game/msw/CGameExDemoBase.cpp.
+void GXLoadTexObj(const GXTexObj *pObj, int map);
+
 void GXInitTexObjLOD(GXTexObj *pObj, GXTexFilter minFilter, GXTexFilter magFilter, float fMinLod, float fMaxLod,
                      float fLodBias, unsigned char bBiasClamp, unsigned char bEdgeLod, GXAnisotropy maxAniso);
 

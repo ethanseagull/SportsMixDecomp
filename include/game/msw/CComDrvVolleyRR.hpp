@@ -21,6 +21,12 @@ namespace msw {
             // Steers rPos round a character or item in the way; non-zero
             // while it is turning round one.
             int GetPosTurnAroundGimmick(bcs::FVEC3 &rPos);
+
+        protected:
+            // Not mapped yet. The size, 0x1A4, is what
+            // CHR_MAN_VOLLEY::CChrManVolleyRhythmReceive::CreateDriver_
+            // allocates.
+            unsigned char m_Unk170[0x1A4 - 0x170];
     };
 }
 

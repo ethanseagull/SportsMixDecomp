@@ -7,6 +7,7 @@
 struct _GXTexObj;
 
 namespace bcs {
+    class CMdlObj;
     class CTask;
 }
 
@@ -33,6 +34,9 @@ namespace msw {
     //    for an empty one. All are guesses, as are the member names.
     class CChrCore : public bcs::CFsmQueue<CChrCore> {
         public:
+            // (contents not known; the MethdRDB slots take a pointer to one)
+            struct INPUT_WORK;
+
             CChrCore();
             virtual ~CChrCore();                                     // 0x08
             virtual void DispFunc();                                 // 0x0C
@@ -570,6 +574,85 @@ namespace msw {
             virtual int MethdJumpUpper();                             // 0x83C
             virtual int CanbeSideStep(float, float);                  // 0x840
             virtual int MethdSideStep(float, float);                  // 0x844
+            // 0x848-0x974 added for HockeyF game/hockey/CChrManHockey.cpp, named
+            // from __vt__Q23msw14CChrCoreHockey (return types guessed as above;
+            // CChrManHockeyCS::AllSetState_ calls MethdTimeOver).
+            virtual int CanbeCatch();                                 // 0x848
+            virtual int MethdCatch();                                 // 0x84C
+            virtual int CanbeCatchToSDB();                            // 0x850
+            virtual int MethdCatchToSDB();                            // 0x854
+            virtual int CanbeSDBCatch();                              // 0x858
+            virtual int MethdSDBCatch();                              // 0x85C
+            virtual int CanbeDribble();                               // 0x860
+            virtual int CanbeSDB();                                   // 0x864
+            virtual int MethdSDB(float);                              // 0x868
+            virtual int CanbeRDB();                                   // 0x86C
+            virtual int MethdRDB(INPUT_WORK *, float);                // 0x870
+            virtual int MethdRDB(INPUT_WORK *, float, float);         // 0x874
+            virtual int CanbeQuickTurnState();                        // 0x878
+            virtual int CanbeQuickTurn(float);                        // 0x87C
+            virtual int MethdQuickTurn(float);                        // 0x880
+            virtual int CanbeTrickMove();                             // 0x884
+            virtual int MethdTrickMove(float);                        // 0x888
+            virtual int CanbeTrickDance();                            // 0x88C
+            virtual int MethdTrickDance();                            // 0x890
+            virtual int CanbeBlockCut(int);                           // 0x894
+            virtual int CanbeNowBlockCut();                           // 0x898
+            virtual int MethdBlockCut(float);                         // 0x89C
+            virtual int CanbeChargeCut();                             // 0x8A0
+            virtual int MethdChargeCut(float);                        // 0x8A4
+            virtual int CanbeDropCut();                               // 0x8A8
+            virtual int CanbeNowDropCut();                            // 0x8AC
+            virtual int MethdDropCut();                               // 0x8B0
+            virtual int CanbeShoot();                                 // 0x8B4
+            virtual int MethdShoot(float);                            // 0x8B8
+            virtual int CanbeJumpShoot();                             // 0x8BC
+            virtual int MethdJumpShoot();                             // 0x8C0
+            virtual int MethdJumpShoot(float, int);                   // 0x8C4
+            virtual int CanbeAerialShoot();                           // 0x8C8
+            virtual int MethdAerialShoot();                           // 0x8CC
+            virtual int CanbeRebound();                               // 0x8D0
+            virtual int CanbeReboundDunk();                           // 0x8D4
+            virtual int MethdReboundDunk();                           // 0x8D8
+            virtual int CanbeLayUp();                                 // 0x8DC
+            virtual int MethdLayUp();                                 // 0x8E0
+            virtual int MethdLayUp(int);                              // 0x8E4
+            virtual int CanbeAirTrick();                              // 0x8E8
+            virtual int MethdAirTrick();                              // 0x8EC
+            virtual int CanbeAirTrickSub();                           // 0x8F0
+            virtual int MethdAirTrickSub(long, long);                 // 0x8F4
+            virtual int CanbeDunk();                                  // 0x8F8
+            virtual int MethdDunk();                                  // 0x8FC
+            virtual int CanbeItemBallAttack();                        // 0x900
+            virtual int MethdItemBallAttack();                        // 0x904
+            virtual int CanbePass(CChrCore *);                        // 0x908
+            virtual int MethdPass(float, int);                        // 0x90C
+            virtual int MethdPass(CChrCore *, int);                   // 0x910
+            virtual int CanbePassIdx(long);                           // 0x914
+            virtual int MethdPassIdx(long);                           // 0x918
+            virtual int CanbeDash() const;                            // 0x91C
+            virtual int MethdDash();                                  // 0x920
+            virtual int CanbeJumpPass();                              // 0x924
+            virtual int MethdJumpPass(long);                          // 0x928
+            virtual int CanbeJumpCatch();                             // 0x92C
+            virtual int MethdJumpCatch(float);                        // 0x930
+            virtual int CanbeDribbleMiss();                           // 0x934
+            virtual int MethdDribbleMiss(float);                      // 0x938
+            virtual int CanbeAerialPass(CChrCore *);                  // 0x93C
+            virtual int MethdAerialPass(float, int);                  // 0x940
+            virtual int CanbeAerialPassIdx(long);                     // 0x944
+            virtual int MethdAerialPassIdx(long);                     // 0x948
+            virtual int CanbeItemShoot();                             // 0x94C
+            virtual int MethdItemShoot(float);                        // 0x950
+            virtual int CanbeSetMoveRevise();                         // 0x954
+            virtual int MethdSetMoveRevise(float);                    // 0x958
+            virtual int MethdDamage(unsigned long, float);            // 0x95C
+            virtual int MethdDamage(unsigned long, float, float, float, long, float, long, long);// 0x960
+            virtual int MethdDamage(unsigned long, float, float, float, long, float, long, long, long, long);// 0x964
+            virtual int CanbeUseItem();                               // 0x968
+            virtual int MethdUseItem();                               // 0x96C
+            virtual int MethdTurnOver(long);                          // 0x970
+            virtual int MethdTimeOver(long);                          // 0x974
             // ... the vtable goes on from here (about 1,100 slots in all).
 
             // Not zero when the character takes no part in the game: it has
@@ -667,16 +750,9 @@ namespace msw {
             void GetPos(bcs::FVEC3 &rPos);
 
             // Added for DodgeF game/dodge/CChrManDodge.cpp (all in the DOL;
-            // parameter names guessed). The position of the goal the
-            // character's team attacks.
-            const bcs::FVEC3 &GetTargetGoalPos() const;
-            // The yaw (radians) from pos towards the character, in the XZ
-            // plane (meaning guessed from the name; see GetRotY_ToPosXZ).
+            // parameter names guessed). The yaw (radians) from pos towards
+            // the character, in the XZ plane (see GetRotY_ToPosXZ).
             float GetRotY_FromPosXZ(const bcs::FVEC3 &pos) const;
-            // The yaw (radians) from the character towards pChr.
-            float GetRotY_ToChr(const CChrCore *pChr) const;
-            // The distance from the character to pos in the XZ plane.
-            float GetDist_ToPosXZ(const bcs::FVEC3 &pos) const;
             // Not zero when the character is within fRadius of pos in the XZ
             // plane (meaning guessed from the name).
             int IsInnerXZ(const bcs::FVEC3 &pos, float fRadius);
@@ -684,6 +760,16 @@ namespace msw {
             // members directly.
             long GetDriverIdx() const { return m_nDriver; }
             CChrCore *GetPassCheckChr() const { return m_pPassCheckChr; }
+            void SetRotY(float fRotY);
+            // (meanings guessed) Hides or shows the character for an event.
+            void SetEvtHidden(int bHidden, int);
+            // (fn_800DF580, unnamed in the DOL; name guessed) Stores the rate
+            // clamped to [0, 1] at 0x514.
+            void SetSeVolume(float fRate);
+            // (fn_800DE0B8, unnamed in the DOL; name guessed) Clamps the rate
+            // to [0, 1] and passes it on to CGameSnd::SetVoiceVolume for the
+            // character's player.
+            void SetVoiceVolume(float fRate, float);
             // (names guessed) Inline in the modules: the character managers
             // write the members directly.
             void SetCamNo(long nCam) { m_nCamNo = nCam; }
@@ -691,11 +777,37 @@ namespace msw {
             void SetDisable() { m_UnkEC |= 0x40000000; }
             void OnStatusFlag(unsigned long nBit) { m_nStatusFlag |= nBit; }
 
+            // Added for HockeyF game/hockey/CChrManHockey.cpp (all in the
+            // DOL; return types and parameter meanings guessed).
+            // The position, as a reference to the member (GetPos(FVEC3 &)
+            // copies it).
+            const bcs::FVEC3 &GetPos();
+            float GetRotY() const;
+            // The goal the character's team attacks, as a point.
+            const bcs::FVEC3 &GetTargetGoalPos() const;
+            // The distance to rPos in the XZ plane.
+            float GetDist_ToPosXZ(const bcs::FVEC3 &rPos) const;
+            // The yaw (radians) from the character towards pChr.
+            float GetRotY_ToChr(const CChrCore *pChr) const;
+            // Frame, motion id and play of animation slot nSlot (the
+            // fighting code uses slot 3).
+            float AnimGetFrame(unsigned long nSlot) const;
+            long AnimGetMotID(unsigned long nSlot, long) const;
+            void AnimPlay(unsigned long nSlot, long nMotId, int, float, float);
+            // (names guessed) Inline in the modules.
+            long DriverGetNo() const { return m_nDriver; }
+            bcs::CMdlObj *GetMdl() const { return m_pMdl; }
+            long GetComLevel() const { return m_nComLevel; }
+
         protected:
             unsigned long m_Unk60;
             CChrDrv *m_pDriver[2];       // 0x64 (count guessed from the index's place)
             long m_nDriver;              // 0x6C, index of the driver in use, negative for none
-            unsigned char m_Unk70[0x78];
+            unsigned char m_Unk70[0x90 - 0x70];
+            // 0x90 (name guessed): the character's model; IsDisable is true
+            // while it is null. CChrManHockey::ArtsStart_ fades it out.
+            bcs::CMdlObj *m_pMdl;
+            unsigned char m_Unk94[0xE8 - 0x94];
             unsigned long m_nStatusFlag; // 0xE8, meaning of the bits not known
             unsigned long m_UnkEC;
             // 0xF0 (name guessed): CChrCore::UpdateDisp_ draws nothing while

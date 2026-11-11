@@ -79,7 +79,9 @@ namespace msw {
                 // CEventDemoHockey::CameraEvent).
                 long GetStage() const { return m_nStage; }
 
-                unsigned char m_Unk00[4];
+                // 0x00 (meaning not known): HockeyF's CFighting compares it
+                // with a team number (the fight gauge and the shake icon).
+                long m_nUnk00;
                 unsigned char m_nGameMode; // 0x04, the GAME_MODE of the running game
                 unsigned char m_nGameType; // 0x05, 2 selects the sport's party game
                 // 0x06 (meaning not known): with 11 to 13 here the tournament
@@ -93,7 +95,10 @@ namespace msw {
                 unsigned char m_nStage;
                 unsigned char m_Unk0B;
                 unsigned char m_nPeriod;   // 0x0C, the period being played; 0 is the first (guess)
-                unsigned char m_Unk0D[2];
+                // 0x0D (name guessed): the number of teams; HockeyF makes one
+                // shoot marker per team and loops over the team scores with it.
+                unsigned char m_nTeamNum;
+                unsigned char m_Unk0E;
                 // 0x0F (name guessed): a team number, -1 for none; read
                 // through GetUserTeam (CComManVolley::CanbeTouch, and the
                 // same read in BasketF's CComManBasketGame).
@@ -108,7 +113,12 @@ namespace msw {
                 // 0x1C, copied from the tournament's work by
                 // TournamentRule::SetupGame (meaning not known)
                 long m_nUnk1C;
-                unsigned char m_Unk20[0x40 - 0x20];
+                unsigned char m_Unk20[0x34 - 0x20];
+                // 0x34 (name guessed): a speed rate of the game. The DOL's
+                // goal demo (game/msw/CGameExDemoBase.cpp) sets its own rate
+                // here while the demo camera plays and restores it after.
+                float m_fGameSpeed;
+                unsigned char m_Unk38[0x40 - 0x38];
                 // 0x40, flag words whose bit 0 the boss game's "?" panels test
                 // (game/boss/CQPanelManBoss.cpp): with bit 0 of 0x40 set a coin
                 // panel gives no coin; with bit 0 of 0x1C8 set the panels pop up
@@ -127,7 +137,11 @@ namespace msw {
                 // passed to the coin mission (0x4E) check after a basket
                 // (BasketF); meaning not known.
                 long m_Unk160;
-                unsigned char m_Unk164[0x1C8 - 0x164];
+                unsigned char m_Unk164[0x180 - 0x164];
+                // 0x180 (meaning not known): while it is zero HockeyF's
+                // CFighting shows the fight gauge icons over the fighters.
+                long m_nUnk180;
+                unsigned char m_Unk184[0x1C8 - 0x184];
                 unsigned long m_nUnk1C8;   // 0x1C8
                 // 0x1CC: screen split; msw::cockpit::GetViewSplitNum gives 1
                 // view for 0, 4 for 3, else 2 (name guessed). The volley coin
@@ -318,8 +332,9 @@ namespace msw {
             // created under (BossF's bomb explosions).
             static bcs::CTask *GetTempParent();
             // (DOL, static; argument meanings not known: DodgeF's bomb blasts
-            // pass a quake number and -1, -1)
-            static void StartCameraQuake(long, long, long);
+            // pass a quake number and -1, -1; HockeyF's CFighting passes
+            // (0x2F, -1, -1) when a fight ends)
+            static void StartCameraQuake(long nType, long, long);
             // (DOL; meaning of the argument not known, CDropCoinMan passes
             // 1) Non-zero while the game is in its main loop state.
             static int IsMainLoopState(int);
@@ -331,6 +346,10 @@ namespace msw {
             // and above differently (most likely the Mii characters; not
             // checked).
             static long GetCharType(long nPlayer);
+            // (DOL, static; return type guessed) The character type of Mii
+            // nIndex of a source (19 and up). Added for MenuF
+            // game/menu/CCourtChr.cpp.
+            static long GetMiiChrType(RFLDataSource source, long nIndex);
             // The colour of team nTeam: the byte at g_GameWork + 0x80 +
             // nTeam, read unsigned. The radar uses it as an index of four.
             static long GetTeamColorIdx(long nTeam);
@@ -378,15 +397,14 @@ namespace msw {
             // The goal team nTeam attacks: the byte at g_GameWork + 0x88 +
             // nTeam, read unsigned. (return type guessed)
             static long GetTargetGoalIdx(long nTeam);
+            // (DOL, static; return type guessed) The goal of team nTeam
+            // (HockeyF: 1 minus it is the goal the team defends).
+            static long GetGoalIdx(long nTeam);
             // (DOL, static; meanings guessed from the names and from
             // BasketF's CStageBasket03) The goal team nTeam guards, and the
             // team that goal nGoal belongs to.
             static long GetGuardGoalIdx(long nTeam);
             static long GetTeamIdxByGoalIdx(long nGoal);
-            // (DOL, static; meaning guessed from the name) The goal of team
-            // nTeam: DodgeF's CChrManDodge::Util_SearchNearOwnGoal_ takes
-            // goal 1 - GetGoalIdx(nTeam). (return type guessed)
-            static long GetGoalIdx(long nTeam);
             // (DOL, static; meaning guessed from the name) Not zero when the
             // leader of team nTeam may be changed by the player
             // (CChrManDodge::Util_SearchChgLeader_).
@@ -424,9 +442,34 @@ namespace msw {
             static int IsNowSlowEffect();
             // DOL, static. Not zero while an arts (special move) event plays (guess).
             static int IsArtsEventMode();
+            // Added for VolleyF game/volley/CChrManVolley.cpp (DOL, static;
+            // return types guessed). SetOffenseTeam makes team nTeam the one
+            // attacking (CChrManVolley::StartArtsEvent_ passes the team of the
+            // character starting a special move); IsVolleyScored is not zero
+            // once the rally has ended in a point.
+            static void SetOffenseTeam(long nTeam);
+            static int IsVolleyScored();
             // (fn_8017D558, unnamed in the DOL) IsNowBonusTime_ on the
             // running game, zero without one.
             static int IsNowBonusTime();
+            // Added for the DOL's game/msw/CGameExDemoBase.cpp (all static
+            // in the DOL; names after the virtuals they call, return types
+            // and parameter meanings guessed).
+            // Stops camera quake nQuake (-1: all) on the active cameras.
+            static void StopCameraQuake(long nQuake);
+            // (fn_8017EB18, unnamed in the DOL) Stops every quake of the
+            // game's own four cameras.
+            static void StopAllCameraQuake();
+            // (fn_8017E820, fn_8017E880, fn_8017E8A8, unnamed in the DOL)
+            // TelopCreate_, TelopRemove_ and TelopIsEnd_ on m_pInstance;
+            // TelopIsEnd gives 1 without an instance.
+            static void TelopCreate(long nTelop, int, long);
+            static void TelopRemove(long nTelop);
+            static int TelopIsEnd(long nTelop);
+            // The speed lines effect over the screen for fFrame frames, and
+            // (fn_8018BED0, unnamed in the DOL) its early end.
+            static void StartSaturatedLinework(float fFrame);
+            static void EndSaturatedLinework();
             // Adds nCoin coins to team nTeam. (DOL)
             static void AddTeamCoin(long nTeam, long nCoin);
 

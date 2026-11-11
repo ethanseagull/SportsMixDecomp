@@ -48,6 +48,19 @@ namespace msw {
                 }
             }
 
+            // The same for a member taking a float (MenuF msw::SelectMenu::
+            // CCourtChr::CreateChrMenuObj).
+            void CallEffectFunc(void (bcs::EF::CEffect::*pFunc)(float), float fArg)
+            {
+                bcs::EF::CManager *pManager = bcs::EF::CManager::GetInstance();
+                for (long i = 0; i < m_nEffectNum; i++) {
+                    bcs::EF::CEffect *pEffect = pManager->GetEffect(m_Effect[i].m_hEffect);
+                    if (pEffect != 0) {
+                        (pEffect->*pFunc)(fArg);
+                    }
+                }
+            }
+
         private:
             struct Entry {
                 unsigned long m_hEffect; // 0x00, for bcs::EF::CManager::GetEffect

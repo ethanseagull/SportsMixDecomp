@@ -7,6 +7,9 @@
 extern "C" {
 #endif
 
+// The pixel engine functions of GX. Only what the game's code calls so far.
+
+void GXPixModeSync(void);
 // Only what is used so far (MenuF game/menu/CTitle.cpp). Declarations of the
 // public GX API; the bodies are in main.dol.
 void GXSetZMode(GXBool compare_enable, GXCompare func, GXBool update_enable);

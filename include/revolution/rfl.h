@@ -11,7 +11,15 @@ extern "C" {
 
 // Where a Mii's data comes from (passed and stored as a word).
 typedef enum RFLDataSource {
-    RFLDataSource_Official = 0
+    RFLDataSource_Official = 0,
+    RFLDataSource_Controller1,
+    RFLDataSource_Controller2,
+    RFLDataSource_Controller3,
+    RFLDataSource_Controller4,
+    RFLDataSource_Middle,
+    // The six default Miis (MenuF CCourtChr::CreateChrMenuObj takes the
+    // index modulo 6 for this source).
+    RFLDataSource_Default
 } RFLDataSource;
 
 // Size 8. Identifies one Mii; copied as two words.

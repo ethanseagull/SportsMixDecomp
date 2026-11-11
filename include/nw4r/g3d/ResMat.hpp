@@ -39,6 +39,19 @@ namespace nw4r {
             private:
                 ResMatData *m_pData; // 0x00
         };
+
+        // Handle to the texture objects of a material: one pointer.
+        // Minimal declaration written for this project (MenuF
+        // msw::SelectMenu::CCourtChr::GetResTexObj returns one in r3).
+        class ResTexObj {
+            public:
+                explicit ResTexObj(void *pData = 0) : m_pData(pData) {}
+
+                bool IsValid() const { return m_pData != 0; }
+
+            private:
+                void *m_pData; // 0x00
+        };
     }
 }
 

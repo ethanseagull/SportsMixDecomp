@@ -85,14 +85,19 @@ namespace msw {
             static unsigned long GetBallHandle(long nBall);
             static CBall *GetBallPtr(long nBall);
             static CBall *GetNearPosBall(const bcs::FVEC3 &rPos);
-            // (return type guessed from GetPassFlyFrame_) The frames a pass
-            // from rFrom to rTo takes.
-            static float GetPassFlyFrame(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, long);
             static void DelBall(long nBall);
             static CBall *AddBall(CBall *pBall);
             // (fn_800CD520, unnamed in the DOL) IsExistStarBall_ on the
             // instance, zero without one.
             static int IsExistStarBall();
+            // AllReset_ and AllSleep_ on the instance (DOL; the DOL's
+            // CGameScoredView calls them before its camera starts).
+            static void AllReset();
+            static void AllSleep();
+            // (DOL, static) GetPassFlyFrame_ on the instance: the frames a
+            // pass from rFrom to rTo takes. (return type from the virtual;
+            // HockeyF's CChrManHockey::Util_SearchPassmeetTo_ drops it)
+            static float GetPassFlyFrame(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, long);
 
             static CBallMan *GetInstance();
             // Not zero when there is an instance.

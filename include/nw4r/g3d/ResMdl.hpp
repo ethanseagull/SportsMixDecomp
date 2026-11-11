@@ -8,6 +8,7 @@ namespace nw4r {
     namespace g3d {
 
         struct ResMdlData;
+        class ResFile;
 
         // Handle to a model resource: one pointer, null when the resource
         // was not found. Minimal declaration written for this project.
@@ -22,6 +23,8 @@ namespace nw4r {
                 ResMat GetResMat(ResName name) const;
                 // (DOL) The number of materials.
                 unsigned long GetResMatNumEntries() const;
+                // (DOL) The file the model is in.
+                ResFile GetParent();
 
             private:
                 ResMdlData *m_pData; // 0x00

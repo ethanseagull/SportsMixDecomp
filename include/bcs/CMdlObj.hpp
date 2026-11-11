@@ -134,6 +134,21 @@ namespace bcs {
             CAnmObj *GetAnmObjMatClr() const { return m_pAnmObjMatClr; }
             CAnmObj *GetAnmObjTexSrt() const { return m_pAnmObjTexSrt; }
 
+            // (DOL) Access to the copied material nMat of a model. Size
+            // about 0x34 (layout.py: fields up to 0x30); only the first word
+            // is read from outside, null when there is no such material.
+            class CopiedMatAccess {
+                public:
+                    CopiedMatAccess(CMdlObj *pMdl, unsigned long nMat);
+
+                    bool IsValid() const { return m_pData != 0; }
+                    nw4r::g3d::ResTexObj GetResTexObj(int nIndex);
+
+                private:
+                    void *m_pData;                 // 0x00
+                    unsigned char m_Unk04[0x30];   // 0x04
+            };
+
         private:
             nw4r::g3d::ResMdl m_ResMdl;   // 0x118 (name guessed)
             unsigned char m_Unk11C[0x30]; // 0x11C

@@ -103,6 +103,8 @@ namespace msw {
             static void EffectCoinGetCreate(const bcs::FVEC3 &rPos, DROP_COIN::CoinType type);
             // (DOL) The instance's CreateItem_: an item of type nType at rPos.
             static CItem *CreateItem(long nType, const bcs::FVEC3 &rPos);
+            // DOL, static: AllReset_ on the instance.
+            static void AllReset();
 
         protected:
             // The instance is a plain static pointer in the DOL (no task

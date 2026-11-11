@@ -65,6 +65,9 @@ namespace msw {
             // without a task or for another nFile.
             static const char *GetResourceFileName(long nFile);
             static void PlayEndAnim(long nObjId);                 // return type guessed
+            // (DOL, static; return type guessed) Resets the characters' face
+            // icons (HockeyF's CChrManHockey::AllReset_).
+            static void InitFaceIcon();
             // CMenuTask::SendObjEventTrigger on the task; -1 without a task.
             static long SendObjEventTrigger(long nObjId, long nEvent, void *pParam);
             // (added for MenuF game/menu/CWiFiFrindVS.cpp) The task's result

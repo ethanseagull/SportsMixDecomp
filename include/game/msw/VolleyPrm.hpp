@@ -134,6 +134,53 @@ namespace msw {
     extern float VOLLEY_PRM_S03_PAT2_UNIT_STAY_TIME;
     extern float VOLLEY_PRM_S03_PAT2_PRESTART_TIME;
     extern long VOLLEY_PRM_S03_TEST_ALWAYS; // long in the parameter table
+
+    // Stage 05, the rafts (CStageVolley05). OUTER_FRONT is in .bss.
+    extern float VOLLEY_PRM_S05_COURT_WIDTH;
+    extern float VOLLEY_PRM_S05_COURT_DEPTH;
+    extern float VOLLEY_PRM_S05_WALL_WIDTH;
+    extern float VOLLEY_PRM_S05_WALL_DEPTH;
+    extern float VOLLEY_PRM_S05_OUTER_WIDTH;
+    extern float VOLLEY_PRM_S05_OUTER_DEPTH;
+    extern float VOLLEY_PRM_S05_NET_WIDTH;
+    extern float VOLLEY_PRM_S05_NET_HEIGHT_TOP;
+    extern float VOLLEY_PRM_S05_NET_HEIGHT_BTM;
+    extern float VOLLEY_PRM_S05_START_TIME_SEC;
+    extern float VOLLEY_PRM_S05_FLOAT_WIDTH;
+    extern float VOLLEY_PRM_S05_WIDTH_CYCLE;
+    extern float VOLLEY_PRM_S05_FLOAT_DEPTH;
+    extern float VOLLEY_PRM_S05_DEPTH_CYCLE;
+    extern float VOLLEY_PRM_S05_HEAVY_TIME_SEC;
+    extern float VOLLEY_PRM_S05_HEAVY_FLOAT_WIDTH;
+    extern float VOLLEY_PRM_S05_HEAVY_WIDTH_CYCLE;
+    extern float VOLLEY_PRM_S05_HEAVY_FLOAT_DEPTH;
+    extern float VOLLEY_PRM_S05_HEAVY_DEPTH_CYCLE;
+    extern float VOLLEY_PRM_S05_HEAVY_ACC_TIME_SEC;
+    extern float VOLLEY_PRM_S05_TURRET_EARLY_HIT;
+    extern float VOLLEY_PRM_S05_ENV_SE_TIME;
+    extern float VOLLEY_PRM_S05_ENV_SE_TIME_RND;
+    extern float VOLLEY_PRM_S05_OUTER_FRONT;
+
+    // Stage 11, the volcano stage (CStageVolley11).
+    extern float VOLLEY_PRM_S11_COURT_ANGLE;
+    extern float VOLLEY_PRM_S11_COURT_ROT_SPEED;
+    extern float VOLLEY_PRM_S11_COURT_ROT_ACC;
+    extern float VOLLEY_PRM_S11_CHR_FLOW_SPEED;
+    extern float VOLLEY_PRM_S11_CENTER_MOVE_SPEED;
+    extern float VOLLEY_PRM_S11_CENTER_MOVE_ACC;
+    extern float VOLLEY_PRM_S11_CENTER_RANGE;
+    extern long VOLLEY_PRM_S11_CENTER_LEVEL;
+    extern long VOLLEY_PRM_S11_CENTER_MOVE_SCORE;
+    extern float VOLLEY_PRM_S11_CENTER_FIX_RATE;
+    extern float VOLLEY_PRM_S11_BUBBLE_SCALE;
+    extern float VOLLEY_PRM_S11_BUBBLE_PRESTART;
+    extern float VOLLEY_PRM_S11_BUBBLE_JUMP_HEIGHT;
+    extern float VOLLEY_PRM_S11_BUBBLE_JUMP_FRM;
+    extern float VOLLEY_PRM_S11_BUBBLE_JUMP_DOF_FRM;
+    extern float VOLLEY_PRM_S11_BUBBLE_DOWN_FRM;
+    extern float VOLLEY_PRM_S11_BUBBLE_INIT_INTERVAL;
+    extern float VOLLEY_PRM_S11_BUBBLE_INTERVAL;
+    extern float VOLLEY_PRM_S11_BUBBLE_ZONE_Z;
 }
 
 #endif /* !MSW_VOLLEYPRM_HPP_ */

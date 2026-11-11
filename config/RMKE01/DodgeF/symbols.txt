@@ -2485,7 +2485,7 @@ SubStateArtsShotReadyArtsShot___Q23msw18CChrCoreDodgeMii01FPQ33msw13CChrCoreDodg
 SubStateArtsShotPlayLoopMotion___Q23msw18CChrCoreDodgeMii01FPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x0006689C; // type:function size:0x4 scope:global
 SubStateArtsShotPlayArtsShotMotion___Q23msw18CChrCoreDodgeMii01FPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x000668A0; // type:function size:0x4C scope:global
 DtorStateAirTrick__Q23msw18CChrCoreDodgeMii01Fv = .text:0x000668EC; // type:function size:0x4 scope:global
-fn_6_668F0 = .text:0x000668F0; // type:function size:0x14
+__sinit_\CChrCoreDodgeMii01_cpp = .text:0x000668F0; // type:function size:0x14 scope:local
 __ct__Q23msw19CChrCoreDodgeMoogleFv = .text:0x00066904; // type:function size:0x3C scope:global
 __dt__Q23msw19CChrCoreDodgeMoogleFv = .text:0x00066940; // type:function size:0x58 scope:global
 SubStateArtsShotPlayTrickMotion___Q23msw19CChrCoreDodgeMoogleFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x00066998; // type:function size:0x58 scope:global

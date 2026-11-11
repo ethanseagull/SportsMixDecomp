@@ -72,8 +72,14 @@ typedef struct RFLMiddleDB {
 } RFLMiddleDB;
 
 // (added for DOL game/bcs/CMiiMan.cpp) Extra data about a Mii (name, sex,
-// colours...). Only passed by address so far, so left incomplete.
-typedef struct RFLAdditionalInfo RFLAdditionalInfo;
+// colours...). (MenuF game/menu/CMiiSel.cpp) The Mii's name is at the
+// start (copied out with wcscpy); the size, 0x3C, is from the stack frames
+// of CMiiSel::SetMiiPage, which keeps two of them. The rest is not used by
+// the game's own code.
+typedef struct RFLAdditionalInfo {
+    wchar_t name[11];             // 0x00
+    unsigned char m_Unk16[0x26];  // 0x16
+} RFLAdditionalInfo;
 
 // Size 8. Identifies one Mii; copied as two words.
 typedef struct RFLCreateID {

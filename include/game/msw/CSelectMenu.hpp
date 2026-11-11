@@ -94,6 +94,21 @@ namespace msw {
             // nOption by nStep settings (0: only shows its help line) and
             // returns whether its setting changed; RuleSel_ResetRule puts
             // every option back to its default.
+            // (added for game/menu/CMiiSel.cpp) The steps of the Mii select
+            // screen (SelectMenu::CMiiSel).
+            void MiiSel_In();
+            void MiiSel_Loop();
+            void MiiSel_Out();
+            // Defined in another MenuF file (return types guessed). The
+            // entry id of pad nPad; records the Mii chosen for entry nEntry
+            // (or, for the second Wi-Fi player, for the second player); says
+            // the Mii's voice.
+            long GetPadEntryId(long nPad);
+            void Mii_SetMiiParam(long nEntry, unsigned char bGuest, long nNameId, RFLDataSource source,
+                                 RFLCreateID createId);
+            void WiFi_Set2PMiiParam(unsigned char bGuest, long nNameId, RFLDataSource source, RFLCreateID createId);
+            void CharSel_CallMiiVoice(RFLDataSource source, RFLCreateID createId);
+            void WindowYesNo_Close();
             void RuleSel_In();
             void RuleSel_Loop();
             void RuleSel_Out();
@@ -586,7 +601,17 @@ namespace msw {
             // the controller error window of the entry screen waits.
             float m_fEntryErrorWait;
         private:
-            unsigned char m_Unk6D0[0x8];     // 0x6D0
+            unsigned char m_Unk6D0[0x6];     // 0x6D0
+        public:
+            // 0x6D6, 0x6D7. (added for game/menu/CMiiSel.cpp; names
+            // guessed) Bit 0x80 of m_nMiiSelFlags is set when the Mii
+            // select screen is left with the back button; m_nMiiSelSlot is
+            // the slot (0 to 9) of the Mii chosen there, 0xFF none. The
+            // screen reads m_nMiiSelFlags as 1 or 2 (or 0xFF/0) to pick its
+            // message.
+            unsigned char m_nMiiSelFlags;
+            unsigned char m_nMiiSelSlot;
+        private:
         public:
             // 0x6D8. (added for game/menu/CFriendInfo.cpp; name guessed)
             // A copy of the friend's name, for the message windows.

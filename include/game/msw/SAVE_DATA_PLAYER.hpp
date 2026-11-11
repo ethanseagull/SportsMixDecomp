@@ -38,6 +38,26 @@ namespace msw {
         // choosing a Mii by index.
         long SearchMiiIndex(RFLCreateID createId);
         void SetSelectMii(long nIndex, int bUnk);
+
+        // Size 0x38. (added for MenuF game/menu/CMiiSel.cpp; names
+        // guessed) One Mii of the player's list, or one of the guest Miis.
+        struct MiiData {
+            unsigned char m_Unk00[4];    // 0x00
+            long m_nNameId;              // 0x04, a guest Mii's name in "List_Mii_Name"
+            RFLDataSource m_Source;      // 0x08
+            RFLCreateID m_CreateId;      // 0x0C, all zero for an empty entry
+            unsigned char m_Unk14[0x20]; // 0x14
+            long m_bSelect;              // 0x34, read by GetSelectMii (meaning guessed)
+        };
+        // (added for MenuF game/menu/CMiiSel.cpp; return types guessed)
+        // The number of Miis in the player's list, Mii nIndex of it (null
+        // when empty) and guest Mii nIndex, and whether each is already
+        // chosen.
+        long GetMiiCount();
+        MiiData *GetIndexMii(long nIndex);
+        MiiData *GetGuestMii(long nIndex);
+        int GetSelectMii(long nIndex);
+        int GetSelectGuestMii(long nIndex);
         // (added for MenuF game/menu/CCharaLevelStar.cpp) For game kind
         // nGameKind (CSelectMenu::m_nGameKind): the computer level (0 to
         // 3) the level window starts from. Meaning guessed from that use.

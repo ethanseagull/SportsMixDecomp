@@ -43,3 +43,5 @@ Equivalent game/menu/CCharaLevelStar.cpp
 Equivalent game/menu/CCourtChr.cpp
 Equivalent game/menu/CPartyMEHelpBossPackun.cpp
 Equivalent game/menu/CBgChr.cpp
+Equivalent game/menu/CEntry.cpp
+Equivalent game/menu/CCourtTab.cpp

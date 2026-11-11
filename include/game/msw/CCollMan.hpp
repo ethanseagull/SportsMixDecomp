@@ -76,6 +76,10 @@ namespace msw {
             static int DetectMapHit(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, float &rTime, const bcs::FVEC3 &rFrom,
                                     const bcs::FVEC3 &rTo, float fRadius, long, unsigned long);
             static int CheckMapInner(const bcs::FVEC3 &rPos, float fRadius, unsigned long);
+            // HockeyF's CStgGmk_Pinball_Act_Hockey::WallHitCheck compares the
+            // result unsigned with 0x20 and 0x40 (a goal post hit).
+            static unsigned long DetectBallGoalIn(long &rGoal, bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal,
+                                                  const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius);
             static void SetArtsExColl(long n);
             // (DOL) The ground attribute under rPos (the stage's
             // GetFloorAttribute) into rAttr and the floor's flow there (its

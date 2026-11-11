@@ -26,7 +26,11 @@ namespace msw {
             unsigned char m_nOwnerKind;
             unsigned char m_Unk13;
             signed char m_nOwnerNo;
-            unsigned char m_Unk15[0x18 - 0x15];
+            unsigned char m_Unk15;
+            // 0x16, 0x17 (names guessed): DodgeF's bomb blast sets the team
+            // and the index of the character that threw the bomb.
+            signed char m_nTeamNo;
+            signed char m_nChrNo;
             unsigned long m_nFlag; // 0x18, CBombExplosion::Create_ sets 0x2A
             unsigned char m_Unk1C[0x2C - 0x1C];
             float m_fPosX;         // 0x2C, (names guessed) where the attack is

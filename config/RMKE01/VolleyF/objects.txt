@@ -49,3 +49,8 @@ NonMatching game/volley/CStageVolley11.cpp
 Equivalent game/volley/CStgGmk_Case_Act_Volley.cpp
 Equivalent game/volley/CGimmickManVolley.cpp
 NonMatching game/volley/CBallTargetMarker.cpp
+Matching game/volley/CChrCoreVolleyMario.cpp
+Equivalent game/volley/CChrCoreVolleyMoogle.cpp
+Matching game/volley/CChrCoreVolleyMii00.cpp
+Matching game/volley/CChrCoreVolleyMii01.cpp
+Equivalent game/volley/CChrCoreVolleyPeach.cpp

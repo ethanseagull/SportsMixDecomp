@@ -12,6 +12,11 @@ namespace msw {
     namespace Unlock {
         // Creates the task of the unlock screen and returns it.
         bcs::CTask *CreateInstance(bcs::CTask *pParent);
+        // (added for MenuF game/menu/CTopMenu.cpp; return types and
+        // meaning guessed) Whether the unlock screen has something to show
+        // on the top menu, and whether it has finished showing it.
+        int IsDispMenuTop();
+        int IsDispMenuEnd();
     }
 }
 

@@ -1,6 +1,7 @@
 #ifndef BCS_CWORLDENV_HPP_
 #define BCS_CWORLDENV_HPP_
 
+#include "bcs/BCS_Color.hpp"
 #include "bcs/FVEC3.hpp"
 
 namespace nw4r {
@@ -39,6 +40,9 @@ namespace bcs {
             static float GetViewFovy(long view);
             // How many views the screen is split into. Return type guessed.
             static long GetViewSplitNum();
+            // (added for MenuF game/menu/CTopMenu.cpp) Sets the 3D
+            // background colour of every view.
+            static void Set3DBackColorAll(BCS_Color color);
 
             // 1 selects the second set of camera data in the tournament
             // (msw::CTournamentCamera::GetDataMode). Type guessed.

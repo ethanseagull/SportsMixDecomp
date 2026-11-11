@@ -94,6 +94,12 @@ namespace msw {
             // CGameScoredView calls them before its camera starts).
             static void AllReset();
             static void AllSleep();
+            // (DOL, static; added for DodgeF game/dodge/CItemBallBombDodge.cpp,
+            // return types guessed) The rates a ball's speed keeps when it
+            // bounds or rolls on the floor.
+            static float GetFloorBoundDecRateXZ();
+            static float GetFloorBoundDecRateY();
+            static float GetFloorRoundDecRateXZ();
             // (DOL, static) GetPassFlyFrame_ on the instance: the frames a
             // pass from rFrom to rTo takes. (return type from the virtual;
             // HockeyF's CChrManHockey::Util_SearchPassmeetTo_ drops it)

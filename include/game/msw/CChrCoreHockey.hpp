@@ -446,7 +446,9 @@ namespace msw {
         float m_fUnk0C;              // 0x0C, Luigi clears it when his target is lost
         unsigned char m_Unk10[0x40 - 0x10];
         CChrCore::ROT_LERP1 m_RotLerp; // 0x40, the turn (SubStateArtsShotCalcRotParam_)
-        unsigned char m_Unk50[0x4];
+        // 0x50 (name guessed): the kind of jump; Donkey Kong sets 2, or 0
+        // for none (SubStateArtsShotSetTrickJumpParam_).
+        long m_nJumpType;
         long m_nTrickStep;           // 0x54
         unsigned char m_Unk58[0x68 - 0x58];
         float m_fShotFrame;          // 0x68, the frame of the motion the ball leaves at
@@ -461,6 +463,11 @@ namespace msw {
         public:
             CChrCoreHockeyMario();
             virtual ~CChrCoreHockeyMario();
+            virtual void Reset_();                                     // 0x384
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xCD8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
     };
 
     class CChrCoreHockeyLuigi : public CChrCoreHockey {
@@ -505,12 +512,19 @@ namespace msw {
         public:
             CChrCoreHockeyPeach();
             virtual ~CChrCoreHockeyPeach();
+            virtual void Reset_();                                     // 0x384
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCC8
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xD0C
     };
 
     class CChrCoreHockeyDaisy : public CChrCoreHockey {
         public:
             CChrCoreHockeyDaisy();
             virtual ~CChrCoreHockeyDaisy();
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
     };
 
     class CChrCoreHockeyYoshi : public CChrCoreHockey {
@@ -528,6 +542,7 @@ namespace msw {
         public:
             CChrCoreHockeyWario();
             virtual ~CChrCoreHockeyWario();
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
     };
 
     // Waluigi: his special shot splits the puck in four (game/hockey/
@@ -565,12 +580,21 @@ namespace msw {
         public:
             CChrCoreHockeyDonkey();
             virtual ~CChrCoreHockeyDonkey();
+            virtual void Reset_();                                     // 0x384
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCC8
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xCD8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK *, long); // 0xCE8
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xD0C
     };
 
     class CChrCoreHockeyDiddy : public CChrCoreHockey {
         public:
             CChrCoreHockeyDiddy();
             virtual ~CChrCoreHockeyDiddy();
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
         protected:
             unsigned char m_Unk76C[0x770 - 0x76C];
     };
@@ -593,30 +617,51 @@ namespace msw {
         public:
             CChrCoreHockeyKoopa();
             virtual ~CChrCoreHockeyKoopa();
+            virtual void Reset_();                                     // 0x384
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCC8
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xCD8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xD0C
     };
 
     class CChrCoreHockeyKoopaJr : public CChrCoreHockey {
         public:
             CChrCoreHockeyKoopaJr();
             virtual ~CChrCoreHockeyKoopaJr();
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
     };
 
     class CChrCoreHockeyMoogle : public CChrCoreHockey {
         public:
             CChrCoreHockeyMoogle();
             virtual ~CChrCoreHockeyMoogle();
+            virtual void Reset_();                                     // 0x384
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCC8
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual void SubStateArtsShotShootBall_(STATE_WORK_AIR_TRICK *); // 0xD14
     };
 
     class CChrCoreHockeySaboten : public CChrCoreHockey {
         public:
             CChrCoreHockeySaboten();
             virtual ~CChrCoreHockeySaboten();
+            virtual void Reset_();                                     // 0x384
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCC8
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xD0C
     };
 
     class CChrCoreHockeyNinja : public CChrCoreHockey {
         public:
             CChrCoreHockeyNinja();
             virtual ~CChrCoreHockeyNinja();
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
         protected:
             unsigned char m_Unk76C[0x788 - 0x76C];
     };
@@ -649,6 +694,7 @@ namespace msw {
         public:
             CChrCoreHockeySiroma();
             virtual ~CChrCoreHockeySiroma();
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
         protected:
             unsigned char m_Unk76C[0x780 - 0x76C];
     };
@@ -657,6 +703,7 @@ namespace msw {
         public:
             CChrCoreHockeySlime();
             virtual ~CChrCoreHockeySlime();
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
         protected:
             unsigned char m_Unk76C[0x770 - 0x76C];
     };
@@ -665,12 +712,22 @@ namespace msw {
         public:
             CChrCoreHockeyMii00();
             virtual ~CChrCoreHockeyMii00();
+            virtual void Reset_();                                     // 0x384
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCC8
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xCD8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
     };
 
     class CChrCoreHockeyMii01 : public CChrCoreHockey {
         public:
             CChrCoreHockeyMii01();
             virtual ~CChrCoreHockeyMii01();
+            virtual void Reset_();                                     // 0x384
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCC8
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xCD8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
     };
 }
 

@@ -103,6 +103,11 @@ namespace msw {
             // meaning guessed from the name): the character holding the
             // ball, null for none.
             static CChrCore *Util_SearchHoldBallChr(long);
+            // DOL (added for DodgeF game/dodge/CItemBallBombDodge.cpp;
+            // meaning guessed from the name): Util_SearchNearPosChar_ on the
+            // instance, the character nearest to rPos (the second argument is
+            // a team index, -1 for any).
+            static CChrCore *Util_SearchNearPosChar(const bcs::FVEC3 &rPos, long nTeam);
 
             // The character with index `nChr` (0 to GetChrCoreNum() - 1), or
             // null when there is no manager or the index is out of range.

@@ -69,6 +69,9 @@ namespace msw {
             // (DOL, static; name from the DOL) The resource file of the
             // marker models (HockeyF's CShootMarker loads its models from it).
             static nw4r::g3d::ResFile GetRsrcPack();
+            // (DOL, static) The marker colour of team nTeam (VolleyF's
+            // CBallTargetMarkerRhythmReceive tints its mark with it).
+            static bcs::BCS_Color GetTeamColor(long nTeam);
 
         protected:
             unsigned long m_nFlag; // 0x7C, bit 1: view check enabled

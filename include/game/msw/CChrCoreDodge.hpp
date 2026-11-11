@@ -38,6 +38,10 @@ namespace msw {
             struct STATE_WORK_BALL_CATCH;
             struct STATE_WORK_ITEM_SHOOT;
             struct HIT_BALL_STATE;
+
+            // (DodgeF, static; added for game/dodge/CItemBallBombDodge.cpp)
+            // The parameter block of character nChr.
+            static const CHR_CORE_DODGE::CC_PARAM_DODGE *GetCcParamByChrIdx(long nChr);
             struct MOT_ACT_PARAM;
             struct MOT_ACT_CONTEXT;
             // (values not known) The kind of throw (MethdShootSub) and an
@@ -901,6 +905,13 @@ namespace msw {
         public:
             CChrCoreDodgeMii00();
             virtual ~CChrCoreDodgeMii00();
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD80
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
+            virtual void SubStateArtsShotReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD9C
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
     };
 
     // Size 0x930.
@@ -908,6 +919,13 @@ namespace msw {
         public:
             CChrCoreDodgeMii01();
             virtual ~CChrCoreDodgeMii01();
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD80
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
+            virtual void SubStateArtsShotReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD9C
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
     };
 
     // Size 0x930 (the party game "dodge or die").

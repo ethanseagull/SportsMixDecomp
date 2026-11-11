@@ -1054,6 +1054,9 @@ namespace msw {
             float GetTransNodeHeight() const;
             // The goal the character's team attacks, as a point.
             const bcs::FVEC3 &GetTargetGoalPos() const;
+            // (return type guessed; added for HockeyF CChrCoreHockeyPeach) The
+            // same point, copied to rPos.
+            void GetTargetGoalPos(bcs::FVEC3 &rPos) const;
             // The distance to rPos in the XZ plane.
             float GetDist_ToPosXZ(const bcs::FVEC3 &rPos) const;
             // (name guessed; the DOL's fn_800E1E1C) The distance to rPos.
@@ -1206,6 +1209,14 @@ namespace msw {
             // (BasketF CChrCoreBasketKuroma reads the result: not zero once
             // the jump has ended, meaning guessed.)
             int Util_DoJumpMove(float fStep);
+            // (added for VolleyF CChrCoreVolleyMoogle; meanings guessed) The
+            // landing part of the jump move; clears the position correction;
+            // sets the height.
+            void Util_DoJumpMoveLand(float fStep);
+            void ClearRevise();
+            void SetPosY(float fY);
+            // (name guessed) m_fJumpVelX-Z as a vector.
+            bcs::FVEC3 &GetJumpVel() { return *reinterpret_cast<bcs::FVEC3 *>(&m_fJumpVelX); }
             void SE_Play(long nSlot, long nSe, unsigned long, long, float, float, float);
             void SE_Stop(long nSlot, float fFrames);
             void AnimSetSpeed(unsigned long nSlot, float fSpeed);
@@ -1309,15 +1320,25 @@ namespace msw {
             // 0x190 (name guessed): a second model node for effects
             // (CChrCoreVolleyYoshi's block and spike effects attach there).
             unsigned short m_nEffNodeSub;
-            unsigned char m_Unk192[0x20C - 0x192];
+            unsigned char m_Unk192[0x208 - 0x192];
+            // 0x208-0x210 (names guessed): the speed of a jump. The three are
+            // one vector (CChrCoreVolleyMoogle's hover scales them with the
+            // paired-single vector helpers); see GetJumpVel.
+            float m_fJumpVelX;
             // 0x20C (name guessed): the vertical speed of a jump (negative
             // while falling; CChrCoreVolleyKinopio's block jump tests it).
             float m_fJumpVelY;
-            unsigned char m_Unk210[0x218 - 0x210];
+            float m_fJumpVelZ;
+            // 0x214 (name guessed): the vertical acceleration applied now;
+            // set from m_fJumpGravity once the hang time at the top is over.
+            float m_fJumpAccelY;
             // 0x218 (name guessed): the gravity of a jump; the White Mage's
             // air trick sets it after Util_SetJumpParam.
             float m_fJumpGravity;
-            unsigned char m_Unk21C[0x224 - 0x21C];
+            // 0x21C (name guessed): the yaw of the jump's horizontal move
+            // (negative for none; CChrCoreVolleyMoogle steers it).
+            float m_fJumpRotY;
+            unsigned char m_Unk220[0x224 - 0x220];
             // 0x224, 0x228 (names guessed): two jump values the air tricks
             // set next to Util_SetJumpParam.
             float m_fJumpUnk224;

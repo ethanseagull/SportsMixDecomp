@@ -430,7 +430,7 @@ game/msw/CStgGmk_WaterPillar.cpp:
 	.sdata2     start:0x805C3718 end:0x805C3788
 
 game/bcs/CMusicData.cpp:
-	.text       start:0x801960B4 end:0x80196424
+	.text       start:0x801960B4 end:0x801965AC
 
 game/msw/CCockpitPause.cpp:
 	.text       start:0x80198108 end:0x8019A004

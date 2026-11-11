@@ -3,7 +3,9 @@
 
 #include "bcs/CFsmQueue.hpp"
 #include "bcs/FVEC3.hpp"
+#include "game/msw/CAtkCollision.hpp"
 #include "game/msw/CBodyCollision.hpp"
+#include "game/msw/CDefCollision.hpp"
 #include "game/msw/CStgGmkAct.hpp"
 
 namespace msw {
@@ -134,8 +136,10 @@ namespace msw {
             unsigned char m_Unk1D4[0x8];   // 0x1D4, not mapped
         protected:
             CBodyCollision m_BodyColl;     // 0x1DC (name guessed)
+            CAtkCollision m_AtkColl;       // 0x1E8 (name guessed)
+            CDefCollision m_DefColl;       // 0x1F4 (name guessed; VolleyF's InitDefColl/UpdateDefColl)
         private:
-            unsigned char m_Unk1E8[0x1C];  // 0x1E8, not mapped (CAtkCollision at 0x1E8, CDefCollision at 0x1F4)
+            unsigned char m_Unk200[4];     // 0x200, not mapped
             int m_bAlive;                  // 0x204 (IsAlive)
             unsigned char m_Unk208[0xC];   // 0x208, not mapped
             float m_fInvincibleTime;       // 0x214 (IsInvincible while above zero; name guessed)

@@ -105,6 +105,9 @@ namespace msw {
             // play the mirrored motions.
             void SetMotionReverse(int bReverse);
             void SetEnableFootSe(int bEnable);
+            // (added for VolleyF CPerfectDemoVolley; meaning guessed) Whether
+            // the model follows the floor of the scene.
+            void SetFloorMove(int bMove);
 
             // (DOL functions; names from the symbols, parameter names
             // guessed) Whether the model is shown; attach a node path to the

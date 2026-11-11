@@ -95,6 +95,10 @@ namespace msw {
 
             CStgMdl(CStgObj *pParent);
 
+            // The creator that makes nothing (DOL .sbss, a vptr only; its
+            // class is not known).
+            static CCreator NullCreator;
+
         private:
             CStgObj *m_pParent;          // 0x00
             unsigned long m_nIndex;      // 0x04
@@ -110,7 +114,9 @@ namespace msw {
 
         public:
             virtual ~CStgMdl();
-            virtual void Create();
+            // Create with no model (inline: HockeyF's
+            // game/hockey/CGoalObjHockey.cpp emits a weak copy).
+            virtual void Create() { Create(NullCreator); }
             // Create from pParam in the resource file res (CLoadData).
             virtual void Create(long res, const MDL_PARAM *pParam)
             {

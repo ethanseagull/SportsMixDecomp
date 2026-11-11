@@ -1,6 +1,7 @@
 #ifndef CGOALOBJ_HPP_
 #define CGOALOBJ_HPP_
 
+#include "game/msw/CGoalMdl.hpp"
 #include "game/msw/CStgGmk.hpp"
 
 namespace bcs {
@@ -32,44 +33,106 @@ class CGoalObj : public msw::CStgGmk {
         virtual void OnPeriodInit();
         virtual void OnTurnInit();
 
-        virtual void SetSubType(long type);                              // 0xB0
-        virtual long GetSubType() const;                                 // 0xB4
-        virtual void SetAutoPosFlag(int flag);                           // 0xB8
-        virtual int IsAutoPos() const;                                   // 0xBC
-        virtual void SetAutoRotFlag(int flag);                           // 0xC0
-        virtual int IsAutoRot() const;                                   // 0xC4
-        virtual void SetAutoCalcRingPosFlag(int flag);                   // 0xC8
-        virtual int IsAutoCalcRingPos() const;                           // 0xCC
+        // The inline ones are emitted as weak functions by the modules'
+        // goal classes (HockeyF game/hockey/CGoalObjHockey.cpp, BasketF
+        // game/basket/CGoalObjBasket.cpp).
+        virtual void SetSubType(long type) { m_nSubType = type; }       // 0xB0
+        virtual long GetSubType() const { return m_nSubType; }          // 0xB4
+        virtual void SetAutoPosFlag(int flag)                            // 0xB8
+        {
+            if (flag) {
+                m_nFlags |= FLAG_AUTO_POS;
+            } else {
+                m_nFlags &= ~FLAG_AUTO_POS;
+            }
+        }
+        virtual int IsAutoPos() const { return m_nFlags & FLAG_AUTO_POS; } // 0xBC
+        virtual void SetAutoRotFlag(int flag)                            // 0xC0
+        {
+            if (flag) {
+                m_nFlags |= FLAG_AUTO_ROT;
+            } else {
+                m_nFlags &= ~FLAG_AUTO_ROT;
+            }
+        }
+        virtual int IsAutoRot() const { return (m_nFlags >> 1) & 1; }   // 0xC4
+        virtual void SetAutoCalcRingPosFlag(int flag)                    // 0xC8
+        {
+            if (flag) {
+                m_nFlags |= FLAG_AUTO_CALC_RING_POS;
+            } else {
+                m_nFlags &= ~FLAG_AUTO_CALC_RING_POS;
+            }
+        }
+        virtual int IsAutoCalcRingPos() const { return (m_nFlags >> 2) & 1; } // 0xCC
         virtual void SetPosAuto();                                       // 0xD0
-        virtual const bcs::FVEC3 &GetPos() const;                        // 0xD4
+        virtual const bcs::FVEC3 &GetPos() const { return m_Pos; }       // 0xD4
         virtual void SetRot(const bcs::FVEC3 &rRot);                     // 0xD8
         virtual void SetRotAuto();                                       // 0xDC
-        virtual const bcs::FVEC3 &GetRot() const;                        // 0xE0
-        virtual void SetDefaultOffset(const bcs::FVEC3 &rOffset);        // 0xE4
-        virtual const bcs::FVEC3 &GetDefaultOffset() const;              // 0xE8
+        virtual const bcs::FVEC3 &GetRot() const { return m_Rot; }       // 0xE0
+        virtual void SetDefaultOffset(const bcs::FVEC3 &rOffset) { m_DefaultOffset = rOffset; } // 0xE4
+        virtual const bcs::FVEC3 &GetDefaultOffset() const { return m_DefaultOffset; } // 0xE8
         virtual unsigned long GetMdlHandle() const;                      // 0xEC
-        virtual long GetRingNodeIdx() const;                             // 0xF0
+        // The ring's node in the goal model (model 1).
+        virtual long GetRingNodeIdx() const                              // 0xF0
+        {
+            const msw::CGoalMdl *pMdl = static_cast<const msw::CGoalMdl *>(GetMdl(1));
+            if (pMdl == 0) {
+                return 0;
+            }
+            return pMdl->m_nRingNodeIdx;
+        }
         virtual const bcs::FVEC3 &GetRingPos() const;                    // 0xF4
         virtual const bcs::FVEC3 &GetBoardPos() const;                   // 0xF8
         virtual const bcs::FVEC3 &GetBoardVec() const;                   // 0xFC
-        virtual const bcs::FVEC3 &GetVec() const;                        // 0x100
+        virtual const bcs::FVEC3 &GetVec() const { return m_Vec; }       // 0x100
         virtual void CrushStart();                                       // 0x104
         virtual void CrushEnd();                                         // 0x108
         virtual void GoalIn();                                           // 0x10C
-        virtual void DunkStart(DUNK_POW pow, const bcs::FVEC3 &rPos);    // 0x110
+        // (meaning of the result not known) HockeyF's returns 1.0f.
+        virtual float DunkStart(DUNK_POW pow, const bcs::FVEC3 &rPos);   // 0x110
         virtual void DunkRelease();                                      // 0x114
         virtual void DunkCancel();                                       // 0x118
         virtual int IsNowDunkMot() const;                                // 0x11C
         virtual void RingHit();                                          // 0x120
-        virtual bcs::CScnObj *GetMdlObj(int idx);                        // 0x124
-        virtual const bcs::CScnObj *GetMdlObj(int idx) const;            // 0x128
+        // The scene object of model idx, or 0 (the model object of a goal
+        // model; BasketF's boss goal gives the boss's).
+        virtual bcs::CScnObj *GetMdlObj(int idx)                         // 0x124
+        {
+            if (GetMdl(idx) != 0) {
+                return GetMdl(idx)->GetMdlObj();
+            }
+            return 0;
+        }
+        virtual const bcs::CScnObj *GetMdlObj(int idx) const             // 0x128
+        {
+            if (GetMdl(idx) != 0) {
+                return GetMdl(idx)->GetMdlObj();
+            }
+            return 0;
+        }
+
+        // Bits of m_nFlags (names from the accessors).
+        enum {
+            FLAG_AUTO_POS = 1,
+            FLAG_AUTO_ROT = 2,
+            FLAG_AUTO_CALC_RING_POS = 4
+        };
 
         // From the end of msw::CStgGmk (0x68); the constructor stores 0 at
-        // 0x68 and 1 at 0x6C (meanings not known) and its idx at 0x70.
-        unsigned char m_Unk68[0x70 - 0x68];
+        // 0x68 and 1 at 0x6C and its idx at 0x70.
+        unsigned char m_Unk68[0x6C - 0x68];
+        long m_nSubType;              // 0x6C
         // 0x70, the constructor's idx: the goal's side. HockeyF's
         // CGoalMdlHockey::NewMdl turns the fading model by it.
         long m_nGoalIdx;
+        bcs::FVEC3 m_Pos;             // 0x74
+        bcs::FVEC3 m_Rot;             // 0x80
+        bcs::FVEC3 m_Vec;             // 0x8C
+        unsigned char m_Unk98[0xBC - 0x98];
+        bcs::FVEC3 m_DefaultOffset;   // 0xBC
+        unsigned char m_UnkC8[0xD4 - 0xC8];
+        unsigned long m_nFlags;       // 0xD4, FLAG_*
 };
 
 #endif /* !CGOALOBJ_HPP_ */

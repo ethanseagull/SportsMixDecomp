@@ -8,18 +8,24 @@
 namespace msw {
 
     // (purpose guessed from the name) A stage model with no model of its
-    // own: an empty scene group stands in for it. Size 0x130. HockeyF's
-    // game/hockey/CGoalObjHockey.cpp has its vtable and functions (the goal's
-    // model 0); the constructor is inline (msw::CGoalObjHockey::NewMdl).
+    // own: an empty scene group stands in for it. Size 0x130. Everything
+    // is inline: HockeyF's game/hockey/CGoalObjHockey.cpp emits the vtable
+    // and the weak functions (the goal's model 0).
     class CStgMdlNull : public CStgMdl {
         public:
             CStgMdlNull(CStgObj *pParent) : CStgMdl(pParent) { m_pGroup = new (0) bcs::CScnGroup(0x10, 0); }
-            virtual ~CStgMdlNull();
-            virtual bcs::CScnObj *GetScnObj();
-            virtual const bcs::CScnObj *GetScnObj() const;
-            virtual bcs::CMdlObj *NewMdl(long heap) const;
-            virtual bcs::CMdlShadow *NewShadowMdl(long heap) const;
-            virtual bcs::CMdlRef *NewRefMdl(long heap) const;
+            virtual ~CStgMdlNull()
+            {
+                if (m_pGroup != 0) {
+                    bcs::CScnObj::AppendDelayDeleteObject(m_pGroup);
+                }
+                m_pGroup = 0;
+            }
+            virtual bcs::CScnObj *GetScnObj() { return m_pGroup; }
+            virtual const bcs::CScnObj *GetScnObj() const { return m_pGroup; }
+            virtual bcs::CMdlObj *NewMdl(long heap) const { return 0; }
+            virtual bcs::CMdlShadow *NewShadowMdl(long heap) const { return 0; }
+            virtual bcs::CMdlRef *NewRefMdl(long heap) const { return 0; }
 
         private:
             bcs::CScnGroup *m_pGroup; // 0x12C

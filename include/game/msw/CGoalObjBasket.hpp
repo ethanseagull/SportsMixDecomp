@@ -32,9 +32,9 @@ namespace msw {
             virtual const COLL_INFO *FindCollInfo(long idx) const;
 
         private:
-            // From the end of CGoalObj's mapped members (0x74); where
+            // From the end of CGoalObj's mapped members (0xD8); where
             // CGoalObj's own members end is not known.
-            unsigned char m_Unk74[0x64A8 - 0x74];
+            unsigned char m_UnkD8[0x64A8 - 0xD8];
     };
 }
 

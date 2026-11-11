@@ -32,7 +32,8 @@ namespace msw {
                     virtual void Unk18();                          // 0x18
                     virtual void Unk1C();                          // 0x1C (Create)
                     virtual void Unk20();                          // 0x20 (Main)
-                    virtual void Unk24();                          // 0x24
+                    // (name guessed) Where the panel lies.
+                    virtual const bcs::FVEC3 &GetPos() const;      // 0x24
                     virtual void Unk28();                          // 0x28
                     virtual void Unk2C();                          // 0x2C
                     virtual void Unk30();                          // 0x30
@@ -41,7 +42,8 @@ namespace msw {
                     virtual void Unk3C();                          // 0x3C
                     virtual void Unk40();                          // 0x40
                     virtual void Unk44();                          // 0x44
-                    virtual void Unk48();                          // 0x48
+                    // (name guessed) The panel's radius.
+                    virtual float GetRadius() const;               // 0x48
                     virtual void Unk4C();                          // 0x4C (IsRide)
                     virtual void Unk50();                          // 0x50 (IsRideAnyChr)
                     virtual void Unk54();                          // 0x54 (IsOverlap)
@@ -53,12 +55,20 @@ namespace msw {
                     virtual void Unk6C();                          // 0x6C (SetFailed)
                     virtual void Unk70();                          // 0x70 (Terminate)
                     virtual void Unk74();                          // 0x74
-                    virtual void Unk78();                          // 0x78 (GetPanelScore)
+                    // (argument meaning guessed) The score the panel gives;
+                    // below 1 for none.
+                    virtual long GetPanelScore(long) const;        // 0x78
                     // (return types guessed) The bonus kind (1 and 2 seen)
                     // and its rate; CTelopDispBase::FindKind maps the pair
                     // to a telop.
                     virtual long GetPanelBonusType() const;        // 0x7C
                     virtual long GetPanelBonusRate() const;        // 0x80
+                    virtual void Unk84();                          // 0x84
+                    virtual void Unk88();                          // 0x88
+                    virtual void Unk8C();                          // 0x8C
+                    // (name guessed) Whether the panel is in play
+                    // (HockeyF CComManHockeyGame skips the others).
+                    virtual int IsEnable() const;                  // 0x90
             };
 
             // (purpose guessed) A telop shown over a goal when a bonus

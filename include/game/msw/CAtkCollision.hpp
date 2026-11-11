@@ -51,6 +51,15 @@ namespace msw {
             void SetIndexAll(long nIndex);
             void SetEnableAll();
 
+            // Added for HockeyF's CStgGmk_FirePillar_Hockey_Act (DOL;
+            // argument meanings guessed): settings of unit `index`.
+            void SetCollType(long index, long type);
+            void SetTargetFlag(long index, unsigned long flag);
+            void SetAtkType(long index, unsigned long type);
+            void SetEnable(long index);
+            void SetPos(long index, const bcs::FVEC3 &rPos);
+            void SetSize(long index, const bcs::FVEC3 &rSize);
+
         private:
             unsigned long m_Unk00[3];
     };

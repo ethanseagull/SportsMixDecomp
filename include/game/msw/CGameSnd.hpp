@@ -107,18 +107,21 @@ namespace msw {
             // (names guessed; fn_801488DC, fn_801488E4)
             static void DestroyHeap();
             static void StopAllSound();
-            // Empty in this build.
+            // Pauses or resumes every sound (bcs::CSnd::PauseAll).
             static void GamePauseAll(int bPause, float fFadeFrames);
 
         private:
             // What LoadGameGroups needs to know of a game (names guessed).
             struct GAME_INFO {
                 GAME_INFO(long nGameMode, long nGameType)
-                    : m_nGameMode(nGameMode), m_nGameType(nGameType), m_nPartyParam(-1), m_nStage(0)
                 {
+                    m_nStage = 0;
                     for (long i = 0; i < 8; i++) {
                         m_aChr[i] = -1;
                     }
+                    m_nGameMode = nGameMode;
+                    m_nGameType = nGameType;
+                    m_nPartyParam = -1;
                 }
 
                 long m_nGameMode;   // 0x00, GameWork::m_nGameMode

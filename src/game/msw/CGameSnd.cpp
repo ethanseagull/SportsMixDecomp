@@ -47,6 +47,11 @@ namespace msw {
         const unsigned long CHR_NUM = 25;
         const unsigned long VOICE_NUM = 0x96;  // voices of a character
         const unsigned long WRAP_ACT_NUM = 24; // actions of PlayWrapAct
+        // The checks compare against the last valid number (`> last`, not
+        // `>= count`).
+        const unsigned long CHR_LAST = CHR_NUM - 1;
+        const unsigned long VOICE_LAST = VOICE_NUM - 1;
+        const unsigned long WRAP_ACT_LAST = WRAP_ACT_NUM - 1;
 
         enum {
             VOICE_SLOT_NUM = 16,
@@ -141,11 +146,12 @@ namespace msw {
         };
 
         // The three tracks of each game music.
-        const short s_aaMusic[MUSIC_TRACK_NUM][12] = {
-            { 64, 67, 70, 73, 76, 79, 82, 85, 88, 91, 94, 97 },
-            { 65, 68, 71, 74, 77, 80, 83, 86, 89, 92, 95, 98 },
-            { 66, 69, 72, 75, 78, 81, 84, 87, 90, 93, 96, 99 },
-        };
+        // One table per track (three objects: PreparePlayMusic addresses
+        // each from the start of the section, which the compiler does for
+        // separate objects but not for rows of one array).
+        const short s_aMusicTrack0[12] = { 64, 67, 70, 73, 76, 79, 82, 85, 88, 91, 94, 97 };
+        const short s_aMusicTrack1[12] = { 65, 68, 71, 74, 77, 80, 83, 86, 89, 92, 95, 98 };
+        const short s_aMusicTrack2[12] = { 66, 69, 72, 75, 78, 81, 84, 87, 90, 93, 96, 99 };
 
         // Sound group of each stage (indexed by GameWork::m_nStage), -1 for
         // none.
@@ -209,24 +215,32 @@ namespace msw {
             return static_cast<bcs::CSndTask *>(bcs::CTaskMan::GetTask(id));
         }
 
-        inline void SetListener(float fMaxVolumeDistance, float fUnitDistance, float fInteriorSize)
+        inline void SetListener(const LISTENER_PARAM &rParam)
         {
+            float fMaxVolumeDistance = rParam.m_fMaxVolumeDistance;
+            float fUnitDistance = rParam.m_fUnitDistance;
+            float fInteriorSize = rParam.m_fInteriorSize;
             bcs::CSnd::SetListenerMaxVolumeDistance(fMaxVolumeDistance);
             bcs::CSnd::SetListenerUnitDistance(fUnitDistance);
             bcs::CSnd::SetListenerInteriorSize(fInteriorSize);
         }
 
+        // LoadMenuSnd goes through this one and the others call the
+        // reference form directly: the float registers of the inlined body
+        // swap with the inline depth, and the original has them one way in
+        // LoadMenuSnd and the other in SetGameListener/LoadTournamentSnd
+        // (which caller used which form is a guess).
         inline void SetListener(long nListener)
         {
-            const LISTENER_PARAM &rParam = s_aListener[nListener];
-            SetListener(rParam.m_fMaxVolumeDistance, rParam.m_fUnitDistance, rParam.m_fInteriorSize);
+            SetListener(s_aListener[nListener]);
         }
 
         // Makes the sound heap for rList, nExtra bytes larger, and loads the
         // groups into it.
         inline void CreateHeapAndLoad(const bcs::CSndGroupList &rList, unsigned long nExtra)
         {
-            bcs::CSnd::CreateHeap(SND_HEAP, bcs::CSnd::GetGroupListSize(rList) + nExtra, 1, -0x20);
+            unsigned long nSize = bcs::CSnd::GetGroupListSize(rList);
+            bcs::CSnd::CreateHeap(SND_HEAP, nSize + nExtra, 1, -0x20);
             bcs::CSnd::LoadGroupList(rList);
         }
 
@@ -279,7 +293,7 @@ namespace msw {
     unsigned long CGameSnd::PlayChrSeA(long nChr, long nKind, long nVar, const bcs::FVEC3 &rPos,
                                        unsigned long nArg2, long nArg3, float fArg4, float fVolume, float fArg6)
     {
-        long nClass = nChr < CHR_NUM ? s_aChrSeClass[nChr] : 1;
+        long nClass = nChr <= CHR_LAST ? s_aChrSeClass[nChr] : 1;
 
         long nSe;
         if (nChr == 0xC) {
@@ -293,7 +307,7 @@ namespace msw {
         }
 
         CGame::GameWork &work = CGame::g_GameWork;
-        if (work.m_nGameMode == CGame::GAME_MODE_VOLLEY && work.m_nGameType == 2) {
+        if (work.GetGameMode() == CGame::GAME_MODE_VOLLEY && work.GetGameType() == 2) {
             fVolume *= 0.5f;
         }
         return bcs::CSndTask::Play(nSe, rPos, nArg2, nArg3, fArg4, fVolume, fArg6);
@@ -328,7 +342,13 @@ namespace msw {
                              long nArg3, long nRand)
     {
         StopVoice(nSlot, 0.0f);
-        if (nVoice == -1 || nChr >= CHR_NUM || nVoice >= VOICE_NUM) {
+        if (nVoice == -1) {
+            return;
+        }
+        if (nChr > CHR_LAST) {
+            return;
+        }
+        if (nVoice > VOICE_LAST) {
             return;
         }
 
@@ -396,10 +416,10 @@ namespace msw {
         if (nAct == -1) {
             return 0;
         }
-        if (nChr >= CHR_NUM) {
+        if (nChr > CHR_LAST) {
             return 0;
         }
-        if (nAct >= WRAP_ACT_NUM) {
+        if (nAct > WRAP_ACT_LAST) {
             return 0;
         }
 
@@ -422,7 +442,7 @@ namespace msw {
         }
 
         CGame::GameWork &work = CGame::g_GameWork;
-        if (work.m_nGameMode == CGame::GAME_MODE_VOLLEY && work.m_nGameType == 2) {
+        if (work.GetGameMode() == CGame::GAME_MODE_VOLLEY && work.GetGameType() == 2) {
             long nParam = CGame::GetPartyGameParam(0);
             aFile[nStart].m_nFlags &= ~1;
             sprintf(aFile[nStart].m_szPath, "snd/Music%.2d.mus", nParam);
@@ -431,9 +451,9 @@ namespace msw {
 
     int CGameSnd::PreparePlayMusic(long nMusic)
     {
-        s_ahMusic[0] = bcs::CSndTask::PrepareBGM(s_aaMusic[0][nMusic], 1, 1.0f, 0.0f);
-        s_ahMusic[1] = bcs::CSndTask::PrepareBGM(s_aaMusic[1][nMusic], 1, 1.0f, 0.0f);
-        s_ahMusic[2] = bcs::CSndTask::PrepareBGM(s_aaMusic[2][nMusic], 1, 1.0f, 0.0f);
+        s_ahMusic[0] = bcs::CSndTask::PrepareBGM(s_aMusicTrack0[nMusic], 1, 1.0f, 0.0f);
+        s_ahMusic[1] = bcs::CSndTask::PrepareBGM(s_aMusicTrack1[nMusic], 1, 1.0f, 0.0f);
+        s_ahMusic[2] = bcs::CSndTask::PrepareBGM(s_aMusicTrack2[nMusic], 1, 1.0f, 0.0f);
         // Only the first track is heard at first.
         SetMusicVolume(1, 0.0f, 0.0f);
         SetMusicVolume(2, 0.0f, 0.0f);
@@ -494,34 +514,50 @@ namespace msw {
         long nListener = LISTENER_GAME;
         switch (work.m_nGameMode) {
         case CGame::GAME_MODE_BASKET:
-            nListener = work.m_nGameType == 2 ? LISTENER_PARTY_GAME + 0 : LISTENER_GAME + 0;
+            if (work.GetGameType() == 2) {
+                nListener = LISTENER_PARTY_GAME + 0;
+            } else {
+                nListener = LISTENER_GAME + 0;
+            }
             break;
         case CGame::GAME_MODE_VOLLEY:
-            nListener = work.m_nGameType == 2 ? LISTENER_PARTY_GAME + 1 : LISTENER_GAME + 1;
+            if (work.GetGameType() == 2) {
+                nListener = LISTENER_PARTY_GAME + 1;
+            } else {
+                nListener = LISTENER_GAME + 1;
+            }
             break;
         case CGame::GAME_MODE_DODGE:
-            nListener = work.m_nGameType == 2 ? LISTENER_PARTY_GAME + 2 : LISTENER_GAME + 2;
+            if (work.GetGameType() == 2) {
+                nListener = LISTENER_PARTY_GAME + 2;
+            } else {
+                nListener = LISTENER_GAME + 2;
+            }
             break;
         case CGame::GAME_MODE_HOCKEY:
-            nListener = work.m_nGameType == 2 ? LISTENER_PARTY_GAME + 3 : LISTENER_GAME + 3;
+            if (work.GetGameType() == 2) {
+                nListener = LISTENER_PARTY_GAME + 3;
+            } else {
+                nListener = LISTENER_GAME + 3;
+            }
             break;
         case CGame::GAME_MODE_BOSS:
             nListener = LISTENER_GAME + 4;
             break;
         }
-        SetListener(nListener);
+        const LISTENER_PARAM &rParam = s_aListener[nListener];
+        SetListener(rParam);
     }
 
     void CGameSnd::LoadGameSnd()
     {
         SetGameListener();
 
-        CGame::GameWork &work = CGame::g_GameWork;
-        GAME_INFO info(work.m_nGameMode, work.m_nGameType);
+        GAME_INFO info(CGame::g_GameWork.GetGameMode(), CGame::g_GameWork.GetGameType());
         if (info.m_nGameMode == CGame::GAME_MODE_VOLLEY && info.m_nGameType == 2) {
             info.m_nPartyParam = CGame::GetPartyGameParam(0);
         }
-        info.m_nStage = work.m_nStage;
+        info.m_nStage = CGame::g_GameWork.m_nStage;
         for (long i = 0; i < 8; i++) {
             info.m_aChr[i] = CGame::GetCharType(i);
         }
@@ -707,17 +743,13 @@ namespace msw {
     {
         bcs::CSndGroupList list;
         long nGroup;
-        switch (nSeq) {
-        case 0xBB7:
+        if (nSeq == 0xBB7) {
             nGroup = 0;
-            break;
-        case 0xBB8:
+        } else if (nSeq == 0xBB8) {
             nGroup = 1;
-            break;
-        case 0xBB9:
+        } else if (nSeq == 0xBB9) {
             nGroup = 2;
-            break;
-        default:
+        } else {
             return;
         }
         if (bcs::CSnd::IsGroupLoaded(nGroup)) {
@@ -731,9 +763,9 @@ namespace msw {
     void CGameSnd::LoadTournamentSnd()
     {
         if (CTournament::IsSndStage()) {
-            SetListener(LISTENER_TOURNAMENT_STAGE);
+            SetListener(s_aListener[LISTENER_TOURNAMENT_STAGE]);
         } else {
-            SetListener(LISTENER_TOURNAMENT);
+            SetListener(s_aListener[LISTENER_TOURNAMENT]);
         }
 
         bcs::CSndGroupList list;
@@ -793,7 +825,10 @@ namespace msw {
         bcs::CSnd::StopAllSound();
     }
 
-    void CGameSnd::GamePauseAll(int bPause, float fFadeFrames) {}
+    void CGameSnd::GamePauseAll(int bPause, float fFadeFrames)
+    {
+        bcs::CSnd::PauseAll(bPause, fFadeFrames);
+    }
 
     namespace {
         // Fade lengths, in frames.

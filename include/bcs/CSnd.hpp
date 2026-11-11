@@ -34,6 +34,9 @@ namespace bcs {
             static int LoadHeapState(long nHeap, long nLevel);
             // Stops every sound. fn_800797A4
             static void StopAllSound();
+            // Pauses (bPause != 0) or resumes every playing sound over
+            // fFadeFrames (BasicSound::Pause on each). fn_800799DC
+            static void PauseAll(int bPause, float fFadeFrames);
             // Set on all four 3D listeners. fn_80079C48, fn_80079D20 (calls
             // fn_803C42A0), fn_80079CB4 (Sound3DListener::SetInteriorSize)
             static void SetListenerMaxVolumeDistance(float fDistance);
@@ -54,10 +57,13 @@ namespace bcs {
 
             CSndGroupList() : m_nNum(0) {}
 
+            long GetNum() const { return m_nNum; }
+            short GetGroup(long i) const { return m_aEntry[i].m_nGroup; }
+
             bool IsExist(unsigned long nGroup) const
             {
-                for (long i = 0; i < m_nNum; i++) {
-                    if (nGroup == m_aEntry[i].m_nGroup) {
+                for (long i = 0; i < GetNum(); i++) {
+                    if (nGroup == GetGroup(i)) {
                         return true;
                     }
                 }
@@ -74,8 +80,9 @@ namespace bcs {
                 if (m_nNum >= ENTRY_MAX) {
                     return 0;
                 }
-                m_aEntry[m_nNum].m_nGroup = nGroup;
-                m_aEntry[m_nNum].m_nFlag = nFlag;
+                ENTRY &rEntry = m_aEntry[m_nNum];
+                rEntry.m_nGroup = nGroup;
+                rEntry.m_nFlag = nFlag;
                 m_nNum++;
                 return 1;
             }

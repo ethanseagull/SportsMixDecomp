@@ -23,6 +23,10 @@ namespace bcs {
             // 1 selects the second set of camera data in the tournament
             // (msw::CTournamentCamera::GetDataMode). Type guessed.
             static long m_vatViewAspectType;
+            // (added for HockeyF CChrManHockey::SetCamIdAssign_) How the
+            // screen is split: 1 and 2 two views, 3 four views (guessed from
+            // the camera tables chosen by it). Type guessed.
+            static long m_vstViewSplitType;
     };
 }
 

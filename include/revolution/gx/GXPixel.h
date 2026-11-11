@@ -9,8 +9,11 @@ extern "C" {
 
 // The pixel engine functions of GX. Only what the game's code calls so far.
 
-void GXSetBlendMode(GXBlendMode type, GXBlendFactor src, GXBlendFactor dst, GXLogicOp op);
 void GXPixModeSync(void);
+// Only what is used so far (MenuF game/menu/CTitle.cpp). Declarations of the
+// public GX API; the bodies are in main.dol.
+void GXSetZMode(GXBool compare_enable, GXCompare func, GXBool update_enable);
+void GXSetBlendMode(GXBlendMode type, GXBlendFactor src_factor, GXBlendFactor dst_factor, GXLogicOp op);
 
 #ifdef __cplusplus
 }

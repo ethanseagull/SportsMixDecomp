@@ -27,7 +27,7 @@ Equivalent game/basket/CCockpitBasketPauseResult.cpp
 Equivalent game/basket/CCockpitBasketCoin.cpp
 Equivalent game/basket/CBallManBasket.cpp
 Matching game/basket/CComDrvBasket.cpp
-Equivalent game/basket/CBallMarkerBasket.cpp
+Matching game/basket/CBallMarkerBasket.cpp
 Matching game/basket/CHBData.cpp
 Matching game/basket/CCockpitBasketBonusTime.cpp
 Matching game/basket/CComManBasketHB.cpp
@@ -45,3 +45,6 @@ Matching game/basket/CStageBasket07.cpp
 Matching game/basket/CStageBasket02.cpp
 Equivalent game/basket/CStgGmk_WaterWorks_Basket.cpp
 Equivalent game/basket/CStageBasket16.cpp
+Matching game/basket/CStageBasket03.cpp
+Matching game/basket/CStageBasket09.cpp
+Equivalent game/basket/CStageBasket15.cpp

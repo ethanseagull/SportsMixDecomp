@@ -39,6 +39,7 @@ namespace msw {
     extern float BASKET_PRM_S03_WATER_RADIUS2;
     extern float BASKET_PRM_S03_WATER_RADIUS3;
     extern float BASKET_PRM_S03_WATER_RESIST;
+    extern long BASKET_PRM_S03_WATER_SLOWDOWN_RATE;
     extern float BASKET_PRM_S03_WATER_HEIGHT;
     extern float BASKET_PRM_S03_WATER_PRESTART_TIME;
     extern float BASKET_PRM_S03_WATER_STAY_TIME;
@@ -50,6 +51,7 @@ namespace msw {
     extern float BASKET_PRM_S03_WC_LOC_RADIUS;
     extern long BASKET_PRM_S03_WC_LOC_NUM;
     extern long BASKET_PRM_S03_WC_LOC_NUM_PER_GRP;
+    extern long BASKET_PRM_S03_DEB_DRAW_INFO; // in .bss
 
     // Stage 06, the lit stage, listed in CStageBasket06::GetPrmTbl.
     extern float BASKET_PRM_S06_MOVE_SPEED;
@@ -477,6 +479,15 @@ namespace msw {
     extern float BASKET_PRM_S07_MUD_TBL1_POS_X1;
     extern float BASKET_PRM_S07_MUD_TBL2_POS_Z2;
 
+    // Stage 09, the conveyor belt stage, listed in CStageBasket09::GetPrmTbl.
+    // Times are in seconds, speeds in world units per frame.
+    extern float BASKET_PRM_S09_EV_INTERVAL;
+    extern float BASKET_PRM_S09_CV_ACC_TIME;
+    extern float BASKET_PRM_S09_CV_PRE_ACC_TIME;
+    extern float BASKET_PRM_S09_CV_SPEED_0;
+    extern float BASKET_PRM_S09_CV_ACC_SPEED_0;
+    extern long BASKET_PRM_S09_CV_DIR_0; // 0: towards the attacked goal, 1 to 3: a fixed direction
+
     // Stage 16, the star piece stage. Times are in seconds.
     extern float BASKET_PRM_S16_DROP_AREA_Z;
     extern long BASKET_PRM_S16_MAX_NUM;
@@ -500,6 +511,44 @@ namespace msw {
     extern float BASKET_PRM_S16_FLASH_TIME;
     extern float BASKET_PRM_S16_FLASH_GAIN;
     extern float BASKET_PRM_S16_FLASH_DECAY;
+
+    // Stage 15, the ship stage, listed in CStageBasket15::GetPrmTbl. Times are
+    // in seconds, the roll angle in degrees.
+    extern float BASKET_PRM_S15_CASE_WIDTH;
+    extern float BASKET_PRM_S15_CASE_DEPTH;
+    extern float BASKET_PRM_S15_CASE_HEIGHT;
+    extern float BASKET_PRM_S15_CASE_INTERVAL;
+    extern float BASKET_PRM_S15_CASE_OFFSET_Z;
+    extern float BASKET_PRM_S15_CASE_POS_Y;
+    extern float BASKET_PRM_S15_CASE_ACC_0;
+    extern float BASKET_PRM_S15_CASE_DEC_0;
+    extern float BASKET_PRM_S15_CASE_DEC_RND_0;
+    extern float BASKET_PRM_S15_CASE_VEL_0;
+    extern float BASKET_PRM_S15_CASE_ACC_1;
+    extern float BASKET_PRM_S15_CASE_DEC_1;
+    extern float BASKET_PRM_S15_CASE_DEC_RND_1;
+    extern float BASKET_PRM_S15_CASE_VEL_1;
+    extern float BASKET_PRM_S15_CASE_ACC_2;
+    extern float BASKET_PRM_S15_CASE_DEC_2;
+    extern float BASKET_PRM_S15_CASE_DEC_RND_2;
+    extern float BASKET_PRM_S15_CASE_VEL_2;
+    extern float BASKET_PRM_S15_RAINY_INTERVAL;
+    extern float BASKET_PRM_S15_RAINY_TIME;
+    extern float BASKET_PRM_S15_SHIP_CYCLE;
+    extern float BASKET_PRM_S15_SHIP_ROT_ANGLE;
+    extern float BASKET_PRM_S15_SHIP_STOP_TIME;
+    extern float BASKET_PRM_S15_SHIP_STOP_TIME_RND;
+    extern float BASKET_PRM_S15_CHR_FLOW_VEL;
+    extern long BASKET_PRM_S15_FLASH_COLOR_R;
+    extern long BASKET_PRM_S15_FLASH_COLOR_G;
+    extern long BASKET_PRM_S15_FLASH_COLOR_B;
+    extern long BASKET_PRM_S15_FLASH_COLOR_A;
+    extern float BASKET_PRM_S15_FLASH_TIME;
+    extern float BASKET_PRM_S15_FLASH_GAIN;
+    extern float BASKET_PRM_S15_FLASH_DECAY;
+    extern float BASKET_PRM_S15_KARON_SCALE;
+    extern float BASKET_PRM_S15_KARON_COLL_SCALE;
+    extern float BASKET_PRM_S15_KARON_SPEED;
 }
 
 #endif /* !MSW_BASKETPRM_HPP_ */

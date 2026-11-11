@@ -90,6 +90,9 @@ namespace msw {
             CChrCore *GetHoldBallChrCore(long) const;
             // The ball in play, or null.
             CBall *GetActiveBall() const;
+            // DOL. (added for VolleyF CCameraVolleyBoss) The leader of the
+            // camera's team, or null.
+            CChrCore *GetMyTeamLeaderCore() const;
             // (guessed) Where fValue lies between fMin and fMax, from 0 to 1.
             float GetRate(float fValue, float fMin, float fMax) const;
             void MakeingFrontCamDataBase(const bcs::FVEC3 &rPos, const bcs::FVEC3 &rTarget, float, float, float,
@@ -120,10 +123,12 @@ namespace msw {
         protected:
             // 0x1BC to 0x1C8 and 0x1D8: cleared by BossF's CCameraBoss
             // constructor (meanings not known).
-            unsigned long m_Unk1BC;
+            // 0x1BC and 0x1C8 are compared signed (VolleyF CCameraVolleyBoss:
+            // a zoom state 0/1 and the ball's touch count).
+            long m_Unk1BC;
             float m_Unk1C0; // 0x1C0
             float m_Unk1C4;
-            unsigned long m_Unk1C8;
+            long m_Unk1C8;
 
         private:
             unsigned char m_Unk1CC[0x1D8 - 0x1CC];
@@ -132,7 +137,20 @@ namespace msw {
             unsigned long m_Unk1D8;
 
         private:
-            unsigned char m_Unk1DC[0x240 - 0x1DC];
+            unsigned char m_Unk1DC[0x228 - 0x1DC];
+
+        protected:
+            // 0x228, 0x230, 0x234: read by VolleyF's CCameraVolleyBoss
+            // MakeingCamZoom (meanings not known; 0x230/0x234 are written by
+            // the DOL's GetBallTargetPos, 0x228 by SetCamMode).
+            unsigned long m_Unk228;
+
+        private:
+            unsigned char m_Unk22C[0x230 - 0x22C];
+
+        protected:
+            unsigned long m_Unk230;
+            bcs::FVEC3 m_Unk234;
 
         protected:
             // 0x240 to 0x24C: floats set by the constructor.

@@ -75,3 +75,9 @@ Equivalent game/hockey/CComManHockeyGame.cpp
 Equivalent game/hockey/CCockpitHockeyIconFightGauge.cpp
 Equivalent game/hockey/CCockpitHockeyResult.cpp
 Equivalent game/hockey/CChrCoreHockeyKoopaJr.cpp
+Matching game/hockey/unit_7AD44.cpp
+Matching game/hockey/unit_AFCA0.cpp
+Matching game/hockey/unit_EDBF0.cpp
+Equivalent game/hockey/CCockpitHockeyVSCount.cpp
+Equivalent game/hockey/CCockpitHockeyTelopReady.cpp
+Equivalent game/hockey/CChrCoreHockeySlime.cpp

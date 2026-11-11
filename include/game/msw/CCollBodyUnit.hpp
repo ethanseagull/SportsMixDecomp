@@ -21,7 +21,11 @@ namespace msw {
             // msw::CStgGmk_WaterPillar_Act::OnBodyPush passes it to
             // CChrMan::GetChrCore for an owner of kind 1.
             signed char m_nOwnerIdx;
-            unsigned char m_Unk15[0x17];
+            unsigned char m_Unk15[2];
+            // 0x17 (meaning unknown; read signed): the DOL's shells pass it
+            // to CItem::SendHitChrMessage when an owner of kind 1 pushes them.
+            signed char m_nUnk17;
+            unsigned char m_Unk18[0x2C - 0x18];
             // 0x2C (name guessed): the unit's position; VolleyF's
             // CStgGmk_Pinball_Act_Volley::OnBallCatch reads it.
             bcs::FVEC3 m_Pos;

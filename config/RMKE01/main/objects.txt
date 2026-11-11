@@ -43,7 +43,7 @@ NonMatching game/msw/CGameSnd.cpp
 NonMatching game/bcs/CGDLObj.cpp
 Equivalent game/msw/cockpit/CMissionCount.cpp
 Matching game/msw/CEvDemoRes/_CHR_INFO.cpp
-NonMatching game/msw/CItemShellCmn.cpp
+Equivalent game/msw/CItemShellCmn.cpp
 Matching game/msw/vm/CVMCpu.cpp
 Matching game/msw/menu/CVibEff.cpp
 NonMatching game/msw/CEventDemoBase.cpp

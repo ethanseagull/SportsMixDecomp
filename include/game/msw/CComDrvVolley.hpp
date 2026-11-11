@@ -2,6 +2,7 @@
 #define MSW_CCOMDRVVOLLEY_HPP_
 
 #include "game/msw/CComDrv.hpp"
+#include "game/msw/CChrCore.hpp"
 
 namespace msw {
 
@@ -38,6 +39,10 @@ namespace msw {
             int CanbeMyTouch() const;
             // Not zero when some character is in its serve mode.
             int IsExistServeMode() const;
+            // The driven character's number, widened (the other sports have
+            // this out of line; in VolleyF it is inline, in
+            // CComDrvVolleyGame's special shot actions).
+            long GetChrTypeID() const { return m_pChr->GetChrTypeID(); }
     };
 }
 

@@ -129,7 +129,7 @@ namespace msw {
             virtual void SetConditionEffect_(long);                    // 0x24
             virtual int IsNowBlockWork() const;                        // 0x30
             virtual int Is1on1() const;                                // 0x44
-            virtual void GetTargetMarkerPos(bcs::FVEC3 &);             // 0x58
+            virtual int GetTargetMarkerPos(bcs::FVEC3 &);              // 0x58
             virtual int MoveTargetMarkerPos(float);                    // 0x5C
             virtual int IsBattle() const;                              // 0x68
             virtual int IsDisp1On1Maker() const;                       // 0x6C

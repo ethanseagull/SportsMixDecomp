@@ -61,6 +61,9 @@ namespace bcs {
                 // Number of frames of animation nAnim; 0 when there is no
                 // such animation (main.dol msw::cockpit::CSPGauge::SetParam).
                 float GetAnimFrameMax(long nAnim);
+                // (added for VolleyF game/volley/CCockpitVolleyTelopServe.cpp)
+                // Length of animation nAnim in frames.
+                float GetAnimFrameSize(long nAnim);
 
                 // (name guessed; inline, no symbol) How many animations
                 // BuildAnim made. GetAnimFrameMax checks its index against it.

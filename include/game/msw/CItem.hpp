@@ -183,6 +183,28 @@ namespace msw {
             // (DOL) Sets the Y rotation of the item's model.
             void SetRotY(float rad);
 
+            // (DOL, names guessed; added for game/msw/CItemShellCmn.cpp)
+            // Thin wrappers of m_AtkColl / m_BodyColl like the ones above.
+            void CollAtkCreate(long num);                              // fn_80128C88
+            void CollAtkSetRadius(long index, float radius);           // fn_80128CFC
+            void CollAtkSetPos(long index, const bcs::FVEC3 &rPos);    // fn_80128D1C
+            void CollAtkSetHitEffectID(long index, long id);           // fn_80128D24
+            // Sets the float CollAtkGetUnkA0 returns (the shells store the
+            // direction they fly off in when they break).
+            void CollAtkSetUnkA0(long index, float value);             // fn_80128D34
+            int CollAtkIsAtkHit(long index);                           // fn_80128D3C
+            void CollAtkSetHitCamVibIDAll(long id);                    // fn_80128D54
+            void CollBodySetPushEnableAll(int enable);                 // fn_80128F30
+            // (DOL, name guessed) Sets the alpha of the item's models,
+            // clamped to [0, 1].
+            void SetMdlAlpha(float alpha);                             // fn_801296A4
+            // (DOL, name guessed) Tells the game the item hit character
+            // nChr (CGame::SendMessage 0x2F, and 0x2E in some cases).
+            void SendHitChrMessage(long nChr);                         // fn_80129CC4
+            // (DOL, name guessed) Clears flag 4 and changes to state 7
+            // (Break).
+            void ChangeStateBreak();                                   // fn_8012C1CC
+
             // DOL. (return types guessed from CComManVolleyRR::IsExistItemBall,
             // which tests the first and third and compares the second with a
             // frame count)
@@ -241,7 +263,12 @@ namespace msw {
             CBodyCollision m_BodyColl;      // 0x17C
             unsigned char m_Unk188[0x190 - 0x188];
             float m_fUnk190;                // 0x190, the shells set 30 when they break (meaning unknown)
-            unsigned char m_Unk194[0x1AA - 0x194];
+            unsigned char m_Unk194[0x1A4 - 0x194];
+            // 0x1A4 and 0x1A6 (meaning unknown): the red shell passes
+            // ((0x1A4 & 0x7F) << 24) | (0x1A6 & 0xFF) to CCollMan::DetectMapHit.
+            short m_nUnk1A4;
+            short m_nUnk1A6;
+            short m_nUnk1A8;                // 0x1A8, (meaning unknown) a character index SendHitChrMessage reports
             short m_nUnk1AA;                // 0x1AA, passed to SearchTarget_
     };
 }

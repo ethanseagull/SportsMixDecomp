@@ -48,7 +48,7 @@ Equivalent game/volley/CStageVolley05.cpp
 NonMatching game/volley/CStageVolley11.cpp
 Equivalent game/volley/CStgGmk_Case_Act_Volley.cpp
 Equivalent game/volley/CGimmickManVolley.cpp
-NonMatching game/volley/CBallTargetMarker.cpp
+Equivalent game/volley/CBallTargetMarker.cpp
 Matching game/volley/CChrCoreVolleyMario.cpp
 Equivalent game/volley/CChrCoreVolleyMoogle.cpp
 Matching game/volley/CChrCoreVolleyMii00.cpp
@@ -64,3 +64,13 @@ Equivalent game/volley/CStgGmk_Pinball_Act_Volley.cpp
 Equivalent game/volley/CCameraVolleyRR.cpp
 Equivalent game/volley/CChrParasiteBanana.cpp
 Equivalent game/volley/CPerfectDemoVolley.cpp
+Matching game/volley/unit_7C3A8.cpp
+Equivalent game/volley/unit_C5D08.cpp
+Matching game/volley/unit_AB1D8.cpp
+Equivalent game/volley/unit_BEF84.cpp
+Equivalent game/volley/unit_BF960.cpp
+Equivalent game/volley/CCameraVolleyBoss.cpp
+Equivalent game/volley/CReadyStartDemoVolley.cpp
+Equivalent game/volley/CCockpitVolleyMarkerIcon2D.cpp
+Equivalent game/volley/CCockpitVolleyTelopServe.cpp
+Equivalent game/volley/CCockpitVolleySPGauge.cpp

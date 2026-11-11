@@ -108,6 +108,48 @@ namespace msw {
     extern long DODGE_PRM_S12_BALL_NUM;
     extern float DODGE_PRM_S12_BALL_DOWN_TIME;
 
+    // Stage 15, the ship stage with the rolling cases (CStageDodge15::GetPrmTbl
+    // and CStgGmk_Case_Act_Dodge). Times are in seconds, angles in degrees;
+    // the _0/_1/_2 values are per kind of case.
+    extern float DODGE_PRM_S15_CASE_WIDTH;
+    extern float DODGE_PRM_S15_CASE_DEPTH;
+    extern float DODGE_PRM_S15_CASE_HEIGHT;
+    extern float DODGE_PRM_S15_CASE_INTERVAL;
+    extern float DODGE_PRM_S15_CASE_OFFSET_Z;
+    extern float DODGE_PRM_S15_CASE_POS_Y;
+    extern float DODGE_PRM_S15_CASE_ACC_0;
+    extern float DODGE_PRM_S15_CASE_DEC_0;
+    extern float DODGE_PRM_S15_CASE_DEC_RND_0;
+    extern float DODGE_PRM_S15_CASE_VEL_0;
+    extern float DODGE_PRM_S15_CASE_LIFE_0;
+    extern float DODGE_PRM_S15_CASE_ACC_1;
+    extern float DODGE_PRM_S15_CASE_DEC_1;
+    extern float DODGE_PRM_S15_CASE_DEC_RND_1;
+    extern float DODGE_PRM_S15_CASE_VEL_1;
+    extern float DODGE_PRM_S15_CASE_LIFE_1;
+    extern float DODGE_PRM_S15_CASE_ACC_2;
+    extern float DODGE_PRM_S15_CASE_DEC_2;
+    extern float DODGE_PRM_S15_CASE_DEC_RND_2;
+    extern float DODGE_PRM_S15_CASE_VEL_2;
+    extern float DODGE_PRM_S15_CASE_LIFE_2;
+    extern float DODGE_PRM_S15_RAINY_INTERVAL;
+    extern float DODGE_PRM_S15_RAINY_TIME;
+    extern float DODGE_PRM_S15_SHIP_CYCLE;
+    extern float DODGE_PRM_S15_SHIP_ROT_ANGLE;
+    extern float DODGE_PRM_S15_SHIP_STOP_TIME;
+    extern float DODGE_PRM_S15_SHIP_STOP_TIME_RND;
+    extern float DODGE_PRM_S15_CHR_FLOW_VEL;
+    extern long DODGE_PRM_S15_FLASH_COLOR_R;
+    extern long DODGE_PRM_S15_FLASH_COLOR_G;
+    extern long DODGE_PRM_S15_FLASH_COLOR_B;
+    extern long DODGE_PRM_S15_FLASH_COLOR_A;
+    extern float DODGE_PRM_S15_FLASH_TIME;
+    extern float DODGE_PRM_S15_FLASH_GAIN;
+    extern float DODGE_PRM_S15_FLASH_DECAY;
+    extern float DODGE_PRM_S15_KARON_SCALE;
+    extern float DODGE_PRM_S15_KARON_COLL_SCALE;
+    extern float DODGE_PRM_S15_KARON_SPEED;
+
     // Stage 16, the star piece stage (CStageDodge16::GetPrmTbl). Times are
     // in seconds, angles in degrees.
     extern float DODGE_PRM_S16_DROP_AREA_Z;

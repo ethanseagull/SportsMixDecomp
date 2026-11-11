@@ -462,14 +462,10 @@ game/dodge/CStageDodge13.cpp:
 	.bss        start:0x00000BF8 end:0x00000C00
 
 game/dodge/CStageDodge15.cpp:
-	.text       start:0x00096018 end:0x00096B58
+	.text       start:0x00096018 end:0x00096CBC
 	.rodata     start:0x00005DB8 end:0x00005FD8
-	.data       start:0x0001F5D8 end:0x0001FBE0
+	.data       start:0x0001F5D8 end:0x0001FCC8
 	.bss        start:0x00000C00 end:0x00000C08
-
-game/dodge/CStgGmk_Case_Dodge.cpp:
-	.text       start:0x00096B58 end:0x00096CBC
-	.data       start:0x0001FBE0 end:0x0001FCC8
 
 game/dodge/CStageDodge17.cpp:
 	.text       start:0x00096CBC end:0x00097EBC

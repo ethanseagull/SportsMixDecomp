@@ -96,7 +96,6 @@ namespace msw {
             CStgGmk_Trolley_Act(CStgGmk *pParent);
             virtual ~CStgGmk_Trolley_Act();
 
-            virtual long Eff_GetSlotNum() const { return 1; }
             virtual void UpdateMdlMtx();
             virtual void OnInit();
             virtual void OnUpdate(float rate);
@@ -143,6 +142,10 @@ namespace msw {
             virtual float GetParam_CoinModeRate() const { return 0.2f; }  // 0x22C
             virtual float GetParam_ThrowDistMin(long type) const { return 1.0f; } // 0x230
             virtual float GetParam_ThrowDistMax(long type) const { return 4.0f; } // 0x234
+            // An override of CStgEffectSlot's: declared here, not with the other
+            // overrides, because that puts its weak copy between
+            // GetParam_RailNodeName and GetDispMdlNum as in the original.
+            virtual long Eff_GetSlotNum() const { return 1; }
             virtual long SE_GetSlotNum() const { return 1; }             // 0x238
             virtual long GetDispMdlNum() const { return m_nDispMdlNum; } // 0x23C
             virtual void DoSpawn();                                       // 0x240

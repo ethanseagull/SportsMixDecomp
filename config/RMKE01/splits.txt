@@ -217,15 +217,8 @@ game/msw/CEventDemoBase.cpp:
 	.text       start:0x8011141C end:0x8011158C
 
 game/msw/CEventModel.cpp:
-	.text       start:0x80111CCC end:0x801143EC
-
-game/msw/CEventMove.cpp:
-	.text       start:0x80114AB8 end:0x80114DC0
-	.data       start:0x8046F010 end:0x8046F024
-
-game/msw/CEventChrCore.cpp:
-	.text       start:0x8011722C end:0x801177F4
-	.data       start:0x8046F318 end:0x8046F3CC
+	.text       start:0x80111CCC end:0x801177F4
+	.data       start:0x8046F010 end:0x8046F3CC
 
 game/msw/CEventScene.cpp:
 	.text       start:0x801177F4 end:0x8011970C

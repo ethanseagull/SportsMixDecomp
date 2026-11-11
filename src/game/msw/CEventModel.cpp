@@ -1,10 +1,110 @@
+// msw::CEventModel and the classes defined with it in one DOL file
+// (.text 0x80111CCC..0x801177F4): CEventModel, CEventMoveAction, CEventMove,
+// CEvDemoMdlChr / CEventCameraNull and CEventChrCore. They share .sdata2
+// constants, and CEventMove inlines CEventModel's SetLink* bodies.
+
+#include "game/msw/CEventModel.hpp"
+#include "game/msw/CEventMove.hpp"
+#include "game/msw/CEventMoveAction.hpp"
 #include "game/msw/CEventChrCore.hpp"
-
 #include <stdlib.h>
-
 #include "bcs/CMdlObj.hpp"
 #include "game/msw/CChrCore.hpp"
 #include "game/msw/CChrMan.hpp"
+#include "game/msw/CEventNodeSimple.hpp"
+
+namespace msw {
+
+    // TODO(CEventModel): the rest of CEventModel (0x80111CCC..0x801143EC) goes
+    // here, in address order. The bodies below are proven: with them in the
+    // same file CEventMove's SetLink/ctor/SetUpdate inline them and match.
+
+    void CEventModel::SetUpdateMove(int b)
+    {
+        _SetFlag(0x10, b);
+    }
+
+    void CEventModel::SetLinkNode(CEventNodeBase *pNode, int b)
+    {
+        CEventMove *pMove = m_pMove;
+        if (pMove == 0) {
+            if (b && pNode != 0) {
+                delete pNode;
+            }
+            return;
+        }
+        if (m_nFlag & 4) {
+            if (pMove->m_pNode != 0) {
+                delete pMove->m_pNode;
+            }
+            pMove->m_pNode = 0;
+        }
+        pMove->m_pNode = pNode;
+        _SetFlag(4, b);
+    }
+
+    void CEventModel::SetLinkMove(CEventMove *pMove, int b)
+    {
+        if (m_nFlag & 1) {
+            SetLinkNode(0, 0);
+            if (m_pMove != 0) {
+                delete m_pMove;
+            }
+            m_pMove = 0;
+        }
+        m_pMove = pMove;
+        _SetFlag(1, b);
+    }
+
+    void CEventModel::SetLinkAction(CEventMoveAction *pAction, int b)
+    {
+        if (m_nFlag & 2) {
+            if (m_pAction != 0) {
+                delete m_pAction;
+            }
+            m_pAction = 0;
+        }
+        m_pAction = pAction;
+        _SetFlag(2, b);
+    }
+}
+
+
+namespace msw {
+
+    void CEventMoveAction::SetLink(int b)
+    {
+        m_pModel->SetLinkAction(this, b);
+    }
+
+    // The virtual call to the inline CEventModel::SetAnimSpeed emits its
+    // weak body right after this function, where the original has it.
+    void CEventMoveAction::AnimPlay(long nMot, unsigned long nFlag, float fBlend, float fFrame, float fSpeed)
+    {
+        m_pModel->SetAnimSpeed(fSpeed);
+        m_pModel->AnimPlay(nMot, nFlag, fBlend, fFrame, 1);
+    }
+
+    CEventMove::CEventMove(CEventModel *pModel, CEventNodeBase *pNode, int b)
+        : m_fFrame(0.0f), m_fEndFrame(0.0f), m_pModel(pModel), m_pNode(pNode), m_nNodeId(-1), m_nFlip(0)
+    {
+        if (pModel != 0) {
+            pModel->SetLinkMove(this, b);
+        }
+        m_vOffset.Set(0.0f, 0.0f, 0.0f);
+        m_vOffsetRot.Set(0.0f, 0.0f, 0.0f);
+        m_vUnk1C.Set(0.0f, 0.0f, 0.0f);
+    }
+
+    CEventMove::~CEventMove()
+    {
+    }
+
+    void CEventMove::SetUpdate(int bUpdate)
+    {
+        m_pModel->SetUpdateMove(bUpdate);
+    }
+}
 
 namespace msw {
 

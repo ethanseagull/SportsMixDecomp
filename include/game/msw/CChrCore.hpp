@@ -596,6 +596,9 @@ namespace msw {
             // the name; CChrMarkerVolley::AppearCheck asks it outside the
             // party game) In the DOL.
             int IsPadCtrl() const;
+            // DOL. The goal the character's team attacks (BasketF
+            // CStageBasket06::SendMessage lights that goal's side).
+            long GetTargetGoalIdx() const;
             // DOL. The yaw (radians) from the character towards a point,
             // in the XZ plane.
             float GetRotY_ToPosXZ(const bcs::FVEC3 &pos) const;

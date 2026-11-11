@@ -5,6 +5,8 @@ MenuF CheckControllerState__Q33msw10SelectMenu6CEntryFv near 95.0 CMenuPadInfo p
 MenuF CheckFrindStat__Q33msw10SelectMenu11CFriendInfoFv near 99.9 register allocation only
 MenuF ClearSign__Q33msw10SelectMenu8CChrSignFl near 99.2 register choice only: three saved registers (task, list, kind|0x80000000) permuted
 MenuF CreateChrMenuObj__Q33msw10SelectMenu9CCourtChrFllll13RFLDataSourcell near 99.1 incoming arguments copied to saved registers in another order
+MenuF Cup_Loop__Q23msw11CSelectMenuFv near 98.5 float constants reached from one kept base register instead of lis/@l each; single beq+b vs bne for the same test; register swaps in the inlined _TabChange and Cup_OkButtonOut; cmpwi vs cmplwi on a zero-extended byte compared with 1 (same result)
+MenuF Cup_OkButton__Q23msw11CSelectMenuFv near 99.3 register allocation only (pad index and cancel flag swapped)
 MenuF DispCharaStatus__Q33msw10SelectMenu12CCharaStatusFv near 99.5 register allocation only
 MenuF DispNumberPane__Q33msw10SelectMenu11CFriendInfoFUs near 99.7 one register choice
 MenuF Disp__Q43msw10SelectMenu25@unnamed@CChrCaption_cpp@12CCaptionTaskFPQ23msw17CMenuPaneAccessorl near 99.1 register choice only: inlined GetPaneObj index check r6/r0 vs r0/r3, FVEC3Add paired-single f0/f1 swapped
@@ -110,6 +112,7 @@ MenuF Title_Loop__Q23msw11CSelectMenuFv near 88.1 float literals: the original l
 MenuF WifiEntry_Loop__Q23msw11CSelectMenuFv unverified 70.6 the original inlines Entry_LoopStep22 into case 22 (and still emits it); ours calls it (explicit inline makes it inline but drops the standalone copy); plus the pad-loop address form
 MenuF WifiEntry_PadEntry__Q23msw11CSelectMenuFv near 97.2 CMenuPadInfo pad loop: the original steps a pointer from s_Instance+4 and reads 0(rP), ours folds the offset into 4(rX); same addresses; one load order
 MenuF _GetUsedCursol__Q23msw11CSelectMenuFl near 98.9 operand order of the final commutative or
+MenuF _SetCupBit__Q23msw11CSelectMenuFl near 96.4 register allocation and instruction order only
 MenuF _SetStarMii__Q23msw11CSelectMenuFl near 99.9 stack slots of the two 8-byte RFLCreateID copies swapped (sp+8 / sp+0x10)
 MenuF __ct__Q23msw5CMenuFPQ23bcs5CTask near 99.8 stack slot order only: inline CFsm() null-PTMF temporary at sp+0x8 vs sp+0xE0, state-table temporaries shifted by 0xC
 MenuF __dt__Q33msw10SelectMenu9CCourtChrFv near 99.1 register choice only; regs search no gain

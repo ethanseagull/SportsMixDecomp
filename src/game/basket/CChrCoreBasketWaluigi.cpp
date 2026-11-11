@@ -56,6 +56,7 @@ msw::CChrCoreBasketWaluigi::~CChrCoreBasketWaluigi()
 // model, a little to the side.
 void msw::CChrCoreBasketWaluigi::CreateArtsBall_()
 {
+    CBall *pCopy;
     // static-order swap: declared in this order the values come out in the
     // original's order, but the "@0" suffix lands on uAttachFlag instead of
     // fOff_X (see notes/decisions.md).
@@ -83,7 +84,7 @@ void msw::CChrCoreBasketWaluigi::CreateArtsBall_()
     };
 
     for (int i = 0; i < ARTS_BALL_NUM; i++) {
-        CBall *pCopy = CBallManBasket::GetInstance()->CreateDummyBall_();
+        pCopy = CBallManBasket::GetInstance()->CreateDummyBall_();
         pCopy->WarpPos(pBall->GetPos());
         pCopy->SetRot(pBall->GetRot());
         pCopy->SetDestroyOnReset(1);

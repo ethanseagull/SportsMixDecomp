@@ -338,6 +338,9 @@ namespace msw {
             // (DOL; meaning of the argument not known, CDropCoinMan passes
             // 1) Non-zero while the game is in its main loop state.
             static int IsMainLoopState(int);
+            // (DOL, static; added for HockeyF game/hockey/CChrCoreHockeyLuigi.cpp)
+            // The computer level of team nTeam, as CComMan::GetDatF takes it.
+            static float GetTeamComLevel(long nTeam);
 
             // The three below are static in the DOL: their bodies index
             // g_GameWork with the argument. (return types guessed)
@@ -397,6 +400,9 @@ namespace msw {
             // The goal team nTeam attacks: the byte at g_GameWork + 0x88 +
             // nTeam, read unsigned. (return type guessed)
             static long GetTargetGoalIdx(long nTeam);
+            // DOL. The yaw (radians) of goal nGoal. (added for BasketF
+            // CChrDrvPadBasket; meaning guessed from the name)
+            static float GetGoalYRot(long nGoal);
             // (DOL, static; return type guessed) The goal of team nTeam
             // (HockeyF: 1 minus it is the goal the team defends).
             static long GetGoalIdx(long nTeam);
@@ -448,6 +454,9 @@ namespace msw {
             // character starting a special move); IsVolleyScored is not zero
             // once the rally has ended in a point.
             static void SetOffenseTeam(long nTeam);
+            // (DOL; added for BasketF game/basket/CNpcGhostBasketBase.cpp,
+            // meaning guessed) Switches the loose ball mode on or off.
+            static void SetLooseBallMode(int bOn);
             static int IsVolleyScored();
             // (fn_8017D558, unnamed in the DOL) IsNowBonusTime_ on the
             // running game, zero without one.

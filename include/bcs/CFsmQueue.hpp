@@ -165,6 +165,42 @@ namespace bcs {
                 FsmqPush(state);
             }
 
+            // (added for BasketF game/basket/CNpcGhostBasketBase.cpp; inline
+            // there, out of line as FsmqSetState__Q23bcs35CFsmQueue<Q23msw16CNpcBehemothBoss>Fl
+            // in BossF, which gives this overload its name) Drops the queue
+            // and runs state, as FsmqChangeState; returns the state's
+            // cleared work memory (null without one).
+            void *FsmqSetState(long state)
+            {
+                FsmqClear();
+                int bEmpty = FsmqIsEmpty();
+                long tail = m_nQueueTail;
+                long next = FsmqWrap(tail + 1, m_nQueueSize);
+                m_pStateQueue[tail] = state;
+                m_nQueueTail = next;
+                if (bEmpty && m_pStateTable) {
+                    m_pNextState = &m_pStateTable[state];
+                }
+                void *pWork;
+                if (m_pWorkQueue == 0 || m_nWorkSize == 0) {
+                    pWork = 0;
+                } else {
+                    pWork = static_cast<char *>(m_pWorkQueue) + m_nWorkSize * tail;
+                    BCS_CpuClear(pWork, m_nWorkSize);
+                }
+                return pWork;
+            }
+
+            // (name guessed; BasketF) The work memory of queue entry idx;
+            // null when the states have none.
+            void *FsmqGetWorkAt_(long idx) const
+            {
+                if (m_pWorkQueue == 0 || m_nWorkSize == 0) {
+                    return 0;
+                }
+                return static_cast<char *>(m_pWorkQueue) + m_nWorkSize * idx;
+            }
+
             // (name guessed) From a state's hook: lets FsmqExec carry the
             // change out in the same frame.
             void FsmqRetry() { m_nFlag |= 2; }
@@ -197,9 +233,11 @@ namespace bcs {
             }
 
             // (name guessed) One frame of the state machine, called from the
-            // owner's update: enters a pending state (leaving the current
-            // one), then runs the current state's loop unless a change is
-            // pending again; repeats while a hook asked for it (FsmqRetry).
+            // owner's update (msw::CStgGmk_WaterPillar_Act; inline in
+            // BasketF's CNpcGhostBasketBase::MainFunc): enters a pending
+            // state (leaving the current one), then runs the current state's
+            // loop unless a change is pending again; repeats while a hook
+            // asked for it (FsmqRetry).
             void FsmqExec()
             {
                 do {

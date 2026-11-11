@@ -9,6 +9,7 @@ namespace nw4r {
     }
     namespace lyt {
         class ArcResourceAccessor;
+        class ResourceAccessor;
     }
 }
 
@@ -39,6 +40,11 @@ namespace msw {
             nw4r::lyt::ArcResourceAccessor *NewArcResourceAccessor(const char *pFileName, const char *pRootFolderName);
             nw4r::ut::Font *GetArchiveFont(long nFont);   // return type guessed (some font pointer or null)
             const char *GetFontResourceName(long nFont);
+            // Added for BossF game/boss/CCockpitBossCoder.cpp (the spelling
+            // is the symbol's): the resources of layout pLayoutName, loaded
+            // from archive nArc; null when not loaded. (argument meanings
+            // and return type guessed)
+            nw4r::lyt::ResourceAccessor *GetLayoutResourceAccesor(long nArc, const char *pLayoutName);
             // Added for MenuF game/menu/CSelectMenuLayoutBase.cpp. The second
             // argument is the word at 0x2C of pLayout's CLayoutDL; return
             // type guessed.

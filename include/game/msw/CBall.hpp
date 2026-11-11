@@ -429,6 +429,7 @@ namespace msw {
             void SetAttachPos(const bcs::FVEC3 &rOfs, int);
             // (names guessed) Two more bits of m_nFlag that the basket and
             // hockey ball markers read; what they stand for is not known.
+            int IsFlag1() const { return m_nFlag & 0x1; }
             int IsFlag4() const { return m_nFlag & 0x4; }
             int IsFlag100000() const { return m_nFlag & 0x100000; }
             // (names guessed) msw::CItemBall attaches its model to the

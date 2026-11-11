@@ -23,6 +23,10 @@ namespace msw {
         // by the modules).
         class CSPGauge {
             public:
+                // Inline: the modules that hold one (the cockpit coders)
+                // emit the constructor and destructor weak.
+                CSPGauge() { Initialize(); }
+
                 void Initialize();
                 void Finalize();
                 void SetParam(bcs::G2D::CPaneCtrl *pPaneCtrl, unsigned short nPane, unsigned short nUnk02,
@@ -47,7 +51,7 @@ namespace msw {
 
             public:
                 // vptr at 0x14: declared after the data.
-                virtual ~CSPGauge() {}
+                virtual ~CSPGauge() { Finalize(); }
         };
     }
 }

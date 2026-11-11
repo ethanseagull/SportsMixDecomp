@@ -2,6 +2,7 @@
 #define NW4R_LYT_PANE_HPP_
 
 #include "nw4r/math/types.h"
+#include "nw4r/ut/Color.hpp"
 #include "nw4r/ut/RuntimeTypeInfo.h"
 
 namespace nw4r {
@@ -46,8 +47,10 @@ namespace nw4r {
                 virtual void Unk18();
                 virtual void Unk1C();
                 virtual void Unk20();
-                virtual void Unk24();
-                virtual void Unk28();
+                // 0x24, 0x28 (added for BossF game/boss/CCockpitBossCoder.cpp):
+                // the colour of corner nIdx (0 to 3).
+                virtual ut::Color GetVtxColor(unsigned long nIdx) const;
+                virtual void SetVtxColor(unsigned long nIdx, ut::Color color);
                 virtual void Unk2C();
                 virtual void Unk30();
                 virtual void Unk34();

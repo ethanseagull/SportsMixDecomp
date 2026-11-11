@@ -3,9 +3,12 @@
 
 #include "game/msw/CStageDodge01.hpp"
 #include "game/msw/CStageDodge02.hpp"
+#include "game/msw/CStageDodge03.hpp"
 #include "game/msw/CStageDodge04.hpp"
 #include "game/msw/CStageDodge05.hpp"
 #include "game/msw/CStageDodge07.hpp"
+#include "game/msw/CStageDodge09.hpp"
+#include "game/msw/CStageDodge11.hpp"
 #include "game/msw/CStageDodge12.hpp"
 #include "game/msw/CStageDodge15.hpp"
 #include "game/msw/CStageDodge16.hpp"
@@ -27,14 +30,7 @@ namespace msw {
 
     // Stage 02 has its own header, game/msw/CStageDodge02.hpp.
 
-    class CStageDodge03 : public CStageManDodge {
-        public:
-            CStageDodge03(bcs::CTask *pParent);
-            virtual ~CStageDodge03();
-
-        private:
-            unsigned char m_Unk244[0x88]; // size 0x2CC
-    };
+    // Stage 03 has its own header, game/msw/CStageDodge03.hpp.
 
     // Stage 04 has its own header, game/msw/CStageDodge04.hpp.
 
@@ -42,23 +38,9 @@ namespace msw {
 
     // Stage 07 has its own header, game/msw/CStageDodge07.hpp.
 
-    class CStageDodge09 : public CStageManDodge {
-        public:
-            CStageDodge09(bcs::CTask *pParent);
-            virtual ~CStageDodge09();
+    // Stage 09 has its own header, game/msw/CStageDodge09.hpp.
 
-        private:
-            unsigned char m_Unk244[0x24]; // size 0x268
-    };
-
-    class CStageDodge11 : public CStageManDodge {
-        public:
-            CStageDodge11(bcs::CTask *pParent);
-            virtual ~CStageDodge11();
-
-        private:
-            unsigned char m_Unk244[0x438]; // size 0x67C
-    };
+    // Stage 11 has its own header, game/msw/CStageDodge11.hpp.
 
     // Stage 12 has its own header, game/msw/CStageDodge12.hpp.
 

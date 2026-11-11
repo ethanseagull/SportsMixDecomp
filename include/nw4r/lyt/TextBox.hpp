@@ -23,9 +23,14 @@ namespace nw4r {
                                                  unsigned short nLen);          // 0x80
 
                 const wchar_t *GetStringBuffer() const { return mTextBuf; }
+                // Added for BossF game/boss/CCockpitBossCoder.cpp.
+                const Size &GetFontSize() const { return mFontSize; }
+                void SetFontSize(const Size &rSize) { mFontSize = rSize; }
 
             private:
-                wchar_t *mTextBuf; // 0xD8
+                wchar_t *mTextBuf;         // 0xD8
+                unsigned char m_UnkDC[0xC];
+                Size mFontSize;            // 0xE8 (name from the ogws description)
         };
     }
 }

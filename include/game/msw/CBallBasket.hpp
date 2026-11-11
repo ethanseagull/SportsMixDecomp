@@ -144,6 +144,9 @@ namespace msw {
             // Moves rPos by rVel for one step under fGravity. (argument
             // names guessed)
             void FuncMove_(bcs::FVEC3 &rPos, bcs::FVEC3 &rVel, float fGravity, float fRate);
+            // (name guessed) Sets bits of m_nBasketFlag; BasketF's ghost
+            // sets 0x10000 on the ball it passes.
+            void OnBasketFlag(unsigned long nBit) { m_nBasketFlag |= nBit; }
 
         protected:
             unsigned char m_Unk318[0x320 - 0x318];

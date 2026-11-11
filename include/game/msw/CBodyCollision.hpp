@@ -70,6 +70,21 @@ namespace msw {
             // (added for VolleyF's CC09_VOLLEY::CcKinopioBoundMushroom)
             void SetHitEffectFrameAll(float fFrame);
 
+            // Added for BasketF game/basket/CNpcGhostBasketBase.cpp (all in
+            // the DOL; argument meanings guessed). The ghost makes four
+            // units with the constructor above (BasketF read its arguments
+            // as nUnit, nType, ?, ?; BossF's reading kept). The
+            // constructor, SetCollType, SetPos, SetSize, SetPushEnable,
+            // SetPosAll, AddPosXZAll and CalcAABBAll it also uses are
+            // declared above.
+            void SetEnable(long index);
+            void SetDisable(long index);
+            void SetCatchEnable(long index);
+            void ResetTargetFlag(long index, unsigned long flag);
+            void SetBallCatchCallback(long index, BallCatchCallback pFunc, void *pArg);
+            void SetYRot(long index, float fRotY);
+            float GetRadius(long index) const;
+
         private:
             unsigned long m_Unk00[3];
     };

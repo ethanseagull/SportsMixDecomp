@@ -74,6 +74,11 @@ namespace msw {
             // word (m_Result); static like the above. The friend match
             // screen waits for 1000.
             static long GetResult();
+            // (added for DodgeF game/dodge/CCockpitDodge.cpp; static, return
+            // type and argument names guessed) Places mini telop nObjId (a
+            // CCockpitTelopMiniPos) at world position rPos as seen by camera
+            // nCamNo.
+            static long CreateTelopMiniPos(long nObjId, unsigned char nCamNo, const bcs::FVEC3 &rPos);
 
             // Id of the cockpit task, set by the constructor; 0 when there
             // is none.

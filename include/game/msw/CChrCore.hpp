@@ -59,6 +59,13 @@ namespace msw {
             // Kinds of effect for Util_SetEffect / Util_AttachEffect (values not known).
             enum SET_EFFECT_TYPE {};
             enum ATTACH_EFFECT_TYPE {};
+            // (added for HockeyF game/hockey/CChrCoreHockeyLuigi.cpp; names
+            // not known) A turn spread over frames: the DOL's RotateYParam_
+            // reads the four floats. The size is a guess (the hockey air
+            // trick work has its next member 0x14 bytes on).
+            struct ROT_LERP1 {
+                float m_afUnk[4];
+            };
             // (added for VolleyF game/volley/CChrCoreVolleyKinopio.cpp;
             // contents not known) The work of a move in a fixed direction
             // (Util_SetDirMoveParam), and how the body collision is sized.
@@ -925,6 +932,9 @@ namespace msw {
             // DOL. The yaw (radians) from the character towards a point,
             // in the XZ plane.
             float GetRotY_ToPosXZ(const bcs::FVEC3 &pos) const;
+            // DOL (added for HockeyF game/hockey/CChrCoreHockeyLuigi.cpp). The
+            // yaw towards the goal the character's team attacks.
+            float GetRotY_ToGoal() const;
 
             // (names guessed) Inline in the original; the module reads the
             // members directly (CChrMarkerBoss::AppearCheck loads the byte
@@ -932,6 +942,9 @@ namespace msw {
             long GetChrId() const { return (unsigned char)m_nChrId; }
             unsigned long GetStatusFlag() const { return m_nStatusFlag; }
             unsigned long GetDispFlag() const { return m_nDispFlag; }
+            // (name guessed) The flag word at 0xEC; BasketF's
+            // CChrDrvPadBasket ignores the pad while bit 25 or 27 is set.
+            unsigned long GetFlagEC() const { return m_UnkEC; }
             // (name guessed) BossF's CEventDemoBoss::CreateDemo sets bit 2
             // (no drawing) on each character the demo replaces by a model.
             void OnDispFlag(unsigned long nBit) { m_nDispFlag |= nBit; }
@@ -964,6 +977,9 @@ namespace msw {
             // (msw::cockpit::CSPGaugeInputDisp::SetDispAnim in the DOL passes
             // it to CGame::GetPadDefaultType and CMenuPad::IsNunchakuStyle).
             long GetPadNo() const { return m_nPadNo; }
+            // Added for BossF game/boss/CCockpitBossCoder.cpp (name guessed),
+            // see m_nCtrlPlayerNo.
+            long GetCtrlPlayerNo() const { return m_nCtrlPlayerNo; }
             // Not zero for the star player of a team (names guessed). The
             // parameter files of the sports modules call it, so it is inline
             // and emitted there.
@@ -1019,7 +1035,8 @@ namespace msw {
             // copies it).
             const bcs::FVEC3 &GetPos();
             // The same for a const character (GetPos__Q23msw8CChrCoreCFv;
-            // msw::CStgGmk_WaterPillarCluster::OnUpdate in the DOL).
+            // msw::CStgGmk_WaterPillarCluster::OnUpdate in the DOL; BasketF's
+            // CChrDrvPadBasket::MethdTrickMove calls it too).
             const bcs::FVEC3 &GetPos() const;
             float GetRotY() const;
             // The goal the character's team attacks, as a point.
@@ -1040,7 +1057,25 @@ namespace msw {
             // (names guessed) Inline in the modules.
             long DriverGetNo() const { return m_nDriver; }
             bcs::CMdlObj *GetMdl() const { return m_pMdl; }
-            long GetComLevel() const { return m_nComLevel; }
+            // (name guessed) The word at 0x230, read directly by
+            // CChrManHockeyCS::CanbeTurnOver_. Not GetComLevel: the DOL has a
+            // GetComLevel__Q23msw8CChrCoreCFv that returns the team's level
+            // instead (CGame::GetTeamComLevel of m_nTeamNo, truncated), called
+            // by CChrCoreHockeyLuigi.
+            long GetComLevelWork() const { return m_nComLevel; }
+            // DOL. The computer level of the character's team (see above).
+            long GetComLevel() const;
+
+            // Added for BasketF game/basket/CChrDrvPadBasket.cpp (all in the
+            // DOL; return types guessed). Not zero while the character is in
+            // the named step of its play (IsStepAirTrick is below).
+            int IsStepCatch() const;
+            int IsStepPassCatch() const;
+            int IsStepTrickMove() const;
+            int IsStepNormalShoot() const;
+            int IsStepCatchDunk() const;
+            // Not zero when the character holds a stocked item.
+            int IsHaveStockItem() const;
 
             // Added for BossF game/boss/CChrDrvPadBoss.cpp (names guessed).
             // Inline in the module: the pad driver reads both words directly.
@@ -1117,6 +1152,8 @@ namespace msw {
             // Stops the effect in slot nSlot at once.
             void Eff_StopForce(long nSlot);
             void AnimSetSpeed(unsigned long nSlot, float fSpeed);
+            // Plays sound nSe at pPos (null: at the character). (BasketF had
+            // it returning void; VolleyF's return type kept.)
             unsigned long PlaySePos(long nSe, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
             void SetMoveMotStep_(long nStep);
             // The body collision's push settings.
@@ -1128,6 +1165,9 @@ namespace msw {
             unsigned long m_Unk60;
             CChrDrv *m_pDriver[2];       // 0x64 (count guessed from the index's place)
             long m_nDriver;              // 0x6C, index of the driver in use, negative for none
+        public:
+            // (public: BasketF's game/basket/CChrDrvPadBasket.cpp reads 0x70
+            // and 0x74 directly.)
             // 0x70 (name guessed): the yaw the pad's stick directions are
             // relative to; CChrDrvPadBoss adds it to the stick angle.
             float m_fCamRotY;
@@ -1142,6 +1182,7 @@ namespace msw {
             // msw::CStgGmk_WaterPillar_Act::OnBodyPush (DOL) pushes the
             // character back by its movement since.
             bcs::FVEC3 m_PrevPos;
+        protected:
             unsigned char m_Unk88[0x90 - 0x88];
             // 0x90 (name guessed): the character's model; IsDisable is true
             // while it is null. CChrManHockey::ArtsStart_ fades it out.
@@ -1172,7 +1213,12 @@ namespace msw {
             // 0x179 (name guessed): the CChrManBoss::CreateDriver_ stores the
             // entry of SetCamIdAssign_'s table here.
             signed char m_nCamNo;
-            unsigned char m_Unk17A[0x186 - 0x17A];
+            unsigned char m_Unk17A[0x17C - 0x17A];
+            // 0x17C (name guessed): which human player (0 to 3) controls the
+            // character; the cockpits pick the "1P" to "4P" label with it
+            // when IsPadCtrl() is set. Read signed.
+            signed char m_nCtrlPlayerNo;
+            unsigned char m_Unk17D[0x186 - 0x17D];
             // 0x186 (name guessed): the model node effects attach to by
             // default (the volley characters pass it to Eff_CreateAttach).
             unsigned short m_nEffNode;
@@ -1199,6 +1245,13 @@ namespace msw {
             // The rest, up to the size of 0x574: the DOL constructor writes
             // up to 0x570 and CChrCoreBoss's own members start at 0x574.
             unsigned char m_Unk234[0x574 - 0x234];
+    };
+
+    // The work the MethdRDB slots take. Only the first word is known: BasketF's
+    // CChrDrvPadBasket clears it on the stack before the call (one word of
+    // stack, so the size may be just that). (member name guessed)
+    struct CChrCore::INPUT_WORK {
+        long m_nUnk00;
     };
 }
 

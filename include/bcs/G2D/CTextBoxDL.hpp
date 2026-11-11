@@ -17,6 +17,10 @@ namespace bcs {
                 // the text takes, ignoring line feeds (name from the
                 // symbol; returned by value).
                 nw4r::ut::Rect GetTextDrawRectNoLineFeed();
+                // Added for BossF game/boss/CCockpitBossCoder.cpp: draws with
+                // the font in resource pFontRes (a .brfnt image; return type
+                // guessed). Resets the font size, which callers restore.
+                void SetFontByResource(void *pFontRes);
         };
     }
 }

@@ -7,11 +7,13 @@
 #include "game/msw/CC_DATA.hpp"
 #include "game/msw/CChrDrv.hpp"
 #include "nw4r/g3d/ResFile.hpp"
+#include "revolution/gx/GXEnum.h"
 
 struct _GXTexObj;
 
 namespace bcs {
     class CMdlObj;
+    struct BCS_Color;
     class CTask;
 }
 
@@ -1231,6 +1233,14 @@ namespace msw {
             void SetCollBodyPushPower_(long nPower);
             void SetCollBodyPushType_(BODY_COLL_SIZE_SET_TYPE type, float);
             void SetCollBodyPushRank_(long nRank);
+            // Added for BasketF game/basket/CChrCoreBasketSlime.cpp (DOL;
+            // parameter meanings guessed): the size (radius, height and a
+            // third value) and offset of the body collision's push unit,
+            // and the colours of the effect in slot nSlot.
+            void SetCollBodyPushSize_(float fRadius, float fHeight, float);
+            void SetCollBodyPushPos_(float fX, float fY, float fZ);
+            void Eff_SetPointLightColor(long nSlot, bcs::BCS_Color color0, bcs::BCS_Color color1);
+            void Eff_SetMdlKColorReg(long nSlot, _GXTevKColorID id, bcs::BCS_Color color);
             // Added for BasketF game/basket/CChrCoreBasketYoshi.cpp (DOL;
             // return type guessed). The effect in slot nSlot; null when
             // there is none.

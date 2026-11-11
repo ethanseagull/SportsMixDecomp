@@ -31,13 +31,16 @@ BasketF CtorStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.0 register ch
 BasketF CtorStateAttach__Q23msw16CBallBasketFruitFv near 99.4 float register choice for the tilt-centre and 0/1 axis constants; same loads, operations and stores
 BasketF CtorStateCatch__Q23msw19CNpcGhostBasketBaseFv near 99.1 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CtorStateDisappears__Q23msw19CNpcGhostBasketBaseFv near 99.6 register choice / schedule only (UpDateCollBody_: argument load order).
+BasketF CtorStateJumpUpper__Q23msw19CChrCoreBasketSlimeFv near 95.5 95.5%: second float of the const param struct read through a copy of the base register; same values/stores
 BasketF CtorStateMotPlay__Q23msw19CNpcGhostBasketBaseFv near 98.9 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CtorStateMove__Q23msw19CNpcGhostBasketBaseFv near 99.7 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CtorStatePursuit__Q23msw19CNpcGhostBasketBaseFv near 98.4 register choice / schedule only (UpDateCollBody_: argument load order).
+BasketF CtorStateSmashCut__Q23msw19CChrCoreBasketSlimeFv near 95.5 95.5%: second float of the const param struct read through a copy of the base register; same values/stores
 BasketF CtorStateSmashCut__Q23msw19CChrCoreBasketYoshiFv near 99.5 instruction order and registers only
 BasketF DetectMapHit___Q23msw14CCollManBasketFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 98.4 98.4%, schedule only: the 0.0f load at entry is scheduled later and the two-court gap calculation assigns float registers differently; constants, calls, memory accesses and branch targets identical
 BasketF EffectCoinGetCreate___Q23msw17CGimmickManBasketFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 95.4 95.4%: original reloads m_pMdl before CreateAttachEffect (no store between), 2*20 multiply scheduled differently; register/schedule only, same difference as the recorded Volley/Hockey/Dodge copies
 BasketF GameResult_In__Q23msw14CCockpitBasketFv near 99.0 99.0%: register choice only.
+BasketF GetArtsEffectUnit__Q23msw19CChrCoreBasketSlimeFl near 90.9 90.9%: same colour values/stores into static SLIME_COL_SET; array base addressing (stwu @l vs addi) and one more saved register, as Yoshi GetEffectUnit
 BasketF GetBgCollRadiusXZ__Q23msw16CBallBasketFruitCFv near 99.3 float register choice for 0.23f and the scale array
 BasketF GetBgCollRadius__Q23msw16CBallBasketFruitCFv near 99.3 float register choice for 0.23f and the scale array
 BasketF GetEffectUnit__Q23msw19CChrCoreBasketYoshiFl near 89.7 same values/order into the static YOSHI_COL_SET array; only the array base addressing (stwu @l vs separate addi) and one more saved register differ
@@ -59,12 +62,14 @@ BasketF LoopStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.4 register ch
 BasketF LoopStateCatch__Q23msw19CNpcGhostBasketBaseFv near 99.6 one dead branch.
 BasketF LoopStateDisappears__Q23msw19CNpcGhostBasketBaseFv near 99.8 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateGetLooseBall__Q23msw19CNpcGhostBasketBaseFv near 99.4 original compares MoveRun's unused result.
+BasketF LoopStateJumpUpper__Q23msw19CChrCoreBasketSlimeFv near 99.7 99.7%: r3/r4 choice for the work pointer only
 BasketF LoopStateMotPlay__Q23msw19CNpcGhostBasketBaseFv near 99.5 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateMove__Q23msw19CNpcGhostBasketBaseFv near 99.7 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStatePassCatch__Q23msw19CNpcGhostBasketBaseFv near 99.7 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStatePass__Q23msw19CNpcGhostBasketBaseFv unverified 99.3 99.3%: original calls MethdSetPassCatchJumpWaitFrame (CChrCoreBasket slot 0xA78, (FVEC3&, float)) without loading f1, so the float it passes is whatever f1 held; ours passes the pass frame.
 BasketF LoopStatePursuit__Q23msw19CNpcGhostBasketBaseFv near 99.8 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateSleep__Q23msw19CNpcGhostBasketBaseFv near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
+BasketF LoopStateSmashCut__Q23msw19CChrCoreBasketSlimeFv near 99.7 99.7%: r3/r4 choice for the work pointer only
 BasketF LoopStateSmashCut__Q23msw19CChrCoreBasketYoshiFv near 85.9 control flow, calls, constants and fields match; ours keeps one .rodata base register where the original reloads lis/@l per constant (toolchain.md literal pooling), and cmpwi vs mr. on IsAnmFlipPlay
 BasketF LoopStateSmashCut__Q23msw20CChrCoreBasketKuromaFv near 94.5 stack slots of vector temporaries, register choice, fmadds operand order, one extra fmr in the original
 BasketF LoopStateSmashCut__Q23msw21CChrCoreBasketKinopioFv near 98.5 two local vectors in different stack slots; register renumbering and load order
@@ -120,6 +125,7 @@ BasketF SubOffDribble___Q23msw16CChrDrvPadBasketFv unverified 99.0 99.0% after t
 BasketF SubOffNotHaveBall___Q23msw16CChrDrvPadBasketFv unverified 88.4 88.4% after the shared CChrDrvPad header dropped the pool-off stand-in (it lowered BossF/HockeyF/VolleyF pad drivers): float constants via one base register instead of per-literal lis; otherwise as before.
 BasketF SubStateArtsShotFireBullet___Q23msw19CChrCoreBasketKoopaFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICKl near 98.8 98.8%: float register choice for -1.0/0.0 and FVEC3Scale temporaries, one stfs vs ps_madd order in inlined BCS_Vec_Normalize, register of the new CcFireBall pointer; constants, calls, accesses, branches identical
 BasketF SubStateArtsShotFireBullet___Q23msw19CChrCoreBasketPeachFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICKl near 93.6 93.6%: original computes the bomb count at run time (li 5; srawi) and tests nRest>0, ours folds both to the constant 2 / always-true (same values); hence r26 vs r27 saved, one stack-slot swap, register choice. .rodata 0.5/-1 placed before the 0x4330 double in ours
+BasketF SubStateArtsShotFireBullet___Q23msw19CChrCoreBasketSlimeFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICKl near 99.6 99.6%: team byte loaded before player byte in the original; register renaming
 BasketF SubStateArtsShotFireBullet___Q23msw21CChrCoreBasketKinopioFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICKl near 99.6 register choice only
 BasketF SubStateArtsShotIsReadyArtsShot___Q23msw20CChrCoreBasketKuromaFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK near 100.0 100% by objdiff; one lfs reads the .rodata pool at +0x5C in the original vs +0x58 in ours: the same constant (10.0f for Start) at a swapped pool address, as in SubStateArtsShotPlayTrickMotion_
 BasketF SubStateArtsShotPlayTrickMotion___Q23msw20CChrCoreBasketKuromaFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK near 99.1 same constants 5.0f/10.0f read from swapped .rodata pool addresses (pool order)

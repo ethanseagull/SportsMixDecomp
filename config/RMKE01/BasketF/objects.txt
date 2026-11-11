@@ -74,3 +74,4 @@ Equivalent game/basket/CComManBasket.cpp
 Equivalent game/basket/CGoalObjBasket.cpp
 Equivalent game/basket/CGimmickManBasket.cpp
 Equivalent game/basket/CArrowSignalBasket.cpp
+Equivalent game/basket/CChrCoreBasketSlime.cpp

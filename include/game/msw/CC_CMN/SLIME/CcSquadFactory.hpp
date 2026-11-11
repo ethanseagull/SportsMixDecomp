@@ -24,13 +24,21 @@ namespace msw {
                     // the slime file (fn_801D1130, fn_801D112C).
                     virtual void Main() {}
                     virtual void Disp() {}
-                    // fn_801CC0D0 (name guessed): empty.
-                    virtual void Update();
+                    // fn_801CC0D0: empty here. Its name and parameters are
+                    // those of the override in BasketF
+                    // (AnimPlay__Q33msw11CC16_BASKET20CcSquadFactoryBasketFlif):
+                    // effect slot nEffSlot and the squad motions (meanings
+                    // guessed).
+                    virtual void AnimPlay(long nEffSlot, int bLoop, float fInterFrame);
+
+                    // Stops the squad model nIndex (0 to 2).
+                    void KillChild(long nIndex);
 
                 private:
                     // fn_801CBF90 (name guessed).
                     void Create_(CChrCore *pChr, const float *pfSpeed);
 
+                protected:
                     unsigned long m_aTaskId[SQUAD_NUM]; // 0x34: ids of the squad tasks
             };
         }

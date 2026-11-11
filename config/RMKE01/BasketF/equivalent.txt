@@ -80,6 +80,7 @@ BasketF LoopStateDisappears__Q23msw19CNpcGhostBasketBaseFv near 99.8 register ch
 BasketF LoopStateGameSet__Q23msw27CGameBasketHungryBossPackunFv near 99.0 register allocation only: in the inlined bcs::CFsmQueue::FsmqPush the old tail and the wrapped next index swap registers; same instructions and memory accesses
 BasketF LoopStateGameSetup__Q23msw27CGameBasketHungryBossPackunFv near 98.2 register allocation only: in the inlined bcs::CFsmQueue::FsmqNext the head+1 value and the queue size swap registers; same instructions and memory accesses
 BasketF LoopStateGetLooseBall__Q23msw19CNpcGhostBasketBaseFv near 99.4 original compares MoveRun's unused result.
+BasketF LoopStateIdle__Q23msw19CNpcGhostBasketBaseFv near 99.3 register allocation only (diff.py: registers); was 100% before the 2026-11-11 merge of main's CChrCore/CNpcBase header changes
 BasketF LoopStateJumpUpper__Q23msw19CChrCoreBasketSlimeFv near 99.7 99.7%: r3/r4 choice for the work pointer only
 BasketF LoopStateMotPlay__Q23msw19CNpcGhostBasketBaseFv near 99.5 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateMove__Q23msw19CNpcGhostBasketBaseFv near 99.7 register choice / schedule only (UpDateCollBody_: argument load order).
@@ -121,6 +122,7 @@ BasketF OnPostInitialize__Q23msw14CStageBasket10Fv near 99.9 99.9%: CameraData l
 BasketF PlayAnimScore__Q23msw19CCockpitBasketCoderFli near 96.0 register allocation only: the effect handle slot is reached through a this+0x20*i pointer in ours, an offset register (li 0 / addi 0x20) in the original; same calls, constants, memory accesses and branches
 BasketF PlayCombination___Q23msw13CChrManBasketFPCQ23msw8CChrCore near 99.2 register allocation/instruction order only
 BasketF Reset__Q23msw16CBallBasketFruitFv near 96.4 integer register choice in the copy of the local scale array from the constant table, and the schedule of the vtable load for GetCollPushRadiusDefault
+BasketF Reset__Q23msw19CNpcGhostBasketBaseFv near 99.7 register allocation only (diff.py: registers); was 100% before the 2026-11-11 merge of main's CChrCore/CNpcBase header changes
 BasketF ScoreBoard_Loop__Q23msw19CCockpitBasketPauseFv near 98.0 register allocation only: the original keeps the basket result page in r2 (the table base register) and the result-chr page in r7, ours r7/r8, saving one more register in stmw/lmw; same loads, stores, calls and branches
 BasketF ScoreInWait__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 BasketF ScoreIn__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28

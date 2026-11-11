@@ -18,6 +18,9 @@ namespace msw {
                 void Stop(unsigned long nPadMask);
                 // Counts the wait times down by the frame time.
                 void MainLoop();
+                // (added for MenuF game/menu/unit_61C00.cpp; inline, no
+                // symbol)
+                void SetEnable(int bEnable) { m_bEnable = bEnable; }
 
                 static CVibEff s_Instance;
 

@@ -28,6 +28,15 @@ namespace msw {
                 void Play(nw4r::g3d::ResAnmTexSrt res, float);
                 // Sets or restores konstant colours 0 and 1.
                 void SetGoldColor(int bGold);
+                // (name guessed) The spin: angles (radians) and the top
+                // speed, with the spin mode reset. Inline in msw::
+                // SelectMenu::CCourtBall::Set.
+                void SetSpin(const bcs::FVEC3 &vRot, float fRotSpeedMax)
+                {
+                    m_vRot = vRot;
+                    m_fRotSpeedMax = fRotSpeedMax;
+                    m_nRotMode = 0;
+                }
 
             private:
                 // (guessed) Konstant colour 0, and the alpha of konstant

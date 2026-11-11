@@ -42,6 +42,8 @@ namespace nw4r {
             public:
                 explicit ResTex(void *p = 0) : m_pData(static_cast<ResTexData *>(p)) {}
 
+                bool IsValid() const { return m_pData != 0; }
+
             private:
                 ResTexData *m_pData; // 0x00
         };

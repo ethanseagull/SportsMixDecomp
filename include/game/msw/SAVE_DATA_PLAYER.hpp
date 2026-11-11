@@ -15,6 +15,10 @@ namespace msw {
         // (added for MenuF game/menu/CPlayMode.cpp) Forgets the Mii chosen
         // on the character select screen.
         void ClearSelectMii();
+        // (added for MenuF game/menu/CCharaLevelStar.cpp) For game kind
+        // nGameKind (CSelectMenu::m_nGameKind): the computer level (0 to
+        // 3) the level window starts from. Meaning guessed from that use.
+        unsigned char IsDifficult(long nGameKind);
 
         unsigned char m_Unk0000[0x18];
         // 0x18 to 0x2B. (names guessed; added for MenuF

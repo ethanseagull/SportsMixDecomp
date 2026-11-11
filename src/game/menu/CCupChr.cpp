@@ -19,13 +19,6 @@
 #include "game/msw/SelectMenu/CCourtCharaObj.hpp"
 #include "game/msw/SelectMenu/CCourtTableSetObj.hpp"
 
-// file-level optimization pragma: loop unrolling off. The constructor builds
-// its one-element ResFile array with a plain do-while in the original; with
-// unrolling on, the compiler peels it into a store plus a dead mtctr/bdnz loop.
-// The compiler has no command-line switch for this (-opt has no unroll
-// option), so the original most likely carried the pragma. CCourtChr and
-// CBgChr show the same loop. Other compilers ignore it.
-#pragma opt_unroll_loops off
 
 // The names in this namespace are guesses; the objects have no symbols.
 namespace {

@@ -23,6 +23,9 @@ namespace bcs {
                 // of the word at 0x50 of each emitter. msw::cockpit::
                 // CEffectSet::SetDispFlag calls it through a member pointer.
                 void SetDispFlag(int bDisp);
+                // (DOL; parameter name guessed) MenuF msw::SelectMenu::
+                // CCourtChr calls it through a member pointer with 4 frames.
+                void SetDelayTime(float fTime);
         };
     }
 }

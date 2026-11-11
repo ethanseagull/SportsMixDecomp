@@ -8,7 +8,7 @@
 // bcs::CPool, bcs::CList) are all inline, so their vtables and weak
 // functions are emitted here too.
 //
-// The original file was StageVolley11.cpp: the net class below is in the
+// The file is StageVolley11.cpp, as in the original: the net class below is in the
 // anonymous namespace of that name (__vt__Q227@unnamed@StageVolley11_cpp@
 // 17CStageNetVolley11).
 #include "game/msw/CStageVolley11.hpp"

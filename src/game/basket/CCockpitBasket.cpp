@@ -1053,6 +1053,7 @@ void msw::CCockpitBasket::GamePause_Out()
 
 void msw::CCockpitBasket::GameResult_In()
 {
+    long nPeriod;
     static const long TeamMax = 2;
     static const long titleStrLen = 128;
     long aTotal[2];
@@ -1084,7 +1085,7 @@ void msw::CCockpitBasket::GameResult_In()
     if (pScore != 0) {
         Build(nObjId);
         long nPeriodNum = m_nPeriodNum;
-        long nPeriod = m_nPeriod;
+        nPeriod = m_nPeriod;
         pScore->SetCountScore(m_aPeriodScore[0], m_aPeriodScore[1], nPeriod, nPeriodNum);
         pScore->SetTextNext(nPeriodNum, nPeriod);
         pScore->SetTotalPoint(aTotal[0], aTotal[1]);

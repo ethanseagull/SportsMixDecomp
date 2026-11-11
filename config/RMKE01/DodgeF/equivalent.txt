@@ -1,5 +1,6 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
 DodgeF AddCoinValue__Q23msw17CCockpitDodgeCoinFlll near 98.8 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
+DodgeF CalcPos___Q210CC09_DODGE22CcKinopioBoundMushroomFv near 99.4 register choice in the paired-single vector add and angle wrap loops (VolleyF copy same)
 DodgeF CallbackBodyDamage___Q23msw21CItemDodgeBombDD_BaseFPQ23msw13CCollBodyUnitPCQ23msw12CCollAtkUnitRCQ23bcs5FVEC3 near 99.0 99.0%: float register choice and scheduling only.
 DodgeF CallbackBodyPush___Q23msw21CItemDodgeBombDD_BaseFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 92.4 92.4%: the already-moving-away skip is ble+b in the original, bgt in ours (same branch); float registers.
 DodgeF CameraEvent__Q23msw15CEventDemoDodgeFPCcllf near 98.8 98.8%: case 0 swaps the saved registers of the CGame instance and the new task; one relocation names the .bss section instead of m_hDamageLifeGauge (same address)
@@ -18,11 +19,13 @@ DodgeF GetParam_FlashColor__Q23msw13CStageDodge16CFv unverified 63.3 Same values
 DodgeF GetTeamOuterFieldBack__Q23msw13CStageDodge03CFll near 99.8 register choice / operand order only.
 DodgeF GetTeamOuterFieldBack__Q23msw13CStageDodge11CFll near 99.8 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
 DodgeF IsValid__Q33bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>6HandleCFv near 96.4 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
+DodgeF LoopStateAirTrick__Q23msw18CChrCoreDodgeLuigiFv near 99.6 r3/r4 swapped in the inlined FsmqGetWork_ (queue head vs work pointer); same as HockeyF Luigi
 DodgeF LoopStateThrow__Q23msw21CItemDodgeBombDD_BaseFv near 95.8 95.8%: original converts the flash grey level with a quantized psq_st (u8, clamps); ours uses a plain (unsigned char) cast, same value for the in-range 55..255 it computes; frame 0x30 vs 0x20, colour bytes stored in another order, two extra frsp on single values, two constants loaded in the other order.
 DodgeF Main__Q23msw17CCockpitDodgeCoinFv near 98.8 register choice only (as CCockpitHockeyCoin::Main): loop counters and pointer temporaries in different saved registers
 DodgeF Main__Q23msw9CTelopOutFv near 99.1 99.1%: character number and telop id in swapped registers inside the out-telop inline
 DodgeF Main___Q23msw13CStageDodge05Ff near 96.2 96.2%: register choice; raft loop uses index offsets in the original, advancing pointers in ours; period != 0.0f compare operands swapped; game-flag bit-0 test is clrlwi + double cntlzw in the original, one clrlwi. in ours (same as CStageBasket05::Main_). Same branches and values.
 DodgeF Main___Q23msw13CStageDodge11Ff near 99.4 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
+DodgeF MovePos___Q210CC09_DODGE22CcKinopioBoundMushroomFf near 99.6 fmadds multiplicands swapped (register choice)
 DodgeF OnCalcSum__Q23msw13CStageDodge03CFv near 98.3 register choice / operand order only.
 DodgeF OnCalcSum__Q23msw13CStageDodge07CFv near 97.7 97.7%: ours adds one redundant empty-list check (cmpwi/beq) before jumping to the loop's own test; same result.
 DodgeF OnGimmickCancel__Q23msw13CStageDodge05Fv near 99.1 99.1%: float register allocation only.
@@ -51,6 +54,7 @@ DodgeF SetLifeGaugeState__Q23msw13CCockpitDodgeFlllll near 99.9 99.9%: one regis
 DodgeF Set__Q23msw17CCockpitDodgeCoinFv near 99.3 register choice only (as CCockpitHockeyCoin::Set)
 DodgeF StartDamageDemo__Q23msw11EvDemoDodgeFv near 97.8 97.8%: the original keeps a cmpwi 1/beq to the switch end for the empty case 1 plus one dead b; equivalent branch form
 DodgeF Start__Q33msw13CStageDodge0310CWaterInfoFli near 93.4 original also computes max(WATER_NUM,0) with srawi/andc as the loop bound after the >0 guard; same iteration count; registers.
+DodgeF SubStateArtsShotFireBullet___Q23msw20CChrCoreDodgeKinopioFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 97.9 register choice and order of the float loads/stores setting up the court rectangle and start position (VolleyF CreateBoundMushroom_ same)
 DodgeF UpdateCourtCenter___Q23msw13CStageDodge03Ff near 96.4 register choice / operand order only.
 DodgeF UpdateMdl__Q23msw13CStageDodge13FUlf near 98.1 register choice and common-subexpression reuse only (as CStageBasket13::UpdateMdl): in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls
 DodgeF UpdatePos___Q33msw13CStageDodge0310CWaterInfoFv near 90.6 float registers and instruction order; frame and values match.

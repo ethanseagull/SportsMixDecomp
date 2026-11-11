@@ -21,6 +21,9 @@ namespace msw {
         public:
             // (name guessed)
             const bcs::FVEC3 &GetPos() const { return m_Pos; }
+            // (name guessed) The velocity; msw::CStgGmk_Trolley::GetVel
+            // reads it.
+            const bcs::FVEC3 &GetVel() const { return m_Vel; }
 
             void SetFront(const bcs::FVEC3 &rFront);
 
@@ -92,7 +95,8 @@ namespace msw {
 
         private:
             unsigned long m_nFlagC8;     // 0xC8
-            unsigned char m_UnkCC[0x34]; // 0xCC
+            bcs::FVEC3 m_Vel;            // 0xCC (name guessed)
+            unsigned char m_UnkD8[0x28]; // 0xD8
             bcs::FVEC3 m_Unk100;         // 0x100
             bcs::FVEC3 m_Unk10C;         // 0x10C
             unsigned char m_Unk118[0x2C]; // 0x118

@@ -15,6 +15,9 @@ namespace bcs {
     // vector of length len along +Z turned by rotY (radians) about Y. In the
     // DOL.
     void BCS_VecZ_RotY(FVEC3 &rOut, float len, float rotY);
+    // (added for BasketF game/basket/CChrCoreBasketKinopio.cpp) The same
+    // for a vector of length len along X.
+    void BCS_VecX_RotY(FVEC3 &rOut, float len, float rotY);
 
     // (argument names guessed) rOut = rIn turned by rotY (radians) about Y.
     // In the DOL.

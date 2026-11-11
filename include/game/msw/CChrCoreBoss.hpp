@@ -9,6 +9,7 @@ namespace msw {
     namespace CC09_BOSS {
         class CcKinopioReceiver;
     }
+    class CNpcBase;
 
     // The boss-mode character core, and one class per character.
     //
@@ -33,6 +34,12 @@ namespace msw {
             // work of the side step and of the jump shot states.
             struct STATE_WORK_SIDESTEP;
             struct STATE_WORK_JUMP_SHOOT;
+            // (added for game/boss/CStickObj.cpp, which defines it) The
+            // work of the shoot stance state.
+            struct STATE_WORK_SHOOT_STANCE;
+            // (added for game/boss/unit_5FF80.cpp, which defines it) The
+            // work of the dunk state.
+            struct STATE_WORK_DUNK;
 
             CChrCoreBoss();
             virtual ~CChrCoreBoss();
@@ -223,15 +230,15 @@ namespace msw {
             virtual int SubStateReceiveDoProcDiveReceive_(STATE_WORK_RECEIVE *); // 0xD34 (not zero when the state is over)
             virtual void SubStateReceiveDoDiveReceiveDiveStart_(STATE_WORK_RECEIVE *); // 0xD38
             virtual void SubStateAirTrickStartTrick_(STATE_WORK_AIR_TRICK *); // 0xD3C
-            virtual float SubStateAirTrickSetTrickFrameParam_(STATE_WORK_AIR_TRICK *, long); // 0xD40
+            virtual void SubStateAirTrickSetTrickFrameParam_(STATE_WORK_AIR_TRICK *, long); // 0xD40
             virtual void SubStateAirTrickSetTrickJumpParam_(STATE_WORK_AIR_TRICK *, long); // 0xD44
-            virtual float SubStateAirTrickSetTrickMoveParam_(STATE_WORK_AIR_TRICK *, long); // 0xD48
+            virtual void SubStateAirTrickSetTrickMoveParam_(STATE_WORK_AIR_TRICK *, long); // 0xD48
             virtual float SubStateAirTrickGetTrickMotFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD4C
             virtual float SubStateAirTrickGetTrickDoFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD50
             virtual float SubStateAirTrickGetTrickRotFrame_(STATE_WORK_AIR_TRICK *); // 0xD54
             virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD58
             virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD5C
-            virtual int SubStateAirTrickStartBallAdsorb_(STATE_WORK_AIR_TRICK *, CBall *); // 0xD60
+            virtual void SubStateAirTrickStartBallAdsorb_(STATE_WORK_AIR_TRICK *, CBall *); // 0xD60
             virtual float SubStateAirTrickGetBallAdsorbFrame_(STATE_WORK_AIR_TRICK *); // 0xD64
             virtual void SubStateAirTrickDoBallAdsorb_(STATE_WORK_AIR_TRICK *); // 0xD68
             virtual void SubStateAirTrickTrgBallAdsorbEnd_(STATE_WORK_AIR_TRICK *); // 0xD6C
@@ -279,6 +286,10 @@ namespace msw {
             // two are in other units; return types and meanings guessed).
             // Not zero when the shoot stance may be left for another action.
             int SubStateShootStanceCanbeCancel_() const;
+            // (added for game/boss/CStickObj.cpp) Lets the shoot stance's
+            // stick fade out over fFrame frames, or deletes it at once when
+            // fFrame is not positive, and forgets it.
+            void StickObjDestroy_(float fFrame);
             // How a receive of the target ball would be made (1: diving,
             // 4: none possible). pWork may be null.
             long SubStateReceiveChoiceProcType_(STATE_WORK_RECEIVE *pWork);
@@ -293,6 +304,31 @@ namespace msw {
             void SetReceiveEndureWork_(CBall *pBall, STATE_WORK_RECEIVE *pWork);
             // Not zero when the stocked item may be used now.
             int CanbeUseItem_(CBall *pBall);
+            // Added for game/boss/unit_5FF80.cpp (the dunk and air trick
+            // states; names from the symbols, meanings guessed). The boss,
+            // null when there is none.
+            const CNpcBase *Util_GetBoss_() const;
+            // Sets rRot up to turn to fRotY over fFrame frames.
+            void CalcRotParam_(ROT_LERP1 &rRot, float fRotY, float fFrame);
+            void ClearMoveParamWork_(CC_DATA::CHR_PARAM::MOVE_PARAM &rParam);
+            // The dunk: the point aimed at (rTarget, rBase) and the point
+            // the character homes in on (rMid, its y the range), fFrame
+            // frames into the jump.
+            void GetAirTrickTargetPos_(bcs::FVEC3 &rTarget, bcs::FVEC3 &rBase, bcs::FVEC3 &rMid, float fFrame) const;
+            void CtorStateDunk_(STATE_WORK_DUNK *pWork);
+            void SubStateDunkCtor_(STATE_WORK_DUNK *pWork, float fFrame, long nType, float, long nMot);
+            // (inline in the original) The dunk's loop, and one step of its
+            // run-up towards the target.
+            void LoopStateDunk_(STATE_WORK_DUNK *pWork);
+            void DunkHomingMove_();
+            void SubStateDunkCmnLandInit_(STATE_WORK_DUNK *pWork);
+            void SubStateDunkCmnMove_(STATE_WORK_DUNK *pWork);
+            void SubStateDunkCmnDunk_(STATE_WORK_DUNK *pWork);
+            void SubStateDunkCmnLand_(STATE_WORK_DUNK *pWork);
+            void Util_DunkStart_(long nMot, long, float, long);
+            // (inline in the original) One step of the air trick's jump and
+            // of its move; returns what Util_DoJumpMoveEX returned.
+            int SubStateAirTrickDoJumpMove_(STATE_WORK_AIR_TRICK *pWork);
 
         protected:
             // Not mapped yet. The size, 0x818, is what CChrManBoss::CreateObj_
@@ -309,7 +345,10 @@ namespace msw {
             // height above the character a receive in each pose takes the
             // ball at (CChrCoreBossSiroma adds GetPosY to it).
             float m_afReceiveHeight[8];
-            unsigned char m_Unk754[0x80C - 0x754];
+            unsigned char m_Unk754[0x808 - 0x754];
+            // 0x808 (name guessed): the task id of the shoot stance's stick
+            // (CHR_CORE_BOSS::CStickObj), 0 when there is none.
+            unsigned long m_hStickObj;
             // 0x80C, 0x810 (names guessed): the character's full and
             // remaining life in the boss battle (GetVsBossHPRate).
             float m_fHPMax;

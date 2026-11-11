@@ -45,10 +45,10 @@ namespace msw {
             virtual void DetachItemEffect();
             virtual void SetPassMode(const bcs::FVEC3 &, long, float, long, long, int, int, unsigned long);
             virtual void SetShootMode(long, float, long, long, unsigned long);
-            virtual const bcs::FVEC3 &GetShootStartPos() const;               // inline
+            virtual bcs::FVEC3 GetShootStartPos() const;               // inline
             virtual long GetShootCalcType() const;                            // inline
             virtual float GetShootCurveValue() const;                         // inline: m_fShootCurveValue
-            virtual void CalcJumpShootVel(const bcs::FVEC3 &, const bcs::FVEC3 &, bcs::FVEC3 &, float &);
+            virtual float CalcJumpShootVel(const bcs::FVEC3 &, const bcs::FVEC3 &, bcs::FVEC3 &, float &);
             virtual void DoExplode(float, float);
             virtual int IsAirBall() const;
             virtual void OnBaPad0Shot();

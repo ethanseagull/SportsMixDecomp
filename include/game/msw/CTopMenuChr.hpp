@@ -15,10 +15,12 @@ namespace nw4r {
 
 namespace msw {
 
+    class CTopMenuChrObj;
+    class CBBoxObj;
+
     // The characters of the sports shown on the top menu (MenuF). Size 0x64
-    // (layout.py). Only the members msw::SelectMenu::CBgChr uses; their
-    // bodies are in another MenuF unit. Names after the mangled names;
-    // return and argument meanings are guesses.
+    // (layout.py). Defined in game/menu/CTopMenuChrObj.cpp. Names after the
+    // mangled names; return and argument meanings are guesses.
     class CTopMenuChr : public bcs::CTask {
         public:
             CTopMenuChr(bcs::CTask *pParent);
@@ -34,7 +36,8 @@ namespace msw {
             void AttachTo(long nChr, bcs::CScnObj *pParent, long nNode);
             // Turns to the character of game nGame (-1: none) in fFrame frames.
             void SetSelectGame(long nGame, float fFrame);
-            void PrepareDecideAnim();
+            // Not zero when a character holds its decide motion.
+            int PrepareDecideAnim();
             int IsReadyDecideAnim() const;
             void PlayDecideAnim(float fFrame);
             int IsEndDecideAnim() const;
@@ -43,8 +46,18 @@ namespace msw {
             // The screen box of character nChr; 1 when it is valid.
             long GetBBoxInfo(long nChr, nw4r::math::AABB &rBox);
 
+            // The number of characters: the four sports and the mixed
+            // games.
+            enum {
+                CHR_NUM = 5
+            };
+
         private:
-            unsigned char m_Unk34[0x30]; // 0x34
+            CTopMenuChrObj *m_pChrObj[CHR_NUM]; // 0x34
+            // 0x48, the screen box of each character, attached to its model
+            CBBoxObj *m_pBBox[CHR_NUM];
+            long m_nSelectGame; // 0x5C, -1 for none
+            int m_bMixDisp;     // 0x60, the mixed games' character is shown
     };
 }
 

@@ -1269,6 +1269,12 @@ namespace msw {
             int Eff_IsAlive(long nSlot) const;
             // Stops the effect in slot nSlot at once.
             void Eff_StopForce(long nSlot);
+            // (added for game/boss/CStickObj.cpp; meaning guessed) Turns the
+            // effect in slot nSlot to the yaw fRotY.
+            void Eff_SetRotateY(long nSlot, float fRotY);
+            // (added for game/boss/CStickObj.cpp; meaning guessed) Turns
+            // towards pos by fRate of the way.
+            void RotateYToPosRate_(const bcs::FVEC3 &pos, float fRate);
             // Added for BasketF game/basket/CChrCoreBasketSaboten.cpp (DOL;
             // return types and parameter meanings guessed). Moves the
             // character to rPos; one step of the jump set by
@@ -1321,6 +1327,21 @@ namespace msw {
             void RotateYParam_(ROT_LERP1 &rLerp);
             int Util_DoDirMove(const CC_DATA::CHR_PARAM::MOVE_PARAM &rParam, float fFrame, DIR_MOVE &rMove, int);
 
+            // Added for BossF game/boss/unit_5FF80.cpp (the dunk and air trick
+            // states; all in the DOL, return types and parameter meanings
+            // guessed). Drops the held ball; removes every effect; lets go
+            // of whatever the character hangs on; moves by up to fDist
+            // towards rPos in the XZ plane; turns the model's root node to
+            // fRotY; plays sound nSe of the character's sound table (WSE);
+            // not zero once the motion in slot nSlot has looped.
+            void DropBall();
+            void Eff_EraseAll();
+            void SetDetach_();
+            void Util_DoHomingMoveXZ(const bcs::FVEC3 &rPos, float fDist);
+            void Util_NodePatchRotY(float fRotY);
+            void WSE_Play(long nSlot, long nSe, unsigned long, long);
+            int IsAnimLoop(unsigned long nSlot) const;
+
             // Added for BossF game/boss/CChrCoreBossMethod.cpp (all in the
             // DOL; return types and parameter meanings guessed).
             // Starts a change of body size (0: back to normal, 2: grown or
@@ -1372,7 +1393,10 @@ namespace msw {
             // character back by its movement since.
             bcs::FVEC3 m_PrevPos;
         protected:
-            unsigned char m_Unk88[0x90 - 0x88];
+            // 0x88 (name guessed): the character's resource file; the boss
+            // shoot stance takes its stick model "bstick" from it.
+            nw4r::g3d::ResFile m_ResFile;
+            unsigned char m_Unk8C[0x90 - 0x8C];
             // 0x90 (name guessed): the character's model; IsDisable is true
             // while it is null. CChrManHockey::ArtsStart_ fades it out.
             bcs::CMdlObj *m_pMdl;
@@ -1431,7 +1455,9 @@ namespace msw {
             // 0x188 (name guessed): another model node for effects
             // (CChrCoreBasketSaboten's dunk effect attaches there).
             unsigned short m_nEffNodeDunk;
-            unsigned char m_Unk18A[0x18C - 0x18A];
+            // 0x18A (name guessed): the model node the boss air trick's
+            // ball effect attaches to.
+            unsigned short m_nEffNodeArts;
             // 0x18C, 0x18E (names guessed): two more model nodes for effects
             // (CChrCoreVolleyDonkey's air trick puts one effect on each,
             // most likely his two hands).
@@ -1451,7 +1477,10 @@ namespace msw {
             float m_fScaleTo;
             float m_fScaleRate;
             float m_fScaleBase;
-            unsigned char m_Unk1B0[0x1EC - 0x1B0];
+            // 0x1B0 (name guessed): set to 1 with the four above when the
+            // boss arts event starts (CChrCoreBoss::DoPlayArtsEvent).
+            float m_fScaleUnk1B0;
+            unsigned char m_Unk1B4[0x1EC - 0x1B4];
             // 0x1EC-0x1FE (names guessed): the last damage taken, as passed
             // to CChrCoreBoss::MethdDamage.
             float m_fDamage;
@@ -1478,7 +1507,8 @@ namespace msw {
             // 0x21C (name guessed): the yaw of the jump's horizontal move
             // (negative for none; CChrCoreVolleyMoogle steers it).
             float m_fJumpRotY;
-            unsigned char m_Unk220[0x224 - 0x220];
+            // 0x220 (name guessed): cleared by CChrCoreBoss's shoot stance.
+            float m_fJumpUnk220;
             // 0x224, 0x228 (names guessed): two jump values the air tricks
             // set next to Util_SetJumpParam.
             float m_fJumpUnk224;

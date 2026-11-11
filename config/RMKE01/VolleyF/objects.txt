@@ -80,3 +80,4 @@ Equivalent game/volley/CCockpitVolley.cpp
 Equivalent game/volley/CStageVolley10.cpp
 Matching game/volley/CQPanelVolley.cpp
 Equivalent game/volley/CStageVolley17.cpp
+Equivalent game/volley/CCockpitVolleyResult.cpp

@@ -30,6 +30,9 @@ namespace msw {
             // result; return type guessed) The set-up data of player
             // nPlayer (-1: the current one).
             static void *GetPlayerSetUpData(long nPlayer);
+            // (added for MenuF game/menu/CTournamentLoad.cpp; return type
+            // guessed) The number of the player in use.
+            static long GetUsePlayerID();
     };
 }
 

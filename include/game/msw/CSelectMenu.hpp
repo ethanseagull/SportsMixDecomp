@@ -74,6 +74,20 @@ namespace msw {
             void GameMode_LoopStep2();
             void GameMode_LoopStep100();
             void GameMode_LoopStep101();
+            // (added for game/menu/CTournamentLoad.cpp) The other steps of
+            // the game mode screen (SelectMenu::CMode) and of the window
+            // that offers to continue a saved tournament
+            // (SelectMenu::CTournamentLoad).
+            void GameMode_In();
+            void GameMode_Loop();
+            void GameMode_LoopStep0();
+            void GameMode_LoopStep30();
+            void GameMode_Out();
+            void GameMode_TournamentCheckConnectPad();
+            void GameMode_TournamentBackCheck();
+            // Defined in another MenuF file (return type guessed). The
+            // option kind of the rules of the current game.
+            long RuleSel_GetOptionKindId();
             // The steps of the "how to play" screen (SelectMenu::CHowTo).
             void HowTo_In();
             void HowTo_Loop();

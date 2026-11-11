@@ -1312,7 +1312,12 @@ namespace msw {
             long m_nComLevel;
             // The rest, up to the size of 0x574: the DOL constructor writes
             // up to 0x570 and CChrCoreBoss's own members start at 0x574.
-            unsigned char m_Unk234[0x574 - 0x234];
+            unsigned char m_Unk234[0x264 - 0x234];
+            // 0x264 (meaning not known): a float HockeyF's
+            // CChrCoreHockeyWaluigi passes to CChrCoreHockey::Util_ShootBall_
+            // for each copy of the puck it throws.
+            float m_fUnk264;
+            unsigned char m_Unk268[0x574 - 0x268];
     };
 
     // The work the MethdRDB slots take. Only the first word is known: BasketF's

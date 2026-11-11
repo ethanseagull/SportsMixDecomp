@@ -35,6 +35,9 @@ namespace msw {
             virtual void SetUnk214And218(float);               // 0x164, sets both
             virtual unsigned long GetFadeEnable() const;       // 0x168, the word at 0x21C
             virtual void SetFadeEnable(unsigned long bEnable); // 0x16C
+            // (name not known) HockeyF's CStageHockey02 passes 1 for its
+            // parasols.
+            virtual void Unk170(int);                          // 0x170
             // More virtual functions follow (to 0x184).
 
             // (guessed) Inline in the modules: VolleyF's stage and BasketF's

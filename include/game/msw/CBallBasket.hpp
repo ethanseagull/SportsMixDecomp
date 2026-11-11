@@ -41,7 +41,7 @@ namespace msw {
             virtual void Main();
 
             virtual void Reset();
-            virtual void AttachItemEffect(long);
+            virtual long AttachItemEffect(long);
             virtual void DetachItemEffect();
             virtual void SetPassMode(const bcs::FVEC3 &, long, float, long, long, int, int, unsigned long);
             virtual void SetShootMode(long, float, long, long, unsigned long);

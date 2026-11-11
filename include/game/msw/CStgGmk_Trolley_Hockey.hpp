@@ -4,6 +4,7 @@
 #include "bcs/New.hpp"
 #include "game/msw/CStgGmk_Trolley.hpp"
 #include "game/msw/CStgGmk_Trolley_Act.hpp"
+#include "game/msw/HockeyPrm.hpp"
 
 namespace msw {
 
@@ -12,13 +13,13 @@ namespace msw {
     // The trolley of stage 17 in the hockey mode.
 
     // The actor, size 0x560 (one float added to msw::CStgGmk_Trolley_Act),
-    // with the HOCKEY_PRM_S17_* parameters. Its functions are in
-    // game/hockey/CStgGmk_Trolley_Act_Hockey.cpp (not written yet); only the
-    // constructor is inline (msw::CStgGmk_Trolley_Hockey::NewAct). The
-    // overrides are those of the HockeyF symbols, in no particular order.
+    // with the HOCKEY_PRM_S17_* parameters. Unlike the other modules' it
+    // reflects the puck: game/hockey/CStgGmk_Trolley_Act_Hockey.cpp. The
+    // getters are inline: the original emits them after the destructor, in
+    // reverse order of these declarations.
     class CStgGmk_Trolley_Act_Hockey : public CStgGmk_Trolley_Act {
         public:
-            CStgGmk_Trolley_Act_Hockey(CStgGmk *pParent) : CStgGmk_Trolley_Act(pParent) { m_fUnk55C = 0.0f; }
+            CStgGmk_Trolley_Act_Hockey(CStgGmk *pParent) : CStgGmk_Trolley_Act(pParent) { m_fReflectWait = 0.0f; }
             virtual ~CStgGmk_Trolley_Act_Hockey();
 
             virtual void OnInit();
@@ -27,31 +28,42 @@ namespace msw {
             virtual unsigned long OnReflectHit(const CCollDefUnit *pDef, const CBall *pBall, bcs::FVEC3 &rPos,
                                                bcs::FVEC3 &rVel);
 
-            virtual float GetParam_MdlWidth() const;
-            virtual float GetParam_MdlDepth() const;
-            virtual float GetParam_MdlHeight() const;
-            virtual float GetParam_Width() const;
-            virtual float GetParam_Depth() const;
-            virtual float GetParam_Height(long type) const;
-            virtual float GetParam_AtkWidth() const;
-            virtual float GetParam_AtkDepth() const;
-            virtual float GetParam_AtkHeight() const;
-            virtual float GetParam_VelLimit() const;
-            virtual long GetParam_MdlMinNum() const;
-            virtual long GetParam_MdlMaxNum() const;
+            virtual float GetParam_MdlWidth() const { return HOCKEY_PRM_S17_TROLLEY_MDL_WIDTH; }
+            virtual float GetParam_MdlDepth() const { return HOCKEY_PRM_S17_TROLLEY_MDL_DEPTH; }
+            virtual float GetParam_MdlHeight() const { return HOCKEY_PRM_S17_TROLLEY_MDL_HEIGHT; }
+            virtual float GetParam_Width() const { return HOCKEY_PRM_S17_TROLLEY_WIDTH; }
+            virtual float GetParam_Depth() const { return HOCKEY_PRM_S17_TROLLEY_DEPTH; }
+            virtual float GetParam_Height(long type) const { return HOCKEY_PRM_S17_TROLLEY_HEIGHT; }
+            virtual float GetParam_AtkWidth() const { return HOCKEY_PRM_S17_TROLLEY_ATK_WIDTH; }
+            virtual float GetParam_AtkDepth() const { return HOCKEY_PRM_S17_TROLLEY_ATK_DEPTH; }
+            virtual float GetParam_AtkHeight() const { return HOCKEY_PRM_S17_TROLLEY_ATK_HEIGHT; }
+            virtual float GetParam_VelLimit() const { return HOCKEY_PRM_S17_TROLLEY_SPEED; }
+            virtual long GetParam_MdlMinNum() const { return HOCKEY_PRM_S17_TROLLEY_NUM_MIN; }
+            virtual long GetParam_MdlMaxNum() const { return HOCKEY_PRM_S17_TROLLEY_NUM_MAX; }
             virtual long GetParam_Effect(long type) const;
-            virtual long GetParam_TrolleyPatType() const;
-            virtual long GetParam_TrolleyPatNo() const;
+            virtual long GetParam_TrolleyPatType() const { return HOCKEY_PRM_S17_TROLLEY_PAT_TYPE; }
+            virtual long GetParam_TrolleyPatNo() const { return HOCKEY_PRM_S17_TROLLEY_PAT_NO; }
             virtual long GetParam_TrolleyPatValidNum() const;
-            virtual float GetParam_CoinModeRate() const;
-            virtual float GetParam_ThrowDistMin(long type) const;
-            virtual float GetParam_ThrowDistMax(long type) const;
+            // The rate is a percentage.
+            virtual float GetParam_CoinModeRate() const { return 0.01f * HOCKEY_PRM_S17_HEYHO_COIN_RATE; }
+            virtual float GetParam_ThrowDistMin(long type) const {
+                if (type != 0) {
+                    return HOCKEY_PRM_S17_HEYHO_C_DIST_MIN;
+                }
+                return HOCKEY_PRM_S17_HEYHO_B_DIST_MIN;
+            }
+            virtual float GetParam_ThrowDistMax(long type) const {
+                if (type != 0) {
+                    return HOCKEY_PRM_S17_HEYHO_C_DIST_MAX;
+                }
+                return HOCKEY_PRM_S17_HEYHO_B_DIST_MAX;
+            }
             virtual void OnDamage(CCollBodyUnit *pBody, CBall *pBall);
-            virtual bool IsEnableDefColl() const;
+            virtual bool IsEnableDefColl() const { return true; }
             virtual long GetLocRawTblIdx(long, long) const;
 
         private:
-            float m_fUnk55C; // 0x55C (meaning not known)
+            float m_fReflectWait; // 0x55C, frames before the trolley reflects the puck again (name guessed)
     };
 
     // The trolley, size 0x80 (nothing added to msw::CStgGmk_Trolley). Made

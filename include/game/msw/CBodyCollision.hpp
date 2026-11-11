@@ -65,6 +65,7 @@ namespace msw {
             void SetPushPower(long index, long power);
             void SetBodyEnable(long index);
             void SetTargetFlag(long index, unsigned long flag);
+            unsigned long GetTargetFlag(long index) const;
             void SetRadius(long index, float radius);
             void SetBodyDisableAll();
             // (added for VolleyF's CC09_VOLLEY::CcKinopioBoundMushroom)

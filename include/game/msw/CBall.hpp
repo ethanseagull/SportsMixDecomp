@@ -98,7 +98,9 @@ namespace msw {
             virtual void *GetRadarIconTexObj() const;                           // 0x50 DOL
             virtual void *GetMinimapIconTexObj() const;                         // 0x54 DOL
             virtual int GetTargetPos(bcs::FVEC3 &) const;                       // 0x58 DOL (int: CComManVolley tests it)
-            virtual void AttachItemEffect(long);                                // 0x5C DOL
+            // (return type from HockeyF's CC06_HOCKEY::CBallHockeyWaluigi,
+            // whose override returns 0)
+            virtual long AttachItemEffect(long);                                // 0x5C DOL
             virtual void DetachItemEffect();                                    // 0x60 DOL
             virtual void SetPassMode(const bcs::FVEC3 &, long, float, long, long, int, int, unsigned long); // 0x64 DOL
             virtual void SetShootMode(long, float, long, long, unsigned long);  // 0x68 DOL
@@ -437,6 +439,16 @@ namespace msw {
             // (DOL; added for BasketF CChrCoreBasketWaluigi) With 1 the
             // ball is destroyed when the game resets (FLAG_DESTROY_ON_RESET).
             void SetDestroyOnReset(int bOn);
+            // (name guessed; added for HockeyF CChrCoreHockeyWaluigi) The
+            // resource file the ball was built from. The caller needs the
+            // definition of nw4r::g3d::ResFile to copy it.
+            const nw4r::g3d::ResFile &GetResFile() const
+            {
+                return *reinterpret_cast<const nw4r::g3d::ResFile *>(m_ResFile);
+            }
+            // DOL (added for HockeyF CChrCoreHockeyWaluigi; meaning guessed
+            // from the name): with 1 no marker is shown for the ball.
+            void SetDisableMarker(int bDisable);
             // (names guessed) The ball's turn.
             const Quaternion &GetRot() const { return m_Rot; }
             void SetRot(const Quaternion &rRot)
@@ -486,7 +498,9 @@ namespace msw {
             // m_fMoveRate to FuncMove_.
             float m_fFrameRate;            // 0xA4
             float m_fMoveRate;             // 0xA8
-            unsigned char m_UnkAC[0x4];    // 0xAC
+            // 0xAC: the ball's nw4r::g3d::ResFile (kept as bytes so that this
+            // header need not include nw4r/g3d; GetResFile gives it typed).
+            unsigned char m_ResFile[0x4];
             bcs::CMdlObj *m_pMdlObj;       // 0xB0, the ball's model (name guessed)
             // 0xB4, a second scene object, deleted with the model (name
             // guessed; CBallBasketFruit sets bits 0xC0 of its flags)

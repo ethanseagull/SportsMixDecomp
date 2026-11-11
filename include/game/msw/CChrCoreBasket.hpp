@@ -742,6 +742,21 @@ namespace msw {
             unsigned char m_Unk5E8[0x5EC - 0x5E8];
             unsigned long m_nUnk5EC;   // 0x5EC (meaning not known), cleared by the constructor
     };
+
+    // Peach: her special shot throws a fan of five heart bombs
+    // (CC_CMN::PEACH::CcHeartBomb) at the goal. (size not known; no members
+    // of its own found)
+    class CChrCoreBasketPeach : public CChrCoreBasket {
+        public:
+            CChrCoreBasketPeach();
+            virtual ~CChrCoreBasketPeach();
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *pWork, long); // 0xCE4
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
+    };
 }
 
 #endif /* !MSW_CCHRCOREBASKET_HPP_ */

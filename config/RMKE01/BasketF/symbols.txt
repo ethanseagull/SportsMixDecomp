@@ -2091,7 +2091,7 @@ SubStateArtsShotIsReadyArtsShot___Q23msw19CChrCoreBasketPeachFPQ33msw14CChrCoreB
 SubStateArtsShotPlayTrickMotion___Q23msw19CChrCoreBasketPeachFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x0006C1C4; // type:function size:0x40 scope:global
 SubStateArtsShotPlayArtsShotMotion___Q23msw19CChrCoreBasketPeachFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x0006C204; // type:function size:0x40 scope:global
 SubStateArtsShotFireBullet___Q23msw19CChrCoreBasketPeachFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICKl = .text:0x0006C244; // type:function size:0x3D0 scope:global
-fn_4_6C614 = .text:0x0006C614; // type:function size:0x14
+__sinit_\CChrCoreBasketPeach_cpp = .text:0x0006C614; // type:function size:0x14 scope:local
 __ct__Q23msw21CChrCoreBasketSabotenFv = .text:0x0006C628; // type:function size:0x3C scope:global
 __dt__Q23msw21CChrCoreBasketSabotenFv = .text:0x0006C664; // type:function size:0x58 scope:global
 CtorStateAirTrick__Q23msw21CChrCoreBasketSabotenFv = .text:0x0006C6BC; // type:function size:0x4 scope:global

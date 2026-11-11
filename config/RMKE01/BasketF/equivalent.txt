@@ -107,12 +107,14 @@ BasketF OnMsgMain___Q23msw16CChrDrvPadBasketFPQ33msw7CChrDrv8_CHR_MSG unverified
 BasketF OnMsg__Q23msw16CChrDrvPadBasketFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG unverified 92.8 92.8% after the shared CChrDrvPad header dropped the pool-off stand-in (it lowered BossF/HockeyF/VolleyF pad drivers): float constants via one base register instead of per-literal lis; otherwise as before.
 BasketF OnPostCreateMdl__Q23msw30CStageBasketHungryBossPackun72FPCQ33msw5STAGE12MDL_GEN_RULERQ23bcs6CRegexRQ33bcs77CPool<PQ23msw9CStageMdl,Q33msw9CStageMan15CMdlPtrPoolNode,Q33bcs4pool6NoLock>6HandleRQ23msw4CArnl near 98.3 register choice only: r4 vs r0 for the constant 1 and the result of the max
 BasketF OnPostInitialize__Q23msw14CStageBasket10Fv near 99.9 99.9%: CameraData local at 0x60/frame 0x180 vs 0x5C/0x170 (same as VolleyF CStageVolley42)
+BasketF PlayAnimScore__Q23msw19CCockpitBasketCoderFli near 96.0 register allocation only: the effect handle slot is reached through a this+0x20*i pointer in ours, an offset register (li 0 / addi 0x20) in the original; same calls, constants, memory accesses and branches
 BasketF Reset__Q23msw16CBallBasketFruitFv near 96.4 integer register choice in the copy of the local scale array from the constant table, and the schedule of the vtable load for GetCollPushRadiusDefault
 BasketF ScoreBoard_Loop__Q23msw19CCockpitBasketPauseFv near 98.0 register allocation only: the original keeps the basket result page in r2 (the table base register) and the result-chr page in r7, ours r7/r8, saving one more register in stmw/lmw; same loads, stores, calls and branches
 BasketF ScoreInWait__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 BasketF ScoreIn__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 BasketF ScoreOutWait__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 BasketF ScoreOut__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
+BasketF SendEvent__Q23msw19CCockpitBasketCoderFlPv near 97.1 register allocation only: the original loads the .rodata base into r31 at entry and keeps this/pParam in r28/r29, ours loads the base inside the SP-gauge case (two instructions fewer); same calls, constants and branches
 BasketF SendMessage__Q23msw14CStageBasket11Fllll near 99.8 instruction order only
 BasketF SendMessage__Q23msw19CNpcGhostBasketBaseFlllll near 99.9 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF SetBallScore__Q23msw22CCockpitBasketHarapekoFll near 98.6 register choice and instruction order only
@@ -120,13 +122,19 @@ BasketF SetCoinValue__Q23msw18CCockpitBasketCoinFll near 98.9 register allocatio
 BasketF SetCountNum__Q23msw25CCockpitBasketPauseResultFl near 99.2 registers only: the pane accessor and the computed show flag swap r30/r31; same instructions, order and stack frame
 BasketF SetCountScore__Q23msw20CCockpitBasketResultFPlPlll near 99.6 99.6%: float register choice around m_fUnk00 + m_fUnk04*i only
 BasketF SetDispBallFruit4__Q23msw22CCockpitBasketHarapekoFi near 99.5 register choice and instruction order only
+BasketF SetFaceIcon__Q23msw19CCockpitBasketCoderFPQ33bcs3G2D9CPaneCtrlllPCQ23msw8CChrCore near 98.1 register allocation only (loop counter and table pointer swap registers); SetVisible(bool) bit insert compiled as srwi+rlwimi instead of rlwinm+rlwimi (same flag byte result); as HockeyF
 BasketF SetFaceIcon__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 97.6 register choice, one pointer increment scheduled elsewhere, single-bit set as clear-then-insert vs shift-then-insert (same value)
+BasketF SetPeriodValue__Q23msw19CCockpitBasketCoderFl near 97.8 SetVisible(bool) bit insert compiled as srwi+rlwimi instead of rlwinm+rlwimi (same flag byte result); as HockeyF
+BasketF SetSPGauge__Q23msw19CCockpitBasketCoderFlf near 99.0 register allocation only around the int-to-float conversion; same instructions; as HockeyF
+BasketF SetScoreValue__Q23msw19CCockpitBasketCoderFll near 99.4 register allocation only
 BasketF SetScore__Q23msw22CCockpitBasketHarapekoFllii near 97.8 register choice and instruction order only
 BasketF SetTeamFaceIcon__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 97.4 register choice; second table pointer as base+0x48 vs direct address (same address); single-bit set as clear-then-insert vs shift-then-insert
 BasketF SetTelop3DScoreCount__Q23msw14CCockpitBasketFllllllllil near 97.5 97.5%: only the order of the stores into the parameter struct differs.
 BasketF SetTextNext__Q23msw20CCockpitBasketResultFll near 99.2 99.2%: r30/r31 swapped (pane accessor vs loop flag)
 BasketF Set__Q23msw18CCockpitBasketCoinFv near 99.3 register choice only (as CCockpitHockeyCoin::Set)
+BasketF Set__Q23msw19CCockpitBasketCoderFv near 99.6 register allocation only (loop counter and table pointer swap registers); same instructions and memory accesses; as HockeyF
 BasketF Set__Q23msw22CCockpitBasketHarapekoFv near 93.0 s_PaneName address formed as s_LayoutRes base + 0x60 in a saved register instead of its own load (same address), one more saved register; same calls
+BasketF SetupGame__Q23msw19CCockpitBasketCoderFv near 97.3 register allocation only (loop counters and table pointers); SetVisible(bool) bit insert compiled as srwi+rlwimi instead of rlwinm+rlwimi (same flag byte result); as HockeyF
 BasketF ShotArtsBall___Q23msw21CChrCoreBasketWaluigiFl near 99.6 float register choice for the 1/60 multiply operands and one byte load into r0 vs r9
 BasketF SubDefNormal___Q23msw16CChrDrvPadBasketFv unverified 84.2 84.2%: float constants via one base register instead of the original's per-literal lis (pool-off stand-in could not stay in the shared CChrDrvPad header); extra field reloads in the original; not proven.
 BasketF SubOffDribble___Q23msw16CChrDrvPadBasketFv unverified 99.0 99.0% after the shared CChrDrvPad header dropped the pool-off stand-in (it lowered BossF/HockeyF/VolleyF pad drivers): float constants via one base register instead of per-literal lis; otherwise as before.

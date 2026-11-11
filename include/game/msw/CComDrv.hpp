@@ -105,6 +105,26 @@ namespace msw {
             // DOL. A random number below nMax. (range guessed from the name;
             // BasketF tests RandMaxI(999) < 20)
             long RandMaxI(long nMax) const;
+            // DOL. The size of the per-action work CComDrv's own actions
+            // need (0x5C); a derived driver passes the larger of this and
+            // its own to the constructor (DodgeF CComDrvDodgeDD).
+            unsigned long CalcWorkBaseMaxSize() const;
+            // DOL. The work of the action running now (zero for none).
+            void *GetCurrentActWork();
+
+            // DOL. The common actions, one per frame while running; derived
+            // drivers list them in their action tables (g_ActFuncMap).
+            // Return type guessed (ActLoopNop tail-calls ReturnAct).
+            void ActLoopNop();
+            void ActLoopWait();
+            void ActLoopWaitNeutral();
+            void ActLoopLookTarget();
+            void ActLoopLookFront();
+            void ActLoopLookBall();
+            void ActLoopRun();
+            void ActLoopRunTurn();
+            void ActLoopJump();
+            void ActLoopJumpBlock();
 
         protected:
             unsigned char m_Unk04[0x60];

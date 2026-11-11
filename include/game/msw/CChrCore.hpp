@@ -4,6 +4,7 @@
 #include "bcs/CAnmObjMotBase.hpp"
 #include "bcs/CFsmQueue.hpp"
 #include "bcs/FVEC3.hpp"
+#include "game/msw/CC_DATA.hpp"
 #include "game/msw/CChrDrv.hpp"
 #include "nw4r/g3d/ResFile.hpp"
 
@@ -70,8 +71,13 @@ namespace msw {
             // (added for VolleyF game/volley/CChrCoreVolleyKinopio.cpp;
             // contents not known) The work of a move in a fixed direction
             // (Util_SetDirMoveParam), and how the body collision is sized.
+            // 0x10 bytes: Util_SetDirMoveParam writes its float at 0x0 and
+            // clears 0x4-0xC; BasketF's STATE_WORK_AIR_TRICK has a ROT_LERP1
+            // 0x10 bytes after it. 0x0 is the direction of the move
+            // (CChrCoreBasketMoogle stores a yaw there).
             struct DIR_MOVE {
-                unsigned char m_Unk00[0x20];
+                float m_fRotY;
+                float m_afUnk04[3];
             };
             enum BODY_COLL_SIZE_SET_TYPE {};
 
@@ -1072,6 +1078,10 @@ namespace msw {
             long GetComLevelWork() const { return m_nComLevel; }
             // DOL. The computer level of the character's team (see above).
             long GetComLevel() const;
+            // DOL. Added for BasketF game/basket/unit_7E8FC.cpp (meaning
+            // guessed from the name): not zero while the move assist drives the
+            // character; the computer then starts no action of its own.
+            int IsMoveAssist() const;
 
             // Added for BasketF game/basket/CChrDrvPadBasket.cpp (all in the
             // DOL; return types guessed). Not zero while the character is in
@@ -1177,7 +1187,8 @@ namespace msw {
             long GetTargetCourtIdx() const;
             long GetGuardGoalIdx() const;
             // Moves the character along its jump; nMode not known.
-            void Util_DoJumpMoveEX(int nMode);
+            // (CChrCoreBasketMoogle tests the result for 1, meaning not known.)
+            int Util_DoJumpMoveEX(int nMode);
             // Sets a jump of fFrame frames from height fFrom.
             void Util_SetJumpParam(float fFrame, float fFrom, float, float);
             void Util_SetDirMoveParam(DIR_MOVE &rMove, float);
@@ -1213,6 +1224,14 @@ namespace msw {
             // return type guessed). The effect in slot nSlot; null when
             // there is none.
             CEffectCluster *Eff_GetCluster(long nSlot);
+            // Added for BasketF game/basket/CChrCoreBasketMoogle.cpp (DOL;
+            // return types guessed). Not zero while sound slot nSlot plays;
+            // removes the effect in slot nSlot; one step of a turn; one step
+            // of a move by rParam at frame fFrame in the direction of rMove.
+            int SE_IsPlay(long nSlot) const;
+            void Eff_Erase(long nSlot);
+            void RotateYParam_(ROT_LERP1 &rLerp);
+            int Util_DoDirMove(const CC_DATA::CHR_PARAM::MOVE_PARAM &rParam, float fFrame, DIR_MOVE &rMove, int);
 
         protected:
             unsigned long m_Unk60;

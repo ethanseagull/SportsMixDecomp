@@ -95,6 +95,10 @@ namespace msw {
 
             CStgMdl(CStgObj *pParent);
 
+            // A creator that makes nothing (a DOL object in .sbss, 4 bytes:
+            // only the vptr). Create() passes it.
+            static CCreator NullCreator;
+
         private:
             CStgObj *m_pParent;          // 0x00
             unsigned long m_nIndex;      // 0x04
@@ -110,7 +114,10 @@ namespace msw {
 
         public:
             virtual ~CStgMdl();
-            virtual void Create();
+            // Inline: the modules that emit msw::CStgMdlNull's vtable (the
+            // only one that does not override it) have weak copies, which
+            // pass NullCreator to Create(const CCreator &).
+            virtual void Create() { Create(NullCreator); }
             // Create from pParam in the resource file res (CLoadData).
             virtual void Create(long res, const MDL_PARAM *pParam)
             {

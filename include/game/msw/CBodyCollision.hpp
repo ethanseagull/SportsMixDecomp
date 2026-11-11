@@ -44,6 +44,8 @@ namespace msw {
             void SetSize(long index, const bcs::FVEC3 &rSize);
             void SetSize(long index, float x, float y, float z);
             void SetPushEnable(long index);
+            // (added for BasketF's CGoalObjBasket)
+            void SetPushDisable(long index);
 
             void ResetTargetFlagAll(unsigned long flag);
             void AddTargetFlagAll(unsigned long flag);

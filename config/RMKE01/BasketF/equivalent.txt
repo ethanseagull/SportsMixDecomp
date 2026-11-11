@@ -15,6 +15,8 @@ BasketF CheckCurveDir___Q23msw14CBallManBasketCFfRCQ23bcs5FVEC3RCQ23bcs5FVEC3f n
 BasketF CheckStrokeRaw__Q23msw16CChrDrvPadBasketCFl unverified 88.7 88.7% after the shared CChrDrvPad header dropped the pool-off stand-in (it lowered BossF/HockeyF/VolleyF pad drivers): float constants via one base register instead of per-literal lis; otherwise as before.
 BasketF CheckTrg__Q23msw16CChrDrvPadBasketCFl unverified 88.5 88.5% after the shared CChrDrvPad header dropped the pool-off stand-in (it lowered BossF/HockeyF/VolleyF pad drivers): float constants via one base register instead of per-literal lis; otherwise as before.
 BasketF ClearFunc___Q23msw16CChrDrvPadBasketFv unverified 98.9 98.9% after the shared CChrDrvPad header dropped the pool-off stand-in (it lowered BossF/HockeyF/VolleyF pad drivers): float constants via one base register instead of per-literal lis; otherwise as before.
+BasketF CollUpdateSub__Q23msw14CGoalObjBasketFlRCQ33msw14CGoalObjBasket9COLL_INFO near 99.0 99.0%: inlined FVEC3Add psq_l load order and f0/f1 swapped; same sum
+BasketF CollUpdate__Q23msw14CGoalObjBasketFv near 99.1 99.1%: operand order of one cmpw before beq only
 BasketF ConveyorUpdate__Q23msw30CStageBasketHungryBossPackun72Ff near 99.9 float register choice for the three loop-invariant constants (60, 0, 1/60)
 BasketF CreateArtsBall___Q23msw21CChrCoreBasketWaluigiFv near 98.5 saved registers r24-r30 allocated in a different order only
 BasketF CreateBallIcon__Q23msw18CRadarIcon2DBasketFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc near 99.9 99.9%, registers only: in the inlined GetLytObj the layout handle from 0x1C(this) is kept in r29 in the original, r30 in ours (2 instructions)

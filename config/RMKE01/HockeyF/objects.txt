@@ -39,7 +39,7 @@ Equivalent game/hockey/CChrCoreHockeyKuroma.cpp
 Equivalent game/hockey/CCockpitHockeyCoder.cpp
 Equivalent game/hockey/CStageHockey16.cpp
 Matching game/hockey/CStageHockey03.cpp
-Equivalent game/hockey/CStageHockey12.cpp
+Matching game/hockey/CStageHockey12.cpp
 Equivalent game/hockey/CStageHockey15.cpp
 Matching game/hockey/CStageManHockey.cpp
 Equivalent game/hockey/CStageHockey17.cpp

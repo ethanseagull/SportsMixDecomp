@@ -112,17 +112,17 @@ void msw::CStageHockey12::Main_(float frame)
     if (m_pPinball != 0) {
         m_pPinball->MechaMain(frame);
     }
-    CStageMan::Main_(frame);
+    CStageManHockey::Main_(frame);
 }
 
 const msw::STAGE::MDL_GEN_RULE *msw::CStageHockey12::GetMdlGenRule_() const
 {
-    // The end entry chains to CStageMan's table (not CStageManHockey's).
+    // The end entry chains to the base class's table.
     static STAGE::MDL_GEN_RULE tbl[] = {
         { "^s[0-9]+_banper_0([0-9]+)", MDL_BUMPER, 0, 0, CStageMan::NewMdl },
         { "^s[0-9]+_ana_0([0-9]+)", MDL_EXIT, 0, 0, CStageMan::NewMdl },
         { "^s[0-9]+_wl_meka$", MDL_LAUNCHER, 0, 0, CStageMan::NewMdl },
-        { 0, reinterpret_cast<long>(CStageMan::GetMdlGenRule_()), 0, 0, 0 },
+        { 0, reinterpret_cast<long>(CStageManHockey::GetMdlGenRule_()), 0, 0, 0 },
     };
 
     return tbl;

@@ -6,6 +6,7 @@
 
 namespace bcs {
     struct BCS_Color;
+    class CScnObj;
 }
 
 namespace msw {
@@ -57,8 +58,15 @@ namespace msw {
             virtual void LoopStateDisappear();
             virtual void DtorStateDisappear();
 
+            // DOL. (what the index selects is not known; the basket marker
+            // passes 0 on stage 6)
+            void SetFogIdx(long nIdx);
+
         protected:
-            unsigned char m_Unk7C[0x8];  // 0x7C
+            unsigned char m_Unk7C[0x4];  // 0x7C
+            // 0x80 (name guessed): the marker's model; the basket and hockey
+            // markers attach it to the ball or to what holds the ball.
+            bcs::CScnObj *m_pMdlObj;
             unsigned long m_nBallHandle; // 0x84, the constructor's nBallHandle
             unsigned char m_Unk88[0x8];  // 0x88
     };

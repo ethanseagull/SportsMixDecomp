@@ -36,7 +36,19 @@ namespace bcs {
             // last parameter of msw::CStgMdl::AttachToMdl). Values not known;
             // msw::CTournamentChip::Destroy passes 0 with no parent.
             enum AttachMode {
-                ATTACHMODE_0
+                ATTACHMODE_0,
+                ATTACHMODE_1, // msw::CTournamentMan (TourF) attaches its markers with 1 and 3
+                ATTACHMODE_2,
+                ATTACHMODE_3
+            };
+
+            // Which matrix GetMtx copies. (enumerator names guessed) 0 is the
+            // one at 0x08 that CalcRootMtx builds, 1 the one at 0x38, 2 the
+            // one at 0x68 that CalcViewMtx builds.
+            enum ScnObjMtxType {
+                SCNOBJMTXTYPE_ROOT,
+                SCNOBJMTXTYPE_1,
+                SCNOBJMTXTYPE_VIEW
             };
 
             // Bits of m_nFlag. (names guessed) msw::CTableSetMdlObj::SetVisible
@@ -136,6 +148,8 @@ namespace bcs {
             // Rebuilds the matrix at 0x08 from the rotation and the
             // translation members.
             void CalcRootMtx();
+            // In the DOL. Copies the matrix `type` to rMtx.
+            void GetMtx(ScnObjMtxType type, FMTX34 &rMtx) const;
             // fn_800424A0, unnamed in the binary (name guessed). Concatenates
             // pViewMtx with the matrix at 0x38 into the one at 0x68, then
             // calls fn_800424F0. ObjProc runs it for task 4.
@@ -152,10 +166,28 @@ namespace bcs {
             }
             // (name guessed)
             unsigned long GetFlag() const { return m_nFlag; }
+            // (name guessed) The handle GetScnObj takes.
+            unsigned long GetHandle() const { return m_nHandle; }
 
             // (names guessed) Inline in the modules.
             void OnFlag(unsigned long flag) { m_nFlag |= flag; }
             void OffFlag(unsigned long flag) { m_nFlag &= ~flag; }
+            // (name and meaning guessed) Sets or clears both of the bits
+            // 0x10000000 and 0x20000000; HockeyF's CStageHockey01 does it to
+            // switch its audience models with the camera.
+            void SetHide(int bHide)
+            {
+                if (bHide) {
+                    OnFlag(0x10000000);
+                } else {
+                    OffFlag(0x10000000);
+                }
+                if (bHide) {
+                    OnFlag(0x20000000);
+                } else {
+                    OffFlag(0x20000000);
+                }
+            }
             // (name guessed) Inline in the modules: msw::CChrMarkerDodgeArrow
             // stores a yaw in radians to 0xB4, brought into [0, 2 pi] after
             // the model pointer is loaded, so the wrapping is taken to be
@@ -206,7 +238,10 @@ namespace bcs {
             FVEC3 m_vScale;               // 0xBC
 
         private:
-            unsigned char m_UnkC8[0x34];  // 0xC8
+            unsigned char m_UnkC8[0x30];  // 0xC8
+            // 0xF8 (name guessed): the handle GetScnObj looks the object up
+            // by; the constructor sets it and AppendDelayDeleteObject reads it.
+            unsigned long m_nHandle;
             unsigned long m_nFlag;        // 0xFC (name guessed)
             unsigned char m_Unk100[0x18]; // 0x100
     };

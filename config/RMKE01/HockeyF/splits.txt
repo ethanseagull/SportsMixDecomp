@@ -189,17 +189,18 @@ game/hockey/CShootMarker.cpp:
 	.bss        start:0x00000448 end:0x000004A0
 
 game/hockey/CCollManHockey.cpp:
-	.text       start:0x00078490 end:0x0007A7A8
+	.text       start:0x00078490 end:0x0007A830
 	.rodata     start:0x000026F8 end:0x00002738
 	.data       start:0x00014B00 end:0x00014BC8
 
-game/hockey/CCollMan.cpp:
-	.text       start:0x0007A7A8 end:0x0007A830
-
 game/hockey/CComDrvHockey.cpp:
-	.text       start:0x0007A830 end:0x0007B050
-	.rodata     start:0x00002738 end:0x00002750
+	.text       start:0x0007A830 end:0x0007AD44
+	.rodata     start:0x00002738 end:0x00002740
 	.data       start:0x00014BC8 end:0x00014CC0
+
+game/hockey/unit_7AD44.cpp:
+	.text       start:0x0007AD44 end:0x0007B050
+	.rodata     start:0x00002740 end:0x00002750
 
 game/hockey/CEventDemoHockey.cpp:
 	.text       start:0x0007B050 end:0x0007BB30
@@ -563,11 +564,15 @@ game/hockey/CStageHockeyCrushSkate86.cpp:
 	.bss        start:0x00000738 end:0x00000740
 
 game/hockey/CBallMarkerHockey.cpp:
-	.text       start:0x000ED728 end:0x000EEA14
+	.text       start:0x000ED728 end:0x000EDBF0
 	.ctors      start:0x00000028 end:0x0000002C
 	.rodata     start:0x0000D7E8 end:0x0000D7F8
-	.data       start:0x000225F8 end:0x00022748
+	.data       start:0x000225F8 end:0x00022670
 	.bss        start:0x00000740 end:0x00000788
+
+game/hockey/unit_EDBF0.cpp:
+	.text       start:0x000EDBF0 end:0x000EEA14
+	.data       start:0x00022670 end:0x00022748
 
 game/hockey/unit_EEA14.cpp:
 	.text       start:0x000EEA14 end:0x000F1BF4

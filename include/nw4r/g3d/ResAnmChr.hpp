@@ -2,6 +2,7 @@
 #define NW4R_G3D_RESANMCHR_HPP_
 
 #include "nw4r/db/Panic.hpp"
+#include "nw4r/math/types.h"
 
 namespace nw4r {
     namespace g3d {
@@ -10,6 +11,20 @@ namespace nw4r {
         struct ResAnmChrData {
             unsigned char unk00[0x20];
             unsigned short numFrame; // 0x20 (name guessed)
+        };
+
+        // The result of one node of a skeletal animation at one frame:
+        // flags, scale, rotation and the rotation-translation matrix.
+        // 0x4C bytes. Minimal declaration written for this project after
+        // the layout NW4R decompilations give it; only GetTranslate is used
+        // (TourF's Stage33).
+        struct ChrAnmResult {
+            unsigned long flags; // 0x00
+            math::VEC3 s;        // 0x04
+            math::VEC3 rawR;     // 0x10
+            float rt[3][4];      // 0x1C
+
+            void GetTranslate(math::VEC3 *pTrans) const;
         };
 
         // Handle to a skeletal animation resource: one pointer, null when
@@ -37,6 +52,9 @@ namespace nw4r {
                 }
 
                 int GetNumFrame() const { return ref().numFrame; }
+
+                // Node nNode of the animation at frame fFrame (DOL).
+                void GetAnmResult(ChrAnmResult *pResult, unsigned long nNode, float fFrame) const;
 
             private:
                 ResAnmChrData *m_pData; // 0x00

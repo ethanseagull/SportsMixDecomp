@@ -169,6 +169,37 @@ namespace msw {
                 }
             }
 
+            // (name guessed) The same, stretched to take `frame` in all
+            // (msw::CTournamentMan::SetCameraRateFrame).
+            void SetRateFrame(float frame, float add, float mul, float min)
+            {
+                if (_SetRate(add, mul, min)) {
+                    Interp(0.0f);
+                } else {
+                    float scale = frame / m_fTotal;
+                    m_fStep *= scale;
+                    m_fTotal *= scale;
+                    Update(0.0f);
+                }
+            }
+
+            // (names guessed) Read and written by msw::CTournamentMan.
+            void SetStep(float step) { m_fStep = step; }
+            float GetTotal() const { return m_fTotal; }
+            int IsEnd() const { return m_bEnd; }
+            const bcs::FVEC3 &GetAt() const { return m_Cur.at; }
+
+            // (name guessed) Jumps to `rInfo` as SetValueDirect does, with
+            // m_bDirect given (msw::CTournamentMan::SetCameraActive).
+            void SetValueDirect(const _CAMERA_INFO_LOOK &rInfo, int bDirect)
+            {
+                m_Start = rInfo;
+                m_End = rInfo;
+                m_Cur = rInfo;
+                m_bDirect = bDirect;
+                m_bEnd = true;
+            }
+
         protected:
             _CAMERA_INFO_LOOK m_Start; // 0xFC
             _CAMERA_INFO_LOOK m_End;   // 0x120

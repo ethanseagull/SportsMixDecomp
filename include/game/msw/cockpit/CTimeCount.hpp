@@ -13,6 +13,10 @@ namespace msw {
         // destructor are emitted by the modules).
         class CTimeCount {
             public:
+                // Inline: BasketF CCockpitBasketHarapeko and CCockpitBasketCoder
+                // hold one.
+                CTimeCount() { Initialize(); }
+
                 void Initialize();
                 void Finalize();
                 // Whole seconds in fFrame frames (60 a second), rounded up
@@ -31,13 +35,19 @@ namespace msw {
                 long SetCountDown(CMenuPaneAccessor *pAccessor, long nCount, long nPane, long nTextPane,
                                   long nAnim);
 
+                // The second shown last, -1 before the first (BasketF
+                // CCockpitBasketHarapeko reads and writes it).
+                long GetShowSec() const { return m_nUnk00; }
+                void SetShowSec(long nSec) { m_nUnk00 = nSec; }
+
             private:
-                long m_nUnk00; // 0x00, -1 after Initialize; not read here
+                long m_nUnk00; // 0x00, -1 after Initialize
 
             public:
                 // Declared after the data: MWCC puts the vptr where the
-                // first virtual function is declared.
-                virtual ~CTimeCount() {}
+                // first virtual function is declared. The destructor calls
+                // Finalize (seen in the emitted copies in BasketF CCockpitBasketCoder).
+                virtual ~CTimeCount() { Finalize(); }
         };
     }
 }

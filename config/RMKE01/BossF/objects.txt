@@ -19,3 +19,5 @@ NonMatching game/boss/CEffectCoinScore.cpp
 NonMatching game/boss/CQPanelManBoss.cpp
 Equivalent game/boss/CCockpitBossCoin.cpp
 Matching game/boss/CEventDemoBoss.cpp
+Equivalent game/boss/CCameraBoss.cpp
+NonMatching game/boss/CComDrvBoss.cpp

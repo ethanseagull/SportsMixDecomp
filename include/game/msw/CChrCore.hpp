@@ -580,6 +580,18 @@ namespace msw {
             // CChrMarkerBoss only shows markers for type 1 (most likely the
             // human players; not checked).
             long DriverGetType() const;
+            // DOL. Driver nDrv of the character (CChrCore keeps a small
+            // table of them, m_pDriver).
+            CChrDrv *DriverGetEntry(long nDrv) const;
+            // (name guessed) The driver in use. Inline in the modules: each
+            // CComDrv<Sport>::GetComDrv reads m_nDriver itself and passes it
+            // to DriverGetEntry.
+            CChrDrv *DriverGetCurrent() const { return DriverGetEntry(m_nDriver); }
+            // (name guessed) m_nChrId as stored, signed; the modules'
+            // CComDrv<Sport>::GetChrTypeID return it (lbz, extsb on the same
+            // register: a signed field, not a cast of an unsigned one).
+            // GetChrId reads the same byte unsigned.
+            signed char GetChrTypeID() const { return m_nChrId; }
             // Not zero when a pad drives the character. (meaning guessed from
             // the name; CChrMarkerVolley::AppearCheck asks it outside the
             // party game) In the DOL.
@@ -591,7 +603,7 @@ namespace msw {
             // (names guessed) Inline in the original; the module reads the
             // members directly (CChrMarkerBoss::AppearCheck loads the byte
             // unsigned).
-            long GetChrId() const { return m_nChrId; }
+            long GetChrId() const { return (unsigned char)m_nChrId; }
             unsigned long GetStatusFlag() const { return m_nStatusFlag; }
             unsigned long GetDispFlag() const { return m_nDispFlag; }
             // (name guessed) BossF's CEventDemoBoss::CreateDemo sets bit 2
@@ -609,7 +621,19 @@ namespace msw {
             // (names guessed) Inline in the original; the modules read the
             // bytes directly, as signed values.
             long GetPlayerNo() const { return m_nPlayerNo; }
+            // DOL. (name from the DOL; what height it gives is not checked)
+            float GetPosY() const;
             long GetTeamNo() const { return m_nTeamNo; }
+            // (names guessed) Added for BasketF
+            // game/basket/CCockpitBasketHarapeko.cpp, which reads both bytes
+            // signed: the character number (as GetChrId, which other modules
+            // read unsigned) passed to menu::GetCockpitFaceIconScale, and the
+            // pad of a human player (0 to 3; the cockpit labels "1P" to "4P").
+            long GetChrIdS() const { return (signed char)m_nChrId; }
+            // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp (name
+            // guessed): the character's face icon texture for the cockpit;
+            // null when there is none. In the DOL.
+            const _GXTexObj *GetCockpitIconTexObj() const;
             // (name guessed) The pad driving the character, read signed
             // (msw::cockpit::CSPGaugeInputDisp::SetDispAnim in the DOL passes
             // it to CGame::GetPadDefaultType and CMenuPad::IsNunchakuStyle).
@@ -632,7 +656,7 @@ namespace msw {
             unsigned char m_UnkF4[4];
             int m_bStarPlayer;           // 0xF8, see IsStarPlayer
             unsigned char m_UnkFC[0x78];
-            unsigned char m_nChrId;      // 0x174, a character number (meaning guessed)
+            signed char m_nChrId;        // 0x174, a character number (meaning guessed; signed, see GetChrTypeID)
             unsigned char m_Unk175;
             // (names guessed) What CRadarIcon2D<Game>::CreateCharaIcon passes
             // to CGame::GetCharType and to CGame::GetTeamColorIdx.

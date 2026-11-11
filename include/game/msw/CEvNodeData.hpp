@@ -3,14 +3,17 @@
 
 #include "bcs/FVEC3.hpp"
 #include "nw4r/g3d/ResFile.hpp"
+#include "game/msw/CEventNodeSimple.hpp"
 
 namespace msw {
 
     // Reads the path of one node out of a skeletal animation (DOL class,
     // 8 bytes, vptr at 0x00). msw::CTournamentRouteMan_Stage32::Initialize
     // keeps one on the stack to read where its cannons put the character.
-    // Names of the parameters guessed.
-    class CEvNodeData {
+    // Names of the parameters guessed. A node path: Stage33 (TourF) hands
+    // one to msw::CEventModel::SetLinkNode; its constructor stores only its
+    // own vtable, as the inline CEventNodeBase constructor stores none.
+    class CEvNodeData : public CEventNodeBase {
         public:
             CEvNodeData();
             virtual ~CEvNodeData();
@@ -32,6 +35,12 @@ namespace msw {
             long GetAnmId(const char *pNode) const
             {
                 return _GetAnmId(m_anm, pNode);
+            }
+
+            // (name guessed) Inline in TourF: makes `anm` the animation read.
+            void SetResAnm(nw4r::g3d::ResAnmChr anm)
+            {
+                m_anm = anm;
             }
 
             // Length of the animation in frames, 0 without one.

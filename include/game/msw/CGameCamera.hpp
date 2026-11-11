@@ -72,6 +72,20 @@ namespace msw {
             bcs::FVEC3 GetBallPosXZ(const CBall *pBall) const;
             bcs::FVEC3 GetCorePosXZ(const CChrCore *pCore) const;
             void NormalizePersPos(bcs::FVEC3 &rPos, float, float min, float max);
+            // DOL. (return type guessed) Not zero when the camera looks at
+            // the other goal (HockeyF CStageHockey01::Main_ turns the stage's
+            // background half a turn then).
+            long GetTargetGoalIdx() const;
+            // DOL members used by BossF's CCameraBoss (return types and
+            // parameter names guessed).
+            long GetTeamNo() const;
+            CChrCore *GetHoldBallChrCore(long) const;
+            // The ball in play, or null.
+            CBall *GetActiveBall() const;
+            // (guessed) Where fValue lies between fMin and fMax, from 0 to 1.
+            float GetRate(float fValue, float fMin, float fMax) const;
+            void MakeingFrontCamDataBase(const bcs::FVEC3 &rPos, const bcs::FVEC3 &rTarget, float, float, float,
+                                         float, float, float, float, float);
 
         protected:
             // 0xFC: flags. With 0x80 set the camera stands still
@@ -93,13 +107,24 @@ namespace msw {
             bcs::FVEC3 m_Unk118; // 0x118
 
         private:
-            unsigned char m_Unk124[0x1C0 - 0x124];
+            unsigned char m_Unk124[0x1BC - 0x124];
 
         protected:
+            // 0x1BC to 0x1C8 and 0x1D8: cleared by BossF's CCameraBoss
+            // constructor (meanings not known).
+            unsigned long m_Unk1BC;
             float m_Unk1C0; // 0x1C0
+            float m_Unk1C4;
+            unsigned long m_Unk1C8;
 
         private:
-            unsigned char m_Unk1C4[0x240 - 0x1C4];
+            unsigned char m_Unk1CC[0x1D8 - 0x1CC];
+
+        protected:
+            unsigned long m_Unk1D8;
+
+        private:
+            unsigned char m_Unk1DC[0x240 - 0x1DC];
 
         protected:
             // 0x240 to 0x24C: floats set by the constructor.

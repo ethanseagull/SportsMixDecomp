@@ -21,6 +21,9 @@ namespace nw4r {
                 }
 
                 void Set(const _GXTexObj &rTexObj);
+                // Added for VolleyF game/volley/CCockpitChrIcon2DVolley.cpp
+                // (Material::SetTexture): a member-wise copy.
+                void Set(const TexMap &rTexMap) { *this = rTexMap; }
 
                 void *GetImage() const { return mpImage; }
                 void SetImage(void *pImage) { mpImage = pImage; }

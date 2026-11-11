@@ -2,9 +2,11 @@
 #define CEVDEMORES_HPP_
 
 #include "bcs/CTask.hpp"
+#include "bcs/FVEC3.hpp"
 
 namespace msw {
     class CEventModel;
+    class CStageMan;
     class IEvMdlCreater;
 
     // Owner of the models of an event demo. A DOL task, 0x84 bytes (the
@@ -36,6 +38,9 @@ namespace msw {
                 // An object (kind 2): its number, its init data and the
                 // motion selection. (parameter names guessed)
                 void SetObjInit(long nObj, void *pInit, long nMotSel);
+                // A background object (kind 3), as SetObjInit. (parameter
+                // names guessed)
+                void SetObjBgInit(long nObj, void *pInit, long nMotSel);
                 void SetTeam(long nTeam, long nNo);
                 // bDisp sets bit 0x80 of the third value.
                 void SetDispInfo(int bDisp, long nDrawLayer, long nLightSelector, long nDispInfo);
@@ -107,8 +112,19 @@ namespace msw {
             _CHR_INFO &FindIndexNew(long nIndex, long nKind);
             // Gives the entry the two numbers at 0x66/0x68 and its index.
             void SetInit(_CHR_INFO &rInfo, long nIndex);
-            // Makes the entry's model with the creater of its kind.
-            void _CreateRes(_CHR_INFO &rInfo);
+            // Makes the entry's model with the creater of its kind and
+            // returns it (0 when none was made).
+            CEventModel *_CreateRes(_CHR_INFO &rInfo);
+            // Destroys the model of entry nIndex of kind nKind. (name from
+            // the symbol, parameter names guessed)
+            void FindIndexDestory(long nIndex, long nKind);
+            // (parameter name guessed) The centre the mirrored motions turn
+            // about.
+            void SetRevCenter(const bcs::FVEC3 &vCenter);
+
+            // (name guessed) The stage manager of the models (written by
+            // msw::CTournamentMan in TourF).
+            void SetStageMan(CStageMan *pStageMan) { m_pStageMan = pStageMan; }
 
             // (names guessed) Inline in BossF's CEventDemoBoss constructor,
             // which writes the members directly.
@@ -126,7 +142,8 @@ namespace msw {
             // (_CHR_INFO::nKind); _CreateRes in the DOL calls the one of the
             // model's kind.
             IEvMdlCreater *m_pCreater[4];
-            unsigned char m_Unk44[0x08];
+            CStageMan *m_pStageMan;      // 0x44 (name guessed)
+            unsigned char m_Unk48[0x04];
             const char *m_pDemoName;     // 0x4C (name guessed)
             unsigned char m_Unk50[0x12];
             short m_nUnk62;              // 0x62: BossF sets 0

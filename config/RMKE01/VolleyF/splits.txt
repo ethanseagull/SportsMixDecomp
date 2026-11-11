@@ -222,9 +222,12 @@ game/volley/CCollManVolley.cpp:
 	.data       start:0x000159B0 end:0x00015A78
 
 game/volley/CComDrvVolley.cpp:
-	.text       start:0x0007C188 end:0x0007C688
-	.rodata     start:0x00002680 end:0x00002688
+	.text       start:0x0007C188 end:0x0007C3A8
 	.data       start:0x00015A78 end:0x00015B78
+
+game/volley/unit_7C3A8.cpp:
+	.text       start:0x0007C3A8 end:0x0007C688
+	.rodata     start:0x00002680 end:0x00002688
 
 game/volley/CEventDemoVolley.cpp:
 	.text       start:0x0007C688 end:0x0007D1CC
@@ -529,9 +532,13 @@ game/volley/CStageVolley16.cpp:
 	.bss        start:0x00000920 end:0x00000978
 
 game/volley/CCockpitChrIcon2DVolley.cpp:
-	.text       start:0x000CA124 end:0x000CAAE0
-	.rodata     start:0x00009670 end:0x00009A88
+	.text       start:0x000CA124 end:0x000CA990
+	.rodata     start:0x00009670 end:0x00009A80
 	.data       start:0x000202E0 end:0x00020408
+
+game/volley/unit_CA990.cpp:
+	.text       start:0x000CA990 end:0x000CAAE0
+	.rodata     start:0x00009A80 end:0x00009A88
 
 game/volley/CCockpitVolleyPause.cpp:
 	.text       start:0x000CAAE0 end:0x000CB1E0

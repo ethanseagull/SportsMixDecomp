@@ -5,6 +5,12 @@
 #include "bcs/EF/CResource.hpp"
 #include "bcs/FVEC3.hpp"
 
+namespace bcs {
+    namespace EF {
+        class CEffect;
+    }
+}
+
 namespace msw {
 
     // A group of effects started together (DOL class). Only the functions
@@ -14,6 +20,12 @@ namespace msw {
             void SetTranslate(const bcs::FVEC3 *pPos);
             // Rotation in radians.
             void SetRotateRad(const bcs::FVEC3 *pRot);
+            // (parameter names and return types guessed) Fades the cluster
+            // out over fFrame frames; the effects it holds.
+            void SetFadeoutTime(float fFrame);
+            long GetEffectNum();
+            bcs::EF::CEffect *GetEffect(long nIndex);
+
             // (name guessed; the DOL's fn_801233FC) Called with 1 on a
             // cluster just attached to a layout pane object. Calls a member
             // of each effect through a member pointer, like CallEffectFunc;

@@ -39,6 +39,11 @@ namespace bcs {
             // (meaning of -1 guessed). Return type guessed.
             void SetActive(long view);
 
+            // (name guessed) The view the camera belongs to.
+            long GetView() const { return m_nView; }
+            // (name guessed) Read by msw::CTournamentMan (TourF).
+            const VIEW_DATA &GetViewData() const { return m_Data; }
+
             // Static: the body in the DOL reads the data block through r3.
             static void LoadQuakeData(const void *pData);
 

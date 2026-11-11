@@ -28,6 +28,16 @@ namespace msw {
 
             static CTournamentRouteMan *CreateInstance(long nStage, CStageManTournament *pStageMan);
             static CTournamentRouteMan *GetInstance();
+            // (return types guessed; used by msw::CTournamentMan) The route
+            // manager of an event demo on stage nStage; deletes the
+            // instance.
+            static CTournamentRouteMan *CreateInstanceDemo(long nStage);
+            static void DeleteInstance();
+
+            // (return type guessed) Forgets the route character nChr is on.
+            void ResetNowRoute(long nChr);
+            // (name guessed) Route nRoute of the map (0 to 0xFF).
+            CRouteBase *GetRoute(long nRoute) const { return m_apRoute[nRoute]; }
 
             virtual ~CTournamentRouteMan();
             virtual void Initialize();
@@ -89,9 +99,17 @@ namespace msw {
             void _StageChipFade(long nChip, float fFrom, float fSpeed);
             void _StageChipEff(long nEff, long nChip, float fParam, unsigned long ulParam, long n,
                                unsigned long ul1, unsigned long ul2);
+            // (parameter names guessed; used by Stage33) Plays node
+            // animation pAnim on map object nParam and returns its length in
+            // frames; attaches the character ulParam to map object nParam (or
+            // takes it off again); hides or shows map object nParam.
+            float _StageAnimNode(const char *pAnim, long nParam, float fParam, unsigned long ulParam, long nEvent,
+                                 float fFrame, long n, int b);
+            void _StageAttachChr(long nParam, unsigned long ulParam, long n, int bAttach);
+            void _StageDisp(long nParam, int bDisp);
 
             CStageManTournament *m_pStageMan; // 0x04
-            char m_Unk08[0x4];                // 0x08
+            long m_nUnk08;                    // 0x08: passed to _StageAttachChr by Stage33
             long m_nTimerGroup;               // 0x0C: group of the timer being run (-1 for none)
             float m_fTimer;                   // 0x10: time of the timer being run
             float m_fTimerOver;               // 0x14: how far the current time is past it
@@ -99,7 +117,9 @@ namespace msw {
             void *m_pTimerFree;               // 0x1C
             void *m_pTimerList;               // 0x20
             void *m_pTimerPush;               // 0x24
-            char m_Unk28[0x550];              // 0x28
+            char m_Unk28[0x50];               // 0x28
+            CRouteBase *m_apRoute[0x100];     // 0x78: one per route of the map (name guessed)
+            char m_Unk478[0x100];             // 0x478
             float m_fUnk578;                  // 0x578
             float m_fParam0;                  // 0x57C: GetParamData(0) of Stage31/32
             float m_fUnk580;                  // 0x580

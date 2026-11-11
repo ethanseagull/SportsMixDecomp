@@ -20,6 +20,20 @@ namespace bcs {
     // In the DOL.
     void BCS_Vec_RotY(FVEC3 &rOut, const FVEC3 &rIn, float rotY);
 
+    // (argument names and meaning guessed) The foot of the perpendicular
+    // from rPos to the line through rLinePos along rLineDir, in rOut; not
+    // zero when there is one. In the DOL.
+    int BCS_GetPosToLineCross(FVEC3 &rOut, const FVEC3 &rPos, const FVEC3 &rLinePos, const FVEC3 &rLineDir);
+
+    // (argument names and meaning guessed) The crossing point (*pX, *pZ)
+    // of the segments (x0, z0)-(x1, z1) and (x2, z2)-(x3, z3) in the XZ
+    // plane; not zero when they cross. In the DOL.
+    int BCS_GetSegLineToSegLineCross(float *pX, float *pZ, float x0, float z0, float x1, float z1, float x2,
+                                     float z2, float x3, float z3);
+
+    // (argument names guessed) The same with length 1. In the DOL.
+    void BCS_VecOneZ_RotY(FVEC3 &rOut, float rotY);
+
     // The three routines below are inline in the modules and written in
     // paired-single assembly in the original (x and y as a pair, z alone; the
     // compiler does not produce these instructions from float code). They are

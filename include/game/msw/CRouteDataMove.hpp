@@ -22,6 +22,10 @@ namespace msw {
             void SetNode(const nw4r::g3d::ResFile &file, const char *pNode, long n);
             void SetNode(const nw4r::g3d::ResFile &file, const char *pNode, const char *pName);
 
+            // (name and meaning guessed) Stage33's rainbow roads on the
+            // right side play the left side's node paths with this set.
+            void SetMirror(short nMirror) { m_nMirror = nMirror; }
+
             // (name and meaning guessed) Two frame values Stage32's cannon
             // sets before CalcFrame (11 and 5).
             void SetFrameParam(float f1, float f2)
@@ -31,7 +35,9 @@ namespace msw {
             }
 
         private:
-            char m_Unk34[0x18]; // 0x34
+            char m_Unk34[0x6];  // 0x34
+            short m_nMirror;    // 0x3A: see SetMirror
+            char m_Unk3C[0x10]; // 0x3C
             float m_fUnk4C;     // 0x4C
             float m_fUnk50;     // 0x50
             char m_Unk54[0x4];  // 0x54

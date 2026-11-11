@@ -8,8 +8,15 @@ extern "C" {
 // Only what is used so far.
 double pow(double x, double y);
 double ceil(double x);
+double fmod(double x, double y);
 
 #ifdef __cplusplus
+}
+
+// The float version (inline, as in the compiler's own library).
+inline float fmodf(float x, float y)
+{
+    return (float)fmod(x, y);
 }
 #endif
 

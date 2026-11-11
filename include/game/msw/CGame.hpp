@@ -115,7 +115,9 @@ namespace msw {
                 // 0x1C, copied from the tournament's work by
                 // TournamentRule::SetupGame (meaning not known)
                 long m_nUnk1C;
-                unsigned char m_Unk20[0x24 - 0x20];
+                // 0x20 (meaning not known): BasketF's computer players
+                // take a fixed shot time while it is not above 0.
+                float m_fUnk20;
                 // 0x24 (name and meaning guessed): a game time in frames;
                 // HockeyF's fire pillars (stage 86) change their timing
                 // when it falls below HOCKEY_PRM_S86_FIRE_TIME1/2 seconds.

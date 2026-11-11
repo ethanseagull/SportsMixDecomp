@@ -47,6 +47,9 @@ namespace bcs {
 
                 // Added for MenuF game/menu/CSelectMenuLayoutBase.cpp.
                 void SetVisible(int bVisible);
+                // Added for DodgeF game/dodge/CLockCursorDodge.cpp (return
+                // type guessed; the caller tests it against 0).
+                int IsVisible();
 
                 // Added for MenuF game/menu/CButton2.cpp. The argument name
                 // and the return type are guesses.

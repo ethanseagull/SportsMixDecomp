@@ -76,6 +76,12 @@ namespace msw {
             void SetSuka(int);
             // (name guessed) The panel's position at 0xA0.
             const bcs::FVEC3 &GetPos() const { return m_Pos; }
+            // (added for BasketF game/basket/CComManBasketGame.cpp) The word
+            // at 0x88 as a kind (name guessed): the computer players take
+            // kind 2 for an arrow panel. GetDir4 (DOL) is the arrow's
+            // direction, a quarter turn 0 to 3.
+            long GetUnk88() const { return m_nUnk88; }
+            long GetDir4() const;
 
         protected:
             unsigned char m_Unk7C[0x84 - 0x7C]; // 0x7C

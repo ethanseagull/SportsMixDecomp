@@ -73,8 +73,9 @@ namespace bcs {
 
         // Added for MenuF game/menu/CChrSign.cpp. The screen position of the
         // world point rPos seen through camera nCamera, into rOut (return
-        // type and argument names guessed).
-        void GetWorldScreenPosition(const FVEC3 &rPos, long nCamera, FVEC3 &rOut);
+        // type and argument names guessed; DodgeF CLockCursorDodge::Disp
+        // tests the result against 0 and uses rOut only when it is 0).
+        int GetWorldScreenPosition(const FVEC3 &rPos, long nCamera, FVEC3 &rOut);
 
         // Added for MenuF game/menu/CSelectMenuLayoutBase.cpp: releases a
         // font made from a layout archive (return type guessed).

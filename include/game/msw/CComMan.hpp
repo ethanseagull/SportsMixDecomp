@@ -8,6 +8,7 @@ namespace msw {
     class CBall;
     class CChrCore;
     class CItem;
+    class CQPanel;
 
     // The computer players' manager. A DOL class; each game module derives
     // its own (CComManVolleyGame, CComManBasketGame, CComManHockey, ...) and
@@ -112,6 +113,19 @@ namespace msw {
             static float GetStageCourtCenterX(long nCourt);
             static float GetStageCourtCenterZ(long nCourt);
             static long GetNearBestPos2on3(const bcs::FVEC3 *pMy, const bcs::FVEC3 *pTarget, long nIdx);
+
+            // (DOL; added for BasketF game/basket/CComManBasketGame.cpp;
+            // return types guessed) The instance (g_pInstance); whether the
+            // court has an invisible wall at the view (the collision's
+            // IsEnableViewColl_), its Z in the court's frame, and the side it
+            // closes (0: the back line, 1: the front line); walks of the "?"
+            // panels.
+            static CComMan *GetInstance();
+            static int IsEnableViewColl();
+            static float GetViewCollPosZ();
+            static long GetViewCollTargetDir();
+            static CQPanel *QPanel_GetFirst();
+            static CQPanel *QPanel_GetNext(CQPanel *pPanel);
 
             static CComMan *g_pInstance;
     };

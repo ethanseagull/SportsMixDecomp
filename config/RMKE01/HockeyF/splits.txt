@@ -353,12 +353,12 @@ game/hockey/CComDrvHockeyKeeper.cpp:
 
 game/hockey/CStgGmk_Case_Act_Hockey.cpp:
 	.text       start:0x000B9834 end:0x000B9FB0
-	.rodata     start:0x0000A348 end:0x0000A398
+	.rodata     start:0x0000A348 end:0x0000A370
 	.data       start:0x0001AD88 end:0x0001B018
 
 game/hockey/CStageHockeyCrushSkate.cpp:
 	.text       start:0x000B9FB0 end:0x000BA38C
-	.rodata     start:0x0000A398 end:0x0000A3B0
+	.rodata     start:0x0000A370 end:0x0000A3B0
 	.data       start:0x0001B018 end:0x0001B578
 	.bss        start:0x000005C8 end:0x000005D0
 
@@ -506,12 +506,12 @@ game/hockey/unit_E0310.cpp:
 	.rodata     start:0x0000C868 end:0x0000C880
 
 game/hockey/CCockpitHockeyMap.cpp:
-	.text       start:0x000E4974 end:0x000E5FF0
+	.text       start:0x000E4974 end:0x000E5E78
 	.rodata     start:0x0000C880 end:0x0000CB00
 	.data       start:0x00020210 end:0x00020420
 
 game/hockey/CCockpitHockeyIconFightGauge.cpp:
-	.text       start:0x000E5FF0 end:0x000E6888
+	.text       start:0x000E5E78 end:0x000E6888
 	.rodata     start:0x0000CB00 end:0x0000CC18
 	.data       start:0x00020420 end:0x000204C8
 

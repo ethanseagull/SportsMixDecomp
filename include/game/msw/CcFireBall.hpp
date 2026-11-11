@@ -30,6 +30,8 @@ namespace msw {
                     // Starts the fireball of pOwner from rPos towards rTarget.
                     void Create(CChrCore *pOwner, const bcs::FVEC3 &rPos, const bcs::FVEC3 &rTarget,
                                 FIRE_PARAM &rParam);
+                    // (meaning guessed) Not zero once the fireball is over.
+                    int IsEnd() const;
 
                 protected:
                     unsigned char m_Unk94[0xD8 - 0x94];

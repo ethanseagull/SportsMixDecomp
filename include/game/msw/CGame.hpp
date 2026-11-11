@@ -113,7 +113,12 @@ namespace msw {
                 // 0x1C, copied from the tournament's work by
                 // TournamentRule::SetupGame (meaning not known)
                 long m_nUnk1C;
-                unsigned char m_Unk20[0x34 - 0x20];
+                unsigned char m_Unk20[0x24 - 0x20];
+                // 0x24 (name and meaning guessed): a game time in frames;
+                // HockeyF's fire pillars (stage 86) change their timing
+                // when it falls below HOCKEY_PRM_S86_FIRE_TIME1/2 seconds.
+                float m_fGameTime;
+                unsigned char m_Unk28[0x34 - 0x28];
                 // 0x34 (name guessed): a speed rate of the game. The DOL's
                 // goal demo (game/msw/CGameExDemoBase.cpp) sets its own rate
                 // here while the demo camera plays and restores it after.
@@ -378,6 +383,10 @@ namespace msw {
             // team of type 1 the computer driver.
             static long GetTeamCtrlType(long nTeam);
             static void SetStartFadeType(long nType);
+            // (DOL, static; added for MenuF game/menu/unit_4BB48.cpp; return
+            // type guessed) Which team (0 or 1) this console plays in a
+            // Wi-Fi game.
+            static void SetMyTeamIdx(long nTeam);
             // The difficulty of the game (see GameWork::m_nGameLevel).
             // Inline; the parameter files emit it.
             static long GetGameLevel() { return g_GameWork.m_nGameLevel; }

@@ -569,7 +569,7 @@ namespace msw {
         if (IsEnableDefColl()) {
             m_DefColl.GetColl(0)->SetPos(LowerPos(rPos, 0.5f * height));
             m_DefColl.GetColl(0)->SetSize(0.5f * width, height + width, 0.5f * depth);
-            m_DefColl.GetColl(0)->SetRotY(rotY);
+            m_DefColl.GetColl(0)->SetRotYWrapped(rotY);
             m_DefColl.GetColl(0)->OnFlag10(1);
             m_DefColl.GetColl(0)->OnFlagA0(1);
         } else {

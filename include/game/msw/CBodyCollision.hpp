@@ -44,6 +44,9 @@ namespace msw {
             void SetSize(long index, const bcs::FVEC3 &rSize);
             void SetSize(long index, float x, float y, float z);
             void SetPushEnable(long index);
+            // (added for BasketF's CGoalObjBasket and VolleyF's
+            // CStgGmk_Trolley_Act_Volley)
+            void SetPushDisable(long index);
 
             void ResetTargetFlagAll(unsigned long flag);
             void AddTargetFlagAll(unsigned long flag);
@@ -96,6 +99,8 @@ namespace msw {
             // 0xA2, the one SetBodyEnable sets).
             void SetBodyDisable(long index);
             void SetCatchDisable(long index);
+            // (added for HockeyF's CStgGmk_FirePillar_Hockey_Act; DOL)
+            int IsEnable(long index) const;
 
         private:
             unsigned long m_Unk00[3];

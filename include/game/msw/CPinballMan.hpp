@@ -2,6 +2,7 @@
 #define MSW_CPINBALLMAN_HPP_
 
 #include "bcs/FVEC3.hpp"
+#include "game/msw/CStgSeSlot.hpp"
 
 namespace bcs {
     class CTask;
@@ -11,6 +12,24 @@ namespace msw {
 
     class CStageMdlListNode;
     class CStgGmk_Pinball;
+
+    // (added for VolleyF's CStgGmk_Pinball_Act_Volley.cpp; no name in the
+    // DOL, vtable lbl_80484FD8) The launcher ("mecha") of CPinballMan, at
+    // 0x1C: a sound slot (CStgSeSlot, vptr at 0x08) plus 0x28 bytes. Only
+    // the first new virtual functions are declared, up to the ones
+    // CPinballMan's inline functions call; names guessed.
+    class CPinballMecha : public CStgSeSlot {
+        public:
+            virtual void UnkA4();                          // 0xA4
+            virtual void SetMdl(CStageMdlListNode *pNode); // 0xA8
+            virtual void UnkAC();                          // 0xAC
+            virtual void UnkB0();                          // 0xB0
+            virtual void Reset();                          // 0xB4
+            virtual void Cancel();                         // 0xB8
+
+        private:
+            unsigned char m_Unk0C[0x28]; // 0x0C
+    };
 
     // (purpose guessed from the names) The balls of a sport's stage 12: a
     // DOL class (game/msw/CPinballMan.cpp), size 0x54, data first and the
@@ -27,12 +46,16 @@ namespace msw {
             CPinballMan();
 
         private:
+            // (name guessed) The launcher; its functions are reached through
+            // its vtable.
+            CPinballMecha *GetMecha() { return &m_Mecha; }
+
             CStgGmk_Pinball **m_ppGmk;   // 0x00, GetMaxNum gimmicks (GetGmk reads it)
             unsigned long m_Unk04;       // 0x04
             float m_Unk08;               // 0x08
             float m_Unk0C;               // 0x0C
             bcs::FVEC3 m_vDefaultPos;    // 0x10, GetDefaultPos
-            unsigned char m_Unk1C[0x34]; // 0x1C, the launcher (an object with its vptr at 0x24)
+            CPinballMecha m_Mecha;       // 0x1C, the launcher (vptr at 0x24)
 
         public:
             virtual ~CPinballMan();

@@ -386,7 +386,8 @@ namespace msw {
             virtual void SubStateArtsShotCalcSetbackPos_(bcs::FVEC3 &); // 0xCFC
             virtual void SubStateArtsShotCalcRotParam_(CChrCore::ROT_LERP1 &, float, float); // 0xD00
             virtual void SubStateArtsShotClearMoveParamWork_(CC_DATA::CHR_PARAM::MOVE_PARAM &); // 0xD04
-            virtual void SubStateArtsShotDoJumpMove_(STATE_WORK_AIR_TRICK *); // 0xD08
+            // Not zero once the jump is over (CChrCoreHockeyKoopaJr reads it).
+            virtual int SubStateArtsShotDoJumpMove_(STATE_WORK_AIR_TRICK *); // 0xD08
             virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xD0C
             virtual int SubStateArtsShotIsEndArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD10
             virtual void SubStateArtsShotShootBall_(STATE_WORK_AIR_TRICK *); // 0xD14
@@ -450,7 +451,11 @@ namespace msw {
         // for none (SubStateArtsShotSetTrickJumpParam_).
         long m_nJumpType;
         long m_nTrickStep;           // 0x54
-        unsigned char m_Unk58[0x68 - 0x58];
+        unsigned char m_Unk58[0x5C - 0x58];
+        // 0x5C (name guessed): Diddy Kong stores the frame count of his
+        // trick motion here.
+        float m_fTrickMotFrameNum;
+        unsigned char m_Unk60[0x68 - 0x60];
         float m_fShotFrame;          // 0x68, the frame of the motion the ball leaves at
         // 0x6C: the yaw the shot aims at; negative for straight at the goal
         // (Luigi's target marker sets it).
@@ -594,9 +599,22 @@ namespace msw {
         public:
             CChrCoreHockeyDiddy();
             virtual ~CChrCoreHockeyDiddy();
+            virtual void Reset_();                                     // 0x384
             virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCC8
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xCD8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xD0C
+
         protected:
-            unsigned char m_Unk76C[0x770 - 0x76C];
+            // Throws the boomerang from the arts model in his hand.
+            void ThrowBanana_();
+
+            // 0x76C (name guessed; allocated with 0x770 bytes): the id of a
+            // task Reset_ deletes, 0 for none. Only cleared in this unit; no
+            // code here sets it.
+            unsigned long m_hBullet;
     };
 
     class CChrCoreHockeyKinopio : public CChrCoreHockey {
@@ -630,7 +648,13 @@ namespace msw {
         public:
             CChrCoreHockeyKoopaJr();
             virtual ~CChrCoreHockeyKoopaJr();
+            virtual void Reset_();                                     // 0x384
             virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCC8
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xD0C
+            virtual int SubStateArtsShotIsEndArtsShotAfter_(STATE_WORK_AIR_TRICK *); // 0xD1C
     };
 
     class CChrCoreHockeyMoogle : public CChrCoreHockey {

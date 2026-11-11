@@ -263,13 +263,9 @@ game/volley/CStgGmk_Case_Act_Volley.cpp:
 	.data       start:0x00016738 end:0x000169C8
 
 game/volley/CStgGmk_WaterWorks_Volley_Act.cpp:
-	.text       start:0x000859B4 end:0x00089B6C
+	.text       start:0x000859B4 end:0x00089D4C
 	.rodata     start:0x00005738 end:0x00005890
-	.data       start:0x000169C8 end:0x00016F78
-
-game/volley/CCreator.cpp:
-	.text       start:0x00089B6C end:0x00089D4C
-	.data       start:0x00016F78 end:0x00016FE0
+	.data       start:0x000169C8 end:0x00016FE0
 
 game/volley/CStageFactoryVolley.cpp:
 	.text       start:0x00089D4C end:0x00089FA0
@@ -281,12 +277,9 @@ game/volley/CStageMan.cpp:
 	.data       start:0x00017090 end:0x000174F0
 
 game/volley/CStageNetVolley.cpp:
-	.text       start:0x0008B1D8 end:0x0008BC60
+	.text       start:0x0008B1D8 end:0x0008BD50
 	.rodata     start:0x000058D8 end:0x00006018
 	.data       start:0x000174F0 end:0x000179F0
-
-game/volley/CStgEffectSlot.cpp:
-	.text       start:0x0008BC60 end:0x0008BD50
 
 game/volley/CStageVolley02.cpp:
 	.text       start:0x0008BD50 end:0x0008C3E0
@@ -337,14 +330,10 @@ game/volley/CStageVolley13.cpp:
 	.bss        start:0x000005D8 end:0x000005E0
 
 game/volley/CStageVolley15.cpp:
-	.text       start:0x00097DD0 end:0x00098888
+	.text       start:0x00097DD0 end:0x000989EC
 	.rodata     start:0x00006A50 end:0x00006C58
-	.data       start:0x0001A628 end:0x0001AC30
+	.data       start:0x0001A628 end:0x0001AD18
 	.bss        start:0x000005E0 end:0x000005E8
-
-game/volley/CStgGmk_Case_Volley.cpp:
-	.text       start:0x00098888 end:0x000989EC
-	.data       start:0x0001AC30 end:0x0001AD18
 
 game/volley/CStageVolley17.cpp:
 	.text       start:0x000989EC end:0x00099CA4
@@ -368,12 +357,12 @@ game/volley/CCockpitVolleyRhythmA.cpp:
 	.data       start:0x0001B930 end:0x0001BCE0
 
 game/volley/CPerfectDemoVolley.cpp:
-	.text       start:0x0009F56C end:0x0009FF44
+	.text       start:0x0009F56C end:0x0009FDD0
 	.rodata     start:0x00008128 end:0x00008158
 	.data       start:0x0001BCE0 end:0x0001BD28
 
 game/volley/CComDrvVolleyGame.cpp:
-	.text       start:0x0009FF44 end:0x000AB1D8
+	.text       start:0x0009FDD0 end:0x000AB1D8
 	.rodata     start:0x00008158 end:0x000082C0
 	.data       start:0x0001BD28 end:0x0001C168
 

@@ -24,6 +24,17 @@ namespace msw {
             // (name guessed) The velocity; msw::CStgGmk_Trolley::GetVel
             // reads it.
             const bcs::FVEC3 &GetVel() const { return m_Vel; }
+            // (name guessed; inline in VolleyF's CStgGmk_Pinball_Act_Volley)
+            // Sets the velocity and its copy in the rotated frame at 0xD8.
+            void SetVel(const bcs::FVEC3 &rVel)
+            {
+                m_Vel = rVel;
+                if (m_nFlag & 2) {
+                    CalcRotMtx(m_RotMtx, m_Dir, m_Up);
+                    m_nFlag &= ~2;
+                }
+                PSMTXMultVec(m_RotMtx.m, (const Vec *)&rVel, (Vec *)&m_WorldVel);
+            }
 
             void SetFront(const bcs::FVEC3 &rFront);
             // (added for game/msw/CStgGmk_Trolley.cpp) The same from the

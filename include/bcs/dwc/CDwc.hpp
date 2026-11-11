@@ -58,6 +58,16 @@ namespace bcs {
                 // the storage server for the public data of friend nIndex.
                 // Returns 0 when there is no storage connection.
                 int LoadFriendStorage(long nIndex);
+                // Added for MenuF game/menu/unit_4BB48.cpp (return types and
+                // argument names guessed). The opponent's AID; the level the
+                // match was made at; whether matches are limited to
+                // Australia; starting a match with anybody for nNum players
+                // (nPlayerNum of them here) in game kind nGameKind at rating
+                // nSkill (bLimit: see CSelectMenu::m_bWifiMatchLimit).
+                long GetEmAID() const;
+                long GetMatchingLevel() const;
+                int IsShouldMatchAustraliaOnly() const;
+                void StartAnybodyMatching(long nNum, long nPlayerNum, long nGameKind, long nSkill, int bLimit);
         };
     }
 }

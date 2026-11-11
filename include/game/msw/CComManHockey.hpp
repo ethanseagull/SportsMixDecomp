@@ -26,6 +26,14 @@ namespace msw {
             int isExistPillar();
             int GetMapStatus(short nX, short nZ, MAP_STATUS_DATA &rData);
             int GetPartyMapStatus(short nX, short nZ, unsigned char &, unsigned char &, char &);
+            // (meaning of the floats not known) Whether pChr can reach
+            // pTarget; static (CComManHockeyCS::IsExistTargetInArea passes
+            // its own first argument in r3).
+            static int IsExistTargetCore(const CChrCore *pChr, const CChrCore *pTarget, float, float, float);
+            // (meaning guessed) Where the ball and pChr will be in fTime
+            // frames, in the world.
+            static bcs::FVEC3 GetBallWorldVelPos(const CBall *pBall, float fTime);
+            static bcs::FVEC3 GetChrVelPos(const CChrCore *pChr, float fTime);
     };
 }
 

@@ -75,6 +75,10 @@ namespace msw {
             // bit 0x2 of m_UnkFC is set.
             bcs::FVEC3 GetBallPosXZ(const CBall *pBall) const;
             bcs::FVEC3 GetCorePosXZ(const CChrCore *pCore) const;
+            // (added for VolleyF CCameraVolleyRR; return meaning guessed) The
+            // point the ball is heading for, x and z as in GetBallPosXZ; zero
+            // when there is none.
+            int GetBallTargetPosXZ(bcs::FVEC3 &rPos, const CBall *pBall) const;
             void NormalizePersPos(bcs::FVEC3 &rPos, float, float min, float max);
             // DOL. (return type guessed) Not zero when the camera looks at
             // the other goal (HockeyF CStageHockey01::Main_ turns the stage's

@@ -118,11 +118,13 @@ namespace msw {
             virtual float GetParam_SignalTime() const = 0;                                   // 0xD0
             virtual float GetParam_SignalAfterTime() const = 0;                              // 0xD4
             virtual float GetParam_SignalSEStopTime() const = 0;                             // 0xD8
-            virtual float GetParam_TrolleyPreWait() const = 0;                               // 0xDC
+            // Defaults for a stage without a trolley (DodgeF's CStageDodgeDOD57
+            // emits them as weak copies).
+            virtual float GetParam_TrolleyPreWait() const { return 60.0f; }                  // 0xDC
             virtual float GetParam_TrolleyRate() const = 0;                                  // 0xE0
             virtual float GetParam_TrolleyInitRate() const = 0;                              // 0xE4
-            virtual long GetParam_TrolleyDirType() const = 0;                                // 0xE8
-            virtual float GetParam_TrolleyLocOffset() const = 0;                             // 0xEC
+            virtual long GetParam_TrolleyDirType() const { return 2; }                       // 0xE8
+            virtual float GetParam_TrolleyLocOffset() const { return 10.0f; }                // 0xEC
             virtual long GetParam_Effect(long type) const = 0;                               // 0xF0
             virtual long GetParam_SE(long type) const;                                       // 0xF4
     };

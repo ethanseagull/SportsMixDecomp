@@ -61,6 +61,7 @@ namespace msw {
             void SetRadius(long index, float fRadius);
             void SetPos(long index, const bcs::FVEC3 &rPos);
             void SetPos2(long index, const bcs::FVEC3 &rPos);
+            void SetSize(long index, const bcs::FVEC3 &rSize);
 
         private:
             unsigned long m_Unk00[3];

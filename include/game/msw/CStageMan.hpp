@@ -526,7 +526,18 @@ namespace msw {
 
             static bcs::FVEC3 m_vZero;
 
+        protected:
+            // (names guessed) The number of models in the model pool, and
+            // the model of its idx-th node in use, or null. Inline; HockeyF's
+            // CStageHockey05::Main_ walks the models with them.
+            long GetMdlNum() { return GetMdlUsedList().GetCount(); }
+            CStageMdl *GetMdlByIdx(long idx);
+
         private:
+            // The list of nodes in use of m_MdlPtrPool (bcs::CPool::m_UsedList,
+            // at 0x34 in the pool).
+            bcs::CListBase &GetMdlUsedList() { return *reinterpret_cast<bcs::CListBase *>(m_MdlPtrPool + 0x34); }
+
             unsigned char m_Unk40[0x10];        // 0x40, an object the constructor builds
             long m_nStageNo;                    // 0x50
             unsigned char m_Unk54[0x28];        // 0x54, a pool or list
@@ -556,6 +567,22 @@ namespace msw {
             CStageMdl *m_Data;           // 0x14
             unsigned char m_Unk18[0x14]; // 0x18
     };
+
+    inline CStageMdl *CStageMan::GetMdlByIdx(long idx)
+    {
+        bcs::CListBase &rList = GetMdlUsedList();
+        if (idx < 0 || idx >= GetMdlNum()) {
+            return 0;
+        }
+        long i = 0;
+        for (bcs::CListNodeBase *pNode = rList.GetFirst(); pNode != rList.GetEnd(); bcs::CListNodeBase::Step(pNode)) {
+            if (i == idx) {
+                return reinterpret_cast<CMdlPtrPoolNode *>(pNode)->m_Data;
+            }
+            i++;
+        }
+        return 0;
+    }
 
     namespace STAGE {
 

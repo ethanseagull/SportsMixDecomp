@@ -76,8 +76,20 @@ namespace msw {
             virtual void SetOutOfBounds();                                                          // 0x5B4
             virtual long GetWallHitEffect() const;                                                  // 0x5B8
 
-        private:
-            unsigned char m_Unk318[0x190]; // 0x318
+            // (added for DodgeF game/dodge/CItemBallBombDodge.cpp; meaning
+            // guessed) Turns the ball towards pChr by at most fMaxRot
+            // (radians); zero when it could not.
+            int HomingUpdate(const CChrCore *pChr, float fMaxRot, float, float);
+
+            unsigned char m_Unk318[0x3C]; // 0x318
+            // 0x354 (name guessed): cleared by
+            // CItemBallBaseDodge::CancelOffensive_.
+            long m_nOffensive;
+            unsigned char m_Unk358[0x8];  // 0x358
+            // 0x360 (meaning not known): the bomb item clears it when it is
+            // shot.
+            long m_nUnk360;
+            unsigned char m_Unk364[0x144]; // 0x364
     };
 }
 

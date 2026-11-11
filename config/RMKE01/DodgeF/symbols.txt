@@ -815,7 +815,7 @@ GetFriendHitResult__Q23msw18CItemBallBombDodgeFv = .text:0x0001E208; // type:fun
 TranslateCatchParamType__Q23msw18CItemBallBaseDodgeCFli = .text:0x0001E210; // type:function size:0x8 scope:global
 TranslateCatchMethod__Q23msw18CItemBallBaseDodgeCFll = .text:0x0001E218; // type:function size:0x8 scope:global
 __dt__Q23msw20CItemBallNormalDodgeFv = .text:0x0001E220; // type:function size:0x40 scope:global
-fn_6_1E260 = .text:0x0001E260; // type:function size:0x14
+__sinit_\CItemBallBombDodge_cpp = .text:0x0001E260; // type:function size:0x14 scope:local
 @100@GetDmgEffectFrame__Q23msw18CItemBallBombDodgeCFv = .text:0x0001E274; // type:function size:0x8 scope:global
 @100@GetHitType__Q23msw18CItemBallBombDodgeCFv = .text:0x0001E27C; // type:function size:0x8 scope:global
 @100@GetGravityDefault__Q23msw18CItemBallBombDodgeCFv = .text:0x0001E284; // type:function size:0x8 scope:global
@@ -2476,7 +2476,7 @@ SubStateArtsShotReadyArtsShot___Q23msw18CChrCoreDodgeMii00FPQ33msw13CChrCoreDodg
 SubStateArtsShotPlayLoopMotion___Q23msw18CChrCoreDodgeMii00FPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x000665F8; // type:function size:0x4 scope:global
 SubStateArtsShotPlayArtsShotMotion___Q23msw18CChrCoreDodgeMii00FPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x000665FC; // type:function size:0x4C scope:global
 DtorStateAirTrick__Q23msw18CChrCoreDodgeMii00Fv = .text:0x00066648; // type:function size:0x4 scope:global
-fn_6_6664C = .text:0x0006664C; // type:function size:0x14
+__sinit_\CChrCoreDodgeMii00_cpp = .text:0x0006664C; // type:function size:0x14 scope:local
 __ct__Q23msw18CChrCoreDodgeMii01Fv = .text:0x00066660; // type:function size:0x3C scope:global
 __dt__Q23msw18CChrCoreDodgeMii01Fv = .text:0x0006669C; // type:function size:0x58 scope:global
 SubStateArtsShotPlayTrickMotion___Q23msw18CChrCoreDodgeMii01FPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x000666F4; // type:function size:0x40 scope:global
@@ -2485,7 +2485,7 @@ SubStateArtsShotReadyArtsShot___Q23msw18CChrCoreDodgeMii01FPQ33msw13CChrCoreDodg
 SubStateArtsShotPlayLoopMotion___Q23msw18CChrCoreDodgeMii01FPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x0006689C; // type:function size:0x4 scope:global
 SubStateArtsShotPlayArtsShotMotion___Q23msw18CChrCoreDodgeMii01FPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x000668A0; // type:function size:0x4C scope:global
 DtorStateAirTrick__Q23msw18CChrCoreDodgeMii01Fv = .text:0x000668EC; // type:function size:0x4 scope:global
-fn_6_668F0 = .text:0x000668F0; // type:function size:0x14
+__sinit_\CChrCoreDodgeMii01_cpp = .text:0x000668F0; // type:function size:0x14 scope:local
 __ct__Q23msw19CChrCoreDodgeMoogleFv = .text:0x00066904; // type:function size:0x3C scope:global
 __dt__Q23msw19CChrCoreDodgeMoogleFv = .text:0x00066940; // type:function size:0x58 scope:global
 SubStateArtsShotPlayTrickMotion___Q23msw19CChrCoreDodgeMoogleFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x00066998; // type:function size:0x58 scope:global

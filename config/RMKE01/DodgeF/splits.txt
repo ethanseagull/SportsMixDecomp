@@ -32,65 +32,11 @@ game/dodge/CBallMarkerDodge.cpp:
 	.text       start:0x0001A664 end:0x0001A7A8
 	.data       start:0x00000D30 end:0x00000DA8
 
-game/dodge/CItemBallBaseDodge.cpp:
-	.text       start:0x0001A7A8 end:0x0001A7B0
-
 game/dodge/CItemBallBombDodge.cpp:
-	.text       start:0x0001A7B0 end:0x0001E1A0
+	.text       start:0x0001A7A8 end:0x0001E594
+	.ctors      start:0x00000008 end:0x0000000C
 	.rodata     start:0x00000228 end:0x000002E8
 	.data       start:0x00000DA8 end:0x000017A0
-
-game/dodge/unit_1E1A0.cpp:
-	.text       start:0x0001E1A0 end:0x0001E1A8
-
-game/dodge/unit_1E1A8.cpp:
-	.text       start:0x0001E1A8 end:0x0001E1B0
-
-game/dodge/unit_1E1B0.cpp:
-	.text       start:0x0001E1B0 end:0x0001E1B8
-
-game/dodge/unit_1E1B8.cpp:
-	.text       start:0x0001E1B8 end:0x0001E1C0
-
-game/dodge/unit_1E1C0.cpp:
-	.text       start:0x0001E1C0 end:0x0001E1C8
-
-game/dodge/unit_1E1C8.cpp:
-	.text       start:0x0001E1C8 end:0x0001E1D0
-
-game/dodge/unit_1E1D0.cpp:
-	.text       start:0x0001E1D0 end:0x0001E1D8
-
-game/dodge/unit_1E1D8.cpp:
-	.text       start:0x0001E1D8 end:0x0001E1E0
-
-game/dodge/unit_1E1E0.cpp:
-	.text       start:0x0001E1E0 end:0x0001E1E8
-
-game/dodge/unit_1E1E8.cpp:
-	.text       start:0x0001E1E8 end:0x0001E1F0
-
-game/dodge/unit_1E1F0.cpp:
-	.text       start:0x0001E1F0 end:0x0001E1F8
-
-game/dodge/unit_1E1F8.cpp:
-	.text       start:0x0001E1F8 end:0x0001E200
-
-game/dodge/unit_1E200.cpp:
-	.text       start:0x0001E200 end:0x0001E208
-
-game/dodge/unit_1E208.cpp:
-	.text       start:0x0001E208 end:0x0001E210
-
-game/dodge/unit_1E210.cpp:
-	.text       start:0x0001E210 end:0x0001E218
-
-game/dodge/unit_1E218.cpp:
-	.text       start:0x0001E218 end:0x0001E220
-
-game/dodge/unit_1E220.cpp:
-	.text       start:0x0001E220 end:0x0001E594
-	.ctors      start:0x00000008 end:0x0000000C
 	.bss        start:0x000001C8 end:0x000001D0
 
 game/dodge/CCameraDodge.cpp:

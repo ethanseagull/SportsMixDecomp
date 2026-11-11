@@ -21,6 +21,17 @@ namespace bcs {
             unsigned char m_Unk0C[0x28];
     };
 
+    // (field names guessed) The settings of one node of a model's motion;
+    // the motion takes an array of them. BasketF's goal model
+    // (game/basket/CGoalMdlBasket.cpp) gives tables of node, a kind (0 to
+    // 3) and a flag that is 0 for the root and 1 for the others.
+    struct CAnmObjMotBase::NODE_EX_INFO {
+        unsigned short nNode;   // 0x00
+        unsigned char nKind;    // 0x02
+        unsigned char nFlag;    // 0x03
+        unsigned short nUnk04;  // 0x04, 0 in every table seen
+    };
+
     // (field names guessed) A trigger in a motion, as msw::CChrCore's
     // CallbackMotTrg_ reads it: the kind of trigger at 0x04 (it switches on
     // it) and two parameters at 0x06 and 0x08.

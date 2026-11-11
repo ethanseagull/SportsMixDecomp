@@ -142,6 +142,16 @@ namespace msw {
             void CancelVsFriend();
             void FriendVSWait_SendSetStep(long nStep);
 
+            // Added for MenuF game/menu/CFriendList.cpp. The steps of the
+            // friend roster screen (SelectMenu::CFriendList), and the help
+            // line it shows for the selected row (the argument is not
+            // used).
+            void FriendList_In();
+            void FriendList_Loop();
+            void FriendList_LoopStep();
+            void FriendList_Out();
+            void FriendList_LineMessage(long nBtnKindId);
+
             // Added for MenuF game/menu/CPlusMinus.cpp (defined there; the
             // return types and argument names are guesses). Whether pad
             // nPad uses a cursor (either of two flags of CMenuPadInfo).
@@ -243,6 +253,21 @@ namespace msw {
             // Writes friend code nCode as text into m_MessageWork and
             // returns it.
             wchar_t *ExchangeFriendCode(unsigned long long nCode);
+
+            // Added for MenuF game/menu/CFriendInfo.cpp (return types
+            // guessed). The rest of the friend's information window's steps,
+            // the window of a friend who has not registered the player back
+            // (SelectMenu::CNoFriendInfo), and what they call.
+            void FriendInfo_Loop();
+            void FriendInfo_LoopStep();
+            void FriendInfo_Out();
+            // Follows the cancel window shown while a friend match is being
+            // set up (m_UnkA0C is its step).
+            void FriendMatchChancelCheck();
+            void NoFriendInfo_In();
+            void NoFriendInfo_Loop();
+            void NoFriendInfo_Main();
+            void NoFriendInfo_Out();
 
             // Data, added for the same unit. The class is 0xAB8 bytes (the
             // size layout.py finds); only two members are named so far.
@@ -371,7 +396,13 @@ namespace msw {
             // the controller error window of the entry screen waits.
             float m_fEntryErrorWait;
         private:
-            unsigned char m_Unk6D0[0x28];    // 0x6D0
+            unsigned char m_Unk6D0[0x8];     // 0x6D0
+        public:
+            // 0x6D8. (added for game/menu/CFriendInfo.cpp; name guessed)
+            // A copy of the friend's name, for the message windows.
+            wchar_t m_FriendNameWork[0xC];
+        private:
+            unsigned char m_Unk6F0[0x8];     // 0x6F0
         public:
             // 0x6F8. (added for game/menu/CFriendCode.cpp; name guessed)
             // The Wi-Fi friend roster, taken from the connection by
@@ -386,7 +417,9 @@ namespace msw {
             dwc::CFriend *m_pVsFriendSaved;  // 0x704
             // 0x708. (added for game/menu/CFriendCode.cpp) Cleared by
             // FriendPlayerInfo_In (meaning not known).
-            long m_Unk708;
+            // (game/menu/CFriendInfo.cpp) The friend the information
+            // window shows; null for the player's own.
+            dwc::CFriend *m_Unk708;
         private:
             unsigned char m_Unk70C[0x4];     // 0x70C
         public:
@@ -427,7 +460,13 @@ namespace msw {
         public:
             long m_UnkA00;                   // 0xA00
         private:
-            unsigned char m_UnkA04[0x58];    // 0xA04
+            unsigned char m_UnkA04[0x8];     // 0xA04
+        public:
+            // 0xA0C. (added for game/menu/CFriendInfo.cpp; name guessed)
+            // The step of FriendMatchChancelCheck.
+            long m_nCancelStep;
+        private:
+            unsigned char m_UnkA10[0x4C];    // 0xA10
         public:
             // 0xA5C. (added for game/menu/CEntry.cpp; name guessed) Set by
             // Entry_In when the camera is still moving in; cleared once
@@ -447,7 +486,11 @@ namespace msw {
             // is accepted.
             long m_UnkA78;
         private:
-            unsigned char m_UnkA7C[0xAB8 - 0xA7C]; // 0xA7C
+            unsigned char m_UnkA7C[0x24];    // 0xA7C
+        public:
+            // 0xAA0. (added for game/menu/CFriendList.cpp; name guessed)
+            // The name the friend roster's help line was last made for.
+            wchar_t m_FriendListLineName[0xC];
     };
 
     // Defined in the same MenuF file as CSelectMenu. The text of message

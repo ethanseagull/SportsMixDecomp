@@ -2,6 +2,7 @@
 #define SAVE_DATA_PLAYER_HPP_
 
 #include "dwc.h"
+#include "game/msw/WiFiSkill.hpp"
 #include "revolution/rfl.h"
 
 namespace msw {
@@ -25,6 +26,9 @@ namespace msw {
         // nGameKind (CSelectMenu::m_nGameKind): the computer level (0 to
         // 3) the level window starts from. Meaning guessed from that use.
         unsigned char IsDifficult(long nGameKind);
+        // (added for MenuF game/menu/CFriendList.cpp; return type guessed)
+        // Not zero when the data holds a player.
+        int IsValid() const;
 
         // 0x00. (added for MenuF game/menu/CFriendCode.cpp; name and
         // length guessed) The player's name, shown in the friend code
@@ -51,7 +55,14 @@ namespace msw {
             long m_Unk30;                // 0x30, CDwcFriend 0x18
             long m_Unk34;                // 0x34, CDwcFriend 0x1C
             unsigned char m_Data[0x260]; // 0x38, CDwcFriend 0xE0
-            unsigned char m_Unk298[0x8]; // 0x298
+            // 0x298. (added for MenuF game/menu/CFriendInfo.cpp; meaning
+            // not known) Cleared when the friend is deleted.
+            // Signed: game/menu/CFriendList.cpp shows them as numbers
+            // (loaded with lha).
+            short m_Unk298;
+            short m_Unk29A;
+            short m_Unk29C;
+            unsigned char m_Unk29E[0x2];
         };
 
         enum {
@@ -61,7 +72,18 @@ namespace msw {
         DWCstAccUserData m_AccUserData;  // 0x38
         unsigned long long m_nFriendCode; // 0x78, the player's own code
         long m_nFriendNum;               // 0x80
-        unsigned char m_Unk0084[0x2F0 - 0x84];
+        unsigned char m_Unk0084[0x108 - 0x84];
+        // 0x108. (added for MenuF game/menu/CFriendInfo.cpp) The player's
+        // ratings in the four sports, then the overall one.
+        WiFiSkill m_Skill[4];
+        WiFiSkill m_TotalSkill;          // 0x288
+        unsigned char m_Unk02E8[0x2EA - 0x2E8];
+        // 0x2EA to 0x2EF. (added for MenuF game/menu/CFriendList.cpp;
+        // meaning not known) Three counts shown on the player's row of the
+        // friend roster, like Friend::m_Unk298 to m_Unk29C for a friend.
+        short m_Unk2EA;
+        short m_Unk2EC;
+        short m_Unk2EE;
         Friend m_Friend[FRIEND_MAX];     // 0x2F0
         unsigned char m_Unk56F0[0x5C50 - 0x56F0];
         unsigned char m_nFlags5C50; // 0x5C50; bit 0x08 picks the second camera table in CSelectMenu::HowTo_In (MenuF)

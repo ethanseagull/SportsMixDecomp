@@ -26,6 +26,14 @@ namespace nw4r {
 
             void SetWhite() { *reinterpret_cast<unsigned long *>(this) = 0xFFFFFFFF; }
 
+            // Added for MenuF game/menu/CFriendInfo.cpp: assigning a packed
+            // RGBA value stores one word (assigning a Color copies bytes).
+            Color &operator=(unsigned long rgba)
+            {
+                *reinterpret_cast<unsigned long *>(this) = rgba;
+                return *this;
+            }
+
             // The colour as GX takes it (added for the DOL's
             // game/msw/CGameExDemoBase.cpp, which passes colours to
             // GXSetTevColor).

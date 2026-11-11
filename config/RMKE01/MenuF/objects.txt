@@ -48,3 +48,4 @@ Equivalent game/menu/CCourtTab.cpp
 Equivalent game/menu/CCharaStatus.cpp
 Equivalent game/menu/CFriendCode.cpp
 NonMatching game/menu/CFriendInfo.cpp
+NonMatching game/menu/CFriendList.cpp

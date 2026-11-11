@@ -45,6 +45,11 @@ namespace bcs {
                 // servers to be updated in the background.
                 CDwcFriendList *GetFriendList();
                 void SetFriendServersAsyncFlag(int bFlag);
+                // Added for MenuF game/menu/CFriendInfo.cpp (return types
+                // guessed). Asks friend nIndex for a match; whether it has
+                // been accepted.
+                int CreateFriendMatch(long nIndex, long nPlayerNum);
+                int IsMatched() const;
         };
     }
 }

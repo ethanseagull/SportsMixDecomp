@@ -479,6 +479,15 @@ namespace msw {
     extern float BASKET_PRM_S07_MUD_TBL1_POS_X1;
     extern float BASKET_PRM_S07_MUD_TBL2_POS_Z2;
 
+    // Stage 09, the conveyor belt stage, listed in CStageBasket09::GetPrmTbl.
+    // Times are in seconds, speeds in world units per frame.
+    extern float BASKET_PRM_S09_EV_INTERVAL;
+    extern float BASKET_PRM_S09_CV_ACC_TIME;
+    extern float BASKET_PRM_S09_CV_PRE_ACC_TIME;
+    extern float BASKET_PRM_S09_CV_SPEED_0;
+    extern float BASKET_PRM_S09_CV_ACC_SPEED_0;
+    extern long BASKET_PRM_S09_CV_DIR_0; // 0: towards the attacked goal, 1 to 3: a fixed direction
+
     // Stage 16, the star piece stage. Times are in seconds.
     extern float BASKET_PRM_S16_DROP_AREA_Z;
     extern long BASKET_PRM_S16_MAX_NUM;

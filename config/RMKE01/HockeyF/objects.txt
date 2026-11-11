@@ -60,3 +60,9 @@ Matching game/hockey/CChrCoreHockeySaboten.cpp
 Matching game/hockey/CChrCoreHockeyMii00.cpp
 Matching game/hockey/CChrCoreHockeyMii01.cpp
 Equivalent game/hockey/CChrCoreHockeyPeach.cpp
+Matching game/hockey/CStageHockey05.cpp
+Equivalent game/hockey/CStageHockeyCrushSkate.cpp
+Equivalent game/hockey/CStgGmk_Case_Act_Hockey.cpp
+Matching game/hockey/CQPanelHockey.cpp
+Equivalent game/hockey/CChrCoreHockeyDiddy.cpp
+Equivalent game/hockey/CCameraHockeyCS.cpp

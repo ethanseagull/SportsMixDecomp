@@ -2,6 +2,22 @@
 // boss game. Each only adds a few effects to the CChrCoreBoss states.
 #include "game/msw/CChrCoreBoss.hpp"
 
+namespace {
+
+    // (guessed) The original .rodata ends with 0.5f and -1.0f, which
+    // nothing left in the file reads; most likely code the link stripped
+    // used them. These dead comparisons, made from the dive start (the
+    // first float user), keep them in place. See notes/decisions.md,
+    // "Unreferenced data kept by dead references".
+    inline void UnusedReferences(float f)
+    {
+        if (f == 0.5f) {
+        }
+        if (f == -1.0f) {
+        }
+    }
+}
+
 msw::CChrCoreBossLuigi::CChrCoreBossLuigi()
 {
 }
@@ -22,6 +38,7 @@ void msw::CChrCoreBossLuigi::SubStateReceiveDoDiveReceiveDiveStart_(STATE_WORK_R
 
     Eff_CreateAttach(0x13, 0x4EE, 0, &ofs, 1, 3, 0);
     Eff_CreateAttach(0x14, 0x4EF, 0, &ofs, 1, 3, 0);
+    UnusedReferences(ofs.x);
 }
 
 // Landing after a smash spike. The original reads the landing point and

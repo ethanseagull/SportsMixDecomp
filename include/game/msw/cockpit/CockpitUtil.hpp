@@ -2,6 +2,9 @@
 #define MSW_COCKPIT_COCKPITUTIL_HPP_
 
 namespace bcs {
+    struct FMTX34;
+    struct FVEC3;
+
     namespace G2D {
         class CPaneCtrl;
     }
@@ -25,6 +28,13 @@ namespace msw {
         // Added for BossF game/boss/CCockpitBossCoder.cpp: the leader of
         // team nTeam. (It only branches to CChrMan::GetTeamLeader.)
         CChrCore *GetTeamLeaderChrCore(long nTeam);
+
+        // (name, argument names and meaning guessed; the DOL's fn_801DFE44,
+        // added for game/msw/CCockpitChrIcon2D.cpp) Turns pOfs, an offset
+        // in the model space of pMtx, into a world offset as seen from
+        // camera nCamera: the model's rotation is replaced by the camera's,
+        // scale kept. -1 when pOfs or pMtx is null, else 0.
+        long GetBillboardOffset(const bcs::FVEC3 *pOfs, const bcs::FMTX34 *pMtx, long nCamera, bcs::FVEC3 *pOut);
 
         // Added for VolleyF game/volley/CCockpitVolleyCoder.cpp (return type
         // and argument names guessed): gives text pane pPane of layout

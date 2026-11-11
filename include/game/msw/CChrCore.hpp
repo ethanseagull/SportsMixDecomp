@@ -1042,6 +1042,10 @@ namespace msw {
             // CChrDrvPadBasket::MethdTrickMove calls it too).
             const bcs::FVEC3 &GetPos() const;
             float GetRotY() const;
+            // (added for game/msw/CCockpitChrIcon2D.cpp; return type from
+            // the stfs of f1) The height of the trans node, for icons over
+            // the character.
+            float GetTransNodeHeight() const;
             // The goal the character's team attacks, as a point.
             const bcs::FVEC3 &GetTargetGoalPos() const;
             // The distance to rPos in the XZ plane.

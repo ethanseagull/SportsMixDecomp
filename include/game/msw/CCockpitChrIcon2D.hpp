@@ -28,9 +28,20 @@ namespace msw {
 
             virtual long SetChrIcon(long nChr, const bcs::FVEC3 &rPos, long nUnk);
             virtual long SetChrIcon(long nChr, const bcs::FVEC3 &rPos, long nUnk, const void *pUnk) { return -1; }
-            virtual void ClearChrIcon(long nChr, int bUnk, long nUnk);
+            // Returns 0 (li r3, 0 before the return).
+            virtual long ClearChrIcon(long nChr, int bUnk, long nUnk);
 
             long SetChrIconImpl(long nChr, const bcs::FVEC3 &rPos, long nUnk);
+            // (name guessed; the DOL's fn_80259260) The body of ClearChrIcon,
+            // which inlines it; CCockpitCombiIcon2D calls it.
+            long ClearChrIconImpl(long nChr, int bUnk, long nUnk);
+
+            // In the three functions above nChr is the icon (a pane index of
+            // the layout) and nUnk the character (for CChrMan::GetChrCore).
+
+        private:
+            // (no symbol; shared body of ClearChrIcon and ClearChrIconImpl)
+            inline long ClearIconTasks(long nIcon, int bFade, long nChr);
 
         protected:
             long m_nType;  // 0x60: the constructor's last argument; which icon

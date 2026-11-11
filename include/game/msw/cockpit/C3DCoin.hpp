@@ -14,7 +14,7 @@ namespace msw {
     namespace cockpit {
 
         // (name guessed; no symbol) The task that draws the spinning coin
-        // model. Lives in the DOL (constructor fn_80246E94, 0xF8 bytes, a
+        // model. Lives in the DOL (constructor fn_80246E94, object 0xF8 bytes, a
         // bcs::CTask with a second base at 0x78). Only what C3DCoin calls;
         // the function names are guesses.
         class C3DCoinTask : public bcs::CTask {
@@ -22,9 +22,9 @@ namespace msw {
                 C3DCoinTask(bcs::CTask *pParent, const bcs::FVEC3 &rPos, long nTeam);
                 virtual void Main();
 
-                void SetDisp(int bDisp);                // fn_8024753C
-                void SetPos(const bcs::FVEC3 &rPos);    // fn_80247654
-                void CalcMtx();                         // fn_80247A70
+                void SetDisp(int bDisp);
+                void SetPos(const bcs::FVEC3 &rPos);
+                void CalcMtx();
                 void ActReset();                        // fn_80247B4C
                 void ActPopup();                        // fn_80247ADC
                 void ActDrop();                         // fn_80247B24

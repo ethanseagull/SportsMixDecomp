@@ -54,7 +54,7 @@ namespace {
 namespace msw {
     namespace cockpit {
 
-        // (name guessed; the DOL's fn_801BBF24) The first character of team
+        // (name guessed) The first character of team
         // nTeam a pad drives, among the players the game mode fields: an
         // enabled, pad-driven infielder that is neither a dodgeball
         // outfielder nor a hockey keeper. Null when there is none.

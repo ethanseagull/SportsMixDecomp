@@ -27,7 +27,7 @@ Matching game/msw/CStgGmkAct.cpp
 Matching game/bcs/CWifiPadBase.cpp
 NonMatching game/msw/CGameSnd.cpp
 NonMatching game/bcs/CGDLObj.cpp
-NonMatching game/msw/cockpit/CMissionCount.cpp
+Equivalent game/msw/cockpit/CMissionCount.cpp
 Matching game/msw/CEvDemoRes/_CHR_INFO.cpp
 NonMatching game/msw/CItemShellCmn.cpp
 Matching game/msw/vm/CVMCpu.cpp

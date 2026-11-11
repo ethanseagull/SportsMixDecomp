@@ -95,7 +95,7 @@ game/bcs/CMdlRef.cpp:
 	.text       start:0x8005F380 end:0x8005F648
 
 game/bcs/CMdlShadow.cpp:
-	.text       start:0x8005FFA0 end:0x80060304
+	.text       start:0x8005FFA0 end:0x80060344
 
 game/bcs/CMiiMan.cpp:
 	.text       start:0x80068954 end:0x80068D44

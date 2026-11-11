@@ -161,7 +161,7 @@ void msw::CSelectMenu::FriendList_LoopStep()
         return;
     }
 
-    unsigned short nBtnKindId = m_nCurrentBtnKindId[padNo0][nMode];
+    long nBtnKindId = m_nCurrentBtnKindId[padNo0][nMode];
 
     m_fInputWait -= GetFrameRateF();
     if (m_fInputWait <= 0.0f) {
@@ -215,17 +215,16 @@ void msw::CSelectMenu::FriendList_LoopStep()
             case BTN_KIND_ROW_3:
             case BTN_KIND_ROW_4: {
                 pObj->PushButton(padNo0, nBtnKindId);
-                long nRow = nBtnKindId - BTN_KIND_ROW_0;
                 if (pObj->m_nTopIndex == 0 && nBtnKindId == BTN_KIND_ROW_0) {
                     // The player's own row.
                     SetNextMode(MODE_PLAYER_INFO, pObj);
                     m_Unk708 = 0;
-                } else if (pObj->m_nRowKind[nRow] == 1) {
+                } else if (pObj->m_nRowKind[nBtnKindId - BTN_KIND_ROW_0] == 1) {
                     SetNextMode(MODE_FRIEND_INFO, pObj);
-                    m_Unk708 = pObj->m_pRowFriend[nRow];
+                    m_Unk708 = pObj->m_pRowFriend[nBtnKindId - BTN_KIND_ROW_0];
                 } else {
                     SetNextMode(MODE_NO_FRIEND_INFO, pObj);
-                    m_Unk708 = pObj->m_pRowFriend[nRow];
+                    m_Unk708 = pObj->m_pRowFriend[nBtnKindId - BTN_KIND_ROW_0];
                 }
                 break;
             }
@@ -269,9 +268,9 @@ void msw::CSelectMenu::FriendList_LineMessage(long)
 
     long nMode = m_nMode;
     SelectMenu::CFriendList *pObj = (SelectMenu::CFriendList *)FindObj(OBJ_FRIEND_LIST);
-    unsigned short nBtnKindId = m_nCurrentBtnKindId[padNo0][nMode];
+    long nBtnKindId = m_nCurrentBtnKindId[padNo0][nMode];
 
-    if (nBtnKindId < BTN_KIND_ROW_0 || nBtnKindId > BTN_KIND_ROW_4) {
+    if ((unsigned long)(nBtnKindId - BTN_KIND_ROW_0) > BTN_KIND_ROW_4 - BTN_KIND_ROW_0) {
         return;
     }
 
@@ -625,10 +624,12 @@ int msw::SelectMenu::CFriendList::Set()
                         m_nSelfButton = i;
                         break;
                     case 2:
-                        m_nFriendButton[nFriendButton++] = i;
+                        m_nFriendButton[nFriendButton] = i;
+                        nFriendButton++;
                         break;
                     case 3:
-                        m_nCodeButton[nCodeButton++] = i;
+                        m_nCodeButton[nCodeButton] = i;
+                        nCodeButton++;
                         break;
                 }
                 if (nType >= 0x10 && nType <= 0x12) {
@@ -807,14 +808,19 @@ long msw::SelectMenu::CFriendList::PushButton(long nPad, long nBtnKindId)
     if (m_pMenuPartList->SetPushButtonAnim(nBtnKindId, nPad) >= 0) {
         return 0;
     }
-    GetSelectMenu()->SendObjEventTrigger(OBJ_UNK_01, nPad + EVENT_PUSH, (void *)nBtnKindId);
-    GetSelectMenu()->SendObjEventTrigger(OBJ_PLUS_MINUS, nPad + EVENT_PUSH, (void *)nBtnKindId);
+    long nEvent = nPad + EVENT_PUSH;
+    GetSelectMenu()->SendObjEventTrigger(OBJ_UNK_01, nEvent, (void *)nBtnKindId);
+    GetSelectMenu()->SendObjEventTrigger(OBJ_PLUS_MINUS, nEvent, (void *)nBtnKindId);
     return 0;
 }
 
 // The helpers below are inlined in the game and defined here because their
-// local statics follow Set()'s constants in .rodata.
-inline void msw::SelectMenu::CFriendList::CheckButtonAnim()
+// local statics follow Set()'s constants in .rodata. CheckButtonAnim() is
+// not marked inline: as an inline defined after its only caller (Main) its
+// static is folded away and not emitted; as a plain function it is still
+// inlined into Main, keeps backEvent in .rodata, and its unused out-of-line
+// copy is dropped by the module link (as CEntry::CheckButtonAnim).
+void msw::SelectMenu::CFriendList::CheckButtonAnim()
 {
     static const int backEvent = 0x20;
 
@@ -878,6 +884,13 @@ inline void msw::SelectMenu::CFriendList::SetFaceIcon(long nFace, RFLStoreData &
     m_pPaneAccessor->SetPaneDisp(s_FacePanes[nFace], 1);
 }
 
+inline void msw::SelectMenu::CFriendList::AttachToRow(nw4r::lyt::Pane *pPane, long nRow)
+{
+    nw4r::math::VEC3 pos(0.0f, 0.0f, 0.0f);
+    bcs::G2D::SetPaneParent(pPane, m_pPaneAccessor->GetPane(s_RowPanes[nRow]), 1, 0);
+    pPane->SetTranslate(pos);
+}
+
 void msw::SelectMenu::CFriendList::SetFriendData(long nTop)
 {
     CSave::PlayerData *pPlayerData = m_pPlayerData;
@@ -915,10 +928,7 @@ void msw::SelectMenu::CFriendList::SetFriendData(long nTop)
             bcs::CMiiMan::GetStoreData(storeData, pPlayerData->m_MiiSource, pPlayerData->m_MiiCreateId);
             SetFaceIcon(0, storeData);
 
-            nw4r::lyt::Pane *pPane = m_pPaneAccessor->GetPane(PANE_SELF);
-            nw4r::math::VEC3 pos(0.0f, 0.0f, 0.0f);
-            bcs::G2D::SetPaneParent(pPane, m_pPaneAccessor->GetPane(s_RowPanes[0]), 1, 0);
-            pPane->SetTranslate(pos);
+            AttachToRow(m_pPaneAccessor->GetPane(PANE_SELF), 0);
             m_pPaneAccessor->SetPaneDisp(PANE_SELF, 1);
 
             CMenuPartBase *pPart = m_pMenuPartList->FindObjectByCurrentBtnKindId(BTN_KIND_ROW_0 + nRow);
@@ -932,12 +942,13 @@ void msw::SelectMenu::CFriendList::SetFriendData(long nTop)
             continue;
         }
 
-        if (i - 1 >= pList->GetNum()) {
+        long nFriend = i - 1;
+        if (nFriend >= pList->GetNum()) {
             break;
         }
 
         nw4r::lyt::Pane *pPane = 0;
-        dwc::CFriend *pFriend = static_cast<dwc::CFriend *>(pList->GetSortFriend(i - 1));
+        dwc::CFriend *pFriend = static_cast<dwc::CFriend *>(pList->GetSortFriend(nFriend));
         m_pRowFriend[nRow] = pFriend;
         if (pFriend->IsBuddyComplete() == 1) {
             long nIndex = pFriend->m_nIndex;
@@ -999,9 +1010,7 @@ void msw::SelectMenu::CFriendList::SetFriendData(long nTop)
         }
 
         // The row's panes move under the row's button.
-        nw4r::math::VEC3 pos(0.0f, 0.0f, 0.0f);
-        bcs::G2D::SetPaneParent(pPane, m_pPaneAccessor->GetPane(s_RowPanes[nRow]), 1, 0);
-        pPane->SetTranslate(pos);
+        AttachToRow(pPane, nRow);
         nRow++;
     }
 }

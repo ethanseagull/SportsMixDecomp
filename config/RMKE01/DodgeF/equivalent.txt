@@ -43,6 +43,7 @@ DodgeF OnCtorNormalShoot__Q23msw19CItemBallSmallDodgeFv near 99.3 register numbe
 DodgeF OnCtorNormalShoot__Q23msw20CItemBallBananaDodgeFv near 99.4 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF OnCtorNormalShoot__Q23msw20CItemBallGShellDodgeFv near 99.4 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF OnCtorNormalShoot__Q23msw20CItemBallRShellDodgeFv near 99.4 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
+DodgeF OnDamage__Q23msw25CStgGmk_Pinball_Act_DodgeFPQ23msw13CCollBodyUnitPQ23msw5CBall near 98.4 98.4%: float/pointer register numbering, and 'ble body; b skip' vs 'bgt skip' (same for NaN); constants, calls, accesses, stack identical
 DodgeF OnGimmickCancel__Q23msw13CStageDodge05Fv near 99.1 99.1%: float register allocation only.
 DodgeF OnGimmickReset__Q23msw13CStageDodge05Fv near 99.2 99.2%: float register allocation only.
 DodgeF OnPostAppendNode__Q23msw13CStageDodge12FPCQ33msw5STAGE12MDL_GEN_RULERQ23bcs6CRegexPQ23msw17CStageMdlListNodeRQ34nw4r3g3d7ResFileRQ23msw4CArnl near 99.8 99.8%: the two case-local sscanf result variables have their stack slots (0x8/0xC) swapped. No behaviour change.

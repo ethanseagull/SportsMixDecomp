@@ -25,6 +25,20 @@ namespace msw {
             // reads it.
             const bcs::FVEC3 &GetVel() const { return m_Vel; }
 
+            // (name guessed) Sets the velocity and its copy turned by the
+            // rotation matrix (at 0xD8), rebuilding the rotation first if
+            // the direction changed. Inline in DodgeF's
+            // msw::CStgGmk_Pinball_Act_Dodge::OnDamage.
+            void SetVel(const bcs::FVEC3 &rVel)
+            {
+                m_Vel = rVel;
+                if ((m_nFlag >> 1) & 1) {
+                    CalcRotMtx(m_RotMtx, m_Dir, m_Up);
+                    m_nFlag &= ~2;
+                }
+                PSMTXMultVec(m_RotMtx.m, (const Vec *)&rVel, (Vec *)&m_LocalVel);
+            }
+
             void SetFront(const bcs::FVEC3 &rFront);
 
             // (name guessed) Point the direction from the position towards
@@ -96,7 +110,8 @@ namespace msw {
         private:
             unsigned long m_nFlagC8;     // 0xC8
             bcs::FVEC3 m_Vel;            // 0xCC (name guessed)
-            unsigned char m_UnkD8[0x28]; // 0xD8
+            bcs::FVEC3 m_LocalVel;       // 0xD8, see SetVel (name guessed)
+            unsigned char m_UnkE4[0x1C]; // 0xE4
             bcs::FVEC3 m_Unk100;         // 0x100
             bcs::FVEC3 m_Unk10C;         // 0x10C
             unsigned char m_Unk118[0x2C]; // 0x118

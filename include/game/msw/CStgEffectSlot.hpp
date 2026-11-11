@@ -21,7 +21,7 @@ namespace msw {
     // The order of the virtual functions is the order of the first part of
     // __vt__Q23msw22CStgGmk_Wave_Dodge_Act (DodgeF). All are DOL functions
     // except GetMdl, which msw::CStgAct supplies, and Eff_GetSlotNum, which
-    // every user overrides. Parameter names and return types are guesses.
+    // most users override. Parameter names and return types are guesses.
     class CStgEffectSlot {
         private:
             void *m_pSlot;   // 0x00, Eff_GetSlotNum() slots, made by Eff_Init (type not mapped)
@@ -32,7 +32,9 @@ namespace msw {
             virtual void Eff_Init();
             // The model the effects attach to.
             virtual CStgMdl *GetMdl(long idx) = 0;
-            virtual long Eff_GetSlotNum() const;
+            // Inline: DodgeF's game/dodge/CStgGmk_Pinball_Act_Dodge.cpp has
+            // a weak copy (its actor keeps this one).
+            virtual long Eff_GetSlotNum() const { return 0; }
             virtual unsigned long Eff_CreateEffect(long slot, long eff, const bcs::FVEC3 *pPos, unsigned long flag);
             virtual unsigned long Eff_CreateAttach(long slot, long eff, long mdl, unsigned long node,
                                                    const bcs::FVEC3 *pOfs, int, int, int, unsigned long flag);

@@ -1,9 +1,7 @@
 #ifndef MSW_CCOLLBODYUNIT_HPP_
 #define MSW_CCOLLBODYUNIT_HPP_
 
-namespace bcs {
-    struct FVEC3;
-}
+#include "bcs/FVEC3.hpp"
 
 namespace msw {
 
@@ -23,6 +21,10 @@ namespace msw {
             // msw::CStgGmk_WaterPillar_Act::OnBodyPush passes it to
             // CChrMan::GetChrCore for an owner of kind 1.
             signed char m_nOwnerIdx;
+            unsigned char m_Unk15[0x17];
+            // 0x2C (name guessed): the unit's position. DodgeF's
+            // msw::CStgGmk_Pinball_Act_Dodge::OnDamage reads it.
+            bcs::FVEC3 m_vPos;
 
             // (name guessed) Inline: DodgeF compares the byte as a signed int.
             long GetOwnerKind() const { return m_nOwnerKind; }

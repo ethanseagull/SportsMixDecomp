@@ -42,3 +42,5 @@ Equivalent game/dodge/CChrCoreDodgeLuigi.cpp
 Equivalent game/dodge/CChrCoreDodgeMario.cpp
 Matching game/dodge/CStageDodge17.cpp
 Equivalent game/dodge/CChrCoreDodgeKinopio.cpp
+Equivalent game/dodge/CChrCoreDodgeKuroma.cpp
+Equivalent game/dodge/CChrCoreDodgeSaboten.cpp

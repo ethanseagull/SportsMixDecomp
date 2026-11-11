@@ -20,7 +20,10 @@ namespace msw {
             CChrObstacle(bcs::CTask *pParent, long, long);
             virtual ~CChrObstacle();
             virtual void Disp();
-            virtual void SendMessage(long, long, long, long);
+            // Inline: each module has one weak copy (li r3, 0), emitted by
+            // the first file that makes the vtable of a class that does not
+            // override it (BasketF: game/basket/CChrCoreBasketSaboten.cpp).
+            virtual long SendMessage(long, long, long, long) { return 0; }
             virtual float GetAttackRadius() const;
             virtual float GetAttackRange() const;
             virtual int IsAttackEnd() const;

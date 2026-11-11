@@ -267,13 +267,9 @@ game/dodge/CChrCoreDodgePeach.cpp:
 	.bss        start:0x000009D0 end:0x000009D8
 
 game/dodge/CChrCoreDodgeSaboten.cpp:
-	.text       start:0x00069AAC end:0x00069F10
-	.rodata     start:0x00001070 end:0x00001088
-
-game/dodge/CcSabotenNeedleDodge.cpp:
-	.text       start:0x00069F10 end:0x00069F9C
+	.text       start:0x00069AAC end:0x00069F9C
 	.ctors      start:0x00000064 end:0x00000068
-	.rodata     start:0x00001088 end:0x00001098
+	.rodata     start:0x00001070 end:0x00001098
 	.bss        start:0x000009D8 end:0x000009E0
 
 game/dodge/CcSiromaMagicCircle.cpp:

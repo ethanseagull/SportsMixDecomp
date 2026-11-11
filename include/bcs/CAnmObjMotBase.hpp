@@ -20,6 +20,17 @@ namespace bcs {
             // mapped.
             unsigned char m_Unk0C[0x28];
     };
+
+    // (field names guessed) A trigger in a motion, as msw::CChrCore's
+    // CallbackMotTrg_ reads it: the kind of trigger at 0x04 (it switches on
+    // it) and two parameters at 0x06 and 0x08.
+    struct CAnmObjMotBase::MOT_TRG {
+        unsigned char m_Unk00[0x4];
+        unsigned char m_nType;  // 0x04
+        unsigned char m_Unk05;
+        short m_nParam0;        // 0x06
+        short m_nParam1;        // 0x08
+    };
 }
 
 #endif /* !BCS_CANMOBJMOTBASE_HPP_ */

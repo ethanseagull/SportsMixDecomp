@@ -24,6 +24,14 @@ namespace msw {
                 void SetCourtCharaObjImplEx(long nUnk, long nMotion, long nMotionSub, long nIndex);
                 void SetCourtCharaObjMotionEx(long nIndex, long nMotion, long nMotionSub);
                 void SetCourtCharaObj(long nUnk0, long nMotion, long nMotionSub, long nUnk1);
+
+            private:
+                unsigned char m_Unk5A0[0x64C - 0x5A0];
+
+            public:
+                // 0x64C. (added for MenuF game/menu/CWiFiGame.cpp; meaning
+                // not known) Cleared by CSelectMenu::WifiGame_In.
+                long m_Unk64C[4];
         };
     }
 }

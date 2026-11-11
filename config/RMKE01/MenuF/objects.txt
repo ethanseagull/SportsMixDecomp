@@ -50,3 +50,5 @@ Equivalent game/menu/CFriendCode.cpp
 Equivalent game/menu/CFriendInfo.cpp
 Equivalent game/menu/CFriendList.cpp
 Equivalent game/menu/unit_61C00.cpp
+Equivalent game/menu/CWiFiGame.cpp
+Equivalent game/menu/unit_4B7F4.cpp

@@ -99,6 +99,7 @@ MenuF Set__Q33msw10SelectMenu8CCharaOkFv near 99.2 the two button-text results s
 MenuF Set__Q33msw10SelectMenu9CCourtChrFv near 91.7 file-local .data objects reached as one base plus offsets in the original, one symbol each in ours (same addresses); register choice; the original loads s_MarkerColor[4] once before the marker loop, ours each pass (same value)
 MenuF Set__Q33msw10SelectMenu9CCourtTabFv near 99.4 the original loads the constant 0 twice (li r4 / li r29), ours once; pParams and pMenuPartList in swapped registers
 MenuF Set__Q33msw10SelectMenu9CPlayModeFv near 99.4 register choice only around the CMenuPartList pointer and index*4
+MenuF Set__Q33msw10SelectMenu9CWiFiGameFv near 99.3 register allocation only: the FindObj result and the pane loop's counter and pointer get other registers; same instructions, calls and memory accesses
 MenuF StateCharaChange__Q33msw10SelectMenu14CCourtCharaObjFv near 96.3 original reloads m_hNextMdl (0xC) after the store to 0x8 inside the inlined SetNextMdlHandle(0), ours reuses the register; no store can change 0xC in between, so behaviour is the same
 MenuF StateCheck__Q33msw10SelectMenu14CCourtCharaObjFv near 96.4 original reloads m_hNextMdl (0xC) after the store to 0x8 inside the inlined SetNextMdlHandle(0), ours reuses the register; no store can change 0xC in between, so behaviour is the same; also pAnm/flag swap r30/r31
 MenuF StateControl__Q33msw10SelectMenu9CPlayModeFv near 98.2 schedule only: mr r3,r31 for the SetCourtCharaObj call placed before the player-count load, registers shift with it
@@ -111,6 +112,7 @@ MenuF Title_In__Q23msw11CSelectMenuFv near 86.8 float literals: the original loa
 MenuF Title_Loop__Q23msw11CSelectMenuFv near 88.1 float literals: the original loads each with its own lis+lfs (the literal pool is off in this TU, likely from an inline virtual with a function-local static const float somewhere in the original's includes; notes/toolchain.md), ours through one pool base register; hence different saved registers and frame size. Same calls, constants, stores and branches; the jump table targets shift with the shorter code
 MenuF WifiEntry_Loop__Q23msw11CSelectMenuFv unverified 70.6 the original inlines Entry_LoopStep22 into case 22 (and still emits it); ours calls it (explicit inline makes it inline but drops the standalone copy); plus the pad-loop address form
 MenuF WifiEntry_PadEntry__Q23msw11CSelectMenuFv near 97.2 CMenuPadInfo pad loop: the original steps a pointer from s_Instance+4 and reads 0(rP), ours folds the offset into 4(rX); same addresses; one load order
+MenuF WifiTop_In__Q23msw11CSelectMenuFv near 91.3 register allocation only: the original keeps one callee-saved register fewer (this/pObj/GetLytObj result in other registers, one less stack save); same calls, constants and memory accesses
 MenuF _GetUsedCursol__Q23msw11CSelectMenuFl near 98.9 operand order of the final commutative or
 MenuF _SetCupBit__Q23msw11CSelectMenuFl near 96.4 register allocation and instruction order only
 MenuF _SetStarMii__Q23msw11CSelectMenuFl near 99.9 stack slots of the two 8-byte RFLCreateID copies swapped (sp+8 / sp+0x10)

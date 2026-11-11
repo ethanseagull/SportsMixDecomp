@@ -49,3 +49,4 @@ Equivalent game/dodge/CEffectCoinGet.cpp
 Equivalent game/dodge/CStgGmk_Trolley_Act_Dodge.cpp
 Matching game/dodge/CStgGmk_Case_Act_Dodge.cpp
 Matching game/dodge/CComDrvDodgeDD.cpp
+Matching game/dodge/CStageDodgeDOD55.cpp

@@ -1,13 +1,21 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
 HockeyF AddCoinValue__Q23msw18CCockpitHockeyCoinFlll near 99.0 register allocation only: the original gives the two GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 HockeyF AllSetState___Q33msw14CHR_MAN_HOCKEY15CChrManHockeyCSFlll near 99.5 register allocation only
+HockeyF CheckStickParam__Q23msw16CChrDrvPadHockeyFv near 96.4 float register choice and one swapped independent store/load pair
 HockeyF CreateGoal__Q23msw14CStageHockey07Fv near 99.3 99.3%: boss position vector (X, 0.0f, Z) loaded in a different order into the same stack vector; same values
 HockeyF DetectBallGoalIn___Q23msw14CCollManHockeyFRlRQ23bcs5FVEC3RQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 92.8 stack slots and scheduling; goalPos loaded twice where the original copies it once (ps_mr); guardian pointer strength-reduced differently; same constants, calls, accesses and branches
 HockeyF DetectBallGoalOut___Q23msw14CCollManHockeyFRlRQ23bcs5FVEC3RQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 96.9 stack slots and 4 redundant float reloads; same constants, calls, field accesses and branch targets
 HockeyF DetectGoalHit___Q23msw14CCollManHockeyFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 93.1 stack slot layout plus one dead copy of a temporary vector the original makes; same constants, calls, field accesses and branch targets
 HockeyF DetectMapHit___Q23msw14CCollManHockeyFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 96.2 register numbering, order of a few float instructions in the camera-edge test and two redundant reloads of 'to'; same constants, calls, field accesses and branch targets
+HockeyF MainCrashSkate___Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG unverified 75.3 original calls UpdateCmdBuf_, ours inlines it (same effect); #pragma auto_inline off gives 100% but is not allowed under rule 3 (one function, not file-wide evidence)
+HockeyF MainDefense___Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG unverified 85.6 original calls UpdateCmdBuf_, ours inlines it (same effect); #pragma auto_inline off gives 100% but is not allowed under rule 3 (one function, not file-wide evidence)
 HockeyF MainFunc__Q23msw9CFightingFf near 99.4 0x4306 flag test as andi./bne vs andi./cntlzw/srwi./beq (same condition); register numbering and order of independent stack stores/loads
+HockeyF MainOffenseOnBall___Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG unverified 93.0 original calls UpdateCmdBuf_, ours inlines it (same effect); #pragma auto_inline off gives 100% but is not allowed under rule 3 (one function, not file-wide evidence)
+HockeyF MainOffense___Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG unverified 89.0 original calls UpdateCmdBuf_, ours inlines it (same effect); #pragma auto_inline off gives 100% but is not allowed under rule 3 (one function, not file-wide evidence)
 HockeyF Main__Q23msw18CCockpitHockeyCoinFv near 98.8 register choice only: the loop counters and the pane-accessor temporary sit in r27/r28, the original's first loop counter in r30; same instructions otherwise
+HockeyF MethdPassCall___Q23msw16CChrDrvPadHockeyFl near 99.7 load order of queue head/tail and the two team bytes
+HockeyF OnMsgMain__Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG near 99.9 register choice for the character pointer
+HockeyF OnMsg__Q23msw16CChrDrvPadHockeyFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG near 99.0 register choice and load order in rumble cases 0x53/0x54
 HockeyF ScoreBoard_Loop__Q23msw19CCockpitHockeyPauseFv near 98.0 register allocation only (as CCockpitBasketPause::ScoreBoard_Loop): the original reuses the table-pointer register for the third result page, ours takes one more saved register (stmw/lmw); same loads, stores, calls and branches
 HockeyF ScoreInWait__Q23msw18CCockpitHockeyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 HockeyF ScoreIn__Q23msw18CCockpitHockeyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28

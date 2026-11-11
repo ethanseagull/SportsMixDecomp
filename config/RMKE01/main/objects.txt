@@ -36,6 +36,10 @@ NonMatching game/msw/CEventDemoBase.cpp
 NonMatching game/msw/CStgGmk_Pylon_Mdl.cpp
 Equivalent game/msw/CItemBall.cpp
 NonMatching game/msw/CEffectTable.cpp
+Equivalent game/msw/CEffectAttachTable.cpp
+Equivalent game/bcs/CSndTask.cpp
+Equivalent game/msw/menu/CMovieScnObj.cpp
+Equivalent game/msw/CC_CMN/SLIME/CcSquadFactory.cpp
 Matching game/msw/CoinRes.cpp
 NonMatching game/bcs/CAnmTexSrt.cpp
 NonMatching game/bcs/CAnmTexPat.cpp

@@ -11,6 +11,7 @@ Matching game/boss/TournamentBoss.cpp
 Matching game/boss/CCockpitBossLayoutBase.cpp
 Matching game/boss/CCollManBoss.cpp
 Equivalent game/boss/CChrManBoss.cpp
+Equivalent game/boss/CChrDrvPadBoss.cpp
 Matching game/boss/CChrMarkerBoss.cpp
 Matching game/boss/CBallManBoss.cpp
 Equivalent game/boss/CRadarIcon2DBoss.cpp
@@ -23,3 +24,7 @@ Equivalent game/boss/CCockpitBossCoin.cpp
 Matching game/boss/CEventDemoBoss.cpp
 Equivalent game/boss/CCameraBoss.cpp
 NonMatching game/boss/CComDrvBoss.cpp
+Equivalent game/boss/CChrCoreBossLuigi.cpp
+Equivalent game/boss/CChrCoreBossYoshi.cpp
+Equivalent game/boss/CChrCoreBossSiroma.cpp
+Equivalent game/boss/CChrCoreBossKinopio.cpp

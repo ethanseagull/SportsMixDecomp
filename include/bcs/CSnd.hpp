@@ -4,6 +4,7 @@
 namespace bcs {
 
     class CSndGroupList;
+    class CTask;
 
     // The sound system (DOL). Only the members used so far.
     class CSnd {
@@ -42,6 +43,12 @@ namespace bcs {
             static void SetListenerMaxVolumeDistance(float fDistance);
             static void SetListenerUnitDistance(float fDistance);
             static void SetListenerInteriorSize(float fSize);
+
+            // (names guessed) The state of the sound system (5 once it is
+            // running, lbl_805C0A30), and the task every sound task is made
+            // under (lbl_805C0A58, a plain bcs::CTask made with priority 0x3E).
+            static long s_nState;
+            static CTask *s_pTaskRoot;
     };
 
     // A list of sound groups to load, 0x404 bytes (the DOL builds it on the

@@ -17,14 +17,28 @@ namespace msw {
     // words are not mapped.
     class CBodyCollision {
         public:
+            // Added for BossF game/boss/CChrCoreBossKinopio.cpp (DOL;
+            // argument meanings guessed): nUnit units of collision kind
+            // nKind.
+            CBodyCollision(long, long nUnit, long nKind, unsigned long);
+            ~CBodyCollision();
+            void SetTargetFlagAll(unsigned long flag);
+            void SetPushRankAll(long rank);
+            void SetPushPowerAll(long power);
+            void SetPosAll(const bcs::FVEC3 &pos);
+            void AddPosXZAll(const bcs::FVEC3 &pos, const bcs::FVEC3 &move);
+            void SetSizeAll(float fRadius, float fHeight, float);
+            void SetPushEnableAll();
+            void SetEnableAll();
+            // Recomputes the bounding boxes after a move.
+            void CalcAABBAll();
+
             // Target flags of every unit: set all to `flag`, or add `flag`.
             // Added for the DOL's msw::CStgGmk_WaterPillar_Act (parameter
             // meanings guessed).
             CBodyCollision();
-            ~CBodyCollision();
             void Create(long num, long, long, unsigned long);
             void SetCollType(long index, long type);
-            void SetEnableAll();
             void SetDisableAll();
             void SetPos(long index, const bcs::FVEC3 &rPos);
             void SetSize(long index, const bcs::FVEC3 &rSize);
@@ -53,6 +67,8 @@ namespace msw {
             void SetTargetFlag(long index, unsigned long flag);
             void SetRadius(long index, float radius);
             void SetBodyDisableAll();
+            // (added for VolleyF's CC09_VOLLEY::CcKinopioBoundMushroom)
+            void SetHitEffectFrameAll(float fFrame);
 
         private:
             unsigned long m_Unk00[3];

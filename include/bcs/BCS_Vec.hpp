@@ -10,6 +10,10 @@ namespace bcs {
     // rOut = rFrom turned towards rTo by t of the angle between them. In the
     // DOL.
     void BCS_Vec_Slerp(FVEC3 &rOut, const FVEC3 &rFrom, const FVEC3 &rTo, float t);
+    // (DOL; added for VolleyF CComDrvVolleyGame; meaning guessed from the
+    // name) The point at t of a beta spline from rFrom through rCtrl to
+    // rTo, in the XZ plane.
+    void BCS_Vec_BetaSplineCurveXZ(FVEC3 &rOut, const FVEC3 &rFrom, const FVEC3 &rCtrl, const FVEC3 &rTo, float t);
 
     // (argument names guessed) rOut = (sin(rotY), 0, cos(rotY)) * len: a
     // vector of length len along +Z turned by rotY (radians) about Y. In the

@@ -17,8 +17,59 @@ namespace msw {
             CComDrvHockeyGame();
             virtual ~CComDrvHockeyGame();
 
+            // Overrides, in the order of the vtable (added for
+            // game/hockey/unit_AFCA0.cpp; return types as in CComDrv).
+            virtual int MethdShoot();
+            virtual void ClearAll();
+            virtual void UpdateInfo();
+            virtual void Reset();
+            virtual long OnMain(_CHR_MSG *pMsg);
+            virtual long OnInit(_CHR_MSG *pMsg);
+            virtual void OnDamage(_CHR_MSG *pMsg);
+            virtual long OnGameMsgProc(MSG_ID id, _CHR_MSG *pMsg);
+            virtual void ActInterrupt();
+            virtual void ThkMain();
+
+            // The skating moves (game/hockey/unit_AFCA0.cpp). Each returns 1
+            // when the character took the action.
+            int MethdMoveMain(float fRotY);
+            int MethdMoveRevise(const bcs::FVEC3 &pos);
+            int MethdRotY(float fRotY);
+            int MethdFeintShoot();
+            int MethdItemBallShoot();
+
+            // The three attack parameters of a character for the computer
+            // (game/hockey/unit_EDBF0.cpp; meaning of the three not known).
+            void GetAttack1Param(long nChr, float &, float &, float &);
+            void GetAttack2Param(long nChr, float &, float &, float &);
+            void GetAttack3Param(long nChr, float &, float &, float &);
+            // Whether the puck is being shot (passed) by the driver's own
+            // team (nSide 0) or by the other team (1); rChr gets the shooter
+            // (the pass's receiver).
+            int AreYouShot(long nSide, long &rChr);
+            int AreYouPass(long nSide, long &rChr);
+
+            // 0 for the driver's own team, 1 for the other one (values
+            // inferred from AreYouShot).
+            long FriendOrEnemy(long nChr) const;
+            long GetMyTeamNo() const;
+            // The computer level as a float, for CComMan::GetDatF.
+            float GetHockeyComLvF();
+
         protected:
-            unsigned char m_Unk1B0[0x494 - 0x1B0];
+            unsigned char m_Unk1B0[0x37C - 0x1B0];
+            // 0x37C (name guessed): set by MethdRotY.
+            int m_bRotY;
+            unsigned char m_Unk380[0x3E8 - 0x380];
+            // 0x3E8, 0x3EC (names guessed): whether the skater brakes to
+            // turn, and whether that was drawn since it last could.
+            int m_bSwitchBrake;
+            int m_bSwitchBrakeLot;
+            unsigned char m_Unk3F0[0x418 - 0x3F0];
+            // 0x418 (name guessed): a wait after a shot, from the computer
+            // data (id 0x119).
+            float m_fShootWait;
+            unsigned char m_Unk41C[0x494 - 0x41C];
     };
 
     class CComDrvHockeyKeeper : public CComDrvHockey {

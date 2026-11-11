@@ -43,7 +43,7 @@ namespace msw {
             virtual int IsHoldBall() const;                            // 0x38
             virtual int IsAirTrickSwingEnd() const;                    // 0x4C
             virtual int IsAirTrickFall() const;                        // 0x50
-            virtual void GetTargetMarkerPos(bcs::FVEC3 &);             // 0x58
+            virtual int GetTargetMarkerPos(bcs::FVEC3 &);              // 0x58
             virtual int MoveTargetMarkerPos(float);                    // 0x5C
             virtual long CheckGuideTelopDisp();                        // 0x64
             virtual int IsVolleyRightBallTouch(long) const;            // 0x8C

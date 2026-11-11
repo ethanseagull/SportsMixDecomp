@@ -32,8 +32,8 @@ namespace msw {
             virtual int MethdRotateY(float fRot, long);
             virtual void ClearAll();
             virtual void UpdateInfo();
-            virtual void OnMain(_CHR_MSG *pMsg);
-            virtual void OnInit(_CHR_MSG *pMsg);
+            virtual long OnMain(_CHR_MSG *pMsg);
+            virtual long OnInit(_CHR_MSG *pMsg);
             virtual int GetMapStatus(short nX, short nZ, CComManHockey::MAP_STATUS_DATA &rData);
             virtual int GetPartyMapStatus(short nX, short nZ, unsigned char &, unsigned char &, char &);
             virtual int MethdSkate(const bcs::FVEC3 &pos, int, float);

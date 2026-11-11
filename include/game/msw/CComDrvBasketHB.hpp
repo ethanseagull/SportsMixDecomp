@@ -21,10 +21,10 @@ namespace msw {
             virtual void UpdateInfo();
             virtual void NormalizeCanMovePos(bcs::FVEC3 &pos) const;
             virtual void Reset();
-            virtual void OnMain(_CHR_MSG *pMsg);
+            virtual long OnMain(_CHR_MSG *pMsg);
             virtual void OnConnect(_CHR_MSG *pMsg);
             virtual void OnDisconnect(_CHR_MSG *pMsg);
-            virtual void OnInit(_CHR_MSG *pMsg);
+            virtual long OnInit(_CHR_MSG *pMsg);
             virtual long OnGameMsgProc(MSG_ID id, _CHR_MSG *pMsg);
             virtual void ActInterrupt();
             virtual void ThkMain();

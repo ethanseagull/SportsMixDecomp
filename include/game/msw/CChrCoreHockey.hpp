@@ -445,7 +445,12 @@ namespace msw {
         float m_fRotY;               // 0x04, the yaw the trick turns to
         unsigned char m_Unk08[0x4];
         float m_fUnk0C;              // 0x0C, Luigi clears it when his target is lost
-        unsigned char m_Unk10[0x40 - 0x10];
+        unsigned char m_Unk10[0x1C - 0x10];
+        // 0x1C-0x40 (names guessed; added for game/hockey/CChrCoreHockeySlime.cpp):
+        // the move during the trick (SubStateArtsShotSetTrickMoveParam_).
+        float m_fMoveFrame;          // 0x1C
+        CC_DATA::CHR_PARAM::MOVE_PARAM m_Move; // 0x20
+        CChrCore::DIR_MOVE m_DirMove; // 0x30
         CChrCore::ROT_LERP1 m_RotLerp; // 0x40, the turn (SubStateArtsShotCalcRotParam_)
         // 0x50 (name guessed): the kind of jump; Donkey Kong sets 2, or 0
         // for none (SubStateArtsShotSetTrickJumpParam_).
@@ -727,9 +732,20 @@ namespace msw {
         public:
             CChrCoreHockeySlime();
             virtual ~CChrCoreHockeySlime();
+            virtual void Reset_();                                     // 0x384
             virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCC8
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK *, long); // 0xCE8
+            virtual void SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRICK *, long); // 0xCEC
+            virtual float SubStateArtsShotGetTrickMotFrame_(STATE_WORK_AIR_TRICK *, long); // 0xCF0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xD0C
         protected:
-            unsigned char m_Unk76C[0x770 - 0x76C];
+            // 0x76C (name guessed): the task id of the squad factory that
+            // holds the three slime models of the special shot; zero for
+            // none.
+            unsigned long m_hSquadFactory;
     };
 
     class CChrCoreHockeyMii00 : public CChrCoreHockey {

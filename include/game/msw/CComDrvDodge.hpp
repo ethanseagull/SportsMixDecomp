@@ -48,8 +48,8 @@ namespace msw {
             virtual void NormalizeCanMoveWorldPos(bcs::FVEC3 &pos) const;
             virtual void Reset();
             virtual int IsActiveBallNothingThk() const;
-            virtual void OnMain(_CHR_MSG *pMsg);
-            virtual void OnInit(_CHR_MSG *pMsg);
+            virtual long OnMain(_CHR_MSG *pMsg);
+            virtual long OnInit(_CHR_MSG *pMsg);
             virtual long OnGameMsgProc(MSG_ID id, _CHR_MSG *pMsg);
             virtual void ActInterrupt();
             virtual void ThkMain();

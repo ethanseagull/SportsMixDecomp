@@ -29,6 +29,10 @@ namespace msw {
             struct STATE_WORK_RECEIVE;
             struct STATE_WORK_SPIKE;
             struct STATE_WORK_AIR_TRICK;
+            // (added for game/boss/unit_636D4.cpp, which defines them) The
+            // work of the side step and of the jump shot states.
+            struct STATE_WORK_SIDESTEP;
+            struct STATE_WORK_JUMP_SHOOT;
 
             CChrCoreBoss();
             virtual ~CChrCoreBoss();
@@ -263,6 +267,13 @@ namespace msw {
             // Starts the receive state; returns its work.
             STATE_WORK_RECEIVE *SetStateReceive_(CBall *pBall, long, long nPose);
             float GetBallShotTrgFrame_(long, float) const;
+            // (added for game/boss/unit_636D4.cpp; as in CChrCoreVolley) The
+            // yaw to the spike's target, whose position goes to pPos when
+            // not null.
+            float GetSpikeTargetPosRot_(bcs::FVEC3 *pPos) const;
+            // (added for game/boss/unit_636D4.cpp; meaning of the second
+            // float not known) Adds fRate of a full gauge to the arts gauge.
+            void AddArtsGauge_(float fRate, float);
             CBall *GetTargetBall_() const;
 
         protected:

@@ -56,6 +56,13 @@ namespace msw {
         nw4r::lyt::Pane *CreateFaceIconPicturePane(long nChr, bcs::G2D::CPaneCtrl *pPaneCtrl,
                                                    nw4r::lyt::Pane *pBase, const char *pName);
 
+        // (added for game/menu/CBackIcon.cpp; return type and argument
+        // name guessed) Fills text pane pPane with the key text of the
+        // current controller style; nKind picks one of two texts (the back
+        // button passes 1 while the remote of a pad in pointer style
+        // points off the screen).
+        void ReplaceKeyTextByPane(nw4r::lyt::Pane *pPane, int nKind);
+
         // (added for game/menu/CWiFiFrindVS.cpp; argument names guessed)
         // Shows the texture pTexObj in a new picture pane named pName, made
         // in pPaneCtrl's layout over pPane. Returns the new pane

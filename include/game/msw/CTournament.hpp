@@ -59,6 +59,19 @@ namespace msw {
             static int IsMissionComThrowingShootDisable(long nTeam);
             static int IsMissionComDunkShootDisable(long nTeam);
             static int IsMissionComLayupShootDisable(long nTeam);
+            // Added for MenuF game/menu/CTournamentLoad.cpp (names of the
+            // arguments and return types guessed; the callers pass
+            // CSelectMenu::m_nGameKind and -1). The tournament saved for
+            // later in game nGameKind: whether there is one, whether its
+            // players have no Mii data, its number of players, its cup
+            // (1 to 3) and how far it had got (0, 1 or 3); Continue
+            // resumes it.
+            static int IsContinue(long nGameKind, long nUnk);
+            static int IsContinueNotMiiData(long nGameKind, long nUnk);
+            static long GetContinuePlayer(long nGameKind, long nUnk);
+            static long GetContinueCup(long nGameKind, long nUnk);
+            static long GetContinueRank(long nGameKind, long nUnk);
+            static void Continue(long nGameKind, long nUnk);
     };
 }
 

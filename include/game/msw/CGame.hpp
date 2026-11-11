@@ -394,6 +394,10 @@ namespace msw {
             static long DemoSkipInputCheck(long nPad);
             static void SetCockpitPartMove(long, long);
             static const wchar_t *GetCharName(long nPlayer);
+            // (DOL, static; added for MenuF game/menu/unit_4BB48.cpp; return
+            // type guessed) Which team (0 or 1) this console plays in a
+            // Wi-Fi game.
+            static void SetMyTeamIdx(long nTeam);
             // The difficulty of the game (see GameWork::m_nGameLevel).
             // Inline; the parameter files emit it.
             static long GetGameLevel() { return g_GameWork.m_nGameLevel; }

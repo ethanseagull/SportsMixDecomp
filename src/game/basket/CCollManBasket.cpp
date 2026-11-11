@@ -7,7 +7,7 @@
 msw::CCollMan *msw::CCollManBasket::CreateInstance(bcs::CTask *pParent)
 {
     if (CCollMan::m_pInstance == 0) {
-        CCollMan::m_pInstance = new (0x100) CCollManBasket(pParent);
+        CCollMan::m_pInstance = new (0) CCollManBasket(pParent);
     }
     return CCollMan::m_pInstance;
 }

@@ -12,7 +12,7 @@ Matching game/msw/CStageNet.cpp
 Matching game/msw/CStage01Base.cpp
 Matching game/msw/CStgDrv.cpp
 Matching game/bcs/G2D/CTexMap.cpp
-NonMatching game/msw/CDropCoinMan.cpp
+Equivalent game/msw/CDropCoinMan.cpp
 NonMatching game/msw/CGameSpeedCtrl.cpp
 Matching game/msw/menu/CStateSave.cpp
 Matching game/msw/CCockpitResultTime.cpp

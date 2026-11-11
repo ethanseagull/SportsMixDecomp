@@ -1,9 +1,17 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
 main AddChrGroups__Q23msw8CGameSndFRQ23bcs13CSndGroupListRCQ33msw8CGameSnd9GAME_INFOs near 99.3 99.3%: register numbering of the list pointer and group value in the inlined Add; same code otherwise
 main AttachPane__Q33msw7cockpit7C3DCoinFPQ34nw4r3lyt4Pane near 99.6 register allocation/order only after naming the C3DCoinTask calls; declaration-order search no gain
+main CheckBound___Q23msw9CDropCoinFv unverified 94.5 star-piece bit tested via cntlzw/srwi bool in the original, rlwinm. in ours; original reloads m_nFlag after the reflection, ours keeps it in a register (no store between); rest register choice
 main ChgDemoDisp__Q23msw9CItemBallFi near 98.2 98.2%: diff.py class schedule; the null test and flag set/clear blocks are laid out in the opposite branch order with registers renumbered; same loads, stores and calls
+main CreateBuryCoin__Q23msw12CDropCoinManFRCQ23bcs5FVEC3RCQ23bcs5FVEC3l near 99.1 float register choice and load order only
+main CreateMdl___Q23msw18CEffectCoinGetBaseFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinTypei unverified 98.2 ResFile stored to the stack before the alignment-assert branch in the original, after it in ours (one extra mr)
+main CreateMdl___Q23msw9CDropCoinFv near 99.9 shadow/reflection model name pointers in swapped registers; declaration-order search no gain
+main DoParabolaThrow__Q23msw9CDropCoinFRCQ23bcs5FVEC3ff near 99.2 float register choice only
+main DropCoinPickup__Q23msw12CDropCoinManFRCQ23bcs5FVEC3ffPFPCQ23msw9CDropCoinPv_vPv near 97.5 register choice; (flag & 0x4306) == 0 tested via cntlzw bool in the original, direct masked branch in ours (equivalent)
 main GetMusicFrame__Q23msw8CGameSndFv near 98.8 98.8%: float registers f0/f1 swapped in the 60*pos/rate expression; same operations and order
 main LoadGameSnd__Q23msw8CGameSndFv near 99.1 r3/r4 swapped for the GameWork pointer and the zero stored to m_nStage; same stores, calls and branches
+main MainBury___Q23msw9CDropCoinFv near 99.9 one fmadds with its multiplied operands swapped (commutative)
+main MainMove___Q23msw9CDropCoinFv near 97.7 register choice in the inlined reflection; -3.0f constant loaded earlier in the original
 main Main__Q23msw19CItemBallShellWreckFv near 96.3 96.3%: float register numbering and instruction order in the paired-single motion block and the fade branch; same operations, constants and branches
 main SetDispFlag__Q33msw7cockpit10CEffectSetFi near 99.8 register allocation only (loop pointer and EF manager swap r8/r10); declaration-order search no gain
 main SetTimeValue__Q33msw7cockpit10CTimeCountFPQ23msw17CMenuPaneAccessorfilllli near 99.6 register allocation only (three saved registers permuted); declaration-order search no gain in 24 tries

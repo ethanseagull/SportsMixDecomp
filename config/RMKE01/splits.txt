@@ -98,10 +98,10 @@ game/bcs/CMdlShadow.cpp:
 	.text       start:0x8005FFA0 end:0x80060344
 
 game/bcs/CMiiMan.cpp:
-	.text       start:0x80068954 end:0x80068D44
+	.text       start:0x8006832C end:0x800695C8
 
 game/bcs/CMovie.cpp:
-	.text       start:0x80069604 end:0x8006A15C
+	.text       start:0x800695C8 end:0x8006A15C
 
 game/bcs/CPadWI.cpp:
 	.text       start:0x800708F0 end:0x8007109C

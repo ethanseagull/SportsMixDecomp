@@ -26,6 +26,7 @@ main CtorState_STAY__Q23msw23CStgGmk_WaterPillar_ActFv near 99.3 register alloca
 main DeleteJointObj__Q23bcs7CScnObjFv unverified 73.2 73.2%: inlining depth only (AppendDelayDeleteObject inlined one level deeper here); byte-identical under Wii/1.5 and 1.7
 main Disp__Q33msw31@unnamed@CCockpitChrIcon2D_cpp@12CChrIconTaskFPQ23msw17CMenuPaneAccessorl near 99.3 99.3%: register numbering only (GetPaneObj bound check r6/r0 vs r0/r3; FVEC3Add float registers)
 main DoParabolaThrow__Q23msw9CDropCoinFRCQ23bcs5FVEC3ff near 99.2 float register choice only
+main DrawOutline___Q23bcs7CMiiManFPUslll near 88.2 88.2%: original recomputes the row start with mullw each outer iteration, ours strength-reduces to a w*4 step; one more saved register shifts numbering; arithmetic identical
 main Draw__Q23msw18CGameExDemoMaskObjFv near 96.6 screen width/height read with lha where the original has lhz+extsh (same value); otherwise register choice and scheduling of the -1 colour and the write-gather vertex stores
 main DropCoinPickup__Q23msw12CDropCoinManFRCQ23bcs5FVEC3ffPFPCQ23msw9CDropCoinPv_vPv near 97.5 register choice; (flag & 0x4306) == 0 tested via cntlzw bool in the original, direct masked branch in ours (equivalent)
 main GetAttachName__Q23msw18CEffectAttachTableCFl near 91.8 prologue order only: the original saves r31 before loading m_ppName, ours after; same instructions otherwise, registers renumbered

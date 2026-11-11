@@ -770,6 +770,9 @@ namespace msw {
             // The position, as a reference to the member (GetPos(FVEC3 &)
             // copies it).
             const bcs::FVEC3 &GetPos();
+            // The same for a const character (GetPos__Q23msw8CChrCoreCFv;
+            // msw::CStgGmk_WaterPillarCluster::OnUpdate in the DOL).
+            const bcs::FVEC3 &GetPos() const;
             float GetRotY() const;
             // The goal the character's team attacks, as a point.
             const bcs::FVEC3 &GetTargetGoalPos() const;

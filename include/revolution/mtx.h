@@ -22,6 +22,7 @@ void PSMTXMultVec(const Mtx m, const Vec *src, Vec *dst);
 float PSVECSquareDistance(const Vec *pA, const Vec *pB);
 void PSVECNormalize(const Vec *pIn, Vec *pOut);
 float PSVECMag(const Vec *p);
+void PSVECCrossProduct(const Vec *pA, const Vec *pB, Vec *pAxB);
 
 typedef struct Quaternion {
     float x; // 0x00

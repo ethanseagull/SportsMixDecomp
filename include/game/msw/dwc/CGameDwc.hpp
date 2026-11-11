@@ -32,6 +32,14 @@ namespace msw {
                 void Window_Picture1(char *pGroup, char *pLabel, int nUnk);
                 void Window_Pict1Close();
 
+                // Added for MenuF game/menu/CWiFiGame.cpp (return types and
+                // argument names guessed). A time limit of fTime (seconds,
+                // guessed) for the screen; non-zero once it has run out;
+                // stopping it.
+                static void SetUpTimer(float fTime, int nUnk);
+                static int CountTimer();
+                static void CloseTimer();
+
                 // (no symbol; name guessed) Forgets the answer of the last
                 // message window. Inline in MenuF.
                 void ClearWindowResult()

@@ -152,6 +152,18 @@ namespace msw {
             void FriendList_Out();
             void FriendList_LineMessage(long nBtnKindId);
 
+            // Added for MenuF game/menu/CWiFiGame.cpp (return types
+            // guessed). The steps of the Wi-Fi game selection screen
+            // (SelectMenu::CWiFiGame), the game and play mode button
+            // nBtnKindId selects, and the steps of the Wi-Fi top screen.
+            void WifiGame_In();
+            void WifiGame_Loop();
+            void WifiGame_Out();
+            void WifiGame_SetPlayStyle(long nBtnKindId);
+            void WifiTop_In();
+            void WifiTop_Loop();
+            void WifiTop_Out();
+
             // Added for MenuF game/menu/CPlusMinus.cpp (defined there; the
             // return types and argument names are guesses). Whether pad
             // nPad uses a cursor (either of two flags of CMenuPadInfo).
@@ -269,6 +281,39 @@ namespace msw {
             void NoFriendInfo_Main();
             void NoFriendInfo_Out();
 
+            // Added for MenuF game/menu/unit_61C00.cpp (return types and
+            // names guessed). The steps of the cup select screen
+            // (SelectMenu::CCupSelect with its difficulty tabs,
+            // SelectMenu::CCupSelectTab), and what they call.
+            void Cup_In();
+            void Cup_Loop();
+            void Cup_Out();
+            // 1 when the leader's pad moved the difficulty tab, else 0.
+            int Cup_CheckTabChange();
+            void Cup_ChangeStateInit(long nMode);
+            // The number of difficulties open in the current game kind,
+            // less one.
+            long _DifficultyBitCount();
+            // Enables the cup buttons of difficulty nLevel from the save.
+            void _SetCupBit(long nLevel);
+            // nCup when cup nCup of difficulty nLevel is open, else the
+            // first open cup (0 for none).
+            long _CheckCupBit(long nLevel, long nCup);
+            void _TabChange(long nLevel);
+            // Shows cup model nCup (0: none) on pMenu's cup stand.
+            void _SetCupCharaObj(CSelectMenu *pMenu, long nCup);
+            void Cup_OkButtonDelay();
+            void Cup_OkButtonInit();
+            void Cup_OkButton();
+            void Cup_OkButtonOut();
+            // Updates the background and the cup model for the button
+            // the cursor is on.
+            void _BgChangeDisp(long nBtnKindId);
+            // Defined in other MenuF files.
+            void SetPreviousButtonKindIdWithoutNone(long nPad, unsigned short nBtnKindId,
+                                                    CSelectMenuLayoutBase *pObj);
+            void Court_CameraReverse();
+
             // Data, added for the same unit. The class is 0xAB8 bytes (the
             // size layout.py finds); only two members are named so far.
             // The second polymorphic part mentioned above (a `@68@` thunk)
@@ -311,8 +356,11 @@ namespace msw {
             // mode (0x66 bytes per pad: 51 modes). Saved by Backup().
             unsigned short m_nCurrentBtnKindId[4][51];
 
-        private:
-            unsigned char m_Unk236[0x8];     // 0x236
+        public:
+            // 0x236. (name guessed; added for game/menu/unit_61C00.cpp)
+            // A button kind id per pad, written by Cup_OkButtonOut with the
+            // cup chosen.
+            unsigned short m_nCupBtnKindId[4];
 
         public:
             // 0x23E. (added for game/menu/CTitle.cpp; names guessed) Five
@@ -427,9 +475,26 @@ namespace msw {
         private:
             unsigned char m_Unk714[0x48];    // 0x714
         public:
-            // 0x75C. (added for game/menu/CWiFiFrindVS.cpp) 0x1EC bytes
-            // FriendVS_Loop clears before the friend match starts.
-            unsigned char m_FriendVSWaitWork[0x1EC];
+            // Size 0x1EC. (added for game/menu/CWiFiGame.cpp; names
+            // guessed) What each side of a friend match sends the other
+            // (bcs::dwc::CDwc::SetMySingleDataA, GetSingleDataA).
+            struct WiFiSingleData {
+                unsigned char m_Unk00[4];    // 0x00
+                unsigned char m_nRole;       // 0x04, compared with m_bStarMii
+                unsigned char m_Unk05[3];    // 0x05
+                long m_nBtnKindId;           // 0x08, the button the host's cursor is on
+                unsigned long m_nInput;      // 0x0C, the host's decide input
+                unsigned char m_Unk10[0x1DC]; // 0x10
+            };
+
+            union {
+                // 0x75C. (added for game/menu/CWiFiFrindVS.cpp) 0x1EC bytes
+                // FriendVS_Loop clears before the friend match starts.
+                unsigned char m_FriendVSWaitWork[0x1EC];
+                // The same bytes as this player's WiFiSingleData
+                // (game/menu/CWiFiGame.cpp).
+                WiFiSingleData m_MySingleData;
+            };
         private:
             unsigned char m_Unk948[0x14];    // 0x948
         public:
@@ -459,8 +524,13 @@ namespace msw {
             unsigned char m_Unk98C[0x74];    // 0x98C
         public:
             long m_UnkA00;                   // 0xA00
+            // 0xA04, 0xA08. (names guessed; added for
+            // game/menu/unit_61C00.cpp) The cup model the cup select
+            // screen shows (0 none, 1 to 3 the cups), and the one shown
+            // before it.
+            long m_nCupModel;
+            long m_nPrevCupModel;
         private:
-            unsigned char m_UnkA04[0x8];     // 0xA04
         public:
             // 0xA0C. (added for game/menu/CFriendInfo.cpp; name guessed)
             // The step of FriendMatchChancelCheck.
@@ -518,6 +588,11 @@ namespace msw {
     // argument names are guesses). A table of stage ids for game kind
     // nGame; an entry of 0x10 is not playable.
     const unsigned char *_GetStageNoInfo(long nGame, long nIndex);
+
+    // Defined in another MenuF file (added for game/menu/unit_61C00.cpp;
+    // the return type and argument names are guesses). Stores the number
+    // of cups of game kind nGame in *pCount.
+    long _GetCupCount(long nGame, unsigned char *pCount);
 }
 
 #endif /* !CSELECTMENU_HPP_ */

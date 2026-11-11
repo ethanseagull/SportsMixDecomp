@@ -167,6 +167,9 @@ namespace msw {
             // Drops the item behaviour pItem from the ball (the bomb calls
             // it on itself when it goes off).
             void DetachItemEffect(CItemBall *pItem);
+            // (name guessed) Waluigi's special shot sets it on each ball it
+            // throws.
+            void SetArtsShotUnk(float fValue) { m_fArtsShotUnk384 = fValue; }
 
         protected:
             unsigned char m_Unk318[0x320 - 0x318];
@@ -186,7 +189,10 @@ namespace msw {
             float m_fNoCatchCount;      // 0x378, counted down by m_fFrameRate
             float m_fTimer37C;          // 0x37C, counted down by m_fFrameRate
             float m_fDefCounter;        // 0x380, counted down by m_fFrameRate
-            unsigned char m_Unk384[0x398 - 0x384];
+            // 0x384 (name guessed): set by Waluigi's special shot on each
+            // ball it throws (SetArtsShotUnk).
+            float m_fArtsShotUnk384;
+            unsigned char m_Unk388[0x398 - 0x388];
             float m_fGoalInRate;        // 0x398
             unsigned char m_Unk39C[0x3A0 - 0x39C];
             float m_fShootCurveValue;   // 0x3A0

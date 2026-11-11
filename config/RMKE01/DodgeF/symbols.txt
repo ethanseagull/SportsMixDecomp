@@ -2675,7 +2675,7 @@ SubStateArtsShotPlayLoopMotion___Q23msw20CChrCoreDodgeWaluigiFPQ33msw13CChrCoreD
 SubStateArtsShotPlayArtsShotMotion___Q23msw20CChrCoreDodgeWaluigiFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x0006D7B8; // type:function size:0xC8 scope:global
 SubStateArtsShotPlayLandMotion___Q23msw20CChrCoreDodgeWaluigiFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x0006D880; // type:function size:0x54 scope:global
 GetMotIDType_SideStep__Q23msw20CChrCoreDodgeWaluigiCFv = .text:0x0006D8D4; // type:function size:0x8 scope:global
-fn_6_6D8DC = .text:0x0006D8DC; // type:function size:0x14
+__sinit_\CChrCoreDodgeWaluigi_cpp = .text:0x0006D8DC; // type:function size:0x14 scope:local
 __ct__Q23msw18CChrCoreDodgeWarioFv = .text:0x0006D8F0; // type:function size:0x3C scope:global
 __dt__Q23msw18CChrCoreDodgeWarioFv = .text:0x0006D92C; // type:function size:0x58 scope:global
 OnDivingCatchStart___Q23msw18CChrCoreDodgeWarioFPQ33msw13CChrCoreDodge23STATE_WORK_DIVING_CATCH = .text:0x0006D984; // type:function size:0x28 scope:global
@@ -3011,7 +3011,7 @@ Main__Q33msw13GIMMICK_DODGE14CEffectCoinGetFv = .text:0x0007E014; // type:functi
 __dt__Q23msw26CGimmickManDodgeDodgeOrDieFv = .text:0x0007E35C; // type:function size:0x5C scope:global
 CreateInstance__Q23msw26CGimmickManDodgeDodgeOrDieFPQ23bcs5CTask = .text:0x0007E3B8; // type:function size:0x7C scope:global
 Initialize___Q23msw26CGimmickManDodgeDodgeOrDieFv = .text:0x0007E434; // type:function size:0xA0 scope:global
-fn_6_7E4D4 = .text:0x0007E4D4; // type:function size:0x24
+__sinit_\CEffectCoinGet_cpp = .text:0x0007E4D4; // type:function size:0x24 scope:local
 __ct__Q23msw15CQPanelManDodgeFPQ23bcs5CTask = .text:0x0007E4F8; // type:function size:0x40 scope:global
 __dt__Q23msw15CQPanelManDodgeFv = .text:0x0007E538; // type:function size:0x74 scope:global
 GetPopupGroupData___Q23msw15CQPanelManDodgeCFl = .text:0x0007E5AC; // type:function size:0x70 scope:global

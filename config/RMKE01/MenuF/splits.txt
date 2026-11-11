@@ -251,9 +251,13 @@ game/menu/CWiFiTopA.cpp:
 	.data       start:0x00005280 end:0x000056D8
 
 game/menu/CWiFiGame.cpp:
-	.text       start:0x00049FD4 end:0x0004BB48
-	.rodata     start:0x00008C88 end:0x00008DE8
+	.text       start:0x00049FD4 end:0x0004B7F4
+	.rodata     start:0x00008C88 end:0x00008DD0
 	.data       start:0x000056D8 end:0x00005770
+
+game/menu/unit_4B7F4.cpp:
+	.text       start:0x0004B7F4 end:0x0004BB48
+	.rodata     start:0x00008DD0 end:0x00008DE8
 
 game/menu/unit_4BB48.cpp:
 	.text       start:0x0004BB48 end:0x0004E890
@@ -301,12 +305,13 @@ game/menu/CWiFiFrindVS.cpp:
 	.data       start:0x000078D8 end:0x00007970
 
 game/menu/CCupSelectTab.cpp:
-	.text       start:0x0005EDA0 end:0x00061C00
-	.rodata     start:0x0000CA98 end:0x0000CCE8
+	.text       start:0x0005EDA0 end:0x0006181C
+	.rodata     start:0x0000CA98 end:0x0000CCA8
 	.data       start:0x00007970 end:0x00007B58
 
 game/menu/unit_61C00.cpp:
-	.text       start:0x00061C00 end:0x00063634
+	.text       start:0x0006181C end:0x00063634
+	.rodata     start:0x0000CCA8 end:0x0000CCE8
 	.data       start:0x00007B58 end:0x00007C00
 
 game/menu/CCupChr.cpp:

@@ -6,6 +6,8 @@
 
 namespace bcs {
 
+    class CCameraAnmCalc;
+
     // Size 0x1A4. A camera that plays a camera animation (the scene
     // camera of a g3d resource). The class lives in the DOL; only what the
     // modules need is mapped so far (constructor at
@@ -69,6 +71,11 @@ namespace bcs {
             // the animated camera (written directly by TourF).
             void SetUnk138Bit0() { m_nUnk138 |= 1; }
 
+            // (names guessed) The calculation run every frame, and the one
+            // the constructor made (msw::CSceneCalc::SetCalc).
+            void SetCalc(CCameraAnmCalc *pCalc) { m_pCalc = pCalc; }
+            CCameraAnmCalc *GetDefaultCalc() const { return m_pCalcDefault; }
+
         private:
             // 0xFC: a frame controller (SetFrame passes its address on to a
             // DOL function); only the words the modules read are named.
@@ -76,7 +83,10 @@ namespace bcs {
             unsigned char m_Unk100[4];    // 0x100
             float m_fRate;                // 0x104, set by Play (name guessed)
             float m_fEndFrame;            // 0x108 (name guessed)
-            unsigned char m_Unk10C[0x18]; // 0x10C
+            unsigned char m_Unk10C[0xC];  // 0x10C
+            CCameraAnmCalc *m_pCalcDefault; // 0x118: made by the constructor (name guessed)
+            CCameraAnmCalc *m_pCalc;      // 0x11C: called every frame (name guessed)
+            unsigned char m_Unk120[4];    // 0x120
             SCENE_INFO *m_pSceneInfo;     // 0x124 (name guessed)
             SCENE_INFO m_SceneDefault;    // 0x128 (name guessed)
             long m_nSceneNum;             // 0x134 (name guessed)

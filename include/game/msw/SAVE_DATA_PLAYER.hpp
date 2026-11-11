@@ -11,6 +11,18 @@ namespace msw {
     // per-sport settings below are read by TourF's TournamentRule::SetupGame.
     // (member names and meanings guessed)
     struct SAVE_DATA_PLAYER {
+        // Size 0xC. (added for MenuF game/menu/unit_61C00.cpp; names
+        // guessed) Bit n of m_nLevelBit: difficulty n is open (bit 3 in
+        // game kind 0's record also gates game kind 5); bit n of
+        // m_nCupBit[nLevel]: cup n of that difficulty is open, of
+        // m_nCupNewBit[nLevel]: its button shows the new mark.
+        struct CupRecord {
+            unsigned char m_nLevelBit;      // 0x0
+            unsigned char m_nCupBit[4];     // 0x1
+            unsigned char m_nCupNewBit[4];  // 0x5
+            unsigned char m_Unk9[3];        // 0x9
+        };
+
         // Not zero while sport nGameMode has not been played in mode nMode.
         // (meaning and return type guessed)
         int IsFirstPlay(long nMode, long nGameMode);
@@ -86,8 +98,14 @@ namespace msw {
         short m_Unk2EE;
         Friend m_Friend[FRIEND_MAX];     // 0x2F0
         unsigned char m_Unk56F0[0x5C50 - 0x56F0];
-        unsigned char m_nFlags5C50; // 0x5C50; bit 0x08 picks the second camera table in CSelectMenu::HowTo_In (MenuF)
-        unsigned char m_Unk5C51[0x5C95 - 0x5C51];
+        union {
+            unsigned char m_nFlags5C50; // 0x5C50; bit 0x08 picks the second camera table in CSelectMenu::HowTo_In (MenuF)
+            // 0x5C50. (added for MenuF game/menu/unit_61C00.cpp; names
+            // guessed) The cup record of each game kind (0 to 3); kind 5
+            // uses the last difficulty of kind 0.
+            CupRecord m_Cup[4];
+        };
+        unsigned char m_Unk5C80[0x5C95 - 0x5C80];
         // 0x5C95, 0x5CB5, 0x5CD5, 0x5CF5: one byte per sport (basketball,
         // volleyball, dodgeball, hockey); while it is 0 the tournament sets
         // rule option 0x200.

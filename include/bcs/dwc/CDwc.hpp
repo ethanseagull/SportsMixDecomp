@@ -50,6 +50,10 @@ namespace bcs {
                 // been accepted.
                 int CreateFriendMatch(long nIndex, long nPlayerNum);
                 int IsMatched() const;
+                // Added for MenuF game/menu/CWiFiGame.cpp (argument name
+                // guessed). The data player nAid last sent with
+                // SetMySingleDataA.
+                const void *GetSingleDataA(long nAid) const;
         };
     }
 }

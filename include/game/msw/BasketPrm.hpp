@@ -590,6 +590,26 @@ namespace msw {
     extern float BASKET_PRM_S17_HEYHO_B_DIST_MAX;
     extern float BASKET_PRM_S17_HEYHO_C_DIST_MIN;
     extern float BASKET_PRM_S17_HEYHO_C_DIST_MAX;
+
+    // Stage 11, the volcano stage, listed in CStageBasket11::GetPrmTbl.
+    // Times are in seconds, angles in degrees, speeds per second.
+    extern float BASKET_PRM_S11_COURT_INIT_WAIT;
+    extern float BASKET_PRM_S11_COURT_WAIT;
+    extern float BASKET_PRM_S11_COURT_ANGLE;
+    extern float BASKET_PRM_S11_COURT_ROT_SPEED;
+    extern float BASKET_PRM_S11_COURT_ROT_ACC;
+    extern float BASKET_PRM_S11_CHR_FLOW_SPEED;
+    extern float BASKET_PRM_S11_BUBBLE_SCALE;
+    extern float BASKET_PRM_S11_BUBBLE_PRESTART;
+    extern float BASKET_PRM_S11_BUBBLE_JUMP_HEIGHT;
+    extern float BASKET_PRM_S11_BUBBLE_JUMP_FRM;
+    extern float BASKET_PRM_S11_BUBBLE_JUMP_DOF_FRM;
+    extern float BASKET_PRM_S11_BUBBLE_DOWN_FRM;
+    extern float BASKET_PRM_S11_BUBBLE_INIT_INTERVAL;
+    extern float BASKET_PRM_S11_BUBBLE_INTERVAL;
+    extern float BASKET_PRM_S11_BUBBLE_ZONE_R;
+    extern float BASKET_PRM_S11_BUBBLE_ZONE_ANGLE;
+    extern long BASKET_PRM_S11_BUBBLE_ZONE_SLOT;
 }
 
 #endif /* !MSW_BASKETPRM_HPP_ */

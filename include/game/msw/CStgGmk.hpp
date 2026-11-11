@@ -1,6 +1,7 @@
 #ifndef MSW_CSTGGMK_HPP_
 #define MSW_CSTGGMK_HPP_
 
+#include "bcs/CListNodeBase.hpp"
 #include "game/msw/CStgObj.hpp"
 
 namespace msw {
@@ -45,12 +46,23 @@ namespace msw {
             virtual void OnPeriodInit() {}
             virtual void OnTurnInit() {}
 
+            // (name guessed) The gimmick's node in CStgGmkMan's list: a list
+            // node (vtable lbl_80474C98, deleting destructor fn_8016FFF0)
+            // holding its gimmick at 0x10. The constructor sets the gimmick
+            // to the CStgGmk itself and links the node in through
+            // CStgGmkMan::Regist.
+            class CNode : public bcs::CListNodeBase {
+                public:
+                    CStgGmk *GetGmk() const { return m_pGmk; }
+
+                    CStgGmk *m_pGmk; // 0x10
+            };
+
+            CNode &GetNode() { return m_Node; }
+            const CNode &GetNode() const { return m_Node; }
+
         private:
-            unsigned long m_Unk48;          // 0x48
-            unsigned long m_Unk4C;          // 0x4C
-            unsigned long m_Unk50;          // 0x50
-            unsigned long m_Unk54;          // 0x54
-            unsigned long m_Unk58;          // 0x58
+            CNode m_Node;                   // 0x48, 0x14 bytes
             int m_nType;                    // 0x5C
             CStgGmkClusterImpl *m_pCluster; // 0x60
             long m_nClusterIdx;             // 0x64

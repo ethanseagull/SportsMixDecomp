@@ -273,6 +273,19 @@ namespace msw {
     extern float DODGE_PRM_S56_SHIP_STOP_TIME;
     extern float DODGE_PRM_S56_SHIP_STOP_TIME_RND;
     extern float DODGE_PRM_S56_CHR_FLOW_VEL;
+    extern float DODGE_PRM_S57_TT_INIT_STOP_TIME;
+    extern float DODGE_PRM_S57_TT_STOP_TIME;
+    extern float DODGE_PRM_S57_TT_STOP_TIME_RND;
+    extern float DODGE_PRM_S57_TT_ROT_TIME;
+    extern float DODGE_PRM_S57_TT_ROT_TIME_RND;
+    extern float DODGE_PRM_S57_TT_SPEED;
+    extern long DODGE_PRM_S57_TT_DIR;
+    extern float DODGE_PRM_S57_TT_ACC_TIME;
+    extern float DODGE_PRM_S57_TT_RADIUS;
+    extern float DODGE_PRM_S57_TT_OPEN_RATE;
+    extern float DODGE_PRM_S57_TT_WARN_TIME;
+    extern float DODGE_PRM_S57_TT_WARN_AFTER_TIME;
+    extern float DODGE_PRM_S57_TT_WARN_SE_STOP_TIME;
 }
 
 #endif /* !MSW_DODGEPRM_HPP_ */

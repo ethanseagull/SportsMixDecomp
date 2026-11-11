@@ -57,3 +57,4 @@ Equivalent game/menu/CRuleInfo.cpp
 Equivalent game/menu/CTrofy.cpp
 Equivalent game/menu/CTopMenu.cpp
 Equivalent game/menu/CPartyInfo.cpp
+Equivalent game/menu/CCupSelectTab.cpp

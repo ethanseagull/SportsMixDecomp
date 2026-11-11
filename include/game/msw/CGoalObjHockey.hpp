@@ -18,8 +18,8 @@ namespace msw {
     // below are the ones in that vtable. NewMdl is inline (HockeyF's
     // CStageHockey17::CGoalObj17::NewMdl inlines it); GetRingPos,
     // GetBoardPos, GetBoardVec and DunkRelease are weak copies at the end of
-    // CGoalObjHockey.cpp too. The members are one block that only gives the
-    // size.
+    // CGoalObjHockey.cpp too, but their bodies are not written yet. The
+    // class adds no members: CGoalObj is 0x6498 bytes.
     class CGoalObjHockey : public CGoalObj {
         public:
             CGoalObjHockey(bcs::CTask *pParent, long idx);
@@ -49,11 +49,6 @@ namespace msw {
             virtual float DunkStart(DUNK_POW pow, const bcs::FVEC3 &rPos);
             virtual void DunkRelease() {}
             virtual void DunkCancel();
-
-        private:
-            // From the end of CGoalObj's mapped members (0xD8); where
-            // CGoalObj's own members end is not known.
-            unsigned char m_UnkD8[0x6498 - 0xD8];
     };
 }
 

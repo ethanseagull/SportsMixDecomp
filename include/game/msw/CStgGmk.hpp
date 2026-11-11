@@ -19,9 +19,9 @@ namespace msw {
             CStgGmk(bcs::CTask *pParent, unsigned long arg);
             virtual ~CStgGmk();
 
-            // Inline: each module emits one weak copy (HockeyF in
-            // game/hockey/CGoalObjHockey.cpp, BasketF in its goal unit); the
-            // bodies follow the class.
+            // Inline: BasketF's game/basket/CGoalObjBasket.cpp and HockeyF's
+            // game/hockey/CGoalObjHockey.cpp have weak copies (their goals
+            // keep these two of CStgGmk). Defined below the class.
             virtual CStgAct *NewAct(long heap);
             virtual CStgDrv *NewDrv(long heap);
 
@@ -73,15 +73,11 @@ namespace msw {
 #include "bcs/New.hpp"
 #include "game/msw/CStgGmkAct.hpp"
 
-// A plain gimmick actor and driver.
-inline msw::CStgAct *msw::CStgGmk::NewAct(long heap)
-{
-    return new (heap) CStgGmkAct(this);
-}
+namespace msw {
 
-inline msw::CStgDrv *msw::CStgGmk::NewDrv(long heap)
-{
-    return new (heap) CStgDrv(this);
+    // A plain gimmick actor and driver.
+    inline CStgAct *CStgGmk::NewAct(long heap) { return new (heap) CStgGmkAct(this); }
+    inline CStgDrv *CStgGmk::NewDrv(long heap) { return new (heap) CStgDrv(this); }
 }
 
 #endif /* !MSW_CSTGGMK_HPP_ */

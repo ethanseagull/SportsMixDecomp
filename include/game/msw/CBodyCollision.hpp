@@ -44,7 +44,8 @@ namespace msw {
             void SetSize(long index, const bcs::FVEC3 &rSize);
             void SetSize(long index, float x, float y, float z);
             void SetPushEnable(long index);
-            // (added for VolleyF's CStgGmk_Trolley_Act_Volley)
+            // (added for BasketF's CGoalObjBasket and VolleyF's
+            // CStgGmk_Trolley_Act_Volley)
             void SetPushDisable(long index);
 
             void ResetTargetFlagAll(unsigned long flag);

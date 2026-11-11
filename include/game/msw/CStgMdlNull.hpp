@@ -8,9 +8,11 @@
 namespace msw {
 
     // (purpose guessed from the name) A stage model with no model of its
-    // own: an empty scene group stands in for it. Size 0x130. Everything
-    // is inline: HockeyF's game/hockey/CGoalObjHockey.cpp emits the vtable
-    // and the weak functions (the goal's model 0).
+    // own: an empty scene group stands in for it. Size 0x130. Everything is
+    // inline: HockeyF's game/hockey/CGoalObjHockey.cpp and BasketF's
+    // game/basket/CGoalObjBasket.cpp (the goal's model 0) both have weak
+    // copies of the vtable and the functions, in reverse declaration order
+    // with the destructor last.
     class CStgMdlNull : public CStgMdl {
         public:
             CStgMdlNull(CStgObj *pParent) : CStgMdl(pParent) { m_pGroup = new (0) bcs::CScnGroup(0x10, 0); }

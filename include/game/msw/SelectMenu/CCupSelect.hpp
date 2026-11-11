@@ -44,8 +44,20 @@ namespace msw {
                 void SetStageEnable(long nCup, int bEnable, unsigned char bDisp);
 
             private:
-                long m_Unk5A0;                      // 0x5A0
-                float m_fUnk5A4;                    // 0x5A4
+                // (added for game/menu/CCupSelectTab.cpp; no symbols, names
+                // guessed) Inline helpers: the button and event step of
+                // Main(), and two text box setters that the game never calls
+                // here but whose local statics are in .rodata.
+                void CheckButtonAnim();
+                void SetTextPaneString(long nPane, const wchar_t *pText);
+                void SetTextPaneString(long nPane, long nValue);
+
+                // 0x5A0. Not zero while the +/- buttons (menu object 2)
+                // are shown and take hits.
+                long m_bPlusMinus;
+                // 0x5A4. Frames left before the opening animation is
+                // checked.
+                float m_fWait;
         };
     }
 }

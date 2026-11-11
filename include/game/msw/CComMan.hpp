@@ -58,14 +58,22 @@ namespace msw {
             static CItem *ThrowItem_GetFirst();
             static CItem *ThrowItem_GetNext(CItem *pItem);
 
+            // Added for game/basket/CComManBasket.cpp (meanings and return
+            // types guessed). The index of the character nearest to rPos,
+            // past the last one for none.
+            static unsigned long GetNearChr(const bcs::FVEC3 &rPos, long, long, long, int);
+            // The XZ distance from rPos to the nearest "?" panel, negative
+            // when there is none.
+            static float QPanel_GetNearDisXZ(const bcs::FVEC3 &rPos, long, unsigned long);
+            // Not zero when rPos lies in the area spanned from rFrom to rTo
+            // in the XZ plane (widths guessed from the two floats).
+            static int IsPointInFaceXZ(const bcs::FVEC3 &rPos, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo,
+                                       float, float);
+            // Bit masks of characters: bit nChr of nBits.
+            static int IsEnableBit(unsigned long nBits, long nChr);
+            static void SetEnableBit(unsigned long &rBits, long nChr);
             // Added for HockeyF game/hockey/CComManHockeyGame.cpp (DOL;
             // meanings and return types guessed).
-            // Whether bit nBit of nBits is set.
-            static int IsEnableBit(unsigned long nBits, long nBit);
-            // Whether rPos lies in the sector of the XZ plane in front of
-            // rOrigin towards rTarget (fWidth and fLength).
-            static int IsPointInFaceXZ(const bcs::FVEC3 &rPos, const bcs::FVEC3 &rOrigin,
-                                       const bcs::FVEC3 &rTarget, float fWidth, float fLength);
             // The index in pTarget (nTargetNum positions) that the nMyNum
             // positions of pMy should take, for my position nMyIdx; negative
             // for none.

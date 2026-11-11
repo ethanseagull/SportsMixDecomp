@@ -30,6 +30,9 @@ namespace msw {
             static long GetTeamGhostType(long nTeam);
             // Not zero while the game's main loop runs (play is on).
             int IsNowMainLoopEnable_() const;
+            // (added for game/basket/CComManBasket.cpp) The radius of the
+            // three-point line.
+            static float GetCourt3PointSize();
 
         private:
             unsigned char m_Unk150[0x274 - sizeof(CGame)];

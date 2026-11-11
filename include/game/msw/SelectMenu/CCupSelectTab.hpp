@@ -43,7 +43,14 @@ namespace msw {
                 void AllStopTabAnim();
 
             private:
-                unsigned char m_Unk5A0[0xD];        // 0x5A0
+                // (fields from 0x5A0 to 0x5AC and from 0x5B0 named for
+                // game/menu/CCupSelectTab.cpp; names guessed)
+                // 0x5A0. The animation of pane 0x14 requested by events
+                // 0x3D (1, then 2 while it plays) and 0x3E (3, then 4).
+                long m_nTabAnimState;
+                // 0x5A4. The selected difficulty, -1 before the first.
+                long m_nLevel;
+                unsigned char m_Unk5A8[0x5];        // 0x5A8
 
             public:
                 // 0x5AD. The number of difficulties open, less one (set by
@@ -51,7 +58,13 @@ namespace msw {
                 unsigned char m_nLevelNum;
 
             private:
-                unsigned char m_Unk5AE[0x1A];       // 0x5AE
+                unsigned char m_Unk5AE[0x2];        // 0x5AE
+                // 0x5B0, 0x5B4. Not zero while the left / right arrow is
+                // hidden (at the first / the last difficulty).
+                long m_bLeftArrow;
+                long m_bRightArrow;
+                // 0x5B8. Not zero while the pointer is on tab i.
+                long m_bTabPointed[4];
         };
     }
 }

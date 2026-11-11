@@ -39,4 +39,5 @@ Equivalent game/basket/CStageBasketHungryBossPackun71.cpp
 Equivalent game/basket/CStageBasketHungryBossPackun72.cpp
 Equivalent game/basket/CCockpitBasketHarapeko.cpp
 Equivalent game/basket/CBallBasketFruit.cpp
-NonMatching game/basket/CStageBasket06.cpp
+Equivalent game/basket/CStageBasket06.cpp
+Equivalent game/basket/CStageBasket05.cpp

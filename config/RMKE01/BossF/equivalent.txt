@@ -7,4 +7,8 @@ BossF GetLenHosei__Q23msw11CCameraBossFRCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 96.3 st
 BossF MainCamera_Normal__Q23msw11CCameraBossFv near 85.6 stack layout, the original turns the 0x20/0x1 bit tests into bools (equivalent branches), one swapped commutative multiply operand; same calls, arguments and constants
 BossF MainCamera__Q23msw11CCameraBossFv near 97.8 stack slots and one temporary copy the original keeps; same calls, constants and accesses
 BossF SetCoinValue__Q23msw16CCockpitBossCoinFll near 98.9 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
+BossF TrgDamage___Q23msw17CItemBallBossBombFv unverified 100.0 original returns 4 when the ball is not shot; Trg*_/DoTrg are declared bool in CItemBall.hpp so ours returns 1 (fix: change the Trg return type to long across CItemBall and all modes)
+BossF TrgDamage___Q23msw19CItemBallBossGShellFv unverified 100.0 original returns 4 when the ball is not shot; Trg*_/DoTrg are declared bool in CItemBall.hpp so ours returns 1 (fix: change the Trg return type to long across CItemBall and all modes)
+BossF TrgDamage___Q23msw19CItemBallBossRShellFv unverified 100.0 original returns 4 when the ball is not shot; Trg*_/DoTrg are declared bool in CItemBall.hpp so ours returns 1 (fix: change the Trg return type to long across CItemBall and all modes)
 BossF __ct__Q23msw11CCameraBossFl near 99.6 register allocation only
+BossF __ct__Q23msw17CItemBallBossBombFPQ23msw5CBall near 98.5 original reloads m_pMdl before CreateAttachEffect; ours reuses the value from the null check (same field, nothing written between)

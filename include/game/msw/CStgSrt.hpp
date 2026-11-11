@@ -39,6 +39,10 @@ namespace msw {
                 PSMTXMultVec(m_RotMtx.m, (const Vec *)&rVel, (Vec *)&m_LocalVel);
             }
 
+            // (name and meaning guessed) msw::CStgGmk_Pylon_Act_Dodge::SetPushVel
+            // stores its GetParam_Dec here with the push velocity.
+            void SetDecel(float decel) { m_fDecel = decel; }
+
             void SetFront(const bcs::FVEC3 &rFront);
 
             // (name guessed) Point the direction from the position towards
@@ -111,7 +115,8 @@ namespace msw {
             unsigned long m_nFlagC8;     // 0xC8
             bcs::FVEC3 m_Vel;            // 0xCC (name guessed)
             bcs::FVEC3 m_LocalVel;       // 0xD8, see SetVel (name guessed)
-            unsigned char m_UnkE4[0x1C]; // 0xE4
+            unsigned char m_UnkE4[0x18]; // 0xE4
+            float m_fDecel;              // 0xFC, see SetDecel (name guessed)
             bcs::FVEC3 m_Unk100;         // 0x100
             bcs::FVEC3 m_Unk10C;         // 0x10C
             unsigned char m_Unk118[0x2C]; // 0x118

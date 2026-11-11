@@ -8,6 +8,11 @@
 // (macro name guessed) The other way: the 0.024543693f the modules multiply
 // Atan2FIdx's result by.
 #define NW4R_MATH_FIDX_TO_RAD(fidx) (((2.0f * 3.14159265f) / 256.0f) * (fidx))
+// (macro names guessed; added for MenuF game/menu/unit_6EE84.cpp) Degrees
+// to indices (the 0.7111111f the modules multiply by), and to radians
+// through them.
+#define NW4R_MATH_DEG_TO_FIDX(deg) ((256.0f / 360.0f) * (deg))
+#define NW4R_MATH_DEG_TO_RAD(deg) NW4R_MATH_FIDX_TO_RAD(NW4R_MATH_DEG_TO_FIDX(deg))
 
 namespace nw4r {
     namespace math {

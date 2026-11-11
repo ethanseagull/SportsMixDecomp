@@ -3,6 +3,8 @@
 
 #include "game/msw/CMenuTask.hpp"
 
+struct _GXTexObj;
+
 namespace bcs {
     struct FVEC3;
 }
@@ -82,6 +84,20 @@ namespace msw {
             // (DOL; added for BasketF game/basket/CStageBasket10.cpp; return
             // type guessed) Shows the points icon nKind for team nTeam at *pPos.
             static void SetShootPtsIcon(long nTeam, const bcs::FVEC3 *pPos, long nKind);
+            // (DOL, static; added for BasketF game/basket/CChrManBasket.cpp;
+            // parameter meanings guessed) The head icon of human player
+            // nCtrlPlayer over player nPlayer: at *pPos plus *pOfs, with the
+            // texture pTex (null: the default); and its removal.
+            static void SetChrHeadIcon(long nCtrlPlayer, long nPlayer, const bcs::FVEC3 *pOfs, long,
+                                       const bcs::FVEC3 *pPos, const _GXTexObj *pTex);
+            static void ClearChrHeadIcon(long nCtrlPlayer, long nPlayer, int);
+            // (DOL, static; added for BasketF
+            // game/basket/CGameBasketHungryBossPackun.cpp; parameter meanings
+            // guessed) The party game's result screen: nNum players with
+            // their scores, (optional) times, teams and ranks; bDiffRank is
+            // set when not every player has the same rank.
+            static void SetResultPartyVSParameter(long nNum, long *pScore, float *pTime, long *pTeam, long *pRank,
+                                                  int bDiffRank);
             // (name guessed; DOL fn_80137A34, not inline) The result word
             // at 0x70.
             long GetUnk70() const;

@@ -316,6 +316,14 @@ namespace msw {
     extern long BASKET_PRM_S72_CV2_DIR;
     extern long BASKET_PRM_S72_DELIVERY_PATTERN;
 
+    // The party game's crown over the leaders and the "point up" telop
+    // over a scorer (added for game/basket/CGameBasketHungryBossPackun.cpp):
+    // their heights, and the height a character must be under for the
+    // telop to show.
+    extern float BASKET_PRM_COMMON_CROWN_TELOP_DISP_Y;
+    extern float BASKET_PRM_COMMON_POINT_UP_TELOP_DISP_Y;
+    extern float BASKET_PRM_COMMON_POINT_UP_TELOP_CHECK_DISP_Y;
+
     // The Hungry Boss Packun stages: the size of the court.
     extern float BASKET_PRM_BOSS_PACKUN_COURT_WIDTH;
     extern float BASKET_PRM_BOSS_PACKUN_COURT_DEPTH;

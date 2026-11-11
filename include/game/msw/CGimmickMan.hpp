@@ -109,6 +109,11 @@ namespace msw {
             static CItem *CreateItem(long nType, const bcs::FVEC3 &rPos);
             // DOL, static: AllReset_ on the instance.
             static void AllReset();
+            // (DOL, static; added for BasketF
+            // game/basket/CGameBasketHungryBossPackun.cpp) SetUp_ and
+            // QPanelSetViewBaseRot_ on the instance (guessed from the names).
+            static void SetUp();
+            static void QPanelSetViewBaseRot(float fRot);
 
         protected:
             // The instance is a plain static pointer in the DOL (no task

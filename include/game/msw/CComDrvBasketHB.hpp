@@ -38,6 +38,11 @@ namespace msw {
             void CallMainScriptFunc(const char *pName, long nArg0, long nArg1);
             // The value of the script's global pName.
             long GetScriptVariable(const char *pName) const;
+
+        protected:
+            // The script (not mapped). The size, 0x178, is what
+            // CChrManBasketHungryBossPackun::CreateDriver_ allocates.
+            unsigned char m_Unk170[0x178 - 0x170];
     };
 }
 

@@ -22,6 +22,10 @@ namespace msw {
 
                 static CSndEff s_Instance;
 
+                // (inline, no symbol; added for MenuF
+                // game/menu/unit_6EE84.cpp)
+                void SetEnable(int bEnable) { m_bEnable = bEnable; }
+
             private:
                 int m_bEnable; // 0x00
 

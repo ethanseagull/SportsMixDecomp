@@ -11,6 +11,9 @@ namespace bcs {
 
                 // Releases the archive loaded under pName (return type guessed).
                 void Cleanup(const char *pName);
+                // Added for MenuF game/menu/CMenu.cpp (return type guessed;
+                // the menu passes 0 as the second argument).
+                void GetResourceFromDvdMan(const char *pPath, unsigned long);
         };
     }
 }

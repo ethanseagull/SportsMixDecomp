@@ -95,6 +95,12 @@ namespace msw {
             // Looks the instance up in the task manager by s_InstanceHandle.
             static CEffectCtrl *GetInstance();
             static void AttachResource();
+            // Added for MenuF game/menu/CMenu.cpp. Static (the DOL bodies
+            // find the effect manager, resource and task themselves); the
+            // menu calls them in this order when it closes.
+            static void Dispose();
+            static void DetachResource();
+            static void Close();
             // Registers the effects of archive `pPath`, file `fileId` of CLoadData.
             static void AttachArcResource(long fileId, const char *pPath); // return type guessed
 

@@ -130,11 +130,8 @@ game/bcs/G2D.cpp:
 game/bcs/dwc/CDwc.cpp:
 	.text       start:0x800B10A0 end:0x800B1EB8
 
-game/bcs/dwc/CDwcFriendList.cpp:
-	.text       start:0x800B3E14 end:0x800B4AC0
-
 game/bcs/dwc/CDwcFriend.cpp:
-	.text       start:0x800B4BAC end:0x800B4F14
+	.text       start:0x800B3C8C end:0x800B4F14
 
 game/bcs/CWifiPadBase.cpp:
 	.text       start:0x800C1558 end:0x800C16C0

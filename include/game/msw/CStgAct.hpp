@@ -43,7 +43,7 @@ namespace msw {
             virtual CStgObj *GetParent() { return m_pParent; }
             virtual const CStgObj *GetParent() const { return m_pParent; }
             // Inline in the original (the address of the embedded CStgSrt).
-            virtual CStgSrt *GetSrt();
+            virtual CStgSrt *GetSrt() { return reinterpret_cast<CStgSrt *>(m_Srt); }
             virtual const CStgSrt *GetSrt() const { return reinterpret_cast<const CStgSrt *>(m_Srt); }
             virtual void SetMdl(CStgMdl *pMdl) { m_pMdl = pMdl; }
             virtual const CStgMdl *GetMdl(long idx) const;

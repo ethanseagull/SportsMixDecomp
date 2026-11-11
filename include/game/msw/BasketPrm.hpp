@@ -33,6 +33,24 @@ namespace msw {
     extern float BASKET_PRM_S02_BIG_ITEM_POP_DIST;
     extern float BASKET_PRM_S02_BIG_ITEM_POP_POS_X;
 
+    // Stage 03, the fountain stage (CStgGmk_WaterWorks_Basket). Times are
+    // in seconds.
+    extern float BASKET_PRM_S03_WATER_RADIUS;
+    extern float BASKET_PRM_S03_WATER_RADIUS2;
+    extern float BASKET_PRM_S03_WATER_RADIUS3;
+    extern float BASKET_PRM_S03_WATER_RESIST;
+    extern float BASKET_PRM_S03_WATER_HEIGHT;
+    extern float BASKET_PRM_S03_WATER_PRESTART_TIME;
+    extern float BASKET_PRM_S03_WATER_STAY_TIME;
+    extern float BASKET_PRM_S03_WATER_INTERVAL;
+    extern float BASKET_PRM_S03_WC_ZONE_ANGLE;
+    extern float BASKET_PRM_S03_WC_ZONE_WIDTH;
+    extern float BASKET_PRM_S03_WC_ZONE_MARGIN;
+    extern float BASKET_PRM_S03_WC_OFFSET_Z;
+    extern float BASKET_PRM_S03_WC_LOC_RADIUS;
+    extern long BASKET_PRM_S03_WC_LOC_NUM;
+    extern long BASKET_PRM_S03_WC_LOC_NUM_PER_GRP;
+
     // Stage 06, the lit stage, listed in CStageBasket06::GetPrmTbl.
     extern float BASKET_PRM_S06_MOVE_SPEED;
     extern float BASKET_PRM_S06_MOVE_SPEED_SHOOT_CATCH;

@@ -3,6 +3,8 @@
 
 #include "bcs/CUnivTask.hpp"
 #include "bcs/FVEC3.hpp"
+#include "game/msw/CStgAct.hpp"
+#include "game/msw/CStgSrt.hpp"
 
 namespace msw {
 
@@ -22,9 +24,8 @@ namespace msw {
     // __vt__Q23msw18CStgGmk_Wave_Dodge (DodgeF). Several of them are inline
     // in the original: the modules emit weak copies of GetIdx, SetIdx,
     // GetSrt, SetPos, SetFront, LookAt, GetMdlNum, GetMdl, GetAct and GetDrv.
-    // Bodies are given for the plain getters; the others need the layout of
-    // msw::CStgAct and msw::CStgSrt and are declared only, for now. Return
-    // types not visible in a body are guesses.
+    // BasketF has all of them in game/basket/CStgGmk_WaterWorks_Basket.cpp.
+    // Return types not visible in a body are guesses.
     class CStgObj : public bcs::CUnivTask {
         public:
             virtual ~CStgObj();
@@ -34,14 +35,28 @@ namespace msw {
             virtual void Create();
             virtual void SceneEntry();
             virtual void SceneLeave();
-            // Inline in the original: the actor's GetSrt(), or 0 without an
-            // actor.
-            virtual CStgSrt *GetSrt();
-            virtual const CStgSrt *GetSrt() const;
-            // Inline in the original: forward to the actor's CStgSrt.
-            virtual void SetPos(const bcs::FVEC3 &rPos);
-            virtual void SetFront(const bcs::FVEC3 &rFront);
-            virtual void LookAt(const bcs::FVEC3 &rTarget);
+            // The actor's CStgSrt, or 0 without an actor.
+            virtual CStgSrt *GetSrt() { return m_pAct ? m_pAct->GetSrt() : 0; }
+            virtual const CStgSrt *GetSrt() const { return m_pAct ? m_pAct->GetSrt() : 0; }
+            // Forward to the actor's CStgSrt; nothing without an actor.
+            virtual void SetPos(const bcs::FVEC3 &rPos)
+            {
+                if (m_pAct) {
+                    m_pAct->GetSrt()->SetPos(rPos);
+                }
+            }
+            virtual void SetFront(const bcs::FVEC3 &rFront)
+            {
+                if (m_pAct) {
+                    m_pAct->GetSrt()->SetFront(rFront);
+                }
+            }
+            virtual void LookAt(const bcs::FVEC3 &rTarget)
+            {
+                if (m_pAct) {
+                    m_pAct->GetSrt()->SetLookAtPos(rTarget);
+                }
+            }
             virtual void EventNotify(CStgAct *pAct, long event, void *pArg);
             virtual unsigned long CalcSum() const;
             // Factories for the parts; each stage object class supplies them.
@@ -49,10 +64,12 @@ namespace msw {
             virtual CStgAct *NewAct(long heap) = 0;
             virtual CStgDrv *NewDrv(long heap) = 0;
             virtual unsigned long GetMdlNum() const { return m_nMdlNum; }
-            // Inline in the original: model idx, or 0 when idx is not below
-            // GetMdlNum() (called through the vtable).
-            virtual CStgMdl *GetMdl(unsigned long idx);
-            virtual const CStgMdl *GetMdl(unsigned long idx) const;
+            // Model idx, or 0 when idx is not below GetMdlNum().
+            virtual CStgMdl *GetMdl(unsigned long idx) { return idx < GetMdlNum() ? m_ppMdl[idx] : 0; }
+            virtual const CStgMdl *GetMdl(unsigned long idx) const
+            {
+                return idx < GetMdlNum() ? m_ppMdl[idx] : 0;
+            }
             virtual CStgAct *GetAct() { return m_pAct; }
             virtual const CStgAct *GetAct() const { return m_pAct; }
             virtual CStgDrv *GetDrv() { return m_pDrv; }

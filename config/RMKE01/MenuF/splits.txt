@@ -16,7 +16,7 @@ game/menu/CChrMenuCtrl.cpp:
 	.ctors      start:0x00000000 end:0x00000004
 	.rodata     start:0x00000008 end:0x00000018
 	.data       start:0x00000238 end:0x00000288
-	.bss        start:0x00000000 end:0x00000F20
+	.bss        start:0x00000000 end:0x00000040
 
 game/menu/CEffectCtrlMenu.cpp:
 	.text       start:0x00001BD0 end:0x0000202C
@@ -30,7 +30,7 @@ game/menu/CGamePadCheck.cpp:
 	.text       start:0x000020C4 end:0x0000E5F8
 	.rodata     start:0x00000038 end:0x00002760
 	.data       start:0x000002C8 end:0x00000DD0
-	.bss        start:0x00000F20 end:0x00000F28
+	.bss        start:0x00000040 end:0x00000F28
 
 game/menu/CBackIcon.cpp:
 	.text       start:0x0000E5F8 end:0x00010220

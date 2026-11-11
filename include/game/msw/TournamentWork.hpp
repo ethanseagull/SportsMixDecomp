@@ -281,8 +281,9 @@ namespace msw {
             if (nPoint > 0) {
                 const POINT_INFO *pPoint = GetPointInfo(nPoint);
                 if (pPoint->HasViewPos()) {
-                    pos.Set(pPoint->GetViewOfsX() + pPoint->vPos.x, pPoint->vPos.y,
-                            pPoint->GetViewOfsZ() + pPoint->vPos.z);
+                    float fx = pPoint->GetViewOfsX() + pPoint->vPos.x;
+                    float fz = pPoint->GetViewOfsZ() + pPoint->vPos.z;
+                    pos.Set(fx, pPoint->vPos.y, fz);
                 }
             }
         }

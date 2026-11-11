@@ -84,6 +84,7 @@ void msw::SelectMenu::CBgMdl::ChangeBall(long nBall)
 
 void msw::SelectMenu::CBgMdl::SetSelectPosMdlObjId(long nId)
 {
+    CSelectMenuBgMdlObj *pOut;
     unsigned char nOldId = m_nPosMdlObjId[0];
     if (nOldId == nId) {
         return;
@@ -94,7 +95,7 @@ void msw::SelectMenu::CBgMdl::SetSelectPosMdlObjId(long nId)
         unsigned char nNewId = m_nPosMdlObjId[i];
         if (nNewId == nId) {
             m_nPosMdlObjId[i] = nOldId;
-            CSelectMenuBgMdlObj *pOut = m_pBallMdl[nOldId];
+            pOut = m_pBallMdl[nOldId];
             if (pOut != 0) {
                 pOut->StartMove(fMoveTime, 4, 0);
             }

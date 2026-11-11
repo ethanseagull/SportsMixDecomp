@@ -11,11 +11,20 @@ namespace bcs {
     // bodies and from the callers (msw::CTableSetMdlObj::IsAnmLooped and
     // IsAnmEnd in MenuF call 0x38 and 0x40).
     //
-    // The object also has a second vptr at 0x0C (another base). That is not
-    // modelled, so this class must not be constructed or destroyed inline.
+    // Size 0x0C. The material animations (bcs::CAnmMatClr, CAnmTexSrt,
+    // CAnmTexPat) add a second base at 0x0C through bcs::CAnmObjMat. The
+    // constructor and destructor are inline: the derived destructors call
+    // bcs::CG3dObj's directly and store no vtable of this class.
     class CAnmObj : public CG3dObj {
         public:
-            virtual ~CAnmObj();
+            // Bit 2 of m_nAnmFlag. (name guessed) Cleared when the material
+            // table is released and by Create.
+            enum {
+                ANMFLAG_4 = 4
+            };
+
+            CAnmObj() : m_nAnmFlag(0) {}
+            virtual ~CAnmObj() {}
             virtual void ObjProc(unsigned long, unsigned long, void *); // 0x1C
             virtual void SetFrame(float frame);                         // 0x20 (name guessed) takes a float
             virtual float GetFrame() const;                             // 0x24, reads the float at 0x1C
@@ -27,10 +36,17 @@ namespace bcs {
             virtual int VFunc3C() const;                                // 0x3C, bit 2
             virtual int IsEnd() const;                                  // 0x40, bit 3
 
+            // (names guessed) Inline in MenuF's msw::CChrMenuCtrl::CreateMdlObj,
+            // which sets bit 3 of the word at 0x08 after Create.
+            void OnFlag(unsigned long flag) { m_nAnmFlag |= flag; }
+
+        protected:
+            void OffAnmFlag(unsigned long flag) { m_nAnmFlag &= ~flag; }
+
         private:
-            // 0x08 to 0x34. Where this class ends and bcs::CAnmMatClr and
-            // bcs::CAnmTexSrt (both 0x34 bytes) begin is not known.
-            unsigned char m_Unk08[0x2C];
+            // 0x08 (name guessed). The class ends here: the 0x34-byte
+            // material animations add bcs::CAnmObjMat's second base at 0x0C.
+            unsigned long m_nAnmFlag;
     };
 }
 

@@ -10,6 +10,9 @@ namespace msw {
         public:
             // The node settings for the motions of non-player model `nNpc`.
             static const bcs::CAnmObjMotBase::NODE_EX_INFO *GetNpcMdl_NodeExInfo(long nNpc);
+            // The same for character nChr's model. (meaning of the second
+            // argument not known; MenuF's CChrMenuCtrl passes 0)
+            static const bcs::CAnmObjMotBase::NODE_EX_INFO *GetMdl_NodeExInfo(long nChr, long);
     };
 }
 

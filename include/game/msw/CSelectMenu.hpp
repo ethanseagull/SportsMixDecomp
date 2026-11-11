@@ -314,6 +314,14 @@ namespace msw {
                                                     CSelectMenuLayoutBase *pObj);
             void Court_CameraReverse();
 
+            // Added for MenuF game/menu/CRuleInfo.cpp. The steps of the
+            // rules screen (SelectMenu::CRuleInfo), and the party game
+            // information step it returns to (argument meaning guessed).
+            void RuleInfo_In();
+            void RuleInfo_Loop();
+            void RuleInfo_Out();
+            void PartyInfo_ChangeStateInit(long nMode);
+
             // Data, added for the same unit. The class is 0xAB8 bytes (the
             // size layout.py finds); only two members are named so far.
             // The second polymorphic part mentioned above (a `@68@` thunk)

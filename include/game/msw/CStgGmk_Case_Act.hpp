@@ -26,14 +26,15 @@ namespace msw {
     // declared. DodgeF's game/dodge/CStgGmk_Case_Act_Dodge.cpp emits weak
     // copies of some of these (IsAlive, SetAlive, IsInvincible,
     // IsEnableDefColl, GetParam_LocOffsetZ, GetParam_ItemHitMethod,
-    // Eff_GetSlotNum, SE_GetSlotNum); their bodies are not written yet. Return
+    // Eff_GetSlotNum, SE_GetSlotNum, OnDamage), so they are inline (bodies from
+    // VolleyF's game/volley/CStgSeSlot.cpp). Return
     // types not visible in a body are guesses.
     class CStgGmk_Case_Act : public CStgGmkAct, public bcs::CFsmQueue<CStgGmk_Case_Act> {
         public:
             CStgGmk_Case_Act(CStgGmk *pParent);
             virtual ~CStgGmk_Case_Act();
 
-            virtual long Eff_GetSlotNum() const;
+            virtual long Eff_GetSlotNum() const { return 1; }
             virtual void UpdateMdlMtx();
             virtual void OnUpdate(float rate);
             virtual void OnAttackHit(const CCollAtkUnit *pAtk, const CCollBodyUnit *pBody, const bcs::FVEC3 &rPos,
@@ -42,7 +43,7 @@ namespace msw {
             virtual unsigned long OnBodyDamage(CCollBodyUnit *pBody, const CCollAtkUnit *pAtk, const bcs::FVEC3 &rPos);
             virtual void OnBallCatch(CCollBodyUnit *pBody, CBall *pBall);
 
-            virtual int IsAlive() const;                                  // 0x1A4
+            virtual int IsAlive() const { return m_bAlive; }              // 0x1A4
             virtual void Inactivate();                                    // 0x1A8
             virtual void ForceBreak(float delay);                         // 0x1AC
             virtual float GetParam_Width() const;                         // 0x1B0
@@ -64,22 +65,22 @@ namespace msw {
             virtual long GetParam_Effect(long type) const;                // 0x1E8
             virtual long GetParam_SE(long type) const;                    // 0x1EC
             virtual float GetParam_MaxLife() const;                       // 0x1F0
-            virtual float GetParam_LocOffsetZ() const;                    // 0x1F4
+            virtual float GetParam_LocOffsetZ() const { return 0.0f; }    // 0x1F4
             virtual float GetParam_LocPosY() const;                       // 0x1F8
             virtual float GetParam_KaronScale() const;                    // 0x1FC
             virtual float GetParam_KaronCollScale() const;                // 0x200
             virtual float GetParam_KaronSpeed() const;                    // 0x204
             virtual float GetParam_HitCameraQuake() const;                // 0x208
             virtual float GetParam_BreakTime() const;                     // 0x20C
-            virtual long GetParam_ItemHitMethod() const;                  // 0x210
-            virtual long SE_GetSlotNum() const;                           // 0x214
+            virtual long GetParam_ItemHitMethod() const { return 1; }     // 0x210
+            virtual long SE_GetSlotNum() const { return 1; }              // 0x214
             virtual void UpdateColl();                                    // 0x218
-            virtual bool IsInvincible() const;                            // 0x21C
-            virtual void SetAlive(int bAlive);                            // 0x220
+            virtual bool IsInvincible() const { return m_fInvincibleTime > 0.0f; } // 0x21C
+            virtual void SetAlive(int bAlive) { m_bAlive = bAlive; }      // 0x220
             virtual void DoDamage(const bcs::FVEC3 &rPos, int, int);      // 0x224
-            virtual void OnDamage(CCollBodyUnit *pBody, CBall *pBall);    // 0x228
+            virtual void OnDamage(CCollBodyUnit *pBody, CBall *pBall) {}  // 0x228
             virtual void OnBreak();                                       // 0x22C
-            virtual bool IsEnableDefColl() const;                         // 0x230
+            virtual bool IsEnableDefColl() const { return false; }        // 0x230
             virtual void CreateKaron();                                   // 0x234
             virtual long GetSubType_() const;                             // 0x238
             virtual void CtorState_DEFAULT();                             // 0x23C
@@ -105,7 +106,11 @@ namespace msw {
             virtual void DtorState_OPEN();                                // 0x28C
 
         private:
-            unsigned char m_Unk1D4[0x40]; // 0x1D4, not mapped
+            unsigned char m_Unk1D4[0x28]; // 0x1D4, not mapped
+            int m_bAlive;                 // 0x1FC, IsAlive / SetAlive
+            unsigned char m_Unk200[0xC];  // 0x200, not mapped
+            float m_fInvincibleTime;      // 0x20C, IsInvincible while above zero (name guessed)
+            float m_Unk210;               // 0x210
     };
 }
 

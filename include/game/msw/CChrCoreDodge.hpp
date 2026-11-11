@@ -362,7 +362,7 @@ namespace msw {
             virtual int SubStateArtsShotIsEndArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xDAC
             virtual void SubStateArtsShotShootBall_(STATE_WORK_AIR_TRICK_CMN *); // 0xDB0
             virtual void SubStateArtsShotStartArtsHitback_(STATE_WORK_AIR_TRICK_CMN *); // 0xDB4, return type guessed
-            virtual void SubStateArtsShotIsEndArtsShotAfter_(STATE_WORK_AIR_TRICK_CMN *); // 0xDB8, return type guessed
+            virtual int SubStateArtsShotIsEndArtsShotAfter_(STATE_WORK_AIR_TRICK_CMN *); // 0xDB8 (returns int: the Moogle's override returns its result)
             virtual void SubStateArtsShotDoLandStart_(STATE_WORK_AIR_TRICK_CMN *); // 0xDBC, return type guessed
             virtual void SubStateArtsShotPlayLandMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDC0
             virtual void SubStateArtsShotPlayLandEffect_(STATE_WORK_AIR_TRICK_CMN *); // 0xDC4
@@ -637,15 +637,19 @@ namespace msw {
 
     // (only what Luigi's vacuum and Toad's trick use is mapped; names guessed)
     struct CChrCoreDodge::STATE_WORK_AIR_TRICK_CMN {
-        unsigned char m_Unk00[0xAC];
+        unsigned char m_Unk00[0x4];
+        // 0x04: flag bits. The Moogle clears bit 1 when his after-shot
+        // timer runs out and waits for bit 3 (meanings not known).
+        unsigned long m_nFlag04;
+        unsigned char m_Unk08[0xAC - 0x08];
         float m_fJumpUnk;              // 0xAC, for CChrCore::m_fJumpUnk224
         bcs::FVEC3 m_TargetPos;        // 0xB0, where the trick turns to
         unsigned char m_UnkBC[0xC8 - 0xBC];
         bcs::FVEC3 m_MovePos;          // 0xC8, where the trick moves to
-        float m_fUnkD4;                // 0xD4
-        unsigned char m_UnkD8[0x4];
+        float m_fUnkD4;                // 0xD4, the frame of the move by m_MoveParam (the Moogle)
+        float m_fUnkD8;                // 0xD8, frames left before the Moogle clears bit 1 of m_nFlag04
         CC_DATA::CHR_PARAM::MOVE_PARAM m_MoveParam; // 0xDC
-        unsigned char m_UnkEC[0xFC - 0xEC];
+        CChrCore::DIR_MOVE m_DirMove;  // 0xEC
         CChrCore::ROT_LERP1 m_RotLerp; // 0xFC, the turn (SubStateArtsShotCalcRotParam_)
         float m_fRotY;                 // 0x10C, the yaw the trick turns to
         long m_nTrickStep;             // 0x110
@@ -655,6 +659,7 @@ namespace msw {
         float m_fAnimSpeed;            // 0x120
         long m_nArtsLevel;             // 0x124
         float m_fShotFrame;            // 0x128, the frame of the shot motion the ball leaves at (name guessed)
+        long m_nAfterStep;             // 0x12C, the step after the shot (the Moogle)
     };
 
     // Size 0x968.
@@ -715,6 +720,12 @@ namespace msw {
         public:
             CChrCoreDodgePeach();
             virtual ~CChrCoreDodgePeach();
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD80
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD94
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
     };
 
     // Size 0x930.
@@ -777,6 +788,15 @@ namespace msw {
         public:
             CChrCoreDodgeDonkey();
             virtual ~CChrCoreDodgeDonkey();
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD64
+            virtual void SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD68
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD80
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD94
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
     };
 
     // Size 0x930.
@@ -784,6 +804,15 @@ namespace msw {
         public:
             CChrCoreDodgeDiddy();
             virtual ~CChrCoreDodgeDiddy();
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD64
+            virtual void SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD68
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD80
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD94
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
     };
 
     // Size 0x930.
@@ -828,6 +857,12 @@ namespace msw {
         public:
             CChrCoreDodgeMoogle();
             virtual ~CChrCoreDodgeMoogle();
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD80
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
+            virtual void SubStateArtsShotShootBall_(STATE_WORK_AIR_TRICK_CMN *); // 0xDB0
+            virtual int SubStateArtsShotIsEndArtsShotAfter_(STATE_WORK_AIR_TRICK_CMN *); // 0xDB8
     };
 
     // Size 0x930.

@@ -6,6 +6,12 @@
 #include "bcs/CUnivTask.hpp"
 #include "game/msw/CNpcBase.hpp"
 
+namespace nw4r {
+    namespace g3d {
+        class ResMdl;
+    }
+}
+
 namespace msw {
 
     // INCOMPLETE: the boss Packun (Petey Piranha) NPC. A DOL class; BasketF
@@ -15,6 +21,59 @@ namespace msw {
     class CNpcBossPackun : public CNpcBase, public bcs::CFsmQueue<CNpcBossPackun> {
         public:
             virtual ~CNpcBossPackun();
+
+            // The class's own virtual functions, after the state queue's
+            // part of the vtable (from 0x80), named by BasketF's
+            // __vt__Q23msw24CNpcBossPackunBasketBase up to GetRingNodeIdx
+            // (0x130), which BasketF's CGoalObjBasket_BossPackun calls.
+            // Return types are guessed; nothing defines them yet.
+            virtual long GetGoalIdx() const;                            // 0x80
+            virtual int IsMouthOpen() const;                            // 0x84
+            virtual float GetRemainderMouthOpenFrame();                 // 0x88
+            virtual float GetRemainderMouthCloseFrame();                // 0x8C
+            virtual void CreateMdlObj_();                               // 0x90
+            virtual void InitFsm_();                                    // 0x94
+            virtual unsigned long GetQueueWorkSize() const;             // 0x98
+            virtual unsigned long GetQueueStackSize() const;            // 0x9C
+            virtual bcs::CMdlObj *NewMdlObj_(nw4r::g3d::ResMdl mdl, unsigned long heap); // 0xA0
+            virtual void CtorStateSleep();                              // 0xA4
+            virtual void LoopStateSleep();
+            virtual void DtorStateSleep();
+            virtual void CtorStateIdle();                               // 0xB0
+            virtual void LoopStateIdle();
+            virtual void DtorStateIdle();
+            virtual void CtorStateRun();                                // 0xBC
+            virtual void LoopStateRun();
+            virtual void DtorStateRun();
+            virtual void CtorStateAttack();                             // 0xC8
+            virtual void LoopStateAttack();
+            virtual void DtorStateAttack();
+            virtual void CtorStateMudAttack();                          // 0xD4
+            virtual void LoopStateMudAttack();
+            virtual void DtorStateMudAttack();
+            virtual void CtorStateShotIn();                             // 0xE0
+            virtual void LoopStateShotIn();
+            virtual void DtorStateShotIn();
+            virtual void CtorStateEatWait();                            // 0xEC
+            virtual void LoopStateEatWait();
+            virtual void DtorStateEatWait();
+            virtual void CtorStateEat();                                // 0xF8
+            virtual void LoopStateEat();
+            virtual void DtorStateEat();
+            virtual void CtorStateMelt();                               // 0x104
+            virtual void LoopStateMelt();
+            virtual void DtorStateMelt();
+            virtual void CtorStateFears();                              // 0x110
+            virtual void LoopStateFears();
+            virtual void DtorStateFears();
+            virtual void CtorStateEndIdle();                            // 0x11C
+            virtual void LoopStateEndIdle();
+            virtual void DtorStateEndIdle();
+            virtual long GetRequestFruit() const;                       // 0x128
+            // The handle of the goal model the boss carries, and the node of
+            // its ring (BasketF's CGoalObjBasket_BossPackun passes them on).
+            virtual unsigned long GetMdlHandle();                       // 0x12C
+            virtual long GetRingNodeIdx();                              // 0x130
 
             class CMudBomb;
             class CMudBombMan;

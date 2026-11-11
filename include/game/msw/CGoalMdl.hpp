@@ -67,8 +67,13 @@ namespace msw {
             // (CGoalObjHockey::NewMdl passes the goal's sub-type on).
             long m_nSubType;                       // 0x12C
 
+        public:
+            // 0x130, the model node of the ring (CGoalObj::GetRingNodeIdx
+            // reads it; name guessed).
+            long m_nRingNodeIdx;                   // 0x130
+
         private:
-            unsigned char m_Unk130[0x340 - 0x130]; // 0x130
+            unsigned char m_Unk134[0x340 - 0x134]; // 0x134
     };
 }
 

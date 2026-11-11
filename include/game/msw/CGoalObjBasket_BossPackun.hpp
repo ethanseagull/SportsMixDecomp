@@ -13,8 +13,6 @@ namespace msw {
     // CStageBasketHungryBossPackun::CreateGoal). Its vtable
     // (__vt__Q23msw25CGoalObjBasket_BossPackun) ends in SetNpc, after
     // CGoalObjBasket's own virtual functions.
-    //
-    // INCOMPLETE: only what CStageBasketHungryBossPackun needs is declared.
     class CGoalObjBasket_BossPackun : public CGoalObjBasket {
         public:
             CGoalObjBasket_BossPackun(bcs::CTask *pParent, long idx, CNpcBossPackun *pNpc);
@@ -26,7 +24,7 @@ namespace msw {
             virtual const bcs::CScnObj *GetMdlObj(int idx) const;
 
             // The boss that carries this goal.
-            virtual void SetNpc(CNpcBossPackun *pNpc);
+            virtual void SetNpc(CNpcBossPackun *pNpc) { m_pNpc = pNpc; }
 
         private:
             CNpcBossPackun *m_pNpc; // 0x64A8

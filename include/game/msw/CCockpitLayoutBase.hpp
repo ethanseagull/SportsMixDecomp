@@ -41,7 +41,9 @@ namespace msw {
             virtual void OnCursorCheck(long, unsigned short);
             virtual void StickMoveCheck(long, unsigned short);
             virtual void IsButtonKindOfStickMode(unsigned short);
-            virtual void CancelMenu();
+            // Returns -1 when the page cannot close yet, else 0 (the DOL
+            // body; overrides such as CCockpitHockeyResult's return 0).
+            virtual long CancelMenu();
             virtual void PushButton(long);
             // The next four are inline: each module that derives a class
             // emits them. They return 0.

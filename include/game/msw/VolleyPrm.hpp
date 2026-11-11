@@ -77,6 +77,7 @@ namespace msw {
     extern float VOLLEY_PRM_S12_BALL_SIDE_RATE;
     extern long VOLLEY_PRM_S12_BALL_NUM;
     extern float VOLLEY_PRM_S12_BALL_DOWN_TIME;
+    extern long VOLLEY_PRM_S12_BALL_END_LINE;
     extern float VOLLEY_PRM_S15_CASE_WIDTH;
     extern float VOLLEY_PRM_S15_CASE_DEPTH;
     extern float VOLLEY_PRM_S15_CASE_HEIGHT;
@@ -181,6 +182,31 @@ namespace msw {
     extern float VOLLEY_PRM_S11_BUBBLE_INIT_INTERVAL;
     extern float VOLLEY_PRM_S11_BUBBLE_INTERVAL;
     extern float VOLLEY_PRM_S11_BUBBLE_ZONE_Z;
+
+    // Stage 17, the trolley (CStgGmk_Trolley_Act_Volley).
+    extern float VOLLEY_PRM_S17_TROLLEY_SPEED;
+    extern long VOLLEY_PRM_S17_TROLLEY_NUM_MIN;
+    extern long VOLLEY_PRM_S17_TROLLEY_NUM_MAX;
+    extern float VOLLEY_PRM_S17_TROLLEY_WIDTH;
+    extern float VOLLEY_PRM_S17_TROLLEY_DEPTH;
+    extern float VOLLEY_PRM_S17_TROLLEY_HEIGHT;
+    extern float VOLLEY_PRM_S17_TROLLEY_ATK_WIDTH;
+    extern float VOLLEY_PRM_S17_TROLLEY_ATK_DEPTH;
+    extern float VOLLEY_PRM_S17_TROLLEY_ATK_HEIGHT;
+    extern float VOLLEY_PRM_S17_TROLLEY_MDL_WIDTH;
+    extern float VOLLEY_PRM_S17_TROLLEY_MDL_DEPTH;
+    extern float VOLLEY_PRM_S17_TROLLEY_MDL_HEIGHT;
+    extern float VOLLEY_PRM_S17_TROLLEY_DEF_WIDTH;
+    extern float VOLLEY_PRM_S17_TROLLEY_DEF_HEIGHT0;
+    extern float VOLLEY_PRM_S17_TROLLEY_DEF_HEIGHT1;
+    extern float VOLLEY_PRM_S17_TROLLEY_DEF_HEIGHT2;
+    extern float VOLLEY_PRM_S17_HEYHO_COIN_RATE;
+    extern float VOLLEY_PRM_S17_HEYHO_B_DIST_MIN;
+    extern float VOLLEY_PRM_S17_HEYHO_B_DIST_MAX;
+    extern float VOLLEY_PRM_S17_HEYHO_C_DIST_MIN;
+    extern float VOLLEY_PRM_S17_HEYHO_C_DIST_MAX;
+    extern long VOLLEY_PRM_S17_TROLLEY_PAT_TYPE;
+    extern long VOLLEY_PRM_S17_TROLLEY_PAT_NO;
 }
 
 #endif /* !MSW_VOLLEYPRM_HPP_ */

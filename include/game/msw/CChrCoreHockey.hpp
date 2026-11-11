@@ -386,7 +386,8 @@ namespace msw {
             virtual void SubStateArtsShotCalcSetbackPos_(bcs::FVEC3 &); // 0xCFC
             virtual void SubStateArtsShotCalcRotParam_(CChrCore::ROT_LERP1 &, float, float); // 0xD00
             virtual void SubStateArtsShotClearMoveParamWork_(CC_DATA::CHR_PARAM::MOVE_PARAM &); // 0xD04
-            virtual void SubStateArtsShotDoJumpMove_(STATE_WORK_AIR_TRICK *); // 0xD08
+            // Not zero once the jump is over (CChrCoreHockeyKoopaJr reads it).
+            virtual int SubStateArtsShotDoJumpMove_(STATE_WORK_AIR_TRICK *); // 0xD08
             virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xD0C
             virtual int SubStateArtsShotIsEndArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD10
             virtual void SubStateArtsShotShootBall_(STATE_WORK_AIR_TRICK *); // 0xD14
@@ -647,7 +648,13 @@ namespace msw {
         public:
             CChrCoreHockeyKoopaJr();
             virtual ~CChrCoreHockeyKoopaJr();
+            virtual void Reset_();                                     // 0x384
             virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCC8
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xD0C
+            virtual int SubStateArtsShotIsEndArtsShotAfter_(STATE_WORK_AIR_TRICK *); // 0xD1C
     };
 
     class CChrCoreHockeyMoogle : public CChrCoreHockey {

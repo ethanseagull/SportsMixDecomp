@@ -19,7 +19,7 @@ namespace msw {
     // CStageHockey17::CGoalObj17::NewMdl inlines it); GetRingPos,
     // GetBoardPos, GetBoardVec and DunkRelease are weak copies at the end of
     // CGoalObjHockey.cpp too, but their bodies are not written yet. The
-    // members are one block that only gives the size.
+    // class adds no members: CGoalObj is 0x6498 bytes.
     class CGoalObjHockey : public CGoalObj {
         public:
             CGoalObjHockey(bcs::CTask *pParent, long idx);
@@ -29,32 +29,26 @@ namespace msw {
             // the goal's sub-type.
             virtual CStgMdl *NewMdl(long heap, unsigned long idx)
             {
-                CStgMdl *pMdl = 0;
                 if (idx == 0) {
-                    pMdl = new (heap) CStgMdlNull(this);
-                } else {
-                    CGoalMdlHockey *pGoalMdl = new (heap) CGoalMdlHockey(this);
-                    if (pGoalMdl != 0) {
-                        pGoalMdl->SetSubType(GetSubType());
-                    }
-                    pMdl = pGoalMdl;
+                    return new (heap) CStgMdlNull(this);
                 }
-                return pMdl;
+
+                CGoalMdlHockey *pGoalMdl = new (heap) CGoalMdlHockey(this);
+                if (pGoalMdl != 0) {
+                    pGoalMdl->SetSubType(GetSubType());
+                }
+                return pGoalMdl;
             }
 
             virtual void SetPosAuto();
-            virtual const bcs::FVEC3 &GetRingPos() const;
-            virtual const bcs::FVEC3 &GetBoardPos() const;
-            virtual const bcs::FVEC3 &GetBoardVec() const;
+            // The ring and the board are where the goal stands.
+            virtual const bcs::FVEC3 &GetRingPos() const { return GetPos(); }
+            virtual const bcs::FVEC3 &GetBoardPos() const { return GetPos(); }
+            virtual const bcs::FVEC3 &GetBoardVec() const { return GetVec(); }
             virtual void GoalIn();
-            virtual void DunkStart(DUNK_POW pow, const bcs::FVEC3 &rPos);
-            virtual void DunkRelease();
+            virtual float DunkStart(DUNK_POW pow, const bcs::FVEC3 &rPos);
+            virtual void DunkRelease() {}
             virtual void DunkCancel();
-
-        private:
-            // From the end of CGoalObj's mapped members (0x74); where
-            // CGoalObj's own members end is not known.
-            unsigned char m_Unk74[0x6498 - 0x74];
     };
 }
 

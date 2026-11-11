@@ -357,12 +357,12 @@ game/volley/CCockpitVolleyRhythmA.cpp:
 	.data       start:0x0001B930 end:0x0001BCE0
 
 game/volley/CPerfectDemoVolley.cpp:
-	.text       start:0x0009F56C end:0x0009FF44
+	.text       start:0x0009F56C end:0x0009FDD0
 	.rodata     start:0x00008128 end:0x00008158
 	.data       start:0x0001BCE0 end:0x0001BD28
 
 game/volley/CComDrvVolleyGame.cpp:
-	.text       start:0x0009FF44 end:0x000AB1D8
+	.text       start:0x0009FDD0 end:0x000AB1D8
 	.rodata     start:0x00008158 end:0x000082C0
 	.data       start:0x0001BD28 end:0x0001C168
 

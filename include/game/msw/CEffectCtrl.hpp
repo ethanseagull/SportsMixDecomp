@@ -73,6 +73,10 @@ namespace msw {
             // words not known; msw::CDropCoin passes 3, 0, 0; return type
             // guessed)
             static void SimpleEffect(long nId, const bcs::FVEC3 &rPos, unsigned long, unsigned long, unsigned long);
+            // (added for VolleyF's CStgGmk_Trolley_Act_Volley; meanings of the
+            // words not known) The same at *pPos, or on pObj.
+            static void SimpleEffect(long nId, const bcs::CScnObj *pObj, const bcs::FVEC3 *pPos, unsigned long,
+                                     unsigned long, unsigned long, unsigned long, unsigned long);
 
             // Added for game/msw/cockpit/CMissionCount.cpp: the same for an
             // effect attached to a layout pane object (static as well; the

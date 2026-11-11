@@ -19,8 +19,9 @@ namespace msw {
             CStgGmk(bcs::CTask *pParent, unsigned long arg);
             virtual ~CStgGmk();
 
-            // DOL bodies (BasketF's __vt__Q23msw14CGoalObjBasket keeps these
-            // two of CStgGmk).
+            // Inline: BasketF's game/basket/CGoalObjBasket.cpp and HockeyF's
+            // game/hockey/CGoalObjHockey.cpp have weak copies (their goals
+            // keep these two of CStgGmk). Defined below the class.
             virtual CStgAct *NewAct(long heap);
             virtual CStgDrv *NewDrv(long heap);
 
@@ -67,6 +68,16 @@ namespace msw {
             CStgGmkClusterImpl *m_pCluster; // 0x60
             long m_nClusterIdx;             // 0x64
     };
+}
+
+#include "bcs/New.hpp"
+#include "game/msw/CStgGmkAct.hpp"
+
+namespace msw {
+
+    // A plain gimmick actor and driver.
+    inline CStgAct *CStgGmk::NewAct(long heap) { return new (heap) CStgGmkAct(this); }
+    inline CStgDrv *CStgGmk::NewDrv(long heap) { return new (heap) CStgDrv(this); }
 }
 
 #endif /* !MSW_CSTGGMK_HPP_ */

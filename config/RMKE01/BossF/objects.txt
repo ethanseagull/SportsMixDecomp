@@ -30,3 +30,4 @@ Equivalent game/boss/CChrCoreBossYoshi.cpp
 Equivalent game/boss/CChrCoreBossSiroma.cpp
 Equivalent game/boss/CChrCoreBossKinopio.cpp
 Equivalent game/boss/CChrCoreBossKuroma.cpp
+Equivalent game/boss/CCockpitBoss.cpp

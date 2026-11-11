@@ -375,14 +375,12 @@ game/basket/unit_84B20.cpp:
 game/basket/CCockpitBasketCoder.cpp:
 	.text       start:0x00084B8C end:0x000874EC
 	.rodata     start:0x00004780 end:0x00005238
-	.data       start:0x00015D58 end:0x000166C0
+	.data       start:0x00015D58 end:0x000160C8
 
-game/basket/CStgGmk_WaterWorks_Basket_Mdl.cpp:
-	.text       start:0x000874EC end:0x00087628
+game/basket/CStgGmk_WaterWorks_Basket.cpp:
+	.text       start:0x000874EC end:0x00088680
 	.rodata     start:0x00005238 end:0x000052A0
-
-game/basket/CStgSeSlot.cpp:
-	.text       start:0x00087628 end:0x00088680
+	.data       start:0x000160C8 end:0x000166C0
 
 game/basket/CGoalMdlBasket.cpp:
 	.text       start:0x00088680 end:0x00088C1C

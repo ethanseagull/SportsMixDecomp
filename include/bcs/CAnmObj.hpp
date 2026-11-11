@@ -31,7 +31,9 @@ namespace bcs {
             virtual float VFunc28() const;                              // 0x28, reads the float at 0x24
             virtual void SetRate(float rate);                           // 0x2C, writes the float at 0x20
             virtual float GetRate() const;                              // 0x30, reads the float at 0x20
-            virtual void VFunc34();                                     // 0x34 (guessed)
+            // 0x34 (name guessed) Advances the frame by fStep times the
+            // rate; ObjProc calls it for task 8 with the step in the info.
+            virtual void UpdateFrame(float fStep);
             virtual int IsLooped() const;                               // 0x38, bit 1 of the word at 0x18
             virtual int VFunc3C() const;                                // 0x3C, bit 2
             virtual int IsEnd() const;                                  // 0x40, bit 3

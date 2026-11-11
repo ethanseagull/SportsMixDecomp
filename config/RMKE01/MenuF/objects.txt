@@ -35,3 +35,7 @@ NonMatching game/menu/CBgMdl.cpp
 Equivalent game/menu/CPlayerSelect.cpp
 Equivalent game/menu/CWiFiFrindVS.cpp
 Equivalent game/menu/CChrMenuCtrl.cpp
+Equivalent game/menu/CCupChr.cpp
+Equivalent game/menu/CMenu.cpp
+Equivalent game/menu/CTitle.cpp
+Equivalent game/menu/CBackground.cpp

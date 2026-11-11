@@ -29,7 +29,7 @@ namespace msw {
             virtual float GetAtkCollRadius() const;
             virtual float GetParamHeight() const;
             virtual float GetParamAttachHeight() const;
-            virtual bool CallbackBodyPush_(CCollBodyUnit *, CCollBodyUnit *, bcs::FVEC3 *);
+            virtual void CallbackBodyPush_(CCollBodyUnit *, CCollBodyUnit *, bcs::FVEC3 *);
             virtual void DoThrowInit(const bcs::FVEC3 &, int);
             virtual void CtorStateDrop();
             virtual void LoopStateDrop();
@@ -52,7 +52,7 @@ namespace msw {
             virtual float GetAtkCollRadius() const;
             virtual float GetParamHeight() const;
             virtual float GetParamAttachHeight() const;
-            virtual bool CallbackBodyPush_(CCollBodyUnit *, CCollBodyUnit *, bcs::FVEC3 *);
+            virtual void CallbackBodyPush_(CCollBodyUnit *, CCollBodyUnit *, bcs::FVEC3 *);
             virtual void DoThrowInit(const bcs::FVEC3 &, int);
             virtual void CtorStateDrop();
             virtual void LoopStateDrop();
@@ -75,7 +75,7 @@ namespace msw {
             virtual float GetAtkCollRadius() const;
             virtual float GetParamHeight() const;
             virtual float GetParamAttachHeight() const;
-            virtual bool CallbackBodyPush_(CCollBodyUnit *, CCollBodyUnit *, bcs::FVEC3 *);
+            virtual void CallbackBodyPush_(CCollBodyUnit *, CCollBodyUnit *, bcs::FVEC3 *);
             virtual void DoThrowInit(const bcs::FVEC3 &, int);
             virtual void CtorStateDrop();
             virtual void LoopStateDrop();
@@ -91,7 +91,13 @@ namespace msw {
             virtual void DoExplode_();
 
         protected:
-            unsigned char m_Unk1AC[0x1C0 - 0x1AC]; // 0x1AC, size 0x1C0
+            // (names guessed from DodgeF's CItemDodgeBombDD_Base, which uses
+            // them the way the DOL bomb does)
+            float m_fExplodeRestFrame; // 0x1AC, frames until the bomb blows up
+            float m_fFlashPhase;       // 0x1B0, phase of the red flashing before the blast
+            long m_bEffect;            // 0x1B4, set while StartEffect_'s effect runs
+            unsigned long m_hEffect;   // 0x1B8
+            long m_bExplode;           // 0x1BC, the bomb blows up when the countdown is over; size 0x1C0
     };
 
     // What the green and the red shell share (a DOL class; overrides and
@@ -104,7 +110,7 @@ namespace msw {
 
             virtual float GetBodyCollRadius() const;
             virtual float GetAtkCollRadius() const;
-            virtual bool CallbackBodyPush_(CCollBodyUnit *, CCollBodyUnit *, bcs::FVEC3 *);
+            virtual void CallbackBodyPush_(CCollBodyUnit *, CCollBodyUnit *, bcs::FVEC3 *);
             virtual float GetParamHeight() const;
             virtual float GetParamAttachHeight() const;
             virtual long GetParamThrowTrackType() const { return 1; }

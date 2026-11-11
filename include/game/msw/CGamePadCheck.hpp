@@ -13,7 +13,15 @@ namespace msw {
             // reads the instance from a global).
             static void CleanUp();
 
-            unsigned char m_Unk00[0xAC];
+            // (DOL .sbss) The step of the pad check; msw::CMenu leaves its
+            // start-up state only while it is below 2. (type guessed)
+            static long m_PadCheckStap;
+
+            unsigned char m_Unk00[0x38];
+            // 0x38. (added for game/menu/CTitle.cpp) Cleared when the title
+            // screen opens, set to 1 when A is pressed on it.
+            long m_Unk38;
+            unsigned char m_Unk3C[0x70];
             long m_UnkAC; // 0xAC, set to 1 once at start-up
             unsigned char m_UnkB0[0x18];
     };

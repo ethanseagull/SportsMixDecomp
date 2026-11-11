@@ -11,6 +11,9 @@ namespace msw {
     class CEventDemo {
         public:
             static void SetRandomDemoGameMode();
+            // (added for MenuF game/menu/CTitle.cpp; return type and
+            // argument guessed) A game kind (0 to 3) for the attract demo.
+            static long GetRandomDemoGameMode(int);
 
             // The demo camera (DOL, static; read from DodgeF's
             // CEventDemoDodge, which plays its damage demos through them;

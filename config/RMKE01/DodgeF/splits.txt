@@ -462,14 +462,10 @@ game/dodge/CStageDodge13.cpp:
 	.bss        start:0x00000BF8 end:0x00000C00
 
 game/dodge/CStageDodge15.cpp:
-	.text       start:0x00096018 end:0x00096B58
+	.text       start:0x00096018 end:0x00096CBC
 	.rodata     start:0x00005DB8 end:0x00005FD8
-	.data       start:0x0001F5D8 end:0x0001FBE0
+	.data       start:0x0001F5D8 end:0x0001FCC8
 	.bss        start:0x00000C00 end:0x00000C08
-
-game/dodge/CStgGmk_Case_Dodge.cpp:
-	.text       start:0x00096B58 end:0x00096CBC
-	.data       start:0x0001FBE0 end:0x0001FCC8
 
 game/dodge/CStageDodge17.cpp:
 	.text       start:0x00096CBC end:0x00097EBC
@@ -599,13 +595,13 @@ game/dodge/CStgGmk_Trolley_Act_Dodge.cpp:
 	.data       start:0x00023628 end:0x00023900
 
 game/dodge/CStageDodge16.cpp:
-	.text       start:0x000BAEC4 end:0x000BB688
+	.text       start:0x000BAEC4 end:0x000BB47C
 	.rodata     start:0x00007930 end:0x00007A78
 	.data       start:0x00023900 end:0x00023E98
 	.bss        start:0x00000C58 end:0x00000C60
 
-game/dodge/unit_BB688.cpp:
-	.text       start:0x000BB688 end:0x000BD7F8
+game/dodge/unit_BB47C.cpp:
+	.text       start:0x000BB47C end:0x000BD7F8
 	.ctors      start:0x000000C0 end:0x000000C4
 	.rodata     start:0x00007A78 end:0x00007AB8
 	.bss        start:0x00000C60 end:0x00000C68

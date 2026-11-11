@@ -14,6 +14,8 @@ typedef struct Vec {
 
 typedef float Mtx[3][4];
 
+void PSMTXCopy(const Mtx src, Mtx dst);
+
 // dst = m * src (src as a point); src and dst may be the same.
 void PSMTXMultVec(const Mtx m, const Vec *src, Vec *dst);
 

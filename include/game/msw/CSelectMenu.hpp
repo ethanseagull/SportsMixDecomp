@@ -18,10 +18,21 @@ namespace msw {
     // non-static and neither reads `this`. The class has a second
     // polymorphic part (its destructor has a `@68@` thunk) that is not
     // written here, so do not create or destroy one through this header.
+    // (msw::CMenu does `new CSelectMenu`: that only needs the size, 0xAB8,
+    // and the out-of-line constructor.)
     class CSelectMenu : public CMenuTask {
         public:
             CSelectMenu(bcs::CTask *pParent);
             virtual ~CSelectMenu();
+            // Overrides of bcs::CTask's (vtable slots 3 and 4).
+            virtual void Main();
+            virtual void Disp();
+
+            // Added for MenuF game/menu/CMenu.cpp: start loading what the
+            // select menu needs, and whether that has finished (return type
+            // guessed).
+            static void InitLoad();
+            static int IsCompleteOfInitLoad();
 
             const char *GetArchiveFileName(long nArchive);
             const char *GetArchiveRootFolderName(long nArchive);
@@ -136,6 +147,23 @@ namespace msw {
                                  RFLCreateID createId);
             void Chara_SetSelectChara(long nPad, long nChara, long nUnk, int bUnk);
 
+            // Added for MenuF game/menu/CTitle.cpp (return types and
+            // argument names guessed). The steps of the title screen
+            // (SelectMenu::CTitle), and what they call.
+            void Title_In();
+            void Title_Loop();
+            void Title_Out();
+            void Title_SetUpRandGame();
+            void RemoveObj(long nObjId);
+            // The music of screen nUnk, 0 for none.
+            long GetMenuBGMId(long nUnk);
+            void StopMenuBGM();
+            void Chara_SetDecideChara(long nPad, long nChara, long nUnk0, long nUnk1, long nUnk2);
+            // The index of a character pad nPad has not decided yet, or a
+            // negative value when all are.
+            long Chara_FindNotDecideCharaIndex(long nPad);
+            void SetCharaSelectSaveParam();
+
             // Data, added for the same unit. The class is 0xAB8 bytes (the
             // size layout.py finds); only two members are named so far.
             // The second polymorphic part mentioned above (a `@68@` thunk)
@@ -182,10 +210,24 @@ namespace msw {
             unsigned char m_Unk236[0x8];     // 0x236
 
         public:
-            // (names guessed; added for game/menu/CHowTo.cpp)
-            unsigned char m_Unk23E;          // 0x23E, compared with 1
+            // 0x23E. (added for game/menu/CTitle.cpp; names guessed) Five
+            // bytes per pad, written and copied as a whole by
+            // CGamePadCheck.
+            struct PadSelect {
+                unsigned char m_Unk00;       // 0x00
+                unsigned char m_Unk01;       // 0x01
+                unsigned char m_Unk02;       // 0x02
+                unsigned char m_Unk03;       // 0x03, set to 0x80 by Title_In
+                unsigned char m_nPlayerNo;   // 0x04, from CMenuPadInfo::GetDefaultPlayerNo
+            };
+
+            union {
+                // (names guessed; added for game/menu/CHowTo.cpp)
+                unsigned char m_Unk23E;      // 0x23E, compared with 1
+                PadSelect m_aPadSelect[4];   // 0x23E
+            };
         private:
-            unsigned char m_Unk23F[0x19];    // 0x23F
+            unsigned char m_Unk252[0x6];     // 0x252
         public:
             // 0x258. 0 to 3: picks the colour animation of the how-to
             // screen and is passed to CTournament::Tutorial.
@@ -206,7 +248,17 @@ namespace msw {
             unsigned char m_Unk26C;          // 0x26C, cleared when going to mode 0xD
                                              // (game/menu/CTeam.cpp: the index of
                                              // m_nPlayMode in its team group)
-            unsigned char m_Unk26D[0xE];     // 0x26D
+            unsigned char m_Unk26D;          // 0x26D
+            // 0x26E to 0x271. (names guessed; added for
+            // game/menu/CTitle.cpp) The stage of the attract demo's match,
+            // drawn by Title_SetUpRandGame: m_nStage (0 to 3) first, then
+            // m_nStageSub, an index into what _GetStageNoInfo returns for
+            // it. Each has a copy of its old value.
+            unsigned char m_nStageSub;       // 0x26E
+            unsigned char m_nPrevStageSub;   // 0x26F
+            unsigned char m_nStage;          // 0x270
+            unsigned char m_nPrevStage;      // 0x271
+            unsigned char m_Unk272[0x9];     // 0x272
         public:
             unsigned char m_Unk27B;          // 0x27B
         private:
@@ -245,8 +297,18 @@ namespace msw {
             // 0x95C. (name guessed; added for game/menu/CTeam.cpp) Frames
             // left before the team screen takes stick input again.
             float m_fInputWait;
+            // (names guessed; added for game/menu/CTitle.cpp)
+            // 0x960. Which opening movie the title screen plays next;
+            // flipped between 0 and 1 each time.
+            unsigned char m_nTitleMovie;
         private:
-            unsigned char m_Unk960[0x28];    // 0x960
+            unsigned char m_Unk961[0x3];     // 0x961
+        public:
+            // 0x964. Frames left before the title screen gives way to the
+            // attract demo once its music has stopped.
+            float m_fTitleDemoWait;
+        private:
+            unsigned char m_Unk968[0x20];    // 0x968
         public:
             // 0x988. (name guessed; added for game/menu/CPlusMinus.cpp)
             // Non-zero when _SetStarMii gives Miis.
@@ -281,6 +343,11 @@ namespace msw {
     // argument names are guesses). The play mode of button nBtnKindId of
     // the play mode screen for nPlayerNum players, or a negative value.
     long _GetPlayModeFromButtonId(long nBtnKindId, long nPlayerNum);
+
+    // Defined in another MenuF file (added for game/menu/CTitle.cpp; the
+    // argument names are guesses). A table of stage ids for game kind
+    // nGame; an entry of 0x10 is not playable.
+    const unsigned char *_GetStageNoInfo(long nGame, long nIndex);
 }
 
 #endif /* !CSELECTMENU_HPP_ */

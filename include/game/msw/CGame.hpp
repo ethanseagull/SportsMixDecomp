@@ -326,12 +326,13 @@ namespace msw {
             // (meaning guessed) The task new objects of the running game are
             // created under (BossF's bomb explosions).
             static bcs::CTask *GetTempParent();
+            // (DOL, static; argument meanings not known: DodgeF's bomb blasts
+            // pass a quake number and -1, -1; HockeyF's CFighting passes
+            // (0x2F, -1, -1) when a fight ends)
+            static void StartCameraQuake(long nType, long, long);
             // (DOL; meaning of the argument not known, CDropCoinMan passes
             // 1) Non-zero while the game is in its main loop state.
             static int IsMainLoopState(int);
-            // (DOL, static; parameter meanings guessed) Shakes the camera:
-            // HockeyF's CFighting passes (0x2F, -1, -1) when a fight ends.
-            static void StartCameraQuake(long nType, long, long);
 
             // The three below are static in the DOL: their bodies index
             // g_GameWork with the argument. (return types guessed)
@@ -390,6 +391,11 @@ namespace msw {
             // (DOL, static; return type guessed) The goal of team nTeam
             // (HockeyF: 1 minus it is the goal the team defends).
             static long GetGoalIdx(long nTeam);
+            // (DOL, static; meanings guessed from the names and from
+            // BasketF's CStageBasket03) The goal team nTeam guards, and the
+            // team that goal nGoal belongs to.
+            static long GetGuardGoalIdx(long nTeam);
+            static long GetTeamIdxByGoalIdx(long nGoal);
             // (DOL, static) The position of goal nGoal. (return type guessed)
             static const bcs::FVEC3 &GetGoalPos(long nGoal);
             // DOL, static. The direction goal nGoal faces (out of the goal,

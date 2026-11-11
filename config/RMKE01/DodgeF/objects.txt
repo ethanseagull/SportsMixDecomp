@@ -4,7 +4,7 @@
 # adding a line (port_unit.py and autopilot.py do it themselves).
 Matching game/dodge/CEffectCtrlDodge.cpp
 Matching game/dodge/module.cpp
-Equivalent game/dodge/CChrMarkerDodge.cpp
+Matching game/dodge/CChrMarkerDodge.cpp
 Equivalent game/dodge/CCollManDodge.cpp
 Matching game/dodge/TournamentDodge.cpp
 Matching game/dodge/CTmGameHandlerDodge.cpp
@@ -14,7 +14,7 @@ Matching game/dodge/CCameraDodge.cpp
 Matching game/dodge/CStgGmk_Wave_Dodge.cpp
 Matching game/dodge/CCockpitDodgeModelTelop.cpp
 Matching game/dodge/CCockpitChrIcon2DDodge.cpp
-NonMatching game/dodge/CItemManDodge.cpp
+Equivalent game/dodge/CItemManDodge.cpp
 Matching game/dodge/CStageManDodge.cpp
 Matching game/dodge/CComDrvDodge.cpp
 Matching game/dodge/unit_77468.cpp
@@ -29,3 +29,7 @@ Matching game/dodge/CItemDodgeRShell.cpp
 Matching game/dodge/CStageDodge04.cpp
 Equivalent game/dodge/CStageDodge07.cpp
 Equivalent game/dodge/CStageDodge05.cpp
+Equivalent game/dodge/CStageDodge12.cpp
+Matching game/dodge/CStageDodge02.cpp
+Equivalent game/dodge/CStageDodge16.cpp
+Equivalent game/dodge/CStageDodge15.cpp

@@ -12,6 +12,8 @@ namespace nw4r {
         // Width and height of a pane.
         struct Size {
             Size() {}
+            // Added for MenuF game/menu/CBackground.cpp.
+            Size(float w, float h) : width(w), height(h) {}
             // Copies member by member: the game copies a Size with two
             // lfs/stfs pairs (CWiFiFrindVS::Set), not with lwz/stw.
             Size(const Size &rOther) : width(rOther.width), height(rOther.height) {}
@@ -98,6 +100,13 @@ namespace nw4r {
                 const math::VEC3 &GetTranslate() const { return mTranslate; }
                 Pane *GetParent() const { return mpParent; }
 
+                // Added for MenuF game/menu/CBackground.cpp (out of line in
+                // the DOL). Return type of AppendChild guessed.
+                void SetName(const char *pName);
+                void AppendChild(Pane *pChild);
+                // Bytes 0xCD-0xD6 are the user data (ogws description).
+                void SetUserAllocated(bool bUserAllocated) { mbUserAllocated = bUserAllocated; }
+
             private:
                 unsigned char m_Unk04[0x8];
                 Pane *mpParent;              // 0x0C, null at the root
@@ -113,7 +122,9 @@ namespace nw4r {
                 unsigned char m_UnkB9[0x2];
                 unsigned char mFlag;         // 0xBB, bit 0: visible
                 char mName[17];              // 0xBC
-                unsigned char m_UnkCD[0xB];  // size 0xD8
+                unsigned char m_UnkCD[0x9];  // 0xCD
+                bool mbUserAllocated;        // 0xD6 (name from the ogws description)
+                unsigned char m_UnkD7[0x1];  // size 0xD8
         };
     }
 }

@@ -1,0 +1,12 @@
+#ifndef NEW_
+#define NEW_
+
+// Only placement new so far (the C++ library's own is inline and emits
+// nothing). Written for this project.
+
+inline void *operator new(unsigned long, void *p)
+{
+    return p;
+}
+
+#endif /* !NEW_ */

@@ -47,3 +47,4 @@ Equivalent game/basket/CStgGmk_WaterWorks_Basket.cpp
 Equivalent game/basket/CStageBasket16.cpp
 Matching game/basket/CStageBasket03.cpp
 Matching game/basket/CStageBasket09.cpp
+Equivalent game/basket/CStageBasket15.cpp

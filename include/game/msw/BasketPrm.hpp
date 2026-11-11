@@ -511,6 +511,44 @@ namespace msw {
     extern float BASKET_PRM_S16_FLASH_TIME;
     extern float BASKET_PRM_S16_FLASH_GAIN;
     extern float BASKET_PRM_S16_FLASH_DECAY;
+
+    // Stage 15, the ship stage, listed in CStageBasket15::GetPrmTbl. Times are
+    // in seconds, the roll angle in degrees.
+    extern float BASKET_PRM_S15_CASE_WIDTH;
+    extern float BASKET_PRM_S15_CASE_DEPTH;
+    extern float BASKET_PRM_S15_CASE_HEIGHT;
+    extern float BASKET_PRM_S15_CASE_INTERVAL;
+    extern float BASKET_PRM_S15_CASE_OFFSET_Z;
+    extern float BASKET_PRM_S15_CASE_POS_Y;
+    extern float BASKET_PRM_S15_CASE_ACC_0;
+    extern float BASKET_PRM_S15_CASE_DEC_0;
+    extern float BASKET_PRM_S15_CASE_DEC_RND_0;
+    extern float BASKET_PRM_S15_CASE_VEL_0;
+    extern float BASKET_PRM_S15_CASE_ACC_1;
+    extern float BASKET_PRM_S15_CASE_DEC_1;
+    extern float BASKET_PRM_S15_CASE_DEC_RND_1;
+    extern float BASKET_PRM_S15_CASE_VEL_1;
+    extern float BASKET_PRM_S15_CASE_ACC_2;
+    extern float BASKET_PRM_S15_CASE_DEC_2;
+    extern float BASKET_PRM_S15_CASE_DEC_RND_2;
+    extern float BASKET_PRM_S15_CASE_VEL_2;
+    extern float BASKET_PRM_S15_RAINY_INTERVAL;
+    extern float BASKET_PRM_S15_RAINY_TIME;
+    extern float BASKET_PRM_S15_SHIP_CYCLE;
+    extern float BASKET_PRM_S15_SHIP_ROT_ANGLE;
+    extern float BASKET_PRM_S15_SHIP_STOP_TIME;
+    extern float BASKET_PRM_S15_SHIP_STOP_TIME_RND;
+    extern float BASKET_PRM_S15_CHR_FLOW_VEL;
+    extern long BASKET_PRM_S15_FLASH_COLOR_R;
+    extern long BASKET_PRM_S15_FLASH_COLOR_G;
+    extern long BASKET_PRM_S15_FLASH_COLOR_B;
+    extern long BASKET_PRM_S15_FLASH_COLOR_A;
+    extern float BASKET_PRM_S15_FLASH_TIME;
+    extern float BASKET_PRM_S15_FLASH_GAIN;
+    extern float BASKET_PRM_S15_FLASH_DECAY;
+    extern float BASKET_PRM_S15_KARON_SCALE;
+    extern float BASKET_PRM_S15_KARON_COLL_SCALE;
+    extern float BASKET_PRM_S15_KARON_SPEED;
 }
 
 #endif /* !MSW_BASKETPRM_HPP_ */

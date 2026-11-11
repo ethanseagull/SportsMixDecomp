@@ -59,7 +59,9 @@ namespace msw {
             virtual long GetParam_CaseNum() const { return 3; }           // 0xC4
             virtual float GetParam_CaseWidth() const = 0;                 // 0xC8
             virtual float GetParam_CaseOffsetZ() const = 0;               // 0xCC
-            virtual float GetParam_CaseSpacingZ() const = 0;              // 0xD0
+            // BasketF emits this default (4.0f) weak: CStageBasket15 misspells
+            // its override (GetParam_CaseSpacnigZ), so the base one is used.
+            virtual float GetParam_CaseSpacingZ() const { return 4.0f; }  // 0xD0
             virtual void GetParam_CaseLocateRect(float *pLeft, float *pRight, float *pFront,
                                                  float *pBack) = 0;       // 0xD4
             virtual long GetParam_CaseBreakDelayRange() const { return 10; } // 0xD8

@@ -144,6 +144,9 @@ def cmd_new(name, build):
     # An MSYS git writes "gitdir: /c/..." which the Windows git cannot follow; use a native path.
     gitfile = wt / ".git"
     gitdir = (ROOT / ".git" / "worktrees" / name).resolve().as_posix()
+    # Git for Windows marks the file hidden, and Windows refuses to open a hidden file
+    # for "w" (PermissionError); replace it instead of overwriting it.
+    gitfile.unlink()
     gitfile.write_text(f"gitdir: {gitdir}\n")
     for rel in links():
         dst = wt / rel

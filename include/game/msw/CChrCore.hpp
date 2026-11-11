@@ -1043,6 +1043,20 @@ namespace msw {
             CBall *GetAttachBall() const;
             long GetGuardCourtIdx() const;
 
+            // Added for VolleyF game/volley/CChrCoreVolley<Name>.cpp (all in
+            // the DOL; return types and parameter meanings guessed).
+            unsigned long Eff_CreateSimple(long nEff, const bcs::FVEC3 &pos, unsigned long, unsigned long,
+                                           unsigned long);
+            // An effect attached to the character's default node.
+            unsigned long Eff_CreateAttachAuto(long nSlot, long nEff, unsigned long);
+            // Stops the effect in slot nSlot.
+            void Eff_Stop(long nSlot);
+            void SetRotY(float fRotY);
+            // The length in frames of motion nMotId.
+            float AnimGetResFrameNum(long nMotId) const;
+            // Takes ball hBall (its handle) into the character's hand.
+            void AttachBall(long hBall, long, float, unsigned long);
+
         protected:
             unsigned long m_Unk60;
             CChrDrv *m_pDriver[2];       // 0x64 (count guessed from the index's place)
@@ -1053,7 +1067,11 @@ namespace msw {
             // 0x74 (name guessed): the frames one update advances;
             // CChrDrvPadHockey::CheckStickParam counts its timers with it.
             float m_fFrameStep;
-            unsigned char m_Unk78[0x90 - 0x78];
+            // 0x78 (name guessed): a speed factor for the character's
+            // motions and turns (AnimPlay, RotateYRate_ read it);
+            // CChrCoreVolleyLuigi turns its vacuum by it times m_fFrameStep.
+            float m_fTimeScale;
+            unsigned char m_Unk7C[0x90 - 0x7C];
             // 0x90 (name guessed): the character's model; IsDisable is true
             // while it is null. CChrManHockey::ArtsStart_ fades it out.
             bcs::CMdlObj *m_pMdl;
@@ -1078,7 +1096,11 @@ namespace msw {
             // 0x179 (name guessed): the CChrManBoss::CreateDriver_ stores the
             // entry of SetCamIdAssign_'s table here.
             signed char m_nCamNo;
-            unsigned char m_Unk17A[0x230 - 0x17A];
+            unsigned char m_Unk17A[0x186 - 0x17A];
+            // 0x186 (name guessed): the model node effects attach to by
+            // default (the volley characters pass it to Eff_CreateAttach).
+            unsigned short m_nEffNode;
+            unsigned char m_Unk188[0x230 - 0x188];
             // 0x230 (name guessed): the level CComMan::GetDatF reads the
             // computer's parameters for (CComManVolleyGame::GetConditionHandicapDis).
             long m_nComLevel;

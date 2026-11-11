@@ -107,6 +107,31 @@ namespace msw {
     extern float DODGE_PRM_S12_BALL_SIDE_RATE;
     extern long DODGE_PRM_S12_BALL_NUM;
     extern float DODGE_PRM_S12_BALL_DOWN_TIME;
+
+    // Stage 16, the star piece stage (CStageDodge16::GetPrmTbl). Times are
+    // in seconds, angles in degrees.
+    extern float DODGE_PRM_S16_DROP_AREA_Z;
+    extern long DODGE_PRM_S16_MAX_NUM;
+    extern float DODGE_PRM_S16_POP_TIME;
+    extern float DODGE_PRM_S16_POP_TIME_RND;
+    extern float DODGE_PRM_S16_POP_POS_Y;
+    extern float DODGE_PRM_S16_DROP_SPEED;
+    extern float DODGE_PRM_S16_DROP_ANGLE;
+    extern long DODGE_PRM_S16_BOUND_NUM;
+    extern float DODGE_PRM_S16_BOUND_REDUCE_Y;
+    extern float DODGE_PRM_S16_BOUND_REDUCE_XZ;
+    extern long DODGE_PRM_S16_ADD_COIN_0;
+    extern float DODGE_PRM_S16_WARP_INTERVAL;
+    extern float DODGE_PRM_S16_WARP_TIME;
+    extern float DODGE_PRM_S16_WARP_SPEED;
+    extern float DODGE_PRM_S16_WARP_BLUR_SHIFT;
+    extern long DODGE_PRM_S16_FLASH_COLOR_R;
+    extern long DODGE_PRM_S16_FLASH_COLOR_G;
+    extern long DODGE_PRM_S16_FLASH_COLOR_B;
+    extern long DODGE_PRM_S16_FLASH_COLOR_A;
+    extern float DODGE_PRM_S16_FLASH_TIME;
+    extern float DODGE_PRM_S16_FLASH_GAIN;
+    extern float DODGE_PRM_S16_FLASH_DECAY;
 }
 
 #endif /* !MSW_DODGEPRM_HPP_ */

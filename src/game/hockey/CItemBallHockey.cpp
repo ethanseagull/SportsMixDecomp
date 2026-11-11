@@ -2,31 +2,31 @@
 
 namespace msw {
 
-bool CItemBallHockey::DoTrg(long trg) {
+long CItemBallHockey::DoTrg(long trg) {
     return CItemBall::DoTrg(trg);
 }
 
-bool CItemBallHockey::TrgRebound_() {
+long CItemBallHockey::TrgRebound_() {
     return false;
 }
 
-bool CItemBallHockey::TrgReboundToFree_() {
+long CItemBallHockey::TrgReboundToFree_() {
     return false;
 }
 
-bool CItemBallHockey::TrgFreeMode_() {
+long CItemBallHockey::TrgFreeMode_() {
     return false;
 }
 
-bool CItemBallHockey::TrgChrHit_() {
+long CItemBallHockey::TrgChrHit_() {
     return false;
 }
 
-bool CItemBallHockey::TrgAttach_() {
+long CItemBallHockey::TrgAttach_() {
     return false;
 }
 
-bool CItemBallHockey::TrgDamage_() {
+long CItemBallHockey::TrgDamage_() {
     return false;
 }
 

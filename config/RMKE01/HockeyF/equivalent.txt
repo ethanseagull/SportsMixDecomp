@@ -31,8 +31,6 @@ HockeyF SetCountNum__Q23msw25CCockpitHockeyPauseResultFl near 99.2 registers onl
 HockeyF Set__Q23msw18CCockpitHockeyCoinFv near 99.3 register choice only: loop counter and game-mode local swap r26/r27, telop pane r29 vs r28, two lis swap r3/r4
 HockeyF SubStateArtsShotFireBullet___Q23msw21CChrCoreHockeyKinopioFPQ33msw14CChrCoreHockey20STATE_WORK_AIR_TRICKl near 98.0 register choice and order of loads/adds building the first mushroom position; stores identical
 HockeyF TrgDamage___Q23msw19CItemBallHockeyBombFv near 93.4 load order of the 180.0f/0.0f constants for CBombExplosion and the register choice that follows; same values passed
-HockeyF TrgDamage___Q23msw21CItemBallHockeyGShellFv unverified 100.0 original returns 4 when the ball is not shot; Trg*_/DoTrg are bool in CItemBall.hpp so ours returns 1 (fix: Trg return type long across CItemBall and all modes)
-HockeyF TrgDamage___Q23msw21CItemBallHockeyRShellFv unverified 100.0 original returns 4 when the ball is not shot; Trg*_/DoTrg are bool in CItemBall.hpp so ours returns 1 (fix: Trg return type long across CItemBall and all modes)
 HockeyF TrgDestroy___Q23msw19CItemBallHockeyBombFv near 99.4 load order of the 180.0f/0.0f constants for CBombExplosion and the register choice that follows; same values passed
 HockeyF TrgGoalIn___Q23msw19CItemBallHockeyBombFv near 99.4 load order of the 180.0f/0.0f constants for CBombExplosion and the register choice that follows; same values passed
 HockeyF TrgShootStart___Q23msw19CItemBallHockeyBombFv near 99.5 load order of the 180.0f/0.0f constants for CBombExplosion and the register choice that follows; same values passed

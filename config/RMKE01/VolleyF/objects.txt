@@ -27,7 +27,7 @@ Matching game/volley/CComDrvVolley.cpp
 Matching game/volley/CStageVolley01.cpp
 Equivalent game/volley/CCockpitChrIcon2DVolley.cpp
 Matching game/volley/unit_CA990.cpp
-NonMatching game/volley/CItemBallVolleyBomb.cpp
+Equivalent game/volley/CItemBallVolleyBomb.cpp
 Equivalent game/volley/CChrDrvPadVolley.cpp
 Equivalent game/volley/CChrManVolley.cpp
 Matching game/volley/CChrCoreVolleyLuigi.cpp

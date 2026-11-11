@@ -17,6 +17,7 @@ namespace bcs {
 
 namespace msw {
 
+    class CArn;
     class CStgObj;
 
     // A model of a stage object. A DOL class, size 0x12C, vptr at 0x128
@@ -76,6 +77,25 @@ namespace msw {
                     nw4r::g3d::ResFile m_Res;  // 0x04
                     const MDL_PARAM *m_pParam; // 0x08
                     unsigned long m_Unk0C;     // 0x0C
+            };
+
+            // (names guessed) The creator of a model found in an archive:
+            // the DOL vtable __vt__Q33msw7CStgMdl15CGenericCreator, a
+            // pointer to the resource file and the archive entry. Made on
+            // the stack by VolleyF's CStageVolley10.
+            class CGenericCreator : public CCreator {
+                public:
+                    CGenericCreator(const nw4r::g3d::ResFile &rRes, CArn *pArn, long nIdx)
+                        : m_pRes(&rRes), m_pArn(pArn), m_nIdx(nIdx)
+                    {
+                    }
+
+                    virtual bool CreateMdl(bcs::CMdlObj *pMdl) const;
+
+                private:
+                    const nw4r::g3d::ResFile *m_pRes; // 0x04
+                    CArn *m_pArn;                     // 0x08
+                    long m_nIdx;                      // 0x0C
             };
 
             // The same with animations (MVA), made on the stack by the

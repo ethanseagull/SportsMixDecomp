@@ -14,6 +14,10 @@ namespace bcs {
 namespace msw {
     class CSelectMenuLayoutBase;
 
+    namespace SelectMenu {
+        class CCharSel;
+    }
+
     namespace dwc {
         class CGameDwc;
         class CFriend;
@@ -332,7 +336,10 @@ namespace msw {
                 unsigned char m_nChara;      // 0x10, 0 to 19, 0xFF none
                 unsigned char m_nCharaSub;   // 0x11, the character's variant, 0xFF none
                 unsigned char m_nState;      // 0x12, 1 and up once chosen
-                unsigned char m_Unk13[0x15]; // 0x13
+                unsigned char m_Unk13[0xD];  // 0x13
+                // 0x20. (added for game/menu/unit_6EE84.cpp) The Mii of the
+                // slot when its character is a Mii (0x13).
+                RFLCreateID m_MiiCreateId;
             };
 
             // Slot nIndex (0 to 5), or null.
@@ -455,6 +462,61 @@ namespace msw {
             // table place nChara.
             unsigned char _GetGameModeByBgChrId(unsigned char nChara);
 
+            // Added for MenuF game/menu/unit_6EE84.cpp (return types and
+            // argument names guessed). The steps of the character select
+            // screen (SelectMenu::CCharSel, menu object 0x45) with its "OK?"
+            // windows, and what they call.
+            void _SetColorChange(long nPad, long nBtnKindId);
+            // Starts the random character draw of pad nPad.
+            void _SetRandom(long nPad);
+            void _MoveCursol(long nPad, long nEntry, long nBtnKindId);
+            // Gives entry nEntry its Mii on Wi-Fi when nChara is the Mii
+            // (0x13).
+            void _WiFiMiiSetUp(long nEntry, long nChara);
+            void CharSel_In();
+            void CharSel_Loop();
+            void CharSel_LoopStep();
+            void CharSel_Out();
+            void CharSel_CameraReverse();
+            void CharSel_RandomSelect(long nPad);
+            void CharSel_OkButtonDelay();
+            void CharSel_OkButtonInit();
+            void CharSel_OkButton();
+            void CharSel_LevelOkBtnDelay();
+            void CharSel_LevelOkBtnInit();
+            void CharSel_LevelOkBtn();
+            void CharSel_LevelStarOkBtnDelay();
+            void CharSel_LevelStarOkBtnInit();
+            void CharSel_LevelStarOkBtn();
+            void CharSel_ChangeStateInit(long nNextMode);
+            void CharSel_FrameOut();
+            void CharSel_OkButtonOut();
+            void CharSel_CancelLastDecideChara();
+            // (no symbol; name guessed) Inline in game/menu/unit_6EE84.cpp:
+            // leaves the screen with the back button for the screen before
+            // it.
+            void CharSel_Back(long nPad, long nMode, SelectMenu::CCharSel *pCharSel);
+            // (no symbol; name guessed) Inline there too: shows pad nPad's
+            // Mii as its character (on Wi-Fi only in the star mode).
+            void CharSel_SetMiiChara(long nPad);
+            // The character table place of slot nSlot (CBgChr::GetPosChara).
+            long _GetCharaPosId(long nSlot);
+            // Defined in other MenuF files.
+            long GetPlayerEntryId(long nPad);
+            int Chara_IsAllDecide(long nEntry);
+            int Chara_IsCharaDecide(long nIndex);
+            int Chara_IsCharaDecideSelect(long nIndex);
+            // -1 when character nChara (variant nColor) cannot be taken by
+            // pad nPad.
+            long Chara_CheckSelectChara(long nPad, long nChara);
+            long Chara_CheckSelectChara(long nPad, long nChara, long nColor);
+            CharaSelectParam *Chara_GetLastDecideChara(long nEntry);
+            // Both return the slot index of the character given back.
+            long Chara_CancelDecideChara(long nEntry, long nChara);
+            long Chara_CancelDecideCharaWithMotion(long nEntry, long nChara);
+            void Chara_SetDecideCharaWithMotion(long nEntry, long nChara, long nColor, long nBtnKindId);
+            void SetCancelBackMode(long nPad, long nMode, CSelectMenuLayoutBase *pObj, long nUnk);
+
             // Data, added for the same unit. The class is 0xAB8 bytes (the
             // size layout.py finds); only two members are named so far.
             // The second polymorphic part mentioned above (a `@68@` thunk)
@@ -520,8 +582,12 @@ namespace msw {
                 unsigned char m_Unk23E;      // 0x23E, compared with 1
                 PadSelect m_aPadSelect[4];   // 0x23E
             };
+            // 0x252. (name guessed; added for game/menu/unit_6EE84.cpp)
+            // The colour (variant) of the character each pad's cursor is
+            // on, as CCharSel::GetChrColor takes it; 1 the default.
+            unsigned char m_nCharaColor[4];
         private:
-            unsigned char m_Unk252[0x6];     // 0x252
+            unsigned char m_Unk256[0x2];     // 0x256
         public:
             // 0x258. 0 to 3: picks the colour animation of the how-to
             // screen and is passed to CTournament::Tutorial.
@@ -585,7 +651,26 @@ namespace msw {
             // for the others.
             unsigned char m_nPadPlayer[4];
         private:
-            unsigned char m_Unk284[0x41F];   // 0x284
+            unsigned char m_Unk284[0x204];   // 0x284
+        public:
+            // 0x488. (added for game/menu/unit_6EE84.cpp) The six character
+            // slots GetCharaSelectParam returns.
+            CharaSelectParam m_aCharaSelectParam[6];
+        private:
+            unsigned char m_Unk578[0xF0];    // 0x578
+        public:
+            // 0x668 to 0x68B. (names guessed; added for
+            // game/menu/unit_6EE84.cpp) The random character draw of each
+            // pad on the character select screen: frames left before the
+            // cursor jumps again and before the draw decides (negative:
+            // no draw running).
+            float m_fRandomMoveTime[4];      // 0x668
+            long m_nRandomDecideTime[4];     // 0x678
+            // 0x688. Set to 0x8010 (the first character button) by
+            // CharSel_In; not read there.
+            long m_Unk688;
+        private:
+            unsigned char m_Unk68C[0x17];    // 0x68C
         public:
             // 0x6A3 to 0x6B3. (names guessed; added for
             // game/menu/CPlusMinus.cpp) The Mii _SetStarMii gives the
@@ -600,8 +685,12 @@ namespace msw {
             // 0x6CC. (added for game/menu/CEntry.cpp; name guessed) Frames
             // the controller error window of the entry screen waits.
             float m_fEntryErrorWait;
+            // 0x6D0. (name guessed; added for game/menu/unit_6EE84.cpp)
+            // Frames before the character select screen takes the back
+            // button again after a character was given back.
+            float m_fCharSelBackWait;
         private:
-            unsigned char m_Unk6D0[0x6];     // 0x6D0
+            unsigned char m_Unk6D4[0x2];     // 0x6D4
         public:
             // 0x6D6, 0x6D7. (added for game/menu/CMiiSel.cpp; names
             // guessed) Bit 0x80 of m_nMiiSelFlags is set when the Mii
@@ -762,7 +851,19 @@ namespace msw {
             // When 1, WifiWait_In sets up the court and the camera first.
             long m_bWifiWaitCourt;
         private:
-            unsigned char m_UnkA1C[0x40];    // 0xA1C
+            unsigned char m_UnkA1C[0x8];     // 0xA1C
+        public:
+            // 0xA24. (name guessed; added for game/menu/unit_6EE84.cpp) Set
+            // when the character under a pad's cursor was taken by another
+            // player and its own choice was dropped.
+            long m_bCharSelCancel[4];
+        private:
+            unsigned char m_UnkA34[0x18];    // 0xA34
+        public:
+            // 0xA4C. (name guessed; added for game/menu/unit_6EE84.cpp)
+            // Frames each entry waits after its random draw before the
+            // rumble is switched back on.
+            float m_fCharSelVibWait[4];
         public:
             // 0xA5C. (added for game/menu/CEntry.cpp; name guessed) Set by
             // Entry_In when the camera is still moving in; cleared once

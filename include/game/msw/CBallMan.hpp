@@ -84,6 +84,9 @@ namespace msw {
             static long GetActiveBallNum();
             static unsigned long GetBallHandle(long nBall);
             static CBall *GetBallPtr(long nBall);
+            // (added for BasketF game/basket/CChrManBasket.cpp; return type
+            // guessed) Not zero when the balls allow a turnover.
+            static int CanbeTurnOver();
             static CBall *GetNearPosBall(const bcs::FVEC3 &rPos);
             static void DelBall(long nBall);
             static CBall *AddBall(CBall *pBall);

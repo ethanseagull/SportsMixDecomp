@@ -38,6 +38,9 @@ namespace msw {
         // choosing a Mii by index.
         long SearchMiiIndex(RFLCreateID createId);
         void SetSelectMii(long nIndex, int bUnk);
+        // (added for MenuF game/menu/unit_6EE84.cpp; argument names
+        // guessed) Records difficulty nLevel for game kind nGameKind.
+        void SetDifficult(long nGameKind, unsigned char nLevel);
 
         // Size 0x38. (added for MenuF game/menu/CMiiSel.cpp; names
         // guessed) One Mii of the player's list, or one of the guest Miis.

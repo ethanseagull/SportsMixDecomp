@@ -46,6 +46,16 @@ namespace msw {
             // (name and meaning guessed) msw::CStgGmk_Pylon_Act_Dodge::SetPushVel
             // stores its GetParam_Dec here with the push velocity.
             void SetDecel(float decel) { m_fUnkFC = decel; }
+            // (name guessed) The same scale on all three axes, flagged for
+            // GetMtx. Inline in HockeyF's CStageHockey10::CPanelInfo::CalcRootMtx
+            // (and the DOL's CStage10Base::CPanelInfoBase::CalcRootMtx).
+            void SetScale(float scale)
+            {
+                m_Scale.x = scale;
+                m_Scale.y = scale;
+                m_Scale.z = scale;
+                m_nFlag |= 4;
+            }
 
             void SetFront(const bcs::FVEC3 &rFront);
             // (added for game/msw/CStgGmk_Trolley.cpp) The same from the

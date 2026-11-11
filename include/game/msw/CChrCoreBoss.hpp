@@ -275,31 +275,69 @@ namespace msw {
             // float not known) Adds fRate of a full gauge to the arts gauge.
             void AddArtsGauge_(float fRate, float);
             CBall *GetTargetBall_() const;
+            // Added for game/boss/CChrCoreBossMethod.cpp (all but the last
+            // two are in other units; return types and meanings guessed).
+            // Not zero when the shoot stance may be left for another action.
+            int SubStateShootStanceCanbeCancel_() const;
+            // How a receive of the target ball would be made (1: diving,
+            // 4: none possible). pWork may be null.
+            long SubStateReceiveChoiceProcType_(STATE_WORK_RECEIVE *pWork);
+            int IsChargeBall_(const CBall *pBall) const;
+            // Drops the held ball towards fRotY.
+            void DropBall_(float fRotY);
+            void SetServeMode_(int bServe);
+            // The yaw to the point a dunk aims at, which goes to pPos.
+            float GetDunkTargetPosRot_(bcs::FVEC3 *pPos) const;
+            // Sets the receive state's work up for a ball shot by a special
+            // move (the character endures it).
+            void SetReceiveEndureWork_(CBall *pBall, STATE_WORK_RECEIVE *pWork);
+            // Not zero when the stocked item may be used now.
+            int CanbeUseItem_(CBall *pBall);
 
         protected:
             // Not mapped yet. The size, 0x818, is what CChrManBoss::CreateObj_
             // allocates for most characters.
-            unsigned char m_Unk574[0x734 - 0x574];
+            unsigned char m_Unk574[0x6FC - 0x574];
+            // 0x6FC, 0x708 (names guessed; GetVolleySpikeOffsetPos reads
+            // them): where the ball is hit in a spike, from the character,
+            // for a normal and for a charged ball.
+            bcs::FVEC3 m_SpikeOfs;
+            bcs::FVEC3 m_SpikeOfsCharge;
+            unsigned char m_Unk714[0x734 - 0x714];
             // 0x734 (name and count guessed: the constructor clears four
             // arrays of eight floats at 0x714, 0x734, 0x754 and 0x774). The
             // height above the character a receive in each pose takes the
             // ball at (CChrCoreBossSiroma adds GetPosY to it).
             float m_afReceiveHeight[8];
-            unsigned char m_Unk754[0x818 - 0x754];
+            unsigned char m_Unk754[0x80C - 0x754];
+            // 0x80C, 0x810 (names guessed): the character's full and
+            // remaining life in the boss battle (GetVsBossHPRate).
+            float m_fHPMax;
+            float m_fHP;
+            // 0x814 (name guessed): set to 1200 frames when the life runs out.
+            float m_fDownTime;
     };
 
     // (field names guessed; only what the character units read is mapped)
     struct CChrCoreBoss::STATE_WORK_RECEIVE {
         long m_nStep;                // 0x00
         long m_nSubStep;             // 0x04, counts the motions of a step
-        unsigned char m_Unk08[0x8];
+        // 0x08 (name guessed): the kind of receive (SetStateReceive_'s
+        // second argument; CanbeRun lets a receive of kind 4 be left).
+        long m_nKind;
+        long m_nPose;                // 0x0C, the receive pose (see GetReceivePoseDir_)
         unsigned long m_nFlag;       // 0x10
         float m_fTrgFrame;           // 0x14, a frame of the receive motion (name guessed)
         float m_fTargetRotY;         // 0x18, negative for none
         float m_fRotY;               // 0x1C
         unsigned char m_Unk20[0x8];
         bcs::FVEC3 m_Dir;            // 0x28, the direction the ball is sent (only x and z read)
-        unsigned char m_Unk34[0x20];
+        unsigned char m_Unk34[0x4];
+        float m_fUnk38;              // 0x38 (meaning not known)
+        float m_fUnk3C;              // 0x3C (meaning not known)
+        float m_fUnk40;              // 0x40, from CChrCore::m_fUnk268 (meaning not known)
+        unsigned char m_Unk44[0xC];
+        float m_fUnk50;              // 0x50 (meaning not known)
         long m_nReceiveType;         // 0x54, passed to ReceiveBall_
         long m_nFlickType;           // 0x58, passed instead when the ball is flicked away
         unsigned char m_Unk5C[0xC4 - 0x5C];

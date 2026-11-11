@@ -25,6 +25,10 @@ namespace msw {
             // meaning guessed) The number of characters of team nTeam; the
             // result screen shows that many players per team.
             static long GetVariableChrNum(long nTeam);
+            // (static, DodgeF; added for game/dodge/CCockpitDodgeCoder.cpp,
+            // which ignores the result; return type guessed) The life a
+            // character of team nTeam starts with.
+            static long GetChrMaxLife(long nTeam);
 
             // The dodgeball game's own virtual functions from slot 0x2A8 (after
             // CGame's), in the order of __vt__Q23msw10CGameDodge; only as far

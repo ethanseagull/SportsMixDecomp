@@ -37,6 +37,12 @@ namespace msw {
             // an extension.
             unsigned char GetPadFlags(long nPad) const { return m_aPad[nPad].m_nFlags04; }
 
+            // (names guessed; inline, no symbol; added for
+            // game/msw/CCokcpitMenuDataList.cpp) The halfword at 0x0A of
+            // pad nPad's entry, which GetPadStates gathers.
+            unsigned short GetPadState(long nPad) const { return m_aPad[nPad].m_nState; }
+            void SetPadState(long nPad, unsigned short nState) { m_aPad[nPad].m_nState = nState; }
+
             static CMenuPadInfo s_Instance;
 
         private:

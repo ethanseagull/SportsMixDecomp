@@ -14,6 +14,9 @@ namespace msw {
         // Field names follow SetParam's argument order and SetDispAnim.
         class CSPGaugeInputDisp {
             public:
+                // Inline, emitted weak by the modules, as CSPGauge's.
+                CSPGaugeInputDisp() { Initialize(); }
+
                 void Initialize();
                 void Finalize();
                 void SetParam(unsigned char nTeam, unsigned short nPane, unsigned char nAnim,
@@ -31,7 +34,7 @@ namespace msw {
 
             public:
                 // vptr at 0x08: declared after the data.
-                virtual ~CSPGaugeInputDisp() {}
+                virtual ~CSPGaugeInputDisp() { Finalize(); }
         };
     }
 }

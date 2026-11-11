@@ -59,6 +59,13 @@ namespace msw {
             // Kinds of effect for Util_SetEffect / Util_AttachEffect (values not known).
             enum SET_EFFECT_TYPE {};
             enum ATTACH_EFFECT_TYPE {};
+            // (added for HockeyF game/hockey/CChrCoreHockeyLuigi.cpp; names
+            // not known) A turn spread over frames: the DOL's RotateYParam_
+            // reads the four floats. The size is a guess (the hockey air
+            // trick work has its next member 0x14 bytes on).
+            struct ROT_LERP1 {
+                float m_afUnk[4];
+            };
             // (added for VolleyF game/volley/CChrCoreVolleyKinopio.cpp;
             // contents not known) The work of a move in a fixed direction
             // (Util_SetDirMoveParam), and how the body collision is sized.
@@ -925,6 +932,9 @@ namespace msw {
             // DOL. The yaw (radians) from the character towards a point,
             // in the XZ plane.
             float GetRotY_ToPosXZ(const bcs::FVEC3 &pos) const;
+            // DOL (added for HockeyF game/hockey/CChrCoreHockeyLuigi.cpp). The
+            // yaw towards the goal the character's team attacks.
+            float GetRotY_ToGoal() const;
 
             // (names guessed) Inline in the original; the module reads the
             // members directly (CChrMarkerBoss::AppearCheck loads the byte
@@ -967,6 +977,9 @@ namespace msw {
             // (msw::cockpit::CSPGaugeInputDisp::SetDispAnim in the DOL passes
             // it to CGame::GetPadDefaultType and CMenuPad::IsNunchakuStyle).
             long GetPadNo() const { return m_nPadNo; }
+            // Added for BossF game/boss/CCockpitBossCoder.cpp (name guessed),
+            // see m_nCtrlPlayerNo.
+            long GetCtrlPlayerNo() const { return m_nCtrlPlayerNo; }
             // Not zero for the star player of a team (names guessed). The
             // parameter files of the sports modules call it, so it is inline
             // and emitted there.
@@ -1044,7 +1057,14 @@ namespace msw {
             // (names guessed) Inline in the modules.
             long DriverGetNo() const { return m_nDriver; }
             bcs::CMdlObj *GetMdl() const { return m_pMdl; }
-            long GetComLevel() const { return m_nComLevel; }
+            // (name guessed) The word at 0x230, read directly by
+            // CChrManHockeyCS::CanbeTurnOver_. Not GetComLevel: the DOL has a
+            // GetComLevel__Q23msw8CChrCoreCFv that returns the team's level
+            // instead (CGame::GetTeamComLevel of m_nTeamNo, truncated), called
+            // by CChrCoreHockeyLuigi.
+            long GetComLevelWork() const { return m_nComLevel; }
+            // DOL. The computer level of the character's team (see above).
+            long GetComLevel() const;
 
             // Added for BasketF game/basket/CChrDrvPadBasket.cpp (all in the
             // DOL; return types guessed). Not zero while the character is in
@@ -1056,8 +1076,6 @@ namespace msw {
             int IsStepCatchDunk() const;
             // Not zero when the character holds a stocked item.
             int IsHaveStockItem() const;
-            // The yaw (radians) towards the goal the character attacks.
-            float GetRotY_ToGoal() const;
 
             // Added for BossF game/boss/CChrDrvPadBoss.cpp (names guessed).
             // Inline in the module: the pad driver reads both words directly.
@@ -1195,7 +1213,12 @@ namespace msw {
             // 0x179 (name guessed): the CChrManBoss::CreateDriver_ stores the
             // entry of SetCamIdAssign_'s table here.
             signed char m_nCamNo;
-            unsigned char m_Unk17A[0x186 - 0x17A];
+            unsigned char m_Unk17A[0x17C - 0x17A];
+            // 0x17C (name guessed): which human player (0 to 3) controls the
+            // character; the cockpits pick the "1P" to "4P" label with it
+            // when IsPadCtrl() is set. Read signed.
+            signed char m_nCtrlPlayerNo;
+            unsigned char m_Unk17D[0x186 - 0x17D];
             // 0x186 (name guessed): the model node effects attach to by
             // default (the volley characters pass it to Eff_CreateAttach).
             unsigned short m_nEffNode;

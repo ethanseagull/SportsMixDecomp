@@ -53,10 +53,11 @@ namespace msw {
         nw4r::lyt::Pane *CreateFaceIconPicturePane(long nChr, bcs::G2D::CPaneCtrl *pPaneCtrl,
                                                    nw4r::lyt::Pane *pBase, const char *pName);
 
-        // (added for game/menu/CWiFiFrindVS.cpp; return type and argument
-        // names guessed) Shows the texture pTexObj in a new picture pane
-        // named pName, made in pPaneCtrl's layout over pPane.
-        void CreateMiiPicturePane(const _GXTexObj *pTexObj, bcs::G2D::CPaneCtrl *pPaneCtrl, nw4r::lyt::Pane *pPane,
+        // (added for game/menu/CWiFiFrindVS.cpp; argument names guessed)
+        // Shows the texture pTexObj in a new picture pane named pName, made
+        // in pPaneCtrl's layout over pPane. Returns the new pane
+        // (game/menu/CFriendList.cpp keeps it; the type is a guess).
+        nw4r::lyt::Pane *CreateMiiPicturePane(const _GXTexObj *pTexObj, bcs::G2D::CPaneCtrl *pPaneCtrl, nw4r::lyt::Pane *pPane,
                                   const char *pName);
     }
 }

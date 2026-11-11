@@ -8,6 +8,8 @@
 // Needs bcs::G2D::CPaneCtrl complete: include bcs/G2D/CPaneCtrl.hpp (or its
 // pending copy) first.
 
+struct _GXTexObj;
+
 namespace nw4r {
     namespace lyt {
         class Pane;
@@ -57,6 +59,12 @@ namespace bcs {
         // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp: gives
         // pPane its parent's size (return type guessed).
         void SetPaneSizeFromParent(nw4r::lyt::Pane *pPane);
+        // Added for BossF game/boss/CCockpitBossCoder.cpp (return types and
+        // argument names guessed): makes picture pane pPane show what
+        // picture pane pSrc shows, or the texture pTexObj in texture map
+        // nTexMap.
+        void ReplacePanePicture(nw4r::lyt::Pane *pPane, nw4r::lyt::Pane *pSrc);
+        void ReplacePanePicture(nw4r::lyt::Pane *pPane, const _GXTexObj *pTexObj, long nTexMap);
 
         // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp. Moves
         // pPane under pParent. Return type and the names of the last two

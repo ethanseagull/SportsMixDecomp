@@ -1407,7 +1407,7 @@ int CChrManHockeyCS::CanbeTurnOver_()
                         bResult = 0;
                         break;
                     case 6:
-                        if (pChr->GetComLevel() != 4) {
+                        if (pChr->GetComLevelWork() != 4) {
                             bResult = 0;
                         }
                         break;

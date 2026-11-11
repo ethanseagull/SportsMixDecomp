@@ -338,6 +338,9 @@ namespace msw {
             // (DOL; meaning of the argument not known, CDropCoinMan passes
             // 1) Non-zero while the game is in its main loop state.
             static int IsMainLoopState(int);
+            // (DOL, static; added for HockeyF game/hockey/CChrCoreHockeyLuigi.cpp)
+            // The computer level of team nTeam, as CComMan::GetDatF takes it.
+            static float GetTeamComLevel(long nTeam);
 
             // The three below are static in the DOL: their bodies index
             // g_GameWork with the argument. (return types guessed)

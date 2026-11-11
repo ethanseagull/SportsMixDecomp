@@ -62,8 +62,13 @@ namespace msw {
             // BasketF emits this default (4.0f) weak: CStageBasket15 misspells
             // its override (GetParam_CaseSpacnigZ), so the base one is used.
             virtual float GetParam_CaseSpacingZ() const { return 4.0f; }  // 0xD0
+            // The whole ground by default (VolleyF and DodgeF emit this one
+            // weak); BasketF and HockeyF override it with the court.
             virtual void GetParam_CaseLocateRect(float *pLeft, float *pRight, float *pFront,
-                                                 float *pBack) = 0;       // 0xD4
+                                                 float *pBack)            // 0xD4
+            {
+                GetStageMan()->GetGroundRect(pLeft, pRight, pFront, pBack);
+            }
             virtual long GetParam_CaseBreakDelayRange() const { return 10; } // 0xD8
             virtual bcs::BCS_Color GetParam_FlashColor() const = 0;       // 0xDC
             virtual float GetParam_FlashFrm() const = 0;                  // 0xE0

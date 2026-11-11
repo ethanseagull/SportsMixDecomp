@@ -1048,6 +1048,10 @@ namespace msw {
             // CChrDrvPadBasket::MethdTrickMove calls it too).
             const bcs::FVEC3 &GetPos() const;
             float GetRotY() const;
+            // (added for game/msw/CCockpitChrIcon2D.cpp; return type from
+            // the stfs of f1) The height of the trans node, for icons over
+            // the character.
+            float GetTransNodeHeight() const;
             // The goal the character's team attacks, as a point.
             const bcs::FVEC3 &GetTargetGoalPos() const;
             // The distance to rPos in the XZ plane.
@@ -1327,7 +1331,12 @@ namespace msw {
             long m_nComLevel;
             // The rest, up to the size of 0x574: the DOL constructor writes
             // up to 0x570 and CChrCoreBoss's own members start at 0x574.
-            unsigned char m_Unk234[0x574 - 0x234];
+            unsigned char m_Unk234[0x264 - 0x234];
+            // 0x264 (meaning not known): a float HockeyF's
+            // CChrCoreHockeyWaluigi passes to CChrCoreHockey::Util_ShootBall_
+            // for each copy of the puck it throws.
+            float m_fUnk264;
+            unsigned char m_Unk268[0x574 - 0x268];
     };
 
     // The work the MethdRDB slots take. Only the first word is known: BasketF's

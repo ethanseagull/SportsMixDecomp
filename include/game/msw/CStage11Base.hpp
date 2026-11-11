@@ -169,7 +169,8 @@ namespace msw {
             virtual long GetCenterFixTeam() const { return m_nCenterFixTeam; }              // 0x28
             virtual void SetRotFixTeam(long team) { m_nRotFixTeam = team; }                 // 0x2C
             virtual long GetRotFixTeam() const { return m_nRotFixTeam; }                    // 0x30
-            virtual int IsRotReady_() const = 0;                                            // 0x34
+            // VolleyF's CStageVolley11 keeps this default (weak copy: 1).
+            virtual int IsRotReady_() const { return 1; }                                   // 0x34
             virtual void SetCourtStatus(COURT_STATUS status);                               // 0x38
             virtual void ResetCourtStatus(COURT_STATUS status);                             // 0x3C
             virtual COURT_STATUS GetCourtStatus() const { return m_nCourtStatus; }          // 0x40

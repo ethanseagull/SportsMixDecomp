@@ -36,3 +36,13 @@ Equivalent game/volley/CChrCoreVolleyKinopio.cpp
 Equivalent game/volley/CChrCoreVolleyKuroma.cpp
 Equivalent game/volley/CCockpitVolleyCoder.cpp
 Equivalent game/volley/CChrCoreVolleySiroma.cpp
+Equivalent game/volley/CStageVolley02.cpp
+Equivalent game/volley/CStageVolley06.cpp
+Equivalent game/volley/CStageVolley09.cpp
+Equivalent game/volley/CStageVolley15.cpp
+Matching game/volley/CStageVolley12.cpp
+Equivalent game/volley/CStageVolley16.cpp
+Equivalent game/volley/CStageVolley42.cpp
+NonMatching game/volley/CStageVolley03.cpp
+Equivalent game/volley/CStageVolley05.cpp
+NonMatching game/volley/CStageVolley11.cpp

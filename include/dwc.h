@@ -10,4 +10,11 @@ struct DWCstAccUserData {
     unsigned char m_Data[0x40];
 };
 
+// A friend's entry in the console's friend roster (12 bytes in
+// bcs::dwc::CDwcFriend and msw::SAVE_DATA_PLAYER; WriteBack's mangled name
+// gives the type). Contents not modelled.
+struct DWCstAccFriendData {
+    unsigned long m_Data[3];
+};
+
 #endif /* !DWC_H_ */

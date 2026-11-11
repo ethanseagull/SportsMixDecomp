@@ -3,6 +3,12 @@
 
 #include "bcs/FVEC3.hpp"
 
+namespace nw4r {
+    namespace g3d {
+        struct CameraData;
+    }
+}
+
 namespace bcs {
 
     // Only the members used so far. Both functions are static: their bodies
@@ -27,6 +33,9 @@ namespace bcs {
             static CameraData *GetViewCameraData(long view);
 
             static void SetViewFovy(long view, float fovy);
+            // (added for VolleyF CStageVolley42) Sets the projection camera
+            // of a view.
+            static void SetProjCameraData(long view, const nw4r::g3d::CameraData &rData);
             static float GetViewFovy(long view);
             // How many views the screen is split into. Return type guessed.
             static long GetViewSplitNum();

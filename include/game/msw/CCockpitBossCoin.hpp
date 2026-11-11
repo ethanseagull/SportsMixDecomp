@@ -60,6 +60,8 @@ namespace msw {
             // an unknown team, -2 without the pane, else 0. Nothing in BossF
             // calls it.
             long GetTargetInfo(long nTeam, bcs::FVEC3 &rPos, nw4r::lyt::Size &rSize);
+            // Team nIdx's 3D coin (CCockpitBoss::Get3DCoinTaskImpl).
+            cockpit::C3DCoin &Get3DCoin(long nIdx) { return m_3DCoin[nIdx]; }
 
         private:
             // Inline, defined in the .cpp (where their constants have to

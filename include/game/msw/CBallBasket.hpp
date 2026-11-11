@@ -5,6 +5,23 @@
 
 namespace msw {
 
+    namespace BALL_BASKET {
+        // How a shot flies: filled in by the ball's item
+        // (CItemBallBasket::GetShotParam_), passed to
+        // CBallBasket::SetShootParamTest2_. Field meanings are not known.
+        struct SHOT_PARAM {
+            long m_nUnk00;
+            long m_nUnk04;
+            float m_fUnk08;
+            float m_fUnk0C;
+            float m_fUnk10;
+            float m_fUnk14;
+            float m_fUnk18;
+            float m_fUnk1C;
+            float m_fCurve; // 0x20, CItemBallBasket::GetCurveValue (name guessed)
+        };
+    }
+
     // The ball of the basketball game (BasketF), size 0x468 (msw::
     // CBallBasketFruit's own members start there; nothing allocates this
     // class directly here).
@@ -147,6 +164,9 @@ namespace msw {
             // (name guessed) Sets bits of m_nBasketFlag; BasketF's ghost
             // sets 0x10000 on the ball it passes.
             void OnBasketFlag(unsigned long nBit) { m_nBasketFlag |= nBit; }
+            // Drops the item behaviour pItem from the ball (the bomb calls
+            // it on itself when it goes off).
+            void DetachItemEffect(CItemBall *pItem);
 
         protected:
             unsigned char m_Unk318[0x320 - 0x318];

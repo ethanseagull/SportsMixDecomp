@@ -585,14 +585,10 @@ game/basket/TournamentBasket.cpp:
 	.data       start:0x0001E2B8 end:0x0001E6F0
 
 game/basket/CItemBallBasketBomb.cpp:
-	.text       start:0x000CDF80 end:0x000CF2D0
-	.rodata     start:0x00009518 end:0x000095B8
-	.data       start:0x0001E6F0 end:0x0001EBF8
-
-game/basket/unit_CF2D0.cpp:
-	.text       start:0x000CF2D0 end:0x000CF300
+	.text       start:0x000CDF80 end:0x000CF300
 	.ctors      start:0x000000E8 end:0x000000EC
-	.rodata     start:0x000095B8 end:0x000095C0
+	.rodata     start:0x00009518 end:0x000095C0
+	.data       start:0x0001E6F0 end:0x0001EBF8
 	.bss        start:0x00000548 end:0x00000550
 
 game/basket/CCockpitBasketModelTelop.cpp:

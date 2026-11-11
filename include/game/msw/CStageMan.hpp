@@ -594,8 +594,7 @@ namespace msw {
             bcs::CListBase &GetList() { return m_List; }
 
         private:
-            bcs::CListBase m_List;      // 0x00
-            unsigned char m_Unk20[0x8]; // 0x20
+            bcs::CListBase m_List;      // 0x00, 0x28 bytes
     };
 }
 

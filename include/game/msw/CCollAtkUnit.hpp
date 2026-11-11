@@ -11,7 +11,13 @@ namespace msw {
     // and what DodgeF's CItemDodgeBombDD_Base::CallbackBodyDamage_ reads.
     class CCollAtkUnit {
         public:
-            unsigned char m_Unk00[0x18];
+            unsigned char m_Unk00[0x12];
+            // 0x12, 0x14 (names guessed; as in CCollBodyUnit): the kind of
+            // owner (1: a character) and its index.
+            unsigned char m_nOwnerKind;
+            unsigned char m_Unk13;
+            signed char m_nOwnerNo;
+            unsigned char m_Unk15[0x18 - 0x15];
             unsigned long m_nFlag; // 0x18, CBombExplosion::Create_ sets 0x2A
             unsigned char m_Unk1C[0x2C - 0x1C];
             float m_fPosX;         // 0x2C, (names guessed) where the attack is
@@ -22,6 +28,7 @@ namespace msw {
             // (DodgeF's time bomb reacts to kind 0x15).
             unsigned long m_nAtkType;
 
+            long GetOwnerKind() const { return m_nOwnerKind; }
             unsigned long GetAtkKind() const { return (m_nAtkType >> 8) & 0xFF; }
     };
 }

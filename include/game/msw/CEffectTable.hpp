@@ -100,12 +100,30 @@ namespace msw {
             long m_nGroup3Top;        // 0x20: index of the last group
     };
 
-    // Size 0x1C (what the callers allocate).
+    // Size 0x1C (what the callers allocate), vtable lbl_8046F890. The data
+    // is a 0x10-byte header (CEffectTable's), the entries (0xC bytes each),
+    // then zero-terminated names in two groups: the entries' names and one
+    // name per entry that GetAttachName appends. Getter names are guesses.
     class CEffectAttachTable : public CTableBase {
         public:
+            // One entry (names guessed).
+            struct ENTRY {
+                unsigned short nName;         // 0x00: its name
+                unsigned short m_Unk02;
+                short aParam[4];              // 0x04: GetParam0 to GetParam3
+            };
+
             CEffectAttachTable();
             virtual ~CEffectAttachTable();
-            void Parse(unsigned char *pData);
+            // 0 when parsed; -1 without data, -2 when the name table could
+            // not be allocated.
+            long Parse(unsigned char *pData);
+
+            // (fn_801249A4) The name of entry idx; null without a table.
+            const char *GetName(long idx) const;
+            // (fn_801249E8) "<name>_<second name>" of entry idx, in a static
+            // buffer; null without a table or name.
+            const char *GetAttachName(long idx) const;
 
             // DOL fn_80124AAC to fn_80124B00 (no exported names).
             virtual float GetParam0(long idx) const;
@@ -114,7 +132,20 @@ namespace msw {
             virtual float GetParam3(long idx) const;
 
         private:
-            unsigned char m_Unk08[0x14];
+            const ENTRY &GetEntry(long idx) const { return m_pEntry[idx - m_Unk00]; }
+            unsigned short GetEntryNum() const
+            {
+                if (m_pEntry == 0) {
+                    return 0;
+                }
+                return m_pHeader->nEntryNum;
+            }
+
+            const CEffectTable::HEADER *m_pHeader; // 0x08: the data passed to Parse
+            const ENTRY *m_pEntry;    // 0x0C
+            const char **m_ppName;    // 0x10: every name, allocated by Parse
+            long m_nNameTop;          // 0x14: index of the first entry name (0)
+            long m_nSubNameTop;       // 0x18: index of the second group
     };
 
     // Size 0x18 (what the callers allocate): up to four tables, their

@@ -3,6 +3,7 @@
 
 namespace bcs {
     namespace dwc {
+        class CDwcFriendList;
 
         // Nintendo Wi-Fi Connection wrapper (game/bcs/dwc/CDwc.cpp). Only the
         // members used so far. The functions marked "unnamed" have no export
@@ -39,6 +40,11 @@ namespace bcs {
                 // bytes of pData as this player's data.
                 int IsConnect() const;
                 void SetMySingleDataA(const void *pData, long nSize);
+                // Added for MenuF game/menu/CFriendCode.cpp (return types
+                // guessed). The friend roster, and asking for the friends'
+                // servers to be updated in the background.
+                CDwcFriendList *GetFriendList();
+                void SetFriendServersAsyncFlag(int bFlag);
         };
     }
 }

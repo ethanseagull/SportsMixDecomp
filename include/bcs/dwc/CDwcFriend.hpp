@@ -12,15 +12,32 @@ namespace bcs {
                 // at 0x47).
                 int IsFriendMatchChallenger() const;
 
-                unsigned char m_Unk00[0x18]; // 0x00
+                // Added for MenuF game/menu/CFriendCode.cpp (return types
+                // guessed): whether the entry holds a friend, and loading
+                // its data from storage.
+                int IsValid() const;
+                void LoadStorage() const;
+
+                unsigned char m_Unk00[0x4];  // 0x00
+                // 0x04 to 0x17. (added for MenuF game/menu/CFriendCode.cpp;
+                // names guessed) Copied into the save data's friend roster.
+                long m_Unk04;                // 0x04
+                long m_Unk08;                // 0x08
+                long m_Unk0C;                // 0x0C
+                unsigned long long m_nFriendCode; // 0x10
                 // 0x18. Passed to CDwc::EntryFriendMatch and
                 // RefuseFriendMatch: the friend's index (guess).
                 long m_nIndex;
-                unsigned char m_Unk1C[0x8];  // 0x1C
+                long m_Unk1C;                // 0x1C (added for game/menu/CFriendCode.cpp)
+                unsigned char m_Unk20[0x4];  // 0x20
                 // 0x24. The friend's name, shown by the friend match screen
                 // (SelectMenu::CWiFiFrindVS). The length is a guess (a Mii
                 // name: ten characters and a terminator).
                 wchar_t m_Name[11];
+                unsigned char m_Unk3A[0xE0 - 0x3A]; // 0x3A
+                // 0xE0. (added for MenuF game/menu/CFriendCode.cpp) The
+                // friend's data kept in the save data (0x260 bytes).
+                unsigned char m_Data[0x260];
         };
     }
 }

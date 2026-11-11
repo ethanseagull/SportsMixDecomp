@@ -701,12 +701,14 @@ void msw::CCockpitBasket::PartMoveCheck()
 {
     static const long objIdTblLength = 3;
     CCockpitPartMove::PartMoveInfo info;
+    const long *pObjIdTbl = objIdTbl;
+    CCockpitPartMove &rPartMove = CCockpitPartMove::s_Instance;
 
-    while (CCockpitPartMove::s_Instance.Pop(info) >= 0) {
+    while (rPartMove.Pop(info) >= 0) {
         long nPart = info.m_nPart;
         long nMove = info.m_nArg0;
         for (long i = 0; i < objIdTblLength; i++) {
-            CCockpitBasketLayoutBase *pObj = (CCockpitBasketLayoutBase *)FindObj(objIdTbl[i]);
+            CCockpitBasketLayoutBase *pObj = (CCockpitBasketLayoutBase *)FindObj(pObjIdTbl[i]);
             if (pObj == 0) {
                 continue;
             }

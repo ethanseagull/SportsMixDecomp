@@ -144,6 +144,8 @@ namespace bcs {
             // (meaning of the two values guessed: the opaque and the
             // translucent pass)
             void SetDrawPriority(long nOpa, long nXlu);
+            // (meaning guessed) The opaque pass priority alone.
+            void SetDrawPriorityOpa(long nOpa);
 
             // Rebuilds the matrix at 0x08 from the rotation and the
             // translation members.
@@ -229,6 +231,15 @@ namespace bcs {
 
             // (name guessed) Sets the three angles at once; msw::CDropCoin
             // stores them through one load of the model pointer.
+            void SetTransOffset(const FVEC3 &rOffset) { m_vTransOffset = rOffset; }
+            // (name guessed) SetRotX, SetRotY and SetRotZ in one.
+            void SetRotXYZ(float fRotX, float fRotY, float fRotZ)
+            {
+                SetRotX(fRotX);
+                SetRotY(fRotY);
+                SetRotZ(fRotZ);
+            }
+
             void SetRot(float fRotX, float fRotY, float fRotZ)
             {
                 m_fRotX = fRotX;
@@ -243,8 +254,9 @@ namespace bcs {
             // (name guessed) The translation CalcRootMtx reads.
             FVEC3 m_vTrans;               // 0x98
 
-        private:
-            unsigned char m_UnkA4[0x0C];  // 0xA4
+            // 0xA4 (name guessed): an offset added to m_vTrans; BasketF's
+            // ghost bobs its model up and down with it.
+            FVEC3 m_vTransOffset;
 
         public:
             // (names guessed) The rotation about the three axes in radians,

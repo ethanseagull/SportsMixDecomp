@@ -14,6 +14,12 @@ namespace bcs {
     class CTask;
 }
 
+namespace nw4r {
+    namespace g3d {
+        class ResFile;
+    }
+}
+
 namespace msw {
 
     class CBall;
@@ -936,6 +942,9 @@ namespace msw {
             long GetChrId() const { return (unsigned char)m_nChrId; }
             unsigned long GetStatusFlag() const { return m_nStatusFlag; }
             unsigned long GetDispFlag() const { return m_nDispFlag; }
+            // (name guessed) The flag word at 0xEC; BasketF's
+            // CChrDrvPadBasket ignores the pad while bit 25 or 27 is set.
+            unsigned long GetFlagEC() const { return m_UnkEC; }
             // (name guessed) BossF's CEventDemoBoss::CreateDemo sets bit 2
             // (no drawing) on each character the demo replaces by a model.
             void OnDispFlag(unsigned long nBit) { m_nDispFlag |= nBit; }
@@ -1026,7 +1035,8 @@ namespace msw {
             // copies it).
             const bcs::FVEC3 &GetPos();
             // The same for a const character (GetPos__Q23msw8CChrCoreCFv;
-            // msw::CStgGmk_WaterPillarCluster::OnUpdate in the DOL).
+            // msw::CStgGmk_WaterPillarCluster::OnUpdate in the DOL; BasketF's
+            // CChrDrvPadBasket::MethdTrickMove calls it too).
             const bcs::FVEC3 &GetPos() const;
             float GetRotY() const;
             // The goal the character's team attacks, as a point.
@@ -1055,6 +1065,19 @@ namespace msw {
             long GetComLevelWork() const { return m_nComLevel; }
             // DOL. The computer level of the character's team (see above).
             long GetComLevel() const;
+
+            // Added for BasketF game/basket/CChrDrvPadBasket.cpp (all in the
+            // DOL; return types guessed). Not zero while the character is in
+            // the named step of its play (IsStepAirTrick is below).
+            int IsStepCatch() const;
+            int IsStepPassCatch() const;
+            int IsStepTrickMove() const;
+            int IsStepNormalShoot() const;
+            int IsStepCatchDunk() const;
+            // Not zero when the character holds a stocked item.
+            int IsHaveStockItem() const;
+            // The yaw (radians) towards the goal the character attacks.
+            float GetRotY_ToGoal() const;
 
             // Added for BossF game/boss/CChrDrvPadBoss.cpp (names guessed).
             // Inline in the module: the pad driver reads both words directly.
@@ -1115,7 +1138,7 @@ namespace msw {
             // Knocks the character back (flags nFlag) towards fRotY.
             void SetHookDamage(unsigned long nFlag, float fRotY, float, float, long, float, long, long, long, long);
             // A model and an animation file of the character's extra
-            // model (Toad's mushrooms); invalid when there is none.
+            // model (Toad's mushrooms, the slime's squad); invalid when there is none.
             nw4r::g3d::ResFile GetChrOptResFile();
             nw4r::g3d::ResFile GetChrOptMotResFile();
             // The court the character's team attacks, and the goal it
@@ -1131,6 +1154,8 @@ namespace msw {
             // Stops the effect in slot nSlot at once.
             void Eff_StopForce(long nSlot);
             void AnimSetSpeed(unsigned long nSlot, float fSpeed);
+            // Plays sound nSe at pPos (null: at the character). (BasketF had
+            // it returning void; VolleyF's return type kept.)
             unsigned long PlaySePos(long nSe, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
             void SetMoveMotStep_(long nStep);
             // The body collision's push settings.
@@ -1142,6 +1167,9 @@ namespace msw {
             unsigned long m_Unk60;
             CChrDrv *m_pDriver[2];       // 0x64 (count guessed from the index's place)
             long m_nDriver;              // 0x6C, index of the driver in use, negative for none
+        public:
+            // (public: BasketF's game/basket/CChrDrvPadBasket.cpp reads 0x70
+            // and 0x74 directly.)
             // 0x70 (name guessed): the yaw the pad's stick directions are
             // relative to; CChrDrvPadBoss adds it to the stick angle.
             float m_fCamRotY;
@@ -1156,6 +1184,7 @@ namespace msw {
             // msw::CStgGmk_WaterPillar_Act::OnBodyPush (DOL) pushes the
             // character back by its movement since.
             bcs::FVEC3 m_PrevPos;
+        protected:
             unsigned char m_Unk88[0x90 - 0x88];
             // 0x90 (name guessed): the character's model; IsDisable is true
             // while it is null. CChrManHockey::ArtsStart_ fades it out.
@@ -1218,6 +1247,13 @@ namespace msw {
             // The rest, up to the size of 0x574: the DOL constructor writes
             // up to 0x570 and CChrCoreBoss's own members start at 0x574.
             unsigned char m_Unk234[0x574 - 0x234];
+    };
+
+    // The work the MethdRDB slots take. Only the first word is known: BasketF's
+    // CChrDrvPadBasket clears it on the stack before the call (one word of
+    // stack, so the size may be just that). (member name guessed)
+    struct CChrCore::INPUT_WORK {
+        long m_nUnk00;
     };
 }
 

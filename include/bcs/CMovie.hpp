@@ -30,6 +30,14 @@ namespace bcs {
             // and where and how the frames are drawn.
             int IsFrameEnd() const;
             void SetDrawEnv(long nUnk0, long nUnk1, float fUnk0, float fUnk1);
+            // Added for game/msw/menu/CMovieScnObj.cpp (names guessed, DOL
+            // fn_8006A190, fn_8006A328, fn_8006A434): msw::menu::CMovieScnObj
+            // draws the current frame with these three, in this order, on
+            // the screen rectangle (nX, nY, nW, nH) with texture coordinates
+            // (fS0, fT0) to (fS1, fT1).
+            void BeginDraw();
+            void Draw(long nX, long nY, long nW, long nH, float fS0, float fT0, float fS1, float fT1);
+            void EndDraw();
     };
 }
 

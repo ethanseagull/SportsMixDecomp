@@ -5,6 +5,12 @@
 #include "game/msw/CSave.hpp"
 #include "revolution/rfl.h"
 
+namespace bcs {
+    namespace dwc {
+        class CDwcFriendList;
+    }
+}
+
 namespace msw {
     class CSelectMenuLayoutBase;
 
@@ -195,6 +201,49 @@ namespace msw {
             void PushMenuHistory(unsigned char nUnk0, unsigned char nUnk1, unsigned short nUnk2);
             void _DisablePointStick(long nPad, int bUnk);
 
+            // Added for MenuF game/menu/CCharaStatus.cpp (names guessed).
+            // Size 0x28. What the character select screen holds for one of
+            // its six character slots; the array is at 0x488.
+            struct CharaSelectParam {
+                long m_Unk00;                // 0x00, 0xFF with m_nPlayerKind for an empty slot
+                long m_nPlayerKind;          // 0x04, 0 to 3 a pad, 4 the computer, 0xFF none
+                long m_Unk08;                // 0x08, passed to CCharSel's pad sign calls
+                long m_Unk0C;                // 0x0C
+                unsigned char m_nChara;      // 0x10, 0 to 19, 0xFF none
+                unsigned char m_nCharaSub;   // 0x11, the character's variant, 0xFF none
+                unsigned char m_nState;      // 0x12, 1 and up once chosen
+                unsigned char m_Unk13[0x15]; // 0x13
+            };
+
+            // Slot nIndex (0 to 5), or null.
+            CharaSelectParam *GetCharaSelectParam(long nIndex);
+
+            // Added for MenuF game/menu/CFriendCode.cpp (return types and
+            // argument names guessed). The steps of the friend code entry
+            // screen (SelectMenu::CFriendCode) and of the friend's
+            // information window (SelectMenu::CFriendInfo), and what they
+            // call.
+            void FriendCode_In();
+            void FriendCode_Loop();
+            void FriendCode_LoopStep();
+            void FriendCode_Out();
+            void FriendPlayerInfo_In();
+            void FriendPlayerInfo_Loop();
+            void FriendPlayerInfo_Out();
+            void FriendInfo_In();
+            // The Wi-Fi message windows: message pLabel of group pGroup
+            // with an A button, with Yes and No, with no button, and
+            // closing the window. The texts fill parts of the message
+            // (null: none).
+            void WindowA_Button(char *pGroup, char *pLabel, wchar_t *pText0, wchar_t *pText1);
+            void WindowYesNo_Button(char *pGroup, char *pLabel, int nUnk0, wchar_t *pText0, wchar_t *pText1,
+                                    int nUnk1);
+            void Window_Message(char *pGroup, char *pLabel, int nUnk);
+            void Window_Close();
+            // Writes friend code nCode as text into m_MessageWork and
+            // returns it.
+            wchar_t *ExchangeFriendCode(unsigned long long nCode);
+
             // Data, added for the same unit. The class is 0xAB8 bytes (the
             // size layout.py finds); only two members are named so far.
             // The second polymorphic part mentioned above (a `@68@` thunk)
@@ -322,8 +371,12 @@ namespace msw {
             // the controller error window of the entry screen waits.
             float m_fEntryErrorWait;
         private:
-            unsigned char m_Unk6D0[0x2C];    // 0x6D0
+            unsigned char m_Unk6D0[0x28];    // 0x6D0
         public:
+            // 0x6F8. (added for game/menu/CFriendCode.cpp; name guessed)
+            // The Wi-Fi friend roster, taken from the connection by
+            // FriendCode_In.
+            bcs::dwc::CDwcFriendList *m_pFriendList;
             // 0x6FC to 0x707. (names guessed; added for
             // game/menu/CWiFiFrindVS.cpp) The Wi-Fi connection, the friend
             // the friend match is with, and a copy of it kept by
@@ -331,8 +384,11 @@ namespace msw {
             dwc::CGameDwc *m_pGameDwc;       // 0x6FC
             dwc::CFriend *m_pVsFriend;       // 0x700
             dwc::CFriend *m_pVsFriendSaved;  // 0x704
+            // 0x708. (added for game/menu/CFriendCode.cpp) Cleared by
+            // FriendPlayerInfo_In (meaning not known).
+            long m_Unk708;
         private:
-            unsigned char m_Unk708[0x8];     // 0x708
+            unsigned char m_Unk70C[0x4];     // 0x70C
         public:
             CSave::PlayerData *m_pPlayerData; // 0x710, CSave::GetPlayerData(-1)
         private:
@@ -358,7 +414,10 @@ namespace msw {
             // attract demo once its music has stopped.
             float m_fTitleDemoWait;
         private:
-            unsigned char m_Unk968[0x20];    // 0x968
+            // 0x968. (added for game/menu/CFriendCode.cpp; name and
+            // length guessed) Text filled in by ExchangeFriendCode and
+            // shown in the message windows.
+            wchar_t m_MessageWork[0x10];
         public:
             // 0x988. (name guessed; added for game/menu/CPlusMinus.cpp)
             // Non-zero when _SetStarMii gives Miis.

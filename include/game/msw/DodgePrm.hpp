@@ -33,6 +33,24 @@ namespace msw {
     extern float DODGE_PRM_S02_BIG_ITEM_POP_DIST;
     extern float DODGE_PRM_S02_BIG_ITEM_POP_POS_X;
 
+    // Stage 03, the fountain stage: a row of water jets is the centre line
+    // and moves between ORIFICE_NUM places on each side of the middle
+    // (ORIFICE_SPACE apart) every CENTER_CYCLE seconds, with a court
+    // without a border every BORDERLESS_CNT moves (for BORDERLESS_TIME
+    // seconds). The _TIME values without a unit above are in frames.
+    extern float DODGE_PRM_S03_CENTER_CYCLE;
+    extern long DODGE_PRM_S03_ORIFICE_NUM;
+    extern float DODGE_PRM_S03_ORIFICE_SPACE;
+    extern long DODGE_PRM_S03_BORDERLESS_CNT;
+    extern float DODGE_PRM_S03_BORDERLESS_TIME;
+    extern long DODGE_PRM_S03_CANNOT_COMEBACK;
+    extern float DODGE_PRM_S03_WATER_HEIGHT;
+    extern float DODGE_PRM_S03_WATER_PRESTART_TIME;
+    extern float DODGE_PRM_S03_PAT2_PRESTART_TIME;
+    extern float DODGE_PRM_S03_WATER_TALL_TIME;
+    extern float DODGE_PRM_S03_WATER_SPEED;
+    extern long DODGE_PRM_S03_WATER_NUM;
+
     // Stage 04, the pylon stage (the pylon models, actors and cluster).
     extern float DODGE_PRM_S04_PYLON_MDL_RADIUS;
     extern float DODGE_PRM_S04_PYLON_MDL_HEIGHT;

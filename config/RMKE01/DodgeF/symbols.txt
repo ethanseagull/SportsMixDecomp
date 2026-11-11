@@ -2493,7 +2493,7 @@ SubStateArtsShotIsReadyArtsShot___Q23msw19CChrCoreDodgeMoogleFPQ33msw13CChrCoreD
 SubStateArtsShotPlayArtsShotMotion___Q23msw19CChrCoreDodgeMoogleFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x00066B20; // type:function size:0x54 scope:global
 SubStateArtsShotShootBall___Q23msw19CChrCoreDodgeMoogleFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x00066B74; // type:function size:0x60 scope:global
 SubStateArtsShotIsEndArtsShotAfter___Q23msw19CChrCoreDodgeMoogleFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x00066BD4; // type:function size:0x1E4 scope:global
-fn_6_66DB8 = .text:0x00066DB8; // type:function size:0x14
+__sinit_\CChrCoreDodgeMoogle_cpp = .text:0x00066DB8; // type:function size:0x14 scope:local
 __ct__Q23msw18CChrCoreDodgeNinjaFv = .text:0x00066DCC; // type:function size:0x54 scope:global
 __dt__Q23msw18CChrCoreDodgeNinjaFv = .text:0x00066E20; // type:function size:0xCC scope:global
 Reset___Q23msw18CChrCoreDodgeNinjaFv = .text:0x00066EEC; // type:function size:0xAC scope:global

@@ -36,6 +36,21 @@ namespace msw {
                                               const bcs::FVEC3 &rPos, unsigned long flag, void *pArg);
             void SetAttackHitCallbackAll(AttackHitCallback pFunc, void *pArg);
 
+            // (added for BasketF CChrCoreBasketKuroma; parameter meanings
+            // guessed) Makes nNum units; sets on every unit the attack type,
+            // the target flags, the flags of what it does not hit, the
+            // radius, the position, the effect played on a hit and the
+            // owner's index; turns every unit on.
+            void Create(long nNum, long, long, unsigned long);
+            void SetAtkTypeAll(unsigned long nType);
+            void SetTargetFlagAll(unsigned long nFlag);
+            void SetNoHitFlagAll(unsigned long nFlag);
+            void SetRadiusAll(float fRadius);
+            void SetPosAll(const bcs::FVEC3 &rPos);
+            void SetHitEffectIDAll(long nEffect);
+            void SetIndexAll(long nIndex);
+            void SetEnableAll();
+
         private:
             unsigned long m_Unk00[3];
     };

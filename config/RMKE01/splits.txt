@@ -233,7 +233,7 @@ game/msw/CEventScene.cpp:
 	.text       start:0x801177F4 end:0x8011970C
 
 game/msw/CSceneCalc.cpp:
-	.text       start:0x8011979C end:0x80119AC4
+	.text       start:0x8011979C end:0x80119B00
 
 game/msw/CEventDemo.cpp:
 	.text       start:0x80119B00 end:0x80119FAC

@@ -16,6 +16,7 @@ namespace nw4r {
 
 namespace bcs {
     class CMdlObj;
+    class CScnGroup;
     class CScnObj;
     struct BCS_Color;
 }
@@ -427,6 +428,12 @@ namespace msw {
             // DOL. The ball's offset from the hand of the character holding
             // it (VolleyF's CChrCoreVolleyLuigi lifts it while it comes in).
             void SetAttachPos(const bcs::FVEC3 &rOfs, int);
+            // (DOL; added for DodgeF CChrCoreDodgeWaluigi, return types
+            // guessed) Puts the ball at rPos at once; attaches it to node
+            // nNode of pMdl; frees it again.
+            void WarpPos(const bcs::FVEC3 &rPos);
+            void Attach(bcs::CMdlObj *pMdl, unsigned long nNode, float, unsigned long, unsigned long, bcs::CScnGroup *);
+            void Detach();
             // DOL (name from the symbol). Stops the trail effect behind the
             // ball (VolleyF's CChrCoreVolleySiroma, once it is pulled in).
             void StopTailEffect();

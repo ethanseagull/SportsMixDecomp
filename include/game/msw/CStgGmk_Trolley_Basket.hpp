@@ -4,42 +4,55 @@
 #include "bcs/New.hpp"
 #include "game/msw/CStgGmk_Trolley.hpp"
 #include "game/msw/CStgGmk_Trolley_Act.hpp"
+#include "game/msw/BasketPrm.hpp"
 
 namespace msw {
 
     // The trolley of stage 17 in the basketball mode.
 
     // The actor, size 0x55C (nothing added to msw::CStgGmk_Trolley_Act),
-    // with the BASKET_PRM_S17_* parameters. Its functions are in
-    // game/basket/CStgGmk_Trolley_Act_Basket.cpp (not written yet); only the
-    // constructor is inline (msw::CStgGmk_Trolley_Basket::NewAct).
+    // with the BASKET_PRM_S17_* parameters. The getters are inline: the
+    // original emits them after the destructor, in reverse order of these
+    // declarations, with their literals after CStgGmk_Trolley_Act's. The
+    // rest is in game/basket/CStgGmk_Trolley_Act_Basket.cpp.
     class CStgGmk_Trolley_Act_Basket : public CStgGmk_Trolley_Act {
         public:
             CStgGmk_Trolley_Act_Basket(CStgGmk *pParent) : CStgGmk_Trolley_Act(pParent) {}
             virtual ~CStgGmk_Trolley_Act_Basket();
 
-            virtual float GetParam_MdlWidth() const;
-            virtual float GetParam_MdlDepth() const;
-            virtual float GetParam_MdlHeight() const;
-            virtual float GetParam_Width() const;
-            virtual float GetParam_Depth() const;
-            virtual float GetParam_Height(long type) const;
-            virtual float GetParam_AtkWidth() const;
-            virtual float GetParam_AtkDepth() const;
-            virtual float GetParam_AtkHeight() const;
-            virtual float GetParam_VelLimit() const;
-            virtual long GetParam_MdlMinNum() const;
-            virtual long GetParam_MdlMaxNum() const;
+            virtual float GetParam_MdlWidth() const { return BASKET_PRM_S17_TROLLEY_MDL_WIDTH; }
+            virtual float GetParam_MdlDepth() const { return BASKET_PRM_S17_TROLLEY_MDL_DEPTH; }
+            virtual float GetParam_MdlHeight() const { return BASKET_PRM_S17_TROLLEY_MDL_HEIGHT; }
+            virtual float GetParam_Width() const { return BASKET_PRM_S17_TROLLEY_WIDTH; }
+            virtual float GetParam_Depth() const { return BASKET_PRM_S17_TROLLEY_DEPTH; }
+            virtual float GetParam_Height(long type) const { return BASKET_PRM_S17_TROLLEY_HEIGHT; }
+            virtual float GetParam_AtkWidth() const { return BASKET_PRM_S17_TROLLEY_ATK_WIDTH; }
+            virtual float GetParam_AtkDepth() const { return BASKET_PRM_S17_TROLLEY_ATK_DEPTH; }
+            virtual float GetParam_AtkHeight() const { return BASKET_PRM_S17_TROLLEY_ATK_HEIGHT; }
+            virtual float GetParam_VelLimit() const { return BASKET_PRM_S17_TROLLEY_SPEED; }
+            virtual long GetParam_MdlMinNum() const { return BASKET_PRM_S17_TROLLEY_NUM_MIN; }
+            virtual long GetParam_MdlMaxNum() const { return BASKET_PRM_S17_TROLLEY_NUM_MAX; }
             virtual long GetParam_Effect(long type) const;
-            virtual long GetParam_TrolleyPatType() const;
-            virtual long GetParam_TrolleyPatNo() const;
+            virtual long GetParam_TrolleyPatType() const { return BASKET_PRM_S17_TROLLEY_PAT_TYPE; }
+            virtual long GetParam_TrolleyPatNo() const { return BASKET_PRM_S17_TROLLEY_PAT_NO; }
             virtual long GetParam_TrolleyPatValidNum() const;
-            virtual float GetParam_CoinModeRate() const;
-            virtual float GetParam_ThrowDistMin(long type) const;
-            virtual float GetParam_ThrowDistMax(long type) const;
+            // The rate is a percentage.
+            virtual float GetParam_CoinModeRate() const { return 0.01f * BASKET_PRM_S17_HEYHO_COIN_RATE; }
+            virtual float GetParam_ThrowDistMin(long type) const {
+                if (type != 0) {
+                    return BASKET_PRM_S17_HEYHO_C_DIST_MIN;
+                }
+                return BASKET_PRM_S17_HEYHO_B_DIST_MIN;
+            }
+            virtual float GetParam_ThrowDistMax(long type) const {
+                if (type != 0) {
+                    return BASKET_PRM_S17_HEYHO_C_DIST_MAX;
+                }
+                return BASKET_PRM_S17_HEYHO_B_DIST_MAX;
+            }
             virtual void OnDamage(CCollBodyUnit *pBody, CBall *pBall);
-            virtual bool IsEnableCatchColl() const;
-            virtual bool IsEnableDefColl() const;
+            virtual bool IsEnableCatchColl() const { return true; }
+            virtual bool IsEnableDefColl() const { return false; }
             virtual long GetLocRawTblIdx(long, long) const;
     };
 

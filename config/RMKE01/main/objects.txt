@@ -11,6 +11,7 @@ Equivalent game/msw/CEvNodeData.cpp
 Equivalent game/msw/EvDemoVs.cpp
 Equivalent game/bcs/CScnObj.cpp
 Equivalent game/msw/CStgGmkMan.cpp
+Equivalent game/msw/CSceneCalc.cpp
 Matching game/msw/CMenuPadInfo.cpp
 Matching game/msw/CStageNet.cpp
 Matching game/msw/CStage01Base.cpp

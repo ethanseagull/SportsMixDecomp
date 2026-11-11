@@ -12,6 +12,7 @@ namespace msw {
     // function is CreateItem.
     class CItemManDodge : public CItemMan {
         public:
+            CItemManDodge(bcs::CTask *pParent) : CItemMan(pParent) {}
             virtual ~CItemManDodge() {}
 
             virtual CItem *CreateItem(long kind, const bcs::FVEC3 &pos);

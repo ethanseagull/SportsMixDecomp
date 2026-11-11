@@ -185,6 +185,8 @@ namespace msw {
             // (names guessed) Read directly by the modules.
             const bcs::FVEC3 &GetPos() const { return m_vPos; }
             const bcs::FVEC3 &GetRot() const { return m_vRot; }
+            // (name guessed) Read by msw::CSceneCalc::_CalcFloor.
+            const bcs::FVEC3 &GetPosOffset() const { return m_vPosOffset; }
 
             // (names guessed) Inline in the modules, which write these
             // members directly.

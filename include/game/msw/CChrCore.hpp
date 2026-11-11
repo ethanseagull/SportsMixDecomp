@@ -1076,8 +1076,6 @@ namespace msw {
             int IsStepCatchDunk() const;
             // Not zero when the character holds a stocked item.
             int IsHaveStockItem() const;
-            // The yaw (radians) towards the goal the character attacks.
-            float GetRotY_ToGoal() const;
 
             // Added for BossF game/boss/CChrDrvPadBoss.cpp (names guessed).
             // Inline in the module: the pad driver reads both words directly.

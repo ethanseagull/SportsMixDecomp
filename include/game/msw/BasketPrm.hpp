@@ -356,6 +356,19 @@ namespace msw {
     extern float BASKET_PRM_S70_JS_MIN_DIST;
     extern float BASKET_PRM_S70_JS_MID_DIST;
     extern float BASKET_PRM_S70_JS_MAX_DIST;
+
+    // Stage 05, the floating rafts with the turrets. Times in seconds,
+    // depths in world units.
+    extern float BASKET_PRM_S05_START_TIME_SEC;
+    extern float BASKET_PRM_S05_FLOAT_DEPTH;
+    extern float BASKET_PRM_S05_DEPTH_CYCLE;
+    extern float BASKET_PRM_S05_FLOAT_STOP_TIME;
+    extern float BASKET_PRM_S05_HEAVY_TIME_SEC;
+    extern float BASKET_PRM_S05_HEAVY_FLOAT_DEPTH;
+    extern float BASKET_PRM_S05_HEAVY_DEPTH_CYCLE;
+    extern float BASKET_PRM_S05_HEAVY_FLOAT_STOP_TIME;
+    extern float BASKET_PRM_S05_HEAVY_ACC_TIME_SEC;
+    extern float BASKET_PRM_S05_TURRET_EARLY_HIT;
 }
 
 #endif /* !MSW_BASKETPRM_HPP_ */

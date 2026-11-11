@@ -9,6 +9,45 @@ namespace bcs {
 
 namespace msw {
 
+    // (name guessed) The animation player of a stage model node (what
+    // CStageMdlListNode holds at 0x18). A DOL class without a name; the
+    // vptr is at 0xA8, after the data. Only the slots BasketF's
+    // CStageBasket05 calls are named; the others are placeholders that keep
+    // them in place.
+    class CStageNodeAnm {
+        private:
+            unsigned char m_Unk00[0xA8]; // 0x00
+
+        public:
+            virtual void Unk08();
+            virtual void Unk0C();
+            virtual void Unk10();
+            virtual void Unk14();
+            virtual void Unk18();
+            virtual void Unk1C();
+            virtual void Unk20();
+            // 0x24 (names guessed) Starts animation `anm`; mode 2 loops it,
+            // mode 0 plays it once. CStageBasket05 passes (1.0f, 0.0f, 0.0f,
+            // -1) for the rest.
+            virtual void Play(long anm, long mode, float rate, float f2, float f3, long n);
+            virtual void Unk28();
+            virtual void Unk2C();
+            virtual void Unk30();
+            virtual void Unk34();
+            virtual void Unk38();
+            virtual void Unk3C();
+            virtual void Unk40();
+            virtual void Unk44();
+            virtual void Unk48();
+            virtual void Unk4C();
+            virtual void Unk50();
+            virtual void Unk54();
+            virtual void Unk58();
+            // 0x5C (name and return type guessed) Whether the animation has
+            // come to its end (CStageBasket05 then starts the next one).
+            virtual int IsEnd(long n) const;
+    };
+
     // (member names guessed) A node of a stage's model list, handed to
     // CStageMan::OnPostAppendNode. Only what BasketF's stages read and
     // write is mapped; the size is not known.
@@ -22,13 +61,16 @@ namespace msw {
             };
 
             bcs::CScnObj *GetObj() const { return m_pObj; }
+            // (name guessed)
+            CStageNodeAnm *GetAnm() const { return m_pAnm; }
             void OnFlag(unsigned long flag) { m_nFlag |= flag; }
             unsigned long GetFlag() const { return m_nFlag; }
 
         private:
             // 0x00: the list links (bcs::CListNodeBase)
             bcs::CScnObj *m_pObj;        // 0x10, the model's scene object
-            unsigned char m_Unk14[0x8];  // 0x14
+            unsigned char m_Unk14[0x4];  // 0x14
+            CStageNodeAnm *m_pAnm;       // 0x18, the model's animations (may be null)
             unsigned long m_nFlag;       // 0x1C
     };
 }

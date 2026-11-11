@@ -78,3 +78,4 @@ Equivalent game/volley/CChrCoreVolleySlime.cpp
 Equivalent game/volley/CStageNetVolley.cpp
 Equivalent game/volley/CCockpitVolley.cpp
 Equivalent game/volley/CStageVolley10.cpp
+Matching game/volley/CQPanelVolley.cpp

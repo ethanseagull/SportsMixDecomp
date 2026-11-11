@@ -26,6 +26,9 @@ namespace msw {
                 void RemoveEffect(long nGroup, long nIdx);
                 // Shows or hides every kept effect.
                 void SetDispFlag(int bDisp);
+                // (inline; added for BasketF CCockpitBasketCoder::PlayAnimScore)
+                // The handle kept in slot nIdx of group nGroup, 0 if none.
+                unsigned long GetEffectHandle(long nGroup, long nIdx) const { return m_hEffect[nGroup][nIdx]; }
 
             private:
                 enum {

@@ -1,5 +1,6 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
 BossF ActLoopShoot__Q23msw11CComDrvBossFv near 99.3 register numbering inside the inlined paired-single helpers (FVEC3LenSq, FVEC3Add); 0.0f is read from another slot of unit_4F0C4's float pool (same value, pool order differs); same instructions otherwise
+BossF ActLoopSpikeGo__Q23msw11CComDrvBossFv near 100.0 0.0f read from another slot of the file's float pool (original after 4.0f, ours after 5.5f; same value); instructions identical otherwise
 BossF ActLoopStickAttack__Q23msw11CComDrvBossFv near 99.3 register numbering inside the inlined paired-single helpers (FVEC3LenSq, FVEC3Add); 0.0f is read from another slot of unit_4F0C4's float pool (the original pool has a 0.0f right after 4.0f, ours after 5.5f; same value); same instructions otherwise
 BossF ActLoopThrowItem__Q23msw11CComDrvBossFv near 99.3 register numbering inside the inlined paired-single helpers (FVEC3LenSq, FVEC3Add); 0.0f is read from another slot of unit_4F0C4's float pool (same value, pool order differs); same instructions otherwise
 BossF AddCoinValue__Q23msw16CCockpitBossCoinFlll near 99.0 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
@@ -9,6 +10,7 @@ BossF CreateBallIcon__Q23msw16CRadarIcon2DBossFPQ33msw12CRadarIcon2D14ICON_PARAM
 BossF CreateCharaIcon__Q23msw16CRadarIcon2DBossFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc unverified 94.4 original frame is 0x80 (ours 0x50) and it stores a .rodata float (0.0f?) to stack slots 0x0C, 0x1C, 0x20 at entry: a local object (likely a vector/size passed by reference later) that our source lacks; the rest is the same calls in a slightly different block order with renumbered registers. Find that object before calling it correct
 BossF CreateMiniTelop__Q23msw12CCockpitBossFllPQ23bcs5FVEC3 near 99.0 register choice and load order inside the inlined paired-single FVEC3Add (pos + offset); same operation; DodgeF copy differs the same way
 BossF CtorStateJumpShoot__Q23msw12CChrCoreBossFv near 86.9 float constants loaded through the side step's pool base register instead of lis/lfs each: the jump shot is a second file in the original (unit to be split at .text 0x63EA4); compiled alone the body is the original's up to register choice
+BossF CtorStateShootStance__Q23msw12CChrCoreBossFv near 99.6 register choice only: the 0xEC flag word and the effect number take swapped volatile registers; same loads, stores, calls and constants
 BossF CtorStateSideStep__Q23msw12CChrCoreBossFv near 99.8 register allocation/order only
 BossF EffectCoinGetCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 95.4 original reloads m_pMdl before CreateAttachEffect (no store in between, same value) and schedules the 2*20 multiply later; same as the recorded Volley/Hockey/Dodge/Basket copies
 BossF EffectCoinScoreCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3RCQ23bcs5FVEC3l near 97.9 register choice only (loop counter and clamped count swap registers; one mr scheduled differently)
@@ -25,6 +27,7 @@ BossF LifeGaugeIn__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table
 BossF LifeGaugeOutWait__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
 BossF LifeGaugeOut__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
 BossF LoopStateJumpShoot__Q23msw12CChrCoreBossFv near 87.5 float constants loaded through the side step's pool base register instead of lis/lfs each: the jump shot is a second file in the original (unit to be split at .text 0x63EA4); compiled alone the body is the original's up to register choice (r4/r5 in the queue wrap)
+BossF LoopStateShootStance__Q23msw12CChrCoreBossFv near 99.8 register choice only: the inlined CFsmQueue::FsmqNext computes head+1 into a new register instead of in place; same instructions otherwise
 BossF LoopStateSideStep__Q23msw12CChrCoreBossFv near 98.9 register allocation/order only
 BossF LoopStateSleep__Q23msw21CBallTargetMarkerBossFv near 99.7 x and z of the ball position swap float registers
 BossF MainCamera_Normal__Q23msw11CCameraBossFv near 85.6 stack layout, the original turns the 0x20/0x1 bit tests into bools (equivalent branches), one swapped commutative multiply operand; same calls, arguments and constants
@@ -68,4 +71,5 @@ BossF __ct__Q23msw11CCameraBossFl near 99.6 register allocation only
 BossF __ct__Q23msw17CItemBallBossBombFPQ23msw5CBall near 98.5 original reloads m_pMdl before CreateAttachEffect; ours reuses the value from the null check (same field, nothing written between)
 BossF __ct__Q23msw21CBallTargetMarkerBossFPQ23bcs5CTaskUli near 99.8 stack slots of the inlined SetState ptmf temporaries differ; same stores and values
 BossF __ct__Q33msw12GIMMICK_BOSS16CEffectCoinScoreFPQ23bcs5CTaskRCQ23bcs5FVEC3fl near 99.4 float register choice, one m_pMdl load scheduled differently (no store in between); same as the Basket/Hockey copies
+BossF __ct__Q33msw13CHR_CORE_BOSS9CStickObjFPQ23bcs5CTaskQ34nw4r3g3d6ResMdlPQ23bcs7CMdlObjll near 99.9 stack slots only: the four SetState pointer-to-member temporaries are copied to different stack offsets; same values, stores and calls
 BossF __dt__Q23msw11CChrManBossFv near 99.1 loop counter and byte offset swap registers (r29/r30); same instructions otherwise

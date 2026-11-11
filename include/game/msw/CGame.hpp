@@ -428,6 +428,11 @@ namespace msw {
             // Passes a message to the running game's virtual at vtable
             // offset 0x3C, if there is a game.
             static void SendMessage(long nMsg, long, long, long);
+            // (DOL, static; added for BossF game/boss/unit_5FF80.cpp,
+            // meanings guessed) Empties team nTeam's arts gauge; turns the
+            // loose ball mode on or off.
+            static void ClearTeamArtsGauge(long nTeam);
+            static void SetLooseBallModeFlag(int bOn);
             // (DOL, static; added for BasketF game/basket/CChrManBasket.cpp;
             // return types and parameter meanings guessed) Fades the
             // background in (fFrom, fFrames); the shot clock's length and

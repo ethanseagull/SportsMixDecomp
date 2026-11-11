@@ -125,7 +125,11 @@ namespace msw {
         // by hand in basketball, dodgeball and hockey (no such setting for
         // volleyball).
         unsigned char bBasketChrChange;
-        unsigned char m_Unk5D08[0x5D29 - 0x5D08];
+        unsigned char m_Unk5D08[0x5D1F - 0x5D08];
+        // 0x5D1F. (added for MenuF game/menu/unit_4BB48.cpp; meaning not
+        // known) Sent to the Wi-Fi opponent next to the options above.
+        unsigned char m_Unk5D1F;
+        unsigned char m_Unk5D20[0x5D29 - 0x5D20];
         unsigned char bDodgeChrChange;
         unsigned char m_Unk5D2A[0x5D36 - 0x5D2A];
         unsigned char bHockeyChrChange;

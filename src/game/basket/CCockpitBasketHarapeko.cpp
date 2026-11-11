@@ -733,7 +733,8 @@ namespace msw {
                 bcs::FVEC3 screenPos;
 
                 menu::GetWorldScreenPosition(m_Pos, nView, screenPos);
-                pObj->GetPane()->SetTranslate(nw4r::math::VEC3(screenPos.x, screenPos.y, screenPos.z));
+                // The text pane sits in a null pane; that one is moved.
+                pObj->GetPane()->GetParent()->SetTranslate(reinterpret_cast<const nw4r::math::VEC3 &>(screenPos));
             }
             m_bEnd = 1;
         }
@@ -789,8 +790,18 @@ msw::CCockpitBasketHarapeko::CCockpitBasketHarapeko(long nId, float)
     m_fSortZ = 0.0f;
 }
 
+namespace {
+
+    // The destructor stores both vtable pointers before it destroys the
+    // members, which the compiler only does when the body calls something,
+    // so the original called a function that is empty in this build (as in
+    // game/basket/CCockpitBasketPause.cpp).
+    inline void Nothing() {}
+}
+
 msw::CCockpitBasketHarapeko::~CCockpitBasketHarapeko()
 {
+    Nothing();
 }
 
 int msw::CCockpitBasketHarapeko::Set()
@@ -835,11 +846,7 @@ int msw::CCockpitBasketHarapeko::Set()
     SetPaneAccessor(pPaneCtrl, s_PaneName, PANE_NUM);
     SetTextBoxFromMessage(pPaneCtrl);
 
-    if (CTournament::IsExtraMatchGame()) {
-        m_nPlayerNum = SetTeamFaceIcon(pPaneCtrl);
-    } else {
-        m_nPlayerNum = SetFaceIcon(pPaneCtrl);
-    }
+    m_nPlayerNum = CTournament::IsExtraMatchGame() ? SetTeamFaceIcon(pPaneCtrl) : SetFaceIcon(pPaneCtrl);
 
     CreateCountUp(pPaneCtrl);
     CreateCrownIcon(pPaneCtrl);
@@ -1013,8 +1020,9 @@ void msw::CCockpitBasketHarapeko::CreateCountUp(bcs::G2D::CPaneCtrl *pPaneCtrl)
     // The pop-ups are placed in screen coordinates: the origin goes to the
     // top left corner.
     const nw4r::math::VEC3 zero(0.0f, 0.0f, 0.0f);
-    const nw4r::math::VEC3 corner(-(0.5f * bcs::CMainApp::g_Rmode.fbWidth),
-                                  0.5f * bcs::CMainApp::g_Rmode.efbHeight, 0.0f);
+    const int nWidth = bcs::CMainApp::g_Rmode.fbWidth;
+    const int nHeight = bcs::CMainApp::g_Rmode.efbHeight;
+    const nw4r::math::VEC3 corner(-(0.5f * nWidth), 0.5f * nHeight, 0.0f);
 
     pNullSrc->SetVisible(true);
     pNullSrc->SetTranslate(corner);
@@ -1022,11 +1030,18 @@ void msw::CCockpitBasketHarapeko::CreateCountUp(bcs::G2D::CPaneCtrl *pPaneCtrl)
     pTextSrc->SetVisible(false);
 
     const PlayerPane *pPlayerPane = s_PlayerPane;
+    long nPlayerNum = m_nPlayerNum;
 
-    for (long i = 0; i < m_nPlayerNum; i++, pPlayerPane++) {
+    for (long i = 0; i < nPlayerNum; i++, pPlayerPane++) {
+        const unsigned char *pNullPane = pPlayerPane->nCountUpNull;
+        const unsigned char *pTextPane = pPlayerPane->nCountUpText;
+        const unsigned char *pFramePane = pPlayerPane->nCountUpFrame;
+        const unsigned char *pPicAPane = pPlayerPane->nCountUpPicA;
+        const unsigned char *pPicBPane = pPlayerPane->nCountUpPicB;
+
         for (long j = 0; j < s_CountUpPaneNum; j++) {
             bcs::G2D::CPaneObj *pNullObj = bcs::G2D::DuplicatePaneObj(
-                pPaneCtrl, pNullSrc, s_PaneName[pPlayerPane->nCountUpNull[j]], s_LayoutRes.pLayout, 0);
+                pPaneCtrl, pNullSrc, s_PaneName[pNullPane[j]], s_LayoutRes.pLayout, 0);
 
             if (pNullObj == 0) {
                 continue;
@@ -1036,7 +1051,7 @@ void msw::CCockpitBasketHarapeko::CreateCountUp(bcs::G2D::CPaneCtrl *pPaneCtrl)
             pNullObj->GetPane()->SetTranslate(zero);
 
             bcs::G2D::CPaneObj *pFrameObj = bcs::G2D::DuplicatePaneObj(
-                pPaneCtrl, pFrameSrc, s_PaneName[pPlayerPane->nCountUpFrame[j]], s_LayoutRes.pLayout, animUse);
+                pPaneCtrl, pFrameSrc, s_PaneName[pFramePane[j]], s_LayoutRes.pLayout, animUse);
 
             if (pFrameObj == 0) {
                 continue;
@@ -1045,7 +1060,7 @@ void msw::CCockpitBasketHarapeko::CreateCountUp(bcs::G2D::CPaneCtrl *pPaneCtrl)
             pFrameObj->GetPane()->SetVisible(true);
 
             bcs::G2D::CPaneObj *pObj = bcs::G2D::DuplicatePaneObj(
-                pPaneCtrl, pPicASrc, s_PaneName[pPlayerPane->nCountUpPicA[j]], s_LayoutRes.pLayout, animUse);
+                pPaneCtrl, pPicASrc, s_PaneName[pPicAPane[j]], s_LayoutRes.pLayout, animUse);
 
             if (pObj == 0) {
                 continue;
@@ -1053,7 +1068,7 @@ void msw::CCockpitBasketHarapeko::CreateCountUp(bcs::G2D::CPaneCtrl *pPaneCtrl)
             pPaneCtrl->AppendPaneObj(pObj, *pFrameObj);
             pObj->GetPane()->SetVisible(true);
 
-            pObj = bcs::G2D::DuplicatePaneObj(pPaneCtrl, pPicBSrc, s_PaneName[pPlayerPane->nCountUpPicB[j]],
+            pObj = bcs::G2D::DuplicatePaneObj(pPaneCtrl, pPicBSrc, s_PaneName[pPicBPane[j]],
                                               s_LayoutRes.pLayout, animUse);
 
             if (pObj == 0) {
@@ -1062,7 +1077,7 @@ void msw::CCockpitBasketHarapeko::CreateCountUp(bcs::G2D::CPaneCtrl *pPaneCtrl)
             pPaneCtrl->AppendPaneObj(pObj, *pFrameObj);
             pObj->GetPane()->SetVisible(true);
 
-            pObj = bcs::G2D::DuplicatePaneObj(pPaneCtrl, pTextSrc, s_PaneName[pPlayerPane->nCountUpText[j]],
+            pObj = bcs::G2D::DuplicatePaneObj(pPaneCtrl, pTextSrc, s_PaneName[pTextPane[j]],
                                               s_LayoutRes.pLayout, animUse);
 
             if (pObj == 0) {
@@ -1215,10 +1230,6 @@ long msw::CCockpitBasketHarapeko::SetTime(float fTime, int nArg, int bArg)
 
 long msw::CCockpitBasketHarapeko::SetPointUpText(long nPlayer, const bcs::FVEC3 &rPos, long nPoint)
 {
-    // static-order swap, as in SetAnimScore.
-    static const int reset = 1;
-    static const int recursive = 1;
-
     long nIdx = m_nCountUpIdx[nPlayer];
     long nTextPane = s_PlayerPane[nPlayer].nCountUpText[nIdx];
     wchar_t text[5] = L"+xxx";
@@ -1240,6 +1251,9 @@ long msw::CCockpitBasketHarapeko::SetPointUpText(long nPlayer, const bcs::FVEC3 
     pTask->SetKind(nPlayer + TASK_POINT_UP);
     m_DispTaskList.PushBack(pTask);
 
+    // static-order swap, as in SetAnimScore.
+    static const int reset = 1;
+    static const int recursive = 1;
     long nNullPane = s_PlayerPane[nPlayer].nCountUpNull[nIdx];
 
     m_pPaneAccessor->PlayAnimation(nNullPane, nAnim, 1.0f, 0.0f, recursive, reset);
@@ -1263,10 +1277,8 @@ long msw::CCockpitBasketHarapeko::ClearPointUpText(long nPlayer)
         m_DispTaskList.RemoveObject(pLink);
     }
 
-    const unsigned char *pNullPane = s_PlayerPane[nPlayer].nCountUpNull;
-
-    for (long i = 0; i < 3; i++, pNullPane++) {
-        bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(*pNullPane);
+    for (long i = 0; i < 3; i++) {
+        bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(s_PlayerPane[nPlayer].nCountUpNull[i]);
 
         if (pObj != 0) {
             pObj->StopAllAnimation(recursive);
@@ -1362,7 +1374,7 @@ long msw::CCockpitBasketHarapeko::SetTeamFaceIcon(bcs::G2D::CPaneCtrl *pPaneCtrl
         }
     }
 
-    const TeamPane(*pLayout)[3] = nPlayerNum > 4 ? s_TeamPane[0] : s_TeamPane[2];
+    const TeamPane(*pLayout)[3] = nPlayerNum <= 4 ? s_TeamPane[2] : s_TeamPane[0];
     const unsigned char *pComLabel = s_ComLabelPane;
 
     for (i = 0; i < nChrNum; i++) {
@@ -1445,8 +1457,9 @@ void msw::CCockpitBasketHarapeko::CreateCrownIcon(bcs::G2D::CPaneCtrl *pPaneCtrl
     }
 
     // The crowns are placed in screen coordinates, as the pop-up scores.
-    const nw4r::math::VEC3 corner(-(0.5f * bcs::CMainApp::g_Rmode.fbWidth),
-                                  0.5f * bcs::CMainApp::g_Rmode.efbHeight, 0.0f);
+    const int nWidth = bcs::CMainApp::g_Rmode.fbWidth;
+    const int nHeight = bcs::CMainApp::g_Rmode.efbHeight;
+    const nw4r::math::VEC3 corner(-(0.5f * nWidth), 0.5f * nHeight, 0.0f);
 
     pNullSrc->SetVisible(true);
     pNullSrc->SetAlpha(0xFF);
@@ -1463,8 +1476,10 @@ void msw::CCockpitBasketHarapeko::CreateCrownIcon(bcs::G2D::CPaneCtrl *pPaneCtrl
     pPictureSrc->SetVisible(false);
 
     const PlayerPane *pPlayerPane = s_PlayerPane;
+    long nPlayerNum = m_nPlayerNum;
 
-    for (long i = 0; i < m_nPlayerNum; i++, pPlayerPane++) {
+    for (long i = 0; i < nPlayerNum; i++, pPlayerPane++) {
+        unsigned char nPicture = pPlayerPane->nCrownPicture;
         bcs::G2D::CPaneObj *pNullObj = bcs::G2D::DuplicatePaneObj(
             pPaneCtrl, pNullSrc, s_PaneName[pPlayerPane->nCrownNull], s_LayoutRes.pLayout, animUse);
 
@@ -1477,7 +1492,7 @@ void msw::CCockpitBasketHarapeko::CreateCrownIcon(bcs::G2D::CPaneCtrl *pPaneCtrl
         pNullObj->GetPane()->SetAlpha(0xFF);
 
         bcs::G2D::CPaneObj *pPictureObj = bcs::G2D::DuplicatePaneObj(
-            pPaneCtrl, pPictureSrc, s_PaneName[pPlayerPane->nCrownPicture], s_LayoutRes.pLayout, 0);
+            pPaneCtrl, pPictureSrc, s_PaneName[nPicture], s_LayoutRes.pLayout, 0);
 
         if (pPictureObj == 0) {
             continue;

@@ -3,6 +3,8 @@ BasketF AddCoinValue__Q23msw18CCockpitBasketCoinFlll near 99.0 register allocati
 BasketF ConveyorUpdate__Q23msw30CStageBasketHungryBossPackun72Ff near 99.9 float register choice for the three loop-invariant constants (60, 0, 1/60)
 BasketF CreateBallIcon__Q23msw18CRadarIcon2DBasketFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc near 99.9 99.9%, registers only: in the inlined GetLytObj the layout handle from 0x1C(this) is kept in r29 in the original, r30 in ours (2 instructions)
 BasketF CreateCharaIcon__Q23msw18CRadarIcon2DBasketFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc near 99.9 99.9%, registers only: in the inlined GetLytObj the layout handle from 0x1C(this) is kept in r26 in the original, r27 in ours (2 instructions)
+BasketF CreateCountUp__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 98.7 register choice and instruction order only
+BasketF CreateCrownIcon__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 97.0 register choice only
 BasketF CtorStateAttach__Q23msw16CBallBasketFruitFv near 99.4 float register choice for the tilt-centre and 0/1 axis constants; same loads, operations and stores
 BasketF DetectMapHit___Q23msw14CCollManBasketFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 98.4 98.4%, schedule only: the 0.0f load at entry is scheduled later and the two-court gap calculation assigns float registers differently; constants, calls, memory accesses and branch targets identical
 BasketF GetBgCollRadiusXZ__Q23msw16CBallBasketFruitCFv near 99.3 float register choice for 0.23f and the scale array
@@ -20,7 +22,13 @@ BasketF ScoreInWait__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only
 BasketF ScoreIn__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 BasketF ScoreOutWait__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 BasketF ScoreOut__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
+BasketF SetBallScore__Q23msw22CCockpitBasketHarapekoFll near 98.6 register choice and instruction order only
 BasketF SetCoinValue__Q23msw18CCockpitBasketCoinFll near 98.9 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 BasketF SetCountNum__Q23msw25CCockpitBasketPauseResultFl near 99.2 registers only: the pane accessor and the computed show flag swap r30/r31; same instructions, order and stack frame
+BasketF SetDispBallFruit4__Q23msw22CCockpitBasketHarapekoFi near 99.5 register choice and instruction order only
+BasketF SetFaceIcon__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 97.6 register choice, one pointer increment scheduled elsewhere, single-bit set as clear-then-insert vs shift-then-insert (same value)
+BasketF SetScore__Q23msw22CCockpitBasketHarapekoFllii near 97.8 register choice and instruction order only
+BasketF SetTeamFaceIcon__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 97.4 register choice; second table pointer as base+0x48 vs direct address (same address); single-bit set as clear-then-insert vs shift-then-insert
 BasketF Set__Q23msw18CCockpitBasketCoinFv near 99.3 register choice only (as CCockpitHockeyCoin::Set)
+BasketF Set__Q23msw22CCockpitBasketHarapekoFv near 93.0 s_PaneName address formed as s_LayoutRes base + 0x60 in a saved register instead of its own load (same address), one more saved register; same calls
 BasketF UpdateMdl__Q23msw14CStageBasket13FUlf near 98.1 register choice and common-subexpression reuse only: in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls

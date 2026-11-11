@@ -4,6 +4,7 @@
 # adding a line (port_unit.py and autopilot.py do it themselves).
 Matching game/boss/module.cpp
 Matching game/boss/CItemBallBoss.cpp
+NonMatching game/boss/CItemBallBossBomb.cpp
 Matching game/boss/CStageManBoss.cpp
 Matching game/boss/CEffectCtrlBoss.cpp
 Matching game/boss/TournamentBoss.cpp

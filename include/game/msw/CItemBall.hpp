@@ -93,6 +93,8 @@ namespace msw {
             // deleted or TrgDestroy_ has run. msw::CBall drops an item
             // behaviour for which this holds.
             int IsEnd() const;
+            // (name guessed) Not zero once TrgShootStart_ has run.
+            int IsShot() const { return m_nTrgFlag & (1 << (TRG_SHOOT_START + 1)); }
 
         protected:
             // (fn_800CEC70, name guessed) Builds the item model of `type`

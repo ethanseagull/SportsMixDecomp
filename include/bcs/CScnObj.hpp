@@ -215,6 +215,15 @@ namespace bcs {
                 m_fRotX = fRotX;
             }
 
+            // (name guessed) Sets the three angles at once; msw::CDropCoin
+            // stores them through one load of the model pointer.
+            void SetRot(float fRotX, float fRotY, float fRotZ)
+            {
+                m_fRotX = fRotX;
+                m_fRotY = fRotY;
+                m_fRotZ = fRotZ;
+            }
+
         private:
             unsigned char m_Unk08[0x90];  // 0x08
 

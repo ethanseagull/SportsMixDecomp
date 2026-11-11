@@ -141,7 +141,7 @@ namespace msw {
         }
 
         long count = 0;
-        for (; nNum > 0; nNum--) {
+        for (; nNum > 0; nNum--, count++) {
             float rot = WrapRad(bcs::BCS_RandMax(6.2831855f));
             float div = 12.0f + bcs::BCS_RandMax(4L);
             float speed = 0.8f + bcs::BCS_RandMax(0.8f);
@@ -159,7 +159,7 @@ namespace msw {
             if (pCoin != 0) {
                 float coinLife = life;
                 if (fLifeRand > 0.0f) {
-                    coinLife = life + ceil(bcs::BCS_RandMax(60.0f * fLifeRand));
+                    coinLife = life + (float)ceil(bcs::BCS_RandMax(60.0f * fLifeRand));
                 }
                 pCoin->m_fLife = coinLife;
                 pCoin->m_vVel.x = vel.x;
@@ -167,7 +167,6 @@ namespace msw {
                 pCoin->m_vVel.z = vel.z;
                 pCoin->m_nValue = 1;
             }
-            count++;
         }
 
         if (count != 0) {
@@ -183,13 +182,15 @@ namespace msw {
 
     long CDropCoinMan::CreateBuryCoin(const bcs::FVEC3 &rMin, const bcs::FVEC3 &rMax, long nNum)
     {
+        float minX;
+        float width;
         if (nNum <= 0) {
             return 0;
         }
 
-        float minX = rMin.x;
         float minZ = rMin.z;
-        float width = rMax.x - minX;
+        minX = rMin.x;
+        width = rMax.x - minX;
         float depth = rMax.z - minZ;
         long count = 0;
         for (long i = 0; i < nNum; i++) {
@@ -251,14 +252,18 @@ namespace msw {
 
     void CDropCoinMan::SetStarPieceRefelctVelReduce(float fY, float fXZ)
     {
-        m_fStarPieceReduceY = __fabsf(fY);
-        m_fStarPieceReduceXZ = __fabsf(fXZ);
+        float y = __fabsf(fY);
+        float xz = __fabsf(fXZ);
+        m_fStarPieceReduceY = y;
+        m_fStarPieceReduceXZ = xz;
     }
 
     void CDropCoinMan::SetCoinRefelctVelReduce(float fY, float fXZ)
     {
-        m_fCoinReduceY = __fabsf(fY);
-        m_fCoinReduceXZ = __fabsf(fXZ);
+        float y = __fabsf(fY);
+        float xz = __fabsf(fXZ);
+        m_fCoinReduceY = y;
+        m_fCoinReduceXZ = xz;
     }
 
     CDropCoin *CDropCoinMan::DropCoinGetFirst()
@@ -268,10 +273,10 @@ namespace msw {
 
     CDropCoin *CDropCoinMan::DropCoinGetNext(CDropCoin *pCoin)
     {
-        if (pCoin == 0) {
-            return 0;
+        if (pCoin != 0) {
+            return static_cast<CDropCoin *>(nw4r::ut::List_GetNext(&m_CoinList, pCoin));
         }
-        return static_cast<CDropCoin *>(nw4r::ut::List_GetNext(&m_CoinList, pCoin));
+        return 0;
     }
 
     void CDropCoinMan::DropCoinPickup(const bcs::FVEC3 &rPos, float fRadius, float fHeight,
@@ -280,12 +285,16 @@ namespace msw {
         float height = __fabsf(fHeight);
         float radius = __fabsf(fRadius);
 
-        if ((CGame::g_GameWork.m_nFlag18 & 0x4306) != 0 || !CGame::IsMainLoopState(1)) {
+        if ((CGame::g_GameWork.m_nFlag18 & 0x4306) != 0) {
+            return;
+        }
+        if (!CGame::IsMainLoopState(1)) {
             return;
         }
 
         float halfHeight = height * 0.5f;
-        bcs::FVEC3 center(rPos.x, rPos.y + halfHeight, rPos.z);
+        bcs::FVEC3 center = rPos;
+        center.y += halfHeight;
         for (CDropCoin *pCoin = static_cast<CDropCoin *>(nw4r::ut::List_GetNext(&m_CoinList, 0)); pCoin != 0;
              pCoin = static_cast<CDropCoin *>(nw4r::ut::List_GetNext(&m_CoinList, pCoin))) {
             if (!pCoin->CanbePickup()) {
@@ -300,8 +309,9 @@ namespace msw {
                 continue;
             }
 
-            bcs::FVEC3 flat(diff.x, 0.0f, diff.z);
-            if (bcs::FVEC3LenSq(&flat) > rangeXZ * rangeXZ) {
+            bcs::FVEC3 flat = diff;
+            flat.y = 0.0f;
+            if (bcs::FVEC3SquareMag(&flat) > rangeXZ * rangeXZ) {
                 continue;
             }
 
@@ -340,7 +350,7 @@ namespace msw {
         m_Link.pPrev = 0;
         m_Link.pNext = 0;
         nw4r::ut::List_Append(&pMan->m_CoinList, this);
-        m_vPos.Set(rPos.x, rPos.y, rPos.z);
+        m_vPos = rPos;
         m_vVel.Set(0.0f, 0.0f, 0.0f);
         CreateMdl_();
         m_nFlag |= FLAG_ENABLE;
@@ -423,15 +433,26 @@ namespace msw {
             m_pMdl->m_vScale.Set(1.0f, 1.0f, 1.0f);
             m_vPos.y = 0.0f;
             m_pMdl->m_vTrans.y = 0.0f;
-            m_pMdl->m_fRotX = 0.0f;
-            m_pMdl->m_fRotY = 0.0f;
-            m_pMdl->m_fRotZ = 0.0f;
+            m_pMdl->SetRot(0.0f, 0.0f, 0.0f);
             m_pMdl->SetRotX(1.5707964f);
             m_pMdl->SetRotY(WrapRad(bcs::BCS_RandMax(6.2831855f)));
             m_pMdl->SetAlphaRateF(0.0f);
         }
         if (m_pShadow != 0) {
             m_pShadow->SetEnable(false);
+        }
+    }
+
+    // (name guessed) Moves rPos with the floor under it when the floor
+    // moves things.
+    static inline void AddGrdFlow(bcs::FVEC3 &rPos)
+    {
+        unsigned long attr;
+        bcs::FVEC3 flow;
+        CCollMan::GetGrdAttr(rPos, attr, flow);
+        if (CCollMan::IsGrdAttrFlow(attr)) {
+            rPos.x += flow.x;
+            rPos.z += flow.z;
         }
     }
 
@@ -446,17 +467,13 @@ namespace msw {
             MainBury_();
         } else {
             MainMove_();
-            if (!(m_nFlag & FLAG_FALL) && m_vPos.y <= 0.25678f * m_fScale && m_vVel.y <= 0.0f) {
-                unsigned long attr;
-                bcs::FVEC3 flow;
-                CCollMan::GetGrdAttr(m_vPos, attr, flow);
-                if (CCollMan::IsGrdAttrFlow(attr)) {
-                    m_vPos.x += flow.x;
-                    m_vPos.z += flow.z;
-                }
+            float groundY = 0.25678f * m_fScale;
+            if (!(m_nFlag & FLAG_FALL) && m_vPos.y <= groundY && m_vVel.y <= 0.0f) {
+                AddGrdFlow(m_vPos);
             }
             m_pMdl->m_vTrans = m_vPos;
-            m_pMdl->SetRotY(m_pMdl->m_fRotY + 0.08726646f * GetFrameRateF());
+            float turn = 0.08726646f * GetFrameRateF();
+            m_pMdl->SetRotY(m_pMdl->m_fRotY + turn);
         }
 
         bool bLifeRuns = true;
@@ -504,9 +521,18 @@ namespace msw {
         float addVel = fGravity * fRate;
         bcs::FVEC3 move;
         bcs::FVEC3Scale(&move, &rVel, fRate);
-        move.y += 0.5f * (addVel * fRate);
         rVel.y += addVel;
+        move.y += 0.5f * (addVel * fRate);
         bcs::FVEC3Add(&rPos, &rPos, &move);
+    }
+
+    // (name guessed) The splash of a coin landing in water, on the ground
+    // under rPos.
+    static inline void SplashEffect(const bcs::FVEC3 &rPos)
+    {
+        bcs::FVEC3 pos(rPos);
+        pos.y = 0.0f;
+        CEffectCtrl::SimpleEffect(0x44, pos, 3, 0, 0);
     }
 
     void CDropCoin::MainMove_()
@@ -530,7 +556,7 @@ namespace msw {
 
         if (m_nFlag & FLAG_FALL) {
             long se = -1;
-            if (CGame::g_GameWork.m_nStage == 5) {
+            if (CGame::g_GameWork.GetStage() == 5) {
                 se = 0xD2A;
             }
             if (m_vPos.y <= -3.0f) {
@@ -553,9 +579,7 @@ namespace msw {
             }
             if ((m_nFlag & FLAG_GROUND) && !(m_nFlag & FLAG_LAND_EFFECT)) {
                 if (CStageMan::GetInstance()->GetHitMaterial(m_vPos) == 3) {
-                    bcs::FVEC3 pos(m_vPos);
-                    pos.y = 0.0f;
-                    CEffectCtrl::SimpleEffect(0x44, pos, 3, 0, 0);
+                    SplashEffect(m_vPos);
                 }
                 m_nFlag |= FLAG_LAND_EFFECT;
             }
@@ -566,14 +590,15 @@ namespace msw {
     {
         float groundY = 0.25678f * m_fScale;
         if (m_vPos.y <= groundY && m_vVel.y < 0.0f) {
-            if (CStageMan::GetInstance()->GetFloorAttribute(m_vPos, CStageMan::FLOW_TYPE_0) == 8) {
+            unsigned long attr = CStageMan::GetInstance()->GetFloorAttribute(m_vPos, CStageMan::FLOW_TYPE_0);
+            if (attr == 8) {
                 m_nFlag = (m_nFlag | FLAG_FALL) & ~FLAG_ENABLE;
                 return 0;
             }
 
             float reduceY = m_pMan->m_fCoinReduceY;
             float reduceXZ = m_pMan->m_fCoinReduceXZ;
-            if (!!(m_nFlag & FLAG_STAR_PIECE)) {
+            if (m_nFlag & FLAG_STAR_PIECE) {
                 reduceY = m_pMan->m_fStarPieceReduceY;
                 reduceXZ = m_pMan->m_fStarPieceReduceXZ;
             }
@@ -606,10 +631,10 @@ namespace msw {
         float rate = GetFrameRateF();
         switch (m_nCount) {
             case 2: {
-                bcs::FVEC3 pos(m_pMdl->m_vTrans);
-                pos.x -= 2.8f;
                 unsigned long attr;
                 bcs::FVEC3 flow;
+                bcs::FVEC3 pos(m_pMdl->m_vTrans);
+                pos.x -= 2.8f;
                 CCollMan::GetGrdAttr(pos, attr, flow);
                 if (!CCollMan::IsGrdAttrFlow(attr)) {
                     m_nCount--;
@@ -617,7 +642,8 @@ namespace msw {
                 break;
             }
             case 1:
-                m_vVel.y = Clamp(m_vVel.y + (1.0f / 30.0f) * rate, 0.0f, 1.0f);
+                m_vVel.y += (1.0f / 30.0f) * rate;
+                m_vVel.y = Clamp(m_vVel.y, 0.0f, 1.0f);
                 m_pMdl->SetAlphaRateF(m_vVel.y);
                 if (m_vVel.y >= 1.0f) {
                     m_vVel.Set(0.0f, 0.0f, 0.0f);

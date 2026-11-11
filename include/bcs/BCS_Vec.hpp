@@ -195,6 +195,32 @@ namespace bcs {
         return work;
     }
 
+    // (name guessed) The square of the length of a vector, the other way
+    // round from FVEC3LenSq: x and y as a pair, z alone and read as a plain
+    // float, so the compiler can reuse a z it already holds. Most likely
+    // the SDK's PSVECSquareMag inlined. Paired-single assembly like the
+    // routines above; written from what msw::CDropCoinMan::DropCoinPickup
+    // (DOL) shows after inlining.
+    inline float FVEC3SquareMag(register const FVEC3 *p)
+    {
+        register float xy;
+        register float z;
+        register float work;
+
+        z = p->z;
+#ifdef __MWERKS__
+        asm {
+            psq_l xy, 0(p), 0, 0
+            ps_mul xy, xy, xy
+            ps_madd work, z, z, xy
+            ps_sum0 work, work, xy, xy
+        }
+#else
+        work = p->x * p->x + p->y * p->y + z * z;
+#endif
+        return work;
+    }
+
     // (name guessed) The dot product of two vectors. Paired-single assembly
     // in the original like FVEC3LenSq (y and z as a pair, x alone); most
     // likely NW4R's VEC3Dot. Written from what msw::CDropCoin's bounce

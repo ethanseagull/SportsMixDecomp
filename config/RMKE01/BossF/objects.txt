@@ -10,6 +10,7 @@ Matching game/boss/CEffectCtrlBoss.cpp
 Matching game/boss/TournamentBoss.cpp
 Matching game/boss/CCockpitBossLayoutBase.cpp
 Matching game/boss/CCollManBoss.cpp
+Equivalent game/boss/CChrManBoss.cpp
 Matching game/boss/CChrMarkerBoss.cpp
 Matching game/boss/CBallManBoss.cpp
 Equivalent game/boss/CRadarIcon2DBoss.cpp

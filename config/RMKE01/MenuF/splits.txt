@@ -78,15 +78,21 @@ game/menu/CTeam.cpp:
 	.rodata     start:0x00004158 end:0x00004308
 	.data       start:0x00001D28 end:0x00002000
 
-game/menu/CPlayerSelect.cpp:
-	.text       start:0x00019C6C end:0x0001AE98
+game/menu/CBgMdl.cpp:
+	.text       start:0x00019C6C end:0x00019FCC
 	.ctors      start:0x00000004 end:0x00000008
-	.rodata     start:0x00004308 end:0x00004C58
-	.data       start:0x00002000 end:0x000021A0
+	.rodata     start:0x00004308 end:0x00004488
+	.data       start:0x00002000 end:0x00002068
 	.bss        start:0x00001328 end:0x00001338
 
+game/menu/CPlayerSelect.cpp:
+	.text       start:0x00019FCC end:0x0001AAB8
+	.rodata     start:0x00004488 end:0x000047F8
+	.data       start:0x00002068 end:0x000021A0
+
 game/menu/CPlayerInfo.cpp:
-	.text       start:0x0001AE98 end:0x0001B9DC
+	.text       start:0x0001AAB8 end:0x0001B9DC
+	.rodata     start:0x000047F8 end:0x00004C58
 	.data       start:0x000021A0 end:0x000022E0
 
 game/menu/CCockpitMenu.cpp:
@@ -284,12 +290,12 @@ game/menu/CCourtCharaObj.cpp:
 	.data       start:0x000075F8 end:0x00007730
 
 game/menu/CTitle.cpp:
-	.text       start:0x0005C48C end:0x0005DBE0
+	.text       start:0x0005C48C end:0x0005DAC8
 	.rodata     start:0x0000C7B8 end:0x0000C9D8
 	.data       start:0x00007730 end:0x000078D8
 
 game/menu/CWiFiFrindVS.cpp:
-	.text       start:0x0005DBE0 end:0x0005EDA0
+	.text       start:0x0005DAC8 end:0x0005EDA0
 	.rodata     start:0x0000C9D8 end:0x0000CA98
 	.data       start:0x000078D8 end:0x00007970
 

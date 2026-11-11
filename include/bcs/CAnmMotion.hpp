@@ -21,7 +21,7 @@ namespace bcs {
             // 0x44 to 0x98: slots past those of bcs::CAnmObj, read from the
             // DOL vtable of bcs::CAnmMotion, where none has a name. They are
             // probably bcs::CAnmObjMotBase's. Most forward to the motion
-            // selected by the word at 0x2C. Only 0x64 and 0x98 are called
+            // selected by the word at 0x2C. Only 0x58, 0x64 and 0x98 are called
             // from a module so far (msw::SelectMenu::CCourtCharaObj::
             // StateCheck in MenuF, both with (3, 0)); the others are
             // placeholders that keep the slots in place.
@@ -30,7 +30,7 @@ namespace bcs {
             virtual void VFunc4C();
             virtual void VFunc50();
             virtual void VFunc54();
-            virtual void VFunc58();
+            virtual float VFunc58(long nNode);          // 0x58, takes a node index (msw::SelectMenu::CBgMdl in MenuF divides the result by a frame count)
             virtual void VFunc5C();
             virtual void VFunc60();
             virtual long VFunc64(long, unsigned long);  // 0x64, compared with 2 by the caller

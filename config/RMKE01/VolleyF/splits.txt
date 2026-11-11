@@ -245,10 +245,15 @@ game/volley/CGimmickManVolley.cpp:
 	.data       start:0x00015C08 end:0x00015D40
 	.bss        start:0x00000578 end:0x00000580
 
+game/volley/CQPanelVolley.cpp:
+	.text       start:0x0007E2BC end:0x0007E980
+	.rodata     start:0x00002788 end:0x00004580
+	.data       start:0x00015D40 end:0x00015E38
+
 game/volley/CCockpitVolley.cpp:
-	.text       start:0x0007E2BC end:0x00082A38
-	.rodata     start:0x00002788 end:0x00004660
-	.data       start:0x00015D40 end:0x000162D0
+	.text       start:0x0007E980 end:0x00082A38
+	.rodata     start:0x00004580 end:0x00004660
+	.data       start:0x00015E38 end:0x000162D0
 
 game/volley/CCockpitVolleyCoder.cpp:
 	.text       start:0x00082A38 end:0x00084E68
@@ -317,7 +322,7 @@ game/volley/CStageVolley10.cpp:
 	.data       start:0x000193D0 end:0x00019A00
 	.bss        start:0x000005C8 end:0x000005D0
 
-game/volley/CStageVolley11.cpp:
+game/volley/StageVolley11.cpp:
 	.text       start:0x000950DC end:0x000978A4
 	.rodata     start:0x00006880 end:0x00006A18
 	.data       start:0x00019A00 end:0x0001A1B0

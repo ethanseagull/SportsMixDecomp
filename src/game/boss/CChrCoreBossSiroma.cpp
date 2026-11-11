@@ -1,5 +1,4 @@
-// msw::CChrCoreBossSiroma (the White Mage), msw::CChrCoreBossSlime,
-// msw::CChrCoreBossWaluigi and msw::CChrCoreBossWario in the boss game.
+// msw::CChrCoreBossSiroma (the White Mage) in the boss game.
 #include "game/msw/CChrCoreBoss.hpp"
 
 #include "game/msw/CBall.hpp"
@@ -147,49 +146,4 @@ void msw::CChrCoreBossSiroma::SubStateSpikeDoLandStart_(STATE_WORK_SPIKE *pWork)
 void msw::CChrCoreBossSiroma::DtorStateSpike()
 {
     CChrCoreBoss::DtorStateSpike();
-}
-
-msw::CChrCoreBossSlime::CChrCoreBossSlime()
-{
-    m_nColorType = 0;
-}
-
-msw::CChrCoreBossSlime::~CChrCoreBossSlime()
-{
-}
-
-void msw::CChrCoreBossSlime::Reset_()
-{
-    CChrCoreBoss::Reset_();
-
-    m_nColorType = 0;
-    switch (m_nColor) {
-        case 1:
-            m_nColorType = 1;
-            break;
-        case 2:
-            m_nColorType = 2;
-            break;
-    }
-}
-
-msw::CChrCoreBossWaluigi::CChrCoreBossWaluigi()
-{
-}
-
-msw::CChrCoreBossWaluigi::~CChrCoreBossWaluigi()
-{
-}
-
-void msw::CChrCoreBossWaluigi::Reset_()
-{
-    CChrCoreBoss::Reset_();
-}
-
-msw::CChrCoreBossWario::CChrCoreBossWario()
-{
-}
-
-msw::CChrCoreBossWario::~CChrCoreBossWario()
-{
 }

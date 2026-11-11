@@ -39,12 +39,12 @@ Equivalent game/hockey/CChrCoreHockeyKuroma.cpp
 Equivalent game/hockey/CCockpitHockeyCoder.cpp
 Equivalent game/hockey/CStageHockey16.cpp
 Matching game/hockey/CStageHockey03.cpp
-Equivalent game/hockey/CStageHockey12.cpp
+Matching game/hockey/CStageHockey12.cpp
 Equivalent game/hockey/CStageHockey15.cpp
 Matching game/hockey/CStageManHockey.cpp
 Equivalent game/hockey/CStageHockey17.cpp
 Equivalent game/hockey/CStageHockey09.cpp
-NonMatching game/hockey/CStageHockey11.cpp
+Equivalent game/hockey/CStageHockey11.cpp flags=noauto
 Equivalent game/hockey/CStgGmk_Trolley_Act_Hockey.cpp
 Equivalent game/hockey/CChrCoreHockeyWaluigi.cpp
 Matching game/hockey/CStageMan.cpp
@@ -61,7 +61,7 @@ Matching game/hockey/CChrCoreHockeyMii00.cpp
 Matching game/hockey/CChrCoreHockeyMii01.cpp
 Equivalent game/hockey/CChrCoreHockeyPeach.cpp
 Matching game/hockey/CStageHockey05.cpp
-Equivalent game/hockey/CStageHockeyCrushSkate.cpp
+Matching game/hockey/CStageHockeyCrushSkate.cpp
 Equivalent game/hockey/CStgGmk_Case_Act_Hockey.cpp
 Matching game/hockey/CQPanelHockey.cpp
 Equivalent game/hockey/CChrCoreHockeyDiddy.cpp
@@ -81,3 +81,4 @@ Matching game/hockey/unit_EDBF0.cpp
 Equivalent game/hockey/CCockpitHockeyVSCount.cpp
 Equivalent game/hockey/CCockpitHockeyTelopReady.cpp
 Equivalent game/hockey/CChrCoreHockeySlime.cpp
+Equivalent game/hockey/CStageHockey10.cpp

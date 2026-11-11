@@ -14,6 +14,7 @@ namespace bcs {
 namespace msw {
 
     class CArn;
+    class CStgMdl;
 
     // (purpose guessed from the names) Stage 10, the panel stage: the board
     // of score and bonus panels the players run over. A DOL class used as a
@@ -89,7 +90,9 @@ namespace msw {
                 private:
                     const CStage10Base *m_pParent; // 0x10
                     long m_nType;                  // 0x14
-                    bcs::CScnObj *m_pMdl;          // 0x18 (type guessed)
+                    // 0x18: a msw::CStgMdl (HockeyF's CStageHockey10::CPanelInfo::CalcRootMtx
+                    // calls its SetMtx and Commit through the vptr at 0x128).
+                    CStgMdl *m_pMdl;               // 0x18
                     float m_fRadius;               // 0x1C
                     CStgSrt m_Srt;                 // 0x20
                     bcs::FVEC3 m_InitPos;          // 0x164
@@ -136,7 +139,9 @@ namespace msw {
                         }
                         return locked;
                     }
-                    virtual void SetScored();                                            // 0x64
+                    // Whether the panel could be scored (HockeyF's override
+                    // returns 1 or 0).
+                    virtual bool SetScored();                                            // 0x64
                     virtual int IsScored() const { return m_nState == 3; }               // 0x68
                     virtual void SetFailed();                                            // 0x6C
                     virtual void Terminate();                                            // 0x70
@@ -158,8 +163,8 @@ namespace msw {
                     virtual int IsActiveBonusPanel() const;                              // 0x94
                     virtual CStgSrt &GetSrt() { return m_Srt; }                          // 0x98
                     virtual const CStgSrt &GetSrt() const { return m_Srt; }              // 0x9C
-                    virtual bcs::CScnObj *GetMdl() { return m_pMdl; }                    // 0xA0
-                    virtual const bcs::CScnObj *GetMdl() const { return m_pMdl; }        // 0xA4
+                    virtual CStgMdl *GetMdl() { return m_pMdl; }                         // 0xA0
+                    virtual const CStgMdl *GetMdl() const { return m_pMdl; }             // 0xA4
                     virtual const CStage10Base *GetParent() const { return m_pParent; }  // 0xA8
                     virtual void Init();                                                 // 0xAC
                     virtual void CalcRootMtx();                                          // 0xB0
@@ -223,6 +228,9 @@ namespace msw {
             // The panel after pPanel in the board's list (the first one
             // for null), or null after the last one.
             CPanelInfoBase *GetNextPanel_(const CPanelInfoBase *pPanel) const;
+            // (meaning guessed) The most panels the board holds (DOL,
+            // called by HockeyF's CStageHockey10::GetPanelMaxNum).
+            long GetPanelMaxNum_() const;
 
         private:
             bcs::CListBase m_PanelList;       // 0x00, the panels (a bcs::CList with its own vtable)
@@ -284,7 +292,7 @@ namespace msw {
             virtual void Stage10_SetColorScale(const bcs::BCS_Color &rColor);               // 0x80
             virtual void SetExRule(int bExRule) { m_bExRule = bExRule; }                    // 0x84
             virtual int IsExRule() const { return m_bExRule; }                              // 0x88
-            virtual int IsPanelArrangeReady_() const;                                       // 0x8C
+            virtual int IsPanelArrangeReady_() const { return 1; }                          // 0x8C (HockeyF emits it weak)
             virtual void PanelArrangeUpdate_(float frame);                                  // 0x90
             virtual void PanelArrangeUpdateSub_(long, float frame);                         // 0x94
             virtual void PanelUpdate_(float frame);                                         // 0x98

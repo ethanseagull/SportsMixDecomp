@@ -4,7 +4,8 @@
 #include "bcs/CTask.hpp"
 
 namespace msw {
-    class CEventCamera;
+    class CEventCameraBase;
+    class CEventDemo;
 
     // Base of each sport's event-demo task (DOL, size 0x40, vptr at 0).
     // One instance at a time, kept in m_pInstance. The virtuals are declared
@@ -64,13 +65,16 @@ namespace msw {
             static CEventDemoBase *m_pInstance;
 
         private:
+            // The static demo camera calls read m_pCamera directly.
+            friend class CEventDemo;
+
             // An entry of the list at 0x38 (8 bytes, AddFadeEndFunc).
             struct FadeEndFunc {
                 FadeEndFunc *pNext;
                 void (*pFunc)();
             };
 
-            CEventCamera *m_pCamera;    // 0x34: made by _Init (name guessed)
+            CEventCameraBase *m_pCamera; // 0x34: a CEventCamera made by _Init (name guessed)
             FadeEndFunc *m_pList;       // 0x38: newest first; freed by _Destroy and Main
             int m_bFade;                // 0x3C: last IsPlayMasterFade result (Main)
     };

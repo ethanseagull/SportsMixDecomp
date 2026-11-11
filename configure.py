@@ -321,6 +321,15 @@ GAME_MODULES = [
 ]
 OBJECT_STATES = {"Matching": Matching, "Equivalent": Equivalent, "NonMatching": NonMatching}
 
+# Per-object flag sets, chosen in objects.txt with `flags=<name>`.
+# noauto: no auto-inlining of functions not declared inline. Files whose
+# original calls small non-inline functions (template members included) that
+# the module flags would inline: the stage 11 files call
+# bcs::CPool<...>::Create and GetHandle in every module (notes/toolchain.md).
+OBJECT_FLAGS = {
+    "noauto": ["-inline noauto"],
+}
+
 
 def objects_path(module: str) -> Path:
     return Path("config") / config.version / module / "objects.txt"
@@ -342,7 +351,9 @@ def module_objects(module: str) -> List[Object]:
         for opt in opts:
             key, _, value = opt.partition("=")
             if key == "pch":
-                kwargs["extra_cflags"] = [f"-prefix pch/{value}.mch"]
+                kwargs.setdefault("extra_cflags", []).append(f"-prefix pch/{value}.mch")
+            elif key == "flags" and value in OBJECT_FLAGS:
+                kwargs.setdefault("extra_cflags", []).extend(OBJECT_FLAGS[value])
             else:
                 sys.exit(f"{path}:{n}: unknown option {opt!r}")
         objects.append(Object(OBJECT_STATES[status], src, **kwargs))

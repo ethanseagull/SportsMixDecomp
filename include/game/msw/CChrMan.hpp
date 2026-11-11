@@ -99,6 +99,10 @@ namespace msw {
             // DOL, static: the instance as stored, and its setter.
             static void SetInstance_(CChrMan *pInstance);
             static CChrMan *GetInstance_();
+            // DOL (added for BasketF game/basket/CChrCoreBasketKinopio.cpp;
+            // meaning guessed from the name): the character holding the
+            // ball, null for none.
+            static CChrCore *Util_SearchHoldBallChr(long);
 
             // The character with index `nChr` (0 to GetChrCoreNum() - 1), or
             // null when there is no manager or the index is out of range.

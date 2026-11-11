@@ -7,6 +7,21 @@
 
 namespace msw {
 
+    namespace CHR_CORE_BASKET {
+        // The second parameter block of a basketball character core
+        // (GetCcParam2_; __ct__Q33msw15CHR_CORE_BASKET16CC_PARAM_BASKET2Fv
+        // in BasketF).
+        //
+        // INCOMPLETE: only what the character units read; names guessed.
+        class CC_PARAM_BASKET2 {
+            public:
+                unsigned char m_Unk000[0x210];
+                // 0x210: the height of Toad's trick jump
+                // (CChrCoreBasketKinopio::SubStateArtsShotSetTrickJumpParam_).
+                float m_fArtsJumpHeight;
+        };
+    }
+
     class CBall;
 
     // The basketball character core (BasketF).
@@ -24,6 +39,12 @@ namespace msw {
             // The work of the air trick (the "arts shot"), passed to the
             // SubStateArtsShot* virtuals (contents mapped only where used).
             struct STATE_WORK_AIR_TRICK;
+            // The work of the smash cut (state 0x32; contents mapped only
+            // where used).
+            struct STATE_WORK_SMASH_CUT;
+            // (values not known) Which part of the air trick a motion is
+            // asked for (GetAirTrickMotID).
+            enum AIR_TIRCK_FLOW {};
 
             CChrCoreBasket();
             virtual ~CChrCoreBasket();
@@ -39,6 +60,14 @@ namespace msw {
             // Starts the combination pass in direction fRotY; zero when it
             // cannot.
             int MethdCombinationPass(float fRotY);
+
+            // Added for game/basket/CChrCoreBasketKinopio.cpp (BasketF;
+            // meanings guessed from the names). The down frames and the
+            // vanish power of attack kind nKind, and the motion of the air
+            // trick for flow (bAlt: bit 2 of the status flags).
+            float GetAtkDownFrame(long nKind) const;
+            float GetAtkVanishPower(long nKind) const;
+            long GetAirTrickMotID(AIR_TIRCK_FLOW flow, int bAlt);
 
             // Overrides of CChrCore's virtuals, in vtable order (the slots of
             // __vt__Q23msw14CChrCoreBasket, read from BasketF, that name
@@ -316,7 +345,7 @@ namespace msw {
             // pointer to a type not mapped yet).
             virtual void *GetCcParam_() const;                         // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
-            virtual void *GetCcParam2_() const;                        // 0xCA4
+            virtual const CHR_CORE_BASKET::CC_PARAM_BASKET2 *GetCcParam2_() const; // 0xCA4
             virtual void GetSpSetBackPos(bcs::FVEC3 &) const;          // 0xCA8
             virtual void UpDateCollBody3_();                           // 0xCAC
             virtual void UpdateCollAtk_();                             // 0xCB0
@@ -376,9 +405,16 @@ namespace msw {
         unsigned long m_nFlag;         // 0x08, bit 9 set while Luigi's vacuum pulls
         unsigned char m_Unk0C[0x28 - 0xC];
         float m_fRotY;                 // 0x28, the yaw the trick turns to
-        unsigned char m_Unk2C[0x7C - 0x2C];
+        unsigned char m_Unk2C[0x48 - 0x2C];
+        float m_fJumpUnk;              // 0x48, passed on to CChrCore::m_fJumpUnk224
+        bcs::FVEC3 m_TargetPos;        // 0x4C, where the trick moves to
+        float m_fUnk58;
+        CC_DATA::CHR_PARAM::MOVE_PARAM m_MoveParam; // 0x5C
+        unsigned char m_Unk6C[0x7C - 0x6C];
         CChrCore::ROT_LERP1 m_RotLerp; // 0x7C, the turn (SubStateArtsShotCalcRotParam_)
-        unsigned char m_Unk8C[0xA0 - 0x8C];
+        long m_nTrickStep;             // 0x8C, the step of the trick (Toad: 0 to 2)
+        float m_fTrickFrame;           // 0x90, the frames of the current step
+        unsigned char m_Unk94[0xA0 - 0x94];
         long m_nUnkA0;                 // 0xA0, (meaning not known) below 1 the shot motion stops twice
         unsigned char m_UnkA4[0x4];
         long m_nUnkA8;                 // 0xA8, Luigi sets 40
@@ -386,6 +422,16 @@ namespace msw {
         // 0xB0: the yaw the shot aims at; negative for straight at the goal
         // (Luigi's target marker sets it).
         float m_fTargetRotY;
+    };
+
+    // (field names guessed; only what the character units read is mapped)
+    struct CChrCoreBasket::STATE_WORK_SMASH_CUT {
+        unsigned char m_Unk00[0x10];
+        // 0x10: not negative while Toad may put his mushroom down
+        // (meaning guessed).
+        float m_fUnk10;
+        unsigned char m_Unk14[0x2C - 0x14];
+        float m_fRadius;               // 0x2C, the reach of the cut (Toad's mushroom takes it as its size)
     };
 
     // Luigi: his special shot pulls the other team in with his vacuum
@@ -416,6 +462,31 @@ namespace msw {
             unsigned long m_nUnk5E8;   // 0x5E8, cleared by the constructor only
             int m_bVacuum;             // 0x5EC, the vacuum pulls
             unsigned long m_hVacuum;   // 0x5F0, task id of the vacuum, 0 for none
+    };
+
+    // Toad: his smash cut puts a mushroom (CC09_BASKET::CcKinopioReceiver)
+    // in front of the ball holder, and his special shot two bouncing
+    // mushrooms in front of the goal.
+    class CChrCoreBasketKinopio : public CChrCoreBasket {
+        public:
+            CChrCoreBasketKinopio();
+            virtual ~CChrCoreBasketKinopio();
+            virtual void CtorStateJumpBlock();                         // 0x5F0
+            virtual void CtorStateSmashCut();                          // 0x608
+            virtual void LoopStateSmashCut();                          // 0x60C
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual void UpdateCollAtk_();                             // 0xCB0
+            virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCBC
+            virtual void SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCC0
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *pWork, long); // 0xCE4
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
+
+        protected:
+            unsigned long m_hReceiver; // 0x5E8 (name guessed), task id of the smash cut's mushroom, 0 for none
     };
 }
 

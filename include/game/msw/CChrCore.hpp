@@ -1129,6 +1129,13 @@ namespace msw {
             void Eff_Stop(long nSlot);
             // The length in frames of motion nMotId.
             float AnimGetResFrameNum(long nMotId) const;
+            // Added for BasketF game/basket/CChrCoreBasketKinopio.cpp (DOL;
+            // return types guessed). The length in frames of the motion in
+            // slot nSlot; the yaw of the goal the team attacks; attack
+            // collision unit nIndex of the character.
+            float AnimGetFrameNum(unsigned long nSlot) const;
+            float GetTargetGoalYRot() const;
+            CCollAtkUnit *CollAtkGetColl_(long nIndex);
             // Takes ball hBall (its handle) into the character's hand.
             void AttachBall(long hBall, long, float, unsigned long);
             // Plays sound nSe of the character's action table.

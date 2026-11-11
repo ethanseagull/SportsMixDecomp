@@ -40,4 +40,5 @@ NonMatching game/dodge/CStageDodge11.cpp
 Equivalent game/dodge/CStageDodge03.cpp
 Equivalent game/dodge/CChrCoreDodgeLuigi.cpp
 Equivalent game/dodge/CChrCoreDodgeMario.cpp
-Equivalent game/dodge/CStageDodge17.cpp
+Matching game/dodge/CStageDodge17.cpp
+Equivalent game/dodge/CChrCoreDodgeKinopio.cpp

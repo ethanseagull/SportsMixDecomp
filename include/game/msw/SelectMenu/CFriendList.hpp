@@ -98,6 +98,9 @@ namespace msw {
                 // nFace.
                 void MoveCursor(long nBtnKindId);
                 void SetFaceIcon(long nFace, RFLStoreData &rData);
+                // (no symbol; inline, name guessed) Moves pPane under row
+                // nRow's pane, at its origin.
+                void AttachToRow(nw4r::lyt::Pane *pPane, long nRow);
 
             public:
                 // 0x5A0. The texture memory of each Mii picture.

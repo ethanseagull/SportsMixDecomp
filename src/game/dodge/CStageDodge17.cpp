@@ -5,6 +5,9 @@
 // and gives it the tuning and the trolley class). The dodgeball trolley
 // (msw::CStgGmk_Trolley_Dodge) is all inline, so its vtable and weak
 // functions are emitted here too.
+// The trolley comes first: the original .data has this file's vtable
+// before the trolley's (vtables are emitted in reverse declaration order).
+#include "game/msw/CStgGmk_Trolley_Dodge.hpp"
 #include "game/msw/CStageDodge17.hpp"
 
 #include "bcs/BCS_Math.hpp"
@@ -15,7 +18,6 @@
 #include "game/msw/CGame.hpp"
 #include "game/msw/CStageMdl.hpp"
 #include "game/msw/CStageMdlListNode.hpp"
-#include "game/msw/CStgGmk_Trolley_Dodge.hpp"
 #include "game/msw/DodgePrm.hpp"
 
 namespace msw {

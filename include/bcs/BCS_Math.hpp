@@ -12,6 +12,10 @@ namespace bcs {
     {
         return deg * (3.14159265f / 180.0f);
     }
+
+    // (meaning guessed from the name) The arc cosine of x, in radians;
+    // probably table based. A DOL function.
+    float BCS_ACosT(float x);
 }
 
 #endif /* !BCS_BCS_MATH_HPP_ */

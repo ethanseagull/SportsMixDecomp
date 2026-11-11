@@ -3,6 +3,7 @@
 
 #include "bcs/CFsmQueue.hpp"
 #include "bcs/FVEC3.hpp"
+#include "game/msw/CBodyCollision.hpp"
 #include "game/msw/CStgGmkAct.hpp"
 
 namespace msw {
@@ -92,7 +93,7 @@ namespace msw {
             virtual void UpdateDefColl(const bcs::FVEC3 &rPos, float, float, float, float); // 0x254
             virtual bool IsInvincible() const { return m_fInvincibleTime > 0.0f; } // 0x258
             virtual void OnDamage(CCollBodyUnit *pBody, CBall *pBall);    // 0x25C
-            virtual bool IsEnableCatchColl() const;                       // 0x260
+            virtual bool IsEnableCatchColl() const { return true; }       // 0x260 (HockeyF emits the weak copy)
             virtual bool IsEnableDefColl() const;                         // 0x264
             virtual void RebuildMdl();                                    // 0x268
             virtual void BuildHeightTypeTbl();                            // 0x26C
@@ -120,7 +121,11 @@ namespace msw {
             virtual void DtorState_INACTIVE();                            // 0x2C4
 
         private:
-            unsigned char m_Unk1D4[0x30];  // 0x1D4, not mapped
+            unsigned char m_Unk1D4[0x8];   // 0x1D4, not mapped
+        protected:
+            CBodyCollision m_BodyColl;     // 0x1DC (name guessed)
+        private:
+            unsigned char m_Unk1E8[0x1C];  // 0x1E8, not mapped (CAtkCollision at 0x1E8, CDefCollision at 0x1F4)
             int m_bAlive;                  // 0x204 (IsAlive)
             unsigned char m_Unk208[0xC];   // 0x208, not mapped
             float m_fInvincibleTime;       // 0x214 (IsInvincible while above zero; name guessed)

@@ -420,10 +420,22 @@ namespace msw {
             // character join the fight over the puck; zero when it cannot.
             int MethdAddFighting_();
 
+            // (in HockeyF; added for CChrCoreHockeyWaluigi, parameter
+            // meanings guessed) Shoots pBall with shot kind nType towards
+            // the yaw fRotY.
+            void Util_ShootBall_(CBall *pBall, long nType, float, float fRotY);
+            // (in HockeyF) The shot trigger of the special shot's next
+            // motion, fFrame frames into it (meaning guessed).
+            void SubStateArtsShotDoGetBallShotTrg_(STATE_WORK_AIR_TRICK *pWork, float fFrame);
+
         protected:
             // Not mapped yet. The size, 0x76C, is what CreateObj_ allocates
             // for most characters.
-            unsigned char m_Unk574[0x76C - 0x574];
+            unsigned char m_Unk574[0x634 - 0x574];
+            // 0x634 (name guessed): the point the special shot's extra
+            // pucks are aimed at (CChrCoreHockeyWaluigi reads x and z).
+            bcs::FVEC3 m_ArtsTargetPos;
+            unsigned char m_Unk640[0x76C - 0x640];
     };
 
     // (field names guessed; only what the character units read is mapped)
@@ -436,10 +448,13 @@ namespace msw {
         CChrCore::ROT_LERP1 m_RotLerp; // 0x40, the turn (SubStateArtsShotCalcRotParam_)
         unsigned char m_Unk50[0x4];
         long m_nTrickStep;           // 0x54
-        unsigned char m_Unk58[0x6C - 0x58];
+        unsigned char m_Unk58[0x68 - 0x58];
+        float m_fShotFrame;          // 0x68, the frame of the motion the ball leaves at
         // 0x6C: the yaw the shot aims at; negative for straight at the goal
         // (Luigi's target marker sets it).
         float m_fTargetRotY;
+        long m_nShotStep;            // 0x70, Waluigi's step through his throws
+        float m_fShotTimer;          // 0x74, Waluigi's frames since the last throw
     };
 
     class CChrCoreHockeyMario : public CChrCoreHockey {
@@ -515,12 +530,35 @@ namespace msw {
             virtual ~CChrCoreHockeyWario();
     };
 
+    // Waluigi: his special shot splits the puck in four (game/hockey/
+    // CChrCoreHockeyWaluigi.cpp).
     class CChrCoreHockeyWaluigi : public CChrCoreHockey {
         public:
+            enum {
+                SPLIT_BALL_NUM = 3 // the copies of the puck
+            };
+
             CChrCoreHockeyWaluigi();
             virtual ~CChrCoreHockeyWaluigi();
-        protected:
-            unsigned char m_Unk76C[0x778 - 0x76C];
+            virtual void Reset_();                                     // 0x384
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCC8
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xCD8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual int SubStateArtsShotIsEndArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual void SubStateArtsShotPlayLandMotion_(STATE_WORK_AIR_TRICK *); // 0xD24
+
+            void SubStateArtsShotCreateSplitBall_();
+
+        private:
+            // Deletes the copies of the puck that are left.
+            void DeleteSplitBall_();
+            // Throws copy idx at m_ArtsTargetPos.
+            void ShootSplitBall_(long idx);
+
+            long m_anSplitBall[SPLIT_BALL_NUM]; // 0x76C, the copies' ball numbers, -1 for none
     };
 
     class CChrCoreHockeyDonkey : public CChrCoreHockey {

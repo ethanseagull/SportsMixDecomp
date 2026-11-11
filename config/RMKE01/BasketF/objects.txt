@@ -67,3 +67,5 @@ Matching game/basket/CQPanelBasket.cpp
 Matching game/basket/CChrCoreBasketMoogle.cpp
 Equivalent game/basket/CGoalMdlBasket.cpp
 Equivalent game/basket/CChrCoreBasketKoopa.cpp
+Equivalent game/basket/CChrCoreBasketPeach.cpp
+Matching game/basket/CChrCoreBasketDiddy.cpp

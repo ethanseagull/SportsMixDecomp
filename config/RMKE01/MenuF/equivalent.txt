@@ -23,6 +23,7 @@ MenuF FriendCode_Loop__Q23msw11CSelectMenuFv near 98.7 register allocation only 
 MenuF FriendInfo_Loop__Q23msw11CSelectMenuFv near 97.9 register choice, jump table symbol name, and word-load order in the 12-byte friend roster copy (original copies it as a struct)
 MenuF GetCharaPos__Q33msw10SelectMenu6CBgChrFl near 86.8 branch form only: return inside the loop is an early blr in ours, a branch to one shared return in the original
 MenuF GetWiFiTrofyPane__Q33msw10SelectMenu6CTrofyFlRl near 92.7 register allocation only (nIndex/rEffect/rate in different callee-saved registers); same calls, constants and memory accesses
+MenuF HitCheck__Q33msw10SelectMenu10CPartyInfoFPQ23bcs5FVEC3 near 98.0 original loads the tab count s_TabNum[m_Unk9C] (const table) a second time for the loop bound; ours reuses the value already loaded: one addi+lwzx fewer and register choice, same value
 MenuF HitCheck__Q33msw10SelectMenu9CCourtTabFPQ23bcs5FVEC3 near 98.9 register choice only; regs search no gain
 MenuF IndividualSelect__Q33msw10SelectMenu9CBackIconFl near 99.5 identical code; only the jump table symbol name differs (anonymous vs jumptable_2_data_11D8)
 MenuF Initialize__Q33msw10SelectMenu6CBgChrFv near 97.4 register choice (one li 0 instead of a reused zero register) and stack slots of the colour temporaries
@@ -42,11 +43,13 @@ MenuF Main__Q33msw10SelectMenu9CBackIconFv near 98.4 pointer-out loop strength-r
 MenuF Main__Q33msw10SelectMenu9CCourtChrFv near 99.6 register choice and instruction order only
 MenuF Main__Q33msw10SelectMenu9CRuleInfoFv near 99.6 register choice and instruction order only (accessor/texture registers swapped around the inline GetPane, operand load order of one float compare)
 MenuF MovieControl__Q33msw10SelectMenu11CGameSelectFv near 99.9 register choice only: loop counter, new pane object and s_PaneNames base in different registers; same instructions otherwise
+MenuF MovieControl__Q33msw10SelectMenu14CPartyHelpPageFv near 99.9 one register choice (r3 vs r4) for the layout handle before CLytManager::GetObject
 MenuF NoFriendInfo_Loop__Q23msw11CSelectMenuFv near 97.9 register choice and word-load order in the friend roster copy
 MenuF PlayMode_Loop0__Q23msw11CSelectMenuFv near 99.9 register choice only: the register holding the next mode (0xD/0xE)
 MenuF Remove__Q33msw10SelectMenu7CCupChrFv near 94.1 cup handle addressed as addi base,4 plus 0x64 instead of 0x68 directly (same address); register order
 MenuF Remove__Q33msw10SelectMenu9CCourtChrFv near 98.9 register choice and instruction order only
 MenuF RuleInfo_Loop__Q23msw11CSelectMenuFv near 97.9 switch range check on the tab button ids: the original recomputes nBtnKindId-0x8010/0x8020 (addi) in the case body, ours reuses the value from the range compare; one instruction and register choice only, same calls and arguments
+MenuF SelectAnimAllOff__Q33msw10SelectMenu10CPartyInfoFv near 89.8 original loads the tab count s_TabNum[m_Unk9C] (const table) a second time (own lis/addi/lwzx) for the loop bound; ours reuses the value already loaded: three instructions fewer and register choice, same value
 MenuF SendEvent__Q33msw10SelectMenu10CPlusMinusFlPv near 99.8 register choice only: r28/r29 swapped in event 0x49 cases 2 and 3
 MenuF SendEvent__Q33msw10SelectMenu9CBackIconFlPv near 99.6 identical code; only the jump table symbol name differs (anonymous vs jumptable_2_data_10A8)
 MenuF SendEvent__Q33msw10SelectMenu9CCourtChrFlPv near 98.2 this/pParam in swapped saved registers; one float register in inlined GetAnimRate
@@ -66,6 +69,7 @@ MenuF SetRuleText__Q33msw10SelectMenu11CCharaLevelFl near 99.9 operand order of 
 MenuF SetScorePos__Q33msw10SelectMenu11CFriendInfoFPQ23msw9WiFiSkill near 91.4 stack frame 0xa0 vs 0x80 from an unused local VEC3 copied as separate floats instead of one block; float constants 4 bytes lower (folded backEvent statics)
 MenuF SetSelectPosMdlObjId__Q33msw10SelectMenu6CBgMdlFl near 98.5 register choice only: the two model and animation pointers of the second move take different saved registers; same instructions, offsets and calls
 MenuF SetSkillLine__Q33msw10SelectMenu11CFriendInfoFPQ23msw9WiFiSkillRQ34nw4r4math4VEC2fff near 99.1 register choice, one operand order; float constants 4 bytes lower because the two CheckButtonAnim backEvent statics are folded out of .rodata
+MenuF SetTabSelect__Q33msw10SelectMenu10CPartyInfoFl near 92.8 original loads the tab count s_TabNum[m_Unk9C] (const table) a second time for the loop bound; ours reuses the value already loaded: one addi+lwzx fewer, one saved register fewer (savegpr_19 vs 18), the m_nTabSelect store scheduled earlier, register choice; same value
 MenuF SetTabSelect__Q33msw10SelectMenu11CFriendInfoFli near 99.4 register allocation only
 MenuF SetTabSelect__Q33msw10SelectMenu9CRuleInfoFl near 98.8 register choice only
 MenuF SetTagTitleIn__Q33msw10SelectMenu9CBackIconFl near 92.4 the table base address is kept in a fifth saved register instead of being rematerialised with lis/addi, so stmw replaces four stw and registers are renumbered; the extra instructions are only moves/spills, same loads, calls and branches
@@ -74,6 +78,7 @@ MenuF SetUpButton__Q23msw12CButtonEntryFPQ23msw15CMenuPartButtonli near 99.8 ope
 MenuF SetUpDisp__Q33msw10SelectMenu11CFriendInfoFi near 99.5 register allocation only
 MenuF SetUpSliderBar__Q33msw10SelectMenu11CFriendListFv near 95.2 the base pane's translation is copied to the stack as three words (lwz/stw) in the original and as three floats (lfs/stfs) here, since our nw4r::math::VEC3 has constructors; same 12 bytes, plus register choice
 MenuF Set__Q33msw10SelectMenu10CCourtBallFv near 95.2 file-local .data objects reached as one base plus offsets in the original, one symbol each in ours (same addresses); register choice
+MenuF Set__Q33msw10SelectMenu10CPartyInfoFv near 99.3 register allocation only (pane ctrl/font name, part list/loop counter swapped); same instructions otherwise
 MenuF Set__Q33msw10SelectMenu10CPlusMinusFv near 99.6 register choice only; same instructions otherwise
 MenuF Set__Q33msw10SelectMenu11CBackgroundFv near 99.4 register allocation only (one more saved register in the original); regs search no gain
 MenuF Set__Q33msw10SelectMenu11CChrCaptionFv near 99.7 register choice only: table and text pointers swap r27/r28 in the caption-text loop
@@ -92,6 +97,7 @@ MenuF Set__Q33msw10SelectMenu13CCourtChrBallFv near 96.4 file-local .data object
 MenuF Set__Q33msw10SelectMenu13CEntryExplainFv near 97.6 register choice only: the part list and this swap r31/r30 (ours r24/r31), loop registers shift with them, plus the order of one mr; same instructions otherwise
 MenuF Set__Q33msw10SelectMenu13CNoFriendInfoFv near 99.9 register allocation only
 MenuF Set__Q33msw10SelectMenu13CPlayerSelectFv near 93.6 addressing form only: the original loads each .rodata object and float literal with its own lis, ours keeps the .rodata base in a saved register (one more saved register, calls scheduled around it); same loads, constants, calls and branches
+MenuF Set__Q33msw10SelectMenu14CPartyHelpPageFv near 99.6 register allocation only in the button loop (part pointer vs loop counter)
 MenuF Set__Q33msw10SelectMenu15CCharaLevelStarFv near 98.2 this and pSelectMenu in different saved registers; calls, constants, accesses and branches the same; regs search no gain
 MenuF Set__Q33msw10SelectMenu21CPartyMEHelpBaseDodgeFv near 99.5 two saved registers swapped in the inlined UpdatePadStyle (CMenuPad instance pointer and pane accessor copy); regs search no gain
 MenuF Set__Q33msw10SelectMenu22CPartyMEHelpBossPackunFv near 99.3 two saved registers swapped in the inlined UpdatePadStyle (CMenuPad instance pointer and pane accessor copy); regs search no gain
@@ -121,6 +127,7 @@ MenuF StateIn__Q33msw10SelectMenu14CCourtCharaObjFv near 96.7 original reloads m
 MenuF StateOut__Q33msw10SelectMenu14CCourtCharaObjFv near 94.7 original reloads m_hNextMdl (0xC) after the store to 0x8 inside the inlined SetNextMdlHandle(0), ours reuses the register; no store can change 0xC in between, so behaviour is the same
 MenuF StepControl__Q33msw10SelectMenu6CBgChrFv near 97.4 registers, local array stack slots, one extra re-read of the unchanged m_bMixMode
 MenuF StepControl__Q33msw10SelectMenu7CCupChrFv near 94.8 register choice and the order of the three rot.x/y/z loads
+MenuF StickMoveCheck__Q33msw10SelectMenu10CPartyInfoFll near 99.9 order of two argument register moves in the prologue only (same as CRuleInfo::StickMoveCheck)
 MenuF StickMoveCheck__Q33msw10SelectMenu11CPlayerInfoFll near 99.8 register choice only: the default button kind id takes a different volatile register; same instructions otherwise
 MenuF StickMoveCheck__Q33msw10SelectMenu9CRuleInfoFll near 99.9 instruction order only
 MenuF Title_In__Q23msw11CSelectMenuFv near 86.8 float literals: the original loads each with its own lis+lfs (the literal pool is off in this TU, likely from an inline virtual with a function-local static const float somewhere in the original's includes; notes/toolchain.md), ours through one pool base register; hence different saved registers and frame size. Same calls, constants, stores and branches

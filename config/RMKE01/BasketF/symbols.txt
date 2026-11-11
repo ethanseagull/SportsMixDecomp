@@ -2006,7 +2006,7 @@ SubStateArtsShotIsReadyArtsShot___Q23msw20CChrCoreBasketMoogleFPQ33msw14CChrCore
 SubStateArtsShotPlayArtsShotMotion___Q23msw20CChrCoreBasketMoogleFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x00067B40; // type:function size:0x54 scope:global
 SubStateArtsShotShootBall___Q23msw20CChrCoreBasketMoogleFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x00067B94; // type:function size:0x88 scope:global
 SubStateArtsShotIsEndArtsShotAfter___Q23msw20CChrCoreBasketMoogleFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x00067C1C; // type:function size:0x19C scope:global
-fn_4_67DB8 = .text:0x00067DB8; // type:function size:0x14
+__sinit_\CChrCoreBasketMoogle_cpp = .text:0x00067DB8; // type:function size:0x14 scope:local
 CtorStateDamage__Q23msw19CChrCoreBasketNinjaFv = .text:0x00067DCC; // type:function size:0x5C scope:global
 DtorStateTrickMove__Q23msw19CChrCoreBasketNinjaFv = .text:0x00067E28; // type:function size:0x5C scope:global
 CtorStateDribbleMiss__Q23msw19CChrCoreBasketNinjaFv = .text:0x00067E84; // type:function size:0x50 scope:global

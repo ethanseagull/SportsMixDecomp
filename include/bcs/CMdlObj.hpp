@@ -4,6 +4,7 @@
 #include "bcs/BCS_Color.hpp"
 #include "bcs/CScnObj.hpp"
 #include "nw4r/g3d/ResMdl.hpp"
+#include "nw4r/g3d/ResNode.hpp"
 
 namespace bcs {
 
@@ -98,6 +99,20 @@ namespace bcs {
             // every node; msw::CItemBall passes null.
             void CalcWorldMatrixAll(const FMTX34 *pMtx);
 
+            // (DOL) The resource node of that name; an invalid handle if
+            // there is none.
+            nw4r::g3d::ResNode GetResNode(const char *pName) const;
+
+            // (name guessed) Inline in MenuF's msw::CChrMenuObj::SetSilhouette:
+            // the two colours are passed by value and stored byte by byte.
+            // The base colour comes first: the silhouette colour's copy is
+            // made first, at the lower stack slot.
+            void SetSilhouetteColor(BCS_Color base, BCS_Color silhouette)
+            {
+                m_SilhouetteColor = silhouette;
+                m_BaseColor = base;
+            }
+
             // -1 if the model has no node of that name.
             long GetNodeID(const char *pName) const;
 
@@ -119,9 +134,12 @@ namespace bcs {
             CAnmObj *m_pAnmObj3;          // 0x154
             CAnmObj *m_pAnmObjTexSrt;     // 0x158
             CAnmObj *m_pAnmObj5;          // 0x15C
-            unsigned char m_Unk160[0x4C]; // 0x160
+            unsigned char m_Unk160[0x48]; // 0x160
 
         protected:
+            // (name guessed) White after construction, like m_BaseColor;
+            // msw::CChrMenuObj::SetSilhouette (MenuF) sets the two together.
+            BCS_Color m_SilhouetteColor;  // 0x1A8
             // (name guessed) White after construction; msw::CFgMdl passes it
             // to CStgMdlObjImpl::PatchMaterial_.
             BCS_Color m_BaseColor;        // 0x1AC

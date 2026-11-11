@@ -45,7 +45,7 @@ namespace msw {
                     long m_nTo;            // 0x0C
                 };
 
-                // (name guessed; the DOL's fn_801BCF68) Puts nFrom and nTo
+                // (name guessed) Puts nFrom and nTo
                 // into the two count boxes and starts the roll and its effect.
                 void StartCountUp(CMenuPaneAccessor *pAccessor, long nFrom, long nTo);
                 // (name guessed; inline) Not zero while the parent of the

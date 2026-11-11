@@ -36,20 +36,29 @@ namespace msw {
             // calls it for every live bomb when the stage gimmick is reset,
             // stopped or cancelled.
             virtual void Cancel();
+            // (return types guessed) The slots after Cancel, named by the
+            // vtable of BasketF's CMudBombBasket. DodgeF's CStageDodge07
+            // adds the words of GetPos() to its check sum.
+            virtual const bcs::FVEC3 &GetInitPos() const;
+            virtual const bcs::FVEC3 &GetPos() const;
     };
 
     // INCOMPLETE: the manager of the mud bombs, a DOL singleton (m_pInst in
-    // .sbss). Its list of bombs is at 0x00; nothing else is mapped.
+    // .sbss). Its list of bombs is at 0x00, a word at 0x20; nothing else is mapped.
     class CNpcBossPackun::CMudBombMan {
         public:
             static CMudBombMan *GetInstance() { return m_pInst; }
 
             bcs::CList<CMudBomb> &GetList() { return m_List; }
+            // (name guessed) The word at 0x20, added to DodgeF's
+            // CStageDodge07 check sum; most likely the number of bombs.
+            unsigned long GetNum() const { return m_nNum; }
 
         private:
             static CMudBombMan *m_pInst;
 
             bcs::CList<CMudBomb> m_List; // 0x00
+            unsigned long m_nNum;        // 0x20 (name guessed)
     };
 }
 

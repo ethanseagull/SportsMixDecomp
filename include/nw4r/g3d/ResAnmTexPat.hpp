@@ -9,6 +9,16 @@ namespace nw4r {
         // Handle to a texture pattern animation resource: one pointer, null
         // when the resource was not found. Minimal declaration written for
         // this project; the member and function names are guessed.
+        // Result of evaluating a texture pattern animation for one material.
+        // Size 0x44 (bcs::CAnmTexPat::Create allocates an array of them
+        // through __construct_new_array). Contents not mapped. Minimal
+        // declaration written for this project.
+        struct TexPatAnmResult {
+            TexPatAnmResult() {}
+
+            unsigned char m_Data[0x44];
+        };
+
         class ResAnmTexPat {
             public:
                 explicit ResAnmTexPat(ResAnmTexPatData *pData = 0) : m_pData(pData) {}

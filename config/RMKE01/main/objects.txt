@@ -12,7 +12,7 @@ Matching game/msw/CStageNet.cpp
 Matching game/msw/CStage01Base.cpp
 Matching game/msw/CStgDrv.cpp
 Matching game/bcs/G2D/CTexMap.cpp
-NonMatching game/msw/CDropCoinMan.cpp
+Equivalent game/msw/CDropCoinMan.cpp
 NonMatching game/msw/CGameSpeedCtrl.cpp
 Matching game/msw/menu/CStateSave.cpp
 Matching game/msw/CCockpitResultTime.cpp
@@ -27,7 +27,7 @@ Matching game/msw/CStgGmkAct.cpp
 Matching game/bcs/CWifiPadBase.cpp
 NonMatching game/msw/CGameSnd.cpp
 NonMatching game/bcs/CGDLObj.cpp
-NonMatching game/msw/cockpit/CMissionCount.cpp
+Equivalent game/msw/cockpit/CMissionCount.cpp
 Matching game/msw/CEvDemoRes/_CHR_INFO.cpp
 NonMatching game/msw/CItemShellCmn.cpp
 Matching game/msw/vm/CVMCpu.cpp
@@ -36,3 +36,6 @@ NonMatching game/msw/CEventDemoBase.cpp
 NonMatching game/msw/CStgGmk_Pylon_Mdl.cpp
 Equivalent game/msw/CItemBall.cpp
 NonMatching game/msw/CEffectTable.cpp
+Matching game/msw/CoinRes.cpp
+NonMatching game/bcs/CAnmTexSrt.cpp
+NonMatching game/bcs/CAnmTexPat.cpp

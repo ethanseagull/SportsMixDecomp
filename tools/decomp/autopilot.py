@@ -157,7 +157,11 @@ NOT_TYPES = {"return", "delete", "goto", "case", "else", "throw", "new"}
 
 
 def demangled(module, unit, fn):
-    text = (ROOT / "build" / VERSION / module / "asm" / (unit + ".s")).read_text(encoding="utf-8", errors="replace")
+    base = ROOT / "build" / VERSION / ("" if module == "main" else module) / "asm"
+    path = base / (unit + ".s")
+    if not path.exists():
+        return None
+    text = path.read_text(encoding="utf-8", errors="replace")
     lines = text.splitlines()
     for i, line in enumerate(lines):
         if line.startswith(".fn ") and line[4:].split(",")[0].strip().strip('"') == fn:

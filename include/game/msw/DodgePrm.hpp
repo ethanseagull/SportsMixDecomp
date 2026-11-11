@@ -43,6 +43,49 @@ namespace msw {
     extern float DODGE_PRM_S04_PYLON_DEC;
     extern long DODGE_PRM_S04_PYLON_LOC_PAT_TYPE;
     extern long DODGE_PRM_S04_PYLON_LOC_PAT_NO;
+
+    // Stage 05, the floating rafts (CStageDodge05::GetPrmTbl).
+    extern float DODGE_PRM_S05_START_TIME_SEC;
+    extern float DODGE_PRM_S05_FLOAT_DEPTH;
+    extern float DODGE_PRM_S05_DEPTH_CYCLE;
+    extern float DODGE_PRM_S05_FLOAT_STOP_TIME;
+    extern float DODGE_PRM_S05_HEAVY_TIME_SEC;
+    extern float DODGE_PRM_S05_HEAVY_FLOAT_DEPTH;
+    extern float DODGE_PRM_S05_HEAVY_DEPTH_CYCLE;
+    extern float DODGE_PRM_S05_HEAVY_FLOAT_STOP_TIME;
+    extern float DODGE_PRM_S05_HEAVY_ACC_TIME_SEC;
+    extern float DODGE_PRM_S05_TURRET_EARLY_HIT;
+    extern float DODGE_PRM_S05_ENV_SE_TIME;
+    extern float DODGE_PRM_S05_ENV_SE_TIME_RND;
+
+    // Stage 07, the boss Packun (CStageDodge07::GetPrmTbl).
+    extern float DODGE_PRM_S07_PACKUN_CLOSE_STANDBY_TIME_RND;
+    extern float DODGE_PRM_S07_PACKUN_OPEN_STANDBY_TIME_RND;
+    extern float DODGE_PRM_S07_PACKUN_OPEN_PASSCATCH_FRM_RND;
+    extern float DODGE_PRM_S07_PACKUN_BLT_TIME_RND;
+    extern float DODGE_PRM_S07_PACKUN_SCALE;
+    extern float DODGE_PRM_S07_PACKUN_COLL_SIZE_XZ;
+    extern float DODGE_PRM_S07_PACKUN_COLL_SIZE_Y;
+    extern float DODGE_PRM_S07_PACKUN_TURN_SPEED;
+    extern float DODGE_PRM_S07_PACKUN_TGT_TURN_SPEED;
+    extern float DODGE_PRM_S07_PACKUN_CLOSE_STANDBY_TIME;
+    extern float DODGE_PRM_S07_PACKUN_CLOSE_PASSCATCH_FRM;
+    extern float DODGE_PRM_S07_PACKUN_OPEN_STANDBY_TIME;
+    extern float DODGE_PRM_S07_PACKUN_OPEN_PASSCATCH_FRM;
+    extern float DODGE_PRM_S07_PACKUN_SHOOT_N_VEL;
+    extern float DODGE_PRM_S07_PACKUN_SHOOT_TRACE_ANGLE;
+    extern float DODGE_PRM_S07_PACKUN_SHOOT_TRACE_PITCH;
+    extern float DODGE_PRM_S07_PACKUN_BLT_NUM;
+    extern float DODGE_PRM_S07_PACKUN_BLT_HEIGHT;
+    extern float DODGE_PRM_S07_PACKUN_BLT_TIME;
+    extern float DODGE_PRM_S07_PACKUN_BLT_LIFE;
+    extern float DODGE_PRM_S07_PACKUN_EXPLODE_TIME;
+    extern float DODGE_PRM_S07_PACKUN_STAY_TIME;
+    extern float DODGE_PRM_S07_PACKUN_EXPLODE_DELAY;
+    extern float DODGE_PRM_S07_PACKUN_EXPLODE_MDL_SIZE;
+    extern float DODGE_PRM_S07_PACKUN_EXPLODE_SIZE;
+    extern float DODGE_PRM_S07_PACKUN_EXPLODE_SIZE_Y;
+    extern float DODGE_PRM_S07_PACKUN_EXPLODE_SCALE_FCTR;
 }
 
 #endif /* !MSW_DODGEPRM_HPP_ */

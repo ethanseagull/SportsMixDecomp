@@ -14,6 +14,11 @@ namespace bcs {
             struct NODE_EX_INFO;
             // A trigger in a motion (contents not mapped).
             struct MOT_TRG;
+
+        private:
+            // 0x0C to 0x34 (bcs::CAnmMotion's members start at 0x34). Not
+            // mapped.
+            unsigned char m_Unk0C[0x28];
     };
 }
 

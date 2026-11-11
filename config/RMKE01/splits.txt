@@ -733,6 +733,9 @@ game/msw/CStage16Base.cpp:
 
 game/msw/CoinRes.cpp:
 	.text       start:0x80249E30 end:0x80249FE4
+	.rodata     start:0x8044AF38 end:0x8044B448
+	.data       start:0x8048C910 end:0x8048C9F8
+	.sdata2     start:0x805C5B88 end:0x805C5BD0
 
 game/msw/CUnlockFlags.cpp:
 	.text       start:0x8024A008 end:0x8024D3C0

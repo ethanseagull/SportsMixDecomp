@@ -104,6 +104,9 @@ namespace bcs {
             CListNodeBase m_End;  // 0x10
             long m_nCount;        // 0x20
 
+            // Link and Unlink count the nodes.
+            friend class CListNodeBase;
+
         public:
             virtual ~CListBase() { Clear(); }
             // Takes every node out of the list.

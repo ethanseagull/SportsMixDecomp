@@ -1,6 +1,8 @@
 #ifndef CEVENTMOVE_HPP_
 #define CEVENTMOVE_HPP_
 
+#include "bcs/FVEC3.hpp"
+
 namespace msw {
 
     class CEventModel;
@@ -32,10 +34,21 @@ namespace msw {
             }
 
         private:
-            unsigned char m_Unk04[0x48]; // 0x04
+            // (CEventModel links the move and writes its offsets)
+            friend class CEventModel;
+
+            // msw::CEventModel's SetMoveOffset, SetMoveOffsetRot and
+            // SetMoveFlip write these through the model. (names guessed)
+            bcs::FVEC3 m_vOffset;        // 0x04
+            bcs::FVEC3 m_vOffsetRot;     // 0x10
+            bcs::FVEC3 m_vUnk1C;         // 0x1C (written by fn_801143B0)
+            unsigned char m_Unk28[0x24]; // 0x28
             float m_fFrame;              // 0x4C (name guessed)
-            float m_fEndFrame;           // 0x50 (name guessed)
-            unsigned char m_Unk54[0xC];  // 0x54
+            float m_fEndFrame;           // 0x50 (name guessed) length of the node path
+            CEventModel *m_pModel;       // 0x54
+            CEventNodeBase *m_pNode;     // 0x58: the node path followed
+            short m_nNodeId;             // 0x5C (name guessed) node of the path
+            short m_nFlip;               // 0x5E (name guessed)
     }; // size 0x60
 }
 

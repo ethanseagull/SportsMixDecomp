@@ -39,6 +39,10 @@ namespace bcs {
             // (meaning of -1 guessed). Return type guessed.
             void SetActive(long view);
 
+            // (name guessed) The constructor's priority; bcs::CCameraMan
+            // treats a camera of priority 0x10 or less as the debug camera.
+            short GetCamPriority() const { return m_nCamPriority; }
+
             // (name guessed) The view the camera belongs to.
             long GetView() const { return m_nView; }
             // (name guessed) Read by msw::CTournamentMan (TourF).

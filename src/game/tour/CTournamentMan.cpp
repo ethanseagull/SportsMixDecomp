@@ -127,6 +127,7 @@ namespace msw {
                 }
                 pFore->nCost = 1;
                 pHead[pInfo->nPoint2] = nLink + 1;
+                nLink += 2;
 
                 // And backwards.
                 pBack[2].nNext = pHead[pInfo->nPoint1];
@@ -138,8 +139,7 @@ namespace msw {
                     pBack->nFlag |= 0x20;
                 }
                 pBack->nCost = 1;
-                pHead[pInfo->nPoint1] = nLink + 2;
-                nLink += 2;
+                pHead[pInfo->nPoint1] = nLink;
             }
             return nLink;
         }
@@ -158,29 +158,33 @@ namespace msw {
                 pCost[i] = -1;
             }
 
-            long nIn = 0;
             long nOut = 0;
+            long nIn = 0;
             aQueue[nIn].nPoint = nStart;
             aQueue[nIn].nRoute = 0;
             aQueue[nIn].nCost = nCost;
-            nIn = (nIn + 1) % QUEUE_MAX;
+            nIn++;
+            nIn %= QUEUE_MAX;
 
             while (nOut != nIn) {
                 QUEUE &rEntry = aQueue[nOut];
-                nOut = (nOut + 1) % QUEUE_MAX;
+                nOut++;
+                nOut %= QUEUE_MAX;
                 short nNow = rEntry.nCost;
                 pCost[rEntry.nRoute] = nNow;
                 short nFirst = pHead[static_cast<unsigned char>(rEntry.nPoint)];
                 for (_LINK_POINT *p = nFirst > 0 ? &pLink[nFirst] : 0; p != 0;
                      p = p->nNext > 0 ? &pLink[p->nNext] : 0) {
                     if (p->nFlag & nMask) {
-                        short nOld = pCost[p->nRoute];
+                        unsigned short nRoute = p->nRoute;
+                        short nOld = pCost[nRoute];
                         short nNew = nNow + p->nCost;
                         if (nOld == -1 || nOld > nNew) {
                             QUEUE &rNew = aQueue[nIn];
                             rNew.nPoint = p->nPoint;
-                            nIn = (nIn + 1) % QUEUE_MAX;
-                            rNew.nRoute = p->nRoute;
+                            nIn++;
+                            nIn %= QUEUE_MAX;
+                            rNew.nRoute = nRoute;
                             rNew.nCost = nNew;
                         }
                     }
@@ -192,12 +196,13 @@ namespace msw {
                                _LINK_POINT *pLink, _MOVE_POINT *pMove, long, long nMove)
         {
             short aQueue[QUEUE_MAX];
-            short nMin = 0x7FFF;
             long nOut = 0;
             long nIn = 0;
+            short nMin = 0x7FFF;
 
             aQueue[nIn] = nMove;
-            nIn = (nIn + 1) % QUEUE_MAX;
+            nIn++;
+            nIn %= QUEUE_MAX;
             _MOVE_POINT *pLast = &pMove[nMove];
             pLast->nNext = 0;
             pLast->nParent = 0;
@@ -210,7 +215,8 @@ namespace msw {
 
             while (nIn != nOut) {
                 short nNow = aQueue[nOut];
-                nOut = (nOut + 1) % QUEUE_MAX;
+                nOut++;
+                nOut %= QUEUE_MAX;
                 _MOVE_POINT *pNow = &pMove[nNow];
                 unsigned char nPoint = pNow->nPoint;
                 short nFirst = pHead[nPoint];
@@ -227,7 +233,8 @@ namespace msw {
                     if ((p->nFlag & nMask) && nPoint != p->nPoint && nCost != -1 && nCost <= nMin) {
                         pLast[1].nParent = nNow;
                         long nQueue = nIn;
-                        nIn = (nIn + 1) % QUEUE_MAX;
+                        nIn++;
+                        nIn %= QUEUE_MAX;
                         nMove++;
                         pLast[1].nNext = pNow->nChild;
                         pLast[1].nChild = 0;
@@ -253,10 +260,12 @@ namespace msw {
             _MOVE_POINT *pFound = 0;
 
             apQueue[nIn] = &pMove[nMove];
-            nIn = (nIn + 1) % QUEUE_MAX;
+            nIn++;
+            nIn %= QUEUE_MAX;
             while (nIn != nOut) {
                 _MOVE_POINT *pNow = apQueue[nOut];
-                nOut = (nOut + 1) % QUEUE_MAX;
+                nOut++;
+                nOut %= QUEUE_MAX;
                 for (_MOVE_POINT *p = pNow->nChild > 0 ? &pMove[pNow->nChild] : 0; p != 0;
                      p = p->nNext > 0 ? &pMove[p->nNext] : 0) {
                     if (p->nPoint == nGoal) {
@@ -265,22 +274,26 @@ namespace msw {
                         }
                     } else {
                         apQueue[nIn] = p;
-                        nIn = (nIn + 1) % QUEUE_MAX;
+                        nIn++;
+                        nIn %= QUEUE_MAX;
                     }
                 }
             }
 
             // Back up the tree from the goal, taking the routes that lead
             // there.
-            pRoute += nNum;
-            while (pFound != 0 && pFound->nRoute != 0) {
+            unsigned short *pOut = &pRoute[nNum];
+            while (pFound != 0) {
+                if (pFound->nRoute == 0) {
+                    break;
+                }
                 short nChild = pFound->nChild;
                 pFound = &pMove[pFound->nParent];
                 for (_MOVE_POINT *p = nChild > 0 ? &pMove[nChild] : 0; p != 0;
                      p = p->nNext > 0 ? &pMove[p->nNext] : 0) {
                     if (pFound->nPoint == p->nPoint && (p->nFlag & 0x20)) {
                         nNum++;
-                        *pRoute++ = p->nRoute;
+                        *pOut++ = p->nRoute;
                     }
                 }
             }
@@ -450,6 +463,30 @@ namespace msw {
         CGameAccInput::Initialize();
     }
 
+    namespace {
+
+        // A player marker that is fully shown pulses in size with the
+        // phase fPhase; one still fading in grows with its alpha.
+        // (name guessed)
+        inline void PulseMarker(CEventModel *pMarker, float &fPhase, float fFrame)
+        {
+            if (pMarker != 0) {
+                float fScale;
+                if (pMarker->GetNowAlpha() >= 1.0f) {
+                    fPhase = WrapRad(fFrame * 0.17453292f + fPhase);
+                    fScale = 0.1f * nw4r::math::SinRad(fPhase) + 0.9f;
+                } else {
+                    fScale = 0.3f + pMarker->GetNowAlpha();
+                    fPhase = 1.5707964f;
+                }
+                if (fScale >= 1.0f) {
+                    fScale = 1.0f;
+                }
+                pMarker->SetScale(bcs::FVEC3(fScale, 1.0f, fScale));
+            }
+        }
+    }
+
     void CTournamentMan::UpdateFrame(float fFrame)
     {
         long i;
@@ -467,9 +504,8 @@ namespace msw {
 
         // Fade the colour of the map.
         if (m_fColorRate > 0.0f) {
-            float fSpeed = m_fColorSpeed;
             TournamentWork::TOURNAMENT_INFO &info = TournamentWork::TournamentInfo();
-            m_fColorRate += fSpeed * fFrame;
+            m_fColorRate += m_fColorSpeed * fFrame;
             m_pStageMan->SetBaseColor(bcs::BCS_Color(0xFF, 0xFF, 0xFF, 0xFF));
             m_fColorRate = Clamp01(m_fColorRate);
             info.mapColor.r = Lerp(m_ColorStart.r, m_Color.r, m_fColorRate);
@@ -492,23 +528,8 @@ namespace msw {
         }
 
         // The player markers pulse once they are fully shown.
-        for (i = 0; i < 2; i++) {
-            CEventModel *pMarker = m_apObjModel[OBJ_MARKER + i];
-            if (pMarker != 0) {
-                float fScale;
-                if (pMarker->GetNowAlpha() >= 1.0f) {
-                    m_afMarkerPhase[i] = WrapRad(fFrame * 0.17453292f + m_afMarkerPhase[i]);
-                    fScale = 0.1f * nw4r::math::SinRad(m_afMarkerPhase[i]) + 0.9f;
-                } else {
-                    fScale = 0.3f + pMarker->GetNowAlpha();
-                    m_afMarkerPhase[i] = 1.5707964f;
-                }
-                if (fScale >= 1.0f) {
-                    fScale = 1.0f;
-                }
-                pMarker->SetScale(bcs::FVEC3(fScale, 1.0f, fScale));
-            }
-        }
+        PulseMarker(m_apObjModel[OBJ_MARKER], m_afMarkerPhase[0], fFrame);
+        PulseMarker(m_apObjModel[OBJ_MARKER + 1], m_afMarkerPhase[1], fFrame);
     }
 
     void CTournamentMan::ScriptLoad(long nFile, long nScript)
@@ -758,13 +779,16 @@ namespace msw {
         // digits its name ends in.
         const char *pName = m_pCameraAnm->GetSceneInfo(nCamera).pName;
         long nLen = strlen(pName);
-        while (nLen > 0 && static_cast<unsigned char>(pName[nLen - 1] - '0') <= 9) {
+        for (long i = nLen; i > 0; i--) {
+            if (static_cast<unsigned char>(pName[nLen - 1] - '0') > 9) {
+                break;
+            }
             nLen--;
         }
-        char szName[0x40];
+        char szName[0x100];
         memcpy(szName, pName, nLen);
         sprintf(&szName[nLen], "%02d", nNo);
-        m_pNodeData->SetResAnm(m_SceneFile, szName);
+        m_pNodeData->SetResAnm(CEvNodeData::_GetResAnm(m_SceneFile, szName));
         return SetSceneNode(pModel, pNode, bDisp, bMove);
     }
 
@@ -969,11 +993,11 @@ namespace msw {
             const TournamentWork::TEAM_INFO &team = TournamentWork::GetTeamInfo(nTeam);
             CEventModel *pModel = m_apChrModel[nTeam];
             CRouteMove *pMove = m_apChrMove[nTeam];
-            unsigned short nRoute = team.GetLastRoute();
             float fFade = 10000.0f;
+            unsigned short nRoute = team.GetLastRoute();
             int bBack = 0;
             if (nRoute >= 0x100) {
-                bBack = 1;
+                bBack |= 1;
                 nRoute -= 0x100;
             }
 
@@ -1029,7 +1053,7 @@ namespace msw {
             CRouteMove *pMove = m_apChrMove[nTeam];
             unsigned short nRoute = team.GetLastRoute();
             float fFade = 10000.0f;
-            unsigned char nFlag = 0;
+            long nFlag = 0;
             if (nRoute >= 0x100) {
                 nFlag |= 1;
                 nRoute -= 0x100;
@@ -1370,10 +1394,11 @@ namespace msw {
     {
         bcs::CCameraAnm *pAnm = m_pCameraAnm;
         short nNum = pAnm->GetSceneNum();
-        if (nStart == -1) {
-            nStart = m_nSceneCamera != -1 ? m_nSceneCamera : 0;
+        short nBegin = nStart;
+        if (nBegin == -1) {
+            nBegin = m_nSceneCamera != -1 ? m_nSceneCamera : 0;
         }
-        for (short i = nStart; i < nNum; i++) {
+        for (short i = nBegin; i < nNum; i++) {
             const bcs::CCameraAnm::SCENE_INFO &info = pAnm->GetSceneInfo(i);
             if (info.nGroup == nGroup && info.fFrame > 0.0f) {
                 return i;

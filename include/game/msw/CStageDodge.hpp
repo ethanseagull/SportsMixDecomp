@@ -3,6 +3,7 @@
 
 #include "game/msw/CStageDodge01.hpp"
 #include "game/msw/CStageDodge04.hpp"
+#include "game/msw/CStageDodge05.hpp"
 #include "game/msw/CStageDodge07.hpp"
 #include "game/msw/CStageManDodge.hpp"
 
@@ -40,14 +41,7 @@ namespace msw {
 
     // Stage 04 has its own header, game/msw/CStageDodge04.hpp.
 
-    class CStageDodge05 : public CStageManDodge {
-        public:
-            CStageDodge05(bcs::CTask *pParent);
-            virtual ~CStageDodge05();
-
-        private:
-            unsigned char m_Unk244[0x70]; // size 0x2B4
-    };
+    // Stage 05 has its own header, game/msw/CStageDodge05.hpp.
 
     // Stage 07 has its own header, game/msw/CStageDodge07.hpp.
 

@@ -44,6 +44,20 @@ namespace msw {
     extern long DODGE_PRM_S04_PYLON_LOC_PAT_TYPE;
     extern long DODGE_PRM_S04_PYLON_LOC_PAT_NO;
 
+    // Stage 05, the floating rafts (CStageDodge05::GetPrmTbl).
+    extern float DODGE_PRM_S05_START_TIME_SEC;
+    extern float DODGE_PRM_S05_FLOAT_DEPTH;
+    extern float DODGE_PRM_S05_DEPTH_CYCLE;
+    extern float DODGE_PRM_S05_FLOAT_STOP_TIME;
+    extern float DODGE_PRM_S05_HEAVY_TIME_SEC;
+    extern float DODGE_PRM_S05_HEAVY_FLOAT_DEPTH;
+    extern float DODGE_PRM_S05_HEAVY_DEPTH_CYCLE;
+    extern float DODGE_PRM_S05_HEAVY_FLOAT_STOP_TIME;
+    extern float DODGE_PRM_S05_HEAVY_ACC_TIME_SEC;
+    extern float DODGE_PRM_S05_TURRET_EARLY_HIT;
+    extern float DODGE_PRM_S05_ENV_SE_TIME;
+    extern float DODGE_PRM_S05_ENV_SE_TIME_RND;
+
     // Stage 07, the boss Packun (CStageDodge07::GetPrmTbl).
     extern float DODGE_PRM_S07_PACKUN_CLOSE_STANDBY_TIME_RND;
     extern float DODGE_PRM_S07_PACKUN_OPEN_STANDBY_TIME_RND;

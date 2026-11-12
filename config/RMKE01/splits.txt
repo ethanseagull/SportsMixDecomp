@@ -210,7 +210,7 @@ game/msw/CBodyCollision.cpp:
 	.text       start:0x801072C0 end:0x801084B0
 
 game/msw/CAtkCollision.cpp:
-	.text       start:0x80108510 end:0x801093A8
+	.text       start:0x80108510 end:0x8010943C
 
 game/msw/CDefCollision.cpp:
 	.text       start:0x8010943C end:0x801099C4

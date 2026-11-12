@@ -88,4 +88,5 @@ Equivalent game/bcs/G2D/CLayoutBase.cpp
 Equivalent game/msw/CStgSeSlot.cpp flags=noauto
 Equivalent game/msw/CGameGuideMan.cpp
 Equivalent game/msw/CEffectCluster.cpp
+Equivalent game/msw/CAtkCollision.cpp
 Matching game/bcs/CWifiPad.cpp

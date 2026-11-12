@@ -151,7 +151,7 @@ namespace msw {
             // `index` on or off.
             void CollAtkSetEnable(long index, int enable);
             // (name guessed; the DOL's fn_80128D44) The float at 0xA0 of
-            // attack collision `index` (CAtkCollision::GetUnkA0); the shells
+            // attack collision `index` (CAtkCollision::GetAtkRotY); the shells
             // bounce away along it when they break.
             float CollAtkGetUnkA0(long index);
             // (name guessed; the DOL's fn_801295C8; SetRotY proper is at 0x80129608) Sets the Y rotation of

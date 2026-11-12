@@ -143,14 +143,12 @@ namespace msw {
             // closes (0: the back line, 1: the front line); walks of the "?"
             // panels.
             static CComMan *GetInstance();
-            // (DOL; added for BasketF game/basket/CComDrvBasketGame.cpp,
-            // meanings guessed) The character of team nTeam holding the
-            // ball (null for none); pChr's computer driver (null when a
-            // computer does not drive it).
-            static CChrCore *GetHoldBallChrCore(long nTeam);
             // (DOL; added for DodgeF game/dodge/unit_A4AE8.cpp) The distance
             // between characters nChr0 and nChr1 in the XZ plane.
             static float GetChrDisXZ(long nChr0, long nChr1);
+            // (DOL; added for BasketF game/basket/CComDrvBasketGame.cpp,
+            // meaning guessed) pChr's computer driver (null when a computer
+            // does not drive it). GetHoldBallChrCore is declared above.
             static CComDrv *GetComDrv(CChrCore *pChr);
             static int IsEnableViewColl();
             static float GetViewCollPosZ();

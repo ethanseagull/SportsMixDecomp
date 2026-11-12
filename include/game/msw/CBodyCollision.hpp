@@ -7,6 +7,7 @@ namespace bcs {
 
 namespace msw {
     class CBall;
+    class CCollUnit;
     class CCollAtkUnit;
     class CCollBodyUnit;
 
@@ -107,6 +108,13 @@ namespace msw {
             // (added for game/msw/CC_CMN/LUIGI/CcOvacuumForce.cpp; DOL)
             void SetSizeAll(const bcs::FVEC3 &rSize);
             void SetYRotAll(float fRotY);
+            // (added for game/msw/CStgGmk_Case.cpp; DOL) Unit index (its
+            // return type is a guess: the unit is read as a CCollUnit).
+            CCollUnit *GetColl(long index) const;
+            // (DOL fn_801074EC, after GetColl; name guessed) Sets the word
+            // at 0x0C of every unit: CStgGmk_Case_Act passes the handle
+            // (CScnObj::m_nHandle) of its model object.
+            void SetOwnerHandleAll(unsigned long handle);
 
         private:
             unsigned long m_Unk00[3];

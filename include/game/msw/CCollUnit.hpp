@@ -24,6 +24,8 @@ namespace msw {
             // (names guessed) Inline in msw::CStgGmk_WaterPillar_Act.
             void SetShape(unsigned long shape) { m_nShape = shape; }
             void SetSize(const bcs::FVEC3 &rSize) { m_Size = rSize; }
+            // (added for game/msw/CStgGmk_Case.cpp)
+            const bcs::FVEC3 &GetSize() const { return m_Size; }
             void SetSize(float x, float y, float z)
             {
                 m_Size.x = x;

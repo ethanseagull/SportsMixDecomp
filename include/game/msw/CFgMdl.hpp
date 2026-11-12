@@ -11,30 +11,38 @@ namespace msw {
     // of CStgMdlObjImpl (slot 0x128 on). They get and set the members of
     // CStgMdlObjImpl; their names are guessed. The two alpha test ranges are
     // named after the BasketF parameters (BASKET_PRM_S06_ALPHA_TEST_NEAR_RANG
-    // and ..._FAR_RANG) that CNpcGhostBasketBase passes to them.
+    // and ..._FAR_RANG) that CNpcGhostBasketBase passes to them. The
+    // setters are inline: the DOL's game/msw/CStgGmk_Case.cpp emits weak
+    // copies of them after its first callers, and the vtable of
+    // CGoalMdl::CMdlObj_Goal uses those copies.
     class CFgMdl : public bcs::CMultViewAlphaMdlObj, public CStgMdlObjImpl {
         public:
             CFgMdl();
             virtual ~CFgMdl();
 
             virtual float GetAlphaTestNearRange() const;       // 0x128, the float at 0x200
-            virtual void SetAlphaTestNearRange(float range);   // 0x12C
+            virtual void SetAlphaTestNearRange(float range) { m_fAlphaTestNearRange = range; } // 0x12C
             virtual float GetAlphaTestFarRange() const;        // 0x130, 0x204
-            virtual void SetAlphaTestFarRange(float range);    // 0x134
+            virtual void SetAlphaTestFarRange(float range) { m_fAlphaTestFarRange = range; }   // 0x134
             virtual float GetFadeDir() const;                  // 0x138, 0x208: an angle about Y
-            virtual void SetFadeDir(float rad);                // 0x13C
+            virtual void SetFadeDir(float rad) { m_fFadeDir = rad; }                // 0x13C
             virtual float GetFadeAngle0() const;               // 0x140, 0x20C: an angle
-            virtual void SetFadeAngle0(float rad);             // 0x144
+            virtual void SetFadeAngle0(float rad) { m_fFadeAngle0 = rad; }          // 0x144
             virtual float GetFadeAngle1() const;               // 0x148, 0x210: an angle
-            virtual void SetFadeAngle1(float rad);             // 0x14C
+            virtual void SetFadeAngle1(float rad) { m_fFadeAngle1 = rad; }          // 0x14C
             virtual float GetUnk214() const;                   // 0x150
-            virtual void SetUnk214(float);                     // 0x154
+            virtual void SetUnk214(float f) { m_fUnk18 = f; }                       // 0x154
             virtual float GetUnk218() const;                   // 0x158
-            virtual void SetUnk218(float);                     // 0x15C
+            virtual void SetUnk218(float f) { m_fUnk1C = f; }                       // 0x15C
             virtual float GetUnk214And218() const;             // 0x160, returns GetUnk218()
-            virtual void SetUnk214And218(float);               // 0x164, sets both
+            // 0x164, sets both
+            virtual void SetUnk214And218(float f)
+            {
+                SetUnk214(f);
+                SetUnk218(f);
+            }
             virtual unsigned long GetFadeEnable() const;       // 0x168, the word at 0x21C
-            virtual void SetFadeEnable(unsigned long bEnable); // 0x16C
+            virtual void SetFadeEnable(unsigned long bEnable) { m_nFadeEnable = bEnable; } // 0x16C
             // (name not known) HockeyF's CStageHockey02 passes 1 for its
             // parasols.
             virtual void Unk170(int);                          // 0x170

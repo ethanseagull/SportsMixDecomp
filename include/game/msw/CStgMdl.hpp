@@ -111,6 +111,10 @@ namespace msw {
                     }
 
                     virtual bool CreateMdl(bcs::CMdlObj *pMdl) const;
+                    // The extra slot (0x18, the last). Inline: the DOL's
+                    // game/msw/CStgGmk_Case.cpp emits the weak copy the
+                    // vtable uses, right after its Create.
+                    virtual ~CGenericMVAGimmickCreator() {}
             };
 
             CStgMdl(CStgObj *pParent);

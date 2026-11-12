@@ -3,6 +3,9 @@
 
 #include "bcs/CFsmQueue.hpp"
 #include "bcs/FVEC3.hpp"
+#include "game/msw/CAtkCollision.hpp"
+#include "game/msw/CBodyCollision.hpp"
+#include "game/msw/CDefCollision.hpp"
 #include "game/msw/CStgGmkAct.hpp"
 
 namespace msw {
@@ -31,6 +34,17 @@ namespace msw {
     // Return types not visible in a body are guesses.
     class CStgGmk_Case_Act : public CStgGmkAct, public bcs::CFsmQueue<CStgGmk_Case_Act> {
         public:
+            // The states of the queue, in the order of the state hooks.
+            enum STATE {
+                STATE_DEFAULT,  // placed at the gimmick's position, then MOVE
+                STATE_STANDBY,  // waits, then MOVE
+                STATE_MOVE,     // slides across the court
+                STATE_BREAK,    // broken: hidden after GetParam_BreakTime frames
+                STATE_RESPAWN,  // placed again with a new model, then MOVE
+                STATE_INACTIVE, // hidden; respawns after the interval in its work
+                STATE_OPEN      // (not used in the DOL)
+            };
+
             CStgGmk_Case_Act(CStgGmk *pParent);
             virtual ~CStgGmk_Case_Act();
 
@@ -48,9 +62,9 @@ namespace msw {
             virtual float GetParam_Width() const;                         // 0x1B0
             virtual float GetParam_Depth() const;                         // 0x1B4
             virtual float GetParam_Height() const;                        // 0x1B8
-            virtual float GetParam_MdlWidth() const;                      // 0x1BC
-            virtual float GetParam_MdlDepth() const;                      // 0x1C0
-            virtual float GetParam_MdlHeight() const;                     // 0x1C4
+            virtual float GetParam_MdlWidth() const { return 1.0f; }     // 0x1BC
+            virtual float GetParam_MdlDepth() const { return 1.0f; }     // 0x1C0
+            virtual float GetParam_MdlHeight() const { return 1.0f; }    // 0x1C4
             virtual float GetParam_Acc() const;                           // 0x1C8
             virtual float GetParam_Dec() const;                           // 0x1CC
             virtual float GetParam_VelLimit() const;                      // 0x1D0
@@ -65,11 +79,11 @@ namespace msw {
             virtual long GetParam_SE(long type) const;                    // 0x1EC
             virtual float GetParam_MaxLife() const;                       // 0x1F0
             virtual float GetParam_LocOffsetZ() const { return 0.0f; }    // 0x1F4
-            virtual float GetParam_LocPosY() const;                       // 0x1F8
-            virtual float GetParam_KaronScale() const;                    // 0x1FC
-            virtual float GetParam_KaronCollScale() const;                // 0x200
-            virtual float GetParam_KaronSpeed() const;                    // 0x204
-            virtual float GetParam_HitCameraQuake() const;                // 0x208
+            virtual float GetParam_LocPosY() const { return 10.0f; }     // 0x1F8
+            virtual float GetParam_KaronScale() const { return 1.0f; }   // 0x1FC
+            virtual float GetParam_KaronCollScale() const { return 0.5f * GetParam_KaronScale(); } // 0x200
+            virtual float GetParam_KaronSpeed() const { return 0.4f; }   // 0x204
+            virtual long GetParam_HitCameraQuake() const;                 // 0x208
             virtual float GetParam_BreakTime() const;                     // 0x20C
             virtual long GetParam_ItemHitMethod() const { return 1; }     // 0x210
             virtual long SE_GetSlotNum() const { return 1; }              // 0x214
@@ -79,9 +93,12 @@ namespace msw {
             virtual void UpdateColl();                                    // 0x218
             virtual bool IsInvincible() const { return m_fInvincibleTime > 0.0f; } // 0x21C
             virtual void SetAlive(int bAlive) { m_bAlive = bAlive; }      // 0x220
-            virtual void DoDamage(const bcs::FVEC3 &rPos, int, int);      // 0x224
+            // Takes one life (when the case has lives) with the hit effect
+            // (bEffect) and sound (bSE) at rPos; out of lives it breaks.
+            // False while invincible.
+            virtual int DoDamage(const bcs::FVEC3 &rPos, int bEffect, int bSE); // 0x224
             virtual void OnDamage(CCollBodyUnit *pBody, CBall *pBall) {}  // 0x228
-            virtual void OnBreak();                                       // 0x22C
+            virtual void OnBreak() {}                                     // 0x22C
             virtual bool IsEnableDefColl() const { return false; }        // 0x230
             virtual void CreateKaron();                                   // 0x234
             virtual long GetSubType_() const;                             // 0x238
@@ -107,12 +124,25 @@ namespace msw {
             virtual void LoopState_OPEN();
             virtual void DtorState_OPEN();                                // 0x28C
 
+        protected:
+            // 0x1D4: 0 to 3 the four walls, 4 the catch volume on top, 5 to
+            // 7 three spheres along the case (names guessed).
+            CBodyCollision m_BodyColl;
+            CAtkCollision m_AtkColl;      // 0x1E0: three capsules along the case
+            CDefCollision m_DefColl;      // 0x1EC
+
         private:
-            unsigned char m_Unk1D4[0x28]; // 0x1D4, not mapped
+            // 0x1F8: frames of the state (STANDBY, BREAK) or time run in
+            // INACTIVE (name guessed).
+            float m_fStateTimer;
             int m_bAlive;                 // 0x1FC (IsAlive, SetAlive)
-            unsigned char m_Unk200[0xC];  // 0x200, not mapped
+            // 0x200: set once the case is inside the court; until then it
+            // is held within GetParam_OuterRect (name guessed).
+            int m_bInCourt;
+            float m_fLife;                // 0x204, hits left
+            float m_fMaxLife;             // 0x208, GetParam_MaxLife at the spawn; not positive: no lives
             float m_fInvincibleTime;      // 0x20C (IsInvincible while above zero; name guessed)
-            unsigned char m_Unk210[0x4];  // 0x210, not mapped
+            float m_fBreakTimer;          // 0x210, ForceBreak's delay; negative when none
     };
 }
 

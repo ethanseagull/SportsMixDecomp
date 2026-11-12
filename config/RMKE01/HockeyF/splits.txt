@@ -393,7 +393,7 @@ game/hockey/CCockpitHockeyClash.cpp:
 	.rodata     start:0x0000AED8 end:0x0000B938
 	.data       start:0x0001BD60 end:0x0001C168
 
-game/hockey/CStgGmk_Container_Act_Hockey.cpp:
+game/hockey/Gmk_Container_Hockey.cpp:
 	.text       start:0x000C46E4 end:0x000C60D4
 	.rodata     start:0x0000B938 end:0x0000B9D8
 	.data       start:0x0001C168 end:0x0001C5A8

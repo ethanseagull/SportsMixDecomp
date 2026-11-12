@@ -77,6 +77,8 @@ BasketF InRectAndRad___Q23msw13CChrManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23b
 BasketF IsRide__Q33msw14CStageBasket1010CPanelInfoCFRCQ23bcs5FVEC3 near 94.8 94.8%: stack vector stores in a different order
 BasketF LookAt__Q23msw7CStgObjFRCQ23bcs5FVEC3 near 97.9 97.9%: weak inline; the two psq_l/ps_sub operands land in f0/f1 swapped (operand order inside the shared bcs::FVEC3Sub helper). Float registers only.
 BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketLuigiFv near 99.8 r3/r4 swapped in the inlined FsmqGetWork_; same as HockeyF Luigi
+BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketMii00Fv near 96.3 96.3%: register allocation, stack slot order of the FVEC3 temporaries, operand order of one commutative fadds, and (m_nStatusFlag & 4) != 0 computed with extrwi where the original uses rlwinm/cntlzw/cntlzw (same 0/1 value); the const local fLenMax adds a 4-byte .rodata object (as in CChrCoreBasketSaboten)
+BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketMii01Fv near 96.3 96.3%: same as Mii00: register allocation, stack slot order of the FVEC3 temporaries, operand order of one commutative fadds, and (m_nStatusFlag & 4) != 0 computed with extrwi where the original uses rlwinm/cntlzw/cntlzw (same 0/1 value); the const local fLenMax adds a 4-byte .rodata object (as in CChrCoreBasketSaboten)
 BasketF LoopStateAirTrick__Q23msw21CChrCoreBasketSabotenFv near 95.4 bool (flag&4)!=0 via extrwi vs double cntlzw (same value), one redundant b, fmadds operand order, stack slots/registers
 BasketF LoopStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateCatch__Q23msw19CNpcGhostBasketBaseFv near 99.6 one dead branch.

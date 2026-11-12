@@ -114,6 +114,12 @@ namespace msw {
                                  const bcs::FVEC3 &rOfs);
             // Blocks pChr's air trick dunk when it runs into this one.
             void CheckAirTrickDunkBlock_(CChrCore *pChr);
+            // (added for game/basket/CChrCoreBasketMii00.cpp; meanings
+            // guessed from the names) The yaw to the goal the team attacks,
+            // without the offset GetTargetGoalPosOffZ_ adds, and the check
+            // of blockers run after every step of the air trick.
+            float GetRotY_ToGoal_NonOffset() const;
+            void SubStateAirTrickCmnBlockerCheck_(STATE_WORK_AIR_TRICK *pWork);
             // Added for game/basket/CChrCoreBasketMoogle.cpp (names from the
             // module's imports; parameter meanings guessed). The body
             // collision's push settings, and the shot of the ball with sound
@@ -489,7 +495,9 @@ namespace msw {
         // (SubBSplineMove_, SubStateAirTrickMove_).
         float m_fMoveFrame;            // 0x0C
         float m_fMoveFrameNum;         // 0x10
-        unsigned char m_Unk14[0x18 - 0x14];
+        // 0x14 (name guessed): a speed the Mii's trick sets to 0, with the
+        // motion's speed, while flag 0x40 is set, and puts back after.
+        float m_fSpeed;
         float m_fMoveUnk18;            // 0x18, the speed of the move, or the last motion frame
         float m_fWaitFrame;            // 0x1C
         float m_fMoveLen;              // 0x20
@@ -612,12 +620,22 @@ namespace msw {
         public:
             CChrCoreBasketMii00();
             virtual ~CChrCoreBasketMii00();
+            virtual int IsAirTrickDunkMode() const;                    // 0x88
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void LoopStateAirTrick();                          // 0x588
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush); // 0xC54
     };
 
     class CChrCoreBasketMii01 : public CChrCoreBasket {
         public:
             CChrCoreBasketMii01();
             virtual ~CChrCoreBasketMii01();
+            virtual int IsAirTrickDunkMode() const;                    // 0x88
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void LoopStateAirTrick();                          // 0x588
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush); // 0xC54
     };
 
     // Luigi: his special shot pulls the other team in with his vacuum

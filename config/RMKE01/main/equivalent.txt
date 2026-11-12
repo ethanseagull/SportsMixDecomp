@@ -47,6 +47,9 @@ main Create__Q23bcs10CAnmTexPatFPCQ23bcs7CMdlObjQ34nw4r3g3d12ResAnmTexPatil near
 main Create__Q23bcs10CAnmTexSrtFPCQ23bcs7CMdlObjQ34nw4r3g3d12ResAnmTexSrtil near 98.3 resource pointer reloaded once where the original reuses it while setting up the frame (TexPat Create also loads res in another order); calls, constants, offsets identical
 main Create__Q23msw13CDefCollisionFlllUl near 98.0 register choice only: loop counter and byte offset registers swapped in the three store loops
 main Create___Q43msw6CC_CMN5SLIME14CcSquadFactoryFPQ23msw8CChrCorePCf near 99.8 instruction order only: the three pointer increments at the loop end are scheduled in another order
+main CtorStateOnlineSync0__Q23msw5CGameFv near 98.4 register choice only: the inline FsmqGetWork keeps the queue head in r5 and the work base in r4 in the original, swapped in ours; same loads, compares and store
+main CtorStateOnlineSync1__Q23msw5CGameFv near 98.4 register choice only: the inline FsmqGetWork keeps the queue head in r5 and the work base in r4 in the original, swapped in ours; same loads, compares and store
+main CtorStateOnlineSync2__Q23msw5CGameFv near 98.5 register choice only: the inline FsmqGetWork keeps the queue head in r5 and the work base in r4 in the original, swapped in ours; same loads, compares and store
 main CtorState_BREAK__Q23msw16CStgGmk_Case_ActFv near 96.7 branch layout of the null-handle select (li 0 on its own path in the original) and store order of the scale vector; same values
 main CtorState_BREAK__Q23msw17CStgGmk_Pylon_ActFv near 100.0 store order of the three equal FVEC3 components (x stored last in the original); same values
 main CtorState_BREAK__Q23msw19CStgGmk_Pinball_ActFv near 94.5 null cluster set by explicit li 0 and register reuse in original; ours saves one more register
@@ -86,6 +89,7 @@ main GetButtonText__Q23msw18CCockpitButtonInfoFl unverified 74.4 below 85%: the 
 main GetCenterPos__Q23msw19CStgGmk_Trolley_ActCFv near 99.2 instruction order of the paired-single add only
 main GetCenterPos__Q23msw26CStgGmk_WaterPillarClusterCFv near 99.0 float register choice only in the inlined paired-single FVEC3Add
 main GetCharName__Q23msw5CGameFlPwl near 99.2 instruction order only
+main GetHockeyUnk1C__Q23msw5CGameFv near 88.3 equivalent branch form only: the original lowers the play-type switch (cases 0, 2, 4) as CW's binary search (cmpwi 2; beq; bge; cmpwi 0 ...), ours as a compare chain, and reloads the GameWork address before the shared return; same tests and result
 main GetMenuResultId__Q23msw18CCockpitButtonInfoFl unverified 74.4 below 85%: the validity test branches the other way (original falls through to return the invalid value, ours to the load); same instructions otherwise
 main GetMiiName__Q23msw5CGameFR12RFLStoreDataPwl near 94.4 argument set-up order and loop pointer registers
 main GetMusicFrame__Q23msw8CGameSndFv near 98.8 98.8%: float registers f0/f1 swapped in the 60*pos/rate expression; same operations and order

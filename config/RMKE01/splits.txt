@@ -437,11 +437,11 @@ game/msw/CTournament.cpp:
 	.text       start:0x801768EC end:0x8017B85C
 
 game/msw/CGame.cpp:
-	.text       start:0x8017C3AC end:0x8018DD88
+	.text       start:0x8017C3AC end:0x8018DCEC
 	.ctors      start:0x8042D21C end:0x8042D220
 
 game/msw/CGameVib.cpp:
-	.text       start:0x8018DD88 end:0x8018DEF4
+	.text       start:0x8018DCEC end:0x8018DEF4
 
 game/msw/CLoadData.cpp:
 	.text       start:0x8018E808 end:0x801902CC

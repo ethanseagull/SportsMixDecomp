@@ -10,6 +10,7 @@
 #include "game/msw/CGameScoredView.hpp"
 #include "bcs/BCS_Rand.hpp"
 #include "game/msw/CGameSnd.hpp"
+#include "game/msw/CGamePadCheck.hpp"
 #include "game/msw/CChrMan.hpp"
 #include "game/msw/CChrCore.hpp"
 #include "game/msw/CBallMan.hpp"
@@ -30,7 +31,9 @@
 #include "bcs/CSnd.hpp"
 #include "bcs/dwc/CDwc.hpp"
 #include "bcs/CWifiPad.hpp"
+#include "bcs/CPadWI.hpp"
 #include "game/msw/dwc/CGameDwc.hpp"
+#include "game/msw/CShadowTexMan.hpp"
 #include <string.h>
 
 // Functions of the DOL that have no name yet (declared with their symbol
@@ -41,6 +44,9 @@ extern "C" {
     void fn_80137964(long nTeam, long nCoin, long nOld); // the cockpit's coin counter
     void fn_8026AA04(long nTeam, long, float);
     void fn_80073FB4(int);
+    void fn_80073FEC(int);
+    int fn_8026D0A0(void *p);                 // the object at CGame 0x134: its message can be shown
+    void fn_8026C990(void *p);                // closes that message
     void fn_8013A7A8(long nId, int bDisp);
     int fn_800EE434();
     int fn_8001275C(long nQuake);             // the quake is one the camera knows
@@ -472,6 +478,17 @@ namespace msw {
             return m_pInstance->m_nReqArtsEvent > 0;
         }
         return 0;
+    }
+
+    // Not in the DOL (nothing calls it, the link strips it); its weak callee
+    // _GetHockeyResultGoalId is emitted here in the original, so it existed.
+    // The result without a game is a guess.
+    long CGame::GetHockeyResultGoalId()
+    {
+        if (m_pInstance) {
+            return m_pInstance->_GetHockeyResultGoalId();
+        }
+        return -1;
     }
 
     void CGame::BgResetFade_()
@@ -929,6 +946,11 @@ namespace msw {
         return 0;
     }
 
+    long CGame::GetFirstGoalIdxMode_()
+    {
+        return 0;
+    }
+
     // Swaps the goals of the two teams, unless the views turn instead (a
     // local versus game on one screen keeps its goals).
     void CGame::ChangeGoalIdx_()
@@ -1035,12 +1057,31 @@ namespace msw {
         }
     }
 
+    void CGame::MainFunc() {}
+
     void CGame::Disp()
     {
         DispFunc();
     }
 
-    // ---- 0x80180DD0..0x80181804 not written yet ----
+    void CGame::DispFunc() {}
+
+    // State 0: loads the game.
+    void CGame::CtorStateGameLoad()
+    {
+        bcs::CMainApp::Start3DFade(0, 1.0f);
+        bcs::CMainApp::StartMasterFade(0, 1.0f);
+        g_GameWork.m_nFlag18 |= 0x4000;
+        m_nStateStep = 0;
+    }
+
+    // ---- LoopStateGameLoad (0x80180E2C) not written yet ----
+
+    void CGame::FinishFirstLoadData() {}
+
+    void CGame::DtorStateGameLoad() {}
+
+    void CGame::CtorStateGameInit() {}
 
     void CGame::LoopStateGameInit()
     {
@@ -1051,7 +1092,87 @@ namespace msw {
 
     void CGame::DtorStateGameInit() {}
 
-    // ---- 0x8018190C..0x8018372C not written yet ----
+    // ---- 0x8018190C..0x80181C90 (state 2) not written yet ----
+
+    void CGame::DtorStateGameStart()
+    {
+        bcs::CMainApp::SetPause(0x40, 0);
+        CGamePadCheck::SetPadCheckDisable(0);
+        fn_80073FEC(0);
+        SendMessage_(2, 0, 0, 0);
+    }
+
+    // ---- 0x80181D10..0x80182064 (state 3) not written yet ----
+
+    void CGame::DtorStateEntranceDemo()
+    {
+        g_GameWork.m_nFlag18 &= ~2;
+        SendMessage_(4, 0, 0, 0);
+    }
+
+    // State 22: creates the game's objects.
+    void CGame::CtorStateGameCreate() {}
+
+    // ---- LoopStateGameCreate (0x8018209C) not written yet ----
+
+    void CGame::GenerateInstance() {}
+
+    void CGame::DtorStateGameCreate() {}
+
+    // State 23: starts the music and goes on at once.
+    void CGame::CtorStateBgmStart() {}
+
+    void CGame::LoopStateBgmStart()
+    {
+        CGameBGM::SetBgmState(CGameBGM::STATE_START);
+        FsmqDoChain();
+    }
+
+    void CGame::DtorStateBgmStart() {}
+
+    void CGame::CtorStateGameSetup() {}
+
+    void CGame::LoopStateGameSetup() {}
+
+    void CGame::DtorStateGameSetup() {}
+
+    // State 5: runs the virtual WaitStart hooks.
+    void CGame::CtorStateWaitStartBase()
+    {
+        CtorStateWaitStart();
+    }
+
+    // ---- LoopStateWaitStartBase (0x80182E88) not written yet ----
+
+    void CGame::DtorStateWaitStartBase()
+    {
+        DtorStateWaitStart();
+    }
+
+    void CGame::CtorStateWaitStart() {}
+
+    void CGame::LoopStateWaitStart() {}
+
+    void CGame::DtorStateWaitStart() {}
+
+    // State 6: runs the virtual MainLoop hooks.
+    void CGame::CtorStateMainLoopBase()
+    {
+        CtorStateMainLoop();
+    }
+
+    // ---- LoopStateMainLoopBase (0x80183170) not written yet ----
+
+    void CGame::DtorStateMainLoopBase()
+    {
+        DtorStateMainLoop();
+    }
+
+    void CGame::CtorStateMainLoop() {}
+
+    void CGame::LoopStateMainLoop() {}
+
+    void CGame::DtorStateMainLoop() {}
 
     void CGame::CtorStateGoalEvent()
     {
@@ -1068,7 +1189,23 @@ namespace msw {
         m_nStateStep = 0;
     }
 
+    int CGame::IsGameSet_()
+    {
+        return 0;
+    }
+
     void CGame::DtorStateTurnResult() {}
+
+    void CGame::CtorStateTimeUp() {}
+
+    void CGame::LoopStateTimeUp() {}
+
+    void CGame::DtorStateTimeUp() {}
+
+    int CGame::MenuCallInterval_()
+    {
+        return 0;
+    }
 
     void CGame::DtorStateChgCourt()
     {
@@ -1078,11 +1215,27 @@ namespace msw {
         m_nUnk108 = 0;
     }
 
+    void CGame::CtorStateTurnOver() {}
+
+    void CGame::LoopStateTurnOver() {}
+
+    void CGame::DtorStateTurnOver() {}
+
     void CGame::CtorStateChgOffense() {}
 
     void CGame::LoopStateChgOffense() {}
 
     void CGame::DtorStateChgOffense() {}
+
+    void CGame::CtorStateGameSet() {}
+
+    void CGame::LoopStateGameSet() {}
+
+    void CGame::DtorStateGameSet() {}
+
+    void CGame::SetGameResult_() {}
+
+    void CGame::CalcAddSkillPoint_() {}
 
     void CGame::DtorStateGameResult()
     {
@@ -1098,6 +1251,11 @@ namespace msw {
         m_nStateStep = 0;
     }
 
+    int CGame::MenuCallGameResult_()
+    {
+        return 0;
+    }
+
     void CGame::DtorStateResultMenu() {}
 
     void CGame::CtorStateEndMenu()
@@ -1111,12 +1269,48 @@ namespace msw {
 
     void CGame::DtorStateEndMenu() {}
 
+    // State 28: saves (99 skips it).
+    void CGame::CtorStateSave()
+    {
+        if (CSave::IsUseSave()) {
+            m_nStateStep = 2;
+        } else {
+            m_nStateStep = 99;
+        }
+    }
+
+    // ---- LoopStateSave (0x801851A8) not written yet ----
+
+    void CGame::DtorStateSave() {}
+
+    // State 29: shows the message of the object at 0x134 (99 skips it).
+    void CGame::CtorStateMessage()
+    {
+        m_nStateStep = 0;
+        if (!fn_8026D0A0(m_pUnk134)) {
+            m_nStateStep = 99;
+        }
+    }
+
+    // ---- LoopStateMessage (0x80185364) not written yet ----
+
+    void CGame::DtorStateMessage()
+    {
+        if (m_pUnk134) {
+            fn_8026C990(m_pUnk134);
+        }
+        fn_80073FB4(0);
+        bcs::CMainApp::SetPause(0x40, 0);
+    }
+
     void CGame::CtorStateRestart()
     {
         bcs::CMainApp::StartMasterFade(0, 1.0f / 30.0f);
         CGameBGM::SetBgmState(CGameBGM::STATE_FADE_OUT);
         m_nStateStep = 0;
     }
+
+    void CGame::PrepareRestartGame_() {}
 
     void CGame::DtorStateRestart() {}
 
@@ -1136,6 +1330,101 @@ namespace msw {
     void CGame::LoopStateExceptDemo() {}
 
     void CGame::DtorStateExceptDemo() {}
+
+    // State 27 does nothing.
+    void CGame::CtorStateNoop() {}
+
+    void CGame::LoopStateNoop() {}
+
+    void CGame::DtorStateNoop() {}
+
+    int CGame::IsGameExist()
+    {
+        return m_pInstance != 0;
+    }
+
+    long CGame::GetLoadedUnkCC()
+    {
+        CGame *pGame = m_pInstance;
+        if (pGame) {
+            if (pGame->RsrcIsLoadEnd_()) {
+                return pGame->m_nUnkCC;
+            }
+            return 0;
+        }
+        return 0;
+    }
+
+    // ---- 0x80186770..0x80186A8C not written yet ----
+
+    long CGame::GetUnk148()
+    {
+        if (m_pInstance) {
+            return m_pInstance->m_nUnk148;
+        }
+        return 0;
+    }
+
+    int CGame::IsRsrcLoadEnd()
+    {
+        if (m_pInstance) {
+            return m_pInstance->RsrcIsLoadEnd_() != 0;
+        }
+        return 0;
+    }
+
+    // Pauses an offline game while the pad check waits for a remote.
+    void CGame::PadCheckPause()
+    {
+        if (m_pInstance && !g_GameWork.m_Unk151 && !bcs::CMainApp::IsPause(0x1000) &&
+            !bcs::CMainApp::IsPauseReady(0x1000)) {
+            StopCameraQuake(-1);
+            CGameSnd::GamePauseAll(1, 16.0f);
+            bcs::CPadWI::PushMotorAll();
+            bcs::CMainApp::SetPause(0x1000, 1);
+            fn_80073FB4(1);
+        }
+    }
+
+    void CGame::PadCheckResume()
+    {
+        if (m_pInstance && !g_GameWork.m_Unk151 && bcs::CMainApp::IsPause(0x1000)) {
+            bcs::CMainApp::SetPause(0x1000, 0);
+            fn_80073FB4(0);
+            bcs::CPadWI::PopMotorAll();
+            CGameSnd::GamePauseAll(0, 18.0f);
+        }
+    }
+
+    // State 24-26: the online synchronisation (their work's first word is
+    // the step).
+    void CGame::CtorStateOnlineSync0()
+    {
+        *FsmqGetWork<long>() = 0;
+    }
+
+    // ---- LoopStateOnlineSync0 (0x80186C6C) not written yet ----
+
+    void CGame::DtorStateOnlineSync0() {}
+
+    void CGame::CtorStateOnlineSync1()
+    {
+        *FsmqGetWork<long>() = 0;
+    }
+
+    // ---- LoopStateOnlineSync1 (0x80186F38) not written yet ----
+
+    void CGame::DtorStateOnlineSync1() {}
+
+    void CGame::CtorStateOnlineSync2()
+    {
+        *FsmqGetWork<long>() = 0;
+        m_nUnk148 = 0;
+    }
+
+    // ---- LoopStateOnlineSync2 (0x8018726C) not written yet ----
+
+    void CGame::DtorStateOnlineSync2() {}
 
     void CGame::CtorStateGameExit()
     {
@@ -1164,13 +1453,6 @@ namespace msw {
             bSkip = 1;
         }
         return bSkip;
-    }
-
-    void CGame::ScoreBookInitCountWork_()
-    {
-        for (long i = 0; i < 3; i++) {
-            m_anScoreBookCount[i] = 0;
-        }
     }
 
     // (name guessed) The pads of team nTeam as bits (all teams for -1);
@@ -1232,7 +1514,21 @@ namespace msw {
         return -1;
     }
 
-    // ---- 0x80187E6C..0x80189544 not written yet ----
+    void CGame::ScoreBookInitCountWork_()
+    {
+        for (long i = 0; i < 3; i++) {
+            m_anScoreBookCount[i] = 0;
+        }
+    }
+
+    // ---- ScoreBookApplyCountWork_ (0x80187E80) not written yet ----
+
+    int CGame::MenuCallPause_()
+    {
+        return 0;
+    }
+
+    // ---- 0x80188280..0x80189544 not written yet ----
 
     void CGameSpeedCtrl::StartSpeedAnim(float from, float to, float time, int nUnk68, long nUnk60)
     {
@@ -1350,6 +1646,30 @@ namespace msw {
             default:
                 return 0;
         }
+    }
+
+    long CGame::GetHockeyUnk1C()
+    {
+        if (g_GameWork.m_nGameType) {
+            return 0;
+        }
+        if (g_GameWork.m_nUnk180) {
+            return 0;
+        }
+        if (g_GameWork.m_Unk151) {
+            return 0;
+        }
+        switch (g_GameWork.m_nGameMode) {
+            case GAME_MODE_HOCKEY:
+                switch (g_GameWork.m_nUnk06) {
+                    case 0:
+                    case 2:
+                    case 4:
+                        return g_GameWork.m_nUnk1C;
+                }
+                break;
+        }
+        return 0;
     }
 
     void CGame::SetGameMode(GAME_MODE mode)
@@ -1558,6 +1878,34 @@ namespace msw {
         if (m_pInstance) {
             m_pInstance->SetDodgeArtsCatchMode_(bOn, n);
         }
+    }
+
+    // Not in the DOL (stripped by the link, like GetDodgeChrMaxLife below);
+    // the weak IsDodgeArtsCatchMode_ placed here shows it existed.
+    int CGame::IsDodgeArtsCatchMode()
+    {
+        if (m_pInstance) {
+            return m_pInstance->IsDodgeArtsCatchMode_();
+        }
+        return 0;
+    }
+
+    // (name guessed) The dodgeball game's variable character count; 0
+    // without a game.
+    long CGame::GetDodgeVariableChrNum(long n)
+    {
+        if (m_pInstance) {
+            return m_pInstance->GetDodgeVariableChrNum_(n);
+        }
+        return 0;
+    }
+
+    long CGame::GetDodgeChrMaxLife(long n)
+    {
+        if (m_pInstance) {
+            return m_pInstance->GetDodgeChrMaxLife_(n);
+        }
+        return 0;
     }
 
     void CGame::SetPassCountLimit_(long nTeam, long nLimit)
@@ -2255,6 +2603,12 @@ namespace msw {
         CCockpit::SetSPGaugeDispEnable(bDisp);
     }
 
+    void CGame::SetCockpitArtsGaugeRatio_(long, float, float) {}
+
+    void CGame::SetCockpitArtsGaugeSpAnim_(long, int) {}
+
+    void CGame::SetDispRadarIcon_(int) {}
+
     void CGame::SetDispChrHeadIcon_(int bDisp)
     {
         fn_8013A7A8(0x1004, bDisp);
@@ -2292,6 +2646,14 @@ namespace msw {
         }
         return 0;
     }
+
+    void CGame::SetCockpitDisp_(int) {}
+
+    void CGame::SetCockpitCoinDisp_(int) {}
+
+    void CGame::SetCockpitTimeDisp_(int) {}
+
+    void CGame::SetCockpitScoreDisp_(int) {}
 
     void CGame::SetCockpitPeriodDisp_(int) {}
 
@@ -2677,5 +3039,54 @@ namespace msw {
     {
         g_GameWork.SetDefault();
         memset(&g_ScoreWork, 0, sizeof(g_ScoreWork));
+    }
+
+    // ---- SetParamSemiAuto, SetPadAssignSemiAuto, fn_8018D38C not written yet ----
+
+    CShadowTexMan *CShadowTexMan::m_pInstance;
+
+    CShadowTexMan::~CShadowTexMan()
+    {
+        m_pInstance = 0;
+    }
+
+    CShadowTexMan::CShadowTexMan(bcs::CTask *pParent) : bcs::CTask(pParent, -1)
+    {
+        m_bEnable = 0;
+        m_pTexObj = 0;
+        nw4r::g3d::ResFile resFile = CLoadData::GetRes(0x23);
+        nw4r::g3d::ResTex resTex = resFile.GetResTex("zz_test");
+        if (resTex.IsValid()) {
+            void *pImage;
+            unsigned short nWidth;
+            unsigned short nHeight;
+            _GXTexFmt format;
+            float fMinLod;
+            float fMaxLod;
+            unsigned char bMipmap;
+            resTex.GetTexObjParam(&pImage, &nWidth, &nHeight, &format, &fMinLod, &fMaxLod, &bMipmap);
+            // The texture is used as an intensity map whatever its format.
+            GXInitTexObj(&m_TexObj, pImage, nWidth, nHeight, GX_TF_I8, GX_CLAMP, GX_CLAMP, bMipmap);
+            GXInitTexObjLOD(&m_TexObj, GX_LIN_MIP_LIN, GX_LINEAR, fMinLod, fMaxLod, 0.0f, 0, 0, GX_ANISO_1);
+            m_pTexObj = &m_TexObj;
+            m_bEnable = 1;
+        }
+    }
+
+    CShadowTexMan *CShadowTexMan::CreateInstance(bcs::CTask *pParent)
+    {
+        if (!m_pInstance) {
+            m_pInstance = new (0x100) CShadowTexMan(pParent);
+        }
+        return m_pInstance;
+    }
+
+    GXTexObj *CShadowTexMan::GetTexObj()
+    {
+        CShadowTexMan *pMan = m_pInstance;
+        if (pMan == 0) {
+            return 0;
+        }
+        return pMan->m_pTexObj;
     }
 }

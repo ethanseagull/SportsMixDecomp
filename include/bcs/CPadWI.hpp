@@ -31,6 +31,10 @@ namespace bcs {
             static float GetStickY(long nPad);
             static int IsNunchukStyle(long nPad);
             static void StopMotor(long nPad);
+            // (added for game/msw/CGame.cpp; names from the symbols) Saves
+            // and stops every remote's rumble, and brings it back.
+            static void PushMotorAll();
+            static void PopMotorAll();
     };
 }
 

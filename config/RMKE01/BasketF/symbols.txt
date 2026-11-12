@@ -1742,7 +1742,7 @@ CallbackBodyPush___Q23msw20CChrCoreBasketDonkeyFPQ23msw13CCollBodyUnitPQ23msw13C
 __ct__Q33msw11CC07_BASKET13CcDonkeyQuakeFPQ23bcs5CTaskPQ23msw8CChrCoreRCQ23bcs5FVEC3 = .text:0x00052260; // type:function size:0x190 scope:global
 __dt__Q33msw11CC07_BASKET13CcDonkeyQuakeFv = .text:0x000523F0; // type:function size:0xC8 scope:global
 Main__Q33msw11CC07_BASKET13CcDonkeyQuakeFv = .text:0x000524B8; // type:function size:0xE0 scope:global
-fn_4_52598 = .text:0x00052598; // type:function size:0x14
+__sinit_\CChrCoreBasketDonkey_cpp = .text:0x00052598; // type:function size:0x14 scope:local
 UpdateCollAtk___Q23msw21CChrCoreBasketKinopioFv = .text:0x000525AC; // type:function size:0x190 scope:global
 __ct__Q23msw21CChrCoreBasketKinopioFv = .text:0x0005273C; // type:function size:0x44 scope:global
 __dt__Q23msw21CChrCoreBasketKinopioFv = .text:0x00052780; // type:function size:0x58 scope:global
@@ -1852,7 +1852,7 @@ DtorStateAirTrick__Q23msw19CChrCoreBasketMarioFv = .text:0x00057E10; // type:fun
 IsAirTrickDunkMode__Q23msw19CChrCoreBasketMarioCFv = .text:0x00057E14; // type:function size:0x84 scope:global
 SubStateAirTrickCmnBlockerCheck___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x00057E98; // type:function size:0x168 scope:global
 CallbackBodyPush___Q23msw19CChrCoreBasketMarioFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 = .text:0x00058000; // type:function size:0x118 scope:global
-fn_4_58118 = .text:0x00058118; // type:function size:0x14
+__sinit_\CChrCoreBasketMario_cpp = .text:0x00058118; // type:function size:0x14 scope:local
 CanbeRun__Q23msw14CChrCoreBasketFv = .text:0x0005812C; // type:function size:0xD0 scope:global
 MethdRun__Q23msw14CChrCoreBasketFf = .text:0x000581FC; // type:function size:0x3D0 scope:global
 GetDir8ToBlockWork__Q23msw14CChrCoreBasketFf = .text:0x000585CC; // type:function size:0xB0 scope:global

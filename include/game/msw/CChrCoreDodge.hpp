@@ -850,6 +850,14 @@ namespace msw {
         public:
             CChrCoreDodgeKoopaJr();
             virtual ~CChrCoreDodgeKoopaJr();
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD80
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD94
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
+            virtual void SubStateArtsShotPlayLandMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDC0
     };
 
     // Size 0x930.

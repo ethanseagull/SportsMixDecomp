@@ -50,6 +50,11 @@ namespace msw {
             void SetHitEffectIDAll(long nEffect);
             void SetIndexAll(long nIndex);
             void SetEnableAll();
+            // (added for game/basket/CChrCoreBasketDonkey.cpp; meanings
+            // guessed) The size of every unit, and the frames of the effect
+            // played on a hit.
+            void SetSizeAll(float, float, float);
+            void SetHitEffectFrameAll(float fFrame);
 
             // Per unit (added for game/msw/CStgGmk_Trolley.cpp; DOL
             // functions, argument meanings guessed). SetPos2 is the other

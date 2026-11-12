@@ -12,7 +12,7 @@ Equivalent game/tour/CCockpitTournamentTelopLogo.cpp
 Matching game/tour/CCockpitTournament.cpp
 Equivalent game/tour/CTournamentChip.cpp
 Equivalent game/tour/CTournamentRouteMan_Stage31.cpp
-Equivalent game/tour/TournamentRule.cpp
+Matching game/tour/TournamentRule.cpp
 Equivalent game/tour/CTournamentRouteMan_Stage32.cpp
 Equivalent game/tour/CTournamentRouteMan_Stage33.cpp
 Equivalent game/tour/CTournamentMan.cpp

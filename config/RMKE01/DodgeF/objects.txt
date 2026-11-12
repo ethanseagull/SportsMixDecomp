@@ -74,3 +74,5 @@ Matching game/dodge/CStageManDodgeDodgeOrDie.cpp
 Equivalent game/dodge/CLockCursorDodge.cpp
 Matching game/dodge/CCockpitDodgeLayoutBase.cpp
 Equivalent game/dodge/CCockpitDodgeTelopInOutChange.cpp
+Equivalent game/dodge/CChrCoreDodgeKoopaJr.cpp
+Equivalent game/dodge/unit_D7800.cpp

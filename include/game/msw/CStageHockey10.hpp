@@ -109,10 +109,13 @@ namespace msw {
             virtual float GetParam_PanelRespawnTime() const;
             virtual long GetParam_BonusPanelNum() const;
             virtual float GetParam_BonusStartTime(long n) const;
-            virtual const PANEL_ARRANGE_GROUP *GetArrangeGroup(long nSet, long nGroup) const;
-            virtual const ARRANGE_ODDS *GetArrangeOddsTbl(long n) const;
+            // Overrides of CStage10Base (a second base) get new slots at the end of
+            // the primary vtable in declaration order; the original's order is
+            // NewPanel_, AddBonusPanel_, GetArrangeGroup, GetArrangeOddsTbl.
             virtual CPanelInfoBase *NewPanel_(long nType) const;
             virtual void AddBonusPanel_();
+            virtual const PANEL_ARRANGE_GROUP *GetArrangeGroup(long nSet, long nGroup) const;
+            virtual const ARRANGE_ODDS *GetArrangeOddsTbl(long n) const;
 
             // The board of the running stage (CStageMan's instance, taken
             // to be this stage; used by CComManHockeyGame).

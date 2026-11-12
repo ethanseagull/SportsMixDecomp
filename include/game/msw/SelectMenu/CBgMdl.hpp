@@ -21,6 +21,10 @@ namespace msw {
                 void SetSelectPosMdlObjId(long nId);
 
             private:
+                // Defined in game/menu/CBgMdl.cpp; generates no code.
+                inline void UnusedReferences() const;
+
+            private:
                 // From game/menu/CBgMdl.cpp (MenuF). The members from 0x1C to
                 // 0x70 are not mapped, nor how many models there are.
                 unsigned char m_Unk1C[0x54];          // 0x1C

@@ -23,6 +23,9 @@ namespace bcs {
                 // fn_800B2B50: wraps fn_803AFCC0 (DWC_IsValidFriendData,
                 // guessed). Unnamed.
                 static int IsValidFriendData(const DWCstAccFriendData *pData);
+                // (added for MenuF game/menu/CWiFiTopA.cpp; return type
+                // guessed) Passes the account data on to the library.
+                static void ReportUserData(const DWCstAccUserData *pUserData);
         };
     }
 }

@@ -60,6 +60,45 @@ namespace msw {
             virtual long RunCorrect_GetFirstRotDirAroundChr(const bcs::FVEC3 &pos, float fLeft, float fRight) const;
             virtual void GetPosTurnAroundForRunEx(bcs::FVEC3 &pos);
             virtual void GetViewPointPosForRunEx(bcs::FVEC3 &pos);
+
+            // (added for game/dodge/unit_D7800.cpp) The virtuals this class
+            // adds, in the order of its vtable (slots 59 to 70, 0xEC to
+            // 0x118, names from DodgeF's symbols; return types guessed).
+            virtual int CanbePassBossPackun();
+            virtual int MethdPassBossPackun();
+            virtual int CanbeDivingCatch() const;
+            virtual int MethdDivingCatch(const bcs::FVEC3 &pos);
+            virtual int MethdSwitchAutoAimTarget();
+            virtual int CanbeQuickTurn();
+            virtual int MethdQuickTurn();
+            virtual int MethdBallCatch();
+            virtual int CanbeSp() const;
+            virtual int MethdSp();
+            // Whether the special shot's target marker can be moved now;
+            // move it towards pos (fRate: how fast, negative for the
+            // default, as in CComDrvVolleyGame).
+            virtual int CanbeMoveSpTargetMarkerPos() const;
+            virtual int MethdMoveSpTargetMarkerPos(const bcs::FVEC3 &pos, float fRate) const;
+
+            // (game/dodge/unit_D7800.cpp and the files around it) Answering
+            // a special shot of the driver's own team by moving its target
+            // marker. Other return types guessed.
+            void ActCallGoHome();
+            void ActLoopSpOffMoveMarker();
+            long GetDatSpTargetMarker(float *pTime, int bEarly);
+            int GetMoveSpTargetMarkerPos(bcs::FVEC3 &rPos, long nKind, long &rChr);
+            void WraperActCallOffSpStart();
+            void WraperActCallOffSpSub();
+            // Where the marker is now; zero when there is none.
+            int GetSpTargetMarkerPos(bcs::FVEC3 &rPos) const;
+            // Characters of the other team in the infield (index, negative
+            // for none): the nearest to pos, the one in bad condition, the
+            // ones with the least and the most life.
+            long GetNearEmInnerChr(const bcs::FVEC3 &pos, int, int) const;
+            long GetBadConditionEmInnerChr() const;
+            long GetLifeFewEmInnerChr() const;
+            long GetLifeLotEmInnerChr() const;
+
             int ShoudEscGimmick() const;
             int GetEscPosFromGimmick(bcs::FVEC3 &rPos) const;
             int GetSafePosFromGimmick(bcs::FVEC3 &rPos) const;

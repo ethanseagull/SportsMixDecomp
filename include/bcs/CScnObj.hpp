@@ -79,9 +79,9 @@ namespace bcs {
             // (which names bcs::CMdlObj's overrides). The ones from 0x54 on
             // without a DOL name are one-line bodies there; the material
             // setters are empty in bcs::CScnObj. Return types guessed.
-            // IsScnObj, GetAlphaMode and GetEffectRootNodeIdx are inline (weak
-            // copies in VolleyF game/volley/CStageNetVolley.cpp and MenuF
-            // game/menu/CBgMdl.cpp).
+            // IsScnObj, GetAlphaRate, GetAlphaMode and GetEffectRootNodeIdx are
+            // inline (weak copies in VolleyF game/volley/CStageNetVolley.cpp and
+            // CBallTargetMarker.cpp, MenuF game/menu/CBgMdl.cpp).
             virtual int IsScnObj() const { return 1; }                                      // 0x10
             virtual const FMTX34 *GetNodeWorldMtxPtr(unsigned long) const;                  // 0x40
             virtual void SetNodeLocalMtx(unsigned long, const FMTX34 &);                    // 0x44
@@ -89,7 +89,7 @@ namespace bcs {
             virtual void SetAlphaRate(unsigned char);                                       // 0x4C
             virtual void SetAlphaRateF(float);                                              // 0x50
             virtual void SetAlphaMode(AlphaMode);                                           // 0x54
-            virtual unsigned char GetAlphaRate() const;                                     // 0x58
+            virtual unsigned char GetAlphaRate() const { return m_nAlphaRate; }             // 0x58
             virtual float GetAlphaRateF() const;                                            // 0x5C
             virtual AlphaMode GetAlphaMode() const { return AlphaMode(m_nAlphaMode); }      // 0x60
             virtual void SetExBlendMode(int);                                               // 0x64

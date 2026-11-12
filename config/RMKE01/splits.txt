@@ -488,7 +488,9 @@ game/msw/CRadarIcon2D.cpp:
 	.text       start:0x8019DC9C end:0x8019FF6C
 
 game/msw/CCockpitMarkerIcon2D.cpp:
-	.text       start:0x801A1434 end:0x801A18BC
+	.text       start:0x801A1434 end:0x801A197C
+	.rodata     start:0x8043E628 end:0x8043E9B0
+	.data       start:0x80481158 end:0x804811B4
 
 game/msw/CSignBoard.cpp:
 	.text       start:0x801A2800 end:0x801A2F70

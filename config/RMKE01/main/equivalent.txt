@@ -256,6 +256,7 @@ main __ct__Q23msw10CEventMoveFPQ23msw11CEventModelPQ23msw14CEventNodeBasei near 
 main __ct__Q23msw13CAtkCollisionFlllUl near 99.0 register choice only: loop counter and byte-offset registers swapped in the store loop (as CDefCollision ctor)
 main __ct__Q23msw13CDefCollisionFlllUl near 98.2 register choice only: loop counter and byte offset registers swapped in the three store loops
 main __ct__Q23msw13CGameGoalDemoFPQ23bcs5CTaskllRCQ23bcs5FVEC3llf near 99.7 register choice only: the two pointer registers of the second and third inlined paired-single vector add (pos += at) are swapped
+main __ct__Q23msw14CBodyCollisionFlllUl near 99.0 register choice only: loop counter and byte-offset registers swapped in the store loop (as CAtkCollision/CDefCollision ctors); vtable reloc names the uncarvable .data label
 main __ct__Q23msw16CStgGmk_Case_ActFPQ23msw7CStgGmk near 99.7 stack slots of the __ptmf_null copy and the ResetVelocity zero vector swapped, float register numbering; same calls, constants and field stores
 main __ct__Q23msw17CStgGmk_Pylon_ActFPQ23msw7CStgGmk near 99.9 stack slot of the null-ptmf temporary
 main __ct__Q23msw18CChr1on1MarkerBaseFPQ23bcs5CTaskl near 99.8 stack slots only: the CFsm null member-pointer copy and the state-table member-pointer copies sit at other offsets

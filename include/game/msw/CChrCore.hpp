@@ -963,6 +963,9 @@ namespace msw {
             // the name; CChrMarkerVolley::AppearCheck asks it outside the
             // party game) In the DOL.
             int IsPadCtrl() const;
+            // (DOL; added for VolleyF game/volley/CGameVolleyVsBoss.cpp) Not
+            // zero when the character's team is attacking.
+            int IsOffenseTeam() const;
             // DOL. The goal the character's team attacks (BasketF
             // CStageBasket06::SendMessage lights that goal's side).
             long GetTargetGoalIdx() const;

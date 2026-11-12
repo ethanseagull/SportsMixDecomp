@@ -465,6 +465,10 @@ namespace msw {
             // The goal team nTeam attacks: the byte at g_GameWork + 0x88 +
             // nTeam, read unsigned. (return type guessed)
             static long GetTargetGoalIdx(long nTeam);
+            // (DOL, static; added for HockeyF CCameraHockeyGame, return type
+            // guessed) A camera kind the game forces: 3 and 7 pick special
+            // hockey camera modes.
+            static long GetExceptionalCameraType();
             // (DOL; added for BasketF game/basket/CStageBasket10.cpp; return
             // type guessed) The team whose goal view n shows.
             static long GetViewTargetTeam(long n);
@@ -605,6 +609,9 @@ namespace msw {
             static void SetTeamRebirthLife(long nTeam, long nLife);
 
             static GameWork g_GameWork;
+            // (DOL; added for BossF game/boss/CBallBoss.cpp, meaning of the
+            // bits not known; the boss ball tests 0x4)
+            static unsigned long g_uPauseBit;
             static CGame *m_pInstance;
 
             // Added for BasketF game/basket/CGameBasketHungryBossPackun.cpp
@@ -664,6 +671,19 @@ namespace msw {
             static void SetReplayMode(int bOn);
             static void SetTime(float fTime);
             static void ClearLastGoalInfo();
+            // (DOL, static; added for VolleyF game/volley/CGameVolleyVsBoss.cpp;
+            // meanings guessed from the names) The record of a goal being
+            // scored: the finish and event modes, the shoot type (with a
+            // float), the scorer, the team, the base score; the volley serve
+            // and rebound modes.
+            static void SetGoalFinishMode(int bOn);
+            static void SetGoalEventMode(int bOn);
+            static void SetGoalShootType(long nType, float);
+            static void SetGoalChar(long nChr);
+            static void SetGoalTeam(long nTeam);
+            static void SetGoalBaseScore(long nScore);
+            static void SetVolleyServeMode(int bOn);
+            static void SetReboundMode(int bOn);
             // The character whose arts (special shot) event runs.
             static long g_nEventChrIdx;
 

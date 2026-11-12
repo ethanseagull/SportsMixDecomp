@@ -8,6 +8,8 @@ VolleyF Bubble_CalcCreatePos__Q23msw14CStageVolley11Fv unverified 78.9 78.9%: or
 VolleyF CalcPos___Q33msw11CC09_VOLLEY22CcKinopioBoundMushroomFv near 99.4 register choice in paired-single FVEC3Add
 VolleyF Calc__Q23msw20CSceneCalcReadyStartFRQ23bcs10CCameraAnmRQ23bcs5FVEC3RQ23bcs5FVEC3Rf near 96.0 register allocation of the cubic blend only (96.0%)
 VolleyF CanbeTurnOver___Q33msw14CHR_MAN_VOLLEY26CChrManVolleyRhythmReceiveFv near 98.1 register allocation only
+VolleyF ChrPosSetNormal___Q23msw17CGameVolleyVsBossFi near 99.9 the two zero inits of the loop counters are issued in the other order
+VolleyF ChrPosSetResult___Q23msw17CGameVolleyVsBossFv near 99.9 the two zero inits of the loop counters are issued in the other order
 VolleyF CoinInWait__Q23msw19CCockpitVolleyCoderFv near 98.8 register allocation only: loop counter, table pointer and accessor temporary in other saved registers
 VolleyF CoinIn__Q23msw19CCockpitVolleyCoderFv near 98.8 register allocation only: loop counter, table pointer and accessor temporary in other saved registers
 VolleyF CoinOutWait__Q23msw19CCockpitVolleyCoderFv near 98.8 register allocation only: loop counter, table pointer and accessor temporary in other saved registers
@@ -99,6 +101,7 @@ VolleyF SetCountPoint__Q23msw20CCockpitVolleyResultFPlPll near 99.6 register all
 VolleyF SetCountScore__Q23msw20CCockpitVolleyResultFPlPlll near 98.4 register allocation only (float temporaries of the count speed and the saved pane pointer/limit registers swapped)
 VolleyF SetCountText__Q23msw23CCockpitVolleyLifeGaugeFll near 98.7 register allocation only (renumbered diff is empty)
 VolleyF SetFaceIcon__Q23msw19CCockpitVolleyCoderFPQ33bcs3G2D9CPaneCtrlllPCQ23msw8CChrCore near 99.2 register allocation, and Pane::SetVisible(IsStarPlayer()) inserts the bit with the operands the other way round (same flag byte)
+VolleyF SetGameResult___Q23msw17CGameVolleyVsBossFv near 99.1 float registers of the 0.0f constant and m_fUnk20 swapped; same compares and branches
 VolleyF SetHeightObjState___Q23msw17CBallTargetMarkerFv near 98.7 float register choice and scheduling; .rodata offsets shifted because -1.0f/0.23f sit after 1.0f in ours (0.23f has no known user)
 VolleyF SetHeightObjState___Q23msw30CBallTargetMarkerRhythmReceiveFv near 98.4 float register choice and block order of the clamp; .rodata offsets shifted (-1.0f/0.23f placement)
 VolleyF SetIconFace__Q23msw23CCockpitChrIcon2DVolleyFll near 99.1 register allocation only: one more callee-saved register (_savegpr_25 vs _savegpr_26), so the frame is 0x60 instead of 0x50; same calls, constants and accesses
@@ -142,6 +145,7 @@ VolleyF SubStateBlockJumpIsActEnd___Q23msw20CChrCoreVolleySiromaFPQ33msw14CChrCo
 VolleyF SubStateBlockJumpIsActEnd___Q23msw21CChrCoreVolleyKinopioFPQ33msw14CChrCoreVolley21STATE_WORK_BLOCK_JUMP near 99.9 instruction scheduling only
 VolleyF SubStateReceiveDoProcDiveReceive___Q23msw19CChrCoreVolleyYoshiFPQ33msw14CChrCoreVolley18STATE_WORK_RECEIVE near 99.8 f2/f3 swapped in the angle wrap (same as the boss sibling)
 VolleyF SubStateReceiveDoProcDiveReceive___Q23msw20CChrCoreVolleySiromaFPQ33msw14CChrCoreVolley18STATE_WORK_RECEIVE near 99.7 register allocation only (angle wrap loop)
+VolleyF TrgVolleyGoalIn___Q23msw17CGameVolleyVsBossFllllllRCQ23bcs5FVEC3Ul near 99.1 original reads m_nGameFlag again before the |= 1 (no store in between, same value); ours keeps the first read in a register; rest identical
 VolleyF UpdateDefColl__Q23msw26CStgGmk_Trolley_Act_VolleyFRCQ23bcs5FVEC3ffff near 92.7 registers and frame: one more saved float register (frame 0x120 vs 0x110); the inlined CStgSrt::GetMtx tests its flags as (flag&7)!=0 normalised and as extracted bits in the original, as masks in ours (equivalent branch forms); same calls, constants, loads and stores
 VolleyF UpdateEdge___Q23msw14CStageVolley10Fv near 96.4 stack layout of the matrix copies (frame 0x170 vs 0x130) and one more saved register; same calls and stores
 VolleyF UpdateMdl__Q23msw14CStageVolley13FUlf near 98.1 register choice and common-subexpression reuse only (as CStageBasket13::UpdateMdl): in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls

@@ -177,6 +177,9 @@ namespace msw {
             static void AllSetState(long nState, long, long);
             static void AllStop(CChrCore::STOP_MODE, CChrCore::STOP_MODE);
             static int CanbeTurnOver();
+            // (DOL, static; added for VolleyF game/volley/CGameVolleyVsBoss.cpp)
+            // SendMsg_ on the instance: message id to character nChr.
+            static void SendMsg(long nChr, CChrDrv::MSG_ID id, long, long, unsigned long, unsigned long);
 
         protected:
             unsigned char m_Unk34[0x50 - 0x34]; // two nw4r::ut::List at 0x34 and 0x40, a word at 0x4C

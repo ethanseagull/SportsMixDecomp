@@ -42,6 +42,13 @@ namespace msw {
                 void Window_Pict1Lock(int bLock);
                 void WindowA_Close();
                 long Makehash(char *pName);
+                // Added for MenuF game/menu/CWiFiTopA.cpp (return types and
+                // argument names guessed): making and freeing the instance,
+                // and the window with a picture shown while connecting.
+                static void Initialize();
+                static void Finalize();
+                void Window_Picture0(char *pGroup, char *pLabel);
+                void Window_Pict0Close();
 
                 // Added for MenuF game/menu/CWiFiGame.cpp (return types and
                 // argument names guessed). A time limit of fTime (seconds,

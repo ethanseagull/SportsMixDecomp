@@ -10,7 +10,29 @@ namespace msw {
     // One player's save data (DOL). Only the members used so far; the
     // per-sport settings below are read by TourF's TournamentRule::SetupGame.
     // (member names and meanings guessed)
-    struct SAVE_DATA_PLAYER {
+    // Size 0x2C. (added for MenuF game/menu/CWiFiTopA.cpp; the class
+    // name is from the DOL's GetMiiStoreData__Q23msw10PlayerInfoFv, which
+    // reads the Mii at 0x20 and 0x24 of the save data: so the save data
+    // starts with it. Member names guessed.) The player's name and Mii.
+    struct PlayerInfo {
+        // The player's own Mii (bcs::CMiiMan::GetStoreData of m_MiiSource
+        // and m_MiiCreateId).
+        RFLStoreData GetMiiStoreData();
+
+        // 0x00. (added for MenuF game/menu/CFriendCode.cpp; name and
+        // length guessed) The player's name, shown in the friend code
+        // message.
+        wchar_t m_Name[0xC];
+        // 0x18 to 0x2B. (names guessed; added for MenuF
+        // game/menu/CPlusMinus.cpp) The player's own Mii, passed to
+        // CSelectMenu::Mii_SelectParam.
+        unsigned char m_nMiiUnk;         // 0x18
+        long m_nMiiIndex;                // 0x1C
+        RFLDataSource m_MiiSource;       // 0x20
+        RFLCreateID m_MiiCreateId;       // 0x24
+    };
+
+    struct SAVE_DATA_PLAYER : public PlayerInfo {
         // Size 0xC. (added for MenuF game/menu/unit_61C00.cpp; names
         // guessed) Bit n of m_nLevelBit: difficulty n is open (bit 3 in
         // game kind 0's record also gates game kind 5); bit n of
@@ -49,7 +71,11 @@ namespace msw {
             long m_nNameId;              // 0x04, a guest Mii's name in "List_Mii_Name"
             RFLDataSource m_Source;      // 0x08
             RFLCreateID m_CreateId;      // 0x0C, all zero for an empty entry
-            unsigned char m_Unk14[0x20]; // 0x14
+            // 0x14. (added for MenuF game/menu/CScoreBook.cpp; meaning
+            // guessed) The Mii's record in each sport (0 basketball, 1
+            // volleyball, 2 dodgeball, 3 hockey), ranked by the score book.
+            long m_nScore[4];
+            unsigned char m_Unk24[0x10]; // 0x24
             long m_bSelect;              // 0x34, read by GetSelectMii (meaning guessed)
         };
         // (added for MenuF game/menu/CMiiSel.cpp; return types guessed)
@@ -68,28 +94,34 @@ namespace msw {
         // (added for MenuF game/menu/CFriendList.cpp; return type guessed)
         // Not zero when the data holds a player.
         int IsValid() const;
+        // (added for MenuF game/menu/CScoreBook.cpp; name from the symbol,
+        // meaning guessed) The record of stage nStage in game kind
+        // nGameKind, negative when it has none.
+        long CheckStage(long nGameKind, unsigned short nStage);
 
-        // 0x00. (added for MenuF game/menu/CFriendCode.cpp; name and
-        // length guessed) The player's name, shown in the friend code
-        // message.
-        wchar_t m_Name[0xC];
-        // 0x18 to 0x2B. (names guessed; added for MenuF
-        // game/menu/CPlusMinus.cpp) The player's own Mii, passed to
-        // CSelectMenu::Mii_SelectParam.
-        unsigned char m_nMiiUnk;         // 0x18
-        long m_nMiiIndex;                // 0x1C
-        RFLDataSource m_MiiSource;       // 0x20
-        RFLCreateID m_MiiCreateId;       // 0x24
-        unsigned char m_Unk002C[0x38 - 0x2C];
+        // 0x00 to 0x2B: PlayerInfo.
+        // 0x2C. (added for MenuF game/menu/CWiFiTopA.cpp; name guessed)
+        // The answer to the Wi-Fi top screen's question about showing
+        // other players' Miis: 0 yes, 1 no.
+        long m_nOtherMii;
+        unsigned char m_Unk0030[0x38 - 0x30];
 
         // 0x38 to 0x56EF. (names guessed; added for MenuF
         // game/menu/CFriendCode.cpp) The Wi-Fi account and friend roster.
         // One saved friend, copied from bcs::dwc::CDwcFriend.
         struct Friend {
             unsigned char m_Unk00[0x18]; // 0x00
-            long m_Unk18;                // 0x18, CDwcFriend 0x04
-            long m_Unk1C;                // 0x1C, CDwcFriend 0x08
-            long m_Unk20;                // 0x20, CDwcFriend 0x0C
+            union {
+                struct {
+                    long m_Unk18;        // 0x18, CDwcFriend 0x04
+                    long m_Unk1C;        // 0x1C, CDwcFriend 0x08
+                    long m_Unk20;        // 0x20, CDwcFriend 0x0C
+                };
+                // 0x18. (added for MenuF game/menu/CWiFiTopA.cpp) The
+                // three words as the library's friend data, as
+                // CDwcFriendList::WriteBack takes them.
+                DWCstAccFriendData m_FriendData;
+            };
             unsigned long long m_nFriendCode; // 0x28, CDwcFriend 0x10
             long m_Unk30;                // 0x30, CDwcFriend 0x18
             long m_Unk34;                // 0x34, CDwcFriend 0x1C
@@ -111,7 +143,19 @@ namespace msw {
         DWCstAccUserData m_AccUserData;  // 0x38
         unsigned long long m_nFriendCode; // 0x78, the player's own code
         long m_nFriendNum;               // 0x80
-        unsigned char m_Unk0084[0x108 - 0x84];
+        unsigned char m_Unk0084[0x88 - 0x84];
+        // 0x88 to 0x2E7 (0x260 bytes, through m_TotalSkill): the public
+        // data other players can read (bcs::dwc::CDwc::
+        // SaveEntryOwnPublicData). (added for MenuF game/menu/CWiFiTopA.cpp;
+        // names guessed) A fixed tag, the name, the Mii.
+        enum {
+            PUBLIC_DATA_SIZE = 0x260,
+            PUBLIC_DATA_TAG = 0x75C9E14A
+        };
+        long m_nPublicTag;               // 0x88
+        wchar_t m_PublicName[0xC];       // 0x8C
+        RFLStoreData m_PublicMii;        // 0xA4
+        unsigned char m_Unk00F0[0x108 - 0xF0];
         // 0x108. (added for MenuF game/menu/CFriendInfo.cpp) The player's
         // ratings in the four sports, then the overall one.
         WiFiSkill m_Skill[4];
@@ -124,7 +168,21 @@ namespace msw {
         short m_Unk2EC;
         short m_Unk2EE;
         Friend m_Friend[FRIEND_MAX];     // 0x2F0
-        unsigned char m_Unk56F0[0x5C50 - 0x56F0];
+        // Size 0x10. (added for MenuF game/menu/CScoreBook.cpp; names
+        // guessed) One character's record in one sport.
+        struct CharaScore {
+            unsigned short m_nPlayNum;   // 0x0, not zero once played
+            unsigned char m_Unk2[0x2];   // 0x2
+            long m_nScore;               // 0x4, ranked by the score book
+            unsigned char m_Unk8[0x8];   // 0x8
+        };
+        enum {
+            CHARA_SCORE_NUM = 20
+        };
+        // 0x56F0. One row per character for each sport (0 basketball, 1
+        // volleyball, 2 dodgeball, 3 hockey).
+        CharaScore m_CharaScore[4][CHARA_SCORE_NUM];
+        unsigned char m_Unk5BF0[0x5C50 - 0x5BF0];
         union {
             unsigned char m_nFlags5C50; // 0x5C50; bit 0x08 picks the second camera table in CSelectMenu::HowTo_In (MenuF)
             // 0x5C50. (added for MenuF game/menu/unit_61C00.cpp; names
@@ -156,6 +214,29 @@ namespace msw {
         unsigned char bDodgeChrChange;
         unsigned char m_Unk5D2A[0x5D36 - 0x5D2A];
         unsigned char bHockeyChrChange;
+        unsigned char m_Unk5D37[0x8864 - 0x5D37];
+
+        // (added for MenuF game/menu/CScoreBook.cpp; names guessed) The
+        // totals the score book shows for one sport: games played, three
+        // counts shown by difficulty, then values shown as an average per
+        // game or as a percentage of another value. Which value is which
+        // differs between the sports, so they are kept as an array.
+        // Basketball, volleyball and dodgeball use 0x44 bytes; hockey's
+        // record is longer (the score book reads it up to 0x4C).
+        struct SportScore {
+            long m_nPlayNum;             // 0x00
+            short m_nLevelNum[3];        // 0x04
+            long m_nValue[14];           // 0x0C
+        };
+        struct HockeyScore {
+            long m_nPlayNum;             // 0x00
+            short m_nLevelNum[3];        // 0x04
+            long m_nValue[16];           // 0x0C
+        };
+        SportScore m_BasketScore;        // 0x8864
+        SportScore m_VolleyScore;        // 0x88A8
+        SportScore m_DodgeScore;         // 0x88EC
+        HockeyScore m_HockeyScore;       // 0x8930
     };
 }
 

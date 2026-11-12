@@ -9,7 +9,7 @@ namespace msw {
     // a friend's storage data: the four sports and an overall one.
     struct WiFiSkill {
         enum {
-            HISTORY_MAX = 42
+            HISTORY_MAX = 40
         };
 
         short m_nRate;                 // 0x00, the rating shown
@@ -19,6 +19,9 @@ namespace msw {
         short m_nLose;                 // 0x08
         short m_nDraw;                 // 0x0A
         short m_History[HISTORY_MAX];  // 0x0C, the rating after each match
+        // 0x5C. (added for MenuF game/menu/CWiFiTopA.cpp; name guessed) Set
+        // to 1000 for a new player, as a word.
+        long m_nPoint;
     };
 }
 

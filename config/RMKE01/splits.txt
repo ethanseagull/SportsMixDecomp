@@ -124,7 +124,9 @@ game/bcs/CWorldEnv.cpp:
 	.text       start:0x8007DF9C end:0x8007EB64
 
 game/bcs/G2D/CLayoutBase.cpp:
-	.text       start:0x800A26F0 end:0x800A31B4
+	.text       start:0x800A2524 end:0x800A34B0
+	.data       start:0x80469F78 end:0x8046A000
+	.sdata2     start:0x805C2298 end:0x805C22B0
 
 game/bcs/G2D.cpp:
 	.text       start:0x800AA14C end:0x800ADA84

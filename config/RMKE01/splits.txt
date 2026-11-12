@@ -254,6 +254,8 @@ game/msw/CEffectCtrl.cpp:
 
 game/msw/CEffectCluster.cpp:
 	.text       start:0x801227AC end:0x80123568
+	.data       start:0x8046F70C end:0x8046F7CC
+	.sdata      start:0x805BFBB8 end:0x805BFBC0
 
 game/msw/CEffectTableList.cpp:
 	.text       start:0x8012444C end:0x801244C0

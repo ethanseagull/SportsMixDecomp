@@ -8,7 +8,11 @@
 namespace nw4r {
     namespace g3d {
 
-        struct ResMdlData;
+        // Only the member read so far.
+        struct ResMdlData {
+            unsigned char unk00[0x48];
+            long name; // 0x48: offset of the model's name from the start
+        };
         class ResFile;
 
         // Handle to a model resource: one pointer, null when the resource
@@ -28,6 +32,30 @@ namespace nw4r {
                 explicit ResMdl(ResMdlData *pData) : m_pData(pData) {}
 
                 bool IsValid() const { return m_pData != 0; }
+
+                // The check, its file name and line are the ones in the
+                // DOL's inline copy (msw::CEffectCluster::FindEffect).
+                static const char *GetClassName() { return "ResMdl"; }
+                ResMdlData &ref() const
+                {
+                    if (!IsValid()) {
+                        nw4r::db::Panic("g3d_resmdl_ac.h", 120, "%s::%s: Object not valid.", GetClassName(), __FUNCTION__);
+                    }
+                    return *m_pData;
+                }
+                // The model's name, null when it has none.
+                const char *GetName() const
+                {
+                    // (as nw4r's ofs_to_ptr: the base pointer is taken
+                    // before the offset is tested; the original's branch
+                    // layout needs this order)
+                    const char *p = reinterpret_cast<const char *>(&ref());
+                    long ofs = reinterpret_cast<const ResMdlData *>(p)->name;
+                    if (ofs != 0) {
+                        return p + ofs;
+                    }
+                    return 0;
+                }
 
                 // (DOL) The material of that name; an invalid handle if
                 // there is none.

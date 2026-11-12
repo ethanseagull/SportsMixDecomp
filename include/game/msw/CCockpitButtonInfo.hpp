@@ -70,6 +70,10 @@ namespace msw {
                                          CMenuPaneAccessor *pPaneAccessor, int nArg);
 
         private:
+            // (added for game/msw/CCockpitMenuBase.cpp) Its step functions
+            // read the result ids inline.
+            friend class CCockpitMenuBase;
+
             bool IsValidButton(long nButton) const
             {
                 bool bValid = false;

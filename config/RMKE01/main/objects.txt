@@ -82,3 +82,4 @@ Matching game/msw/CMenuTask.cpp
 Equivalent game/msw/CChrOptMdlObj.cpp
 Equivalent game/msw/CCockpitLayoutBase.cpp
 Equivalent game/msw/CMenuPartBase.cpp
+Equivalent game/msw/CCockpitMenuBase.cpp

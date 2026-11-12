@@ -117,10 +117,14 @@ namespace bcs {
                 if (FsmqIsEmpty()) {
                     return 0;
                 }
-                if (!m_pWorkQueue || !m_nWorkSize) {
+                // (the pointer in a local: BasketF's CChrCoreBasket states
+                // keep the head in r5 and the pointer in r4 only so;
+                // game/basket/unit_25D70.cpp, 2026-11-12)
+                void *pWork = m_pWorkQueue;
+                if (!pWork || !m_nWorkSize) {
                     return 0;
                 }
-                return static_cast<char *>(m_pWorkQueue) + m_nWorkSize * m_nQueueHead;
+                return static_cast<char *>(pWork) + m_nWorkSize * m_nQueueHead;
             }
 
             template <class W>

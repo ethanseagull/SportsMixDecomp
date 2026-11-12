@@ -456,6 +456,11 @@ namespace msw {
             // DOL. The ball's offset from the hand of the character holding
             // it (VolleyF's CChrCoreVolleyLuigi lifts it while it comes in).
             void SetAttachPos(const bcs::FVEC3 &rOfs, int);
+            // (DOL; added for BasketF game/basket/CBallManBasketHungryBossPackun.cpp,
+            // meanings guessed from the names) Adds rOfs to the attach
+            // offset; sets the spin of the ball (radians per frame).
+            void AddAttachPos(const bcs::FVEC3 &rOfs);
+            void SetRotSpeed(float fSpeed);
             // (DOL; added for DodgeF CChrCoreDodgeWaluigi, return types
             // guessed) Puts the ball at rPos at once; attaches it to node
             // nNode of pMdl; frees it again.

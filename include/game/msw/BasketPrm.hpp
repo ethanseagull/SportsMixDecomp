@@ -653,6 +653,64 @@ namespace msw {
     extern float BASKET_PRM_S11_BUBBLE_ZONE_R;
     extern float BASKET_PRM_S11_BUBBLE_ZONE_ANGLE;
     extern long BASKET_PRM_S11_BUBBLE_ZONE_SLOT;
+
+    // The party game against the hungry boss Piranha Plant (added for
+    // game/basket/CBallManBasketHungryBossPackun.cpp). Points per fruit kind
+    // (ORENGE as spelt in the symbol), the bonus time in seconds and its
+    // telop timing, the grid of places the strings hang fruit over, and
+    // the shooting rates of the party game.
+    extern long BASKET_PRM_COMMON_HUNGRY_ORENGE_PT;
+    extern long BASKET_PRM_COMMON_HUNGRY_BLUE_APPLE_PT;
+    extern long BASKET_PRM_COMMON_HUNGRY_RED_APPLE_PT;
+    extern long BASKET_PRM_COMMON_HUNGRY_SUICA_PT;
+    extern long BASKET_PRM_COMMON_BONUS_SECOND;
+    extern long BASKET_PRM_COMMON_BONUS_TELOP_STEP1_FRM;
+    extern long BASKET_PRM_COMMON_BONUS_TELOP_STEP2_MINUTES;
+    extern long BASKET_PRM_COMMON_APPEND_AREA_X_NUM;
+    extern long BASKET_PRM_COMMON_APPEND_AREA_Z_NUM;
+    extern float BASKET_PRM_COMMON_APPEND_AREA_SIZE_X;
+    extern float BASKET_PRM_COMMON_APPEND_AREA_SIZE_Z;
+    extern float BASKET_PRM_COMMON_APPEND_AREA_POS_Z;
+    extern float BASKET_PRM_COMMON_APPEND_POS_Y;
+    extern float BASKET_PRM_HB_BOMB_EXPLODE_R;
+    extern long BASKET_PRM_PARTY_SHOOT_RATE_BASE;
+    extern long BASKET_PRM_PARTY_SHOOT_RATE0;
+    extern long BASKET_PRM_PARTY_SHOOT_RATE1;
+    extern long BASKET_PRM_PARTY_SHOOT_RATE2;
+    extern long BASKET_PRM_PARTY_SHOOT_RATE3;
+    extern float BASKET_PRM_PARTY_SHOOT_AREA1;
+    extern float BASKET_PRM_PARTY_SHOOT_AREA2;
+    extern float BASKET_PRM_PARTY_SHOOT_AREA3;
+    extern long BASKET_PRM_PARTY_AIR_BALL_RATE;
+
+    // The string NPCs that hang the fruit (msw::CNpcStringBasket): the
+    // shadow under a waiting fruit (colours 0-255, the _CATCH set for a
+    // fruit picked for the bonus), how fast it follows, the swing of a
+    // picked fruit and the turning of the string.
+    extern long BASKET_PRM_WAIT_BALL_COLOR_A;
+    extern long BASKET_PRM_WAIT_BALL_COLOR_R;
+    extern long BASKET_PRM_WAIT_BALL_COLOR_G;
+    extern long BASKET_PRM_WAIT_BALL_COLOR_B;
+    extern float BASKET_PRM_WAIT_BALL_SHADOW_SCALE;
+    extern long BASKET_PRM_WAIT_BALL_COLOR_A_CATCH;
+    extern long BASKET_PRM_WAIT_BALL_COLOR_R_CATCH;
+    extern long BASKET_PRM_WAIT_BALL_COLOR_G_CATCH;
+    extern long BASKET_PRM_WAIT_BALL_COLOR_B_CATCH;
+    extern float BASKET_PRM_WAIT_BALL_SHADOW_SCALE_CATCH;
+    extern float BASKET_PRM_SHADOW_SCALE_UPDATE_RATE;
+    extern float BASKET_PRM_SHADOW_COLOR_UPDATE_RATE;
+    extern float BASKET_PRM_COMMON_WAIT_MOVE_REV_RATE;
+    extern float BASKET_PRM_COMMON_WAIT_MOVE_VALUE_MIN;
+    extern float BASKET_PRM_COMMON_WAIT_MOVE_VALUE_MAX;
+    extern float BASKET_PRM_COMMON_WAIT_MOVE_SPEED_MIN;
+    extern float BASKET_PRM_COMMON_WAIT_MOVE_SPEED_MAX;
+    extern float BASKET_PRM_HB_WAIT_STATE_ROT_VALUE;
+    extern float BASKET_PRM_HB_WAIT_STATE_ROT_MAX;
+    extern float BASKET_PRM_HB_WAIT_OFFSET_Y_OR;
+    extern float BASKET_PRM_HB_WAIT_OFFSET_Y_BA;
+    extern float BASKET_PRM_HB_WAIT_OFFSET_Y_RA;
+    extern float BASKET_PRM_HB_WAIT_OFFSET_Y_SU;
+    extern float BASKET_PRM_HB_WAIT_OFFSET_Y_BM;
 }
 
 #endif /* !MSW_BASKETPRM_HPP_ */

@@ -60,7 +60,10 @@ namespace msw {
             // character's size; the two points are the body capsule's ends)
             virtual float GetBodyCollInfo(bcs::FVEC3 &, bcs::FVEC3 &);    // 0x54
             virtual void MainFunc();                                    // 0x58
-            virtual void DispFunc();                                    // 0x5C
+            // (inline: BasketF CBallManBasketHungryBossPackun.cpp, BossF
+            // CNpcBehemothFiga.cpp and DodgeF CGameDodgeDodgeOrDie.cpp each
+            // have a weak copy, an empty body)
+            virtual void DispFunc() {}                                  // 0x5C
             virtual void CallbackMotTrg_(const bcs::CAnmObjMotBase::MOT_TRG *); // 0x60
             // (the ghost's override returns 1 after taking the hit, 0 when it
             // ignores it)
@@ -90,6 +93,11 @@ namespace msw {
             float GetRotY_FromPosXZ(const bcs::FVEC3 &rPos) const;
             void GetCompPos(bcs::FVEC3 &rPos) const;
             void SetScale(const bcs::FVEC3 &rScale);
+            // (DOL; added for BasketF game/basket/CBallManBasketHungryBossPackun.cpp,
+            // names from the symbols) The offset the model is drawn at from
+            // the NPC's position.
+            void SetOffsetPos(const bcs::FVEC3 &rOfs);
+            bcs::FVEC3 &GetOffsetPos();
 
             // The functions registered with the body collision; pArg is the
             // NPC, and each calls the virtual function of the same name with

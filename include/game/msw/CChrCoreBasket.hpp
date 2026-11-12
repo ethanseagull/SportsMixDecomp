@@ -17,7 +17,18 @@ namespace msw {
         // INCOMPLETE: only what the character units read; names guessed.
         class CC_PARAM_BASKET2 {
             public:
-                unsigned char m_Unk000[0x1E8];
+                unsigned char m_Unk000[0x3C];
+                // 0x3C-0x4C (names guessed; game/basket/unit_25D70.cpp): the
+                // frames of the dash's after effect, the frame from which a
+                // turn of the stick by more than m_nDashTurnDeg degrees
+                // turns the dash round, the frames of a turn with the ball
+                // and its move.
+                long m_nDashEffFrame;          // 0x3C
+                long m_nDashTurnFrame;         // 0x40
+                long m_nDashTurnDeg;           // 0x44
+                long m_nTurnFrame;             // 0x48
+                float m_fTurnDist;             // 0x4C
+                unsigned char m_Unk050[0x1E8 - 0x50];
                 // 0x1E8: the frames Yoshi's smash cut holds its second step
                 // (CChrCoreBasketYoshi::CtorStateSmashCut).
                 long m_nSmashCutHoldFrame;
@@ -115,6 +126,11 @@ namespace msw {
             // far the dash has gone (0 to 1).
             int CanbeDunkMissDist() const;
             float GetDashActRate() const;
+            // (added for game/basket/CGameGuideBasket.cpp; meanings guessed
+            // from the names) How far into its dunk the character is, in
+            // percent; the frame of the jump block's jump.
+            long GetDunkActionRate() const;
+            float GetJumpBlockJumpFrame() const;
             // (added for game/basket/unit_AF3BC.cpp; return types guessed)
             // Whether the character's just shot curves, and by how much.
             int IsJustShootTypeCurve() const;
@@ -261,6 +277,57 @@ namespace msw {
             // Hides the combination icon; plays the combination's sound.
             void DispOffCombinationIcon();
             void PlayCombinationSe();
+
+            // Added for game/basket/unit_25D70.cpp (the basic states; names
+            // from the symbols, return types and meanings guessed). The
+            // works of the neutral, run and dash states, the score of a
+            // target, and the parameters of the battle move (mapped there).
+            struct STATE_WORK_NEUTRAL;
+            struct STATE_WORK_RUN;
+            struct STATE_WORK_DASH;
+            struct SCORE_PARAM;
+            struct BATTLEPARAM;
+            // The motion of the item shot for an item of motion type nType.
+            long GetMotID_ItemShoot(long nType, int);
+            // Starts the fall from the court when the character stands
+            // where it falls; not zero then.
+            int MethdFall_();
+            // The yaw the block work looks in.
+            float CalcBWLookDir_() const;
+            // Sets up the defence collision of a state (nType).
+            void SetCollDefParam_(CChrCore::DEF_COLL *pDef, long nType);
+            // Not zero when the character is to stand in the block work
+            // against the ball holder (and starts the one on one with him).
+            int SubStateNeedBlockWork_(int bNow, float fFrame);
+            int SubStateRunNormal_(STATE_WORK_RUN *pWork);
+            void SubStateRunBlockWorkMove_(STATE_WORK_RUN *pWork);
+            // The second body push collision: back to no gap, or moved by
+            // fRate towards the yaw fRotY.
+            void CalcPush1Zero();
+            void CalcPush1GapValue(float fRate, float fRotY);
+            // The motion speed of the star condition.
+            float GetConditionStarMotSpeed() const;
+            // Which of eight directions (0 forward, round by 45 degrees) a
+            // move at fRot from the look direction is.
+            long GetDir8ToBlockWork(float fRot);
+            // Not zero when rPos is inside the block work's oval; rSide gets
+            // the side.
+            int HitCheckOval_(const bcs::FVEC3 &rPos, int &rSide);
+            void UpDate1on1ActMinFrame();
+            // The character an item shot aims at (null for none).
+            CChrCoreBasket *GetTargetItemShootCore(SCORE_PARAM &rParam);
+            // Throws the stocked item along rDir.
+            void ThrowItem_(const bcs::FVEC3 &rDir, unsigned long nFlag, int);
+            // Pushes the character back at the end of a battle with the
+            // ball holder.
+            void Util_PushBackOnBallerBattleEnd_(int, int, float);
+            // The frame the dribble motion nMot starts at.
+            float GetDribbleStartFrame(long nMot);
+            // The move of the dash; returns the yaw of the dash.
+            float SubStateDashMove_(STATE_WORK_DASH &rWork);
+            // The move of a special move's battle; 1 once it has nothing
+            // left to move.
+            int SubBattleMove_(BATTLEPARAM &rParam);
 
             // Overrides of CChrCore's virtuals, in vtable order (the slots of
             // __vt__Q23msw14CChrCoreBasket, read from BasketF, that name
@@ -588,10 +655,24 @@ namespace msw {
 
             // 0x57C (name guessed): flag bits; with 0x800 set a catch can be
             // followed by an aerial pass (CChrDrvPadBasket::MethdPass).
-            unsigned char m_Unk574[0x57C - 0x574];
+            unsigned char m_Unk574[0x578 - 0x574];
+            // 0x578 (name guessed; game/basket/unit_25D70.cpp): frames the
+            // block work goes on after its start (20 when it starts).
+            float m_fBlockWorkWait;
             unsigned long m_nBasketFlag;
+            unsigned char m_Unk580[0x584 - 0x580];
+            // 0x584 (name guessed; game/basket/unit_25D70.cpp): frames of
+            // the dash's after effect (flag 0x80000 of m_nBasketFlag).
+            float m_fDashEffFrame;
+            unsigned char m_Unk588[0x598 - 0x588];
+            // 0x598-0x5A0 (name guessed; game/basket/unit_25D70.cpp): the
+            // gap of the second body push collision (CalcPush1GapValue);
+            // the run state clears it.
+            float m_fPush1GapX;
+            float m_fPush1GapY;
+            float m_fPush1GapZ;
             // Not mapped yet.
-            unsigned char m_Unk580[0x5E8 - 0x580];
+            unsigned char m_Unk5A4[0x5E8 - 0x5A4];
     };
 
     // (field names guessed; only what the character units read is mapped)

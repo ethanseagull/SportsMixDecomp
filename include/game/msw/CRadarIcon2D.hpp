@@ -93,6 +93,12 @@ namespace msw {
             // callers pass `this`, although the body only loads a global.
             const char *GetLayoutBinaryFileName();
 
+            // (added for HockeyF game/hockey/CRadarIcon2DHockeyGoal.cpp;
+            // meanings guessed) Keeps an icon at rPos inside the view whose
+            // centre is at (fX, fY); and shows pPane, or fades it out.
+            void AdjustIconPosition(bcs::FVEC3 &rPos, float fX, float fY);
+            static void SetAlphaAndVisible(nw4r::lyt::Pane *pPane, int bVisible);
+
             // Static: callers pass the pane only.
             static void InitNullPane(nw4r::lyt::Pane *pPane);
             static void InitPicPane(nw4r::lyt::Pane *pPane);

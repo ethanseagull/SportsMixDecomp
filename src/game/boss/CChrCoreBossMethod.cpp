@@ -1182,7 +1182,7 @@ msw::CChrCoreBoss::STATE_WORK_RECEIVE *msw::CChrCoreBoss::SetStateReceive_(CBall
     pWork->m_nKind = nKind;
     pWork->m_nPose = nPose;
     pWork->m_Dir = pBall->GetVelocity();
-    pWork->m_fUnk38 = pWork->m_fUnk3C = 0.0f;
+    pWork->m_fUnk38 = pWork->m_fEndFrame = 0.0f;
     pWork->m_fUnk40 = m_fUnk268;
     pWork->m_nFlag |= 0x30;
     SetReceiveEndureWork_(pBall, pWork);

@@ -40,6 +40,9 @@ namespace msw {
             void OnFlag10(unsigned short flag) { m_nFlag10 |= flag; }
             void OffFlag10(unsigned short flag) { m_nFlag10 &= ~flag; }
             void OnFlagA0(unsigned long flag) { m_nFlagA0 |= flag; }
+            // (name guessed; added for BossF game/boss/CChrCoreBoss.cpp,
+            // which sets the defence kind of its two units this way)
+            void SetIndex(long n) { m_nIndex = n; }
             void OffFlagA0(unsigned long flag) { m_nFlagA0 &= ~flag; }
             // (name guessed; VolleyF's CStgGmk_Trolley_Act_Volley) Radians, 0 to
             // 2 pi: the callers wrap the angle first.

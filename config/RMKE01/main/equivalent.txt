@@ -42,6 +42,8 @@ main CanbePause__Q23msw14CGamePauseTaskCFv near 87.9 register renaming; the fina
 main ChangeCameraBaseDir__Q23msw5CGameFv near 96.1 inlined GetViewTargetTeam's game-mode switch lowered as a compare chain instead of a binary tree
 main ChangeCameraBaseDir___Q23msw5CGameFv near 90.1 inlined game-mode switch lowered as a compare chain instead of a binary tree; base register vs @l addressing
 main ChangeGoalIdx___Q23msw5CGameFv unverified 81.2 81.2%: inlined switches lowered differently (compare chain vs binary tree), IsLocalVsMode's result kept in a register
+main ChangeInputPointerModeForce__Q23msw8CMenuPadFl near 97.1 register allocation/order only
+main ChangeInputStickModeForce__Q23msw8CMenuPadFl near 98.2 register allocation/order only
 main ChangeResFile__Q23bcs10CAnmMotionFQ34nw4r3g3d7ResFile near 98.6 register choice and instruction order only
 main ChangeRes__Q23bcs10CAnmMatClrFQ34nw4r3g3d6ResMdlQ34nw4r3g3d9ResAnmClr near 98.1 m_Res loaded once more than the original by the inline InitFrame (no store between, same value); otherwise registers/order
 main ChangeRes__Q23bcs10CAnmTexPatFQ34nw4r3g3d6ResMdlQ34nw4r3g3d12ResAnmTexPat near 94.6 m_Res loaded once more than the original by the inline InitFrame (no store between, same value); otherwise registers/order
@@ -359,7 +361,9 @@ main UpdateFrame__Q23bcs15CAnmBlendMotionFf near 94.7 reload of the unchanged 16
 main UpdateFrame__Q23msw10CEventMoveFf near 99.1 paired-single register choice and the stack slots of the two difference temporaries only
 main UpdateFrame__Q23msw13CEvDemoMdlObjFf near 99.0 original reloads m_pMotNameData from memory where ours reuses the register (same value)
 main UpdateGmkPos__Q23msw13CPinballMechaFv near 99.6 register allocation/order only (diff.py: registers/schedule)
+main UpdateInputMode__Q23msw8CMenuPadFv near 91.4 same loads, stores, calls and branches; the original keeps two dead FVEC2 temporaries on the stack (zero and a copy of the pointer position, frame 0x90 vs 0x80) and addresses m_nInput through a separate index register; register numbering follows
 main UpdateMdlMtx__Q23msw19CStgGmk_Trolley_ActFv near 97.9 the first inlined CStgSrt matrix rebuild tests its flag bits through computed bools (neg/or/srwi, extrwi.) where ours tests them directly; stack slots
+main UpdateNoInputCount__Q23msw8CMenuPadFv near 92.0 same loads, stores and branches; the original addresses m_nInput with a separate index induction variable (add+lwz) instead of sharing the float-array pointer
 main UpdateParam__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main UpdateWavePos__Q23msw16CStgGmk_Wave_ActFf near 99.3 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main UpdateWaveTimer__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses

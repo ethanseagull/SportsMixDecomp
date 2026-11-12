@@ -351,7 +351,7 @@ game/msw/CMenuTask.cpp:
 	.data       start:0x80471600 end:0x80471618
 
 game/msw/CMenuPad.cpp:
-	.text       start:0x801413A0 end:0x80141830
+	.text       start:0x801413A0 end:0x80141848
 
 game/msw/CMenuPadInfo.cpp:
 	.text       start:0x80142130 end:0x80142164

@@ -24,6 +24,7 @@ Equivalent game/msw/CStage02Base.cpp
 Equivalent game/bcs/CMiiMan.cpp
 Matching game/msw/CStgGmkClusterImpl.cpp
 Equivalent game/msw/CStgGmk_Trolley.cpp
+Equivalent game/msw/CMenuPad.cpp
 Matching game/msw/CMenuPadInfo.cpp
 Matching game/msw/CStageNet.cpp
 Matching game/msw/CStage01Base.cpp

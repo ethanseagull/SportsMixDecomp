@@ -46,7 +46,7 @@ namespace msw {
             // Extra route played on the way (a model's own animation path);
             // the base class has none (both return 0). Return types guessed.
             virtual CRouteBase *GetOffsetRoute(nw4r::g3d::ResFile file);
-            virtual void *GetOffsetRes();
+            virtual nw4r::g3d::ResFile GetOffsetRes();
 
             void SetJumpData(const JUMP_DATA *pData)
             {

@@ -230,8 +230,7 @@ namespace msw {
 
         // Loaded: the cannon's animation moves the character.
         long nIndex;
-        nw4r::g3d::ResFile file(
-            static_cast<nw4r::g3d::ResFileData *>(EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_big_gun", 0)));
+        nw4r::g3d::ResFile file = EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_big_gun", 0);
         pMan->_PushTimer(0x18, param.pMove->GetMoveEventId(nId + 0x200, 0), 11.0f, nObj, 0.0f, 0);
         route.vStart = vCannon;
         route.vEnd = vCannon;
@@ -440,8 +439,7 @@ namespace msw {
         m_nGunCount = 0;
 
         long nIndex;
-        nw4r::g3d::ResFile file(
-            static_cast<nw4r::g3d::ResFileData *>(EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_big_gun", 0)));
+        nw4r::g3d::ResFile file = EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_big_gun", 0);
 
         // Where the character sits in the cannon, before and after the
         // cannon turns.

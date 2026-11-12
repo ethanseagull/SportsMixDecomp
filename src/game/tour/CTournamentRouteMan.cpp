@@ -890,8 +890,9 @@ namespace msw {
 
         _PARAM route;
         long nIndex;
-        nw4r::g3d::ResFile file(
-            static_cast<nw4r::g3d::ResFileData *>(EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_dokan", 0)));
+        // Direct initialisation: the original copy-constructs the file from
+        // the returned temporary here (weak ResFile copy constructor).
+        nw4r::g3d::ResFile file(EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_dokan", 0));
         CTournamentMan::GetInstance();
         CTournamentRouteMan *pMan = CTournamentRouteMan::GetInstance();
         CTournamentRouteMan::GET_PARAM value;
@@ -948,7 +949,9 @@ namespace msw {
         if (route.fLength > 2.0f) {
             route.fLength -= 2.0f;
             bcs::BCS_VecZ_RotY(route.vEnd, route.fLength, route.fRotY);
-            bcs::FVEC3Add(&route.vEnd, &route.vEnd, &route.vStart);
+            // nw4r::math::VEC3::operator+= (FVEC3 derives from VEC3 in the
+            // original; this function calls it out of line).
+            reinterpret_cast<nw4r::math::VEC3 &>(route.vEnd) += reinterpret_cast<nw4r::math::VEC3 &>(route.vStart);
             CRouteBasicLine *pLine = new CRouteBasicLine(route, 0.17f, 0);
             pLine->SetRouteId(nId);
             param.pMove->PushRoute(pLine, 2, 0.0f, f2);
@@ -1039,7 +1042,7 @@ namespace msw {
         }
         bcs::BCS_VecZ_RotY(route.vEnd, fJump, fRotOut);
         route.vStart.y += value.fValue;
-        bcs::FVEC3Add(&route.vEnd, &route.vEnd, &vPipe);
+        reinterpret_cast<nw4r::math::VEC3 &>(route.vEnd) += reinterpret_cast<nw4r::math::VEC3 &>(vPipe);
         route.fLength = fJump;
         CRouteBasicJump *pJump2 = new CRouteBasicJump(route, route.fLength / fJumpFrame, 1);
         pJump2->SetRouteId(nId + 0x600);
@@ -1219,7 +1222,7 @@ namespace msw {
             }
         }
 
-        void *pOffsetRes = GetOffsetRes();
+        nw4r::g3d::ResFile offsetRes = GetOffsetRes();
         long nId = GetStartRouteId();
         float fDir = param.pModel->GetRot().y;
         float fStart = param.pMove->GetRouteFrame();
@@ -1343,7 +1346,7 @@ namespace msw {
             fDir = route.fRotY;
             CRouteBasicJump *pJump = new CRouteBasicJump(route, route.fLength / fJumpFrame, 1);
             CRouteDataMove *pOffset =
-                static_cast<CRouteDataMove *>(GetOffsetRoute(nw4r::g3d::ResFile(static_cast<nw4r::g3d::ResFileData *>(pOffsetRes))));
+                static_cast<CRouteDataMove *>(GetOffsetRoute(offsetRes));
             if (pOffset != 0) {
                 pJump->m_pOffsetRoute = pOffset;
             }
@@ -1500,9 +1503,9 @@ namespace msw {
         return 0;
     }
 
-    void *CRouteJumpPoints::GetOffsetRes()
+    nw4r::g3d::ResFile CRouteJumpPoints::GetOffsetRes()
     {
-        return 0;
+        return nw4r::g3d::ResFile(0);
     }
 
     CTournamentRouteMan *CTournamentRouteMan::GetInstance()
@@ -1585,8 +1588,7 @@ namespace msw {
 
         // Where the character stands in the pipe.
         long nIndex;
-        nw4r::g3d::ResFile file(
-            static_cast<nw4r::g3d::ResFileData *>(EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_dokan", 0)));
+        nw4r::g3d::ResFile file = EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_dokan", 0);
         node.SetResAnm(file, "dokan_IN");
         long nId = node.GetAnmId("cha_scal_anim");
         if (nId != -1) {

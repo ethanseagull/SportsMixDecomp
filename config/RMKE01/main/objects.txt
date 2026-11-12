@@ -36,7 +36,7 @@ Equivalent game/msw/CGameVib.cpp
 Matching game/msw/menu/CStateSave.cpp
 Equivalent game/msw/CCockpitResult.cpp
 Matching game/msw/CCockpitResultTime.cpp
-NonMatching game/msw/CC_DATA.cpp
+Equivalent game/msw/CC_DATA.cpp
 Equivalent game/msw/CChrMarker.cpp
 Equivalent game/msw/CStgGmk_WaterPillar.cpp
 Equivalent game/msw/CStage17Base.cpp

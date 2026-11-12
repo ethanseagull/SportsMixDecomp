@@ -341,6 +341,9 @@ namespace msw {
             // guessed) Moves the target marker to rPos, kept on court
             // nCourt (rPos is clipped in place).
             void SetTargetMarkerPosClip__(long nCourt, bcs::FVEC3 &rPos);
+            // (added for game/volley/CChrCoreVolleyWario.cpp; DOL) Sets
+            // the turn rRot to yaw fRotY over fFrame frames.
+            void CalcRotParam_(ROT_LERP1 &rRot, float fRotY, float fFrame);
 
         protected:
             // Not mapped yet; size 0x964.
@@ -547,6 +550,17 @@ namespace msw {
         public:
             CChrCoreVolleyWario();
             virtual ~CChrCoreVolleyWario();
+            virtual void SubStateAirTrickStartTrick_(STATE_WORK_AIR_TRICK *); // 0xCF4
+            virtual float SubStateAirTrickGetTrickDoFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD08
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsTMStartAuto_(STATE_WORK_AIR_TRICK *); // 0xD14
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual float SubStateAirTrickGetBallAdsorbFrame_(STATE_WORK_AIR_TRICK *); // 0xD28
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+
+            // Throws the smoke bomb (CC05_VOLLEY::CcWarioSmokeBomb) from
+            // the option model's hand to the middle of the other court.
+            void ThrowSmokeBomb_();
     };
 
     // Waluigi: his air trick splits the ball in four (three copies,

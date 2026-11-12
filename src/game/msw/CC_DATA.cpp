@@ -1,14 +1,54 @@
 #include "game/msw/CC_DATA.hpp"
-
-// Only the part of the DOL's CC_DATA.cpp from GetMdl_NodeExInfo to
-// GetArtsOptionMdl_CreateInfo is written. Its tables are the start of the
-// file's .rodata pool (0x80435A68); the rest of the pool belongs to the
-// functions not written yet.
+#include "bcs/BCS_Math.hpp"
 
 namespace msw {
 
-    // (meaning not known) Read by code of this file not written yet.
-    static const float s_Unk00[4] = { 0.15f, 0.15f, 0.15f, 0.15f };
+    // (name guessed) Read through GetMoveSpeed.
+    static const float s_MoveSpeed[4] = { 0.15f, 0.15f, 0.15f, 0.15f };
+
+    // (name guessed) Read through GetChrSubParam.
+    static CC_DATA::CHR_SUB_PARAM s_ChrSubParam[3] = {
+        { { bcs::FVEC2(0.5f, 0.5f), bcs::FVEC2(0.7f, 0.7f), bcs::FVEC2(0.7f, 0.7f), bcs::FVEC2(1.2f, 0.5f), bcs::FVEC2(0.5f, 0.8f) },
+          { 0.5f, 0.8f, 0.7f, 0.2f } },
+        { { bcs::FVEC2(0.5f, 0.5f), bcs::FVEC2(0.7f, 0.7f), bcs::FVEC2(0.7f, 0.7f), bcs::FVEC2(1.2f, 0.5f), bcs::FVEC2(0.5f, 0.8f) },
+          { 0.5f, 0.8f, 0.7f, 0.2f } },
+        { { bcs::FVEC2(0.5f, 0.5f), bcs::FVEC2(0.7f, 0.7f), bcs::FVEC2(0.7f, 0.7f), bcs::FVEC2(1.2f, 0.5f), bcs::FVEC2(0.5f, 0.8f) },
+          { 0.5f, 0.8f, 0.7f, 0.2f } },
+    };
+
+    // (name guessed) Toad's (Kinopio's) colours, read through
+    // GetChrOptColor_Kinopio.
+    static bcs::BCS_Color s_KinopioColor[4] = {
+        bcs::BCS_Color(0xFF236EFF),
+        bcs::BCS_Color(0x5A73FFFF),
+        bcs::BCS_Color(0x5AFF50FF),
+        bcs::BCS_Color(0xFFF032FF),
+    };
+
+    // (names guessed after the name field) Read through GetChrParam. The
+    // original reaches them from one base, so they are separate objects
+    // like the node tables below, not one array.
+    static CC_DATA::CHR_PARAM s_c00_ChrParam = { 0, 0, 'c00', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 2, 1.0f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 0, 1, 28, 29 } };
+    static CC_DATA::CHR_PARAM s_c01_ChrParam = { 0, 0, 'c01', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 2, 1.0f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 2, 3, 30, 31 } };
+    static CC_DATA::CHR_PARAM s_c02_ChrParam = { 0, 1, 'c02', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 2, 1.0f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 5, 6, 32, 33 } };
+    static CC_DATA::CHR_PARAM s_c03_ChrParam = { 0, 1, 'c03', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 2, 1.0f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 7, 8, 34, 35 } };
+    static CC_DATA::CHR_PARAM s_c04_ChrParam = { 0, 0, 'c04', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 2, 1.0f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 10, 11, 36, 37 } };
+    static CC_DATA::CHR_PARAM s_c05_ChrParam = { 0, 2, 'c05', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 3, 1.0f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 12, 13, 38, 39 } };
+    static CC_DATA::CHR_PARAM s_c06_ChrParam = { 0, 1, 'c06', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 2, 1.2f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 15, 16, 40, 41 } };
+    static CC_DATA::CHR_PARAM s_c07_ChrParam = { 0, 2, 'c07', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 2, 3, 1.2f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 18, 19, 42, 43 } };
+    static CC_DATA::CHR_PARAM s_c08_ChrParam = { 0, 3, 'c08', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 1, 1.0f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 20, 21, 44, 45 } };
+    static CC_DATA::CHR_PARAM s_c09_ChrParam = { 0, 3, 'c09', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 2, 1.0f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 23, 24, 46, 47 } };
+    static CC_DATA::CHR_PARAM s_c10_ChrParam = { 0, 2, 'c10', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 2, 3, 1.5f, { bcs::DEG_TO_RAD(-20.0f), bcs::DEG_TO_RAD(35.0f), bcs::DEG_TO_RAD(-35.0f), bcs::DEG_TO_RAD(35.0f) }, { 25, 26, 48, 49 } };
+    static CC_DATA::CHR_PARAM s_c11_ChrParam = { 0, 3, 'c11', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 1, 1.0f, { bcs::DEG_TO_RAD(-15.0f), bcs::DEG_TO_RAD(35.0f), bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(30.0f) }, { 27, 28, 50, 51 } };
+    static CC_DATA::CHR_PARAM s_c12_ChrParam = { 0, 4, 'c12', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 2, 1.0f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 30, 31, 52, 53 } };
+    static CC_DATA::CHR_PARAM s_c13_ChrParam = { 0, 4, 'c13', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 0, 1.0f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 32, 33, 54, 55 } };
+    static CC_DATA::CHR_PARAM s_c14_ChrParam = { 0, 0, 'c14', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 1, 1.0f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 34, 35, 56, 57 } };
+    static CC_DATA::CHR_PARAM s_c15_ChrParam = { 0, 1, 'c15', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 2, 1.0f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 36, 37, 58, 59 } };
+    static CC_DATA::CHR_PARAM s_c16_ChrParam = { 0, 4, 'c16', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 2, 1.0f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 38, 39, 60, 61 } };
+    static CC_DATA::CHR_PARAM s_c17_ChrParam = { 0, 4, 'c17', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 2, 1.0f, { bcs::DEG_TO_RAD(-15.0f), bcs::DEG_TO_RAD(20.0f), bcs::DEG_TO_RAD(-20.0f), bcs::DEG_TO_RAD(20.0f) }, { 40, 41, 62, 63 } };
+    static CC_DATA::CHR_PARAM s_c18_ChrParam = { 0, 4, 'c18', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 0, 2, 1.0f, { bcs::DEG_TO_RAD(-15.0f), bcs::DEG_TO_RAD(20.0f), bcs::DEG_TO_RAD(-20.0f), bcs::DEG_TO_RAD(20.0f) }, { 0, 1, 28, 29 } };
+    static CC_DATA::CHR_PARAM s_m00_ChrParam = { 0, 0, 'm00', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 2, 1.0f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 43, 44, 64, 65 } };
+    static CC_DATA::CHR_PARAM s_m01_ChrParam = { 0, 0, 'm01', 16.0f, 3.0f, 0.0f, 0.0f, 0.6f, 0.0f, 2.0f, 1, 2, 1.0f, { bcs::DEG_TO_RAD(-30.0f), bcs::DEG_TO_RAD(45.0f), bcs::DEG_TO_RAD(-45.0f), bcs::DEG_TO_RAD(45.0f) }, { 45, 46, 66, 67 } };
 
     static const bcs::CAnmObjMotBase::NODE_EX_INFO s_c00_NodeExInfo[] = {
         { 0x00, 0, 0x00, 0 },
@@ -1890,20 +1930,51 @@ namespace msw {
     // The table for an unknown character (.sbss2): one empty entry.
     static const bcs::CAnmObjMotBase::NODE_EX_INFO s_NodeExInfoNone[1] = { 0 };
 
-    namespace CC_DATA_cpp {
-        // Stand-in for the unknown user of s_Unk00 (code of this file not
-        // written yet), so the table stays first in the pool. Compiles to
-        // nothing.
-        inline void UnusedReferences()
-        {
-            (void)s_Unk00;
+    const CC_DATA::CHR_PARAM *CC_DATA::GetChrParam(long nChr)
+    {
+        switch (nChr) {
+            case 1: return &s_c01_ChrParam;
+            case 2: return &s_c02_ChrParam;
+            case 3: return &s_c03_ChrParam;
+            case 4: return &s_c04_ChrParam;
+            case 5: return &s_c05_ChrParam;
+            case 6: return &s_c06_ChrParam;
+            case 7: return &s_c07_ChrParam;
+            case 8: return &s_c08_ChrParam;
+            case 9: return &s_c09_ChrParam;
+            case 10: return &s_c10_ChrParam;
+            case 11: return &s_c11_ChrParam;
+            case 12: return &s_c12_ChrParam;
+            case 13: return &s_c13_ChrParam;
+            case 14: return &s_c14_ChrParam;
+            case 15: return &s_c15_ChrParam;
+            case 16: return &s_c16_ChrParam;
+            case 17: return &s_c17_ChrParam;
+            case 18: return &s_c18_ChrParam;
+            case 19:
+            case 21:
+            case 23:
+                return &s_m00_ChrParam;
+            case 20:
+            case 22:
+            case 24:
+                return &s_m01_ChrParam;
         }
+        return &s_c00_ChrParam;
+    }
+
+    float CC_DATA::GetMoveSpeed(long nIdx)
+    {
+        return s_MoveSpeed[nIdx];
+    }
+
+    const CC_DATA::CHR_SUB_PARAM *CC_DATA::GetChrSubParam(long nIdx)
+    {
+        return &s_ChrSubParam[nIdx];
     }
 
     const bcs::CAnmObjMotBase::NODE_EX_INFO *CC_DATA::GetMdl_NodeExInfo(long nChr, long nMode)
     {
-        CC_DATA_cpp::UnusedReferences();
-
         if (nMode == 3 || nMode == 4) {
             switch (nChr) {
                 case 0: return s_c00_NodeExInfoMode34;
@@ -2018,5 +2089,96 @@ namespace msw {
             case 17: return &s_c17_SpItemCreateInfo;
         }
         return 0;
+    }
+
+    bcs::BCS_Color CC_DATA::GetChrOptColor_Kinopio(long nColor)
+    {
+        const bcs::BCS_Color *pColor = s_KinopioColor;
+        bcs::BCS_Color color = pColor[0];
+        if (nColor >= 0 && nColor < 4) {
+            color = pColor[nColor];
+        }
+        return color;
+    }
+
+    bcs::BCS_Color CC_DATA::GetChrOptColor_Default(long)
+    {
+        return bcs::BCS_Color(0x28282800);
+    }
+
+    // (names guessed) The tables of GetChrSeId and GetChrSeIndex.
+    static const long s_ChrSeId[25][14] = {
+        { -1, 0x4a2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        { 0x4a5, 0x4a3, 0x4a4, -1, -1, -1, -1, 0x4a6, -1, -1, -1, -1, -1, -1 },
+        { -1, 0x4a7, -1, 0x4a8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        { -1, 0x4a9, -1, 0x4aa, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        { -1, 0x4ab, 0x4ac, -1, 0x4ae, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        { 0x4b1, 0x4af, -1, -1, -1, 0x4b4, 0x4b0, -1, -1, -1, -1, -1, -1, -1 },
+        { -1, 0x4b5, 0x4b7, 0x4b6, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        { 0xe5e, 0x4b8, 0x4b9, -1, -1, -1, -1, -1, 0x4bd, -1, -1, -1, -1, -1 },
+        { 0x4bf, 0x4be, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        { -1, -1, 0x4c1, -1, -1, -1, -1, -1, -1, -1, 0x4c4, -1, -1, -1 },
+        { 0x4c6, 0x4c5, -1, -1, -1, -1, -1, -1, 0x4c9, 0x4ca, -1, -1, 0x4c8, 0x4cb },
+        { -1, 0x4cc, -1, 0x4cd, -1, -1, -1, -1, -1, 0x4cf, -1, -1, -1, -1 },
+        { 0x4d1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0x4d2, -1, -1, -1 },
+        { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        { -1, 0x4dc, 0x4db, 0x4da, 0x4dd, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        { -1, -1, 0x4e1, 0x4df, -1, -1, -1, -1, -1, -1, 0x4e3, -1, -1, -1 },
+        { 0x4e8, -1, -1, -1, -1, -1, -1, -1, -1, 0x4e7, -1, -1, -1, -1 },
+        { 0x4ee, -1, 0x4ec, 0x4eb, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+    };
+    static const long s_SeId[5] = { 0xc0c, 0xc8a, 0xc71, 0xc1a, 0xcb0 };
+    static const long s_ModeSeIndex[5][2] = {
+        { -1, 38 },
+        { 74, 71 },
+        { -1, 103 },
+        { -1, 134 },
+        { -1, -1 },
+    };
+    static const long s_SeIndex[18] = {
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+    };
+
+    long CC_DATA::GetChrSeId(long nMode, long nChr, long nKind, long nIdx, long)
+    {
+        long nId = -1;
+        switch (nKind) {
+            case 0:
+                if (nIdx >= 0 && nIdx < 14 && nChr >= 0 && nChr < 25) {
+                    nId = s_ChrSeId[nChr][nIdx];
+                }
+                break;
+            case 1:
+                if (nIdx >= 0 && nIdx < 5) {
+                    nId = s_SeId[nIdx];
+                }
+                break;
+        }
+        return nId;
+    }
+
+    long CC_DATA::GetChrSeIndex(long nMode, long nChr, long nKind, long nIdx, long)
+    {
+        long n = -1;
+        switch (nKind) {
+            case 0:
+                if (nIdx >= 0 && nIdx < 18) {
+                    n = s_SeIndex[nIdx];
+                }
+                break;
+            case 1:
+                if (nIdx >= 0 && nIdx < 2) {
+                    n = s_ModeSeIndex[nMode][nIdx];
+                }
+                break;
+        }
+        return n;
     }
 }

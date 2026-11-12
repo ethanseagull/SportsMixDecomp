@@ -125,7 +125,9 @@ namespace msw {
                 float m_Unk1AC; // 0x1AC
                 float m_Unk1B0; // 0x1B0
                 float m_Unk1B4; // 0x1B4
-                float m_Unk1B8; // 0x1B8
+                // 0x1B8: read as an integer, the number of trick motions
+                // (1 to 5) CChrCoreHockey::SubStateArtsShotGetTrickMotFrame_ adds up.
+                long m_nUnk1B8; // 0x1B8
                 float m_Unk1BC; // 0x1BC
                 float m_Unk1C0; // 0x1C0
                 float m_Unk1C4; // 0x1C4

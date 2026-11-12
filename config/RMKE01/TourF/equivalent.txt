@@ -5,12 +5,12 @@ TourF AttachEffectModel__Q23msw14CTournamentManFlPQ23msw11CEventModelllUlPCQ23bc
 TourF CalcFrame__Q23msw14CRouteDataMoveFv near 99.5 instruction order only
 TourF CalcSpeed__Q23msw17CRoutePhysOffsetYFff unverified 80.8 only the order of the vector temporaries and register choice differ (schedule); 80.8 is under the near floor
 TourF CleanRoute__Q23msw10CRouteMoveFf near 89.2 instruction order only
-TourF CreateModel__Q23msw17CTournamentTrophyFliill near 98.8 stack slots only: nIndex and the three by-value ResFile copies are allocated in the opposite order (0x8..0x14); same code otherwise
+TourF CreateModel__Q23msw17CTournamentTrophyFliill near 99.9 near 99.9 stack slots only: nIndex and the by-value ResFile temporaries are allocated in the opposite order (0x8..0x10); same code otherwise
 TourF CreateModel__Q23msw21CEvMdlCreaterTmMdlChrFRQ33msw10CEvDemoRes9_CHR_INFO near 99.1 register choice only: r29 and r30 are swapped between rInfo and nChr (later nAnim); same instructions otherwise
 TourF CreatePlayerMarker__Q23msw14CTournamentManFPCcllil near 98.2 register choice and instruction order only
 TourF CreateWinRoute__Q23msw19CTournamentRouteManFRfll near 98.5 instruction order only
+TourF CtorStateDemoEnd__Q23msw15CTournamentStepFv near 96.3 register choice and instruction order; the inlined _SetClear folds (cup-1)*0x20 into the displacement (same address); the map BGM statics named instead of anonymous
 TourF CtorStateDemoSetup__Q23msw15CTournamentStepFv near 99.9 only .rodata literal offsets differ (pool layout)
-TourF CtorStateEventEnd__Q23msw15CTournamentStepFv unverified 40.6 the original inlines _CleanPushTimer (same loop), ours calls it
 TourF CtorStateEventSetup__Q23msw15CTournamentStepFv unverified 87.0 the original calls TournamentInfo once more; byte conversions differ
 TourF CtorStateGameCallEnd__Q23msw15CTournamentStepFv near 99.4 float pool offset and register choice only
 TourF CtorStateGameCallPlay__Q23msw15CTournamentStepFv unverified 81.7 the original inlines _ResetTimer (same loop), ours calls it; rest follows the asm
@@ -20,10 +20,10 @@ TourF CtorStateInitialize__Q23msw15CTournamentStepFv unverified 89.8 same calls 
 TourF CtorStateLoadEnd__Q23msw15CTournamentStepFv unverified 93.0 five instructions more and one branch more in ours; not checked
 TourF CtorStateLoading__Q23msw15CTournamentStepFv unverified 94.9 string pool offsets and one instruction less; not checked
 TourF CtorStateMoveResult__Q23msw15CTournamentStepFv near 99.9 float pool offsets only
-TourF CtorStateMoveSetup__Q23msw15CTournamentStepFv unverified 78.7 the original inlines _CleanPushTimer (same loop), ours calls it; rest follows the asm
+TourF CtorStateMoveSetup__Q23msw15CTournamentStepFv unverified 97.3 _CleanPushTimer now inlined as in the original; left: register choice and one conversion (clrlwi vs extsb), not fully checked
 TourF CtorStateNextCup__Q23msw15CTournamentStepFv unverified 80.9 two memory accesses and a branch differ; not checked
 TourF CtorStateNpcCallPlay__Q23msw15CTournamentStepFv unverified 93.3 memory accesses and one branch differ; not checked
-TourF CtorStateTurnStart__Q23msw15CTournamentStepFv unverified 81.4 the original inlines _ResetTimer (same loop), ours calls it; rest follows the asm
+TourF CtorStateTurnStart__Q23msw15CTournamentStepFv unverified 95.0 _ResetTimer now inlined as in the original; left: register choice and one extra TournamentInfo call/branch, not checked
 TourF GetCameraDirect__Q23msw11CRouteDokanFRQ23bcs5FVEC3Rflf near 95.6 instruction order and register choice only
 TourF GetCameraDirect__Q23msw15CRouteBigGunOutFRQ23bcs5FVEC3Rflf near 95.7 inline TournamentWork::GetPointViewPos computes the z offset before the x offset (independent int-to-float conversions), so stack temporaries, registers and instruction order differ; same loads, stores and constants
 TourF GetLoseTeam__Q23msw14TournamentWorkFl near 99.4 instruction order only
@@ -43,16 +43,17 @@ TourF InitMoveRouteRot__Q23msw14CTournamentManFl near 99.0 the unit's -1.0f lite
 TourF InitMoveRoute__Q23msw14CTournamentManFl near 98.2 the unit's -1.0f literal sits after 1e-5 in .rodata (cause not found), so some float loads use offsets 4-8 bytes away; same values. Otherwise register and order only
 TourF Initialize__Q23msw27CTournamentRouteMan_Stage32Fv near 99.7 the two argument registers of the first _GetResAnm call are set up in the other order; regs search no gain
 TourF LeapDataSceneCamera__Q23msw14CTournamentManFlsUl near 99.2 register choice and instruction order only
+TourF LoopStateEventPlay__Q23msw15CTournamentStepFv near 99.6 register choice and instruction order; the route mask's sign bit taken with extsb/srawi instead of extrwi/neg (same value); float pool offsets shifted by the unit's .rodata order (same constants)
 TourF LoopStateEventSetup__Q23msw15CTournamentStepFv unverified 93.2 an immediate and branch senses differ; not checked
 TourF LoopStateFinalize__Q23msw15CTournamentStepFv unverified 95.1 four instructions less in ours; not checked
 TourF LoopStateGameCallMove__Q23msw15CTournamentStepFv unverified 88.9 frame, immediates and branches differ; not checked
 TourF LoopStateGameCallPlay__Q23msw15CTournamentStepFv near 99.8 float and string pool offsets only
-TourF LoopStateGameExit__Q23msw15CTournamentStepFv near 99.2 one extsb less in ours on a byte that is only stored on (register value identical in the low byte)
-TourF LoopStateGameStart__Q23msw15CTournamentStepFv near 90.1 the original inlines _ResetTimer (same body), ours calls it; rest registers/stack
-TourF LoopStateInitialize__Q23msw15CTournamentStepFv unverified 91.5 branch structure differs (beq/bne counts); not checked
+TourF LoopStateGameStart__Q23msw15CTournamentStepFv near 99.8 float pool offsets (unit .rodata order) and jump table name only; _ResetTimer now inlined as in the original
+TourF LoopStateGameVictory__Q23msw15CTournamentStepFv near 99.3 register choice and store order of the _SETUP fields; float pool offsets and the victory fireworks tables at other .rodata/.data offsets (same constants and table contents)
+TourF LoopStateInitialize__Q23msw15CTournamentStepFv unverified 92.4 branch structure differs (beq/bne counts); not checked
 TourF LoopStateMoveEnd__Q23msw15CTournamentStepFv near 92.6 registers, block placement of the inner switch, a clrlwi before extsb on the turn count; same values
 TourF LoopStateMoveResult__Q23msw15CTournamentStepFv near 92.7 registers and branch layout of the result-move condition; same tests
-TourF LoopStateMoveSetup__Q23msw15CTournamentStepFv near 95.7 registers, block order, and the u8 compare forms in the shared GetMatchMoveFlag/UseTurn inlines (clrlwi before extsb); same values
+TourF LoopStateMoveSetup__Q23msw15CTournamentStepFv near 96.3 registers, block order of the side test, the u8 compare forms in the UseTurn/SetFixedWinTeam inlines (clrlwi before extsb) and the route mask's sign bit via extsb/srawi; same values
 TourF LoopStateNextCup__Q23msw15CTournamentStepFv unverified 96.1 button table built on the stack differently (string pool, byte conversions); not checked line by line
 TourF LoopStateNpcCallMove__Q23msw15CTournamentStepFv unverified 91.7 the original calls GetTournamentInfo once more; frame differs
 TourF LoopStateNpcCallPlay__Q23msw15CTournamentStepFv unverified 98.2 branch form differs (ble in ours); not checked
@@ -75,6 +76,7 @@ TourF PushRoute__Q23msw14CRouteShipMoveFRQ33msw10CRouteBase11_PUSH_PARAMUlff nea
 TourF PushRoute__Q23msw14CRouteShipRideFRQ33msw10CRouteBase11_PUSH_PARAMUlff near 98.7 nId + 0x200 computed into r0 at the store (one extra mr) and paired-single register choice; same values
 TourF PushRoute__Q23msw15CRouteBigGunOutFRQ33msw10CRouteBase11_PUSH_PARAMUlff near 99.6 register allocation only (identical after renumbering); regs search no gain
 TourF PushRoute__Q23msw16CRouteJumpPointsFRQ33msw10CRouteBase11_PUSH_PARAMUlff unverified 84.5 7436-byte route builder written for behaviour from the m2c draft: the trim and direction loops are shared helpers in ours, so frame, loop shapes and call order differ
+TourF RandomSelectLeaderChar__Q23msw14TournamentWorkFli near 96.8 the team point i+1 is truncated to a byte after the add instead of before (same stored byte)
 TourF RandomSelectSubChar__Q23msw14TournamentWorkFllli unverified 95.9 stack slot of a local at 0x8 vs 0x10; not checked further
 TourF RouteSelectSetup__Q23msw15CTournamentStepFUcPCUclll near 93.1 float pool offsets; the fade mode 3/7 built with li vs li<<8 shifted form (same value)
 TourF RouteSelect__Q23msw15CTournamentStepFRl near 96.4 registers, literal offsets, fade mode shifted at use instead of preshifted (0x300/0x700 vs 3/7<<8), one frsp
@@ -130,11 +132,10 @@ TourF _CleanAfterErase__Q23msw15CTournamentStepFv near 98.9 the original reloads
 TourF _DefPushCamera__Q23msw19CTournamentRouteManFPQ33msw10CRouteBase10_PUSH_INFOlfPQ23msw11CEventModel near 94.1 instruction order and register choice only
 TourF _DefTimerEvent__Q23msw19CTournamentRouteManFllfUli unverified 96.5 four loads only in the original (the dead AnimPlay check kept by the inlined _StageSet) and a 0x10 smaller frame in ours
 TourF _GetResult__Q23msw10CRouteMoveFRQ33msw10CRouteBase7_RESULTflf near 99.0 the original keeps one dead float add (a sum of the route frames never read); results identical
-TourF _InitStep__Q23msw15CTournamentStepFv near 99.8 offsets of the member-pointer constants in .rodata only
 TourF _Init__Q23msw14CTournamentManFl near 99.8 two FVEC3 temporaries and locals in swapped stack slots
 TourF _Init__Q23msw19CTournamentRouteManFv near 99.9 instruction order only
-TourF _MakeRouteSelect__Q23msw15CTournamentStepFl near 87.6 2 - bit computed as subfic vs neg+addi: same value
-TourF _MakeRouteSelect__Q23msw15CTournamentStepFll near 88.2 2 - bit computed as subfic vs neg+addi: same value
+TourF _MakeRouteSelect__Q23msw15CTournamentStepFl near 96.5 the route mask's sign bit taken with extsb/srawi instead of extrwi/neg (same value)
+TourF _MakeRouteSelect__Q23msw15CTournamentStepFll near 95.1 the route masks' sign bits taken with extsb/srawi instead of extrwi/neg (same values)
 TourF _OffsetCupUpChar__Q23msw15CTournamentStepFlRCQ23bcs5FVEC3 near 96.9 stack slots of the two vectors swapped and float pool offsets
 TourF _OpSysCallCreateTeamMission__Q23msw9CTmScriptFv near 89.3 local array 4 bytes higher on the stack, repeated nNum>0 test folded, registers
 TourF _OpSysCallEraseTeam__Q23msw9CTmScriptFv near 98.8 register allocation/instruction order only

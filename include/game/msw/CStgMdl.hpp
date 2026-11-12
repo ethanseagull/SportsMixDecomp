@@ -50,14 +50,21 @@ namespace msw {
 
             // Builds the parts of a model for Create(const CCreator &). An
             // interface with the vptr at 0x00; its vtable has no destructor.
-            // The DOL functions in the vtables of its derived classes have
-            // no exported names: the first one makes the model (it looks up
-            // MDL_PARAM::pMdlName), the next ones the shadow, the reference
-            // model and the animations. Only the first is declared (name
-            // guessed).
+            // The names of the four slots are those of their weak copies in
+            // VolleyF: game/volley/CStgGmk_WaterWorks_Volley_Act.cpp is the
+            // only file of the game that emits __vt__Q33msw7CStgMdl8CCreator
+            // and the four bodies (which return 0), so they are declared
+            // here without bodies and defined inline in that file only;
+            // with bodies here every file that builds a creator would emit
+            // them. The DOL functions in the vtables of the derived classes
+            // have no exported names: CreateMdlObj looks up
+            // MDL_PARAM::pMdlName. Return types guessed.
             class CCreator {
                 public:
-                    virtual bool CreateMdl(bcs::CMdlObj *pMdl) const;
+                    virtual bool CreateMdlObj(bcs::CMdlObj *pMdl) const;
+                    virtual bool CreateShadowMdl(bcs::CMdlShadow *pMdl) const;
+                    virtual bool CreateRefMdl(bcs::CMdlRef *pMdl) const;
+                    virtual bool CreateAnm(CStageAnm *pAnm, bcs::CMdlObj *pMdl) const;
             };
 
             // The creator of a gimmick model: the DOL vtable
@@ -67,16 +74,21 @@ namespace msw {
             class CGenericGimmickCreator : public CCreator {
                 public:
                     CGenericGimmickCreator(nw4r::g3d::ResFile res, const MDL_PARAM *pParam)
-                        : m_Res(res), m_pParam(pParam), m_Unk0C(0)
+                        : m_Res(res), m_pParam(pParam), m_pName(0)
+                    {
+                    }
+                    // (added for msw::CStgGenericGmkMdl, which passes a name)
+                    CGenericGimmickCreator(nw4r::g3d::ResFile res, const MDL_PARAM *pParam, const char *pName)
+                        : m_Res(res), m_pParam(pParam), m_pName(pName)
                     {
                     }
 
-                    virtual bool CreateMdl(bcs::CMdlObj *pMdl) const;
+                    virtual bool CreateMdlObj(bcs::CMdlObj *pMdl) const;
 
                 private:
                     nw4r::g3d::ResFile m_Res;  // 0x04
                     const MDL_PARAM *m_pParam; // 0x08
-                    unsigned long m_Unk0C;     // 0x0C
+                    const char *m_pName;       // 0x0C (name and meaning guessed; msw::CStgGenericGmkMdl sets it)
             };
 
             // (names guessed) The creator of a model found in an archive:
@@ -90,7 +102,7 @@ namespace msw {
                     {
                     }
 
-                    virtual bool CreateMdl(bcs::CMdlObj *pMdl) const;
+                    virtual bool CreateMdlObj(bcs::CMdlObj *pMdl) const;
 
                 private:
                     const nw4r::g3d::ResFile *m_pRes; // 0x04
@@ -110,7 +122,7 @@ namespace msw {
                     {
                     }
 
-                    virtual bool CreateMdl(bcs::CMdlObj *pMdl) const;
+                    virtual bool CreateMdlObj(bcs::CMdlObj *pMdl) const;
                     // The extra slot (0x18, the last). Inline: the DOL's
                     // game/msw/CStgGmk_Case.cpp emits the weak copy the
                     // vtable uses, right after its Create.
@@ -123,6 +135,25 @@ namespace msw {
             // only the vptr). Create() passes it.
             static CCreator NullCreator;
 
+            // The arguments of a queued SetAnm (PushAnm), 0x18 bytes.
+            struct ANM_ARG {
+                unsigned long anm;   // 0x00
+                unsigned long arg;   // 0x04
+                float speed;         // 0x08
+                float frame;         // 0x0C
+                float blend;         // 0x10
+                unsigned long flag;  // 0x14, passed to IsAnmEndAll before the next one starts
+            };
+
+            // How many ANM_ARGs the queue holds (a ring).
+            enum { ANM_ARG_NUM = 8 };
+
+        private:
+            // (DOL 0x80172104 and 0x80172468, names guessed) Run over the
+            // model's materials when Create makes it; not written yet.
+            void SetupReflectMat_(bcs::CMdlObj *pMdl);
+            void SetupMat_(bcs::CMdlObj *pMdl);
+
         private:
             CStgObj *m_pParent;          // 0x00
             unsigned long m_nIndex;      // 0x04
@@ -130,9 +161,15 @@ namespace msw {
             bcs::CMdlShadow *m_pShadow;  // 0x0C
             bcs::CMdlRef *m_pRef;        // 0x10
             CStageAnm *m_pAnm;           // 0x14
-            unsigned char m_Unk18[0xC8]; // 0x18
+            long m_nAnmArgHead;          // 0x18, the queue of PushAnm (names guessed)
+            long m_nAnmArgTail;          // 0x1C
+            ANM_ARG m_AnmArg[ANM_ARG_NUM]; // 0x20
             unsigned short m_nLayer;     // 0xE0
-            unsigned char m_UnkE2[0x12]; // 0xE2
+            unsigned char m_UnkE2[0x2];  // 0xE2
+            unsigned long m_UnkE4;       // 0xE4, 0 after construction (use not known)
+            float m_fFadeFrame;          // 0xE8, the fade's frame (FadeIn/FadeOut start it at -delay)
+            float m_fFadeLength;         // 0xEC
+            long m_nFade;                // 0xF0, 1 fading in, -1 fading out, 0 none
             int m_bSceneEntry;           // 0xF4
             bcs::FMTX34 m_Mtx;           // 0xF8
 
@@ -174,8 +211,10 @@ namespace msw {
             virtual void SetVisible(int bVisible);
             virtual void AttachToMdl(CStgMdl *pMdl, long node, bcs::CScnObj::AttachMode mode);
             virtual void DetachFromMdl();
-            virtual void FadeIn(float time, float alpha);
-            virtual void FadeOut(float time, float alpha);
+            // Fades the model in (or out) over time frames, after delay
+            // frames.
+            virtual void FadeIn(float time, float delay);
+            virtual void FadeOut(float time, float delay);
             virtual void FadeUpdate(float rate);
             virtual bool GetNodeMtx(bcs::FMTX34 &rMtx, long node) const;
             virtual bool GetNodeMtx(bcs::FMTX34 &rMtx, const char *pNode) const;
@@ -232,9 +271,9 @@ namespace msw {
             virtual bcs::CMdlObj *NewMdl(long heap) const;
             virtual bcs::CMdlShadow *NewShadowMdl(long heap) const { return new (heap) bcs::CMdlShadow; }
             virtual bcs::CMdlRef *NewRefMdl(long heap) const { return new (heap) bcs::CMdlRef; }
-            virtual void AnmArgPush_();
-            virtual void AnmArgPop_();
-            virtual const void *AnmArgFront_() const;
+            virtual ANM_ARG *AnmArgPush_();
+            virtual ANM_ARG *AnmArgPop_();
+            virtual const ANM_ARG *AnmArgFront_() const;
             virtual void AnmArgClear_();
             virtual bool AnmArgIsEmpty_() const;
             virtual void AnmQueueUpdate_();

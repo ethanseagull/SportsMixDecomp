@@ -94,3 +94,5 @@ Equivalent game/volley/CChrCoreVolleyWario.cpp
 Equivalent game/volley/CCameraVolleyGame.cpp
 Matching game/volley/CC_PARAM_VOLLEY.cpp
 Equivalent game/volley/CChrTargetMarkerVolley.cpp
+Equivalent game/volley/unit_63388.cpp
+Equivalent game/volley/CStgGmk_WaterWorks_Volley_Act.cpp

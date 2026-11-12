@@ -10,6 +10,12 @@ namespace msw {
     class CTournament {
         public:
             static void Initialize(long);
+            // (added for the DOL's CGame::SendMessage_) Passes a game message on.
+            static void SendMessage(long nMsg, long, long, long);
+            // (added for the DOL's CGame::CtorStateGameResult; return type
+            // guessed) 1 when team 0 won the tournament match, 2 when team 1
+            // did, anything else for neither.
+            static long GetBattleResult();
             // (added for BasketF game/basket/CGameBasketHungryBossPackun.cpp;
             // return type guessed) Not zero while a tournament game runs.
             static int IsTournamentGame();

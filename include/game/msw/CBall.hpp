@@ -40,7 +40,19 @@ namespace msw {
             struct SERVE_SHOT_ARG;
             struct SPIKE_SHOT_ARG;
             struct PASS_SHOT_ARG;
-            struct ENDURE_PRM;
+            // (added for VolleyF game/volley/unit_63388.cpp; field names
+            // and meanings guessed) What a special shot asks of the
+            // character receiving it (CBall::GetVolleyEndureParam);
+            // CChrCoreVolley::SetReceiveEndureWork_ copies it into the
+            // receive state's work.
+            // CBallVolley::GetVolleyEndureParam copies all 0x24 bytes.
+            struct ENDURE_PRM {
+                float m_fUnk00;
+                float m_fUnk04;
+                float m_fUnk08;
+                float m_afUnk0C[3];
+                long m_anUnk18[3];
+            };
         }
         namespace BOSS {
             struct SPIKE_SHOT_ARG;

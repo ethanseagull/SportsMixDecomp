@@ -26,6 +26,10 @@ namespace bcs {
                 m_nNum = 0;
             }
 
+            // (DOL 0x8000D1D0; name guessed. Called by bcs::CMdlObj.) Whether
+            // material nMat has an animation (neither 0x8000 nor 0x4000).
+            int IsBound(unsigned long nMat) const;
+
             unsigned long m_nNum;      // 0x04 (0x10 in the animation)
             unsigned short *m_pTable;  // 0x08 (0x14)
     };

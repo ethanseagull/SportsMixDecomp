@@ -56,7 +56,7 @@ msw::CStgGmk_Pinball_Act_Dodge::~CStgGmk_Pinball_Act_Dodge()
 // the pinball at 0.3 times its speed.
 void msw::CStgGmk_Pinball_Act_Dodge::OnDamage(CCollBodyUnit *pBody, CBall *pBall)
 {
-    CStgSrt *pSrt = GetSrt();
+    CStgSrtMove *pSrt = GetSrt();
     bcs::FVEC3 bodyPos = pBody->GetPos();
     bcs::FVEC3 ballPos = pBall->GetPos();
     bcs::FVEC3 vel = pSrt->GetVel();

@@ -379,7 +379,7 @@ namespace msw {
                      &CStgGmk_Pinball_Act::DtorState_RESPAWN);
         FsmqSetState(STATE_INACTIVE, &CStgGmk_Pinball_Act::CtorState_INACTIVE,
                      &CStgGmk_Pinball_Act::LoopState_INACTIVE, &CStgGmk_Pinball_Act::DtorState_INACTIVE);
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         pSrt->ResetVelocity(GetParam_Gravity());
 
         float width = GetParam_Radius();
@@ -456,7 +456,7 @@ namespace msw {
     // bounces with half its upward speed.
     void CStgGmk_Pinball_Act::OnUpdate(float rate)
     {
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         CStageMan *pStage = CStageMan::GetInstance();
         if (m_fInvincibleTime > 0.0f) {
             m_fInvincibleTime -= rate;
@@ -596,7 +596,7 @@ namespace msw {
                                           const bcs::FVEC3 &rPos, unsigned long flag)
     {
         if (flag == 1 && !IsInvincible()) {
-            CStgSrt *pSrt = GetSrt();
+            CStgSrtMove *pSrt = GetSrt();
             // Declared in this order for the original's stack layout.
             bcs::FVEC3 atkPos;
             bcs::FVEC3 bodyPos;
@@ -1072,7 +1072,7 @@ namespace msw {
     // GetParam_LocOffsetZ, and starts it moving.
     void CStgGmk_Pinball_Act::CtorState_DEFAULT()
     {
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         CStgGmk_Pinball *pGmk = static_cast<CStgGmk_Pinball *>(GetParent());
         pSrt->SetGravity(GetParam_Gravity());
         pSrt->ClearUnkE4();
@@ -1122,7 +1122,7 @@ namespace msw {
     // Shot at GetShotAngle at GetParam_Speed.
     void CStgGmk_Pinball_Act::CtorState_MOVE()
     {
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         pSrt->ClearFlagC8(0x10);
         bcs::FVEC3 vel;
         bcs::BCS_VecOneX_RotY(vel, GetShotAngle());
@@ -1141,7 +1141,7 @@ namespace msw {
     void CStgGmk_Pinball_Act::LoopState_MOVE()
     {
         float rate = GetFrameRateF();
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         bcs::FVEC3 prev = pSrt->GetPos();
         m_fGrowTime += rate;
         float grow = m_fGrowTime;

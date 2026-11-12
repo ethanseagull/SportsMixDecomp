@@ -23,6 +23,8 @@ namespace msw {
             unsigned char m_Unk00[0xA8]; // 0x00
 
         public:
+            // (DOL fn_8015ABF4) Made by msw::CStgMdl::Create, 0xAC bytes.
+            CStageAnm();
             virtual ~CStageAnm();                                              // 0x08
             virtual void VFunc0C();                                            // 0x0C
             virtual void VFunc10();                                            // 0x10
@@ -30,28 +32,37 @@ namespace msw {
             virtual void VFunc18();                                            // 0x18
             virtual void VFunc1C();                                            // 0x1C
             virtual void VFunc20();                                            // 0x20
-            virtual void VFunc24();                                            // 0x24
-            virtual void VFunc28();                                            // 0x28
+            // (names guessed) Starts animation anm (what msw::CStgMdl::SetAnm
+            // passes on), and the short form of msw::CStgMdl::SetAnmEx.
+            virtual void SetAnm(unsigned long anm, unsigned long arg, float speed, float frame, float blend,
+                                unsigned long flag);                           // 0x24
+            virtual void SetAnmEx(unsigned long anm, unsigned long arg);       // 0x28
             virtual unsigned long GetCurAnmId(ANM_IDX idx) const;              // 0x2C
-            virtual void VFunc30();                                            // 0x30
+            // (name guessed) Stops animation idx (-1: all); CStgMdl::CancelAnm.
+            virtual void Cancel(long idx);                                     // 0x30
             virtual void VFunc34();                                            // 0x34
             virtual bool IsAnmExist(unsigned long anm, ANM_IDX idx) const;     // 0x38
             virtual void SetFrame(long idx, float frame);                      // 0x3C, idx -1: all
             virtual float GetFrame(ANM_IDX idx) const;                         // 0x40
             virtual void VFunc44();                                            // 0x44
             virtual float GetTotalFrame(ANM_IDX idx) const;                    // 0x48
-            virtual void VFunc4C();                                            // 0x4C
+            // (name guessed) The speed of animation idx (-1: all).
+            virtual void SetSpeed(long idx, float speed);                      // 0x4C
             virtual void VFunc50();                                            // 0x50
-            virtual void VFunc54();                                            // 0x54
-            virtual void VFunc58();                                            // 0x58
+            // (names guessed) The tests behind msw::CStgMdl::IsAnmLooped and
+            // IsAnmLoop (anm as CStgMdl passes it).
+            virtual bool IsAnmLooped(long anm) const;                          // 0x54
+            virtual bool IsAnmLoop(long anm) const;                            // 0x58
             // (name and meaning guessed) Whether the animation idx has
             // ended; msw::CStgGmk_WaterPillar_Act (DOL) passes 1 and -9.
             virtual bool IsEnd(long idx) const;                                // 0x5C
-            virtual void VFunc60();                                            // 0x60
-            virtual void VFunc64();                                            // 0x64
+            // (names guessed) msw::CStgMdl::IsAnmLoopedAll and IsAnmLoopAll.
+            virtual bool IsAnmLoopedAll(long anm) const;                       // 0x60
+            virtual bool IsAnmLoopAll(long anm) const;                         // 0x64
             // (name and meaning guessed) Whether animation idx (-1: all)
             // has looped; VolleyF's CStageVolley10::Main_ then switches the
-            // panel to its next animation.
+            // panel to its next animation. msw::CStgMdl::IsAnmEndAll calls
+            // this slot, so it may rather be an "ended, all" test.
             virtual bool IsLooped(long idx) const;                             // 0x68
     };
 }

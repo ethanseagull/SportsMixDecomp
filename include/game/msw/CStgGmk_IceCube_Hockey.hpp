@@ -29,12 +29,10 @@ class CStgGmk_IceCube_Mdl_Hockey : public msw::CStgGmk_Pylon_Mdl {
         virtual ~CStgGmk_IceCube_Mdl_Hockey();
         virtual void Create();
         virtual void Main(float rate);
-        // The original names of these three slots are GetMdlWidth,
-        // GetMdlDepth and GetMdlHeight (their symbols in this file);
-        // msw::CStgGmk_Pylon_Mdl still declares them under guessed names.
-        virtual float GetParam_OrgWidth() const;
-        virtual float GetParam_OrgDepth() const;
-        virtual float GetParam_OrgHeight() const;
+        // The model's unscaled size (names from this file's symbols).
+        virtual float GetMdlWidth() const;
+        virtual float GetMdlDepth() const;
+        virtual float GetMdlHeight() const;
 };
 
 // The actor of an ice cube, size 0x21C: an attack collision added to the

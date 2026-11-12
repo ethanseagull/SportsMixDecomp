@@ -4,6 +4,7 @@
 #include "nw4r/db/Panic.hpp"
 #include "nw4r/g3d/ResDic.hpp"
 #include "nw4r/g3d/ResAnmTexSrt.hpp" // AnmPolicy
+#include "nw4r/g3d/ResMat.hpp"
 #include "revolution/gx/GXTexture.h" // _GXTexFmt
 
 namespace nw4r {
@@ -36,20 +37,56 @@ namespace nw4r {
         // Handle to a texture or a palette of a resource file; only
         // default-constructed here. Minimal declarations written for this
         // project.
-        struct ResTexData;
-        struct ResPlttData;
+        // (added for nw4r::g3d::ApplyTexPatAnmResult) Only the members read
+        // so far; names after nw4r.
+        struct ResTexData {
+            unsigned char m_Unk00[0x18]; // 0x00
+            unsigned long flag;          // 0x18, bit 0: a colour-indexed format
+        };
+        struct ResPlttData {
+            unsigned char m_Unk00[0x10]; // 0x00
+            long toPlttData;             // 0x10, offset of the colours from this header
+            unsigned char m_Unk14[0x04]; // 0x14
+            _GXTlutFmt fmt;              // 0x18
+            unsigned short numEntries;   // 0x1C
+        };
 
         class ResTex {
             public:
-                explicit ResTex(void *p = 0) : m_pData(static_cast<ResTexData *>(p)) {}
+                explicit ResTex(void *p = 0) : m_pData(static_cast<ResTexData *>(p))
+                {
+                    // NW4R's alignment check; folds away for a constant.
+                    if ((unsigned long)p & 0x3) {
+                        db::Panic("g3d_restex_ac.h", 0, "NW4R:Failed assertion !((u32)p & 0x3)");
+                    }
+                }
 
                 bool IsValid() const { return m_pData != 0; }
+
+                // The check, its file and line are the ones in the DOL's
+                // inline copy (nw4r::g3d::ApplyTexPatAnmResult).
+                static const char *GetClassName() { return "ResTex"; }
+
+                ResTexData &ref() const
+                {
+                    if (!IsValid()) {
+                        db::Panic("g3d_restex_ac.h", 38, "%s::%s: Object not valid.", GetClassName(), __FUNCTION__);
+                    }
+                    return *m_pData;
+                }
+
+                // Whether the texture is colour-indexed (needs a palette).
+                bool IsCIFmt() const { return (ref().flag & 1) != 0; }
 
                 // (added for MenuF game/menu/CRuleInfo.cpp) What
                 // GXInitTexObj and GXInitTexObjLOD need for the texture.
                 bool GetTexObjParam(void **ppImage, unsigned short *pWidth, unsigned short *pHeight,
                                     _GXTexFmt *pFormat, float *pMinLod, float *pMaxLod,
                                     unsigned char *pMipmap) const;
+                // (DOL) The same for a colour-indexed texture.
+                bool GetTexObjCIParam(void **ppImage, unsigned short *pWidth, unsigned short *pHeight,
+                                      _GXCITexFmt *pFormat, float *pMinLod, float *pMaxLod,
+                                      unsigned char *pMipmap) const;
 
             private:
                 ResTexData *m_pData; // 0x00
@@ -57,7 +94,47 @@ namespace nw4r {
 
         class ResPltt {
             public:
-                explicit ResPltt(void *p = 0) : m_pData(static_cast<ResPlttData *>(p)) {}
+                explicit ResPltt(void *p = 0) : m_pData(static_cast<ResPlttData *>(p))
+                {
+                    // NW4R's alignment check; folds away for a constant.
+                    if ((unsigned long)p & 0x3) {
+                        db::Panic("g3d_respltt_ac.h", 0, "NW4R:Failed assertion !((u32)p & 0x3)");
+                    }
+                }
+
+                // The check, its file and line are the ones in the DOL's
+                // inline copies (nw4r::g3d::ApplyTexPatAnmResult).
+                static const char *GetClassName() { return "ResPltt"; }
+
+                // A const and a non-const copy, as in the original: their
+                // strings are separate objects in the DOL's .data.
+                ResPlttData &ref()
+                {
+                    if (m_pData == 0) {
+                        db::Panic("g3d_respltt_ac.h", 42, "%s::%s: Object not valid.", GetClassName(), __FUNCTION__);
+                    }
+                    return *m_pData;
+                }
+                const ResPlttData &ref() const
+                {
+                    if (m_pData == 0) {
+                        db::Panic("g3d_respltt_ac.h", 42, "%s::%s: Object not valid.", GetClassName(), __FUNCTION__);
+                    }
+                    return *m_pData;
+                }
+
+                // The palette's colours.
+                void *GetPlttData()
+                {
+                    ResPlttData &r = ref();
+                    if (r.toPlttData != 0) {
+                        return reinterpret_cast<unsigned char *>(&r) + r.toPlttData;
+                    }
+                    return 0;
+                }
+
+                _GXTlutFmt GetFmt() const { return ref().fmt; }
+                unsigned short GetNumEntries() const { return ref().numEntries; }
 
             private:
                 ResPlttData *m_pData; // 0x00
@@ -124,6 +201,13 @@ namespace nw4r {
             private:
                 ResAnmTexPatData *m_pData; // 0x00
         };
+
+        // (DOL fn_80010848, unnamed; written in the DOL's animation file,
+        // bcs::CMdlObj calls it; name after nw4r's ApplyClrAnmResult, which
+        // sits next to it) Puts the animated textures and palettes of
+        // pResult into a material's texture and palette objects, keeping
+        // each texture object's filter and wrap settings.
+        void ApplyTexPatAnmResult(ResTexObj texObj, ResTlutObj tlutObj, const TexPatAnmResult *pResult);
     }
 }
 

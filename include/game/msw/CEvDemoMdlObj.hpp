@@ -1,6 +1,7 @@
 #ifndef CEVDEMOMDLOBJ_HPP_
 #define CEVDEMOMDLOBJ_HPP_
 
+#include "bcs/CMdlObj.hpp"
 #include "game/msw/CEventModel.hpp"
 
 namespace msw {
@@ -50,7 +51,74 @@ namespace msw {
             // (parameter names guessed) A model from file pFile of the
             // effect resources (msw::CTournamentMan, TourF).
             static CEvDemoMdlObj *CreateModelEffRes(_SETUP &rSetup, const char *pFile, const char *pName);
-    };
+
+            // (The members below are added for the DOL's CreateModel; the
+            // names of the functions unnamed in the DOL are the base's, all
+            // parameter and member names guessed. Vtable lbl_80489260, size
+            // 0xE0.) The constructor is inline in CreateModel.
+            CEvDemoMdlObj() : CEventModel(0), m_pMdl(0), m_pShadow(0), m_pMotion(0), m_pName(0)
+            {
+                for (int i = 0; i < 4; i++) {
+                    m_hEffect[i] = 0;
+                    m_nEffectId[i] = -1;
+                }
+            }
+            virtual ~CEvDemoMdlObj();                                   // fn_80220CA0
+            virtual void _SetPos(const bcs::FVEC3 &rPos);
+            virtual void _SetRot(const bcs::FVEC3 &rRot);
+            virtual void _SetScale(const bcs::FVEC3 &rScale);
+            virtual void SetDisp(int bDisp);
+            virtual void SetShadowDisp(int bDisp);
+            virtual void UpdateFrame(float fFrame);
+            virtual void SetDrawLayer(long nLayer);
+            virtual void SetDrawPriority(long nPriority);
+            virtual void AppendChild(bcs::CScnGroup *pGroup);
+            virtual void SetLightSelector(long nSelector);
+            virtual void ResetLightSelector();
+            // Inline: the original emits them weak after CreateModelEffRes.
+            virtual bcs::CScnObj *GetScnObj() { return m_pMdl; }
+            virtual const bcs::CScnObj *GetScnObj() const { return m_pMdl; }
+            virtual const bcs::FMTX34 *GetNodeWorldMtxPtr(unsigned long nNode) const;
+            virtual long GetNodeId(const char *pName) const;
+            virtual void SetMatTevColor(const char *pMat, bcs::BCS_Color color, _GXTevRegID reg);
+            virtual void SetBaseColor(bcs::BCS_Color color);
+            virtual void SetColorScale(bcs::BCS_Color color);
+            virtual void SetCameraView(long nView);
+            virtual void SetAnimSpeed(float fSpeed);
+            virtual int IsAnimResLoopType(long nMot) const;
+            virtual float AnimResFrame(long nMot) const;
+            virtual float AnimResTrgFrame(long nMot, unsigned long nTrg, float) const;
+            virtual float AnimPlay(long nMot, unsigned long nFlag, float fBlend, float fFrame, int bStopSeq);
+            virtual float AnimPlay(const char *pName, unsigned long nFlag, float fBlend, float fFrame, int bStopSeq);
+            virtual float AnimPlay(nw4r::g3d::ResFile file, const char *pName, unsigned long nFlag, float fBlend,
+                                   float fFrame, int bStopSeq);
+            virtual float GetNowAlpha() const;
+            // Four effect slots.
+            virtual long GetEffMax() const;
+            virtual unsigned long GetEffcetHandle(long n) const;
+            virtual void SetEffectHandle(unsigned long hEffect, long n);
+            virtual long GetEffcetId(long n) const;
+            virtual void SetEffectId(long nId, long n);
+            virtual void Destroy();                                     // fn_80220D14
+
+        private:
+            // (name guessed) The model m_pName in the model file, the first
+            // one without a name. Inline in CreateModel.
+            nw4r::g3d::ResMdl GetResMdl() const
+            {
+                if (m_pName != 0) {
+                    return GetMdlFile().GetResMdl(m_pName);
+                }
+                return GetMdlFile().GetResMdl(0);
+            }
+
+            long m_nEffectId[4];            // 0xB0: -1 for none
+            unsigned long m_hEffect[4];     // 0xC0
+            bcs::CMdlObj *m_pMdl;           // 0xD0: a msw::CEventMdlObj (CEventModel::_CreateMdlObj)
+            bcs::CMdlShadow *m_pShadow;     // 0xD4: only with a shadow size
+            bcs::CAnmMotion *m_pMotion;     // 0xD8
+            const char *m_pName;            // 0xDC: the setup's pInit, the model's name in its file
+    }; // size 0xE0
 }
 
 #endif /* !CEVDEMOMDLOBJ_HPP_ */

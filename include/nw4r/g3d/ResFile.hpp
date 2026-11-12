@@ -76,6 +76,8 @@ namespace nw4r {
                 // (DOL; named after GetResTexNumEntries) Number of skeletal
                 // animations in the file.
                 unsigned long GetResAnmChrNumEntries() const;
+                // (added for DOL bcs::CAnmMotion) By index.
+                ResAnmChr GetResAnmChr(unsigned long index) const;
                 int HasResAnmClr() const;
                 int HasResAnmTexSrt() const;
                 int HasResAnmTexPat() const;

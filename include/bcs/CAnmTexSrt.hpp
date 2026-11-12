@@ -91,6 +91,12 @@ namespace bcs {
             nw4r::g3d::TexSrtAnmResult *m_pResult;      // 0x2C, one per animated material
             long m_nResultNum;                       // 0x30
     };
+
+    // (DOL fn_80010810, unnamed; name and namespace guessed) Hands the
+    // handles and the result on to nw4r::g3d::ApplyTexSrtAnmResult;
+    // bcs::CMdlObj calls it.
+    void ApplyTexSrtAnmResult(nw4r::g3d::ResTexSrt srt, nw4r::g3d::ResMatIndMtxAndScale ind,
+                              const nw4r::g3d::TexSrtAnmResult *pResult);
 }
 
 #endif /* !BCS_CANMTEXSRT_HPP_ */

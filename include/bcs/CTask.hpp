@@ -53,8 +53,17 @@ namespace bcs {
             // (name guessed) Sets bits of the word at 0x08 (HockeyF's
             // CShootMarker sets 0x1).
             void OnUnk08(unsigned long bits) { m_Unk08 |= bits; }
+            // (names guessed) The low byte of the word at 0x08 holds a value
+            // of its own: msw::CGame's stop task sets it to 1, msw::CGame and
+            // its pause task move the word by a constant (DOL constructors
+            // in game/msw/CGame.cpp).
+            void SetUnk08Low(unsigned long value) { m_Unk08 = (m_Unk08 & ~0xFFUL) | value; }
+            void AddUnk08(long n) { m_Unk08 += n; }
 
         private:
+            // Moves tasks between its priority lists and runs them.
+            friend class CTaskMan;
+
             unsigned long m_nId;         // 0x04 (name guessed)
             unsigned long m_Unk08;       // 0x08
             unsigned long m_nFlag;       // 0x0C, bit 0 asks for deletion (name guessed)

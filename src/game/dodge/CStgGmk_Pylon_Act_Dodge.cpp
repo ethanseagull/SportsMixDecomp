@@ -61,7 +61,7 @@ void msw::CStgGmk_Pylon_Act_Dodge::OnDamage(CCollBodyUnit *pBody, CBall *pBall)
 // The pylon slides along rVel at GetParam_Acc and slows by GetParam_Dec.
 void msw::CStgGmk_Pylon_Act_Dodge::SetPushVel(const bcs::FVEC3 &rVel)
 {
-    CStgSrt *pSrt = GetSrt();
+    CStgSrtMove *pSrt = GetSrt();
     bcs::FVEC3 dir;
     VecNormalize(dir, rVel);
     bcs::FVEC3 vel;

@@ -2,6 +2,7 @@
 #define MSW_CEVENTSCENE_HPP_
 
 #include "bcs/CTask.hpp"
+#include "bcs/FVEC3.hpp"
 #include "nw4r/g3d/ResFile.hpp"
 
 namespace bcs {
@@ -71,6 +72,35 @@ namespace msw {
             void ResetTimer();
             void _StartFadeOut() const;
             int _IsPlayFade() const;
+            // (added for the DOL's victory demos in game/msw/EvDemo.cpp;
+            // return types and parameter names guessed) Moves and turns the
+            // node paths of the scene (kept at 0x6C/0x78).
+            void AddOffset(const bcs::FVEC3 &rPos, const bcs::FVEC3 &rRot, int);
+
+            // (DOL functions unnamed in the DOL; names guessed from what
+            // they do, read from their bodies)
+            // fn_8011975C: the demo flags of this scene's slot
+            // (CEventDemo::m_Work.anFlags, indexed by the camera's word at
+            // 0xF4).
+            unsigned long _GetDemoFlags() const;
+            // fn_8011977C: registers pTask as the demo task of that slot
+            // (CEventDemo::m_Work.apTask).
+            void _SetDemoTask(bcs::CTask *pTask);
+            // fn_80119598: advances the timers by fFrame and fires the
+            // virtual EventTimer of each one that is due.
+            void _UpdateTimer(float fFrame);
+            // fn_8011889C: sets the byte at 0x9E from the cut playing
+            // (1 before the first, 4 inside, 7 after the last).
+            void _UpdateCutStep();
+            // fn_801184BC: starts the camera animation of cut rCut.
+            void _PlayCutCamera(const CUT_WORK &rCut);
+            // fn_80118B08: puts the models nFirst..nLast - 1 on the node
+            // path "player%02d" of the scene; the node, -1 without one.
+            long _SetChrNode(long nFirst, long nLast);
+            // fn_80118EC4: reads node paths of animation pAnm for the models
+            // of team nTeam and plays motion nMot (when not negative) on
+            // them at speed fSpeed.
+            void _SetTeamNode(const char *pAnm, long nTeam, long nMot, unsigned long nFlag, float fSpeed);
 
             // The model nChr when that slot is in use (bit nChr of the mask
             // at 0x98), null otherwise.
@@ -96,7 +126,18 @@ namespace msw {
             CEventModel **m_ppChr;       // 0x5C: one per slot, count in the byte at 0x9B
             unsigned char m_Unk60[4];    // 0x60
             CUT_WORK *m_pCut;            // 0x64: one per scene of the camera animation
-            unsigned char m_Unk68[0x30]; // 0x68
+            // (0x68 to 0x8C: names and meanings guessed from AddOffset's
+            // users) How the node paths are flipped, moved and turned.
+            long m_nNodeFlip;            // 0x68
+            bcs::FVEC3 m_vNodeOffset;    // 0x6C
+            bcs::FVEC3 m_vNodeOffsetRot; // 0x78
+            unsigned char m_Unk84[4];    // 0x84
+            float m_fNodeRotY;           // 0x88
+            unsigned char m_Unk8C[4];    // 0x8C
+            // (names guessed) The scene's resource file (GetRes) and the
+            // demo flags last seen (see _GetDemoFlags).
+            nw4r::g3d::ResFile m_resFile; // 0x90
+            unsigned long m_nDemoFlags;  // 0x94
             unsigned short m_nChrMask;   // 0x98: bit n set when slot n holds a model
             unsigned char m_Unk9A;       // 0x9A
             signed char m_nChrNum;       // 0x9B: number of model slots

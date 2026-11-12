@@ -6,6 +6,12 @@
 #include "nw4r/g3d/ResMdl.hpp"
 #include "nw4r/g3d/ResNode.hpp"
 
+namespace nw4r {
+    namespace g3d {
+        struct ChrAnmResult;
+    }
+}
+
 namespace bcs {
 
     class CAnmObj;
@@ -166,6 +172,11 @@ namespace bcs {
             nw4r::math::MTX34 *GetNodeMtxArray() const { return m_pNodeMtx; }
             unsigned long *GetNodeMtxAttribArray() const { return m_pNodeMtxAttrib; }
             CAnmObj *GetAnmObjChr() const { return m_pAnmObjChr; }
+            // (names guessed; added for game/msw/CStgMdl.cpp) The skeletal
+            // animation's result per node (null without one), and
+            // fn_80056DA8, which CStgMdl::ResetAnm calls.
+            nw4r::g3d::ChrAnmResult *GetChrAnmResult() const { return m_pChrAnmResult; }
+            void ResetAnm();
             CAnmObj *GetAnmObjMatClr() const { return m_pAnmObjMatClr; }
             CAnmObj *GetAnmObjTexSrt() const { return m_pAnmObjTexSrt; }
             // (names guessed) The texture pattern and the shape slots.
@@ -212,7 +223,11 @@ namespace bcs {
             // to nw4r::g3d::CalcSkinning (null without one).
             nw4r::math::MTX34 *m_pNodeMtx;      // 0x11C
             unsigned long *m_pNodeMtxAttrib;    // 0x120
-            unsigned char m_Unk124[0x1C];       // 0x124
+            unsigned char m_Unk124[0xC];        // 0x124
+            // (name guessed; added for game/msw/CStgMdl.cpp) One result of
+            // the skeletal animation per node, or null.
+            nw4r::g3d::ChrAnmResult *m_pChrAnmResult; // 0x130
+            unsigned char m_Unk134[0xC];        // 0x134
             const unsigned char *m_pEnvByteCode; // 0x140
             unsigned char m_Unk144[0x8];        // 0x144
 

@@ -4,6 +4,8 @@
 #include "game/msw/CSelectMenuLayoutBase.hpp"
 
 namespace msw {
+    class CSelectMenu;
+
     namespace SelectMenu {
 
         class CCourtTab;
@@ -54,6 +56,9 @@ namespace msw {
             private:
                 // CCourtTab waits for this screen's closing animation.
                 friend class CCourtTab;
+                // CSelectMenu's court select steps read the two flags below
+                // (game/menu/CCourtSelect.cpp).
+                friend class msw::CSelectMenu;
 
                 // Inlined in the game, with no out-of-line copy left in the
                 // module; only their local statics have symbols.

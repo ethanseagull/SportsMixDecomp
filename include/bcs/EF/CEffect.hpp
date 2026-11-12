@@ -31,6 +31,10 @@ namespace bcs {
                 // 0x48-0x58. msw::CCockpitModelTelop::SendEvent calls it
                 // through a member pointer.
                 void SetAnmRate(float fRate);
+                // (DOL; added for BossF game/boss/GameBoss.cpp, which calls it
+                // through a member pointer with 1; meaning guessed from the
+                // name)
+                void SetFrameRateCalcDisable(int bDisable);
 
                 // (name guessed; the DOL's fn_80123490, a weak inline: its
                 // address is taken by msw::CEffectCluster's fn_801233FC and

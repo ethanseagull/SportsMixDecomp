@@ -3,6 +3,7 @@
 #include "bcs/G2D/CLayoutBase.hpp"
 #include "bcs/G2D/CPaneCtrl.hpp"
 #include "game/msw/CCockpitFrameOutBase.hpp"
+#include "game/msw/CCockpitPartMove.hpp"
 #include "game/msw/CLytCtrl.hpp"
 #include "game/msw/CMenuPad.hpp"
 #include "game/msw/CMenuPadInfo.hpp"
@@ -191,4 +192,60 @@ int msw::CCockpitFrameOutBase::IsWaitAnim(bcs::G2D::CPaneCtrl *pPaneCtrl, long n
         return 0;
     }
     return !(pPaneCtrl->GetAnimFrameSize(nAnim) < 2.0f);
+}
+
+// msw::CCockpitPartMove is part of this file in the original: its code
+// follows IsWaitAnim, its vtable comes before CCockpitLayoutBase's in .data,
+// and its static initialiser comes before this file's destructor thunk.
+
+msw::CCockpitPartMove msw::CCockpitPartMove::s_Instance;
+
+msw::CCockpitPartMove::~CCockpitPartMove() {}
+
+void msw::CCockpitPartMove::Initialize()
+{
+    nw4r::ut::List_Init(&m_List, 0);
+}
+
+void msw::CCockpitPartMove::Finalize()
+{
+    for (;;) {
+        PartMoveInfo *pInfo = static_cast<PartMoveInfo *>(nw4r::ut::List_GetPrev(&m_List, 0));
+        if (pInfo == 0) {
+            break;
+        }
+        nw4r::ut::List_Remove(&m_List, pInfo);
+        delete pInfo;
+    }
+}
+
+long msw::CCockpitPartMove::Push(long nPart, long nArg0, long nArg1)
+{
+    PartMoveInfo *pInfo = new PartMoveInfo;
+    if (pInfo == 0) {
+        return -1;
+    }
+    pInfo->m_nPart = nPart;
+    pInfo->m_nArg0 = nArg0;
+    pInfo->m_nArg1 = nArg1;
+    nw4r::ut::List_Append(&m_List, pInfo);
+    return 0;
+}
+
+long msw::CCockpitPartMove::Pop(PartMoveInfo &rInfo)
+{
+    PartMoveInfo *pInfo = static_cast<PartMoveInfo *>(nw4r::ut::List_GetNext(&m_List, 0));
+    if (pInfo == 0) {
+        return -1;
+    }
+    // The original reads the last field first.
+    long nArg1 = pInfo->m_nArg1;
+    long nArg0 = pInfo->m_nArg0;
+    long nPart = pInfo->m_nPart;
+    rInfo.m_nPart = nPart;
+    rInfo.m_nArg0 = nArg0;
+    rInfo.m_nArg1 = nArg1;
+    nw4r::ut::List_Remove(&m_List, pInfo);
+    delete pInfo;
+    return 0;
 }

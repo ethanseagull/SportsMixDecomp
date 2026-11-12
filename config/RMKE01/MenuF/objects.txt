@@ -11,6 +11,7 @@ Matching game/menu/CDepthOfFieldValue.cpp
 Matching game/menu/CButton0.cpp
 Equivalent game/menu/CButton1.cpp
 Equivalent game/menu/CButtonEntry.cpp
+Equivalent game/menu/CSaveSelect.cpp
 Equivalent game/menu/CSelectMenuLayoutBase.cpp
 Equivalent game/menu/CButton1Code.cpp
 Matching game/menu/CCameraMenuBG.cpp
@@ -28,6 +29,7 @@ Matching game/menu/CScoreTop.cpp
 Equivalent game/menu/CGameSelect.cpp
 Equivalent game/menu/CChrSign.cpp
 Equivalent game/menu/CChrCaption.cpp
+Equivalent game/menu/CCharSel.cpp
 Equivalent game/menu/CPlusMinus.cpp
 Equivalent game/menu/CPlayMode.cpp
 Equivalent game/menu/CTeam.cpp
@@ -67,3 +69,4 @@ Equivalent game/menu/CRuleSel.cpp
 Equivalent game/menu/CMiiSel.cpp
 Equivalent game/menu/unit_6EE84.cpp
 Equivalent game/menu/CTopMenuChrObj.cpp
+Equivalent game/menu/CCourtSelect.cpp

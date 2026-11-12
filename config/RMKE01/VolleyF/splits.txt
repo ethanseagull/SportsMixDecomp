@@ -292,7 +292,7 @@ game/volley/CStageVolley02.cpp:
 	.data       start:0x000179F0 end:0x00017F78
 	.bss        start:0x00000590 end:0x00000598
 
-game/volley/CStageVolley03.cpp:
+game/volley/StageVolley03.cpp:
 	.text       start:0x0008C3E0 end:0x0008D960
 	.rodata     start:0x00006230 end:0x00006310
 	.data       start:0x00017F78 end:0x00018400

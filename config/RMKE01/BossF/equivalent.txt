@@ -9,6 +9,7 @@ BossF ChangeTextFont__Q23msw21CCockpitBossBallPowerFli near 97.0 register alloca
 BossF CreateBallIcon__Q23msw16CRadarIcon2DBossFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc unverified 94.1 original frame is 0x80 (ours 0x50) and it stores a .rodata float (0.0f?) to stack slots 0x0C, 0x1C, 0x20 at entry: a local object (likely a vector/size passed by reference later) that our source lacks; the rest is the same calls in a slightly different block order with renumbered registers. Find that object before calling it correct
 BossF CreateCharaIcon__Q23msw16CRadarIcon2DBossFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc unverified 94.4 original frame is 0x80 (ours 0x50) and it stores a .rodata float (0.0f?) to stack slots 0x0C, 0x1C, 0x20 at entry: a local object (likely a vector/size passed by reference later) that our source lacks; the rest is the same calls in a slightly different block order with renumbered registers. Find that object before calling it correct
 BossF CreateMiniTelop__Q23msw12CCockpitBossFllPQ23bcs5FVEC3 near 99.0 register choice and load order inside the inlined paired-single FVEC3Add (pos + offset); same operation; DodgeF copy differs the same way
+BossF CtorStateAppear__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFv near 99.9 register allocation only
 BossF CtorStateDamage__Q23msw12CChrCoreBossFv near 99.9 register choice; the jump table is our compiler's local symbol instead of jumptable_8_data_1258 (same 19 entries)
 BossF CtorStateDizzy__Q23msw12CChrCoreBossFv near 99.7 register allocation and instruction order only
 BossF CtorStateDunk__Q23msw12CChrCoreBossFv near 99.5 register allocation/instruction order only
@@ -43,20 +44,28 @@ BossF LoopStateAirTrick__Q23msw12CChrCoreBossFv near 99.7 register numbering onl
 BossF LoopStateDamage__Q23msw12CChrCoreBossFv near 99.5 register allocation and instruction order only
 BossF LoopStateDizzy__Q23msw12CChrCoreBossFv near 99.2 register allocation and instruction order only
 BossF LoopStateDunk__Q23msw12CChrCoreBossFv near 99.2 stack slot order only (the by-value copy for the XZ length and the difference vector swap slots) plus register order
+BossF LoopStateGameSetup__Q23msw9CGameBossFv near 97.8 the inlined CFsmQueue::FsmqPushState reads head before tail and reloads the tail once; the original reads the tail first. Same queue update and work pointer.
 BossF LoopStateItemShoot__Q23msw12CChrCoreBossFv near 99.0 register allocation and instruction order only
 BossF LoopStateJumpShoot__Q23msw12CChrCoreBossFv near 99.5 Float constants per literal as in the original (pool-off stand-in, own file since the split). Register allocation/order only (diff.py: schedule).
+BossF LoopStateLoop__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFv near 99.9 register allocation only
+BossF LoopStateMainLoop__Q23msw9CGameBossFv near 99.5 register allocation only (loop counter/character pointer of the inlined all-characters-beaten check)
 BossF LoopStateMotPlay__Q23msw12CChrCoreBossFv near 99.2 register allocation and instruction order only
 BossF LoopStateNeutral__Q23msw12CChrCoreBossFv near 96.8 register choice; the toss motion id s_TossPoseMot[0][0] (64) is folded to li 0x40 where the original computes 0*6 and loads the same table entry with lhax (GetTossPoseDir_ always returns 0): same value
 BossF LoopStateShootStance__Q23msw12CChrCoreBossFv near 99.8 register choice only: the inlined CFsmQueue::FsmqNext computes head+1 into a new register instead of in place; same instructions otherwise
 BossF LoopStateSideStep__Q23msw12CChrCoreBossFv near 99.6 register allocation/order only
 BossF LoopStateSleep__Q23msw21CBallTargetMarkerBossFv near 99.7 x and z of the ball position swap float registers
+BossF LoopStateTurnResult__Q23msw9CGameBossFv near 99.5 register allocation only (same inlined check as LoopStateMainLoop)
 BossF LoopStateTurn__Q23msw12CChrCoreBossFv near 98.8 register allocation and instruction order only
+BossF LoopStateTurn__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFv near 99.7 the two float loads of the angle addition are in the other order; register allocation only
 BossF MainCamera_Normal__Q23msw11CCameraBossFv near 85.6 stack layout, the original turns the 0x20/0x1 bit tests into bools (equivalent branches), one swapped commutative multiply operand; same calls, arguments and constants
 BossF MainCamera__Q23msw11CCameraBossFv near 97.8 stack slots and one temporary copy the original keeps; same calls, constants and accesses
+BossF MainCamera__Q33msw22@unnamed@GameBoss_cpp@18CcVsBossArtsCameraFv near 98.8 paired-single lerp instructions interleaved in a different order and register numbering only
 BossF MainOnBall___Q23msw14CChrDrvPadBossFPQ33msw7CChrDrv8_CHR_MSG near 99.9 float register choice only (camera yaw in f0 vs f1)
 BossF Main__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
 BossF Main__Q33msw12GIMMICK_BOSS14CEffectCoinGetFv near 99.0 register choice only (stack-vector address registers, paired-single temporaries); same as the Dodge/Volley/Hockey/Basket copies
 BossF Main__Q33msw12GIMMICK_BOSS16CEffectCoinScoreFv near 98.8 register choice only (fmadds operand order of a product by a zero speed, stack-vector address registers); same as the Volley/Basket copies
+BossF MenuCallGameResult___Q23msw9CGameBossFv near 98.8 register allocation only
+BossF MenuCallInterval___Q23msw9CGameBossFv near 98.7 register allocation only
 BossF MethdChgLeader__Q23msw12CChrCoreBossFv near 99.7 abs() result in r3 instead of r0; register choice only
 BossF MethdShootStance__Q23msw12CChrCoreBossFfi near 99.8 r3/r4 swapped in the inlined FsmqGetWork_ (queue head vs work-queue pointer); register choice only
 BossF MethdSideStep__Q23msw12CChrCoreBossFff near 99.0 the two float parameters kept in f30/f31 the other way round; register choice only
@@ -94,6 +103,7 @@ BossF TrgDamage___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.
 BossF TrgGoalIn___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
 BossF TrgReceive___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
 BossF TrgShootStart___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
+BossF UpdateCockpitCount___Q23msw9CGameBossFv near 92.4 the original also compares g_GameWork.m_fUnk20 <= 0 (fcmpo/cror) and never uses the result; ours drops the dead compare (empty if, unused bool and empty-inline stand-ins all eliminated). Rest is register numbering. No behaviour change.
 BossF UpdateHomePos__Q23msw11CComDrvBossFv near 94.3 first loop: the original indexes the three local tables and the two member arrays with base+offset counters (lfsx, add), ours steps pointers; hence one saved GPR more (r21) and a 0x10 larger frame in the original; register numbering elsewhere; same operations in the same order
 BossF Util_DunkStart___Q23msw12CChrCoreBossFllfl near 99.0 register allocation/instruction order only
 BossF __ct__Q23msw11CCameraBossFl near 99.6 register allocation only
@@ -101,4 +111,6 @@ BossF __ct__Q23msw17CItemBallBossBombFPQ23msw5CBall near 98.5 original reloads m
 BossF __ct__Q23msw21CBallTargetMarkerBossFPQ23bcs5CTaskUli near 99.8 stack slots of the inlined SetState ptmf temporaries differ; same stores and values
 BossF __ct__Q33msw12GIMMICK_BOSS16CEffectCoinScoreFPQ23bcs5CTaskRCQ23bcs5FVEC3fl near 99.4 float register choice, one m_pMdl load scheduled differently (no store in between); same as the Basket/Hockey copies
 BossF __ct__Q33msw13CHR_CORE_BOSS9CStickObjFPQ23bcs5CTaskQ34nw4r3g3d6ResMdlPQ23bcs7CMdlObjll near 99.9 stack slots only: the four SetState pointer-to-member temporaries are copied to different stack offsets; same values, stores and calls
+BossF __ct__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFPQ23bcs5CTaskRCQ23bcs5FVEC3l near 99.9 stack slots of the pointer-to-member temporaries of SetState differ; same values stored to the state table
 BossF __dt__Q23msw11CChrManBossFv near 99.1 loop counter and byte offset swap registers (r29/r30); same instructions otherwise
+BossF __dt__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFv near 99.0 register allocation only (one register of the inlined CFsm destructor)

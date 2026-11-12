@@ -248,6 +248,13 @@ namespace msw {
             // the 8 bytes of an RFLCreateID) and its data source.
             unsigned long long Mii_GetMiiCreateId(long nIndex);
             RFLDataSource Mii_GetMiiDataSource(long nIndex);
+            // (added for game/menu/CSaveSelect.cpp; return types guessed
+            // from the callers) Whether the Mii of character slot nIndex is
+            // a guest Mii, its index in the Mii list, and dropping it from
+            // the Mii select screen's choices.
+            unsigned char Mii_GetMiiMode(long nIndex);
+            long Mii_GetMiiIndex(long nIndex);
+            void Mii_CancelMiiParam(long nIndex, RFLDataSource source, long nMiiIndex);
 
             // Added for MenuF game/menu/CFriendList.cpp. The steps of the
             // friend roster screen (SelectMenu::CFriendList), and the help
@@ -308,6 +315,15 @@ namespace msw {
             // The index of a character pad nPad has not decided yet, or a
             // negative value when all are.
             long Chara_FindNotDecideCharaIndex(long nPad);
+            // (added for game/menu/CCharSel.cpp; return types guessed) The
+            // slot pad nPad is choosing for, or a free one, negative for
+            // none; the state of slot nIndex.
+            long Chara_FindSelectCharaIndex(long nPad);
+            long Chara_FindNoneCharaIndex(long nPad);
+            int Chara_IsCharaDecideTemporary(long nIndex);
+            int Chara_IsCharaDecideAlready(long nIndex);
+            int Chara_IsCharaDecideNone(long nIndex);
+            void Chara_ChangeDecideTemporaryToDecideAlready();
             void SetCharaSelectSaveParam();
 
             // Added for MenuF game/menu/CEntry.cpp (return types guessed).
@@ -352,7 +368,12 @@ namespace msw {
                 unsigned char m_nChara;      // 0x10, 0 to 19, 0xFF none
                 unsigned char m_nCharaSub;   // 0x11, the character's variant, 0xFF none
                 unsigned char m_nState;      // 0x12, 1 and up once chosen
-                unsigned char m_Unk13[0xD];  // 0x13
+                unsigned char m_Unk13[1];    // 0x13
+                unsigned char m_Unk14[4];    // 0x14
+                // 0x18, 0x1C. (added for game/menu/CCharSel.cpp) The Mii
+                // of a Mii slot, as CCourtChr::SetCharaModel takes it.
+                long m_nMiiIndex;
+                RFLDataSource m_MiiSource;
                 // 0x20. (added for game/menu/unit_6EE84.cpp) The Mii of the
                 // slot when its character is a Mii (0x13).
                 RFLCreateID m_MiiCreateId;
@@ -379,6 +400,9 @@ namespace msw {
             // closing the window. The texts fill parts of the message
             // (null: none).
             void WindowA_Button(char *pGroup, char *pLabel, wchar_t *pText0, wchar_t *pText1);
+            // (added for game/menu/CSaveSelect.cpp) A message window with
+            // an OK button; pText fills in the message.
+            void WindowOK_Button(char *pGroup, char *pLabel, wchar_t *pText);
             void WindowYesNo_Button(char *pGroup, char *pLabel, int nUnk0, wchar_t *pText0, wchar_t *pText1,
                                     int nUnk1);
             void Window_Message(char *pGroup, char *pLabel, int nUnk);
@@ -435,6 +459,46 @@ namespace msw {
                                                     CSelectMenuLayoutBase *pObj);
             void Court_CameraReverse();
 
+            // Added for MenuF game/menu/CCourtSelect.cpp (return types and
+            // argument names guessed). The court (stage) select screen
+            // offline, on Wi-Fi and for the party games
+            // (SelectMenu::CCourt with its cup tabs, SelectMenu::CCourtTab),
+            // and what they call.
+            // Sets up the background display for stage nStage of cup nCup
+            // (nStage -1: the cup).
+            void _SetCourtDisplay(long nCup, long nStage);
+            void _SetPartyDisplay(long nCup, long nStage);
+            void _BuildCourtSelect(long nTabType, unsigned char nCupMask, int bParty);
+            void _SetStageName(long nCup, int bParty);
+            void Court_In();
+            void Court_Loop();
+            void Court_Out();
+            void Court_NormalSelect(long nMode);
+            // 1 when the leader's pad moved the cup tab, else 0.
+            int Court_CheckTabChange(long nMode, int bParty);
+            void Court_RandomSelect(long nMode);
+            void Court_LayoutOutWait(long nMode);
+            void Court_ChangeStateInit(long nMode);
+            void WifiCourt_In();
+            void WifiCourt_Loop();
+            void WifiCourt_Out();
+            void WifiCourt_NormalSelect(long nMode);
+            void WifiCourt_LayoutOutWait(long nMode);
+            // Leaves the stage to the other player.
+            void WifiCourt_SetOtherSelect(long nPad, long nMode);
+            void PartyCourt_In();
+            void PartyCourt_Loop();
+            void PartyCourt_Out();
+            void PartyCourt_NormalSelect(long nMode);
+            void PartyCourt_RandomSelect(long nMode);
+            void PartyCourt_LayoutOutWait(long nMode);
+            void PartyCourt_ChangeStateInit(long nMode);
+            void PartyCourt_SetRhythmScore(long nBtnKindId);
+            void Court_OkButtonDelay();
+            void Court_OkButtonInit();
+            void Court_OkButton();
+            void Court_OkButtonOut();
+
             // Added for MenuF game/menu/CRuleInfo.cpp. The steps of the
             // rules screen (SelectMenu::CRuleInfo), and the party game
             // information step it returns to (argument meaning guessed).
@@ -474,6 +538,31 @@ namespace msw {
             // other way, bMix with the fifth (mix) sport open.
             void Top_SetTurnCamera(long nPos, int bReverse, int bMix);
             void TopMenu_BackPlaterSelect();
+
+            // (added for game/menu/CSaveSelect.cpp) The player select
+            // screen ("Plater" is the game's spelling) and the steps of its
+            // Loop. SetUp checks every player's Mii and returns -1 when one
+            // is gone (the step then waits for the window); MiiSetUp marks
+            // player nPlayer's Miis as chosen; NameUpDate takes a player's
+            // name from its Mii.
+            void PlaterSelect_Start();
+            void PlaterSelect_Save();
+            int PlaterSelect_SetUp();
+            void PlaterSelect_MiiSetUp(long nPlayer);
+            void PlaterSelect_NameUpDate(SAVE_DATA_PLAYER *pData);
+            void PlaterSelect_In();
+            void PlaterSelect_Loop();
+            void PlaterSelect_SaveClose();
+            void PlaterSelect_LoopStep();
+            void PlaterSelect_ChangeStep();
+            void PlaterSelect_DeleteStep();
+            void PlaterSelect_Out();
+            void PlaterSelect_LineMessage(long nBtnKindId);
+            void PlaterSelect_PlusMinus(long nPad, long nBtnKindId, long nStep);
+            void PlaterSelect_BackTitle();
+            // (added for game/menu/CSaveSelect.cpp; argument names guessed)
+            void SetHistoryButtonKindId(unsigned char nMode, long nPad, unsigned short nBtnKindId);
+            void LoopPlayMenuBGM(long nBgm);
             // Defined in another MenuF file. The game kind of character
             // table place nChara.
             unsigned char _GetGameModeByBgChrId(unsigned char nChara);
@@ -557,7 +646,12 @@ namespace msw {
             // (names guessed; added for game/menu/CHowTo.cpp)
             short m_nStep;                   // 0x8C, the sub-step of the screen's Loop
         private:
-            unsigned char m_Unk8E[0xB];      // 0x8E
+            unsigned char m_Unk8E[0x6];      // 0x8E
+            // 0x94. (added for game/menu/CCourtSelect.cpp; meaning not
+            // known) Set to 150 when the court select screen goes on to
+            // mode 0x31.
+            float m_fUnk94;
+            unsigned char m_Unk98;           // 0x98
         public:
             unsigned char m_nNextMode;       // 0x99, passed to SetNextMode
         private:
@@ -613,7 +707,10 @@ namespace msw {
             // (negative: none); it then builds the court of that game.
             long m_nWifiGameKind;
         private:
-            unsigned char m_Unk260[0x4];     // 0x260
+            // 0x260. (name guessed; added for game/menu/CCourtSelect.cpp)
+            // The game kind the court select screen was last built for;
+            // the stage choice is reset when it changes.
+            long m_nCourtGameKind;
         public:
             // 0x264. (name guessed; added for game/menu/CScoreTop.cpp) A
             // saved m_nGameKind: the score book keeps the game kind it was
@@ -706,7 +803,12 @@ namespace msw {
             // button again after a character was given back.
             float m_fCharSelBackWait;
         private:
-            unsigned char m_Unk6D4[0x2];     // 0x6D4
+            // 0x6D4, 0x6D5. (added for game/menu/CSaveSelect.cpp; names
+            // guessed) The delete step of the player select screen: how
+            // many times it has asked (0, 1, then 2 once confirmed) and
+            // the player to delete.
+            unsigned char m_nDeleteAsk;
+            unsigned char m_nDeletePlayer;
         public:
             // 0x6D6, 0x6D7. (added for game/menu/CMiiSel.cpp; names
             // guessed) Bit 0x80 of m_nMiiSelFlags is set when the Mii
@@ -722,7 +824,10 @@ namespace msw {
             // A copy of the friend's name, for the message windows.
             wchar_t m_FriendNameWork[0xC];
         private:
-            unsigned char m_Unk6F0[0x4];     // 0x6F0
+            // 0x6F0. (added for game/menu/CSaveSelect.cpp; name guessed)
+            // The step the player select screen goes on to once the slots
+            // have moved aside: 5 change the player, 6 delete it.
+            long m_nPlaterNextStep;
         public:
             // 0x6F4. (added for game/menu/CWiFiTopA.cpp; name guessed) The
             // step of WifiConnectStep.
@@ -917,7 +1022,18 @@ namespace msw {
             // CCourt does not pass its events on to menu object 1.
             long m_UnkA68;
         private:
-            unsigned char m_UnkA6C[0xC];     // 0xA6C
+            // 0xA6C. (added for game/menu/CCourtSelect.cpp) Cleared by
+            // Court_In (meaning not known).
+            unsigned short m_UnkA6C;
+            unsigned char m_UnkA6E[0x2];     // 0xA6E
+        public:
+            // 0xA70, 0xA74. (added for game/menu/CSaveSelect.cpp; names
+            // guessed) A button sequence on the player select screen that
+            // opens everything for the player under the cursor: the stage
+            // of it reached and the presses counted in that stage.
+            long m_nUnlockStep;
+            long m_nUnlockCount;
+        private:
         public:
             // 0xA78. (added for game/menu/CWiFiFrindVS.cpp) Set by
             // FriendVS_Loop to whether m_Unk23E is 1 when a friend match
@@ -930,7 +1046,12 @@ namespace msw {
             // Frames left before the rules screen steps a setting again.
             float m_fRuleInputWait;
         private:
-            unsigned char m_UnkA98[0x8];     // 0xA98
+            // 0xA98, 0xA9C. (names guessed; added for
+            // game/menu/CCourtSelect.cpp) The cup and the stage the
+            // background display (menu object 0x3E) was last set up for;
+            // -1 for the stage: the cup only.
+            long m_nDispCup;
+            long m_nDispStage;
         public:
             // 0xAA0. (added for game/menu/CFriendList.cpp; name guessed)
             // The name the friend roster's help line was last made for.
@@ -969,7 +1090,35 @@ namespace msw {
     // Defined in another MenuF file (added for game/menu/unit_61C00.cpp;
     // the return type and argument names are guesses). Stores the number
     // of cups of game kind nGame in *pCount.
-    long _GetCupCount(long nGame, unsigned char *pCount);
+    // (game/menu/CCourtSelect.cpp: the return type is unsigned char; the
+    // callers truncate it) Also returns the number of cup tabs less one.
+    unsigned char _GetCupCount(long nGame, unsigned char *pCount);
+
+    // Defined in another MenuF file (added for game/menu/CCourtSelect.cpp;
+    // return types and argument names guessed). The stages of the cups:
+    // the bits of the open stages of cup nCup, the bits of its new ones,
+    // whether stage nStage of it is open, and the number of its stages
+    // less one (negative: none).
+    unsigned char _GetStageBit(long nGame, long nCup);
+    unsigned char _GetStageNewBit(long nGame, long nCup);
+    long _CheckStage(long nGame, long nCup, long nStage);
+    long _GetCupStageNum(long nGame, long nCup);
+    // The same for party game nParty (CSelectMenu::m_Unk9C).
+    unsigned char _GetPartyCupCount(long nParty, unsigned char *pCount);
+    unsigned char _GetPartyStageBit(long nParty, long nCup);
+    unsigned char _GetPartyStageNewBit(long nParty, long nCup);
+    long _CheckPartyStage(long nParty, long nCup, long nStage);
+    // Size 0xD8. The stages of a party game (names guessed).
+    struct PartyStageNoInfo {
+        unsigned char m_nStageNo[4][4]; // 0x00, added to the index of m_Label
+        unsigned char m_Unk10[0x48];    // 0x10
+        long m_nStageId[4][4];          // 0x58, CCourt::SetStageId
+        char m_Label[0x40];             // 0x98, a message label in "List_Stage"
+    };
+    const PartyStageNoInfo *_GetPartyStageNoInfo(long nParty);
+    // The number of set bits of nBits, and the lowest set bit of nBits.
+    long _CupStageBitCount(unsigned char nBits);
+    long _BeginBit(unsigned char nBits);
 
     // Defined in another MenuF file (added for game/menu/CTopMenu.cpp;
     // return type guessed). Whether the fifth (mix) sport is open.

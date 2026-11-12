@@ -47,6 +47,10 @@ namespace msw {
             // running demo's CEventDemoBase::SendMessage; CGame::SendMessage_
             // calls it with its own four arguments.
             static void SendMessage(long, long, long, long);
+            // (DOL, static; added for BossF game/boss/GameBoss.cpp; return
+            // type and parameter meanings guessed) Starts demo nDemo under
+            // pParent; the boss game's result passes 1 and -1, -1.
+            static void CreateDemo(long nDemo, bcs::CTask *pParent, float, float);
 
             // 0x38 bytes in the DOL's .bss. Only the byte BossF's
             // CEventDemoBoss::CreateDemo sets when it plays no demo; its

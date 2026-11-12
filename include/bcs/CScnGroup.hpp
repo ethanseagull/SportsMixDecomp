@@ -41,6 +41,9 @@ namespace bcs {
             // nIndex, searched from the nearer end, or null.
             CScnObj *GetChild(unsigned long nIndex) const;
             CScnObj *GetChild(unsigned long nIndex);
+            // (added for BasketF game/basket/CcDaisyFlowerGarden.cpp, name
+            // guessed) The number of children.
+            unsigned long GetChildNum() const { return m_nCount; }
 
         protected:
             // fn_80043520 (name guessed). ObjProc without the IsProcDisabled

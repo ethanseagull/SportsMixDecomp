@@ -13,7 +13,10 @@ namespace bcs {
             // A negative priority means "take the parent's".
             CTask(CTask *pParent, short priority);
             virtual ~CTask();
-            virtual void Main() = 0; // no bcs::CTask::Main exists in the DOL
+            // Empty and inline: the DOL has no copy, but modules that make a
+            // vtable not overriding it carry a weak one (DodgeF
+            // game/dodge/CcDaisyFlowerGarden.cpp, through msw::CGameTask's).
+            virtual void Main() {}
             virtual void Disp() {}
             virtual float GetFrameRateF() const { return CMainApp::GetAppFrameRateF(); }
 

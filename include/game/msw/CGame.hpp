@@ -8,6 +8,8 @@
 
 namespace msw {
 
+    class CGameCamera;
+
     // Base of the per-sport game tasks. Only what callers outside the class
     // need so far; the layout past the bases is not mapped.
     //
@@ -122,7 +124,10 @@ namespace msw {
                 // HockeyF's fire pillars (stage 86) change their timing
                 // when it falls below HOCKEY_PRM_S86_FIRE_TIME1/2 seconds.
                 float m_fGameTime;
-                unsigned char m_Unk28[0x30 - 0x28];
+                // 0x28 (name guessed): the shot clock's length, read by the
+                // inline CGame::GetMaxShotTime_ (BossF game/boss/GameBoss.cpp).
+                float m_fMaxShotTime;
+                unsigned char m_Unk2C[0x30 - 0x2C];
                 // 0x30 (name guessed): the shot clock in frames (BasketF's
                 // CChrManBasket counts it down and shows it in seconds).
                 float m_fShotTime;
@@ -186,14 +191,17 @@ namespace msw {
             // vtables too; each sport's own functions start at 0x2A8. Only
             // the names and argument types are known: every return type here
             // is a placeholder (void) until a caller shows the real one.
-            virtual void GetMaxShotTime_() const;                        // 0x024
+            // The inline ones below have bodies because the modules emit them
+            // as weak functions (BossF game/boss/GameBoss.cpp, after its own
+            // code); their return types are read from those bodies.
+            virtual float GetMaxShotTime_() const { return g_GameWork.m_fMaxShotTime; } // 0x024
             virtual void MainFunc();                                     // 0x028
             virtual void DispFunc();                                     // 0x02C
             virtual void FinishFirstLoadData();                          // 0x030
             virtual void GenerateInstance();                             // 0x034
             virtual void PrepareRestartGame_();                          // 0x038
             virtual void SendMessage_(long, long, long, long);           // 0x03C
-            virtual void IsLineMsgDispEnable_();                         // 0x040
+            virtual int IsLineMsgDispEnable_() { return 1; }             // 0x040
             virtual void CtorStateGameInit();                            // 0x044
             virtual void LoopStateGameInit();                            // 0x048
             virtual void DtorStateGameInit();                            // 0x04C
@@ -255,42 +263,42 @@ namespace msw {
             virtual void SetGameResult_();                               // 0x12C
             virtual void CalcAddSkillPoint_();                           // 0x130
             virtual void SetMissionResult_();                            // 0x134
-            virtual void SetGameResultNext_();                           // 0x138
+            virtual int SetGameResultNext_();                            // 0x138 (int: BossF returns 0)
             virtual void AddTeamCoin_(long, long);                       // 0x13C
             virtual void UseTeamCoin_(long, long);                       // 0x140
             virtual void TrgGoalIn_(long, long, long, long, float, const bcs::FVEC3 &); // 0x144
             virtual void TrgBasketGoalIn_(long, long, long, long, float, const bcs::FVEC3 &, long); // 0x148
             virtual void TrgVolleyGoalIn_(long, long, long, long, long, long, const bcs::FVEC3 &, unsigned long); // 0x14C
             virtual void TrgHockeyGoalIn_(long, long, long, long, float, const bcs::FVEC3 &, unsigned long); // 0x150
-            virtual void GetMaxCoin_() const;                            // 0x154
-            virtual void SetDodgeArtsCatchMode_(int, long);              // 0x158
-            virtual void IsDodgeArtsCatchMode_() const;                  // 0x15C
-            virtual void GetDodgeVariableChrNum_(long) const;            // 0x160
-            virtual void GetDodgeChrMaxLife_(long) const;                // 0x164
+            virtual long GetMaxCoin_() const;                            // 0x154 (BossF returns 100)
+            virtual void SetDodgeArtsCatchMode_(int, long) {}            // 0x158
+            virtual int IsDodgeArtsCatchMode_() const { return 1; }      // 0x15C
+            virtual long GetDodgeVariableChrNum_(long) const { return 0; } // 0x160
+            virtual long GetDodgeChrMaxLife_(long) const { return 0; }   // 0x164
             virtual void SetPassCountLimit_(long, long);                 // 0x168
             virtual void GetPassCountLimit_(long) const;                 // 0x16C
-            virtual int IsNowBonusTime_() const;                         // 0x170 (int: BasketF CGameBasketHungryBossPackun)
-            virtual void IsVolleyScored_() const;                        // 0x174
-            virtual void IsVolleyServeClockOver_() const;                // 0x178
-            virtual void _GetHockeyResultGoalId();                       // 0x17C
-            virtual void EntranceDemoSetUp();                            // 0x180
+            virtual int IsNowBonusTime_() const { return 0; }            // 0x170 (int: BasketF CGameBasketHungryBossPackun)
+            virtual int IsVolleyScored_() const { return 0; }            // 0x174
+            virtual int IsVolleyServeClockOver_() const { return 0; }    // 0x178
+            virtual long _GetHockeyResultGoalId() { return -1; }         // 0x17C
+            virtual void EntranceDemoSetUp() {}                          // 0x180
             virtual void EventDemoSetUp();                               // 0x184
             virtual void CheckDemoSkipInput_();                          // 0x188
             virtual void TrgArtsEvent_(long);                            // 0x18C
             virtual void StartArtsEvent_(long);                          // 0x190
             virtual void EndArtsEvent_(long);                            // 0x194
             virtual void SetFirstGoalIdx_();                             // 0x198
-            virtual void GetFirstGoalIdxMode_();                         // 0x19C
+            virtual long GetFirstGoalIdxMode_();                         // 0x19C (BossF returns 0)
             virtual void ChangeGoalIdx_();                               // 0x1A0
             virtual void ChangeCameraBaseDir_();                         // 0x1A4
-            virtual void IsSetOver_();                                   // 0x1A8
+            virtual int IsSetOver_();                                    // 0x1A8 (BossF returns 1)
             virtual int IsGameSet_();                                    // 0x1AC (int: BasketF CGameBasketHungryBossPackun)
             virtual void RsrcLoadStart_();                               // 0x1B0
             virtual void RsrcIsLoadEnd_();                               // 0x1B4
             virtual void RsrcInitialize_();                              // 0x1B8
             virtual void RsrcUnLoad_();                                  // 0x1BC
             virtual void CheckBgmChange_();                              // 0x1C0
-            virtual void GetTeamArtsGauge_(long);                        // 0x1C4
+            virtual float GetTeamArtsGauge_(long);                       // 0x1C4 (float: BossF compares f1)
             virtual void ClearTeamArtsGauge_(long);                      // 0x1C8
             virtual void AddTeamArtsGauge_(long, float, float);          // 0x1CC
             virtual void SetTeamArtsGauge_(long, float, float);          // 0x1D0
@@ -317,7 +325,7 @@ namespace msw {
             virtual void TelopCreate_(long, int, long);                  // 0x224
             virtual void TelopEnd_(long);                                // 0x228
             virtual void TelopRemove_(long);                             // 0x22C
-            virtual void TelopIsWait_(long);                             // 0x230
+            virtual int TelopIsWait_(long);                              // 0x230 (BossF tests r3)
             virtual int TelopIsEnd_(long);                               // 0x234 (int: BasketF CGameBasketHungryBossPackun)
             virtual void PushTeamItem_(long, long);                      // 0x238
             virtual void PopTeamItem_(long);                             // 0x23C
@@ -325,26 +333,26 @@ namespace msw {
             virtual void IsTeamItemRouletteRole_(long);                  // 0x244
             virtual void CanbeTeamItemPush_(long);                       // 0x248
             virtual void GetGoalDemoType_(long, long) const;             // 0x24C
-            virtual void GetGoalDemoTelop_(long, long, long, int) const; // 0x250
-            virtual void StartGoalTelop_();                              // 0x254
+            virtual long GetGoalDemoTelop_(long, long, long, int) const { return -1; } // 0x250
+            virtual void StartGoalTelop_() {}                            // 0x254
             virtual void CanbeScoredView_();                             // 0x258
             virtual void StartScoredView_(long);                         // 0x25C
             virtual void EndScoredView_();                               // 0x260
-            virtual void GetExceptionalCameraType_();                    // 0x264
+            virtual long GetExceptionalCameraType_() { return 0; }       // 0x264
             virtual void ScoreBookInitCountWork_();                      // 0x268
-            virtual void ScoreBookAddCountWork_(long, long, long);       // 0x26C
+            virtual void ScoreBookAddCountWork_(long, long, long) {}     // 0x26C
             virtual void ScoreBookApplyCountWork_();                     // 0x270
             virtual int MenuCallGameResult_();                           // 0x274 (int: BasketF CGameBasketHungryBossPackun)
-            virtual void MenuCallInterval_();                            // 0x278
-            virtual void MenuCallPause_();                               // 0x27C
-            virtual void MenuCallGameEnd_();                             // 0x280
-            virtual void MenuChoiceEndMenu_(long);                       // 0x284
-            virtual void MenuChoiceNextEndMenu_(long);                   // 0x288
+            virtual int MenuCallInterval_();                             // 0x278 (BossF returns 1)
+            virtual int MenuCallPause_();                                // 0x27C (BossF returns 1)
+            virtual int MenuCallGameEnd_() { return 0; }                 // 0x280
+            virtual long MenuChoiceEndMenu_(long) { return -1; }         // 0x284
+            virtual long MenuChoiceNextEndMenu_(long) { return -1; }     // 0x288
             virtual void MenuGetResult_();                               // 0x28C
-            virtual void CockpitCheckArrowState_();                      // 0x290
+            virtual void CockpitCheckArrowState_() {}                    // 0x290
             virtual void CameraReset_();                                 // 0x294
             virtual void ArtsEventBegin_();                              // 0x298
-            virtual void GetArtsEventFrameNum_();                        // 0x29C
+            virtual float GetArtsEventFrameNum_();                       // 0x29C (the DOL body loads f1)
             virtual void ArtsEventLoop_();                               // 0x2A0
             virtual void ArtsEventEnd_();                                // 0x2A4
 
@@ -628,20 +636,72 @@ namespace msw {
             // Static: the party game calls it without an object.
             static void SetGameResultAll_(long nResult);
 
+            // Added for BossF game/boss/GameBoss.cpp (DOL member functions;
+            // return types and parameter meanings guessed). The screen fade
+            // of the layers in nMask (nType, over fFrame frames); whether
+            // pausing is allowed; the slow-motion effect (start, stop); a
+            // black screen; the game work's per-game reset; the music of the
+            // game result; not zero while an arts event is asked for (the
+            // word at 0xEC).
+            void ScrnFadeStart_(unsigned long nMask, long nType, float fFrame);
+            void SetGamePauseEnable_(int bEnable);
+            void StartSlowEffect_(float, float, float, float);
+            void StopSlowEffect_();
+            void ScrnSetBlackOut_();
+            void GameWorkReset_();
+            void PlayGameResultBGM_();
+            int IsReqArtsEvent_();
+            // (non-virtual; CGameBoss's virtual of the same name calls it)
+            void LoopStateEntranceDemo();
+
+        public:
+            // Added for BossF game/boss/GameBoss.cpp (DOL, static; names
+            // from the symbols, meanings guessed). The ready demo, result
+            // and replay modes; the game time left; the record of the last
+            // goal.
+            static void SetReadyDemoMode(int bOn);
+            static void SetResultMode(int bOn);
+            static void SetReplayMode(int bOn);
+            static void SetTime(float fTime);
+            static void ClearLastGoalInfo();
+            // The character whose arts (special shot) event runs.
+            static long g_nEventChrIdx;
+
+        protected:
             // The constructor writes up to 0x14C, so the class is at least
             // 0x150 bytes; its real size is not known. 0x34-0x94 is the
             // bcs::CFsmQueue<CGame> base. Names of the fields below are
             // guesses from BasketF's CGameBasketHungryBossPackun.
-            unsigned char m_Unk94[0xD0 - 0x94];
+            // 0x94: the game camera of each view (BossF's GenerateInstance
+            // fills them from CGameCamera::GetInstance).
+            CGameCamera *m_apCamera[4];
+            unsigned char m_UnkA4[0xC4 - 0xA4];
+            // 0xC4 (name guessed): a task of the arts event; BossF's
+            // EndArtsEvent_ deletes it.
+            bcs::CTask *m_pArtsEventTask;
+            unsigned char m_UnkC8[0xD0 - 0xC8];
             long m_nNextState;    // 0xD0, the state the wait-start state goes on to
             long m_nStateStep;    // 0xD4, the step inside the running state
             float m_fStateCount;  // 0xD8, frames left (StateWorkDecStateCount_)
             // 0xDC: flag bits; bit 0 stops goals from scoring, bit 2 means
             // the game is set.
             unsigned long m_nGameFlag;
-            unsigned char m_UnkE0[0x130 - 0xE0];
+            unsigned char m_UnkE0[0x104 - 0xE0];
+            // 0x104, 0x108 (meanings not known): BossF's GameInit_ sets 1 and
+            // 0; while 0x104 is above 0 the game setup queues the event demo
+            // (state 19) with 0x108 in its work.
+            long m_nUnk104;
+            long m_nUnk108;
+            unsigned char m_Unk10C[0x11C - 0x10C];
+            long m_nUnk11C;       // 0x11C (meaning not known; cleared by BossF's GameInit_)
+            unsigned char m_Unk120[0x12C - 0x120];
+            // 0x12C (meaning not known): BossF's SendMessage_ stores 1 or 2
+            // with messages 0x20 and 0x21, and the message's value in 0x130.
+            long m_nUnk12C;
             long m_Unk130;        // 0x130, the game is set while above 0 (meaning not known)
-            unsigned char m_Unk134[0x150 - 0x134];
+            unsigned char m_Unk134[0x148 - 0x134];
+            long m_nUnk148;       // 0x148 (meaning not known; BossF's game setup sets 1)
+            unsigned char m_Unk14C[0x150 - 0x14C];
     };
 }
 

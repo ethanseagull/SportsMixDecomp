@@ -3,6 +3,7 @@
 
 #include "bcs/BCS_Color.hpp"
 #include "bcs/FVEC3.hpp"
+#include "bcs/FVEC4.hpp"
 #include "game/msw/CC_DATA.hpp"
 #include "game/msw/CChrCore.hpp"
 
@@ -130,6 +131,10 @@ namespace msw {
             // guessed from the name) The point the air trick aims across the
             // goal from (Donkey Kong's jump keeps to the side of it).
             void GetAirTrickTargetAxis_(bcs::FVEC3 &rAxis) const;
+            // (added for game/basket/CcDaisyFlowerGarden.cpp; meaning guessed
+            // from the name) The court the team attacks, as x and y the
+            // ends along X, z and w the ends along Z.
+            void Util_GetTargetCourtRect_(bcs::FVEC4 &rRect);
             // Added for game/basket/CChrCoreBasketMoogle.cpp (names from the
             // module's imports; parameter meanings guessed). The body
             // collision's push settings, and the shot of the ball with sound
@@ -588,10 +593,19 @@ namespace msw {
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
     };
 
+    // Daisy: her special shot grows a ring of flowers around the middle
+    // of the court she attacks (CC03_BASKET::CcDaisyFlowerGarden).
     class CChrCoreBasketDaisy : public CChrCoreBasket {
         public:
             CChrCoreBasketDaisy();
             virtual ~CChrCoreBasketDaisy();
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *pWork, long); // 0xCE4
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
+            virtual void SubStateArtsShotPlayLandMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xD14
     };
 
     class CChrCoreBasketWario : public CChrCoreBasket {

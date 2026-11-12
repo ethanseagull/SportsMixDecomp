@@ -1711,7 +1711,7 @@ DtorState__Q23bcs70CStateTemplate<Q23bcs46CFsm<Q33msw11CC03_BASKET19CcDaisyFlowe
 CtorState__Q23bcs56CStateTemplate<Q33msw11CC03_BASKET19CcDaisyFlowerGarden>Fv = .text:0x00050A68; // type:function size:0x48 scope:global
 LoopState__Q23bcs56CStateTemplate<Q33msw11CC03_BASKET19CcDaisyFlowerGarden>Fv = .text:0x00050AB0; // type:function size:0x48 scope:global
 DtorState__Q23bcs56CStateTemplate<Q33msw11CC03_BASKET19CcDaisyFlowerGarden>Fv = .text:0x00050AF8; // type:function size:0x48 scope:global
-fn_4_50B40 = .text:0x00050B40; // type:function size:0x14
+__sinit_\CcDaisyFlowerGarden_cpp = .text:0x00050B40; // type:function size:0x14 scope:local
 @148@__dt__Q33msw11CC03_BASKET19CcDaisyFlowerGardenFv = .text:0x00050B54; // type:function size:0x8 scope:global
 Create__Q33msw11CC08_BASKET17CcBoomerangBasketFQ34nw4r3g3d7ResFilePCQ33msw7CC_DATA20ARTS_OPT_CREATE_INFORCQ23bcs5FVEC3RCQ23bcs5FVEC3f = .text:0x00050B5C; // type:function size:0x44 scope:global
 SetParam___Q33msw11CC08_BASKET17CcBoomerangBasketFv = .text:0x00050BA0; // type:function size:0x6C scope:global
@@ -2083,7 +2083,7 @@ DtorState__Q23bcs65CStateTemplate<Q23bcs41CFsm<Q33msw11CC14_BASKET14CcNinjaFacto
 CtorState__Q23bcs51CStateTemplate<Q33msw11CC14_BASKET14CcNinjaFactory>Fv = .text:0x0006BF08; // type:function size:0x48 scope:global
 LoopState__Q23bcs51CStateTemplate<Q33msw11CC14_BASKET14CcNinjaFactory>Fv = .text:0x0006BF50; // type:function size:0x48 scope:global
 DtorState__Q23bcs51CStateTemplate<Q33msw11CC14_BASKET14CcNinjaFactory>Fv = .text:0x0006BF98; // type:function size:0x48 scope:global
-fn_4_6BFE0 = .text:0x0006BFE0; // type:function size:0x14
+__sinit_\CChrCoreBasketNinja_cpp = .text:0x0006BFE0; // type:function size:0x14 scope:local
 @52@__dt__Q33msw11CC14_BASKET14CcNinjaFactoryFv = .text:0x0006BFF4; // type:function size:0x8 scope:global
 __ct__Q23msw19CChrCoreBasketPeachFv = .text:0x0006BFFC; // type:function size:0x3C scope:global
 __dt__Q23msw19CChrCoreBasketPeachFv = .text:0x0006C038; // type:function size:0x58 scope:global

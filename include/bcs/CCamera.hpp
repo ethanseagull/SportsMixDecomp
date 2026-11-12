@@ -38,6 +38,9 @@ namespace bcs {
             // Makes this the camera of `view`; -1 is the camera's own view
             // (meaning of -1 guessed). Return type guessed.
             void SetActive(long view);
+            // (DOL; added for BossF game/boss/GameBoss.cpp; return type
+            // guessed) Starts camera quake nQuake.
+            void StartQuake(long nQuake);
 
             // (name guessed) The constructor's priority; bcs::CCameraMan
             // treats a camera of priority 0x10 or less as the debug camera.

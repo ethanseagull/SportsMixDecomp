@@ -2237,7 +2237,7 @@ DtorState__Q23bcs62CStateTemplate<Q23bcs38CFsm<Q210CC03_DODGE16CcDaisyFenceUnit>
 CtorState__Q23bcs48CStateTemplate<Q210CC03_DODGE16CcDaisyFenceUnit>Fv = .text:0x000591F4; // type:function size:0x48 scope:global
 LoopState__Q23bcs48CStateTemplate<Q210CC03_DODGE16CcDaisyFenceUnit>Fv = .text:0x0005923C; // type:function size:0x48 scope:global
 DtorState__Q23bcs48CStateTemplate<Q210CC03_DODGE16CcDaisyFenceUnit>Fv = .text:0x00059284; // type:function size:0x48 scope:global
-fn_6_592CC = .text:0x000592CC; // type:function size:0x14
+__sinit_\CcDaisyFlowerGarden_cpp = .text:0x000592CC; // type:function size:0x14 scope:local
 @52@__dt__Q210CC03_DODGE16CcDaisyFenceUnitFv = .text:0x000592E0; // type:function size:0x8 scope:global
 @148@__dt__Q210CC03_DODGE19CcDaisyFlowerGardenFv = .text:0x000592E8; // type:function size:0x8 scope:global
 Create__Q210CC08_DODGE16CcBoomerangDodgeFQ34nw4r3g3d7ResFilePCQ33msw7CC_DATA20ARTS_OPT_CREATE_INFORCQ23bcs5FVEC3RCQ23bcs5FVEC3f = .text:0x000592F0; // type:function size:0x44 scope:global

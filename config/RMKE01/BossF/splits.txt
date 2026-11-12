@@ -9,7 +9,7 @@ Sections:
 game/boss/module.cpp:
 	.text       start:0x00000000 end:0x00000098
 
-game/boss/CGameBoss.cpp:
+game/boss/GameBoss.cpp:
 	.text       start:0x00000098 end:0x000063D0
 	.ctors      start:0x00000000 end:0x00000004
 	.rodata     start:0x00000000 end:0x000001C8

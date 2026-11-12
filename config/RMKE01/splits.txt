@@ -72,7 +72,8 @@ game/bcs/CScnObj.cpp:
 	.text       start:0x80041888 end:0x80044B00
 
 game/bcs/CGDLObj.cpp:
-	.text       start:0x80044B00 end:0x80044BD4
+	.text       start:0x80044B00 end:0x80044DD8
+	.data       start:0x80466BB8 end:0x80466CC8
 
 game/bcs/CHBMenu.cpp:
 	.text       start:0x80045AAC end:0x80046D40
@@ -502,12 +503,11 @@ game/msw/CNpcGhost.cpp:
 	.text       start:0x801B8374 end:0x801B9EE8
 
 game/msw/CCockpitLayoutBase.cpp:
-	.text       start:0x801BA114 end:0x801BA944
-	.data       start:0x804821DC end:0x80482238
+	.text       start:0x801BA114 end:0x801BAB24
+	.ctors      start:0x8042D234 end:0x8042D238
+	.data       start:0x804821D0 end:0x80482238
+	.bss        start:0x804D7410 end:0x804D7430
 	.sdata2     start:0x805C4790 end:0x805C4798
-
-game/msw/CCockpitPartMove.cpp:
-	.text       start:0x801BA9EC end:0x801BAA6C
 
 game/msw/cockpit/CMissionCount.cpp:
 	.text       start:0x801BBF24 end:0x801BD93C

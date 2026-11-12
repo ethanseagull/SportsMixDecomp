@@ -100,6 +100,11 @@ namespace msw {
             // adds the words of GetPos() to its check sum.
             virtual const bcs::FVEC3 &GetInitPos() const;
             virtual const bcs::FVEC3 &GetPos() const;
+            // (return types guessed; added for DodgeF game/dodge/
+            // unit_BE1FC.cpp) Whether the bomb is blowing up, and the
+            // radius of its attack.
+            virtual int IsNowExplode() const;
+            virtual float GetAtkCollRadius() const;
     };
 
     // INCOMPLETE: the manager of the mud bombs, a DOL singleton (m_pInst in

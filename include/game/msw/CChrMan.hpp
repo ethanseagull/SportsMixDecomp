@@ -134,6 +134,13 @@ namespace msw {
             static CChrMan *GetInstance();
             // DOL, static. Not zero when the instance exists.
             static int IsActive();
+            // (DOL, static; added for BossF game/boss/GameBoss.cpp; meanings
+            // guessed from the names) Picks the team leaders (the boss game
+            // passes 1); deletes every stocked item; puts the event dolls
+            // away.
+            static void InitLeader(int);
+            static void AllStockItemDelete();
+            static void ResetEventDoll();
             // DOL, static. The character of team nTeam that has the ball,
             // or null. (BasketF's CStageBasket09 passes 0)
             static CChrCore *Util_SearchHaveBallChr(long nTeam);

@@ -83,3 +83,4 @@ Equivalent game/msw/CCockpitLayoutBase.cpp
 Equivalent game/msw/CMenuPartBase.cpp
 Equivalent game/msw/CStgEffectSlot.cpp flags=noauto
 Equivalent game/msw/CCockpitMenuBase.cpp
+Equivalent game/msw/CStgSeSlot.cpp flags=noauto

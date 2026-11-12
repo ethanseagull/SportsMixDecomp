@@ -585,7 +585,9 @@ game/msw/CStgEffectSlot.cpp:
 	.sdata2     start:0x805C4E10 end:0x805C4E18
 
 game/msw/CStgSeSlot.cpp:
-	.text       start:0x801E874C end:0x801E918C
+	.text       start:0x801E86A8 end:0x801E9F40
+	.data       start:0x80485828 end:0x804858D8
+	.sdata2     start:0x805C4E18 end:0x805C4E20
 
 game/msw/CTmGameHandler.cpp:
 	.text       start:0x801E9F48 end:0x801EAD84

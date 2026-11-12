@@ -1,9 +1,11 @@
 #ifndef MSW_CSTGSESLOT_HPP_
 #define MSW_CSTGSESLOT_HPP_
 
+#include "bcs/FVEC3.hpp"
+
 namespace bcs {
-    struct FVEC3;
     class CTask;
+    class CSndTask;
 }
 
 namespace msw {
@@ -19,15 +21,79 @@ namespace msw {
     // without a body here are guessed, except where a note says otherwise.
     class CStgSeSlot {
         public:
-            // One slot, 0x50 bytes. Only the first member is mapped.
+            // One slot, 0x50 bytes, the vptr at 0x4C (the data members are
+            // declared before the virtual destructor). The member functions
+            // are defined in game/msw/CStgSeSlot.cpp. Names are guesses.
             class CSESlot {
                 public:
                     // Supplies the position of a sound that follows something.
                     class CPosFunc;
 
-                private:
-                    unsigned long m_nHandle;     // 0x00, id of the sound's task
-                    unsigned char m_Unk04[0x4C]; // 0x04
+                    // Where the sound plays (m_nMode).
+                    enum {
+                        MODE_FUNC = 0, // at m_Pos, which m_pFunc updates
+                        MODE_POS = 1,  // at the position given
+                        MODE_NONE = 2, // without a position
+                    };
+
+                    // Bits of m_nFlag, copied to m_nState when the sound starts.
+                    enum {
+                        FLAG_ALIVE = 1 << 0,   // counts as alive even when silent
+                        FLAG_LOOP = 1 << 1,    // started again when it ends
+                        FLAG_NOTRACK = 1 << 2, // its task is not kept (sounds overlap)
+                        FLAG_REPEAT = 1 << 3,  // started again after m_fDelay
+                    };
+
+                    unsigned long m_nHandle;  // 0x00, id of the sound's task
+                    unsigned long m_nState;   // 0x04, FLAG_* bits of the playing sound
+                    float m_fDelay;           // 0x08, frames until it starts; -1 when nothing waits
+                    float m_fStopDelay;       // 0x0C, frames until it stops; -1 when nothing waits
+                    float m_fStopFade;        // 0x10
+                    float m_fInterval;        // 0x14, repeat interval
+                    float m_fIntervalRand;    // 0x18, random extra on the interval
+                    long m_nSe;               // 0x1C
+                    unsigned long m_nFlag;    // 0x20
+                    long m_nMode;             // 0x24
+                    unsigned long m_nArg2;    // 0x28, the CGameSnd::Play arguments
+                    long m_nArg3;             // 0x2C
+                    float m_fArg4;            // 0x30
+                    float m_fVolume;          // 0x34
+                    float m_fArg6;            // 0x38
+                    bcs::FVEC3 m_Pos;         // 0x3C
+                    CPosFunc *m_pFunc;        // 0x48
+
+                    CSESlot();
+                    virtual ~CSESlot();
+
+                    bcs::CSndTask *GetTask() const;
+                    bool IsPlaying() const;
+                    bool IsAlive() const;
+                    void StopSound(float fade);
+                    void Stop(float fade);
+                    unsigned long Start(int bLoop);
+                    void SetNextDelay();
+                    void UpdateDelay(float rate);
+                    void Set(long se, long n, long mode, unsigned long a, long b, float f4, float vol, float f6);
+                    void SetPos(CPosFunc *pFunc);
+                    unsigned long Play(long se, long n, unsigned long a, long b, float f4, float vol, float f6);
+                    unsigned long Play(long se, const bcs::FVEC3 &rPos, long n, unsigned long a, long b, float f4,
+                                       float vol, float f6);
+                    unsigned long Play(long se, CPosFunc *pFunc, long n, unsigned long a, long b, float f4,
+                                       float vol, float f6);
+                    void DelayPlay(float delay, long se, long n, unsigned long a, long b, float f4, float vol,
+                                   float f6);
+                    void DelayPlay(float delay, long se, const bcs::FVEC3 &rPos, long n, unsigned long a, long b,
+                                   float f4, float vol, float f6);
+                    void DelayPlay(float delay, long se, CPosFunc *pFunc, long n, unsigned long a, long b, float f4,
+                                   float vol, float f6);
+                    void StartRepeat(float delay, float interval, float rand);
+                    void RepeatPlay(float delay, long se, float interval, float rand, long n, unsigned long a,
+                                    long b, float f4, float vol, float f6);
+                    void RepeatPlay(float delay, long se, const bcs::FVEC3 &rPos, float interval, float rand,
+                                    long n, unsigned long a, long b, float f4, float vol, float f6);
+                    void RepeatPlay(float delay, long se, CPosFunc *pFunc, float interval, float rand, long n,
+                                    unsigned long a, long b, float f4, float vol, float f6);
+                    void Update(float rate);
             };
 
             // The last five arguments of the *Ex functions, in their order.

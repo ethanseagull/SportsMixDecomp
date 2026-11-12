@@ -1,6 +1,8 @@
 #ifndef NW4R_UT_LIST_HPP_
 #define NW4R_UT_LIST_HPP_
 
+#include "nw4r/db/Panic.hpp"
+
 namespace nw4r {
     namespace ut {
 
@@ -27,6 +29,17 @@ namespace nw4r {
         void *List_GetNext(const List *pList, const void *pObj);
         // The last object when pObj is null.
         void *List_GetPrev(const List *pList, const void *pObj);
+
+        // (added for BasketF game/basket/CcDaisyFlowerGarden.cpp) The number
+        // of objects. Inline with NW4R's pointer check: the module carries
+        // its "list.h" strings and the call to db::Panic.
+        inline unsigned short List_GetSize(const List *pList)
+        {
+            if (!pList) {
+                db::Panic("list.h", 210, "NW4R:Pointer must not be NULL (list)");
+            }
+            return pList->nNum;
+        }
     }
 }
 

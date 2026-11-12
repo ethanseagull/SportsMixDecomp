@@ -81,6 +81,12 @@ namespace msw {
             static unsigned long DetectBallGoalIn(long &rGoal, bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal,
                                                   const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius);
             static void SetArtsExColl(long n);
+            // (added for DodgeF game/dodge/CcDaisyFlowerGarden.cpp) The same
+            // for the extra collisions (Daisy's fence uses the one of its
+            // court).
+            static void EnableExColl(long n, int bEnable);
+            static void SetExCollPos(long n, const bcs::FVEC3 &rPos);
+            static void SetExCollRadius(long n, float fRadius);
             // (DOL) The ground attribute under rPos (the stage's
             // GetFloorAttribute) into rAttr and the floor's flow there (its
             // GetFloorFlow) into rFlow. 8 is a hole (msw::CDropCoin).

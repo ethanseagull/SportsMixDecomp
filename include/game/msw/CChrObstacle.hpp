@@ -20,14 +20,18 @@ namespace msw {
         public:
             CChrObstacle(bcs::CTask *pParent, long, long);
             virtual ~CChrObstacle();
-            virtual void Disp();
+            // Disp, GetAttackRadius, GetAttackRange and IsAttackEnd are
+            // inline too: each module has one weak copy of them, emitted by
+            // the first file that makes the vtable of a class overriding
+            // none of them (BasketF: game/basket/CcDaisyFlowerGarden.cpp).
+            virtual void Disp() {}
             // Inline: each module has one weak copy (li r3, 0), emitted by
             // the first file that makes the vtable of a class that does not
             // override it (BasketF: game/basket/CChrCoreBasketSaboten.cpp).
             virtual long SendMessage(long, long, long, long) { return 0; }
-            virtual float GetAttackRadius() const;
-            virtual float GetAttackRange() const;
-            virtual int IsAttackEnd() const;
+            virtual float GetAttackRadius() const { return m_AtkColl.GetRadius(0); }
+            virtual float GetAttackRange() const { return m_AtkColl.GetRadius(0); }
+            virtual int IsAttackEnd() const { return 0; }
 
             // (added for BossF game/boss/CComDrvBoss.cpp, name guessed) The
             // kind of obstacle; the Behemoth's meteors are 0x12.

@@ -88,6 +88,7 @@ BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketNinjaFv unverified 93.5 bcs FVE
 BasketF LoopStateAirTrick__Q23msw20CChrCoreBasketDonkeyFv near 94.4 stack slots of the vector temporaries and register choice differ; (m_nStatusFlag & 4) != 0 for flows 0, 2 and 6 is extrwi in ours, rlwinm/cntlzw/cntlzw in the original (same 0/1 value)
 BasketF LoopStateAirTrick__Q23msw20CChrCoreBasketSiromaFv near 99.6 register numbering / order of independent loads only
 BasketF LoopStateAirTrick__Q23msw21CChrCoreBasketSabotenFv near 95.4 bool (flag&4)!=0 via extrwi vs double cntlzw (same value), one redundant b, fmadds operand order, stack slots/registers
+BasketF LoopStateAppear__Q33msw11CC03_BASKET19CcDaisyFlowerGardenFv near 98.5 redundant cmpwi/ble zero-trip guard before the ring loop, &hitPos via addi instead of mr, float register numbering and ps_add operand order (reviewer confirmed)
 BasketF LoopStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateCatch__Q23msw19CNpcGhostBasketBaseFv near 99.6 one dead branch.
 BasketF LoopStateDisappear__Q33msw11CC15_BASKET19CcSiromaMagicCircleFv near 99.9 register numbering / order of independent loads only
@@ -116,6 +117,7 @@ BasketF MainOffense___Q23msw16CChrDrvPadBasketFPQ33msw7CChrDrv8_CHR_MSG unverifi
 BasketF Main__Q23msw14CGoalMdlBasketFf near 98.0 98.0%: schedule only; one mr placed before the first of two null-check beq instead of between them
 BasketF Main__Q23msw18CArrowSignalBasketFv near 99.0 99.0%: fmadds input registers swapped, position-copy load order (same as HockeyF sibling)
 BasketF Main__Q23msw18CCockpitBasketCoinFv near 98.8 register choice only (as CCockpitHockeyCoin::Main): loop counters and pointer temporaries in different saved registers
+BasketF Main__Q33msw11CC03_BASKET19CcDaisyFlowerGardenFv near 99.4 f0/f1 register swap
 BasketF Main__Q33msw11CC09_BASKET17CcKinopioReceiverFv near 99.6 register choice for one load
 BasketF Main__Q33msw11CC17_BASKET18CcKuromaLockonUnitFv near 96.4 scheduling: m_hEffect loaded before CEffectCtrl::GetInstance() in the original (Hockey/Volley/Dodge same)
 BasketF Main__Q33msw14GIMMICK_BASKET14CEffectCoinGetFv near 99.0 99.0%: register/schedule only, same difference as the recorded Volley/Hockey/Dodge copies
@@ -199,6 +201,7 @@ BasketF WholeUpDatePosition___Q23msw19CChrCoreBasketNinjaFv near 91.2 loop index
 BasketF __ct__Q23msw14CStageBasket11FPQ23bcs5CTask near 99.9 instruction order only
 BasketF __ct__Q23msw16CChrDrvPadBasketFv unverified 84.3 84.3%: float constants via one base register instead of the original's per-literal lis (pool-off stand-in could not stay in the shared CChrDrvPad header); extra field reloads in the original; not proven.
 BasketF __ct__Q23msw19CItemBallBasketBombFPQ23msw5CBall near 98.8 98.8%: original reloads m_pMdl before CreateAttachEffect; ours reuses the checked value (nothing stored between).
+BasketF __ct__Q33msw11CC03_BASKET19CcDaisyFlowerGardenFPQ23bcs5CTaskPQ23msw8CChrCorelRCQ23bcs5FVEC3 near 99.9 stack slots of state-table temporaries
 BasketF __ct__Q33msw11CC14_BASKET14CcNinjaFactoryFPQ23bcs5CTaskPQ23msw8CChrCorePCQ23msw13CCollBodyUnitPQ23msw5CBall near 99.9 ptmf stack slots only
 BasketF __ct__Q33msw11CC15_BASKET19CcSiromaMagicCircleFPQ23bcs5CTaskPQ23msw8CChrCoreRCQ23bcs5FVEC3 near 99.9 stack slots of inlined ptmf temporaries
 BasketF __ct__Q33msw11CC15_BASKET22CcSiromaMagicCircleObjFPQ23bcs5CTaskPQ23bcs9CScnGrouplQ34nw4r3g3d7ResFile near 95.1 one redundant dead stw 0 to m_File (ResFile default ctor) before the copy; registers

@@ -87,3 +87,4 @@ Equivalent game/basket/CChrCoreBasketMario.cpp
 Equivalent game/basket/CChrCoreBasketDonkey.cpp
 Equivalent game/basket/CChrCoreBasketNinja.cpp
 Equivalent game/basket/CcSiromaMagicCircle.cpp
+Equivalent game/basket/CcDaisyFlowerGarden.cpp

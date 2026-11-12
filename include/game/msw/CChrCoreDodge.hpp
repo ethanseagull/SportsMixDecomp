@@ -738,10 +738,19 @@ namespace msw {
     };
 
     // Size 0x930.
+    // Daisy: her special shot grows a ring of flowers inside a fence in the
+    // middle of the court she attacks (CC03_DODGE::CcDaisyFlowerGarden).
     class CChrCoreDodgeDaisy : public CChrCoreDodge {
         public:
             CChrCoreDodgeDaisy();
             virtual ~CChrCoreDodgeDaisy();
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD94
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
+            virtual int SubStateArtsShotIsEndArtsShotAfter_(STATE_WORK_AIR_TRICK_CMN *); // 0xDB8
+            virtual void SubStateArtsShotPlayLandMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDC0
     };
 
     // Size 0x930.

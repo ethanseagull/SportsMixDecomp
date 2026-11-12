@@ -62,6 +62,24 @@ namespace msw {
         // Entry `nChr` of the table of 25; the first entry for a number
         // outside it. (reference or pointer is a guess)
         const CHAR_INFO &GetCharInfo(long nChr);
+
+        // (added for TourF game/tour/CTournamentStep.cpp, which defines
+        // it; names guessed) How far team nTeam stands from the centre of
+        // map point nPoint: the point's own spacing, or a fixed step back
+        // when another team stands there.
+        float GetPointOffsetTeam(long nPoint, long nTeam);
+
+        // (inline, name from its static local) The music of cup nCup's
+        // map.
+        inline long GetTournamentBgm(long nCup)
+        {
+            static long g_sTournamentMainBgm[5] = {0x33, 0x33, 0x34, 0x35, 0x33};
+            return g_sTournamentMainBgm[nCup];
+        }
+
+        // One firework of a victory or unlock scene (CTournamentStep::
+        // _SetupFireworks). Not mapped yet.
+        struct FIREWORKS_INFO;
     }
 }
 

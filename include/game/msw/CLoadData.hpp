@@ -27,6 +27,10 @@ namespace msw {
             static void LoadMenu();
             static void InitData();
             static void UnLoad();
+            // (added for TourF game/tour/CTournamentStep.cpp; return types
+            // guessed) Start loading entry `index`; the tournament's files.
+            static void Load(long index);
+            static void LoadTournament(int b);
 
             // The ones below are static in the DOL too: their bodies index
             // the table of files with the first argument.

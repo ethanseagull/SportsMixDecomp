@@ -1,6 +1,8 @@
 #ifndef CTOURNAMENT_HPP_
 #define CTOURNAMENT_HPP_
 
+#include "revolution/rfl.h"
+
 namespace msw {
 
     // Only the members used so far. Both are static: their bodies in the DOL
@@ -83,6 +85,30 @@ namespace msw {
             static long GetContinueCup(long nGameKind, long nUnk);
             static long GetContinueRank(long nGameKind, long nUnk);
             static void Continue(long nGameKind, long nUnk);
+            // Added for MenuF game/menu/CSelectMenu.cpp (static, from the
+            // symbols; argument names and return types guessed). Setting a
+            // tournament up from the select menu: its sport, level, cup,
+            // starting state, players (character, colour), their names and
+            // Miis, the play type, and Setup to finish (the menu passes
+            // -1). GetPlayerType gives player nPlayer's character.
+            static void SetGameMode(unsigned char nGameMode);
+            static void SetLevel(char nLevel);
+            static void SetCup(unsigned char nCup);
+            static void SetState(char nState);
+            static void SetPlayer(long nPlayer, long nChara, long nColor, int nUnk);
+            static void SetPlayerName(long nPlayer, const wchar_t *pName, long nLen);
+            static void SetPlayerMiiStoreData(long nPlayer, const RFLStoreData &data);
+            static void SetPlayType(long nPlayType);            // (added for TourF game/tour/CTournamentStep.cpp; static,
+            // return types and parameter names guessed)
+            static void Save(long nGameMode, int b, long n);
+            static void SetExPauseFlag(int bPause);
+            static void NextCup(long nCup, long nUnk);
+            static void SetCupClear(long nUnk, long nCup, long nUnk2, long nPlayer);
+            static void ExitMode();
+            static void SetGameMode();
+
+            static void Setup(long nUnk);
+            static long GetPlayerType(long nPlayer);
     };
 }
 

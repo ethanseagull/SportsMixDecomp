@@ -161,6 +161,10 @@ namespace msw {
 
             // Id of the cockpit task, set by the constructor; 0 when there
             // is none.
+            // (added for TourF game/tour/CTournamentStep.cpp) The id for a
+            // new menu object.
+            long GetNextCockpitMenuObjId();
+
             static unsigned long s_TaskHandle;
 
             // (added for BasketF game/basket/CCockpitBasket.cpp; return

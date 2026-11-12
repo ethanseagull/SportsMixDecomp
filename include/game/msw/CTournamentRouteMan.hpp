@@ -18,6 +18,10 @@ namespace msw {
     // are guessed; virtual return types are read from the base bodies where
     // they return something, else guessed.
     class CTournamentRouteMan {
+            // (added for TourF game/tour/CTournamentStep.cpp, which reads
+            // m_pInstance and m_fTimer directly)
+            friend class CTournamentStep;
+
         public:
             // A value read or written through Get/SetParamData: Stage31/32
             // use it as a float, Stage32 also as a word.

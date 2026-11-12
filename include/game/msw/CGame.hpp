@@ -122,7 +122,10 @@ namespace msw {
                 // same read in BasketF's CComManBasketGame).
                 signed char m_nUserTeam;
                 long m_nGameLevel;         // 0x10, 0-3 (EASY, NORMAL, HARD, EXPERT; names guessed)
-                long m_nQPanelLevel;       // 0x14 (SetQPanelLevel)
+                // 0x14 (SetQPanelLevel). MenuF game/menu/CSelectMenu.cpp:
+                // below 2, a first game on the easiest level also gets
+                // question panel level 0.
+                long m_nQPanelLevel;
                 // 0x18: flag bits (name guessed). BasketF's
                 // CStageManBasket::Main_ skips the change-of-offense sound
                 // while any of 0x4306 is set; with 0x8000 set the dodge
@@ -686,6 +689,9 @@ namespace msw {
             static void ResetCharExFlag(long nChr, unsigned long nMask);
             static void SetCharAssignPlayerNo(long nChr, long nPlayer);
             static void SetCharAssignPadNo(long nChr, long nPad);
+            // (added for MenuF game/menu/CSelectMenu.cpp) Assigns the pads
+            // to the characters by the play type.
+            static void SetPadAssignSemiAuto();
             static void SetCharName(long nChr, const wchar_t *pName, long nLen);
             static void SetMiiStoreData(long nChr, const RFLStoreData &data);
             static void SetTeamCtrlType(long nTeam, long nType);

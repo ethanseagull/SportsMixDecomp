@@ -8,6 +8,8 @@ namespace bcs {
     // guessed as void.
     class CLoadMan {
         public:
+            // (added for TourF game/tour/CTournamentStep.cpp; static)
+            static void ClearDvdReadSize();
             // What a file is loaded from: msw::CLoadData keeps a table of
             // these, 0x110 bytes each, starting with the path. Mapped as far
             // as msw::CGameSnd::SetMusicFiles uses it.

@@ -58,6 +58,11 @@ namespace bcs {
                                   float z2, float x3, float z3);
 
     // (argument names guessed) The same with length 1. In the DOL.
+    // (added for HockeyF game/hockey/CRadarIcon2DHockeyGoal.cpp; return
+    // type and argument names guessed) Where world point rPos goes on the
+    // radar of view nView, seen from rCamAt: into rOut, with the direction
+    // to it in rDir (x, y). Not zero when the point is to be shown.
+    int BCS_GetRadarPos(FVEC3 &rOut, FVEC3 &rDir, const FVEC3 &rCamAt, const FVEC3 &rPos, long nView);
     void BCS_VecOneZ_RotY(FVEC3 &rOut, float rotY);
     // (added for the DOL's pinball ball) The unit X vector turned by rotY.
     void BCS_VecOneX_RotY(FVEC3 &rOut, float rotY);

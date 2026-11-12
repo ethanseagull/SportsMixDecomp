@@ -91,3 +91,4 @@ Equivalent game/hockey/CCameraHockeyGame.cpp
 Equivalent game/hockey/unit_AE7E8.cpp
 NonMatching game/hockey/Gmk_Container_Hockey.cpp
 Equivalent game/hockey/unit_E8AB8.cpp
+Equivalent game/hockey/CRadarIcon2DHockeyGoal.cpp

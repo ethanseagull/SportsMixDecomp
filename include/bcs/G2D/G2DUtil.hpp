@@ -75,6 +75,11 @@ namespace bcs {
         void ReplacePanePicture(nw4r::lyt::Pane *pPane, nw4r::lyt::Pane *pSrc);
         void ReplacePanePicture(nw4r::lyt::Pane *pPane, const _GXTexObj *pTexObj, long nTexMap);
 
+        // Added for HockeyF game/hockey/CRadarIcon2DHockeyGoal.cpp: shows or
+        // hides pPane (and, by its size, probably its children; return
+        // type guessed).
+        void SetVisiblePane(nw4r::lyt::Pane *pPane, int bVisible);
+
         // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp. Moves
         // pPane under pParent. Return type and the names of the last two
         // arguments are guesses (called with 1, 0).

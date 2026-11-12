@@ -64,6 +64,7 @@ Matching game/dodge/CChrCoreDodgeMoogle.cpp
 Matching game/dodge/CChrCoreDodgeDonkey.cpp
 Matching game/dodge/CChrCoreDodgeDiddy.cpp
 Equivalent game/dodge/CCameraDodgeBD.cpp
+Equivalent game/dodge/unit_BB47C.cpp
 Matching game/dodge/CComDrvDodgeGameOffRun.cpp
 Equivalent game/dodge/CStgGmk_Pinball_Act_Dodge.cpp
 Equivalent game/dodge/CStgGmk_Pylon_Act_Dodge.cpp

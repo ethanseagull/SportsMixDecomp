@@ -5095,7 +5095,7 @@ SubStateArtsShotPlayLandMotion___Q23msw13CChrCoreDodgeFPQ33msw13CChrCoreDodge24S
 SubStateArtsShotPlayLandEffect___Q23msw13CChrCoreDodgeFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN = .text:0x000BD618; // type:function size:0x50 scope:global
 IsAirTrickSwingEnd__Q23msw13CChrCoreDodgeCFv = .text:0x000BD668; // type:function size:0x94 scope:global
 IsAirTrickFall__Q23msw13CChrCoreDodgeCFv = .text:0x000BD6FC; // type:function size:0xBC scope:global
-fn_6_BD7B8 = .text:0x000BD7B8; // type:function size:0x14
+__sinit_\unit_BB47C_cpp = .text:0x000BD7B8; // type:function size:0x14 scope:local
 ActCallOffRunCharge__Q23msw16CComDrvDodgeGameFv = .text:0x000BD7CC; // type:function size:0x2C scope:global
 ActLoopOffRunCharge__Q23msw16CComDrvDodgeGameFv = .text:0x000BD7F8; // type:function size:0x3F8 scope:global
 ActCallOffRunFront__Q23msw16CComDrvDodgeGameFv = .text:0x000BDBF0; // type:function size:0x8 scope:global

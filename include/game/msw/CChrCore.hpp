@@ -930,7 +930,7 @@ namespace msw {
             virtual void CallbackMotTrg_AtkOn_(long, long);            // 0xC80
             virtual void CallbackMotTrg_AtkOff_(long, long);           // 0xC84
             virtual void SubStateDamageCtorMame_(STATE_WORK_DAMAGE *); // 0xC88
-            virtual void SubStateDamageLoopMame_(STATE_WORK_DAMAGE *); // 0xC8C
+            virtual int SubStateDamageLoopMame_(STATE_WORK_DAMAGE *);  // 0xC8C (int: CChrCoreBoss::LoopStateDamage tests it)
             virtual int SubStateParalyzeStateSet_(unsigned long, float); // 0xC90
             virtual void SubStateParalyzeSetEffect_();                // 0xC94
             virtual void SubStateParalyzeEndEffect_();                 // 0xC98
@@ -1358,6 +1358,28 @@ namespace msw {
             void SetCondition(long nCondition, float fFrame, unsigned long);
             void AdjustOffsetPos_(int);
             void Util_NodePatchWarpToTransNode();
+            // Added for BossF game/boss/unit_18E08.cpp (all in the DOL;
+            // return types and parameter meanings guessed). Runs a step
+            // towards fRotY at fSpeed (fRate of the full speed); which of
+            // four directions (0 front, 1 and 3 the sides, 2 back) a turn
+            // by fRot is; moves the model's root to the waist; zeroes the
+            // root node's offset; gets the stocked item ready to throw;
+            // the yaw to throw it at; throws it.
+            void MoveRunXZ_(float fRotY, float fSpeed, float fRate);
+            long Util_ChangeRot4(float fRot);
+            void Util_ExchgToWaistPos();
+            void Util_NodePatchZeroTrans();
+            void PrepareShotStockItem(float fFrame);
+            float GetItemThrowDir(float fRotY);
+            void ThrowItem(const bcs::FVEC3 &rDir, unsigned long nFlag, int);
+            // Added for BossF game/boss/unit_1C248.cpp (DOL; return types
+            // and parameter meanings guessed). Stops the effects of group
+            // nGroup; one step of the move by the jump velocity (not zero
+            // once on the ground); changes the play speed of slot nSlot to
+            // fSpeed over fFrame frames.
+            void Eff_StopGroup(long nGroup);
+            int Util_DoMove(float fStep);
+            void AnimChgSpeed(unsigned long nSlot, float fSpeed, float fFrame);
             void Reset();
             // The square of GetDist_ToPosXZ.
             float GetDist_ToPosXZSq(const bcs::FVEC3 &rPos) const;
@@ -1530,7 +1552,14 @@ namespace msw {
             // up to 0x570 and CChrCoreBoss's own members start at 0x574.
             // 0x234 (name guessed): the frames a change of body size lasts.
             float m_fSizeChangeTime;
-            unsigned char m_Unk238[0x264 - 0x238];
+            unsigned char m_Unk238[0x23C - 0x238];
+            // 0x23C-0x244 (names guessed; added for BossF
+            // game/boss/unit_18E08.cpp): a phase, its step per frame and the amplitude of the
+            // weaving of a character in condition 4.
+            float m_fWeavePhase;
+            float m_fWeaveSpeed;
+            float m_fWeaveWidth;
+            unsigned char m_Unk248[0x264 - 0x248];
             // 0x264 (meaning not known): a float HockeyF's
             // CChrCoreHockeyWaluigi passes to CChrCoreHockey::Util_ShootBall_
             // for each copy of the puck it throws.
@@ -1541,7 +1570,11 @@ namespace msw {
             // the character this far (plus 0.01) inside the stage's edges, so
             // likely a body radius.
             float m_fUnk26C;
-            unsigned char m_Unk270[0x284 - 0x270];
+            unsigned char m_Unk270[0x274 - 0x270];
+            // 0x274 (name guessed; added for BossF game/boss/unit_18E08.cpp):
+            // cleared when the run state leaves its receive poses.
+            float m_fUnk274;
+            unsigned char m_Unk278[0x284 - 0x278];
             // 0x284 (meaning not known): cleared at the end of a game.
             float m_fUnk284;
             unsigned char m_Unk288[0x574 - 0x288];

@@ -9,6 +9,7 @@ main AnimPlay__Q23msw11CEventModelFPCQ33msw11CEventModel13MOT_NAME_DATAlfl near 
 main AnimPlay__Q23msw11CEventModelFPCQ33msw11CEventModel8MOT_DATAlfl near 98.0 register choice: the original reuses r4 for the sequence flag after storing pData; same loads, stores and calls
 main AnimPlay__Q23msw13CChrOptMdlObjFliff near 98.6 register choice only: the abs() of a negative motion id uses r6/r0 in the original, r0/r4 in ours
 main AnimPlay__Q23msw13CEvDemoMdlChrFlUlffi near 99.2 register choice in the inlined abs() of the motion-table index only (as CEventChrCore::AnimPlay)
+main AnimPlay__Q23msw13CEvDemoMdlObjFlUlffi near 99.2 schedule and register choice only
 main AnimPlay__Q23msw13CEventChrCoreFlUlffi near 99.2 register choice in the inlined abs() of the motion-table index only
 main ApplyLocate__Q23msw26CStgGmk_WaterPillarClusterFv near 99.5 operand order of one commutative fmadds (ratio * pi) only
 main ArtsEventBegin___Q23msw5CGameFv near 97.1 register choice and the camera loop's index register (original reuses the zero stored to 0xF4)
@@ -21,6 +22,8 @@ main Bind__Q23bcs10CAnmTexSrtFQ34nw4r3g3d6ResMdl near 99.9 operand order of one 
 main BuildHeightTypeTbl__Q23msw19CStgGmk_Trolley_ActFv near 99.1 register allocation only
 main ButtonParameterInitialize__Q23msw18CCockpitButtonInfoFPQ23msw18CCockpitLayoutBasePCQ33msw18CCockpitButtonInfo14ButtonPaneInfoPQ23msw17CMenuPaneAccessori near 96.3 register allocation/order only
 main CalcRootMtx__Q23bcs7CScnObjFv near 99.4 99.4%: f1/f4 register swap in the inlined MTX34RotXYZRad arguments
+main CalcRotMtxSide__Q23msw7CStgSrtFRQ23bcs6FMTX34RCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 99.2 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
+main CalcRotMtx__Q23msw7CStgSrtFRQ23bcs6FMTX34RCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 99.2 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
 main CalcSortValue__Q23bcs7CScnObjFPCQ23bcs6FMTX34 near 90.7 90.7%: three flag tests compile to rlwinm. instead of the original double cntlzw; same truth value, corner and centre code identical
 main Calc__Q23msw10CSceneCalcFRQ23bcs10CCameraAnmRQ23bcs5FVEC3RQ23bcs5FVEC3Rf near 94.3 94.3%: float register numbers inside the inlined paired-single FVEC3Add and order of the lfs/stfs pairs copying the model offset
 main Calc__Q33msw4menu12CMoviePlayerFv near 97.7 instruction order only: Open argument evaluation, mr before Start, lfs order in the three float compares; jump table local name differs (reviewer confirmed)
@@ -83,6 +86,10 @@ main Eff_CreateAttach__Q23msw14CStgEffectSlotFlllPCcPCQ23bcs5FVEC3iiiUl near 99.
 main EnableRuleOptionFlag__Q23msw5CGameFUli unverified 71.9 71.9%: as SetTeamAutoSpikeJumpType, inlined four times
 main EndGoalDemo___Q23msw5CGameFv near 97.8 the IsDelete test branches the other way round (same result)
 main EventDemoSetUp__Q23msw5CGameFv near 89.8 the inlined FsmqGetState empty test is a compare and branch instead of cntlzw; same result
+main EventFirst__Q23msw12CVictoryDemoFv near 96.9 the original tests the unrolled cut-array fill loop's condition twice (extra ble cr1) plus register numbering; equivalent branch form
+main EventFirst__Q23msw17CVictoryDemoPartyFv near 95.9 the original tests the unrolled cut-array fill loop's condition twice (extra ble cr1) plus register numbering; equivalent branch form
+main EventStart__Q23msw17CVictoryDemoPartyFv near 99.6 register choice; jump table symbol name is ours
+main EventTimer__Q23msw12CVictoryDemoFssUl near 99.5 register choice only
 main Finalize__Q23msw5CGameFv unverified 99.0 the original passes 0.0f in f1 to CGameSnd::StopAllSound (a fade time); our header declares it without arguments, so the lfs is missing; everything else identical
 main FindWave__Q23msw19CStgGmk_WaveClusterCFRQ23bcs5FVEC3RQ23bcs5FVEC3f near 99.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main Force___Q43msw6CC_CMN5LUIGI14CcOvacuumForceFf near 99.2 float callee-saved register allocation only
@@ -133,6 +140,7 @@ main IsTurnTableOpen__Q23msw12CStage17BaseCFv near 99.8 fadds operands swapped i
 main JudgeStickMove___Q23msw13CMenuPartListFllUlll near 92.7 where the 16-bit zero extension of the kind id (clrlwi) is placed: once before the search loop in the original, after it and again on the not-found return in ours; register numbering
 main LoadGameSnd__Q23msw8CGameSndFv near 99.1 r3/r4 swapped for the GameWork pointer and the zero stored to m_nStage; same stores, calls and branches
 main LoadLocInfoTbl__Q23msw20CStgGmk_PylonClusterFv near 97.9 addressing form: (pData+idx)[1] with +4/+8 offset vs slwi+lwzx; same value
+main LookAt__Q23msw7CStgSrtFRCQ23bcs5FVEC3f near 98.5 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
 main LoopStateBreak__Q23msw11CItemBananaFv near 97.9 float register numbering and instruction order only (same code as CItemShellCmn::LoopStateBreak)
 main LoopStateBreak__Q23msw13CItemShellCmnFv near 97.9 float register numbering and instruction order only
 main LoopStateMain__Q23msw10CChrMarkerFv near 99.7 fmadds operands A/C swapped (rate*speed vs speed*rate), and the scale product's destination register; same values
@@ -205,6 +213,8 @@ main SetDelayResultButton__Q23msw14CCockpitResultFv near 98.1 98.1%: identical i
 main SetDispFlag__Q33msw7cockpit10CEffectSetFi near 99.8 register allocation only (loop pointer and EF manager swap r8/r10); declaration-order search no gain
 main SetFlags__Q23msw10CEventDemoFUl unverified 41.4 same four lwz/or/stw on WORK 0x14..0x20; original does each word in turn, ours hoists the loads (schedule only, 41%, 7 forms tried)
 main SetFrame__Q23msw10CEventMoveFf near 99.6 paired-single register choice in the inlined FVEC3Add/FVEC3Sum only
+main SetFront__Q23msw7CStgSrtFRCQ23bcs5FVEC3 near 97.3 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
+main SetFront__Q23msw7CStgSrtFfff near 96.8 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
 main SetLayoutFilePath__Q23msw4menuFPQ33bcs8CLoadMan10FILE_INPUTll near 99.8 bytes identical (objdump); objdiff scores the relocation to the external table lbl_8047F2E8 differently
 main SetLinkMove__Q23msw11CEventModelFPQ23msw10CEventMovei near 93.4 register choice/instruction order only (inlined SetLinkNode)
 main SetLooseBallMode__Q23msw5CGameFi near 90.7 the original recomputes g_GameWork's address in the else branch; same stores and messages
@@ -214,6 +224,7 @@ main SetMtx__Q23msw19CStgGmk_Pinball_MdlFRCQ23bcs6FMTX34 near 98.2 register choi
 main SetPeriodResult___Q23msw5CGameFv unverified 52.3 52.3%: register allocation (stmw vs single saves) and address forms of the two arrays; same calls
 main SetPointLightColor__Q23msw14CEffectClusterF8_GXColor8_GXColor near 89.8 schedule only: second colour word loaded after the member-pointer lwzu/copy instead of before; same stores and calls
 main SetResultButton__Q23msw14CCockpitResultFll near 98.5 98.5%: float register numbering in the delay computation; callee is the unnamed task constructor fn_8023D858
+main SetRotY__Q23msw7CStgSrtFf near 99.0 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
 main SetScript__Q33msw2vm9CVMScriptFPv unverified 77.7 original inlines CVMData::Init inside the inlined ~CVMData; ours calls Init (CVMData.cpp), same effect; likely fixed by merging vm/CVMData+opcodes+CVMCpu+CVMScript into one file
 main SetScript__Q33msw2vm9CVMScriptFRCQ33msw2vm9CVMScript unverified 72.8 original inlines CVMData::Init inside the inlined ~CVMData; ours calls Init (CVMData.cpp), same effect; likely fixed by merging vm/CVMData+opcodes+CVMCpu+CVMScript into one file
 main SetTeamArtsGauge___Q23msw5CGameFlff near 87.0 register choice and float move order
@@ -223,6 +234,7 @@ main SetTimeValue__Q33msw7cockpit10CTimeCountFPQ23msw17CMenuPaneAccessorfilllli 
 main SetTime__Q23msw5CGameFf near 91.5 original rounds the argument with frsp (a no-op on a float) before the clamp
 main SetTourCockpitFilePath__Q23msw4menuFPQ33bcs8CLoadMan10FILE_INPUTll near 90.5 register allocation and CSE only: the original recomputes base+offset of the file entry at each use and keeps one more saved register (frame 0x40 vs 0x30); same calls, constants and branches
 main SetTurnStartTelopType___Q23msw5CGameFlf near 98.1 the clamp at 0 compares in the other operand order (same result, NaN kept either way)
+main SetUp__Q23msw7CStgSrtFfff near 96.8 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
 main SetVector3__Q33msw2vm9CVMScriptFiQ23bcs5FVEC3 unverified 74.2 schedule only: next float of v loaded before the previous store in the original
 main Set__Q23msw20CCockpitMarkerIcon2DFv near 99.2 register numbering only (the pane accessor pointer lands in another register)
 main Set__Q23msw22CCockpitModelTelopHoldFv near 99.8 register numbering only
@@ -246,11 +258,13 @@ main UpdateColl__Q23msw19CStgGmk_Pinball_ActFv near 99.4 stack slot order of atk
 main UpdateColl__Q23msw19CStgGmk_Trolley_ActFv near 97.1 stack slots of the SetPos temporaries and the capsule ends only (both builds drop the store of the second capsule end's x/z)
 main UpdateFade__Q23msw11CChrOptTaskFf near 99.5 register choice only: the hide bit and the model pointer are swapped between r3 and r4 in the hide-flag updates
 main UpdateFrame__Q23msw10CEventMoveFf near 99.1 paired-single register choice and the stack slots of the two difference temporaries only
+main UpdateFrame__Q23msw13CEvDemoMdlObjFf near 99.0 original reloads m_pMotNameData from memory where ours reuses the register (same value)
 main UpdateGmkPos__Q23msw13CPinballMechaFv near 99.6 register allocation/order only (diff.py: registers/schedule)
 main UpdateMdlMtx__Q23msw19CStgGmk_Trolley_ActFv near 97.9 the first inlined CStgSrt matrix rebuild tests its flag bits through computed bools (neg/or/srwi, extrwi.) where ours tests them directly; stack slots
 main UpdateParam__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main UpdateWavePos__Q23msw16CStgGmk_Wave_ActFf near 99.3 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main UpdateWaveTimer__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
+main Update__Q23msw11CStgSrtMoveFf near 93.5 scheduling and float registers in the paired-single maths; inlined GetRotMtx tests flag bit 2 with rlwinm. where the original has extrwi. (same bit, same branch); stack, calls, constants, offsets, branches identical
 main Update__Q33msw10CStgSeSlot7CSESlotFf near 97.2 original re-reads m_fDelay/m_fStopDelay after each > 0 test, ours reuses the loaded value (no store between); frame size and register choice follow; same calls, constants and branches (as CEffSlot::Update)
 main Update__Q33msw14CStgEffectSlot8CEffSlotFf near 92.6 same zero-constant register effect as Eff_CreateAttachFadeIn; original re-reads m_fCreateDelay/m_fEndDelay after the compare and loads the fade-in after FindList, ours reuses the value (no store in between, so same values); same calls and branches
 main UseTeamCoin___Q23msw5CGameFll unverified 78.8 78.8%: register allocation and address recomputation; same calls and stores (inspected)
@@ -264,7 +278,11 @@ main _GetResAnimNo__Q23msw11CEventModelCFl near 96.8 register choice/order in th
 main _NextMotionName__Q23msw11CEventModelFsf near 94.7 an extra extsh of the short nStep parameter (a no-op on a value passed as short) and register choice
 main _NextMotion__Q23msw11CEventModelFsf near 93.6 an extra extsh of the short nStep parameter (a no-op on a value passed as short) and register choice
 main _OnMotTrg__Q23msw13CEvDemoMdlChrFPCQ33bcs14CAnmObjMotBase7MOT_TRG unverified 78.1 ours inlines _PlayNodeSe (case 0x12) where the original calls it; the rest is the same code. Restating _PlayNodeSe, and writing the foot-sound blocks out instead of through the helper, did not stop the inlining
+main _PlayResult__Q23msw12CVictoryDemoFPCcl near 99.2 one addi rX,rY,0 where ours emits mr, plus register choice
+main _PlayResult__Q23msw17CVictoryDemoPartyFPCcl near 98.7 one addi rX,rY,0 where ours emits mr, plus register choice
+main _SetPlayerNode__Q23msw17CVictoryDemoPartyFll near 89.6 register allocation: original saves one more GPR (_savegpr_27 vs four stw), same instruction sequence otherwise
 main _SetRot__Q23msw13CEvDemoMdlChrFRCQ23bcs5FVEC3 near 88.8 load order only: the original loads m_pMdl after rRot.x, ours after all three angles; same wrap loops and stores
+main _SetRot__Q23msw13CEvDemoMdlObjFRCQ23bcs5FVEC3 near 88.8 instruction order only: m_pMdl load scheduled after the first lfs
 main _UpdateFloor__Q23msw11CEventModelFv near 99.0 stack slots of the two FVEC3Sum temporaries swapped and paired-single register choice only
 main __ct__Q23bcs7CMdlRefFPCQ23bcs7CMdlObjQ34nw4r3g3d6ResMdlUlUll near 95.4 95.4%: calls SetLink where the original inlines it (same-file inline: the original file is the whole bcs model file), the GenMode handle sits in another stack slot and one reload of its pointer is CSEd; GXSetCullMode is the unnamed fn_8040C620
 main __ct__Q23msw10CEventMoveFPQ23msw11CEventModelPQ23msw14CEventNodeBasei near 99.9 only the .sdata2 relocation of 0.0f differs (constant pool not carved for this unit)

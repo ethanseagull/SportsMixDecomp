@@ -12,6 +12,7 @@ namespace msw {
     class CStgDrv;
     class CStgMdl;
     class CStgSrt;
+    class CStgSrtMove;
 
     // An object of a stage (a gimmick, a stage part): a task that owns up to
     // GetMdlNum() models, one actor (the logic) and one driver. A DOL class,
@@ -37,8 +38,8 @@ namespace msw {
             virtual void SceneEntry();
             virtual void SceneLeave();
             // The actor's CStgSrt, or 0 without an actor.
-            virtual CStgSrt *GetSrt() { return m_pAct ? m_pAct->GetSrt() : 0; }
-            virtual const CStgSrt *GetSrt() const { return m_pAct ? m_pAct->GetSrt() : 0; }
+            virtual CStgSrtMove *GetSrt() { return m_pAct ? m_pAct->GetSrt() : 0; }
+            virtual const CStgSrtMove *GetSrt() const { return m_pAct ? m_pAct->GetSrt() : 0; }
             // Forward to the actor's CStgSrt; nothing without an actor.
             virtual void SetPos(const bcs::FVEC3 &rPos)
             {
@@ -60,10 +61,12 @@ namespace msw {
             }
             virtual void EventNotify(CStgAct *pAct, long event, void *pArg);
             virtual unsigned long CalcSum() const;
-            // Factories for the parts; each stage object class supplies them.
-            virtual CStgMdl *NewMdl(long heap, unsigned long idx) = 0;
-            virtual CStgAct *NewAct(long heap) = 0;
-            virtual CStgDrv *NewDrv(long heap) = 0;
+            // Factories for the parts. Not pure: CStgObj's own vtable in
+            // the DOL (0x804753C0) names its plain versions, which make a
+            // CStgMdl, CStgAct and CStgDrv (game/msw/CStgObj.cpp).
+            virtual CStgMdl *NewMdl(long heap, unsigned long idx);
+            virtual CStgAct *NewAct(long heap);
+            virtual CStgDrv *NewDrv(long heap);
             virtual unsigned long GetMdlNum() const { return m_nMdlNum; }
             // Model idx, or 0 when idx is not below GetMdlNum().
             virtual CStgMdl *GetMdl(unsigned long idx) { return idx < GetMdlNum() ? m_ppMdl[idx] : 0; }
@@ -117,6 +120,10 @@ namespace msw {
             virtual CStgAct *GetAct() { return m_pAct; }
             virtual const CStgAct *GetAct() const { return m_pAct; }
             virtual void OnUserEvent(CStgAct *pAct, long event, void *pArg) {}
+
+            // (name guessed; DOL fn_8016FF6C) Passes an actor's event on
+            // to OnUserEvent; msw::CStgObj::EventNotify calls it.
+            void EventNotify(CStgAct *pAct, long event, void *pArg);
     };
 }
 

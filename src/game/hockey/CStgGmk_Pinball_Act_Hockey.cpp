@@ -82,7 +82,7 @@ unsigned long msw::CStgGmk_Pinball_Act_Hockey::OnBodyDamage(CCollBodyUnit *pBody
                                                           const bcs::FVEC3 &rPos)
 {
     if (pAtk != 0 && pAtk->GetOwnerKind() == 5 && pAtk->m_nOwnerNo != pBody->m_nOwnerIdx) {
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         // Declared in this order for the original's stack layout.
         bcs::FVEC3 bodyPos = pBody->GetPos();
         bcs::FVEC3 atkPos;
@@ -127,7 +127,7 @@ unsigned long msw::CStgGmk_Pinball_Act_Hockey::OnReflectHit(const CCollDefUnit *
     VecNormalize(rVel, out);
     m_fReflectWait = 10.0f;
 
-    CStgSrt *pSrt = GetSrt();
+    CStgSrtMove *pSrt = GetSrt();
     // Declared in this order for the original's stack layout.
     bcs::FVEC3 defPos = pDef->GetPos();
     bcs::FVEC3 ballPos = pBall->GetPos();
@@ -153,7 +153,7 @@ unsigned long msw::CStgGmk_Pinball_Act_Hockey::OnReflectHit(const CCollDefUnit *
 // pinball, keeping (1 - HOCKEY_PRM_S12_BALL_HIT_DECAY) of its speed.
 void msw::CStgGmk_Pinball_Act_Hockey::OnDamage(CCollBodyUnit *pBody, CBall *pBall)
 {
-    CStgSrt *pSrt = GetSrt();
+    CStgSrtMove *pSrt = GetSrt();
     bcs::FVEC3 bodyPos = pBody->GetPos();
     bcs::FVEC3 ballPos = pBall->GetPos();
     bcs::FVEC3 vel = pSrt->GetVel();

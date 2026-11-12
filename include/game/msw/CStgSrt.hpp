@@ -8,44 +8,24 @@
 
 namespace msw {
 
-    // Position, rotation and scale of a stage object; msw::CStgAct embeds
-    // one at 0x24 (0x144 bytes, up to its member at 0x168). A DOL class.
+    // Position, rotation and scale of a stage object, 0xC8 bytes; the
+    // moving version msw::CStgSrtMove below is what msw::CStgAct embeds at
+    // 0x24 (0x144 bytes, up to its member at 0x168). A DOL class.
     // msw::CStgGmk_WaterPillar::GetPos reads the position at 0x00; the
     // inline msw::CStgObj::LookAt writes the direction at 0x0C and sets bit
     // 1 of the flags at 0xC0. The vptr is at 0xC4 (the data members come
-    // before the first virtual function): the DOL constructor (no exported
-    // name, called by CStgAct's) stores it there, and the vtable's third
-    // slot sets the position (flag bit 0) and calls it from
-    // msw::CStgObj::SetPos. Names of the slots are guesses.
+    // before the first virtual function): the constructor stores it there,
+    // and the vtable's third slot sets the position (flag bit 0);
+    // msw::CStgObj::SetPos calls it. Names of the slots are guesses.
     class CStgSrt {
         public:
+            // (DOL fn_80174694) Position zero, direction (0, 0, 1), up
+            // (0, 1, 0), scale 1, everything flagged; the matrices are
+            // left for GetMtx.
+            CStgSrt();
+
             // (name guessed)
             const bcs::FVEC3 &GetPos() const { return m_Pos; }
-            // (name guessed) The velocity; msw::CStgGmk_Trolley::GetVel
-            // reads it.
-            const bcs::FVEC3 &GetVel() const { return m_Vel; }
-            // (name guessed) Sets the velocity and its copy turned by the
-            // rotation matrix (at 0xD8), rebuilding the rotation first if
-            // the direction changed. Inline in VolleyF's
-            // CStgGmk_Pinball_Act_Volley and DodgeF's
-            // msw::CStgGmk_Pinball_Act_Dodge::OnDamage and
-            // msw::CStgGmk_Pylon_Act_Dodge::SetPushVel. The direction flag is
-            // tested as (m_nFlag & 2) through GetRotMtx: the originals of
-            // VolleyF's OnBallCatch and the Pylon's SetPushVel test it with
-            // rlwinm. (this form), DodgeF's Pinball OnDamage with extrwi.
-            // (what (m_nFlag >> 1) & 1 gives). Same bit; this form gives the
-            // best total of the three (Pinball OnDamage 98.1% instead of
-            // 98.4%, Pylon SetPushVel 99.6% instead of 98.8%, Volley
-            // OnBallCatch 97.7% instead of 97.4%).
-            void SetVel(const bcs::FVEC3 &rVel)
-            {
-                m_Vel = rVel;
-                PSMTXMultVec(GetRotMtx().m, (const Vec *)&rVel, (Vec *)&m_WorldVel);
-            }
-
-            // (name and meaning guessed) msw::CStgGmk_Pylon_Act_Dodge::SetPushVel
-            // stores its GetParam_Dec here with the push velocity.
-            void SetDecel(float decel) { m_fUnkFC = decel; }
             // (name guessed) The same scale on all three axes, flagged for
             // GetMtx. Inline in HockeyF's CStageHockey10::CPanelInfo::CalcRootMtx
             // (and the DOL's CStage10Base::CPanelInfoBase::CalcRootMtx).
@@ -64,6 +44,30 @@ namespace msw {
             // (name guessed; DOL fn_80174804, after SetFront) Sets the up
             // vector, as SetFront the front one.
             void SetUp(float x, float y, float z);
+            // (name guessed) The same from a vector. Inline: the DOL has no
+            // copy of it, and SetRotY has it expanded.
+            void SetUp(const bcs::FVEC3 &rUp)
+            {
+                m_Up = rUp;
+                if (bcs::FVEC3LenSq(&m_Up) == 0.0f) {
+                    m_Up.Set(0.0f, 1.0f, 0.0f);
+                }
+                m_nFlag |= 2;
+            }
+
+            // (DOL, game/msw/CStgSrt.cpp) Turns the direction towards
+            // rTarget, by at most maxAngle radians: the rotation is blended
+            // from the current one to the one looking at rTarget.
+            void LookAt(const bcs::FVEC3 &rTarget, float maxAngle);
+            // (name guessed) Turns the rotation the part rate of the way to
+            // rTo. Inline in LookAt (game/msw/CStgSrt.cpp).
+            void BlendRotMtx(const bcs::FMTX34 &rTo, float rate);
+            // (name guessed; DOL fn_80174AD0) Faces the object rad radians
+            // about its up vector, measured from the world's axes.
+            void SetRotY(float rad);
+            // (name guessed; DOL fn_80174C94) Turns the direction by rad
+            // radians about the up vector.
+            void AddRotY(float rad);
 
             // (name guessed) Point the direction from the position towards
             // rTarget; inline in msw::CStgObj::LookAt. It goes through
@@ -103,6 +107,90 @@ namespace msw {
                 return m_Mtx;
             }
 
+            // The rotation matrix, rebuilt when the direction changed.
+            const bcs::FMTX34 &GetRotMtx()
+            {
+                if (m_nFlag & 2) {
+                    CalcRotMtx(m_RotMtx, m_Dir, m_Up);
+                    m_nFlag &= ~2;
+                }
+                return m_RotMtx;
+            }
+
+            // In the DOL: the rotation matrix for direction rDir and up
+            // vector rUp.
+            static void CalcRotMtx(bcs::FMTX34 &rMtx, const bcs::FVEC3 &rDir, const bcs::FVEC3 &rUp);
+            // (name guessed; DOL fn_80174F10, after CalcRotMtx) The same
+            // from the side (x) vector rSide and the up vector rUp.
+            static void CalcRotMtxSide(bcs::FMTX34 &rMtx, const bcs::FVEC3 &rSide, const bcs::FVEC3 &rUp);
+
+        protected:
+            bcs::FVEC3 m_Pos;             // 0x00
+            bcs::FVEC3 m_Dir;             // 0x0C
+            bcs::FVEC3 m_Up;              // 0x18 (name guessed)
+            bcs::FVEC3 m_Scale;           // 0x24
+            bcs::FMTX34 m_Mtx;            // 0x30, see GetMtx
+            bcs::FMTX34 m_RotMtx;         // 0x60
+            bcs::FMTX34 m_ScaleMtx;       // 0x90
+            unsigned long m_nFlag;        // 0xC0, 7 after construction
+
+        public:
+            // The base's vtable is __vt__Q23msw7CStgSrt (0x80475470): the
+            // destructor, Reset and the two SetPos. The destructor and
+            // SetPos are inline (their DOL copies are weak ones in other
+            // units: fn_80175190 here, fn_80156A5C, fn_80158090).
+            virtual ~CStgSrt() {}                         // 0x08
+            virtual void Reset();                         // 0x0C
+            // Sets the position and flags it for GetMtx (bit 0).
+            virtual void SetPos(const bcs::FVEC3 &rPos)   // 0x10
+            {
+                m_Pos = rPos;
+                m_nFlag |= 1;
+            }
+            virtual void SetPos(float x, float y, float z) // 0x14
+            {
+                m_Pos.Set(x, y, z);
+                m_nFlag |= 1;
+            }
+    };
+
+    // (name guessed) A CStgSrt that moves: velocity, acceleration,
+    // deceleration, resistance, limits and a fall, applied by Update.
+    // 0x144 bytes, vtable 0x80475448 (the DOL has no exported name for
+    // either). Evidence it is a class of its own: msw::CStgAct's
+    // constructor and msw::CStage10Base::CPanelInfoBase's call its
+    // constructor (0x801750E4), which stores this second vtable over
+    // CStgSrt's, while msw::CNpcBossPackun::CMudBomb builds plain 0xC8-byte
+    // CStgSrt objects with CStgSrt's own constructor (0x80174694).
+    class CStgSrtMove : public CStgSrt {
+        public:
+            CStgSrtMove();
+
+            // (name guessed) The velocity; msw::CStgGmk_Trolley::GetVel
+            // reads it.
+            const bcs::FVEC3 &GetVel() const { return m_Vel; }
+            // (name guessed) Sets the velocity and its copy turned by the
+            // rotation matrix (at 0xD8), rebuilding the rotation first if
+            // the direction changed. Inline in VolleyF's
+            // CStgGmk_Pinball_Act_Volley and DodgeF's
+            // msw::CStgGmk_Pinball_Act_Dodge::OnDamage and
+            // msw::CStgGmk_Pylon_Act_Dodge::SetPushVel. The direction flag is
+            // tested as (m_nFlag & 2) through GetRotMtx: the originals of
+            // VolleyF's OnBallCatch and the Pylon's SetPushVel test it with
+            // rlwinm. (this form), DodgeF's Pinball OnDamage with extrwi.
+            // (what (m_nFlag >> 1) & 1 gives). Same bit; this form gives the
+            // best total of the three (Pinball OnDamage 98.1% instead of
+            // 98.4%, Pylon SetPushVel 99.6% instead of 98.8%, Volley
+            // OnBallCatch 97.7% instead of 97.4%).
+            void SetVel(const bcs::FVEC3 &rVel)
+            {
+                m_Vel = rVel;
+                PSMTXMultVec(GetRotMtx().m, (const Vec *)&rVel, (Vec *)&m_WorldVel);
+            }
+
+            // (name and meaning guessed) msw::CStgGmk_Pylon_Act_Dodge::SetPushVel
+            // stores its GetParam_Dec here with the push velocity.
+            void SetDecel(float decel) { m_fUnkFC = decel; }
             // (name and meaning guessed) Clears both vectors at 0x100 and
             // 0x10C and flags them (bit 4 of the word at 0xC8). Inline in
             // msw::CStgGmk_WaterPillar_Act's constructor (DOL).
@@ -137,6 +225,11 @@ namespace msw {
                 m_Vel.Set(0.0f, 0.0f, 0.0f);
                 m_WorldVel.Set(0.0f, 0.0f, 0.0f);
             }
+
+            // (name guessed; DOL fn_801752F0) Copies everything but the
+            // vptr and m_PrevPos from rSrc.
+            void CopyFrom(const CStgSrtMove &rSrc);
+
             // (name guessed; DOL game/msw/CStgGmk_Pylon.cpp) The resistance,
             // on with flag 0x10 (ClearFlagC8(0x10) turns it off).
             void SetResist(const bcs::FVEC3 &rResist)
@@ -191,42 +284,46 @@ namespace msw {
                 m_Vel.Set(0.0f, 0.0f, 0.0f);
                 m_WorldVel.Set(0.0f, 0.0f, 0.0f);
             }
-            // The rotation matrix, rebuilt when the direction changed.
-            const bcs::FMTX34 &GetRotMtx()
-            {
-                if (m_nFlag & 2) {
-                    CalcRotMtx(m_RotMtx, m_Dir, m_Up);
-                    m_nFlag &= ~2;
-                }
-                return m_RotMtx;
-            }
-
-            // In the DOL: the rotation matrix for direction rDir and up
-            // vector rUp.
-            static void CalcRotMtx(bcs::FMTX34 &rMtx, const bcs::FVEC3 &rDir, const bcs::FVEC3 &rUp);
 
         private:
-            bcs::FVEC3 m_Pos;             // 0x00
-            bcs::FVEC3 m_Dir;             // 0x0C
-            bcs::FVEC3 m_Up;              // 0x18 (name guessed)
-            bcs::FVEC3 m_Scale;           // 0x24
-            bcs::FMTX34 m_Mtx;            // 0x30, see GetMtx
-            bcs::FMTX34 m_RotMtx;         // 0x60
-            bcs::FMTX34 m_ScaleMtx;       // 0x90
-            unsigned long m_nFlag;        // 0xC0, 7 after construction
+            // (name guessed) The constructor's and Reset's part for the
+            // members of this class.
+            void InitMove()
+            {
+                m_nFlagC8 = 0;
+                m_fUnkFC = 0.0f;
+                m_fAccelRate = 1.0f;
+                m_fDecRate = 1.0f;
+                m_Vel.Set(0.0f, 0.0f, 0.0f);
+                m_WorldVel.Set(0.0f, 0.0f, 0.0f);
+                m_UnkE4.Set(0.0f, 0.0f, 0.0f);
+                m_UnkF0.Set(0.0f, 0.0f, 0.0f);
+                m_Unk10C.Set(0.0f, 0.0f, 0.0f);
+                m_Unk100.Set(0.0f, 0.0f, 0.0f);
+            }
 
         public:
-            virtual ~CStgSrt();                           // 0x08
+            virtual ~CStgSrtMove();                       // 0x08
             virtual void Reset();                         // 0x0C
-            virtual void SetPos(const bcs::FVEC3 &rPos);  // 0x10
-            // (added for game/msw/CStgGmk_Trolley.cpp; names guessed) Weak
-            // or out-of-line DOL functions, declared without bodies so no
-            // copy is emitted: SetPos from the components (it passes them
-            // to SetPos), an update without arguments, the per-frame
-            // update that moves the object by its velocity, and an empty
-            // hook.
-            virtual void SetPos(float x, float y, float z); // 0x14
-            virtual void Update();                          // 0x18
+            // Keeps the position in m_PrevPos as well (DOL weak copy
+            // fn_8014B440).
+            virtual void SetPos(const bcs::FVEC3 &rPos)   // 0x10
+            {
+                m_PrevPos = rPos;
+                CStgSrt::SetPos(rPos);
+            }
+            // Through the virtual SetPos (DOL weak copy fn_80158994).
+            virtual void SetPos(float x, float y, float z) // 0x14
+            {
+                SetPos(bcs::FVEC3(x, y, z));
+            }
+            // (name guessed; DOL weak copy fn_8014B610) CopyFrom(rSrc).
+            virtual CStgSrtMove &Copy(const CStgSrtMove &rSrc)  // 0x18
+            {
+                CopyFrom(rSrc);
+                return *this;
+            }
+            // (name guessed) One frame of motion (game/msw/CStgSrt.cpp).
             virtual void Update(float rate);                // 0x1C
             virtual void OnUpdate();                        // 0x20
 
@@ -241,7 +338,9 @@ namespace msw {
             bcs::FVEC3 m_Unk10C;         // 0x10C
             bcs::FVEC3 m_VelMax;         // 0x118 (SetVelLimit)
             bcs::FVEC3 m_VelMin;         // 0x124
-            unsigned char m_Unk130[0x14]; // 0x130
+            float m_fAccelRate;          // 0x130, scales the acceleration (1 after construction; name guessed)
+            float m_fDecRate;            // 0x134, scales the deceleration (1 after construction; name guessed)
+            bcs::FVEC3 m_PrevPos;        // 0x138, the position before the last SetPos
     };
 }
 

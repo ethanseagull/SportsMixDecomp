@@ -226,7 +226,7 @@ namespace msw {
                      &CStgGmk_Case_Act::DtorState_INACTIVE);
         FsmqSetState(STATE_OPEN, &CStgGmk_Case_Act::CtorState_OPEN, &CStgGmk_Case_Act::LoopState_OPEN,
                      &CStgGmk_Case_Act::DtorState_OPEN);
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         pSrt->ResetVelocity(GetParam_Gravity());
 
         float fullWidth = GetParam_Width();
@@ -307,7 +307,7 @@ namespace msw {
     // below 0.05. ForceBreak's delay counts down while the case is alive.
     void CStgGmk_Case_Act::OnUpdate(float rate)
     {
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         CStageMan::GetInstance();
         if (m_fInvincibleTime > 0.0f) {
             m_fInvincibleTime -= rate;
@@ -702,7 +702,7 @@ namespace msw {
     // the court's middle line, with full lives; then it moves.
     void CStgGmk_Case_Act::CtorState_DEFAULT()
     {
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         CStgGmk_Case *pParent = static_cast<CStgGmk_Case *>(GetParent());
         pSrt->SetGravity(GetParam_Gravity());
         pSrt->ClearUnkE4();
@@ -750,7 +750,7 @@ namespace msw {
     // GetParam_VelLimit on each axis, slowed by GetParam_Dec.
     void CStgGmk_Case_Act::CtorState_MOVE()
     {
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         pSrt->StopRun();
         pSrt->SetVelLimit(GetParam_VelLimit());
         pSrt->SetDec(GetParam_Dec());
@@ -763,7 +763,7 @@ namespace msw {
     void CStgGmk_Case_Act::LoopState_MOVE()
     {
         GetFrameRateF();
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         bcs::FVEC3 vel = pSrt->GetVel();
         float speed = PSVECMag(reinterpret_cast<const Vec *>(&vel));
         if (pSrt->GetPos().y <= 0.05f && speed > 0.7f) {

@@ -204,6 +204,29 @@ namespace nw4r {
             operator ConstMtxPtr() const { return reinterpret_cast<ConstMtxPtr>(&_00); }
         };
 
+        // (DOL; added for game/msw/CStgSrt.cpp) The larger and the
+        // smaller of each component of *p1 and *p2.
+        VEC3 *VEC3Maximize(VEC3 *pOut, const VEC3 *p1, const VEC3 *p2);
+        VEC3 *VEC3Minimize(VEC3 *pOut, const VEC3 *p1, const VEC3 *p2);
+
+        // A 3x3 matrix, row by row. Added for the DOL's
+        // msw::CStgSrt::AddRotY.
+        struct MTX33 {
+            union {
+                struct {
+                    float _00, _01, _02;
+                    float _10, _11, _12;
+                    float _20, _21, _22;
+                };
+                float m[3][3];
+            };
+        };
+
+        // (DOL; the first one unnamed there, fn_8042B9F0) The rotation
+        // part of a 3x4 matrix, and a 3x3 matrix with no translation.
+        MTX33 *MTX34ToMTX33(MTX33 *pOut, const MTX34 *pM);
+        MTX34 *MTX33ToMTX34(MTX34 *pOut, const MTX33 *pM);
+
         // (DOL) *pOut = *pM scaled by *pS. Added for the DOL's
         // msw::CStgSrt::GetMtx.
         MTX34 *MTX34Scale(MTX34 *pOut, const MTX34 *pM, const VEC3 *pS);

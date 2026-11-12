@@ -30,29 +30,13 @@
 #include "game/msw/CC_DATA.hpp"
 #include "game/msw/CChrMdlObj.hpp"
 #include "game/msw/CEffectCtrl.hpp"
+#include "game/msw/CEventMdlObj.hpp"
 #include "game/msw/CEventNodeSimple.hpp"
 #include "game/msw/CGameSnd.hpp"
 #include "game/msw/CStageMan.hpp"
 #include "nw4r/g3d/Camera.hpp"
 #include "nw4r/g3d/G3DState.hpp"
 #include "revolution/mtx.h"
-
-namespace msw {
-
-    // The model CEventModel makes from its model file (0x1CC bytes, vtable
-    // lbl_8046F0F0; nothing names it: class and member names guessed). It
-    // can be shown through the camera of a view of its own.
-    class CEventMdlObj : public bcs::CMdlObj {
-        public:
-            CEventMdlObj();
-            virtual ~CEventMdlObj();
-            virtual void ObjProc(unsigned long nTask, unsigned long nArg, void *pArg);
-
-        private:
-            short m_nView;    // 0x1C8: the view whose camera shows the model
-            short m_bOwnView; // 0x1CA: m_nView is used
-    }; // size 0x1CC
-}
 
 namespace msw {
 

@@ -17,6 +17,7 @@ namespace msw {
     class CStgMdl;
     class CStgObj;
     class CStgSrt;
+    class CStgSrtMove;
 
     // The logic of a stage object, with its effect and sound slots. A DOL
     // class, size 0x170: CStgEffectSlot at 0x00 (vptr at 0x08), CStgSeSlot at
@@ -42,9 +43,9 @@ namespace msw {
             virtual void Init();
             virtual CStgObj *GetParent() { return m_pParent; }
             virtual const CStgObj *GetParent() const { return m_pParent; }
-            // Inline in the original (the address of the embedded CStgSrt).
-            virtual CStgSrt *GetSrt() { return reinterpret_cast<CStgSrt *>(m_Srt); }
-            virtual const CStgSrt *GetSrt() const { return reinterpret_cast<const CStgSrt *>(m_Srt); }
+            // Inline in the original (the address of the embedded CStgSrtMove).
+            virtual CStgSrtMove *GetSrt() { return reinterpret_cast<CStgSrtMove *>(m_Srt); }
+            virtual const CStgSrtMove *GetSrt() const { return reinterpret_cast<const CStgSrtMove *>(m_Srt); }
             virtual void SetMdl(CStgMdl *pMdl) { m_pMdl = pMdl; }
             virtual const CStgMdl *GetMdl(long idx) const;
             virtual void SetFrameRateF(float rate) { m_fFrameRate = rate; }
@@ -81,13 +82,21 @@ namespace msw {
                 return reinterpret_cast<CSESlot::CPosFunc *>(m_PosFunc);
             }
 
+            // (name guessed; DOL fn_8016F6C0) The per-frame update:
+            // SetFrameRateF(rate), the effect and sound slots, OnUpdate(rate),
+            // UpdateMdlMtx(). msw::CStgObj::Main calls it.
+            void Update(float rate);
+            // (name guessed; DOL fn_8016F764) OnCalcSum();
+            // msw::CStgObj::CalcSum adds it in.
+            unsigned long CalcSum() const;
+
         private:
             // 0x18: the sound slots' default position callback, a
             // CSESlot::CPosFunc of a DOL class without an exported name
             // (its vptr, then this actor; CStgAct's constructor sets both).
             unsigned long m_PosFunc[2];
             CStgObj *m_pParent;           // 0x20
-            unsigned char m_Srt[0x144];   // 0x24, the CStgSrt GetSrt returns (layout not mapped)
+            unsigned char m_Srt[0x144];   // 0x24, the CStgSrtMove GetSrt returns
             CStgMdl *m_pMdl;              // 0x168, set by SetMdl, read by GetMdl(long) const
             float m_fFrameRate;           // 0x16C
     };

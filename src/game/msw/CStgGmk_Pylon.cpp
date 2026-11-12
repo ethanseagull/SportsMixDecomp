@@ -177,7 +177,7 @@ namespace msw {
                      &CStgGmk_Pylon_Act::DtorState_INACTIVE);
         FsmqSetState(STATE_FALL, &CStgGmk_Pylon_Act::CtorState_FALL, &CStgGmk_Pylon_Act::LoopState_FALL,
                      &CStgGmk_Pylon_Act::DtorState_FALL);
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         pSrt->ResetVelocity(GetParam_Gravity());
 
         long idx;
@@ -234,7 +234,7 @@ namespace msw {
     // sound; the map keeps it inside.
     void CStgGmk_Pylon_Act::OnUpdate(float rate)
     {
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         CStageMan::GetInstance();
         bcs::FVEC3 prev = pSrt->GetPos();
         if (m_fInvincibleTime > 0.0f) {
@@ -659,7 +659,7 @@ namespace msw {
     // Stands up, shown, with full lives, the motion parameters set.
     void CStgGmk_Pylon_Act::CtorState_MOVE()
     {
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         CGmkRef gmk(GetParent());
         pSrt->SetFront(0.0f, 0.0f, 1.0f);
         pSrt->SetUp(0.0f, 1.0f, 0.0f);
@@ -693,7 +693,7 @@ namespace msw {
     void CStgGmk_Pylon_Act::LoopState_MOVE()
     {
         GetFrameRateF();
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         bcs::FVEC3 vel = pSrt->GetVel();
         GetParent();
         float speed = PSVECMag(reinterpret_cast<const Vec *>(&vel));
@@ -862,7 +862,7 @@ namespace msw {
 
     void CStgGmk_Pylon_Act::CtorState_FALL()
     {
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         pSrt->SetGravity(GetParam_Gravity());
         m_bAlive = 0;
     }
@@ -872,7 +872,7 @@ namespace msw {
     // splashes and is gone.
     void CStgGmk_Pylon_Act::LoopState_FALL()
     {
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         float bottom = -2.0f - GetParam_MdlHeight();
         float rate = GetFrameRateF();
         const STATE_WORK *pWork = FsmqGetWork<STATE_WORK>();

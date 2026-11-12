@@ -150,7 +150,7 @@ float CStgGmk_IceCube_Act_Hockey::GetParam_AtkVel() const
 void CStgGmk_IceCube_Act_Hockey::UpdateColl()
 {
     msw::CStgGmk_Pylon_Act_Hockey::UpdateColl();
-    msw::CStgSrt *pSrt = GetSrt();
+    msw::CStgSrtMove *pSrt = GetSrt();
     msw::CStgGmk *pGmk = static_cast<msw::CStgGmk *>(GetParent());
     long idx;
     if (pGmk != 0) {

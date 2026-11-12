@@ -28,6 +28,11 @@ namespace msw {
         // (added for BossF game/boss/GameBoss.cpp; return type and meaning
         // guessed) Checks the unlocks earned by the game just played.
         void CheckClear();
+        // (added for TourF game/tour/CTournamentStep.cpp; types guessed)
+        // Whether an unlock is waiting to be shown before step nStep; makes
+        // the unlock screen go on to main step nStep.
+        int IsDisp(int nStep);
+        void SetNextStep(long nStep);
     }
 }
 

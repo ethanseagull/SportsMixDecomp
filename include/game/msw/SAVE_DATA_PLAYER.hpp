@@ -65,6 +65,19 @@ namespace msw {
         // (added for MenuF game/menu/unit_6EE84.cpp; argument names
         // guessed) Records difficulty nLevel for game kind nGameKind.
         void SetDifficult(long nGameKind, unsigned char nLevel);
+        // (added for TourF game/tour/CTournamentStep.cpp; return types
+        // guessed) Counts a cleared cup of sport nGameMode; checks the
+        // unlocks of nGameMode.
+        void SetTournamentClearCount(long nGameMode, long nCup);
+        void CheckUnLockXml(long nGameMode);
+        // (added for MenuF game/menu/CSelectMenu.cpp; names guessed) The
+        // record of character nChr in game kind nGameKind; the select menu
+        // clears m_nNew of every character a game starts with.
+        struct CharInfo {
+            unsigned char m_Unk00[2]; // 0x0
+            short m_nNew;             // 0x2
+        };
+        CharInfo *GetCharInfo(long nGameKind, short nChr);
 
         // Size 0x38. (added for MenuF game/menu/CMiiSel.cpp; names
         // guessed) One Mii of the player's list, or one of the guest Miis.
@@ -204,7 +217,11 @@ namespace msw {
         // volleyball, dodgeball, hockey); while it is 0 the tournament sets
         // rule option 0x200.
         signed char nBasketOpt;
-        unsigned char m_Unk5C96[0x5CB5 - 0x5C96];
+        unsigned char m_Unk5C96;
+        // 0x5C97: set once the first-tournament demo has been shown
+        // (TourF msw::CTournamentStep::CtorStateInitialize). (name guessed)
+        signed char bFirstDemo;
+        unsigned char m_Unk5C98[0x5CB5 - 0x5C98];
         signed char nVolleyOpt;
         unsigned char m_Unk5CB6[0x5CD5 - 0x5CB6];
         signed char nDodgeOpt;

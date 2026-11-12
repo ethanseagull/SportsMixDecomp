@@ -20,6 +20,7 @@ TourF GetResult__Q23msw14CRouteDataMoveFRQ33msw10CRouteBase7_RESULTfi unverified
 TourF GetResult__Q23msw17CRoutePhysOffsetYFRQ33msw10CRouteBase7_RESULTfi unverified 93.6 paired-single arc position: the original interleaves the two scalings, ours uses separate helper calls (frame and temporaries differ)
 TourF GetSelectDir2d__Q23msw10CRouteBaseFPQ23msw11CEventModell unverified 90.9 stack slot of the projected positions and one extra store in ours
 TourF GetSelectDir__Q23msw16CRouteJumpPointsFfi near 99.5 instruction order only
+TourF GetUsedChar__Q23msw14TournamentWorkFli near 99.7 register allocation only (autopilot regs: no gain in 6 tries)
 TourF InitMoveRouteRot__Q23msw14CTournamentManFl near 99.0 the unit's -1.0f literal sits after 1e-5 in .rodata (cause not found), so some float loads use offsets 4-8 bytes away; same values. Otherwise register and order only
 TourF InitMoveRoute__Q23msw14CTournamentManFl near 98.2 the unit's -1.0f literal sits after 1e-5 in .rodata (cause not found), so some float loads use offsets 4-8 bytes away; same values. Otherwise register and order only
 TourF Initialize__Q23msw27CTournamentRouteMan_Stage32Fv near 99.7 the two argument registers of the first _GetResAnm call are set up in the other order; regs search no gain
@@ -108,4 +109,7 @@ TourF _ShipAnimNodeAp__Q23msw27CTournamentRouteMan_Stage33FUllfUlli near 98.7 re
 TourF _ShipAnimNodeCamera__Q23msw27CTournamentRouteMan_Stage33FUllf near 97.3 register choice and the order of the int-to-float stack temporaries in the inlined point-view offset; regs search no gain
 TourF _ShipAnimNode__Q23msw27CTournamentRouteMan_Stage33FUllfUlli near 98.6 register choice and the order of the int-to-float stack temporaries in the inlined point-view offset; regs search no gain
 TourF _StageAttachChr__Q23msw19CTournamentRouteManFlUlli near 98.9 equivalent branch form of the two model null checks
+TourF _Start3DFadeCross__Q23msw15CTournamentStepFf near 99.9 instruction order only
+TourF _StartFadeCross__Q23msw15CTournamentStepFf near 99.9 instruction order only
+TourF __ct__Q23msw15CTournamentExitFPQ23msw15CTournamentStepl near 93.0 store order of the member initialisers only (autopilot regs: no gain)
 TourF __sinit_\CTournamentRouteMan_Stage31_cpp near 98.5 instruction order only: the two dead stack temporaries of the FVEC3(0,0,0) constructor arguments are stored before the copies into s_KinokoParam instead of interleaved with them; same stores, same values

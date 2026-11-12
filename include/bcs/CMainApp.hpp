@@ -49,6 +49,14 @@ namespace bcs {
             static int IsPause(unsigned long nMask);
             static void SetPause(unsigned long nMask, int bPause);
             static int IsPlay3DFade();
+            // (added for TourF game/tour/CTournamentStep.cpp; return types
+            // guessed) The cross fades.
+            static int IsPlayCrossFade();
+            static int IsPlay3DCrossFade();
+            static void StartCrossFade(float fSpeed, long nType, int b);
+            static void StopCrossFade();
+            static void Start3DCrossFade(float fSpeed, long nType, int b);
+            static void Stop3DCrossFade();
     };
 }
 

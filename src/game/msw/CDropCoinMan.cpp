@@ -125,7 +125,7 @@ namespace msw {
         nw4r::ut::List_Init(&m_CoinList, 0x34);
     }
 
-    void CDropCoinMan::SetUp()
+    void CDropCoinMan::SendMessage(long, long, long, long)
     {
     }
 

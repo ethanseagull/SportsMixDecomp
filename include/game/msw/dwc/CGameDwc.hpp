@@ -135,10 +135,10 @@ namespace msw {
                 // of CSelectMenu::m_bStarMii when the game starts.
                 long m_nRole;
 
-            private:
-                unsigned char m_UnkDC8[0xDCC - 0xDC8];
+                // 0xDC8. (added for MenuF game/menu/CSelectMenu.cpp; meaning
+                // not known) Set with m_UnkDCC when a Wi-Fi game starts.
+                long m_UnkDC8;
 
-            public:
                 // 0xDCC: cleared by msw::CCockpitBasket::GameResult_In
                 // before it sends empty data to the opponent (meaning not
                 // known).

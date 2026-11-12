@@ -279,8 +279,8 @@ namespace msw {
             // file with the model.
             nw4r::g3d::ResFile GetMdlFile() const { return m_mdlFile; }
 
-            // (names guessed) Read directly by the modules.
-            const bcs::FVEC3 &GetPos() const { return m_vPos; }
+            // (names guessed) Read directly by the modules. GetPos is
+            // IEvNodeBindable's (TourF has a weak GetPos__Q23msw15IEvNodeBindableCFv).
             const bcs::FVEC3 &GetRot() const { return m_vRot; }
             // (name guessed) Read by msw::CSceneCalc::_CalcFloor.
             const bcs::FVEC3 &GetPosOffset() const { return m_vPosOffset; }

@@ -36,6 +36,15 @@ namespace bcs {
         // msw::SelectMenu::CCourtBallMdlObj::SetGoldColor (MenuF) builds its
         // colours with one store each.
         explicit BCS_Color(unsigned long rgba) : nw4r::ut::Color(rgba) {}
+
+        // (added for main game/msw/CBallMan.cpp, whose destructor clears its
+        // colour with one word store) A packed RGBA value, stored as a word;
+        // assigning a BCS_Color still copies bytes.
+        BCS_Color &operator=(unsigned long rgba)
+        {
+            nw4r::ut::Color::operator=(rgba);
+            return *this;
+        }
     };
 
     // (DOL; meaning read from the name) c0 blended towards c1 by rate.

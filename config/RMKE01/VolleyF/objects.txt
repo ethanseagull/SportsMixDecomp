@@ -90,3 +90,4 @@ Equivalent game/volley/CcDaisyFlowerGarden.cpp
 Equivalent game/volley/CCockpitVolleyBoss.cpp
 Equivalent game/volley/CGameVolleyVsBoss.cpp
 Equivalent game/volley/CChrCoreVolleyWaluigi.cpp
+Equivalent game/volley/CChrCoreVolleyWario.cpp

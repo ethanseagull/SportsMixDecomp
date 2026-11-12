@@ -36,6 +36,9 @@ namespace msw {
             // (added for game/basket/CChrManBasket.cpp; return type guessed)
             // Plays exceptional slow camera nType.
             void PlayExceptionalCameraSlow_(long nType);
+            // (added for game/basket/unit_23654.cpp; meaning guessed from the
+            // name) Turns the check of the special move's endure on or off.
+            void SetCheckSpEndure_(int bCheck);
 
             // (added for game/basket/CGameBasketHungryBossPackun.cpp) The
             // overrides of CGame's virtual functions, from the slots of

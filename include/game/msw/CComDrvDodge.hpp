@@ -130,12 +130,64 @@ namespace msw {
             int Stage17_GetEscPosFromTrolley(bcs::FVEC3 &rPos, long nTrolley) const;
             int Stage17_GetViewPointPosFromTrolley(bcs::FVEC3 &rPos) const;
 
+            // (added for game/dodge/unit_A40EC.cpp) The frame, message and
+            // alarm handlers this driver overrides.
+            virtual long OnMain(_CHR_MSG *pMsg);
+            virtual long OnInit(_CHR_MSG *pMsg);
+            virtual long OnGameMsgProc(MSG_ID id, _CHR_MSG *pMsg);
+            virtual void OnAlarm0(long nAlarm);
+            virtual void OnAlarm1(long nAlarm);
+            virtual void OnAlarm2(long nAlarm);
+
+            // (game/dodge/unit_A40EC.cpp; defined in the other files of the
+            // class, return types and meanings guessed from the names and
+            // how the handlers use them)
+            void UpdateAssignOuterChr();
+            void SetAssignOuterChr();
+            void UpdateHomePos();
+            void GetHomePos(bcs::FVEC3 &rPos) const;
+            void SetGetBallWait(float fFrame);
+            void FeintInit();
+            void ActCallOutFieldCatchWait();
+            void ActCallOutFieldRunCatchPos();
+            void ActCallPassCatch();
+            // The feint the character falls for (negative for none), and
+            // the reaction to it.
+            long LotFeintDamage(long nChr);
+            void ActCallFeintReaction(long nFeint);
+            long GetStanceResult();
+            long GetCatchResult(long, long);
+            long GetLockPosValue(float);
+            void LotPassStealRate();
+            void LotDodgeRollRate(long);
+            void LotShootDefStance();
+            void LotDivingCatchRate();
+            void LotRateSpBefore();
+            void WraperActCallDefSpStart();
+            // The outfield character of the driver's team nearest to pos.
+            long Util_GetNearMyTeamOuterChr(const bcs::FVEC3 &pos);
+            inline int IsChrHoldBall() const;
+
+            // An action: a member called each frame while it runs.
+            typedef void (CComDrvDodgeGame::*ActFunc)();
+            // The actions by number (CComDrv's common ones, then this
+            // driver's own); defined with the class.
+            static ActFunc g_ActFuncMap[];
+
         protected:
-            unsigned char m_Unk170[0x204 - 0x170];
+            unsigned char m_Unk170[0x1F0 - 0x170];
+            // 0x1F0 (meaning not known): passed to GetLockPosValue.
+            float m_fUnk1F0;
+            unsigned char m_Unk1F4[0x204 - 0x1F4];
             // 0x204 (name guessed): set before a shot at the end of the
             // charge run, 1 for the follow-up actions 2 and 6.
             long m_nShootKind;
-            unsigned char m_Unk208[0x22C - 0x208];
+            unsigned char m_Unk208[0x20C - 0x208];
+            long m_nUnk20C;         // 0x20C, cleared when the driver gets the ball
+            unsigned char m_Unk210[0x228 - 0x210];
+            // 0x228 (meaning not known): cleared when the ball is caught;
+            // OnAlarm2 sets it to 1 by lot unless it is negative.
+            long m_nUnk228;
             // 0x22C to 0x22F (names guessed): what the driver escapes:
             // bomb items, other items, obstacles; the last one is passed
             // negated to the obstacle helpers.
@@ -143,11 +195,27 @@ namespace msw {
             char m_bEscItem;        // 0x22D
             char m_bEscObstacle;    // 0x22E
             char m_bUnk22F;         // 0x22F
-            unsigned char m_Unk230[0x250 - 0x230];
+            char m_bUnk230;         // 0x230, also drawn by OnAlarm2
+            unsigned char m_Unk231[0x234 - 0x231];
+            // 0x234 (name guessed): how far the thrower was from the
+            // character when a shot came.
+            float m_fShooterDis;
+            // 0x238 (meaning not known): passed to Util_GetNearMyTeamOuterChr
+            // and set by ActCallOutFieldRunCatchPos.
+            bcs::FVEC3 m_Unk238;
+            unsigned char m_Unk244[0x250 - 0x244];
             // 0x250 (name guessed): not zero when the driver escapes
             // gimmicks at all.
             long m_nEscGimmick;
-            unsigned char m_Unk254[0x264 - 0x254];
+            long m_nUnk254;         // 0x254, set when a special shot starts
+            // 0x258 (meaning not known): when set, the special shot's
+            // target is answered by lot (OnGameMsgProc 0x21).
+            char m_bUnk258;
+            unsigned char m_Unk259[0x25C - 0x259];
+            // 0x25C, 0x260 (set by ActCallCombination; meaning not known):
+            // a flag and a timer that counts up from below zero.
+            long m_nUnk25C;
+            float m_fUnk260;
     };
 
     // INCOMPLETE: the computer driver of the party game "dodge or die"

@@ -898,7 +898,9 @@ namespace msw {
             virtual void ArtsOptStopEffectAll();                       // 0xC00
             virtual void ArtsOptEraseEffectAll();                      // 0xC04
             virtual void ArtsOptCreate(long, long, long, long);        // 0xC08
-            virtual void Util_DropCoin(float, long, long);             // 0xC0C
+            // (returns not zero when coins were dropped: VolleyF's
+            // CChrCoreVolley::MethdDamage tests it)
+            virtual int Util_DropCoin(float, long, long);              // 0xC0C
             virtual void CheckCountWork__();                           // 0xC10
             virtual int CheckWater_(int);                              // 0xC14
             virtual void CalcMoveSpeedRate_(float, long);              // 0xC18
@@ -1244,7 +1246,9 @@ namespace msw {
             // go; the position as a pointer; a sound that follows pPos.
             unsigned long Eff_CreateSimple(long nSlot, long nEff, const bcs::FVEC3 &pos, float fRotY, unsigned long,
                                            unsigned long, unsigned long);
-            void Util_SetJumpParam(float fFrame, float fFrom, float);
+            // (return type from VolleyF game/volley/unit_63388.cpp's
+            // MethdJump, which tests it for a positive value)
+            float Util_SetJumpParam(float fFrame, float fFrom, float);
             void DetachBall();
             const bcs::FVEC3 *GetPosPtr();
             void SE_PlayMove(long nSlot, long nSe, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);

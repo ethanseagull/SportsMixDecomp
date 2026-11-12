@@ -124,6 +124,10 @@ namespace bcs {
             // colour is copied and stored before the next is read.
             void SetSilhouetteColor(BCS_Color silhouette) { m_SilhouetteColor = silhouette; }
             void SetBaseColor(BCS_Color base) { m_BaseColor = base; }
+            // (names guessed) msw::CChrOptTask copies both from the model it
+            // follows (DOL game/msw/CChrOptMdlObj.cpp).
+            const BCS_Color &GetSilhouetteColor() const { return m_SilhouetteColor; }
+            const BCS_Color &GetBaseColor() const { return m_BaseColor; }
 
             // -1 if the model has no node of that name.
             long GetNodeID(const char *pName) const;

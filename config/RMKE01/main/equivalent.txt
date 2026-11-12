@@ -1,7 +1,9 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
 main AddChrGroups__Q23msw8CGameSndFRQ23bcs13CSndGroupListRCQ33msw8CGameSnd9GAME_INFOs near 99.3 99.3%: register numbering of the list pointer and group value in the inlined Add; same code otherwise
+main AnimPlay__Q23msw11CChrOptTaskFliff near 98.9 register choice only: the abs() of a negative motion id uses r6/r0 in the original, r0/r4 in ours
 main AnimPlay__Q23msw11CEventModelFPCQ33msw11CEventModel13MOT_NAME_DATAlfl near 97.1 register choice: the original reuses r4 for the sequence flag after storing pData
 main AnimPlay__Q23msw11CEventModelFPCQ33msw11CEventModel8MOT_DATAlfl near 98.0 register choice: the original reuses r4 for the sequence flag after storing pData; same loads, stores and calls
+main AnimPlay__Q23msw13CChrOptMdlObjFliff near 98.6 register choice only: the abs() of a negative motion id uses r6/r0 in the original, r0/r4 in ours
 main AnimPlay__Q23msw13CEvDemoMdlChrFlUlffi near 99.2 register choice in the inlined abs() of the motion-table index only (as CEventChrCore::AnimPlay)
 main AnimPlay__Q23msw13CEventChrCoreFlUlffi near 99.2 register choice in the inlined abs() of the motion-table index only
 main ApplyLocate__Q23msw26CStgGmk_WaterPillarClusterFv near 99.5 operand order of one commutative fmadds (ratio * pi) only
@@ -154,6 +156,7 @@ main UpdateColl__Q23msw16CStgGmk_Case_ActFv near 92.7 original also stores two u
 main UpdateColl__Q23msw17CStgGmk_Pylon_ActFv near 99.3 fmadds operand order and store order for the second unit's position
 main UpdateColl__Q23msw19CStgGmk_Pinball_ActFv near 99.4 stack slot order of atkPos and three FVEC3 temporaries
 main UpdateColl__Q23msw19CStgGmk_Trolley_ActFv near 97.1 stack slots of the SetPos temporaries and the capsule ends only (both builds drop the store of the second capsule end's x/z)
+main UpdateFade__Q23msw11CChrOptTaskFf near 99.5 register choice only: the hide bit and the model pointer are swapped between r3 and r4 in the hide-flag updates
 main UpdateFrame__Q23msw10CEventMoveFf near 99.1 paired-single register choice and the stack slots of the two difference temporaries only
 main UpdateGmkPos__Q23msw13CPinballMechaFv near 99.6 register allocation/order only (diff.py: registers/schedule)
 main UpdateMdlMtx__Q23msw19CStgGmk_Trolley_ActFv near 97.9 the first inlined CStgSrt matrix rebuild tests its flag bits through computed bools (neg/or/srwi, extrwi.) where ours tests them directly; stack slots

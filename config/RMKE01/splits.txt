@@ -168,7 +168,9 @@ game/msw/CC_DATA.cpp:
 	.text       start:0x800D2C4C end:0x800D2F58
 
 game/msw/CChrOptMdlObj.cpp:
-	.text       start:0x800D339C end:0x800D3A3C
+	.text       start:0x800D339C end:0x800D5070
+	.data       start:0x8046C258 end:0x8046C378
+	.sdata2     start:0x805C2600 end:0x805C2610
 
 game/msw/CChrCore.cpp:
 	.text       start:0x800D5140 end:0x800E96FC

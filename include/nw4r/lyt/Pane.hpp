@@ -10,6 +10,7 @@ namespace nw4r {
     namespace lyt {
 
         class Material;
+        class DrawInfo;
         class AnimResource;
         class AnimationLink;
 
@@ -81,6 +82,10 @@ namespace nw4r {
                 virtual Material *GetMaterial() const;
                 // 0x6C (added for MenuF game/menu/CBgDisplay.cpp).
                 virtual Material *GetMaterial(unsigned long idx) const;
+                // 0x70, the last slot: every pane vtable in the DOL ends with
+                // LoadMtx (added for DOL game/bcs/G2D/CLineStripDL.cpp, which
+                // emits a vtable of a pane class; the vtable is 0x74 bytes).
+                virtual void LoadMtx(const DrawInfo &rInfo);
 
                 void SetSize(const Size &rSize) { mSize = rSize; }
                 // Added for HockeyF game/hockey/CCockpitHockeyCoin.cpp and MenuF
@@ -92,6 +97,8 @@ namespace nw4r {
                 void SetTranslate(const math::VEC3 &rTranslate) { mTranslate = rTranslate; }
                 // Added for MenuF game/menu/CChrCaption.cpp.
                 void SetAlpha(unsigned char nAlpha) { mAlpha = nAlpha; }
+                // Added for DOL game/bcs/G2D/CLineStripDL.cpp.
+                unsigned char GetGlobalAlpha() const { return mGlbAlpha; }
                 // Bit 0 of the flags. Clear, then set, as two statements:
                 // the game masks the flags before inserting the bit
                 // (HockeyF CCockpitHockeySmashVS::SetupGame).
@@ -142,7 +149,7 @@ namespace nw4r {
                 math::MTX34 mGlbMtx;         // 0x84
                 unsigned char m_UnkB4[0x4];
                 unsigned char mAlpha;        // 0xB8
-                unsigned char m_UnkB9;
+                unsigned char mGlbAlpha;     // 0xB9 (ogws name; the alpha times the parents')
                 unsigned char mBasePosition; // 0xBA (added for MenuF game/menu/CBgDisplay.cpp)
                 unsigned char mFlag;         // 0xBB, bit 0: visible
                 char mName[17];              // 0xBC

@@ -98,6 +98,11 @@ namespace msw {
             // Not zero when pChr (holding the ball) is in reach of a cut
             // (steal) by this character. (meaning guessed from the name)
             int CutHitCheck(const CChrCore *pChr) const;
+            // (added for game/basket/CComDrvBasketGame.cpp; meanings guessed
+            // from the names) Not zero when a dunk from here may miss; how
+            // far the dash has gone (0 to 1).
+            int CanbeDunkMissDist() const;
+            float GetDashActRate() const;
             // (added for game/basket/unit_AF3BC.cpp; return types guessed)
             // Whether the character's just shot curves, and by how much.
             int IsJustShootTypeCurve() const;

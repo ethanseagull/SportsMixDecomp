@@ -161,6 +161,10 @@ namespace bcs {
             // (names guessed) The modules read these slots directly.
             // (name guessed) Inline in bcs::CAnmTexSrt::Create.
             nw4r::g3d::ResMdl GetResMdl() const { return m_ResMdl; }
+            // (names guessed; added for DOL game/bcs/CMdlRef.cpp) The node
+            // matrices and their attribute words.
+            nw4r::math::MTX34 *GetNodeMtxArray() const { return m_pNodeMtx; }
+            unsigned long *GetNodeMtxAttribArray() const { return m_pNodeMtxAttrib; }
             CAnmObj *GetAnmObjChr() const { return m_pAnmObjChr; }
             CAnmObj *GetAnmObjMatClr() const { return m_pAnmObjMatClr; }
             CAnmObj *GetAnmObjTexSrt() const { return m_pAnmObjTexSrt; }
@@ -179,15 +183,40 @@ namespace bcs {
                     nw4r::g3d::ResTexObj GetResTexObj(int nIndex);
                     // (DOL; added for VolleyF game/volley/CBallTargetMarker.cpp)
                     nw4r::g3d::ResMatTevColor GetResMatTevColor(int nIndex);
+                    // (added for DOL game/bcs/CMdlRef.cpp; name guessed) The
+                    // material's GenMode block. Probably the DOL's fn_8005B428
+                    // inlined with its mark-dirty flag false (that one sets
+                    // bit 0x10 of the material's word when the flag is set).
+                    nw4r::g3d::ResGenMode GetResGenMode()
+                    {
+                        if (m_pData != 0 && m_pGenMode != 0) {
+                            return nw4r::g3d::ResGenMode(m_pGenMode);
+                        }
+                        return nw4r::g3d::ResGenMode(0);
+                    }
 
                 private:
                     void *m_pData;                 // 0x00
-                    unsigned char m_Unk04[0x30];   // 0x04
+                    unsigned char m_Unk04[0x14];   // 0x04
+                    void *m_pGenMode;              // 0x18
+                    unsigned char m_Unk1C[0x18];   // 0x1C
             };
 
         private:
             nw4r::g3d::ResMdl m_ResMdl;   // 0x118 (name guessed)
-            unsigned char m_Unk11C[0x30]; // 0x11C
+
+        protected:
+            // (names guessed; added for DOL game/bcs/CMdlRef.cpp, whose
+            // CopyNodeMtx copies them from the linked model) One matrix and
+            // one attribute word per node, and the envelope byte code passed
+            // to nw4r::g3d::CalcSkinning (null without one).
+            nw4r::math::MTX34 *m_pNodeMtx;      // 0x11C
+            unsigned long *m_pNodeMtxAttrib;    // 0x120
+            unsigned char m_Unk124[0x1C];       // 0x124
+            const unsigned char *m_pEnvByteCode; // 0x140
+            unsigned char m_Unk144[0x8];        // 0x144
+
+        private:
             CAnmObj *m_pAnmObjChr;        // 0x14C (names of the five guessed)
             CAnmObj *m_pAnmObjMatClr;     // 0x150
             CAnmObj *m_pAnmObj3;          // 0x154

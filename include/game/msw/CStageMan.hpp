@@ -80,7 +80,10 @@ namespace msw {
     class CStageMan : public bcs::CUnivTask, public CStgSeSlot {
         public:
             enum FLOW_TYPE {
-                FLOW_TYPE_0
+                FLOW_TYPE_0,
+                // Added for DOL game/msw/CC_CMN/CMdlEffect.cpp, which asks
+                // for the floor flow with 2 (meaning not known).
+                FLOW_TYPE_2 = 2
             };
 
             enum GOAL_SE_TYPE {

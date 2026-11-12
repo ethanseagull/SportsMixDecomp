@@ -121,6 +121,9 @@ namespace msw {
             // null; whether a character is on the camera's team, and whether
             // a pad (not the computer) drives it.
             CChrCore *GetAirTrickCoreAll() const;
+            // DOL (added for BasketF CCameraBasketGame; meaning guessed from
+            // the name): the character that did the last air trick, or null.
+            CChrCore *GetLastAirTrickCoreAll() const;
             // (name guessed) The camera mode set by SetCamMode (m_Unk228) as
             // a signed number: DodgeF's CCameraDodgeGame compares it with
             // cmpwi where the member gives cmplwi.

@@ -58,6 +58,8 @@ HockeyF MovePos___Q33msw11CC09_HOCKEY22CcKinopioBoundMushroomFf near 99.6 regist
 HockeyF OnBodyDamage__26CStgGmk_IceCube_Act_HockeyFPQ23msw13CCollBodyUnitPCQ23msw12CCollAtkUnitRCQ23bcs5FVEC3 near 99.7 float register numbering of the two fabs operands only
 HockeyF OnBodyDamage__Q23msw26CStgGmk_Pinball_Act_HockeyFPQ23msw13CCollBodyUnitPCQ23msw12CCollAtkUnitRCQ23bcs5FVEC3 near 96.4 register numbering and load order of the copied positions; the reflect test is ble+b in the original and bgt in ours (same condition, same targets)
 HockeyF OnDamage__Q23msw26CStgGmk_Pinball_Act_HockeyFPQ23msw13CCollBodyUnitPQ23msw5CBall near 98.1 register numbering; reflect test ble+b vs bgt (same condition); CStgSrt::SetVel's direction-flag test is extrwi. in the original and rlwinm. in ours (same bit 1), as in DodgeF's sibling
+HockeyF OnGameMsgProc__Q23msw17CComDrvHockeyGameFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG near 100.0 jump-table symbol name only, plus f0/f1 register swap in one subtraction (same operands)
+HockeyF OnMain__Q23msw17CComDrvHockeyGameFPQ33msw7CChrDrv8_CHR_MSG near 100.0 operand order of one commutative mullw only
 HockeyF OnMsgMain__Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG near 99.9 register choice for the character pointer
 HockeyF OnMsg__Q23msw16CChrDrvPadHockeyFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG near 99.0 register choice and load order in rumble cases 0x53/0x54
 HockeyF OnReflectHit__26CStgGmk_IceCube_Act_HockeyFPCQ23msw12CCollDefUnitPCQ23msw5CBallRQ23bcs5FVEC3RQ23bcs5FVEC3 unverified 77.5 same value: original masks low byte and top 16 bits separately (clrlwi/clrrwi/ori/or), ours merges them into rlwinm/rlwimi; 9 plain forms over two models gave no gain

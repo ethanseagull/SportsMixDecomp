@@ -237,16 +237,17 @@ game/dodge/CChrCoreDodgeWaluigi.cpp:
 	.bss        start:0x00000A28 end:0x00000A60
 
 game/dodge/CcWarioSmokeBomb.cpp:
-	.text       start:0x0006D8F0 end:0x0006F914
+	.text       start:0x0006D8F0 end:0x0006F7E4
 	.ctors      start:0x00000074 end:0x00000078
 	.rodata     start:0x00001250 end:0x00001300
-	.data       start:0x000176E0 end:0x00019AF0
+	.data       start:0x000176E0 end:0x00018950
 	.bss        start:0x00000A60 end:0x00000A68
 
-game/dodge/unit_6F914.cpp:
-	.text       start:0x0006F914 end:0x0006F960
+game/dodge/CChrCoreDodgeYoshi.cpp:
+	.text       start:0x0006F7E4 end:0x0006F960
 	.ctors      start:0x00000078 end:0x0000007C
 	.rodata     start:0x00001300 end:0x00001308
+	.data       start:0x00018950 end:0x00019AF0
 	.bss        start:0x00000A68 end:0x00000A70
 
 game/dodge/CChrDrvPadDodge.cpp:

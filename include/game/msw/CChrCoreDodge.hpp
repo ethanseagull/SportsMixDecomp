@@ -774,13 +774,29 @@ namespace msw {
         public:
             CChrCoreDodgeYoshi();
             virtual ~CChrCoreDodgeYoshi();
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
+            virtual void SubStateArtsShotReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD9C
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
+            virtual void SubStateArtsShotShootBall_(STATE_WORK_AIR_TRICK_CMN *); // 0xDB0
     };
 
     // Size 0x930.
+    // Wario: his special shot throws a smoke bomb (CC05_DODGE::CcWarioSmokeBomb).
     class CChrCoreDodgeWario : public CChrCoreDodge {
         public:
             CChrCoreDodgeWario();
             virtual ~CChrCoreDodgeWario();
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual void OnDivingCatchStart_(STATE_WORK_DIVING_CATCH *); // 0xD58
+            virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD64
+            virtual void SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD68
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD80
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD94
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xD98
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
     };
 
     // Size 0x940.

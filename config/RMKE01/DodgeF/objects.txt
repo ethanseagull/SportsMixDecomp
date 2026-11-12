@@ -46,6 +46,8 @@ Equivalent game/dodge/CChrCoreDodgeKuroma.cpp
 Matching game/dodge/CChrCoreDodgeSaboten.cpp
 Equivalent game/dodge/CChrCoreDodgeSlime.cpp
 Matching game/dodge/CChrCoreDodgeWaluigi.cpp
+Equivalent game/dodge/CcWarioSmokeBomb.cpp
+Matching game/dodge/CChrCoreDodgeYoshi.cpp
 Matching game/dodge/CChrCoreDodgeMii00.cpp
 Matching game/dodge/CChrCoreDodgeMii01.cpp
 Equivalent game/dodge/CEffectCoinGet.cpp

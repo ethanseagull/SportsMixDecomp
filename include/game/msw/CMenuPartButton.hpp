@@ -1,6 +1,8 @@
 #ifndef CMENUPARTBUTTON_HPP_
 #define CMENUPARTBUTTON_HPP_
 
+#include <functional>
+
 #include "game/msw/CMenuPartBase.hpp"
 
 namespace msw {
@@ -28,10 +30,17 @@ namespace msw {
             void SetCallBackAnimMultiOut(CSelectMenuLayoutBase *pLayout);
 
         private:
-            // 0x48: six 0xC-byte callback objects, one per SetCallBack
-            // function above (std::tr1::function in the game; the
-            // constructor clears the first word of each).
-            unsigned long m_CallBack[6][3];
+            // 0x48: what the Set* functions above report to, each bound by
+            // the matching SetCallBackAnim* to the owner screen's
+            // CallbackButtonAnim* virtual. Called with
+            // m_nNextBtnKindId[0] (the Multi ones with their argument
+            // first). 0xC bytes each.
+            std::tr1::function<void (long)> m_CallBackAnimIn;            // 0x48
+            std::tr1::function<void (long)> m_CallBackAnimOut;           // 0x54
+            std::tr1::function<void (long)> m_CallBackAnimPush;          // 0x60
+            std::tr1::function<void (long)> m_CallBackAnimCancel;        // 0x6C
+            std::tr1::function<void (long, long)> m_CallBackAnimMultiIn;  // 0x78
+            std::tr1::function<void (long, long)> m_CallBackAnimMultiOut; // 0x84
     };
 }
 

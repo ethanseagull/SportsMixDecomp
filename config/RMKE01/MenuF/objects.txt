@@ -5,7 +5,6 @@
 Matching game/menu/module.cpp
 Matching game/menu/CFade.cpp
 Matching game/menu/CMenuMdlTableSet.cpp pch=MenuF_g3d
-Matching game/menu/CInfoTabChange.cpp
 Matching game/menu/CEffectCtrlMenu.cpp
 Matching game/menu/CDepthOfFieldValue.cpp
 Matching game/menu/CButton0.cpp
@@ -24,7 +23,7 @@ Matching game/menu/CHowTo.cpp
 Equivalent game/menu/CButtonA.cpp
 Equivalent game/menu/CButtonACode.cpp
 Equivalent game/menu/CCharaMdl.cpp
-Equivalent game/menu/CCharaName.cpp
+Matching game/menu/CCharaName.cpp
 Equivalent game/menu/CScoreBook.cpp
 Matching game/menu/CScoreTop.cpp
 Equivalent game/menu/CGameSelect.cpp

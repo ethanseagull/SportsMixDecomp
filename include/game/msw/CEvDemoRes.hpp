@@ -121,6 +121,9 @@ namespace msw {
             // (parameter name guessed) The centre the mirrored motions turn
             // about.
             void SetRevCenter(const bcs::FVEC3 &vCenter);
+            // (added for TourF CTournamentStep::CtorStateDemoSetup;
+            // parameter name guessed) Moves the whole demo.
+            void SetOffset(const bcs::FVEC3 &vOffset);
 
             // (name guessed) The stage manager of the models (written by
             // msw::CTournamentMan in TourF).

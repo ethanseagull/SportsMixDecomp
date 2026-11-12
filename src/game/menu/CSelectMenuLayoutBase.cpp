@@ -6,6 +6,8 @@
 #include "bcs/New.hpp"
 #include "game/msw/CLytCtrl.hpp"
 #include "game/msw/CMenuPaneAccessor.hpp"
+#include "game/msw/CInfoTabChange.hpp"
+#include "game/msw/CMenuPartButton.hpp"
 #include "game/msw/CMenuPartList.hpp"
 #include "game/msw/CSelectMenu.hpp"
 #include "game/msw/menu/CSndEff.hpp"
@@ -25,7 +27,9 @@ namespace {
         }
 
         bcs::G2D::CLytManager *pManager = bcs::G2D::CLytManager::GetInstance();
-        bcs::G2D::CPaneCtrl *pPaneCtrl = new (0) bcs::G2D::CPaneCtrl;
+        // (0L: a plain 0 is ambiguous here with <new>'s placement form,
+        // which <functional> brings in.)
+        bcs::G2D::CPaneCtrl *pPaneCtrl = new (0L) bcs::G2D::CPaneCtrl;
 
         if (pPaneCtrl == 0) {
             return 0;
@@ -205,4 +209,141 @@ int msw::CSelectMenuLayoutBase::IsBackFrameIn(long nPad)
 int msw::CSelectMenuLayoutBase::IsBackFrameOut(long nPad)
 {
     return GetCurrentButtonKindId(nPad) == 1;
+}
+
+// msw::CMenuPartButton is in this file too: its callbacks are bound to
+// CSelectMenuLayoutBase members, and the std::tr1::function instances they
+// create are emitted at the end of this file (MenuF .text 0x1271C..0x14204,
+// merged 2026-11-12).
+
+namespace {
+    // (name guessed; no symbol) Calls fCallBack when it is set. A helper in
+    // the game: the argument is read before the test, as a by-value
+    // parameter is.
+    template <class F, class A1>
+    inline void CallBack(const F &fCallBack, A1 a1)
+    {
+        if (fCallBack) {
+            fCallBack(a1);
+        }
+    }
+
+    template <class F, class A1, class A2>
+    inline void CallBack(const F &fCallBack, A1 a1, A2 a2)
+    {
+        if (fCallBack) {
+            fCallBack(a1, a2);
+        }
+    }
+}
+
+msw::CMenuPartButton::CMenuPartButton(long nId)
+    : CMenuPartBase(nId)
+{
+}
+
+// The game's destructor has no call to ~CMenuPartBase, and this file carries
+// a weak copy of CMenuPartBase::Disp: both are inline in the game's header.
+// CMenuPartBase.hpp declares them so (empty bodies), and the empty base
+// destructor inlines to nothing here.
+msw::CMenuPartButton::~CMenuPartButton()
+{
+}
+
+long msw::CMenuPartButton::SetButtonIn()
+{
+    long nResult = CMenuPartBase::SetButtonIn();
+    CallBack(m_CallBackAnimIn, m_nNextBtnKindId[0]);
+    return nResult;
+}
+
+long msw::CMenuPartButton::SetButtonOut()
+{
+    long nResult = CMenuPartBase::SetButtonOut();
+    CallBack(m_CallBackAnimOut, m_nNextBtnKindId[0]);
+    return nResult;
+}
+
+long msw::CMenuPartButton::SetButtonPush()
+{
+    long nResult = CMenuPartBase::SetButtonPush();
+    CallBack(m_CallBackAnimPush, m_nNextBtnKindId[0]);
+    return nResult;
+}
+
+long msw::CMenuPartButton::SetButtonPushCancel()
+{
+    long nResult = CMenuPartBase::SetButtonPushCancel();
+    CallBack(m_CallBackAnimCancel, m_nNextBtnKindId[0]);
+    return nResult;
+}
+
+long msw::CMenuPartButton::SetButtonMultiIn(long nArg)
+{
+    long nResult = CMenuPartBase::SetButtonMultiIn(nArg);
+    CallBack(m_CallBackAnimMultiIn, nArg, m_nNextBtnKindId[0]);
+    return nResult;
+}
+
+long msw::CMenuPartButton::SetButtonMultiOut(long nArg)
+{
+    long nResult = CMenuPartBase::SetButtonMultiOut(nArg);
+    CallBack(m_CallBackAnimMultiOut, nArg, m_nNextBtnKindId[0]);
+    return nResult;
+}
+
+void msw::CMenuPartButton::SetCallBackAnimIn(CSelectMenuLayoutBase *pLayout)
+{
+    m_CallBackAnimIn = std::tr1::bind(&CSelectMenuLayoutBase::CallbackButtonAnimIn, pLayout,
+                                      std::tr1::placeholders::_1);
+}
+
+void msw::CMenuPartButton::SetCallBackAnimOut(CSelectMenuLayoutBase *pLayout)
+{
+    m_CallBackAnimOut = std::tr1::bind(&CSelectMenuLayoutBase::CallbackButtonAnimOut, pLayout,
+                                       std::tr1::placeholders::_1);
+}
+
+void msw::CMenuPartButton::SetCallBackAnimPush(CSelectMenuLayoutBase *pLayout)
+{
+    m_CallBackAnimPush = std::tr1::bind(&CSelectMenuLayoutBase::CallbackButtonAnimPush, pLayout,
+                                        std::tr1::placeholders::_1);
+}
+
+void msw::CMenuPartButton::SetCallBackAnimCancel(CSelectMenuLayoutBase *pLayout)
+{
+    m_CallBackAnimCancel = std::tr1::bind(&CSelectMenuLayoutBase::CallbackButtonAnimCancel, pLayout,
+                                          std::tr1::placeholders::_1);
+}
+
+void msw::CMenuPartButton::SetCallBackAnimMultiIn(CSelectMenuLayoutBase *pLayout)
+{
+    m_CallBackAnimMultiIn = std::tr1::bind(&CSelectMenuLayoutBase::CallbackButtonAnimMultiIn, pLayout,
+                                           std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+}
+
+void msw::CMenuPartButton::SetCallBackAnimMultiOut(CSelectMenuLayoutBase *pLayout)
+{
+    m_CallBackAnimMultiOut = std::tr1::bind(&CSelectMenuLayoutBase::CallbackButtonAnimMultiOut, pLayout,
+                                            std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+}
+
+long msw::CInfoTabChange::IncTabNo(long nTabNo)
+{
+    nTabNo++;
+    if (nTabNo >= m_nTabNum) {
+        nTabNo = 0;
+    }
+    m_nTabNo = nTabNo;
+    return nTabNo;
+}
+
+long msw::CInfoTabChange::DecTabNo(long nTabNo)
+{
+    nTabNo--;
+    if (nTabNo < 0) {
+        nTabNo = m_nTabNum - 1;
+    }
+    m_nTabNo = nTabNo;
+    return nTabNo;
 }

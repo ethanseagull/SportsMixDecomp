@@ -87,7 +87,8 @@ namespace msw {
             virtual void OnConnect(_CHR_MSG *pMsg);
             virtual void OnDisconnect(_CHR_MSG *pMsg);
             virtual long OnInit(_CHR_MSG *pMsg);
-            virtual void OnDamage(_CHR_MSG *pMsg);
+            // Returns a long (HockeyF's CComDrvHockeyGame::OnDamage returns 0).
+            virtual long OnDamage(_CHR_MSG *pMsg);
             // Returns the answer to the message (BasketF's CComDrvBasketHB
             // returns this function's result for the messages it does not
             // answer itself).
@@ -194,6 +195,9 @@ namespace msw {
             float GetComLvF() const;
             float GetComBaseLvF() const;
             int IsExistPadDrv() const;
+            // (DOL; added for HockeyF game/hockey/unit_AE7E8.cpp) The number
+            // of pad-driven characters (meaning guessed from the name).
+            long GetExistPadDrvNum() const;
             CChrCore *GetLastSpChrCore() const;
             long GetMyStockItemType() const;
             float RandRangeF(float fMin, float fMax) const;

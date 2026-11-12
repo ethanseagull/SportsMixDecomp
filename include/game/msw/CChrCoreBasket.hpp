@@ -282,7 +282,7 @@ namespace msw {
             virtual int Util_GetRunMotID();                            // 0x34C
             virtual int Util_GetLandMotID(long);                       // 0x354
             virtual int Util_GetJumpUpMotID(int);                      // 0x358
-            virtual void Util_GetJumpLandMotID(int);                   // 0x35C
+            virtual int Util_GetJumpLandMotID(int);                    // 0x35C
             virtual int Util_GetDamageMotID(long, long, long);         // 0x360
             virtual void Util_SetOffenseLeaderFirstState(long);        // 0x364
             virtual void Util_SetDefenseLeaderFirstState();            // 0x368
@@ -292,7 +292,7 @@ namespace msw {
             virtual void UpdateFunc_();                                // 0x380
             virtual void ResetCmn_();                                  // 0x388
             virtual float GetPrmMoveSpeed() const;                     // 0x38C
-            virtual long GetPrmBodySize() const;                       // 0x390
+            virtual const PRM_BODY_SIZE *GetPrmBodySize() const;                       // 0x390
             virtual void SendMessage_(long, long, long, long);         // 0x394
             virtual void CtorStateNeutral();                           // 0x3BC
             virtual void LoopStateNeutral();                           // 0x3C0

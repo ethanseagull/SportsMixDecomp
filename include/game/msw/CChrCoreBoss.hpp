@@ -51,7 +51,7 @@ namespace msw {
             // Overrides of CChrCore's virtuals, in vtable order (the slots of
             // __vt__Q23msw12CChrCoreBoss that name CChrCoreBoss; return types
             // as guessed in CChrCore).
-            virtual long GetQueueWorkSize() const;                     // 0x10
+            virtual long GetQueueWorkSize() const { return 0xD8; }     // 0x10 (the size of the largest state work)
             virtual long GetMainOrderValue(long);                      // 0x18
             virtual void *GetHoldBall() const;                        // 0x1C
             virtual void SetConditionEffect_(long, unsigned long);     // 0x28
@@ -71,7 +71,7 @@ namespace msw {
             virtual int Util_GetWalkMotID();                           // 0x350
             virtual int Util_GetLandMotID(long);                       // 0x354
             virtual int Util_GetJumpUpMotID(int);                      // 0x358
-            virtual void Util_GetJumpLandMotID(int);                   // 0x35C
+            virtual int Util_GetJumpLandMotID(int);                    // 0x35C
             virtual int Util_GetDamageMotID(long, long, long);         // 0x360
             virtual void Util_SetOffenseLeaderFirstState(long);        // 0x364
             virtual void Util_SetDefenseLeaderFirstState();            // 0x368
@@ -82,7 +82,7 @@ namespace msw {
             virtual void UpdateFunc_();                                // 0x380
             virtual void Reset_();                                     // 0x384
             virtual float GetPrmMoveSpeed() const;                     // 0x38C
-            virtual long GetPrmBodySize() const;                       // 0x390
+            virtual const PRM_BODY_SIZE *GetPrmBodySize() const;                       // 0x390
             virtual void SendMessage_(long, long, long, long);         // 0x394
             virtual void CtorStateNeutral();                           // 0x3BC
             virtual void LoopStateNeutral();                           // 0x3C0
@@ -206,20 +206,20 @@ namespace msw {
             virtual int CanbeMoveBossTargetMarkerPos();                // 0xCC4
             virtual void GetBossTargetMarkerDefaultPos(long, const bcs::FVEC3 &, bcs::FVEC3 &, int); // 0xCC8
             virtual void SetBossTargetMarkerPosClip(long, bcs::FVEC3 &); // 0xCCC
-            virtual void GetBossBallShotCollPos(long, bcs::FVEC3 &, float &) const; // 0xCD0
-            virtual CBall *GetBossTargetBall() const;                  // 0xCD4
+            virtual int GetBossBallShotCollPos(long, bcs::FVEC3 &, float &) const; // 0xCD0 (0 for an unknown kind)
+            virtual CBall *GetBossTargetBall() const { return GetTargetBall_(); } // 0xCD4
             virtual int IsBossSpikeJumpStart() const;                  // 0xCD8
             virtual int IsBossSuperSpikeJump() const;                  // 0xCDC
             virtual int IsBossSpikeSwingEnd() const;                   // 0xCE0
             virtual int IsBossSpikeFall() const;                       // 0xCE4
-            virtual int IsBossAirTrickSwingEnd() const;                // 0xCE8
-            virtual int IsBossAirTrickFall() const;                    // 0xCEC
+            virtual int IsBossAirTrickSwingEnd() const { return IsAirTrickSwingEnd(); } // 0xCE8
+            virtual int IsBossAirTrickFall() const { return IsAirTrickFall(); } // 0xCEC
             virtual int IsBossBlockJumpStart() const;                  // 0xCF0
             virtual int IsBossBlockFall() const;                       // 0xCF4
             virtual int IsBossBlockSuccess() const;                    // 0xCF8
             virtual int IsBossDispSpikeJumpMarker() const;             // 0xCFC
-            virtual int IsBossArtsKoopaShotFire() const;               // 0xD00
-            virtual int IsBossArtsKoopaFireEnd() const;                // 0xD04
+            virtual int IsBossArtsKoopaShotFire() const { return 0; } // 0xD00
+            virtual int IsBossArtsKoopaFireEnd() const { return 1; } // 0xD04
             virtual int IsBossSuperSpikeCurveType() const;             // 0xD08
             virtual float GetBossSuperSpikeCurveRate() const;          // 0xD0C
             virtual float GetBossSuperSpikeCurveMaxDist() const;       // 0xD10
@@ -423,6 +423,35 @@ namespace msw {
             void SetTargetMarkerDisable_();
             void EnableSlowCheck_(long, const bcs::FVEC3 &, const bcs::FVEC3 &, const bcs::FVEC3 &, float, float, float);
             void DisableSlowCheck_(float fFrame);
+            // Added for game/boss/CChrCoreBoss.cpp (names from the symbols,
+            // meanings guessed). Measures the ball positions of the poses
+            // (once the model exists); the helper poses the model at one
+            // frame of a motion (inline in the original).
+            void GetBallImpactOffsetPos_();
+            void GetMotVNodePos_(long nMot, float fFrame, bcs::FVEC3 &rPos);
+            // The slow motion while a ball comes near (EnableSlowCheck_).
+            void CheckSlow_();
+            // Which part of the court the character is in.
+            void UpdateAreaCode_();
+            // Takes in the ball the catch collision touched.
+            void HookBallCatch_();
+            void HookBallCatchCmn_(CBall *pBall);
+            // Attaches pBall to the hand (sound nSe, flags nSeFlag).
+            void BallCatch_(CBall *pBall, float fFrame, long nSe, unsigned long nSeFlag);
+            // Parts of the per-frame update.
+            void UpdatePos_();
+            void UpdateCollBody_();
+            void UpdateLook_();
+            void UpdateCollAtk_();
+            void CheckQPanel_();
+            // The callbacks of the catch collisions 4 and 6 (pArg is the
+            // character), and what they do for it.
+            static void CallbackBallCatch2(CCollBodyUnit *pBody, CBall *pBall, void *pArg);
+            void CallbackBallCatch2_(CBall *pBall);
+            int CallbackBallCatch2__(CBall *pBall);
+            static void CallbackBallCatch3(CCollBodyUnit *pBody, CBall *pBall, void *pArg);
+            void CallbackBallCatch3_(CBall *pBall);
+            int CallbackBallCatch3__(CBall *pBall);
 
         protected:
             // Not mapped yet. The size, 0x818, is what CChrManBoss::CreateObj_
@@ -430,7 +459,11 @@ namespace msw {
             // 0x574 (name guessed): the character's parameters for the game
             // level (GetCcParam_ returns it).
             const CHR_CORE_BOSS::CC_PARAM_BOSS *m_pCcParam;
-            unsigned char m_Unk578[0x57C - 0x578];
+            // 0x578 (name guessed; game/boss/CChrCoreBoss.cpp): bits 0 and 1
+            // the serve mode (SetServeMode_), bit 2 set when the target marker
+            // is shown, bit 3 when the driver asks for the spike jump marker
+            // (message 0x99, MainFunc_).
+            unsigned long m_nBossFlag;
             // 0x57C, 0x63C (names guessed; game/boss/unit_1EA14.cpp): for
             // each receive pose and each toss pose, the two points (from
             // the character) the ball is taken at, early and late in the
@@ -463,12 +496,42 @@ namespace msw {
             float m_afReceiveDist[8];
             // 0x774 (name guessed): the same for the toss poses.
             float m_afTossRot[8];
-            unsigned char m_Unk794[0x7CC - 0x794];
+            // 0x794, 0x798 (names guessed): the yaw of the jump toss pose
+            // from the ball, both set from motion 0x51 (GetBallImpactOffsetPos_).
+            float m_fJumpTossRot;
+            float m_fJumpTossRot2;
+            // 0x79C-0x7C8 (names guessed): where the ball can be caught
+            // (the SetBallCatch*_ functions). Two points (equal unless a
+            // segment is set), a radius, a height and a second radius
+            // (shape 1), the mode (0 none, 1 at a virtual node, 2 in the
+            // world), the shape (0 sphere, 1 cylinder, 3 segment, 7 none)
+            // and the model node the points are relative to.
+            bcs::FVEC3 m_BallCatchPos0;
+            bcs::FVEC3 m_BallCatchPos1;
+            float m_fBallCatchRange;
+            float m_fBallCatchHeight;
+            float m_fBallCatchRange2;
+            long m_nBallCatchMode;
+            long m_nBallCatchShape;
+            long m_nBallCatchNode;
             // 0x7CC (meaning not known; written by the SetBallCatch*_
             // functions and set to 0.1 when a spike jump starts): a value
             // of the ball catch, likely its time or rate.
             float m_fBallCatchUnk7CC;
-            unsigned char m_Unk7D0[0x808 - 0x7D0];
+            // 0x7D0-0x804 (names guessed; EnableSlowCheck_, CheckSlow_): the
+            // task id of the game speed control that slows the game while
+            // a ball comes near, the kind of check (0 off, 2 only balls of
+            // some kind), the slow speed, its fade in and fade out frames,
+            // the offset of the checked point from the character (turned by
+            // its yaw), and the ranges (in x) used before and while slowed.
+            unsigned long m_hSlowCtrl;
+            long m_nSlowCheck;
+            float m_fSlowSpeed;
+            float m_fSlowInFrame;
+            float m_fSlowOutFrame;
+            bcs::FVEC3 m_SlowOfs;
+            bcs::FVEC3 m_SlowRange;
+            bcs::FVEC3 m_SlowRange2;
             // 0x808 (name guessed): the task id of the shoot stance's stick
             // (CHR_CORE_BOSS::CStickObj), 0 when there is none.
             unsigned long m_hStickObj;

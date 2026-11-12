@@ -30,6 +30,10 @@ Equivalent game/boss/CComDrvBoss.cpp
 Matching game/boss/unit_51CE4.cpp
 Matching game/boss/unit_52300.cpp
 Matching game/boss/unit_52680.cpp
+NonMatching game/boss/CChrCoreBoss.cpp
+Matching game/boss/CChrCoreBossDaisy.cpp
+Matching game/boss/CChrCoreBossDiddy.cpp
+Matching game/boss/CChrCoreBossDonkey.cpp
 Matching game/boss/CChrCoreBossLuigi.cpp
 Equivalent game/boss/CChrCoreBossMethod.cpp
 Matching game/boss/CChrCoreBossMii00.cpp

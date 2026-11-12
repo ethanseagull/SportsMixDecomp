@@ -103,6 +103,11 @@ namespace msw {
             // BasketF to make the goal follow the boss.
             const bcs::FVEC3 &GetPos() const { return m_vPos; }
             const bcs::FVEC3 &GetRot() const { return m_vRot; }
+            // (DOL; added for BossF game/boss/CChrCoreBoss.cpp) The index of
+            // the model node called pName (negative when there is none), and
+            // the world position of node nNode.
+            long GetNodeID(const char *pName) const;
+            void GetNodePos(long nNode, bcs::FVEC3 &rPos) const;
             // (names guessed) Inline in msw::CStgGmk_Trolley_Mdl (DOL),
             // which places its heyho; the yaw is brought into [0, 2 pi).
             void SetPos(const bcs::FVEC3 &rPos) { m_vPos = rPos; }

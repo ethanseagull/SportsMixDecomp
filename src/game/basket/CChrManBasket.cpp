@@ -259,14 +259,7 @@ namespace msw {
 
 CChrManBasket::~CChrManBasket()
 {
-    if (m_ppChrCore != 0) {
-        for (long i = 0; i < m_nChrCoreNum; i++) {
-            if (m_ppChrCore[i] != 0) {
-                delete m_ppChrCore[i];
-            }
-            m_ppChrCore[i] = 0;
-        }
-    }
+    DeleteChrCore_();
 }
 
 CChrMan *CChrManBasket::CreateInstance(bcs::CTask *pParent)

@@ -15,6 +15,7 @@ namespace msw {
 
         protected:
             // Changes the materials of `mdl` for the stage, with `rColor`.
+            // (reads only its arguments)
             void PatchMaterial_(nw4r::g3d::ResMdl mdl, bcs::BCS_Color &rColor);
 
         protected:

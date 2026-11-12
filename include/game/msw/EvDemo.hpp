@@ -31,6 +31,10 @@ namespace msw {
         // (DOL; return type guessed) The player the ready-start demo
         // shows (VolleyF CReadyStartDemoVolley).
         long GetTargetReadyStart();
+        // (names guessed) Store the flag in a byte of this file's small
+        // data; the victory demo reads them.
+        void SetNewRecord(int bNewRecord);
+        void SetPerfect(int bPerfect);
 
         // Looks up the model resource `pName` in archive `nArc` (a
         // msw::CLoadData entry; a null pSub picks a default sub-folder) and

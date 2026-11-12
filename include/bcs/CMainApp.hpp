@@ -35,6 +35,11 @@ namespace bcs {
             // (0 Japanese, 1 English, 2 German, 3 French, 4 Spanish,
             // 5 Italian, read from the marker models CChrMarker picks).
             static unsigned char GetLanguage();
+            // (fn_800521B8, name guessed; added for the strap screen in
+            // game/bcs/CTask.cpp) The name of the console's language as
+            // used in file paths: a four-byte entry of a table indexed by
+            // SCGetLanguage.
+            static const char *GetSystemLanguageName();
             // (added for MenuF game/menu/CTopMenu.cpp; return type
             // guessed) Non-zero when the console's parental controls forbid
             // messaging with others.

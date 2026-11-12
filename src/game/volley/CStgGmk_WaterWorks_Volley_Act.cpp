@@ -228,7 +228,7 @@ namespace msw {
     // wall to the jet's width and height.
     void CStgGmk_WaterWorks_Volley_Act::OnUpdate(float rate)
     {
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
 
         FsmqExec();
         pSrt->Update(rate);

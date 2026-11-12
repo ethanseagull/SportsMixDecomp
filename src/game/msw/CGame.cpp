@@ -42,7 +42,18 @@
 #include "bcs/CPadWI.hpp"
 #include "game/msw/dwc/CGameDwc.hpp"
 #include "game/msw/CShadowTexMan.hpp"
+#include "game/msw/CGameGuideMan.hpp"
+#include "game/msw/CEventDemo.hpp"
+#include "game/msw/menu/CStateSave.hpp"
+#include "bcs/CLoadMan.hpp"
+#include "bcs/CSndTask.hpp"
+#include "game/msw/Unlock.hpp"
+#include "game/msw/CMainStep.hpp"
+#include "game/msw/CCockpitPause.hpp"
+#include "game/msw/CMenuPadInfo.hpp"
+#include "game/msw/CCockpitMenuWinBtn.hpp"
 #include <string.h>
+#include <math.h>
 
 // Functions of the DOL that have no name yet (declared with their symbol
 // names until their classes are known).
@@ -75,6 +86,27 @@ extern "C" {
     void fn_8026BB40(void *p, int bDelete);   // destroys the object at CGame 0x134
     void fn_80250CAC();
     void fn_80236790();
+    void *fn_8026B418(void *p);              // the constructor of the object at CGame 0x134
+    long fn_800C1514(long nAID);              // the first local pad number of console nAID (guess)
+    void fn_80236704();
+    void fn_80074064(long nViewSplit, int);
+    unsigned long fn_80190114();              // a colour of the stage (guess)
+    void fn_800783E8(long nLayer, const unsigned long *pColor, float, float, float); // a screen fade's colour (guess)
+    void fn_80139D28(long nTeam, int, long nItem); // the cockpit's item icon of a team
+    void fn_800ED4A4();
+    int fn_80236880(long, float);             // the end menu (guess)
+    long fn_80237590();                       // the end menu's choice, -1 while open (guess)
+    void fn_8026CE30(void *pMsg);             // the message object at CGame 0x134 (not named yet)
+    void fn_8026C7B0(void *pMsg);
+    int fn_8026CDC8(void *pMsg);
+    int fn_8026CE3C(void *pMsg, int);
+    void fn_8026BBB0(void *pMsg, int);
+    void fn_8026D074(void *pMsg);
+    void fn_801D23B8(long);
+    void fn_80070F88();
+    void fn_80071128();                       // resumes after an outside pause (guess)
+    long fn_800CFEDC();                       // the view split of a local versus game (guess)
+    long fn_800EC394(long nMsg, long, long, long); // CChrMan: the running manager's SendMessage_ (-1 without one)
 }
 
 namespace msw {
@@ -98,20 +130,67 @@ namespace msw {
     // members used so far, names guessed).
     class CGamePauseTask : public bcs::CTask {
         public:
+            CGamePauseTask(bcs::CTask *pParent) : bcs::CTask(pParent, 0x15)
+            {
+                m_bEnable = 1;
+                m_nUnk38 = 0;
+                m_nStep = 0;
+                AddUnk08(-0x68);
+                for (int i = 0; i < 4; i++) {
+                    m_anUnk40[i] = 0;
+                    m_afUnk50[i] = 0.0f;
+                    m_anUnk60[i] = 0;
+                    m_afUnk70[i] = 0.0f;
+                }
+            }
             virtual ~CGamePauseTask();
-            virtual void Main(); // fn_801882F4, not written yet
+            virtual void Main();
             virtual void Disp();
 
+            // (inline, names guessed) Forgets the held buttons; stops the
+            // game for the pause menu; resumes it.
+            void ClearHold()
+            {
+                for (int i = 0; i < 4; i++) {
+                    m_anUnk40[i] = 0;
+                    m_afUnk50[i] = 0.0f;
+                    m_anUnk60[i] = 0;
+                    m_afUnk70[i] = 0.0f;
+                }
+            }
+            void StopGame();
+            void ResumeGame();
+
+            // (fn_801889A8, fn_80188AF0, fn_80188D1C; names guessed) Not
+            // zero when the game may be paused now; the pad that pressed
+            // the + or the - button (with bHold, held for six frames), -1
+            // for none.
+            int CanbePause() const;
+            long GetPlusPad(int bHold);
+            long GetMinusPad(int bHold);
+
             int m_bEnable; // 0x34, pausing is allowed
-            long m_nUnk38; // 0x38
+            // 0x38 (meaning guessed): not zero when the pause comes from the
+            // outside (CGame::SetGamePauseUnk38) rather than a button.
+            long m_nUnk38;
+            long m_nStep;  // 0x3C, the step of Main
+            // 0x40-0x7C: per pad (names guessed)
+            long m_anUnk40[4];
+            float m_afUnk50[4];
+            long m_anUnk60[4];
+            float m_afUnk70[4];
     };
 
     // A task holding a list of its own (0x48 bytes, vtable lbl_804767C8;
     // name guessed): the parent of the tasks that run during an arts event.
     class CGameTaskGroup : public bcs::CTask {
         public:
+            CGameTaskGroup(bcs::CTask *pParent) : bcs::CTask(pParent, 0x37)
+            {
+                nw4r::ut::List_Init(&m_List, 0x38);
+            }
             virtual ~CGameTaskGroup();
-            virtual void Main(); // fn_8018966C, not written yet
+            virtual void Main();
             virtual void Disp() {}
 
             nw4r::ut::List m_List; // 0x34, the CGameSpeedCtrl tasks (linked at their 0x38)
@@ -120,8 +199,16 @@ namespace msw {
     // The hit stop (0x44 bytes, vtable lbl_80476498; names guessed).
     class CGameStopTask : public bcs::CTask {
         public:
+            CGameStopTask(bcs::CTask *pParent) : bcs::CTask(pParent, -1)
+            {
+                m_nState = 0;
+                m_fFrame = 0.0f;
+                m_fStop = 0.0f;
+                m_nType = 0;
+                SetUnk08Low(1);
+            }
             virtual ~CGameStopTask();
-            virtual void Main(); // fn_80188FC0, not written yet
+            virtual void Main();
             virtual void Disp();
 
             long m_nState;  // 0x34, 1 while a stop runs
@@ -130,14 +217,320 @@ namespace msw {
             long m_nType;   // 0x40
     };
 
-    // A team's item roulette (defined before CGame in this file, not written
-    // yet; only what CGame uses, names guessed). Its state machine is the
-    // second base (0x34; the state number at 0x44 is CFsm's).
+    // A team's item roulette (0x98 bytes; names guessed). Its code comes
+    // first in the file (0x8017B920..0x8017C3AC); CGame builds it inline. Its state machine is the second base (0x34;
+    // the state number at 0x44 is CFsm's). States 0 and 2 accept a new
+    // item, 1 waits with one, 3 spins, 4 stops and 5 gives the item at once
+    // (meanings guessed from CGame's calls).
     class CItemRoulette : public bcs::CTask, public bcs::CFsm<CItemRoulette> {
             friend class CGame;
         public:
-            long m_nUnk7C; // 0x7C, the cockpit's item icon id (-1: none)
+            CItemRoulette(bcs::CTask *pParent, long nTeam) : bcs::CTask(pParent, -1)
+            {
+                m_nItem = -1;
+                m_nTeam = nTeam;
+                m_nUnk84 = 0;
+                m_fUnk88 = 0.0f;
+                m_bUseRoulette = 1;
+                m_nSndId = 0;
+                m_fUnk94 = 0.0f;
+                SetUnk08Low(0x21);
+                InitFsm(this, 6);
+                SetState(0, &CItemRoulette::CtorState0, &CItemRoulette::LoopState0, &CItemRoulette::DtorState0);
+                SetState(1, &CItemRoulette::CtorState1, &CItemRoulette::LoopState1, &CItemRoulette::DtorState1);
+                SetState(3, &CItemRoulette::CtorState3, &CItemRoulette::LoopState3, &CItemRoulette::DtorState3);
+                SetState(4, &CItemRoulette::CtorState4, &CItemRoulette::LoopState4, &CItemRoulette::DtorState4);
+                SetState(2, &CItemRoulette::CtorState2, &CItemRoulette::LoopState2, &CItemRoulette::DtorState2);
+                SetState(5, &CItemRoulette::CtorState5, &CItemRoulette::LoopState5, &CItemRoulette::DtorState5);
+                ChangeState(0);
+            }
+            virtual ~CItemRoulette();
+            virtual void Main();
+
+            // (fn_8017C198, name guessed) Hides the item icon (bDisp 0: a
+            // held item is kept, a spinning roulette is stopped) or shows it
+            // again (the icon kind by bAnim).
+            void SetIconDisp(int bDisp, int bAnim);
+
+            // Stops the roulette's sound, if it plays.
+            void StopSnd()
+            {
+                if (m_nSndId) {
+                    bcs::CSndTask *pSnd = static_cast<bcs::CSndTask *>(bcs::CTaskMan::GetTask(m_nSndId));
+                    if (pSnd && !pSnd->IsDelete()) {
+                        pSnd->Stop(0.0f);
+                    }
+                    m_nSndId = 0;
+                }
+            }
+
+            // Not zero while the roulette takes a new item (states 0 and 2).
+            int IsPushable() const
+            {
+                switch (m_nState) {
+                    case 0:
+                    case 2:
+                        return 1;
+                    default:
+                        return 0;
+                }
+            }
+
+            // The states, in the original's order (state numbers 0, 1, 3,
+            // 4, 2, 5); defined with the rest of the class.
+            void CtorState0();
+            void LoopState0();
+            void DtorState0();
+            void CtorState1();
+            void LoopState1();
+            void DtorState1();
+            void CtorState3();
+            void LoopState3();
+            void DtorState3();
+            void CtorState4();
+            void LoopState4();
+            void DtorState4();
+            void CtorState2();
+            void LoopState2();
+            void DtorState2();
+            void CtorState5();
+            void LoopState5();
+            void DtorState5();
+
+            long m_nItem;          // 0x7C, the item (-1: none)
+            long m_nTeam;          // 0x80
+            long m_nUnk84;         // 0x84
+            float m_fUnk88;        // 0x88
+            long m_bUseRoulette;   // 0x8C, 0: the item is given without spinning
+            unsigned long m_nSndId; // 0x90, the roulette sound's task id
+            float m_fUnk94;        // 0x94
     };
+
+    // (fn_80145B50, fn_80145E98: members of dwc::CGameDwc not named yet)
+    // Store the results of the online game before saving.
+    extern "C" void fn_80145B50(dwc::CGameDwc *pDwc);
+    extern "C" void fn_80145E98(dwc::CGameDwc *pDwc);
+
+    // The synchronisation message each console sends in the online
+    // states (names guessed): a state number (1000 ready, 2000 started,
+    // 3000 ended) and the frame counter to start from.
+    struct OnlineSyncMsg {
+        long m_nState;
+        long m_nTick;
+        long m_nUnk08;
+    };
+    // (dwc::CGameDwc and bcs::dwc::CDwc members not named yet) This
+    // console's message, sending it and console nAID's last message; the
+    // consoles in the match, whether console nAID is connected, the
+    // synchronisation steps, and starting the shared frame counter.
+    extern "C" OnlineSyncMsg *fn_80146248();
+    extern "C" void fn_80146250(dwc::CGameDwc *pDwc);
+    extern "C" OnlineSyncMsg *fn_80146260(dwc::CGameDwc *pDwc, long nAID);
+    extern "C" long fn_800B19D8(bcs::dwc::CDwc *pDwc);
+    extern "C" int fn_800B1A30(bcs::dwc::CDwc *pDwc, long nAID);
+    extern "C" void fn_800B1AA8(bcs::dwc::CDwc *pDwc, int);
+    extern "C" int fn_800B1C30(bcs::dwc::CDwc *pDwc, int);
+    extern "C" void fn_800B1D04(bcs::dwc::CDwc *pDwc);
+    extern "C" void fn_800B1FB4(long nTick);
+    extern "C" long fn_8007C9BC();
+
+    // (SAVE_DATA_PLAYER members and two DOL functions not named yet) The
+    // score book's records: a game of kind nKind played, the counters, the
+    // stage, a character's and a Mii's result.
+    extern "C" void fn_801C1F8C(SAVE_DATA_PLAYER *pData, long nKind, long nGameMode);
+    extern "C" void fn_8017A4C4(long nGameMode, long);
+    extern "C" void fn_80145F8C();
+    extern "C" void fn_801C22A8(SAVE_DATA_PLAYER *pData, long nGameMode, long bWin, long, long, long);
+    extern "C" void fn_801C2B7C(SAVE_DATA_PLAYER *pData, long nStage, long nGameMode);
+    extern "C" void fn_801C29E8(SAVE_DATA_PLAYER *pData, long nChrType, long nGameMode, long nResult);
+    extern "C" void fn_801C2E94(SAVE_DATA_PLAYER *pData, RFLStoreData data, long nGameMode, long nResult);
+    extern "C" void fn_8026C9D8(void *pMsg, int);
+
+    CItemRoulette::~CItemRoulette()
+    {
+        StopSnd();
+    }
+
+    void CItemRoulette::Main()
+    {
+        m_fUnk94 = GetFrameRateF();
+        ExecState();
+    }
+
+    // State 0: no item.
+    void CItemRoulette::CtorState0()
+    {
+        StopSnd();
+        m_nItem = -1;
+        fn_80139D28(m_nTeam, 3, -1);
+    }
+
+    void CItemRoulette::LoopState0() {}
+
+    void CItemRoulette::DtorState0() {}
+
+    // State 1: the item is held.
+    void CItemRoulette::CtorState1() {}
+
+    void CItemRoulette::LoopState1() {}
+
+    void CItemRoulette::DtorState1() {}
+
+    // State 3: the roulette spins for 150 frames.
+    void CItemRoulette::CtorState3()
+    {
+        StopSnd();
+        m_nSndId = CGameSnd::Play(0xC3D, 0, 1, -1, 0.0f, 1.0f, 0.0f);
+        m_fUnk88 = 150.0f;
+        fn_80139D28(m_nTeam, 1, m_nItem);
+    }
+
+    void CItemRoulette::LoopState3()
+    {
+        m_fUnk88 -= m_fUnk94;
+        if (m_fUnk88 <= 0.0f) {
+            StopSnd();
+            CGameSnd::Play(0xC3E, 0, 1, -1, 0.0f, 1.0f, 0.0f);
+            if (m_nItem == 4) {
+                ChangeState(5);
+            } else {
+                ChangeState(4);
+            }
+        }
+    }
+
+    void CItemRoulette::DtorState3()
+    {
+        StopSnd();
+    }
+
+    // State 4: the roulette has stopped; the item is given at once.
+    void CItemRoulette::CtorState4()
+    {
+        StopSnd();
+        if (m_nItem == 4) {
+            ChangeState(5);
+        }
+        m_fUnk88 = 0.0f;
+    }
+
+    void CItemRoulette::LoopState4()
+    {
+        m_fUnk88 -= m_fUnk94;
+        if (m_fUnk88 <= 0.0f) {
+            CGame::g_GameWork.m_anTeamItem[m_nTeam] = m_nItem;
+            ChangeState(1);
+        }
+    }
+
+    void CItemRoulette::DtorState4() {}
+
+    // State 2: the item has been used; a new one is taken after 10 frames.
+    void CItemRoulette::CtorState2()
+    {
+        if (m_bUseRoulette) {
+            fn_80139D28(m_nTeam, 2, m_nItem);
+        }
+        m_nItem = -1;
+        m_fUnk88 = 10.0f;
+    }
+
+    void CItemRoulette::LoopState2()
+    {
+        m_fUnk88 -= m_fUnk94;
+        if (m_fUnk88 <= 0.0f) {
+            ChangeState(0);
+        }
+    }
+
+    void CItemRoulette::DtorState2() {}
+
+    // State 5: item 4 (the star): the team's characters change to their
+    // star state, and the state ends when none of them is a star any more.
+    void CItemRoulette::CtorState5()
+    {
+        m_nUnk84 = 0;
+    }
+
+    void CItemRoulette::LoopState5()
+    {
+        int bEnd = 1;
+        if (m_nUnk84 == 0) {
+            if (!(CGame::g_GameWork.m_nFlag18 & 0x4306) && CChrMan::IsActive()) {
+                long nNum = CChrMan::GetChrCoreNum();
+                for (long i = 0; i < nNum; i++) {
+                    CChrCore *pCore = CChrMan::GetChrCore(i);
+                    if (pCore && !pCore->IsDisable() && m_nTeam == pCore->GetTeamNo()) {
+                        pCore->MethdChgStarState();
+                    }
+                }
+            }
+            m_nUnk84++;
+            bEnd = 0;
+        } else if (CChrMan::IsActive()) {
+            long nNum = CChrMan::GetChrCoreNum();
+            for (long i = 0; i < nNum; i++) {
+                CChrCore *pCore = CChrMan::GetChrCore(i);
+                if (pCore && !pCore->IsDisable() && m_nTeam == pCore->GetTeamNo() &&
+                    ((pCore->GetStatusFlag() >> 17) & 1)) {
+                    bEnd = 0;
+                    break;
+                }
+            }
+        }
+        if (bEnd) {
+            ChangeState(2);
+        }
+    }
+
+    void CItemRoulette::DtorState5() {}
+
+    void CItemRoulette::SetIconDisp(int bDisp, int bAnim)
+    {
+        if (bDisp == 0) {
+            if (m_bUseRoulette && m_nItem >= 0) {
+                fn_80139D28(m_nTeam, 3, m_nItem);
+                if (m_nItem == 4) {
+                    if (m_nState == 5 || m_nState == 2) {
+                        m_nItem = -1;
+                        ChangeState(0);
+                    } else {
+                        // The star is swapped for another item.
+                        long nItem = CGimmickMan::QPanelGetSubstituteItem(m_nTeam);
+                        if (nItem == 4 || nItem < 0) {
+                            m_nItem = -1;
+                            ChangeState(0);
+                        } else {
+                            m_nItem = nItem;
+                            CGame::g_GameWork.m_anTeamItem[m_nTeam] = nItem;
+                            ChangeState(1);
+                        }
+                    }
+                } else if (m_nState == 2) {
+                    m_nItem = -1;
+                    ChangeState(0);
+                } else {
+                    CGame::g_GameWork.m_anTeamItem[m_nTeam] = m_nItem;
+                    ChangeState(1);
+                }
+            }
+        } else {
+            long nItem = CGame::g_GameWork.m_anTeamItem[m_nTeam];
+            if (nItem >= 0 && nItem != m_nItem) {
+                m_nItem = nItem;
+                m_bUseRoulette = 0;
+            }
+            if (m_nItem >= 0 && m_bUseRoulette == 0) {
+                if (bAnim) {
+                    fn_80139D28(m_nTeam, 0, m_nItem);
+                } else {
+                    fn_80139D28(m_nTeam, 4, m_nItem);
+                }
+                ChangeState(1);
+            }
+        }
+        m_bUseRoulette = bDisp;
+    }
 
     CGame::GameWork CGame::g_GameWork;
     CGame::ScoreWork CGame::g_ScoreWork;
@@ -173,6 +566,59 @@ namespace msw {
             s_BgCurColor.b = f * (s_BgFadeColor.b - 255.0f) + 255.0f;
         }
 
+        // The kind of the message object at CGame 0x134 (its byte at 0x25;
+        // 3 is shown over the running game, 2 is the change of court).
+        // (names guessed; the class is not known yet)
+        inline long GetMsgKind(const void *pMsg)
+        {
+            return static_cast<const unsigned char *>(pMsg)[0x25];
+        }
+        inline void SetMsgKind(void *pMsg, long nKind)
+        {
+            static_cast<unsigned char *>(pMsg)[0x25] = nKind;
+        }
+
+        // The work memory of the event demo state (19), filled by whoever
+        // queues it (BossF's game setup). Names guessed.
+        struct EventDemoWork {
+            unsigned long m_nFlag; // 0x00, bit 0: the demo cannot be skipped
+            long m_nStep;          // 0x04
+            long m_nDemo;          // 0x08, the demo CEventDemo::CreateDemo plays
+            long m_nUnk0C;         // 0x0C, passed to fn_801D23B8 first
+            long m_bNoFadeIn;      // 0x10, not zero: the screen does not fade in
+            long m_Unk14;
+            // 0x18: the fade at the end (1: 3D fade type 0, 2: type 1, 3:
+            // cross fade, 0: none) over m_fFadeFrame frames.
+            long m_nFadeType;
+            float m_fFadeFrame;    // 0x1C
+        };
+
+        // The network connection inside the game's Wi-Fi object (a
+        // bcs::dwc::CDwc at 0x38; how CGameDwc holds it is not known).
+        inline bcs::dwc::CDwc *GetDwc(dwc::CGameDwc *pGameDwc)
+        {
+            return reinterpret_cast<bcs::dwc::CDwc *>(reinterpret_cast<char *>(pGameDwc) + 0x38);
+        }
+
+        // The pads in play as bits: those of the online match while one
+        // runs, else this console's.
+        inline unsigned long GetActivePadBits()
+        {
+            int bOnline = CGame::g_GameWork.m_Unk151;
+            if (bOnline) {
+                dwc::CGameDwc *pDwc = dwc::CGameDwc::GetInstance();
+                if (!pDwc) {
+                    bOnline = 0;
+                } else if (!GetDwc(pDwc)->IsInMatch()) {
+                    bOnline = 0;
+                }
+            }
+            if (bOnline) {
+                return CGame::g_GameWork.m_anAllPadBits[1];
+            }
+            return CGame::g_GameWork.m_anAllPadBits[0];
+        }
+
         // Online, the console waits for the others with pWait; without the
         // network object it goes on.
         inline int IsDwcReady(int (*pWait)())
@@ -184,9 +630,93 @@ namespace msw {
         }
     }
 
-    // ---- the constructor (0x8017C3AC) not written yet; the weak
-    // destructors of CStateTemplate<CFsmQueue<CGame> >, CFsmQueue<CGame> and
-    // CStateTemplate<CGame> follow it in the original ----
+    CGame::CGame(bcs::CTask *pParent, GAME_MODE mode) : bcs::CTask(pParent, -1)
+    {
+        AddUnk08(-0x63);
+        m_nNextState = 5;
+        m_fStateCount = 0.0f;
+        m_fBgFadeWait = 0.0f;
+        m_fBgFadeStep = 0.0f;
+        m_fArtsEventFrame = 0.0f;
+        m_fTurnStartTelopFrame = 0.0f;
+        m_fUnk14C = 1800.0f;
+        m_pPauseTask = 0;
+        m_pStopTask = 0;
+        m_pArtsTaskRoot = 0;
+        m_nGoalDemoId = 0;
+        m_nSatLineId = 0;
+        m_pTempParent = 0;
+        m_nSlowTaskId = 0;
+        m_nScoredViewId = 0;
+        m_pArtsEventTask = 0;
+        m_bExit = 0;
+        m_nUnkCC = 0;
+        m_nStateStep = 0;
+        m_nGameFlag = 0;
+        m_nBgFadeMode = 0;
+        m_nReqArtsEvent = 0;
+        m_nArtsEventStep = 0;
+        m_nArtsEventSync = 0;
+        m_nTurnStartTelopType = 0;
+        m_nUnk104 = 0;
+        m_nUnk108 = 0;
+        m_nUnk11C = 0;
+        m_nUnk12C = 0;
+        m_Unk130 = 0;
+        m_pUnk134 = 0;
+        m_nUnk148 = 0;
+        for (int i = 0; i < 4; i++) {
+            m_apCamera[i] = 0;
+        }
+        for (int i = 0; i < 4; i++) {
+            m_apItemRoulette[i] = 0;
+        }
+        g_GameWork.m_nGameMode = mode;
+        ResetBgFadeColor();
+        g_uPauseBit = 0;
+        g_nEventChrIdx = -1;
+        InitState();
+
+        // Team n plays in colour n; the second console swaps the pairs.
+        g_GameWork.m_anTeamColorIdx[0] = 0;
+        g_GameWork.m_anTeamColorIdx[1] = 1;
+        g_GameWork.m_anTeamColorIdx[2] = 2;
+        g_GameWork.m_anTeamColorIdx[3] = 3;
+        if (g_GameWork.m_nUnk00 != 0) {
+            g_GameWork.m_anTeamColorIdx[0] = 1;
+            g_GameWork.m_anTeamColorIdx[1] = 0;
+            g_GameWork.m_anTeamColorIdx[2] = 3;
+            g_GameWork.m_anTeamColorIdx[3] = 2;
+        }
+        if (g_GameWork.m_Unk151) {
+            // Online: the local pad number of each online pad, counted on
+            // from this console's first pad for the other console's pads.
+            long nMyAID = g_GameWork.m_nUnk00;
+            long nBase = fn_800C1514(nMyAID);
+            long nTotal = bcs::CWifiPadBase::GetOnlinePadTotal();
+            for (long i = 0; i < nTotal; i++) {
+                if (nMyAID == bcs::CWifiPadBase::GetAIDFromOnlinePadID(i)) {
+                    g_GameWork.m_anUnk84[i] = bcs::CWifiPadBase::GetLocalPadIDFromOnlinePadID(i);
+                } else {
+                    g_GameWork.m_anUnk84[i] = nBase + bcs::CWifiPadBase::GetLocalPadIDFromOnlinePadID(i);
+                }
+            }
+        }
+        InitTeamPadBits_();
+        m_pTempParent = new bcs::CTask(this, -1);
+        m_pPauseTask = new CGamePauseTask(this);
+        m_pStopTask = new CGameStopTask(this);
+        m_pArtsTaskRoot = new CGameTaskGroup(this);
+        CGameGuideMan::Create(this);
+        // The 0x28-byte message object (class not known yet; fn_8026B418
+        // is its constructor).
+        void *pMsg = ::operator new(0x28);
+        if (pMsg) {
+            pMsg = fn_8026B418(pMsg);
+        }
+        m_pUnk134 = pMsg;
+        fn_80236704();
+    }
 
     CGame::~CGame()
     {
@@ -404,7 +934,7 @@ namespace msw {
         ClearLastGoalInfo();
         ClearCoinHistory();
         rWork.m_nUnk3C = 90;
-        *(long *)rWork.m_Unk1A8 = 0;
+        rWork.m_nUnk1A8 = 0;
         rWork.m_fUnk38 = 0.0f;
         for (long i = 0; i < 4; i++) {
             ClearTeamCoin(i);
@@ -804,6 +1334,89 @@ namespace msw {
         return 0;
     }
 
+    // The pads of each team as bits. Offline they follow from the play
+    // type (one to four pads) and every team gets all of them; online
+    // each team gets the pads of its console, and a team without any
+    // gets all.
+    void CGame::InitTeamPadBits_()
+    {
+        unsigned long nBits = 0;
+        if (g_GameWork.m_Unk151) {
+            long nTotal = bcs::CWifiPadBase::GetOnlinePadTotal();
+            for (int i = 0; i < nTotal; i++) {
+                nBits |= 1 << i;
+            }
+            if (nBits == 0) {
+                nBits = 1;
+            }
+            g_GameWork.m_anAllPadBits[0] = nBits;
+            g_GameWork.m_anAllPadBits[1] = nBits;
+            for (int i = 0; i < 4; i++) {
+                g_GameWork.m_anTeamPadBits[i] = 0;
+                g_GameWork.m_anTeamOnlinePadBits[i] = 0;
+            }
+            for (long i = 0; i < nTotal; i++) {
+                long nAID = bcs::CWifiPadBase::GetAIDFromOnlinePadID(i);
+                if (nAID >= 0 && nAID < 4) {
+                    long nPad = bcs::CWifiPadBase::GetLocalPadIDFromOnlinePadID(i);
+                    g_GameWork.m_anTeamPadBits[nAID] |= 1 << nPad;
+                    g_GameWork.m_anTeamOnlinePadBits[nAID] |= 1 << i;
+                }
+            }
+            for (int i = 0; i < 4; i++) {
+                if (g_GameWork.m_anTeamPadBits[i] == 0) {
+                    g_GameWork.m_anTeamPadBits[i] = nBits;
+                }
+                if (g_GameWork.m_anTeamOnlinePadBits[i] == 0) {
+                    g_GameWork.m_anTeamOnlinePadBits[i] = nBits;
+                }
+            }
+        } else {
+            switch (g_GameWork.m_nUnk06) {
+                case 0:
+                case 2:
+                case 4:
+                    nBits |= 0x1;
+                    break;
+                case 1:
+                case 3:
+                case 5:
+                case 6:
+                case 18:
+                    nBits |= 0x3;
+                    break;
+                case 7:
+                case 9:
+                case 15:
+                case 16:
+                case 17:
+                case 20:
+                case 21:
+                    nBits |= 0x7;
+                    break;
+                case 8:
+                case 10:
+                case 14:
+                case 19:
+                case 22:
+                case 23:
+                case 24:
+                case 25:
+                    nBits |= 0xF;
+                    break;
+            }
+            if (nBits == 0) {
+                nBits = 1;
+            }
+            g_GameWork.m_anAllPadBits[0] = nBits;
+            g_GameWork.m_anAllPadBits[1] = nBits;
+            for (int i = 0; i < 4; i++) {
+                g_GameWork.m_anTeamPadBits[i] = nBits;
+                g_GameWork.m_anTeamOnlinePadBits[i] = nBits;
+            }
+        }
+    }
+
     void CGame::StartStopEffect(float fFrame, float fStop, long nType)
     {
         if (m_pInstance) {
@@ -1021,12 +1634,106 @@ namespace msw {
         }
     }
 
+    // Passes a message to every part of the game, then acts on the ones
+    // the game itself handles: 0x1A ends the game (1: back to the menu, 2:
+    // retry), 0x2E counts in the score book.
+    void CGame::SendMessage_(long nMsg, long n1, long n2, long n3)
+    {
+        CGameGuideMan::SendMessage(nMsg, n1, n2, n3);
+        if (CStageMan::IsValidInstance()) {
+            CStageMan::GetInstance()->SendMessage(nMsg, n1, n2, n3);
+        }
+        fn_800EC394(nMsg, n1, n2, n3);
+        CGimmickMan::SendMessage(nMsg, n1, n2, n3);
+        CTournament::SendMessage(nMsg, n1, n2, n3);
+        CEventDemo::SendMessage(nMsg, n1, n2, n3);
+
+        if (nMsg == 0x1A) {
+            switch (n1) {
+                case 1:
+                    ClearUnk08(1);
+                    g_GameWork.m_nReturnStep = 0;
+                    menu::CStateSave::GetInstance()->SetStartMenuMode(2);
+                    FsmqChangeStateRet(18);
+                    break;
+                case 2:
+                    ClearUnk08(1);
+                    FsmqChangeStateRet(16);
+                    break;
+            }
+        }
+        if (nMsg == 0x2E) {
+            ScoreBookAddCountWork_(n1, n2, n3);
+            switch (n1) {
+                case 0:
+                    if (n2 < 1) {
+                        n2 = 1;
+                    }
+                    m_anScoreBookCount[0] += n2;
+                    break;
+                case 1:
+                    m_anScoreBookCount[1]++;
+                    break;
+                case 2:
+                    m_anScoreBookCount[2]++;
+                    break;
+            }
+        }
+        if (g_GameWork.m_nUnk180) {
+            switch (nMsg) {
+                case 0x18:
+                case 0x36:
+                case 0x40:
+                case 0x54:
+                case 0x61:
+                    m_fUnk14C = 0.0f;
+                    break;
+            }
+        }
+    }
+
     int CGame::IsLineMsgDispEnable()
     {
         if (m_pInstance) {
             return m_pInstance->IsLineMsgDispEnable_();
         }
         return 0;
+    }
+
+    // Which goal each team attacks first (GetFirstGoalIdxMode_: 0 or 1 for
+    // a fixed side, otherwise drawn), and which team each view shows. In a
+    // local versus game on one screen the views follow the swapped goals.
+    void CGame::SetFirstGoalIdx_()
+    {
+        long nFirst;
+        switch (GetFirstGoalIdxMode_()) {
+            case 0:
+                nFirst = 0;
+                break;
+            case 1:
+                nFirst = 1;
+                break;
+            default:
+                nFirst = bcs::BCS_Rand() % 2;
+                break;
+        }
+        for (long i = 0; i < 4; i++) {
+            SetViewTeam(i, i % 2);
+        }
+        if (nFirst != 0) {
+            for (long i = 0; i < 4; i++) {
+                SetGoalIdx(i, 1 - i % 2);
+            }
+            if (IsLocalVsMode() && bcs::CWorldEnv::m_vstViewSplitType == 0) {
+                for (long i = 0; i < 4; i++) {
+                    SetViewTeam(i, 1 - i % 2);
+                }
+            }
+        } else {
+            for (long i = 0; i < 4; i++) {
+                SetGoalIdx(i, i % 2);
+            }
+        }
     }
 
     long CGame::GetFirstGoalIdxMode_()
@@ -1201,7 +1908,66 @@ namespace msw {
         m_nStateStep = 0;
     }
 
-    // ---- LoopStateGameLoad (0x80180E2C) not written yet ----
+    // Starts the event demo and the loading of the game's resources, then
+    // queues the states that follow: creating the objects, the online
+    // synchronisation, the game start, the music, the save, the entrance
+    // demo and the online start; and finally the game's own init state.
+    void CGame::LoopStateGameLoad()
+    {
+        int bNext = 0;
+        switch (m_nStateStep) {
+            case 0:
+                CNowLoading::SetDisp(1);
+                CEventDemo::CreateDemo(2, this, -1.0f, -1.0f);
+                bcs::CLoadMan::ClearDvdReadSize();
+                RsrcLoadStart_();
+                m_nStateStep++;
+                break;
+            case 1:
+                if (CEventDemo::m_Work.bSkip && RsrcIsLoadEnd_()) {
+                    m_nUnkCC = 1;
+                    CNowLoading::SetDisp(0);
+                    RsrcInitialize_();
+                    FinishFirstLoadData();
+                    CGameAccInput::Initialize();
+                    FsmqCutNext();
+                    FsmqPush(22);
+                    if (g_GameWork.m_nUnk180 == 0) {
+                        if (bcs::dwc::CDwc::GetInstance()) {
+                            FsmqPush(24);
+                        }
+                        if (g_GameWork.m_nUnk40 & 0x100) {
+                            FsmqPush(21);
+                        }
+                        if (g_GameWork.m_nGameMode != GAME_MODE_BOSS || !CEventDemo::IsEnable()) {
+                            FsmqPush(23);
+                        }
+                        if (g_GameWork.m_nReturnStep == 0) {
+                            FsmqPush(28);
+                        }
+                        if (CEventDemo::IsEnable()) {
+                            FsmqPush(2);
+                        }
+                        if (bcs::dwc::CDwc::GetInstance()) {
+                            FsmqPush(25);
+                        }
+                    } else {
+                        FsmqPush(23);
+                    }
+                    FsmqPush(1);
+                    fn_80074064(g_GameWork.m_nViewSplit, 0);
+                    bNext = 1;
+                    m_nStateStep++;
+                }
+                break;
+            default:
+                bNext = 1;
+                break;
+        }
+        if (bNext) {
+            FsmqNext();
+        }
+    }
 
     void CGame::FinishFirstLoadData() {}
 
@@ -1218,7 +1984,73 @@ namespace msw {
 
     void CGame::DtorStateGameInit() {}
 
-    // ---- 0x8018190C..0x80181C90 (state 2) not written yet ----
+    // State 21: the start of the game proper (the common sounds are
+    // loaded, the start demo plays). The game is paused and the cockpit
+    // hidden meanwhile.
+    void CGame::CtorStateGameStart()
+    {
+        bcs::CMainApp::SetPause(0x40, 1);
+        bcs::CMainApp::Start3DFade(0, 1.0f);
+        bcs::CMainApp::StartMasterFade(0, 1.0f);
+        fn_80073FEC(1);
+        CGamePadCheck::SetPadCheckDisable(1);
+        SetCockpitDisp_(0);
+        SetCockpitItemIconDisp_(0, 0);
+        SetDispRadarIcon_(0);
+        bcs::CRenderMan::ReqPushViewSplitType(static_cast<bcs::CWorldEnv::ViewSplitType>(0), 0);
+        BgResetFade_();
+        m_nStateStep = 0;
+    }
+
+    void CGame::LoopStateGameStart()
+    {
+        switch (m_nStateStep) {
+            case 0:
+                m_nStateStep++;
+                break;
+            case 1:
+                SendMessage_(1, 0, 0, 0);
+                if (g_GameWork.m_nUnk40 & 0x100) {
+                    CGameSnd::LoadCommonSnd();
+                    m_nStateStep++;
+                } else {
+                    m_nStateStep = 99;
+                }
+                break;
+            case 2:
+                if (bcs::CSnd::IsReady()) {
+                    CGameBGM::SetBgmState(CGameBGM::STATE_INTRO);
+                    CEventDemo::CreateDemo(3, this, 1.0f / 60.0f, 1.0f / 60.0f);
+                    m_nStateStep++;
+                }
+                break;
+            case 3:
+                if (CEventDemo::m_Work.bSkip) {
+                    if (!CEventDemo::IsEnable()) {
+                        g_GameWork.m_nStartFadeType = 0;
+                    }
+                    m_fStateCount = 2.0f;
+                    m_nStateStep++;
+                }
+                break;
+            case 4:
+                if (StateWorkDecStateCount_()) {
+                    CGameSnd::ReloadGameSnd();
+                    m_nStateStep++;
+                }
+                break;
+            case 5:
+                if (bcs::CSnd::IsReady()) {
+                    CGameSnd::SaveGameHeapStateAlways();
+                    m_nStateStep++;
+                }
+                break;
+            default:
+                bcs::CRenderMan::ReqPopViewSplitType(0);
+                FsmqNext();
+                break;
+        }
+    }
 
     void CGame::DtorStateGameStart()
     {
@@ -1228,7 +2060,68 @@ namespace msw {
         SendMessage_(2, 0, 0, 0);
     }
 
-    // ---- 0x80181D10..0x80182064 (state 3) not written yet ----
+    // State 2: the entrance demo. The cockpit is hidden; the boss game
+    // fades its music out first.
+    void CGame::CtorStateEntranceDemo()
+    {
+        g_GameWork.m_nFlag18 |= 2;
+        bcs::CMainApp::Start3DFade(0, 1.0f);
+        bcs::CMainApp::StartMasterFade(0, 1.0f);
+        SetCockpitDisp_(0);
+        SetCockpitItemIconDisp_(0, 0);
+        SetDispRadarIcon_(0);
+        bcs::CRenderMan::ReqPushViewSplitType(static_cast<bcs::CWorldEnv::ViewSplitType>(0), 0);
+        BgResetFade_();
+        if (g_GameWork.m_nGameMode == GAME_MODE_BOSS) {
+            CGameBGM::SetBgmState(CGameBGM::STATE_FADE_OUT);
+        }
+        m_nStateStep = 0;
+    }
+
+    void CGame::LoopStateEntranceDemo()
+    {
+        switch (m_nStateStep) {
+            case 0:
+                m_nStateStep++;
+                break;
+            case 1:
+                SendMessage_(3, 0, 0, 0);
+                EntranceDemoSetUp();
+                m_nStateStep++;
+                break;
+            case 2:
+                if (g_GameWork.m_nUnk40 & 0x100) {
+                    m_nStateStep++;
+                } else {
+                    // Without the start demo the screen fades from the
+                    // stage's colour.
+                    unsigned long color = fn_80190114();
+                    fn_800783E8(4, &color, 0.0f, 0.0f, 1.0f / 60.0f);
+                    bcs::CMainApp::Start3DFade(4, 1.0f);
+                    m_nStateStep = 4;
+                }
+                break;
+            case 3:
+                bcs::CMainApp::Start3DFade(4, 1.0f / 60.0f);
+                bcs::CMainApp::StartMasterFade(4, 1.0f / 60.0f);
+                m_nStateStep++;
+                // fall through
+            case 4:
+                CEventDemo::CreateDemo(0, this, 1.0f / 60.0f, 1.0f / 30.0f);
+                m_nStateStep++;
+                break;
+            default:
+                if (CEventDemo::m_Work.bSkip) {
+                    if (g_GameWork.m_nGameMode == GAME_MODE_BOSS && CGameBGM::GetBgmState() != CGameBGM::STATE_PLAY) {
+                        CGameBGM::SetBgmState(CGameBGM::STATE_START);
+                    }
+                    CEventDemo::m_Work.bSkip = 1;
+                    bcs::CRenderMan::ReqPopViewSplitType(0);
+                    FsmqNext();
+                }
+                break;
+        }
+    }
 
     void CGame::DtorStateEntranceDemo()
     {
@@ -1239,7 +2132,34 @@ namespace msw {
     // State 22: creates the game's objects.
     void CGame::CtorStateGameCreate() {}
 
-    // ---- LoopStateGameCreate (0x8018209C) not written yet ----
+    // Creates the game's objects (GenerateInstance, the balls), stops the
+    // characters and gives each team of a normal game its item roulette
+    // (the boss game has one, for team 0).
+    void CGame::LoopStateGameCreate()
+    {
+        GenerateInstance();
+        fn_800ED4A4();
+        CBallMan::Create();
+        CChrMan::AllSetState(4, -1, 0);
+        CChrMan::AllStop(static_cast<CChrCore::STOP_MODE>(2), static_cast<CChrCore::STOP_MODE>(2));
+        CChrMan::SetChrMarkerDisp(0);
+        if (g_GameWork.m_nGameType == GAME_TYPE_NORMAL) {
+            switch (g_GameWork.m_nGameMode) {
+                case GAME_MODE_BASKET:
+                case GAME_MODE_VOLLEY:
+                case GAME_MODE_DODGE:
+                case GAME_MODE_HOCKEY:
+                    for (long i = 0; i < 2; i++) {
+                        m_apItemRoulette[i] = new (0x100) CItemRoulette(this, i);
+                    }
+                    break;
+                case GAME_MODE_BOSS:
+                    m_apItemRoulette[0] = new (0x100) CItemRoulette(this, 0);
+                    break;
+            }
+        }
+        FsmqDoChain();
+    }
 
     void CGame::GenerateInstance() {}
 
@@ -1268,7 +2188,36 @@ namespace msw {
         CtorStateWaitStart();
     }
 
-    // ---- LoopStateWaitStartBase (0x80182E88) not written yet ----
+    inline int CGame::IsDemoPlayEnd_()
+    {
+        if (g_GameWork.m_nUnk180 == 0) {
+            return 0;
+        }
+        if (m_fUnk14C > 0.0f) {
+            m_fUnk14C -= GetFrameRateF();
+        }
+        if (m_fUnk14C <= 0.0f) {
+            return 1;
+        }
+        if (bcs::CWifiPad::IsDown(0x900, 0)) {
+            CGameSnd::Play(0xBBB, 0, 1, -1, 0.0f, 1.0f, 0.0f);
+            m_fUnk14C = 0.0f;
+            return 1;
+        }
+        return 0;
+    }
+
+    // In the attract demo the game exits (state 18) when the demo is over.
+    void CGame::LoopStateWaitStartBase()
+    {
+        LoopStateWaitStart();
+        if (IsDemoPlayEnd_()) {
+            CChrMan::AllStop(static_cast<CChrCore::STOP_MODE>(2), static_cast<CChrCore::STOP_MODE>(2));
+            FsmqCutNext();
+            FsmqPush(18);
+            FsmqDoChain();
+        }
+    }
 
     void CGame::DtorStateWaitStartBase()
     {
@@ -1287,7 +2236,16 @@ namespace msw {
         CtorStateMainLoop();
     }
 
-    // ---- LoopStateMainLoopBase (0x80183170) not written yet ----
+    void CGame::LoopStateMainLoopBase()
+    {
+        LoopStateMainLoop();
+        if (IsDemoPlayEnd_()) {
+            CChrMan::AllStop(static_cast<CChrCore::STOP_MODE>(2), static_cast<CChrCore::STOP_MODE>(2));
+            FsmqCutNext();
+            FsmqPush(18);
+            FsmqDoChain();
+        }
+    }
 
     void CGame::DtorStateMainLoopBase()
     {
@@ -1306,6 +2264,23 @@ namespace msw {
         m_nStateStep = 0;
     }
 
+    // State 6: waits for the goal demo, then for m_fStateCount, and goes on
+    // to the turn result with the scorer's team set up for the next turn.
+    void CGame::LoopStateGoalEvent()
+    {
+        if (m_nStateStep == 0) {
+            if (IsEndGoalDemo_()) {
+                EndGoalDemo_();
+                StartGoalTelop_();
+                SetCockpitMapDisp_(0);
+                m_nStateStep++;
+            }
+        } else if (StateWorkDecStateCount_()) {
+            CChrMan::ReserveAllSetState(0, g_GameWork.m_nGoalChar, g_GameWork.m_nGoalOwnGoal ? -1 : 0);
+            FsmqChangeState(7);
+        }
+    }
+
     void CGame::DtorStateGoalEvent() {}
 
     void CGame::CtorStateTurnResult()
@@ -1320,6 +2295,44 @@ namespace msw {
         return 0;
     }
 
+    // State 7: the scored view, a pause, then the game set (12), the time
+    // up (8, when the game time has run out in a timed game) or the next
+    // turn (10).
+    void CGame::LoopStateTurnResult()
+    {
+        switch (m_nStateStep) {
+            case 0:
+                if (CanbeScoredView_()) {
+                    m_fStateCount = 3.0f;
+                    StartScoredView_(-1);
+                    m_nStateStep++;
+                }
+                break;
+            case 1:
+                if (StateWorkDecStateCount_()) {
+                    // (both waits are one second in this version)
+                    if (IsGameSet_()) {
+                        m_fStateCount = 60.0f;
+                    } else {
+                        m_fStateCount = 60.0f;
+                    }
+                    m_nStateStep++;
+                }
+                break;
+            default:
+                if (StateWorkDecStateCount_()) {
+                    if (IsGameSet_()) {
+                        FsmqChangeState(12);
+                    } else if (g_GameWork.m_fUnk20 > 0.0f && g_GameWork.m_fGameTime <= 0.0f) {
+                        FsmqChangeState(8);
+                    } else {
+                        FsmqChangeState(10);
+                    }
+                }
+                break;
+        }
+    }
+
     void CGame::DtorStateTurnResult() {}
 
     void CGame::CtorStateTimeUp() {}
@@ -1331,6 +2344,134 @@ namespace msw {
     int CGame::MenuCallInterval_()
     {
         return 0;
+    }
+
+    // State 9: the change of court between periods. Everything is reset,
+    // the next period starts with the time full and the goals swapped, and
+    // the court change demo plays (when event demos are on).
+    void CGame::CtorStateChgCourt()
+    {
+        g_GameWork.m_nFlag18 = (g_GameWork.m_nFlag18 & ~0x300) | 0x4000;
+        EndScoredView_();
+        KillTempChild_();
+        CChrMan::AllMotStop();
+        CChrMan::AllStockItemDelete();
+        CChrMan::AllReset();
+        CBallMan::AllReset();
+        CGimmickMan::AllReset();
+        CGimmickMan::QPanelAllReset();
+        SendMessage_(0x17, 0, 0, 0);
+        SetPeriodResult_();
+        g_GameWork.m_nPeriod++;
+        SetTime(g_GameWork.m_fUnk20);
+        ChangeGoalIdx_();
+        for (long i = 0; i < g_GameWork.m_nTeamNum; i++) {
+            ClearTeamArtsGauge_(i);
+            g_GameWork.m_anTeamItem[i] = -1;
+        }
+        SetCockpitDisp_(0);
+        SetCockpitItemIconDisp_(0, 0);
+        SetDispRadarIcon_(0);
+        CChrMan::AllStop(static_cast<CChrCore::STOP_MODE>(2), static_cast<CChrCore::STOP_MODE>(2));
+        CChrMan::SetChrMarkerDisp(0);
+        SetDispRadarIcon_(0);
+        m_nStateStep = 0;
+        if (CEventDemo::IsEnable()) {
+            bcs::CRenderMan::ReqPushViewSplitType(static_cast<bcs::CWorldEnv::ViewSplitType>(0), 0);
+        } else {
+            m_nStateStep = 99;
+        }
+        m_nUnk11C = 0;
+    }
+
+    void CGame::LoopStateChgCourt()
+    {
+        switch (m_nStateStep) {
+            case 0:
+                m_nStateStep++;
+                break;
+            case 1: {
+                SendMessage_(9, 0, 0, 0);
+                EventDemoSetUp();
+                CBallMan::AllSleep();
+                long nNum = CChrMan::GetChrCoreNum();
+                for (long i = 0; i < nNum; i++) {
+                    CChrCore *pCore = CChrMan::GetChrCore(i);
+                    if (pCore && !pCore->IsDisable()) {
+                        pCore->OnDispFlag(4);
+                    }
+                }
+                bcs::CRenderMan::SetDepthOfFieldParam(1, 6.0f, 7.5f, 1.5f);
+                bcs::CRenderMan::EnableDepthOfFieldEffect(1);
+                m_fStateCount = 30.0f;
+                m_nStateStep++;
+                break;
+            }
+            case 2:
+                if (StateWorkDecStateCount_()) {
+                    CEventDemo::SetupDemoCamera("ChgCourt", 0);
+                    CEventDemo::PlayDemoCamera(1);
+                    bcs::CMainApp::Start3DFade(4, 0.0f);
+                    unsigned long color = fn_80190114();
+                    fn_800783E8(4, &color, 0.0f, 0.0f, 1.0f / 60.0f);
+                    m_nStateStep++;
+                }
+                break;
+            case 3:
+                MenuCallInterval_();
+                m_nStateStep++;
+                break;
+            case 4:
+                if (MenuGetResult_() != -1) {
+                    if (fn_8026D0A0(m_pUnk134)) {
+                        bcs::CMainApp::Start3DFade(0, 1.0f / 60.0f);
+                        bcs::CMainApp::StartMasterFade(0, 1.0f / 60.0f);
+                    } else {
+                        unsigned long color = fn_80190114();
+                        fn_800783E8(0, &color, 0.0f, 0.0f, 1.0f / 60.0f);
+                    }
+                    m_nStateStep++;
+                }
+                break;
+            case 5: {
+                int bEnd = 1;
+                if (bcs::CMainApp::IsPlay3DFade()) {
+                    bEnd = 0;
+                }
+                if (bcs::CMainApp::IsPlayMasterFade()) {
+                    bEnd = 0;
+                }
+                if (bEnd) {
+                    CEventDemo::SetEndDemoCamera();
+                    bcs::CRenderMan::EnableDepthOfFieldEffect(0);
+                    bcs::CRenderMan::ResetDepthOfFieldParam();
+                    bcs::CRenderMan::ReqPopViewSplitType(0);
+                    SendMessage_(10, 0, 0, 0);
+                    m_fStateCount = 30.0f;
+                    m_nStateStep++;
+                }
+                break;
+            }
+            case 6:
+                if (StateWorkDecStateCount_()) {
+                    m_nStateStep = 99;
+                }
+                break;
+            default:
+                // Offline, the message of the change (state 29) comes
+                // first; then the music and the wait for the next start.
+                if (!bcs::dwc::CDwc::GetInstance()) {
+                    FsmqCutNext();
+                    if (m_pUnk134) {
+                        SetMsgKind(m_pUnk134, 2);
+                    }
+                    FsmqPush(29);
+                }
+                FsmqPush(23);
+                FsmqPush(3);
+                FsmqNext();
+                break;
+        }
     }
 
     void CGame::DtorStateChgCourt()
@@ -1363,9 +2504,116 @@ namespace msw {
 
     void CGame::CalcAddSkillPoint_() {}
 
+    // State 13: the result of the game. The court is cleared, the results
+    // and the score book are worked out (a tournament match also from the
+    // tournament's own result), and the unlocks are checked.
+    void CGame::CtorStateGameResult()
+    {
+        SetReplayMode(0);
+        SetResultMode(1);
+        SetPreparationMode(0);
+        KillTempChild_();
+        CEffectCtrl::EraseEffectAll();
+        CBallMan::AllReset();
+        CGimmickMan::AllReset();
+        CGimmickMan::QPanelAllReset();
+        SendMessage_(0x17, 0, 0, 0);
+        SetCockpitDisp_(0);
+        SetCockpitItemIconDisp_(0, 0);
+        SetDispRadarIcon_(0);
+        SetPeriodResult_();
+        SetGameResult_();
+        CalcAddSkillPoint_();
+        ScoreBookApplyCountWork_();
+        SendMessage(0x11, 0, 0, 0);
+        if (CTournament::IsTournamentGame() && !CTournament::IsExtraMatchGame()) {
+            SetGameResultAll_(2);
+            switch (CTournament::GetBattleResult()) {
+                case 1:
+                    g_GameWork.m_anTeamResult[0] = 1;
+                    break;
+                case 2:
+                    g_GameWork.m_anTeamResult[1] = 1;
+                    break;
+                default:
+                    SetGameResultAll_(3);
+                    break;
+            }
+        }
+        Unlock::CheckClear();
+        CChrMan::RemakeChrBustImg(1);
+        m_nStateStep = 0;
+    }
+
+    void CGame::LoopStateGameResult()
+    {
+        switch (m_nStateStep) {
+            case 0:
+                bcs::CRenderMan::ReqPushViewSplitType(static_cast<bcs::CWorldEnv::ViewSplitType>(0), 0);
+                m_nStateStep++;
+                break;
+            case 1:
+                CChrMan::AllStockItemDelete();
+                CChrMan::AllMotStop();
+                CChrMan::AllReset();
+                CChrMan::AllSetState(4, -1, 0);
+                CChrMan::AllStop(static_cast<CChrCore::STOP_MODE>(2), static_cast<CChrCore::STOP_MODE>(2));
+                SendMessage(5, 0, 0, 0);
+                CEventDemo::CreateDemo(1, this, -1.0f, -1.0f);
+                bcs::CMainApp::StartMasterFade(4, 1.0f / 30.0f);
+                m_nStateStep++;
+                break;
+            case 2: {
+                int bEnd = 1;
+                if (bcs::CMainApp::IsPlay3DFade()) {
+                    bEnd = 0;
+                }
+                if (bcs::CMainApp::IsPlayMasterFade()) {
+                    bEnd = 0;
+                }
+                if (bEnd) {
+                    CEventDemo::SetFlags(2);
+                    PlayGameResultBGM_();
+                    m_nStateStep++;
+                }
+                break;
+            }
+            case 3:
+                if (CEventDemo::m_Work.bSkip && CGameBGM::GetBgmState() == CGameBGM::STATE_PLAY) {
+                    CEventDemo::SetFlags(1);
+                    m_fStateCount = 50.0f;
+                    m_nStateStep++;
+                }
+                break;
+            case 4:
+                if (StateWorkDecStateCount_()) {
+                    CEventDemo::Cleanup(SetGameResultNext_());
+                    m_nStateStep++;
+                }
+                break;
+        }
+    }
+
     void CGame::DtorStateGameResult()
     {
         SendMessage(6, 0, 0, 0);
+    }
+
+    // Where the game goes after its result: the end menu (15) after a
+    // tournament game that is over (m_Unk130 == 2), else the result menu
+    // (14).
+    int CGame::SetGameResultNext_()
+    {
+        if (CTournament::IsTournamentGame()) {
+            if (m_Unk130 == 2) {
+                FsmqChangeState(15);
+            } else {
+                FsmqChangeState(14);
+            }
+        } else {
+            FsmqChangeState(14);
+        }
+        return 0;
     }
 
     void CGame::CtorStateResultMenu()
@@ -1375,6 +2623,36 @@ namespace msw {
         SetPreparationMode(0);
         CGameBGM::SetBgmState(CGameBGM::STATE_MUSIC_3C);
         m_nStateStep = 0;
+    }
+
+    // State 14: the result menu (when the game has one), a pause, then the
+    // end menu (15).
+    void CGame::LoopStateResultMenu()
+    {
+        switch (m_nStateStep) {
+            case 0:
+                if (MenuCallGameResult_()) {
+                    m_nStateStep++;
+                } else {
+                    m_fStateCount = 30.0f;
+                    m_nStateStep = 99;
+                }
+                break;
+            case 1:
+                if (MenuGetResult_() != -1) {
+                    m_fStateCount = 45.0f;
+                    m_nStateStep = 99;
+                }
+                break;
+            case 99:
+                if (StateWorkDecStateCount_()) {
+                    m_nStateStep++;
+                }
+                break;
+            default:
+                FsmqChangeState(15);
+                break;
+        }
     }
 
     int CGame::MenuCallGameResult_()
@@ -1393,6 +2671,81 @@ namespace msw {
         }
     }
 
+    // State 15: saves (when saving is on), then runs the end menu and acts
+    // on its choice: 1000 and 1002 play again (16), the others leave the
+    // game (18) for a menu page of the title menu.
+    void CGame::LoopStateEndMenu()
+    {
+        switch (m_nStateStep) {
+            case 0:
+                if (CSave::CanbeWrite()) {
+                    CSave::WriteAsync();
+                    m_nStateStep++;
+                }
+                break;
+            case 1:
+                if (CSave::IsComplete()) {
+                    m_nStateStep++;
+                }
+                break;
+            case 2:
+                if (!fn_80236880(0, 0.0f)) {
+                    FsmqChangeStateRet(18);
+                }
+                m_nStateStep++;
+                break;
+            default:
+                switch (fn_80237590()) {
+                    case -1:
+                        break;
+                    case 1000:
+                    case 1002:
+                        FsmqChangeStateRet(16);
+                        break;
+                    case 1001:
+                        menu::CStateSave::GetInstance()->SetStartMenuMode(2);
+                        FsmqChangeStateRet(18);
+                        break;
+                    case 1003:
+                        menu::CStateSave::GetInstance()->SetStartMenuMode(3);
+                        FsmqChangeStateRet(18);
+                        break;
+                    case 1004:
+                        menu::CStateSave::GetInstance()->SetStartMenuMode(4);
+                        FsmqChangeStateRet(18);
+                        break;
+                    case 1009:
+                        menu::CStateSave::GetInstance()->SetStartMenuMode(8);
+                        FsmqChangeStateRet(18);
+                        break;
+                    case 1010:
+                        menu::CStateSave::GetInstance()->SetStartMenuMode(6);
+                        FsmqChangeStateRet(18);
+                        break;
+                    case 1011:
+                        menu::CStateSave::GetInstance()->SetStartMenuMode(7);
+                        FsmqChangeStateRet(18);
+                        break;
+                    case 1007:
+                        menu::CStateSave::GetInstance()->SetStartMenuMode(1);
+                        FsmqChangeStateRet(18);
+                        break;
+                    case 1008:
+                        menu::CStateSave::GetInstance()->SetStartMenuMode(5);
+                        FsmqChangeStateRet(18);
+                        break;
+                    case 1006:
+                        SetReturnStep(0);
+                        // fall through
+                    default:
+                        menu::CStateSave::GetInstance()->SetStartMenuMode(2);
+                        FsmqChangeStateRet(18);
+                        break;
+                }
+                break;
+        }
+    }
+
     void CGame::DtorStateEndMenu() {}
 
     // State 28: saves (99 skips it).
@@ -1405,7 +2758,40 @@ namespace msw {
         }
     }
 
-    // ---- LoopStateSave (0x801851A8) not written yet ----
+    void CGame::LoopStateSave()
+    {
+        switch (m_nStateStep) {
+            case 0:
+                m_nStateStep++;
+                break;
+            case 1:
+                m_nStateStep++;
+                break;
+            case 2:
+                if (CSave::CanbeWrite()) {
+                    // Online, the network results are stored first.
+                    if (bcs::dwc::CDwc::GetInstance()) {
+                        dwc::CGameDwc *pDwc = dwc::CGameDwc::GetInstance();
+                        if (pDwc) {
+                            fn_80145B50(pDwc);
+                            fn_80145E98(pDwc);
+                        }
+                    }
+                    CSave::WriteAsync();
+                    m_nStateStep++;
+                }
+                break;
+            case 3:
+                if (CSave::IsComplete()) {
+                    m_nStateStep = 99;
+                }
+                break;
+            case 99:
+                FsmqNext();
+                m_nStateStep++;
+                break;
+        }
+    }
 
     void CGame::DtorStateSave() {}
 
@@ -1418,7 +2804,119 @@ namespace msw {
         }
     }
 
-    // ---- LoopStateMessage (0x80185364) not written yet ----
+    void CGame::LoopStateMessage()
+    {
+        switch (m_nStateStep) {
+            case 0:
+                if (GetMsgKind(m_pUnk134) != 3) {
+                    bcs::CMainApp::Start3DFade(0, 1.0f);
+                    bcs::CMainApp::StartMasterFade(0, 1.0f);
+                    fn_8026CE30(m_pUnk134);
+                }
+                CChrMan::AllReset();
+                CChrMan::AllSetState(4, -1, 0);
+                CChrMan::AllStop(static_cast<CChrCore::STOP_MODE>(2), static_cast<CChrCore::STOP_MODE>(2));
+                fn_8026C7B0(m_pUnk134);
+                CNameMesg::Initialize();
+                m_nStateStep++;
+                break;
+            case 1:
+                if (fn_8026CDC8(m_pUnk134)) {
+                    m_nStateStep++;
+                }
+                break;
+            case 2:
+                if (fn_8026CE3C(m_pUnk134, 0)) {
+                    if (GetMsgKind(m_pUnk134) != 3) {
+                        SetCockpitDisp_(0);
+                        SetCockpitItemIconDisp_(0, 0);
+                        SetDispRadarIcon_(0);
+                        bcs::CMainApp::Start3DFade(4, 1.0f / 30.0f);
+                        bcs::CMainApp::StartMasterFade(4, 1.0f / 30.0f);
+                        bcs::CMainApp::SetPause(0x40, 1);
+                    } else {
+                        fn_80073FB4(1);
+                        bcs::CMainApp::SetPause(0x40, 1);
+                    }
+                    fn_8026BBB0(m_pUnk134, 1);
+                    m_nStateStep++;
+                } else {
+                    m_nStateStep = 99;
+                }
+                break;
+            case 3: {
+                int bEnd = 1;
+                if (bcs::CMainApp::IsPlay3DFade()) {
+                    bEnd = 0;
+                }
+                if (bcs::CMainApp::IsPlayMasterFade()) {
+                    bEnd = 0;
+                }
+                if (bEnd) {
+                    m_fStateCount = 5.0f;
+                    m_nStateStep++;
+                }
+                break;
+            }
+            case 4:
+                if (StateWorkDecStateCount_()) {
+                    m_fStateCount = 895.0f;
+                    CCockpit::ClearResult(-1);
+                    CNameMesg::CreateButtonWindow("Btn_A_Skip");
+                    m_nStateStep++;
+                }
+                break;
+            case 5: {
+                // Ends after its time or on the button.
+                int bEnd = StateWorkDecStateCount_();
+                if (CCockpit::GetResult() != -1) {
+                    bEnd = 1;
+                }
+                if (bEnd) {
+                    if (GetMsgKind(m_pUnk134) == 3) {
+                        fn_8026D074(m_pUnk134);
+                        m_fStateCount = 10.0f;
+                        fn_80073FB4(0);
+                        bcs::CMainApp::SetPause(0x40, 0);
+                    } else {
+                        bcs::CMainApp::Start3DFade(0, 1.0f / 30.0f);
+                        bcs::CMainApp::StartMasterFade(0, 1.0f / 30.0f);
+                        bcs::CMainApp::SetPause(0x40, 0);
+                    }
+                    CNameMesg::MenuOutWindow();
+                    m_nStateStep++;
+                }
+                break;
+            }
+            case 6:
+                if (GetMsgKind(m_pUnk134) == 3) {
+                    if (StateWorkDecStateCount_()) {
+                        m_nStateStep = 99;
+                    }
+                } else {
+                    int bEnd = 1;
+                    if (bcs::CMainApp::IsPlay3DFade()) {
+                        bEnd = 0;
+                    }
+                    if (bcs::CMainApp::IsPlayMasterFade()) {
+                        bEnd = 0;
+                    }
+                    if (bEnd) {
+                        m_nStateStep = 99;
+                    }
+                }
+                break;
+            case 99:
+                // With nothing queued after it, the game waits for its
+                // next start (state 3).
+                if (FsmqGetNextState() == 0) {
+                    FsmqPush(3);
+                }
+                FsmqNext();
+                m_nStateStep++;
+                break;
+        }
+    }
 
     void CGame::DtorStateMessage()
     {
@@ -1436,6 +2934,78 @@ namespace msw {
         m_nStateStep = 0;
     }
 
+    // State 16: plays the game again from the start. After the fade the
+    // game is reset (sounds, effects, balls, gimmicks, roulettes and
+    // characters) and the start states are queued again as at the first
+    // load.
+    void CGame::LoopStateRestart()
+    {
+        if (m_nStateStep == 0) {
+            int bEnd = 1;
+            if (bcs::CMainApp::IsPlay3DFade()) {
+                bEnd = 0;
+            }
+            if (bcs::CMainApp::IsPlayMasterFade()) {
+                bEnd = 0;
+            }
+            if (bEnd) {
+                m_fStateCount = 30.0f;
+                m_nStateStep++;
+            }
+        } else if (StateWorkDecStateCount_()) {
+            bcs::CMainApp::SetPause(0x21, 0);
+            OnUnk08(1);
+            CGameSnd::StopAllSound();
+            EndScoredView_();
+            fn_80074064(g_GameWork.m_nViewSplit, 0);
+            KillTempChild_();
+            CEffectCtrl::EraseEffectAll();
+            CBallMan::AllReset();
+            CGimmickMan::AllReset();
+            CGimmickMan::QPanelAllReset();
+            for (long i = 0; i < 4; i++) {
+                CItemRoulette *pRoulette = m_apItemRoulette[i];
+                if (pRoulette) {
+                    pRoulette->StopSnd();
+                    pRoulette->ChangeState(0);
+                }
+            }
+            CChrMan::AllStockItemDelete();
+            CChrMan::AllReset();
+            CChrMan::AllSetState(4, -1, 0);
+            CChrMan::AllStop(static_cast<CChrCore::STOP_MODE>(2), static_cast<CChrCore::STOP_MODE>(2));
+            CChrMan::AllMotStop();
+            fn_80236790();
+            PrepareRestartGame_();
+            CChrMan::RemakeChrBustImg(0);
+
+            FsmqCutNext();
+            if (bcs::dwc::CDwc::GetInstance()) {
+                FsmqPush(24);
+                if (g_GameWork.m_nReturnStep == 0) {
+                    FsmqPush(28);
+                }
+            }
+            if (g_GameWork.m_nGameMode != GAME_MODE_BOSS || !CEventDemo::IsEnable()) {
+                FsmqPush(23);
+            }
+            if (!bcs::dwc::CDwc::GetInstance()) {
+                if (m_pUnk134) {
+                    SetMsgKind(m_pUnk134, 1);
+                }
+                FsmqPush(29);
+            }
+            if (CEventDemo::IsEnable()) {
+                FsmqPush(2);
+            }
+            if (bcs::dwc::CDwc::GetInstance()) {
+                FsmqPush(25);
+            }
+            FsmqPush(1);
+            FsmqNext();
+        }
+    }
+
     void CGame::PrepareRestartGame_() {}
 
     void CGame::DtorStateRestart() {}
@@ -1445,6 +3015,76 @@ namespace msw {
     void CGame::LoopStateChgField() {}
 
     void CGame::DtorStateChgField() {}
+
+    // State 19: plays an event demo (EventDemoWork), skippable with the
+    // demo skip input unless its flag forbids it.
+    void CGame::CtorStateEventDemo()
+    {
+        EventDemoWork *pWork = FsmqGetWork<EventDemoWork>();
+        pWork->m_nStep = 0;
+        SetPreparationMode(1);
+        if (pWork->m_bNoFadeIn == 0) {
+            bcs::CMainApp::Start3DFade(0, 1.0f);
+            bcs::CMainApp::StartMasterFade(0, 1.0f);
+        }
+        bcs::CRenderMan::ReqPushViewSplitType(static_cast<bcs::CWorldEnv::ViewSplitType>(0), 0);
+        EventDemoSetUp();
+        m_nStateStep = 0;
+    }
+
+    void CGame::LoopStateEventDemo()
+    {
+        EventDemoWork *pWork = FsmqGetWork<EventDemoWork>();
+        switch (pWork->m_nStep) {
+            case 0:
+                bcs::CMainApp::Start3DFade(4, 1.0f);
+                pWork->m_nStep++;
+                break;
+            case 1:
+                fn_801D23B8(pWork->m_nUnk0C);
+                CEventDemo::CreateDemo(pWork->m_nDemo, this, 1.0f / 60.0f, -1.0f);
+                pWork->m_nStep++;
+                break;
+            case 2:
+                if (!(pWork->m_nFlag & 1) && CheckDemoSkipInput_()) {
+                    CEventDemo::m_Work.bCancel = 1;
+                    pWork->m_nStep++;
+                }
+                // fall through
+            default:
+                if (CEventDemo::m_Work.bSkip) {
+                    CEventDemo::m_Work.bSkip = 1;
+                    bcs::CRenderMan::ReqPopViewSplitType(0);
+                    // With nothing queued after it, the game goes on to
+                    // its wait-start state (4).
+                    if (FsmqGetNextState() == 0) {
+                        FsmqPush(4);
+                    }
+                    if (pWork->m_nFadeType) {
+                        float fSpeed = pWork->m_fFadeFrame;
+                        if (fSpeed > 0.0f) {
+                            fSpeed = 1.0f / fSpeed;
+                        }
+                        if (!(fSpeed > 0.0f)) {
+                            fSpeed = 0.0f;
+                        }
+                        switch (pWork->m_nFadeType) {
+                            case 1:
+                                bcs::CMainApp::Start3DFade(0, fSpeed);
+                                break;
+                            case 2:
+                                bcs::CMainApp::Start3DFade(1, fSpeed);
+                                break;
+                            case 3:
+                                bcs::CMainApp::Start3DCrossFade(fSpeed, 0, 1);
+                                break;
+                        }
+                    }
+                    FsmqNext();
+                }
+                break;
+        }
+    }
 
     void CGame::DtorStateEventDemo()
     {
@@ -1481,7 +3121,37 @@ namespace msw {
         return 0;
     }
 
-    // ---- 0x80186770..0x80186A8C not written yet ----
+    void CGame::EnterHaltState()
+    {
+        CGame *pGame = m_pInstance;
+        if (pGame && pGame->FsmqGetState() != 27) {
+            bcs::CMainApp::Start3DFade(4, 0.0f);
+            bcs::CMainApp::StartMasterFade(4, 0.0f);
+            bcs::CMainApp::Start3DFade(0, 0.0f);
+            pGame->m_nUnk148 = 0;
+            CGameSnd::GamePauseAll(1, 16.0f);
+            fn_80070F88();
+            bcs::CMainApp::SetPause(0x2000, 1);
+            fn_80073FB4(1);
+            pGame->FsmqChangeState(27);
+        }
+    }
+
+    void CGame::ExitHaltState(int bToMenu)
+    {
+        CGame *pGame = m_pInstance;
+        if (pGame && pGame->FsmqGetState() == 27) {
+            pGame->ClearUnk08(0x2004);
+            g_GameWork.m_nReturnStep = 0;
+            if (bToMenu) {
+                menu::CStateSave::GetInstance()->SetStartMenuMode(2);
+            } else {
+                menu::CStateSave::GetInstance()->SetStartMenuMode(8);
+            }
+            CGamePadCheck::Finalize();
+            pGame->FsmqChangeState(18);
+        }
+    }
 
     long CGame::GetUnk148()
     {
@@ -1529,7 +3199,52 @@ namespace msw {
         *FsmqGetWork<long>() = 0;
     }
 
-    // ---- LoopStateOnlineSync0 (0x80186C6C) not written yet ----
+    // Before the game: every console reports ready with its frame counter,
+    // and all start from console 0's.
+    void CGame::LoopStateOnlineSync0()
+    {
+        long *pStep = FsmqGetWork<long>();
+        dwc::CGameDwc *pDwc = dwc::CGameDwc::GetInstance();
+        if (!pDwc) {
+            FsmqNext();
+            return;
+        }
+        int bNext = 0;
+        switch (*pStep) {
+            case 0: {
+                OnlineSyncMsg *pMsg = fn_80146248();
+                pMsg->m_nState = 1000;
+                pMsg->m_nTick = fn_8007C9BC();
+                pMsg->m_nUnk08 = 0;
+                fn_80146250(pDwc);
+                fn_800B1AA8(GetDwc(pDwc), 0);
+                (*pStep)++;
+                break;
+            }
+            case 1: {
+                int bReady = 1;
+                for (long i = 0; i < fn_800B19D8(GetDwc(pDwc)); i++) {
+                    long nState = fn_80146260(pDwc, i)->m_nState;
+                    if (nState != 1000 && nState != 2000) {
+                        bReady = 0;
+                        break;
+                    }
+                }
+                if (bReady) {
+                    fn_800B1FB4(fn_80146260(pDwc, 0)->m_nTick);
+                    fn_800B1D04(GetDwc(pDwc));
+                    (*pStep)++;
+                }
+                break;
+            }
+            default:
+                bNext = 1;
+                break;
+        }
+        if (bNext) {
+            FsmqNext();
+        }
+    }
 
     void CGame::DtorStateOnlineSync0() {}
 
@@ -1538,7 +3253,66 @@ namespace msw {
         *FsmqGetWork<long>() = 0;
     }
 
-    // ---- LoopStateOnlineSync1 (0x80186F38) not written yet ----
+    // Starting the game: every console reports started (2000), then the
+    // match is synchronised.
+    void CGame::LoopStateOnlineSync1()
+    {
+        long *pStep = FsmqGetWork<long>();
+        dwc::CGameDwc *pDwc = dwc::CGameDwc::GetInstance();
+        if (!pDwc) {
+            FsmqNext();
+            return;
+        }
+        int bNext = 0;
+        switch (*pStep) {
+            case 0:
+                fn_80146248()->m_nState = 2000;
+                fn_80146250(pDwc);
+                (*pStep)++;
+                break;
+            case 1: {
+                int bReady = 1;
+                for (long i = 0; i < fn_800B19D8(GetDwc(pDwc)); i++) {
+                    OnlineSyncMsg *pMsg = fn_80146260(pDwc, i);
+                    if ((i == GetDwc(pDwc)->GetMyAID() || !fn_800B1A30(GetDwc(pDwc), i)) && pMsg->m_nState != 2000) {
+                        bReady = 0;
+                        break;
+                    }
+                }
+                if (bReady) {
+                    (*pStep)++;
+                }
+                break;
+            }
+            case 2:
+            case 3:
+            case 4:
+                (*pStep)++;
+                break;
+            case 5:
+                if (fn_800B1C30(GetDwc(pDwc), 1)) {
+                    (*pStep)++;
+                }
+                break;
+            case 6:
+                if (GetDwc(pDwc)->IsInMatch()) {
+                    (*pStep)++;
+                }
+                break;
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+                (*pStep)++;
+                break;
+            default:
+                bNext = 1;
+                break;
+        }
+        if (bNext) {
+            FsmqNext();
+        }
+    }
 
     void CGame::DtorStateOnlineSync1() {}
 
@@ -1548,7 +3322,56 @@ namespace msw {
         m_nUnk148 = 0;
     }
 
-    // ---- LoopStateOnlineSync2 (0x8018726C) not written yet ----
+    // Ending the game: the match is closed, then every console reports
+    // ended (3000; 1000 from one that has not started counts too).
+    void CGame::LoopStateOnlineSync2()
+    {
+        long *pStep = FsmqGetWork<long>();
+        dwc::CGameDwc *pDwc = dwc::CGameDwc::GetInstance();
+        if (!pDwc) {
+            FsmqNext();
+            return;
+        }
+        int bNext = 0;
+        switch (*pStep) {
+            case 0:
+                if (fn_800B1C30(GetDwc(pDwc), 0)) {
+                    fn_800B1AA8(GetDwc(pDwc), 1);
+                    (*pStep)++;
+                }
+                break;
+            case 1:
+                if (!GetDwc(pDwc)->IsInMatch()) {
+                    (*pStep)++;
+                }
+                break;
+            case 2:
+                fn_80146248()->m_nState = 3000;
+                fn_80146250(pDwc);
+                (*pStep)++;
+                break;
+            case 3: {
+                int bReady = 1;
+                for (long i = 0; i < fn_800B19D8(GetDwc(pDwc)); i++) {
+                    long nState = fn_80146260(pDwc, i)->m_nState;
+                    if (nState != 3000 && nState != 1000) {
+                        bReady = 0;
+                        break;
+                    }
+                }
+                if (bReady) {
+                    (*pStep)++;
+                }
+                break;
+            }
+            default:
+                bNext = 1;
+                break;
+        }
+        if (bNext) {
+            FsmqNext();
+        }
+    }
 
     void CGame::DtorStateOnlineSync2() {}
 
@@ -1557,6 +3380,94 @@ namespace msw {
         SetPreparationMode(1);
         m_bExit = 1;
         m_nStateStep = 0;
+    }
+
+    // State 18: leaves the game. The sound fades out, everything the game
+    // made is reset and deleted, and the main step moves on: back to the
+    // tournament (3), the unlock screen first (4) when it has something to
+    // show, or the menus (2).
+    void CGame::LoopStateGameExit()
+    {
+        switch (m_nStateStep) {
+            case 0:
+                bcs::CMainApp::StartMasterFade(0, 1.0f / 30.0f);
+                if (!bcs::CMainApp::IsPause(0x2021)) {
+                    CGameBGM::SetBgmState(CGameBGM::STATE_FADE_OUT);
+                    CGameSnd::StopAllSound(); // (30 frames in the original; see Finalize)
+                }
+                m_nStateStep++;
+                break;
+            case 1: {
+                int bEnd = 1;
+                if (bcs::CMainApp::IsPlay3DFade()) {
+                    bEnd = 0;
+                }
+                if (bcs::CMainApp::IsPlayMasterFade()) {
+                    bEnd = 0;
+                }
+                if (bEnd) {
+                    KillTempChild_();
+                    BgResetFade_();
+                    CChrMan::AllReset();
+                    CChrMan::AllStop(static_cast<CChrCore::STOP_MODE>(2), static_cast<CChrCore::STOP_MODE>(2));
+                    CBallMan::AllReset();
+                    CGimmickMan::AllReset();
+                    CGimmickMan::QPanelAllReset();
+                    SendMessage_(0x17, 0, 0, 0);
+                    CEffectCtrl::EraseEffectAll();
+                    m_nStateStep++;
+                }
+                break;
+            }
+            case 2:
+                if (m_pTempParent) {
+                    m_pTempParent->Delete();
+                    m_pTempParent = 0;
+                }
+                for (int i = 0; i < 4; i++) {
+                    m_apCamera[i] = 0;
+                }
+                fn_80236790();
+                CGameCamera::Finalize();
+                bcs::CCameraMan::RemoveEntryAll();
+                CGameAccInput::Finalize();
+                m_nStateStep++;
+                break;
+            case 3:
+                DeleteAllChild();
+                // fall through
+            case 4:
+                bcs::CRenderMan::ReqCleanUp();
+                // fall through
+            case 5:
+                m_nStateStep++;
+                break;
+            case 6:
+                bcs::CMainApp::SetPause(0x2021, 0);
+                m_nStateStep++;
+                break;
+            default:
+                fn_80073FB4(0);
+                if (g_GameWork.m_nReturnStep == 1) {
+                    if (g_GameWork.m_nUnk180 == 0 && Unlock::IsDisp(0)) {
+                        Unlock::SetNextStep(3);
+                        CMainStep::ChangeStep(4);
+                    } else {
+                        CMainStep::ChangeStep(3);
+                    }
+                } else {
+                    long nMode = menu::CStateSave::GetInstance()->GetStartMenuMode();
+                    int bUnlock = (nMode < 6 || nMode >= 9) ? 1 : 0;
+                    if (bUnlock && g_GameWork.m_nUnk180 == 0 && Unlock::IsDisp(0)) {
+                        Unlock::SetNextStep(2);
+                        CMainStep::ChangeStep(4);
+                    } else {
+                        CTournament::ExitMode();
+                        CMainStep::ChangeStep(2);
+                    }
+                }
+                break;
+        }
     }
 
     void CGame::DtorStateGameExit() {}
@@ -1570,6 +3481,39 @@ namespace msw {
     {
         m_nTurnStartTelopType = nType;
         m_fTurnStartTelopFrame = fFrame > 0.0f ? fFrame : 0.0f;
+    }
+
+    void CGame::ChgCourtDemoSetup_()
+    {
+        FsmqCutNext();
+        CGameBGM::SetBgmState(CGameBGM::STATE_JINGLE_2);
+        if (CEventDemo::IsEnable()) {
+            KillTempChild_();
+            CChrMan::AllMotStop();
+            CChrMan::AllStockItemDelete();
+            CChrMan::AllReset();
+            CChrMan::AllSetState(4, -1, 0);
+            CChrMan::AllStop(static_cast<CChrCore::STOP_MODE>(2), static_cast<CChrCore::STOP_MODE>(2));
+            CBallMan::AllReset();
+            CGimmickMan::AllReset();
+            CGimmickMan::QPanelAllReset();
+            SendMessage_(0x17, 0, 0, 0);
+            for (long i = 0; i < g_GameWork.m_nTeamNum; i++) {
+                ClearTeamArtsGauge_(i);
+                g_GameWork.m_anTeamItem[i] = -1;
+            }
+            SetCockpitDisp_(0);
+            SetCockpitItemIconDisp_(0, 0);
+            SetDispRadarIcon_(0);
+            EventDemoWork *pWork = static_cast<EventDemoWork *>(FsmqPushState(19));
+            pWork->m_nFlag |= 1;
+            pWork->m_nDemo = 5;
+            pWork->m_nUnk0C = m_nUnk108;
+            pWork->m_nFadeType = 0;
+            pWork->m_fFadeFrame = 0.0f;
+        }
+        FsmqPush(9);
+        FsmqNext();
     }
 
     int CGame::CheckDemoSkipInput_()
@@ -1647,7 +3591,157 @@ namespace msw {
         }
     }
 
-    // ---- ScoreBookApplyCountWork_ (0x80187E80) not written yet ----
+    // Writes the game into the player's save data: the kind of game played
+    // (0 normal, 1 tournament, 2 party, 3 boss, 4 online), and for a normal
+    // game the score book counters, the stage and each character of the
+    // player's team with the result (1 won, -1 lost, 0 draw).
+    void CGame::ScoreBookApplyCountWork_()
+    {
+        SAVE_DATA_PLAYER *pData = CSave::GetPlayerData(-1);
+        if (!pData) {
+            return;
+        }
+        long nKind = 3;
+        if (g_GameWork.m_nGameMode != GAME_MODE_BOSS) {
+            if (g_GameWork.m_Unk151) {
+                nKind = 4;
+            } else if (CTournament::IsTournamentGame()) {
+                nKind = 1;
+            } else if (IsPartyGame()) {
+                nKind = 2;
+            } else {
+                nKind = 0;
+            }
+        }
+        fn_801C1F8C(pData, nKind, g_GameWork.m_nGameMode);
+        if (nKind == 0) {
+            fn_801C1F8C(pData, 1, g_GameWork.m_nGameMode);
+        }
+        if (nKind == 1) {
+            fn_801C1F8C(pData, 0, g_GameWork.m_nGameMode);
+        }
+        fn_8017A4C4(g_GameWork.m_nGameMode, (g_GameWork.m_nUnk40 >> 9) & 1);
+        if (g_GameWork.m_nGameType != GAME_TYPE_NORMAL) {
+            return;
+        }
+
+        long nResult = 0;
+        long bWin = 0;
+        switch (g_GameWork.m_anTeamResult[g_GameWork.m_nUnk00]) {
+            case 1:
+                nResult = 1;
+                bWin = 1;
+                break;
+            case 2:
+                nResult = -1;
+                break;
+        }
+        int bSecond = 0;
+        if (g_GameWork.m_nUnk00 != 0) {
+            bSecond = 1;
+        }
+        if (dwc::CGameDwc::GetInstance()) {
+            fn_80145F8C();
+        }
+        fn_801C22A8(pData, g_GameWork.m_nGameMode, bWin, m_anScoreBookCount[0], m_anScoreBookCount[2],
+                    m_anScoreBookCount[1]);
+        fn_801C2B7C(pData, g_GameWork.m_nStage, g_GameWork.m_nGameMode);
+
+        // The characters of the player's team for the play type.
+        long anChr[6] = { -1, -1, -1, -1, -1, -1 };
+        if (!bSecond) {
+            switch (g_GameWork.m_nUnk06) {
+                case 0:
+                case 1:
+                case 16:
+                case 19:
+                    anChr[0] = 0;
+                    anChr[1] = 2;
+                    anChr[2] = 4;
+                    break;
+                case 3:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                case 20:
+                case 22:
+                case 23:
+                case 24:
+                case 25:
+                    anChr[0] = 0;
+                    break;
+                case 4:
+                case 5:
+                case 17:
+                    anChr[0] = 0;
+                    anChr[1] = 2;
+                    break;
+                case 14:
+                case 15:
+                case 18:
+                case 21:
+                    anChr[0] = 0;
+                    anChr[1] = 4;
+                    break;
+            }
+        } else {
+            switch (g_GameWork.m_nUnk06) {
+                case 3:
+                case 8:
+                case 17:
+                case 19:
+                case 22:
+                case 23:
+                    anChr[0] = 1;
+                    break;
+                case 5:
+                case 7:
+                case 20:
+                    anChr[0] = 1;
+                    anChr[1] = 3;
+                    break;
+                case 1:
+                case 10:
+                case 15:
+                case 21:
+                case 24:
+                case 25:
+                    anChr[0] = 1;
+                    anChr[1] = 3;
+                    anChr[2] = 5;
+                    break;
+                case 14:
+                case 16:
+                    anChr[0] = 1;
+                    anChr[1] = 5;
+                    break;
+            }
+        }
+        for (long i = 0; i < 6; i++) {
+            long nChr = anChr[i];
+            if (nChr < 0) {
+                continue;
+            }
+            if (GetCharType(nChr) >= 0x13) {
+                // A Mii counts only when it is in the player's save data.
+                RFLStoreData data = g_GameWork.m_aMiiStoreData[nChr];
+                RFLAdditionalInfo info;
+                if (bcs::CMiiMan::GetAdditionalInfo(info, data) == RFLErrcode_Success) {
+                    if (pData->SearchMiiIndex(info.createID) >= 0) {
+                        fn_801C2E94(pData, data, g_GameWork.m_nGameMode, nResult);
+                    }
+                }
+            } else {
+                fn_801C29E8(pData, GetCharType(nChr), g_GameWork.m_nGameMode, nResult);
+            }
+        }
+        pData->CheckUnLockXml(g_GameWork.m_nGameMode);
+        if (m_pUnk134) {
+            fn_8026C9D8(m_pUnk134, 1);
+        }
+    }
 
     int CGame::MenuCallPause_()
     {
@@ -1662,6 +3756,214 @@ namespace msw {
 
     // ---- CGamePauseTask::Main and its helpers (0x801882F4..0x80188F48) not written yet ----
 
+    int CGamePauseTask::CanbePause() const
+    {
+        if (!m_bEnable) {
+            return 0;
+        }
+        if (!CGame::IsMainLoopState(1)) {
+            return 0;
+        }
+        if (CGame::g_GameWork.m_nFlag18 & 0x4306) {
+            return 0;
+        }
+        if (CGame::g_GameWork.m_nUnk180) {
+            return 0;
+        }
+        if (CGame::g_GameWork.m_Unk151) {
+            return 0;
+        }
+        if (bcs::CMainApp::IsPause(0xFC67)) {
+            return 0;
+        }
+        if (bcs::CMainApp::IsPauseReady(0xFC67)) {
+            return 0;
+        }
+        if (CGame::g_uPauseBit & 0x1136) {
+            return 0;
+        }
+        return 1;
+    }
+
+    long CGamePauseTask::GetPlusPad(int bHold)
+    {
+        if (bHold) {
+            unsigned long nBits = GetActivePadBits();
+            for (long i = 0; i < 4; i++) {
+                if (!(nBits & (1 << i))) {
+                    m_anUnk40[i] = 0;
+                    m_afUnk50[i] = 0.0f;
+                    continue;
+                }
+                if (bcs::CWifiPad::IsTrg(0x10, i)) {
+                    m_anUnk40[i] = 1;
+                    m_afUnk50[i] = 0.0f;
+                }
+                if (bcs::CWifiPad::IsDown(0x10, i)) {
+                    if (m_anUnk40[i]) {
+                        m_afUnk50[i] += GetFrameRateF();
+                        if (m_afUnk50[i] > 6.0f) {
+                            return i;
+                        }
+                    }
+                } else {
+                    m_anUnk40[i] = 0;
+                    m_afUnk50[i] = 0.0f;
+                }
+            }
+        } else {
+            unsigned long nBits = GetActivePadBits();
+            for (long i = 0; i < 4; i++) {
+                if ((nBits & (1 << i)) && bcs::CWifiPad::IsTrg(0x10, i)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    long CGamePauseTask::GetMinusPad(int bHold)
+    {
+        if (bHold) {
+            unsigned long nBits = GetActivePadBits();
+            for (long i = 0; i < 4; i++) {
+                if (!(nBits & (1 << i))) {
+                    m_anUnk60[i] = 0;
+                    m_afUnk70[i] = 0.0f;
+                    continue;
+                }
+                if (bcs::CWifiPad::IsTrg(0x1000, i)) {
+                    m_anUnk60[i] = 1;
+                    m_afUnk70[i] = 0.0f;
+                }
+                if (bcs::CWifiPad::IsDown(0x1000, i)) {
+                    if (m_anUnk60[i]) {
+                        m_afUnk70[i] += GetFrameRateF();
+                        if (m_afUnk70[i] > 6.0f) {
+                            return i;
+                        }
+                    }
+                } else {
+                    m_anUnk60[i] = 0;
+                    m_afUnk70[i] = 0.0f;
+                }
+            }
+        } else {
+            unsigned long nBits = GetActivePadBits();
+            for (long i = 0; i < 4; i++) {
+                if ((nBits & (1 << i)) && bcs::CWifiPad::IsTrg(0x1000, i)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    inline void CGamePauseTask::StopGame()
+    {
+        CGame::SendMessage(0x19, 0, 0, 0);
+        CGame::StopCameraQuake(-1);
+        CGame::StopAllCameraQuake();
+        CGameSnd::GamePauseAll(1, 18.0f);
+        bcs::CPadWI::PushMotorAll();
+        bcs::CMainApp::SetPause(1, 1);
+    }
+
+    inline void CGamePauseTask::ResumeGame()
+    {
+        if (!m_nUnk38) {
+            bcs::CMainApp::SetPause(1, 0);
+        }
+        if (m_nUnk38) {
+            fn_80071128();
+        } else {
+            bcs::CPadWI::PopMotorAll();
+            CGameSnd::GamePauseAll(0, 18.0f);
+        }
+        CGame::SendMessage(0x1A, m_nUnk38, 0, 0);
+        CCockpit *pCockpit = CCockpit::GetTask();
+        if (pCockpit) {
+            pCockpit->ChangeState(2);
+        }
+        CMenuPadInfo::s_Instance.m_nPadLeader = 0;
+        m_nStep = -1;
+    }
+
+    // Opens the pause menu on a + press (step 1) or, outside party and
+    // boss games, the item info on a - press held for a moment (step 10),
+    // and resumes the game when the menu has closed.
+    void CGamePauseTask::Main()
+    {
+        switch (m_nStep) {
+            case 0:
+                if (CanbePause()) {
+                    long nPad = GetPlusPad(1);
+                    if (nPad >= 0) {
+                        ClearHold();
+                        if (bcs::CWifiPad::IsDown(0x10, nPad)) {
+                            CMenuPadInfo::s_Instance.m_nPadLeader = nPad;
+                            m_nUnk38 = 0;
+                            StopGame();
+                            if (CGame::m_pInstance) {
+                                CGame::m_pInstance->MenuCallPause_();
+                            }
+                            menu::CSndEff::s_Instance.Play(0xBC2, 1);
+                            m_nStep++;
+                        }
+                    }
+                    if (CGame::g_GameWork.m_nGameType != CGame::GAME_TYPE_PARTY &&
+                        CGame::g_GameWork.m_nGameMode != CGame::GAME_MODE_BOSS) {
+                        nPad = GetMinusPad(1);
+                        if (nPad >= 0) {
+                            ClearHold();
+                            if (bcs::CWifiPad::IsDown(0x1000, nPad)) {
+                                CMenuPadInfo::s_Instance.m_nPadLeader = nPad;
+                                m_nUnk38 = 0;
+                                StopGame();
+                                menu::CSndEff::s_Instance.Play(0xBC2, 1);
+                                m_nStep = 10;
+                            }
+                        }
+                    }
+                }
+                break;
+            case 1:
+                if (!bcs::CTaskMan::GetTask(CCockpitPause::s_TaskHandle)) {
+                    ResumeGame();
+                }
+                break;
+            case 2:
+                if (!bcs::CTaskMan::GetTask(CCockpitPause::s_TaskHandle)) {
+                    ResumeGame();
+                }
+                break;
+            case 10:
+                m_afUnk70[0] += GetFrameRateF();
+                if (m_afUnk70[0] > 6.0f) {
+                    m_afUnk70[0] = 0.0f;
+                    CCockpit *pCockpit = CCockpit::GetTask();
+                    CockpitItemInfoTab *pTab = new CockpitItemInfoTab(0x1082, 3, 0.0f);
+                    pCockpit->AddObj(pTab);
+                    pTab->Set();
+                    m_nStep++;
+                }
+                break;
+            case 11:
+                if (CCockpit::IsEndObj(0x1082)) {
+                    ResumeGame();
+                }
+                break;
+            case 12:
+                if (!bcs::CTaskMan::GetTask(CCockpitPause::s_TaskHandle)) {
+                    ResumeGame();
+                }
+                break;
+            default:
+                m_nStep = 0;
+                break;
+        }
+    }
+
     void CGamePauseTask::Disp() {}
 
     // Lifts the hit stop's pause when the task goes.
@@ -1670,7 +3972,37 @@ namespace msw {
         bcs::CMainApp::SetPause(4, 0);
     }
 
-    // ---- CGameStopTask::Main (0x80188FC0) not written yet ----
+    // The hit stop: stops the game (pause bit 4) for m_fFrame frames, then
+    // brings the speed back from the slow motion over m_fStop frames.
+    void CGameStopTask::Main()
+    {
+        switch (m_nState) {
+            case 0:
+                break;
+            case 1:
+                if (m_fFrame >= 0.0f) {
+                    CGame::SendMessage(0x1B, 0, 0, 0);
+                    m_nState++;
+                }
+                break;
+            default:
+                m_fFrame -= GetFrameRateF();
+                if (m_fFrame <= 0.0f) {
+                    CGame::SendMessage(0x1C, 0, 0, 0);
+                    bcs::CMainApp::SetPause(4, 0);
+                    if (m_fStop > 0.0f) {
+                        CGameSpeedCtrl *pCtrl = CGame::CreateSpeedCtrl();
+                        if (pCtrl) {
+                            pCtrl->RestoreSpeed(m_fStop, 1, m_nType);
+                        }
+                    }
+                    m_fFrame = 0.0f;
+                    m_fStop = 0.0f;
+                    m_nState = 0;
+                }
+                break;
+        }
+    }
 
     void CGameStopTask::Disp() {}
 
@@ -1702,7 +4034,77 @@ namespace msw {
         }
     }
 
-    // ---- 0x801892D0 (the speed control's step) not written yet ----
+    // Either a slow effect (m_nUnk5C == 1: down to m_fTo over m_fUnk54,
+    // held for m_fTime, back over m_fUnk58) or a plain move from m_fFrom to
+    // m_fTo over m_fTime (eased by m_nUnk60: 1 squared, 2 to the power 4.5).
+    void CGameSpeedCtrl::Step(float fRate)
+    {
+        int bEnd = 0;
+        if (m_nUnk5C == 1) {
+            switch (m_nUnk64) {
+                case 0:
+                    if (m_fElapsed < m_fUnk54) {
+                        m_fElapsed += fRate;
+                        float fRatio = 1.0f;
+                        if (m_fUnk54 > 0.0f) {
+                            fRatio = CLAMP(m_fElapsed / m_fUnk54, 0.0f, 1.0f);
+                        }
+                        m_fSpeed = fRatio * (m_fTo - m_fFrom) + m_fFrom;
+                    } else {
+                        m_fElapsed = 0.0f;
+                        m_fSpeed = m_fTo;
+                        m_nUnk64++;
+                    }
+                    break;
+                case 1:
+                    m_fSpeed = m_fTo;
+                    if (m_fElapsed < m_fTime) {
+                        m_fElapsed += fRate;
+                    } else {
+                        m_nUnk64++;
+                    }
+                    break;
+                case 2:
+                    if (m_fElapsed < m_fUnk58) {
+                        m_fElapsed += fRate;
+                        float fRatio = 1.0f;
+                        if (m_fUnk58 > 0.0f) {
+                            fRatio = CLAMP(m_fElapsed / m_fUnk58, 0.0f, 1.0f);
+                        }
+                        m_fSpeed = fRatio * (m_fFrom - m_fTo) + m_fTo;
+                    } else {
+                        m_fElapsed = 0.0f;
+                        bEnd = m_nUnk68;
+                        m_fSpeed = m_fFrom;
+                        m_nUnk64++;
+                    }
+                    break;
+                default:
+                    bEnd = m_nUnk68;
+                    break;
+            }
+        } else if (m_fTime > 0.0f) {
+            m_fElapsed = CLAMP(m_fElapsed + fRate, 0.0f, m_fTime);
+            float fRatio = m_fElapsed / m_fTime;
+            switch (m_nUnk60) {
+                case 1:
+                    fRatio *= fRatio;
+                    break;
+                case 2:
+                    fRatio = pow(fRatio, 4.5);
+                    break;
+            }
+            m_fSpeed = fRatio * (m_fTo - m_fFrom) + m_fFrom;
+            if (m_fElapsed >= m_fTime) {
+                bEnd = m_nUnk68;
+            }
+        } else {
+            bEnd = m_nUnk68;
+        }
+        if (bEnd) {
+            Delete();
+        }
+    }
 
     void CGameSpeedCtrl::StartSpeedAnim(float from, float to, float time, int nUnk68, long nUnk60)
     {
@@ -1746,7 +4148,194 @@ namespace msw {
         bcs::CMainApp::SetUnivSpeed(CGame::g_GameWork.m_fGameSpeed);
     }
 
-    // ---- CGameTaskGroup::Main (0x8018966C) and GameWork::SetDefault (0x80189798) not written yet ----
+    // Steps the speed controls and sets the slowest speed for the whole
+    // game; without any, the game's own speed.
+    void CGameTaskGroup::Main()
+    {
+        if (nw4r::ut::List_GetSize(&m_List)) {
+            float fSpeed = CGame::g_GameWork.m_fGameSpeed;
+            float fRate = bcs::CMainApp::GetAppFrameRateF();
+            CGameSpeedCtrl *pCtrl = static_cast<CGameSpeedCtrl *>(nw4r::ut::List_GetNext(&m_List, 0));
+            while (pCtrl) {
+                if (!pCtrl->IsDelete()) {
+                    pCtrl->Step(fRate);
+                    float f = pCtrl->GetSpeed();
+                    if (fSpeed > f && f > 0.0f) {
+                        fSpeed = f;
+                    }
+                }
+                pCtrl = static_cast<CGameSpeedCtrl *>(nw4r::ut::List_GetNext(&m_List, pCtrl));
+            }
+            bcs::CMainApp::SetUnivSpeed(fSpeed);
+        } else {
+            float fSpeed = CGame::g_GameWork.m_fGameSpeed;
+            if (fSpeed != bcs::CMainApp::GetUnivSpeed()) {
+                bcs::CMainApp::SetUnivSpeed(fSpeed);
+            }
+        }
+    }
+
+    // The settings of a game before anything is chosen: a normal
+    // two-team game on level 2, 9000 frames (150 seconds) per period,
+    // every pad in both teams, and the first eight Miis of the console
+    // (topped up with the default Miis).
+    void CGame::GameWork::SetDefault()
+    {
+        m_nUnk00 = 0;
+        m_nGameMode = 0;
+        m_nGameType = 0;
+        m_nUnk06 = 1;
+        m_nUnk07 = 0;
+        m_nTournamentLevel = 0;
+        m_nRound = 0;
+        m_nStage = 1;
+        m_Unk0B = 2;
+        m_nPeriod = 0;
+        m_nUnk44 = 20;
+        m_nTeamNum = 2;
+        m_nGoalNum = 2;
+        m_Unk0E = 0;
+        m_nUserTeam = 0;
+        m_nGameLevel = 2;
+        m_nQPanelLevel = 2;
+        m_nFlag18 = 0;
+        m_nUnk1C = 0;
+        m_fUnk20 = 9000.0f;
+        m_fGameTime = 9000.0f;
+        m_fMaxShotTime = 0.0f;
+        m_fUnk2C = 600.0f;
+        m_fShotTime = 0.0f;
+        m_fGameSpeed = 1.0f;
+        m_Unk150 = 0;
+        m_fUnk38 = 0.0f;
+        m_nUnk40 = 0;
+        m_nUnk1A8 = 0;
+        m_Unk151 = 0;
+        m_nSportsMode = 0;
+        m_nGoalTeam = 0;
+        m_nGoalChar = 0;
+        m_nGoalBaseScore = 0;
+        m_Unk160 = 0;
+        m_nGoalScore = 0;
+        m_fGoalShootRate = 0.0f;
+        m_nGoalShootType = 0;
+        m_nGoalBonusType = 0;
+        m_nGoalBonusColor = 0;
+        m_nGoalBonusPoint = 0;
+        m_nGoalOwnGoal = 0;
+        m_nUnk180 = 0;
+        m_anAllPadBits[0] = 0xF;
+        m_anAllPadBits[1] = 0xF;
+        m_nUnk3C = 0;
+        m_anUnk78[1] = -1;
+        m_anUnk78[2] = -1;
+        m_anUnk78[3] = -1;
+        m_anUnk78[0] = 0;
+        for (long i = 0; i < 4; i++) {
+            m_anTeamCtrlType[i] = 0;
+            m_anTeamColorIdx[i] = i;
+            m_anUnk84[i] = i;
+            m_afTeamComLevel[i] = 2.0f;
+            m_anGoalIdx[i] = i & 1;
+            m_anTeamCoin[i] = 0;
+            m_anTeamDisableDropCoin[i] = 0;
+            m_anCoinHistCount[i] = 0;
+            m_anCoinHistTime[i] = 0;
+            m_anTeamItem[i] = -1;
+            m_anTeamResult[i] = 0;
+            m_anUnk1A4[i] = i & 1;
+            m_anPeriodStartCoin[i] = 0;
+            m_anPeriodStartScore[i] = 0;
+            m_anTeamMaxLife[i] = 100;
+            m_anTeamInitLife[i] = 0;
+            m_anTeamRebirthLife[i] = 20;
+            m_anTeamSkillPoint[i] = 0;
+            m_anTeamPadBits[i] = 0xF;
+            m_anTeamOnlinePadBits[i] = 0xF;
+            m_anTeamChrChangeCtrlType[i] = 0;
+            m_abTeamAutoSpikeJump[i] = 0;
+            m_anPassCountLimit[i] = 0;
+        }
+        m_anPadDefaultType[0] = -1;
+        m_anPadDefaultType[1] = -1;
+        m_anPadDefaultType[2] = -1;
+        m_anPadDefaultType[3] = -1;
+        m_anUnk1A0[0] = 0;
+        m_anUnk1A0[1] = 1;
+        m_anUnk1A0[2] = 0;
+        m_anUnk1A0[3] = 1;
+        m_anGoalTeam[0] = 0;
+        m_anGoalTeam[1] = 1;
+        m_anGoalTeam[2] = 2;
+        m_anGoalTeam[3] = 3;
+        for (long i = 0; i < 8; i++) {
+            m_anCharType[i] = 0;
+            m_anCharColor[i] = 0;
+            m_anCharExFlag[i] = 0;
+            m_anCharAssignPadNo[i] = i & 1;
+            m_anCharAssignPlayerNo[i] = i & 1;
+            for (long j = 0; j < 0x20; j++) {
+                m_aCharName[i][j] = 0;
+            }
+        }
+        m_anNpcType[1] = -1;
+        m_anNpcType[2] = -1;
+        m_anNpcType[3] = -1;
+        m_anNpcType[4] = -1;
+        m_anNpcType[5] = -1;
+        m_anNpcType[6] = -1;
+        m_anNpcType[7] = -1;
+        m_anNpcType[0] = 1;
+        m_anPartyGameParam[0] = 0;
+        m_anPartyGameParam[1] = 0;
+        m_anPartyGameParam[2] = 0;
+        m_anPartyGameParam[3] = 0;
+        m_nUnk1C8 = 0;
+        m_nViewSplit = 0;
+        m_nGimmickParamIdx = 0;
+        m_nUnk430 = 0;
+
+        long nChr = 0;
+        long nIndex = -1;
+        while (nChr < 8) {
+            long nNext = -1;
+            for (long i = nIndex + 1; i < 100; i++) {
+                if (RFLIsAvailableOfficialData(i)) {
+                    nNext = i;
+                    break;
+                }
+            }
+            nIndex = nNext;
+            if (nIndex < 0) {
+                break;
+            }
+            RFLStoreData data;
+            switch (RFLGetStoreData(&data, RFLDataSource_Official, nIndex)) {
+                case RFLErrcode_Success:
+                    SetMiiStoreData(nChr, data);
+                    break;
+                case RFLErrcode_NotAvailable:
+                case RFLErrcode_DBNodata:
+                case 15:
+                    break;
+            }
+            nChr++;
+        }
+        for (long i = 0; nChr < 8; i++) {
+            RFLStoreData data;
+            switch (RFLGetStoreData(&data, RFLDataSource_Default, i % 6)) {
+                case RFLErrcode_Success:
+                    SetMiiStoreData(nChr, data);
+                    break;
+                case RFLErrcode_NotAvailable:
+                case RFLErrcode_DBNodata:
+                case 15:
+                    break;
+            }
+            nChr++;
+        }
+        m_nReturnStep = 0;
+    }
 
 
     void CGame::SetMyTeamIdx(long nTeam)
@@ -1880,6 +4469,105 @@ namespace msw {
     void CGame::SetPlayType(GAME_PLAY_TYPE type)
     {
         g_GameWork.m_nUnk06 = type;
+    }
+
+    // Whether the player of team nTeam may change the team's leader in the
+    // play type (GameWork::m_nUnk06): basketball and dodgeball have their
+    // own tables, the other sports one for both teams.
+    int CGame::IsPlayTypeCanChangeLeader(long nTeam)
+    {
+        switch (g_GameWork.m_nGameMode) {
+            case GAME_MODE_BASKET:
+            case GAME_MODE_DODGE:
+                if (nTeam == 0) {
+                    switch (g_GameWork.m_nUnk06) {
+                        case 0:
+                        case 1:
+                        case 4:
+                        case 5:
+                        case 16:
+                        case 17:
+                        case 19:
+                            return 1;
+                        case 2:
+                        case 3:
+                        case 6:
+                        case 7:
+                        case 8:
+                        case 9:
+                        case 10:
+                        case 11:
+                        case 12:
+                        case 13:
+                        case 14:
+                        case 15:
+                        case 18:
+                            break;
+                    }
+                } else {
+                    switch (g_GameWork.m_nUnk06) {
+                        case 1:
+                        case 5:
+                        case 7:
+                        case 10:
+                        case 15:
+                        case 20:
+                        case 21:
+                        case 24:
+                        case 25:
+                            return 1;
+                        case 0:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 6:
+                        case 8:
+                        case 9:
+                        case 11:
+                        case 12:
+                        case 13:
+                        case 14:
+                        case 16:
+                        case 17:
+                        case 18:
+                        case 19:
+                        case 22:
+                        case 23:
+                            break;
+                    }
+                }
+                return 0;
+            default:
+                switch (g_GameWork.m_nUnk06) {
+                    case 0:
+                    case 1:
+                    case 4:
+                    case 5:
+                        return 1;
+                    case 16:
+                    case 17:
+                    case 19:
+                        if (nTeam == 0) {
+                            return 1;
+                        }
+                        break;
+                    case 6:
+                    case 7:
+                    case 9:
+                    case 10:
+                    case 15:
+                    case 18:
+                    case 20:
+                    case 21:
+                    case 24:
+                    case 25:
+                        if (nTeam == 1) {
+                            return 1;
+                        }
+                        break;
+                }
+                return 0;
+        }
     }
 
     void CGame::SetSportsMode(SPORTS_MODE mode)
@@ -2797,7 +5485,49 @@ namespace msw {
         fn_8013A7A8(0x1005, bDisp);
     }
 
-    // ---- SetCockpitItemIconDisp_, PushTeamItem_ (0x8018B648..0x8018B860) not written yet ----
+    // Shows or hides the item icons of the teams' roulettes (never shown
+    // while rule option bit 2 is set).
+    void CGame::SetCockpitItemIconDisp_(int bDisp, int n)
+    {
+        if (bDisp && !((g_GameWork.m_nUnk40 >> 2) & 1)) {
+            for (long i = 0; i < g_GameWork.m_nTeamNum; i++) {
+                if (m_apItemRoulette[i]) {
+                    m_apItemRoulette[i]->SetIconDisp(1, n);
+                }
+            }
+        } else {
+            for (long i = 0; i < g_GameWork.m_nTeamNum; i++) {
+                if (m_apItemRoulette[i]) {
+                    m_apItemRoulette[i]->SetIconDisp(0, n);
+                }
+            }
+        }
+    }
+
+    // Gives team nTeam item nItem: the roulette sound stops, the icon shows
+    // the item (without the roulette) and the roulette stops on it; item 4
+    // is given at once.
+    void CGame::PushTeamItem_(long nTeam, long nItem)
+    {
+        if ((g_GameWork.m_nUnk40 >> 2) & 1) {
+            return;
+        }
+        CItemRoulette *pRoulette = m_apItemRoulette[nTeam];
+        if (pRoulette && pRoulette->IsPushable()) {
+            pRoulette->StopSnd();
+            pRoulette->m_nItem = nItem;
+            if (pRoulette->m_bUseRoulette == 0) {
+                fn_80139D28(pRoulette->m_nTeam, 0, pRoulette->m_nItem);
+            }
+            if (pRoulette->m_nItem == 4) {
+                pRoulette->ChangeState(5);
+            } else if (pRoulette->m_bUseRoulette) {
+                pRoulette->ChangeState(4);
+            } else {
+                g_GameWork.m_anTeamItem[pRoulette->m_nTeam] = pRoulette->m_nItem;
+            }
+        }
+    }
 
     // Takes team nTeam's item back: a roulette that is waiting drops its
     // icon, one that is spinning is stopped (state 2). Nothing while rule
@@ -2811,7 +5541,7 @@ namespace msw {
         if (pRoulette) {
             switch (pRoulette->m_nState) {
                 case 0:
-                    pRoulette->m_nUnk7C = -1;
+                    pRoulette->m_nItem = -1;
                     break;
                 case 1:
                     pRoulette->ChangeState(2);
@@ -2820,7 +5550,23 @@ namespace msw {
         }
     }
 
-    // ---- TeamItemStartRoulette_ (0x8018B8C8) not written yet ----
+    // Gives team nTeam item nItem without the roulette spinning first (the
+    // spin starts in state 3 when the roulette is used).
+    void CGame::TeamItemStartRoulette_(long nTeam, long nItem)
+    {
+        if ((g_GameWork.m_nUnk40 >> 2) & 1) {
+            return;
+        }
+        CItemRoulette *pRoulette = m_apItemRoulette[nTeam];
+        if (pRoulette && pRoulette->IsPushable()) {
+            pRoulette->m_nItem = nItem;
+            if (pRoulette->m_bUseRoulette == 0) {
+                g_GameWork.m_anTeamItem[pRoulette->m_nTeam] = pRoulette->m_nItem;
+            } else {
+                pRoulette->ChangeState(3);
+            }
+        }
+    }
 
     int CGame::IsTeamItemRouletteRole_(long nTeam)
     {
@@ -3256,7 +6002,552 @@ namespace msw {
         memset(&g_ScoreWork, 0, sizeof(g_ScoreWork));
     }
 
-    // ---- SetParamSemiAuto, SetPadAssignSemiAuto, fn_8018D38C not written yet ----
+    namespace {
+        // The pad of each of the eight characters (GameWork 0x60).
+        inline void SetCharPads(long n0, long n1, long n2, long n3, long n4, long n5, long n6, long n7)
+        {
+            unsigned char *pPad = CGame::g_GameWork.m_anCharAssignPadNo;
+            pPad[0] = n0;
+            pPad[1] = n1;
+            pPad[2] = n2;
+            pPad[3] = n3;
+            pPad[4] = n4;
+            pPad[5] = n5;
+            pPad[6] = n6;
+            pPad[7] = n7;
+        }
+    }
+
+    // Gives each character the pad of its player for the play type
+    // (GameWork::m_nUnk06); characters without a player of their own share
+    // the pads 0 and 1.
+    void CGame::SetPadAssignSemiAuto()
+    {
+        SetCharPads(0, 1, 0, 1, 0, 1, 0, 1);
+        switch (g_GameWork.m_nUnk06) {
+            case 6:
+            case 7:
+            case 15:
+            case 18:
+                SetCharPads(0, 2, 1, 2, 0, 2, 0, 2);
+                break;
+            case 9:
+            case 10:
+                SetCharPads(0, 3, 1, 3, 2, 3, 0, 3);
+                break;
+            case 8:
+            case 14:
+                SetCharPads(0, 2, 1, 3, 0, 2, 0, 2);
+                break;
+            case 16:
+            case 17:
+                SetCharPads(0, 1, 0, 2, 0, 1, 0, 1);
+                break;
+            case 19:
+                SetCharPads(0, 1, 0, 2, 0, 3, 0, 1);
+                break;
+            case 20:
+            case 21:
+                SetCharPads(0, 1, 2, 1, 0, 1, 0, 1);
+                break;
+            case 22:
+                SetCharPads(0, 1, 2, 3, 0, 1, 0, 1);
+                break;
+            case 23:
+                SetCharPads(0, 1, 3, 2, 0, 1, 0, 1);
+                break;
+            case 24:
+                SetCharPads(0, 2, 1, 2, 3, 2, 0, 2);
+                break;
+            case 25:
+                SetCharPads(0, 1, 2, 1, 3, 1, 0, 1);
+                break;
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 11:
+            case 12:
+            case 13:
+            default:
+                SetCharPads(0, 1, 0, 1, 0, 1, 0, 1);
+                break;
+        }
+    }
+
+    namespace {
+        // Leaves character slot nChr empty.
+        inline void ClearChar(long nChr)
+        {
+            CGame::g_GameWork.m_anCharType[nChr] = -1;
+            CGame::g_GameWork.m_anCharColor[nChr] = 0;
+            CGame::g_GameWork.m_anCharExFlag[nChr] = 0;
+        }
+    }
+
+    void CGame::SetCharSemiAuto()
+    {
+        switch (g_GameWork.m_nGameMode) {
+            case GAME_MODE_DODGE: {
+                long nFirst;
+                switch (g_GameWork.m_nUnk06) {
+                    case 13:
+                        g_GameWork.m_anTeamCtrlType[0] = 1;
+                        // fall through
+                    case 0:
+                    case 9:
+                    case 18:
+                        g_GameWork.m_anTeamCtrlType[1] = 1;
+                        nFirst = 6;
+                        break;
+                    case 11:
+                        g_GameWork.m_anTeamCtrlType[0] = 1;
+                        // fall through
+                    case 2:
+                        g_GameWork.m_anTeamCtrlType[1] = 1;
+                        // fall through
+                    case 3:
+                        for (long i = 2; i < 8; i++) {
+                            ClearChar(i);
+                        }
+                        nFirst = 2;
+                        break;
+                    case 12:
+                        g_GameWork.m_anTeamCtrlType[0] = 1;
+                        // fall through
+                    case 4:
+                    case 6:
+                        g_GameWork.m_anTeamCtrlType[1] = 1;
+                        // fall through
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 17:
+                    case 20:
+                    case 22:
+                    case 23:
+                        for (long i = 4; i < 8; i++) {
+                            ClearChar(i);
+                        }
+                        nFirst = 4;
+                        break;
+                    default:
+                        nFirst = 6;
+                        break;
+                }
+                if (g_GameWork.m_nGameMode == GAME_MODE_DODGE && g_GameWork.m_nGameType == GAME_TYPE_PARTY) {
+                    nFirst = -1;
+                }
+                if (nFirst >= 0) {
+                    g_GameWork.m_anCharType[nFirst] = 4;
+                    g_GameWork.m_anCharType[nFirst + 1] = 4;
+                    g_GameWork.m_anCharColor[nFirst] = 5;
+                    g_GameWork.m_anCharColor[nFirst + 1] = 4;
+                    g_GameWork.m_anCharExFlag[nFirst] = 3;
+                    g_GameWork.m_anCharExFlag[nFirst + 1] = 3;
+                }
+                break;
+            }
+            case GAME_MODE_VOLLEY:
+            default:
+                switch (g_GameWork.m_nUnk06) {
+                    case 13:
+                        g_GameWork.m_anTeamCtrlType[0] = 1;
+                        // fall through
+                    case 0:
+                    case 9:
+                    case 18:
+                        g_GameWork.m_anTeamCtrlType[1] = 1;
+                        ClearChar(6);
+                        ClearChar(7);
+                        break;
+                    case 11:
+                        g_GameWork.m_anTeamCtrlType[0] = 1;
+                        // fall through
+                    case 2:
+                        g_GameWork.m_anTeamCtrlType[1] = 1;
+                        // fall through
+                    case 3:
+                        for (long i = 2; i < 8; i++) {
+                            ClearChar(i);
+                        }
+                        break;
+                    case 12:
+                        g_GameWork.m_anTeamCtrlType[0] = 1;
+                        // fall through
+                    case 4:
+                    case 6:
+                        g_GameWork.m_anTeamCtrlType[1] = 1;
+                        // fall through
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 17:
+                        for (long i = 4; i < 8; i++) {
+                            ClearChar(i);
+                        }
+                        break;
+                    default:
+                        ClearChar(6);
+                        ClearChar(7);
+                        break;
+                }
+                break;
+        }
+    }
+
+    // Fills in the rule settings of the game from its mode, game type and
+    // play type: teams, colours, periods and times, the views, the
+    // computer teams and unused characters, the extra characters
+    // (dodgeball, hockey), the NPCs of the stage and the party games'
+    // special rules; then resets the per-game work.
+    void CGame::SetParamSemiAuto()
+    {
+        g_GameWork.m_nTeamNum = 2;
+        g_GameWork.m_nGoalNum = 2;
+        g_GameWork.m_nPeriod = 0;
+        g_GameWork.m_Unk0E = 0;
+        g_GameWork.m_anTeamColorIdx[0] = 0;
+        g_GameWork.m_anTeamColorIdx[1] = 1;
+        g_GameWork.m_anTeamColorIdx[2] = 2;
+        g_GameWork.m_anTeamColorIdx[3] = 3;
+        if (g_GameWork.m_nUnk00 != 0) {
+            g_GameWork.m_anTeamColorIdx[0] = 1;
+            g_GameWork.m_anTeamColorIdx[1] = 0;
+            g_GameWork.m_anTeamColorIdx[2] = 3;
+            g_GameWork.m_anTeamColorIdx[3] = 2;
+        }
+
+        // Periods and times.
+        switch (g_GameWork.m_nGameMode) {
+            case GAME_MODE_VOLLEY:
+                g_GameWork.m_fUnk20 = 0.0f;
+                g_GameWork.m_Unk0B = 3;
+                switch (g_GameWork.m_nUnk06) {
+                    case 3:
+                        g_GameWork.m_nUnk06 = 5;
+                        break;
+                    case 2:
+                        g_GameWork.m_nUnk06 = 4;
+                        break;
+                    case 11:
+                        g_GameWork.m_nUnk06 = 12;
+                        break;
+                }
+                g_GameWork.m_Unk150 = 0;
+                g_GameWork.m_Unk0E = 0;
+                g_GameWork.m_nUnk44 = 15;
+                break;
+            case GAME_MODE_DODGE:
+                g_GameWork.m_fUnk20 = 10800.0f;
+                g_GameWork.m_Unk0B = 3;
+                if (g_GameWork.m_nGameType == GAME_TYPE_PARTY) {
+                    for (long i = 0; i < 4; i++) {
+                        g_GameWork.m_anTeamMaxLife[i] = 100;
+                        g_GameWork.m_anTeamInitLife[i] = 100;
+                        g_GameWork.m_anTeamRebirthLife[i] = 100;
+                    }
+                    g_GameWork.m_fUnk20 = 7200.0f;
+                } else {
+                    for (long i = 0; i < 4; i++) {
+                        g_GameWork.m_anTeamMaxLife[i] = 100;
+                        g_GameWork.m_anTeamRebirthLife[i] = 20;
+                    }
+                    g_GameWork.m_fMaxShotTime = 1800.0f;
+                }
+                break;
+            case GAME_MODE_HOCKEY:
+                g_GameWork.m_fUnk20 = 10800.0f;
+                g_GameWork.m_Unk0B = 2;
+                if (g_GameWork.m_nGameType == GAME_TYPE_PARTY) {
+                    if (!CTournament::IsTournamentGame()) {
+                        g_GameWork.m_nTeamNum = 4;
+                    }
+                    g_GameWork.m_fUnk20 = 18000.0f;
+                }
+                break;
+            case GAME_MODE_BOSS:
+                g_GameWork.m_fUnk20 = 0.0f;
+                g_GameWork.m_Unk0B = 1;
+                g_GameWork.m_Unk150 = 0;
+                g_GameWork.m_Unk0E = 0;
+                g_GameWork.m_nUnk44 = 15;
+                break;
+            case GAME_MODE_BASKET:
+                if (g_GameWork.m_nGameType == GAME_TYPE_PARTY && !CTournament::IsTournamentGame()) {
+                    g_GameWork.m_nTeamNum = 4;
+                }
+                // fall through
+            default:
+                g_GameWork.m_fUnk20 = 9000.0f;
+                g_GameWork.m_Unk0B = 2;
+                if (g_GameWork.m_nGameType == GAME_TYPE_PARTY) {
+                    g_GameWork.m_fUnk20 = 18000.0f;
+                } else {
+                    g_GameWork.m_fMaxShotTime = 1440.0f;
+                }
+                break;
+        }
+
+        // The views: one per team, split when two players play against
+        // each other on one console.
+        for (long i = 0; i < 4; i++) {
+            SetViewTeam(i, i % 2);
+        }
+        long nSplit = 0;
+        if (!g_GameWork.m_Unk151) {
+            switch (g_GameWork.m_nUnk06) {
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                case 10:
+                case 14:
+                case 15:
+                case 16:
+                case 17:
+                case 19:
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                case 24:
+                case 25:
+                    nSplit = fn_800CFEDC();
+                    break;
+            }
+        }
+        g_GameWork.m_nViewSplit = nSplit;
+
+        // The computer teams and the characters not in play.
+        switch (g_GameWork.m_nGameMode) {
+            case GAME_MODE_DODGE:
+            case GAME_MODE_HOCKEY: {
+                long nFirst;
+                switch (g_GameWork.m_nUnk06) {
+                    case 13:
+                        g_GameWork.m_anTeamCtrlType[0] = 1;
+                        // fall through
+                    case 0:
+                    case 9:
+                    case 18:
+                        g_GameWork.m_anTeamCtrlType[1] = 1;
+                        nFirst = 6;
+                        break;
+                    case 11:
+                        g_GameWork.m_anTeamCtrlType[0] = 1;
+                        // fall through
+                    case 2:
+                        g_GameWork.m_anTeamCtrlType[1] = 1;
+                        // fall through
+                    case 3:
+                        for (long i = 2; i < 8; i++) {
+                            ClearChar(i);
+                        }
+                        nFirst = 2;
+                        break;
+                    case 12:
+                        g_GameWork.m_anTeamCtrlType[0] = 1;
+                        // fall through
+                    case 4:
+                    case 6:
+                        g_GameWork.m_anTeamCtrlType[1] = 1;
+                        // fall through
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 17:
+                    case 20:
+                    case 22:
+                    case 23:
+                        for (long i = 4; i < 8; i++) {
+                            ClearChar(i);
+                        }
+                        nFirst = 4;
+                        break;
+                    default:
+                        nFirst = 6;
+                        break;
+                }
+                if (g_GameWork.m_nGameMode == GAME_MODE_DODGE && g_GameWork.m_nGameType == GAME_TYPE_PARTY) {
+                    nFirst = -1;
+                }
+                // Two extra characters after the players (the dodgeball
+                // outfielders, the hockey keepers).
+                if (nFirst >= 0) {
+                    long nType = 4;
+                    if (g_GameWork.m_nGameMode == GAME_MODE_HOCKEY) {
+                        nType = 0x12;
+                    }
+                    g_GameWork.m_anCharType[nFirst] = nType;
+                    g_GameWork.m_anCharType[nFirst + 1] = nType;
+                    if (g_GameWork.m_nUnk00 != 0) {
+                        g_GameWork.m_anCharColor[nFirst] = 4;
+                        g_GameWork.m_anCharColor[nFirst + 1] = 5;
+                    } else {
+                        g_GameWork.m_anCharColor[nFirst] = 5;
+                        g_GameWork.m_anCharColor[nFirst + 1] = 4;
+                    }
+                    g_GameWork.m_anCharExFlag[nFirst] = 3;
+                    g_GameWork.m_anCharExFlag[nFirst + 1] = 3;
+                }
+                break;
+            }
+            case GAME_MODE_VOLLEY:
+                if (g_GameWork.m_nGameType == GAME_TYPE_PARTY) {
+                    break;
+                }
+                // fall through
+            default:
+                switch (g_GameWork.m_nUnk06) {
+                    case 13:
+                        g_GameWork.m_anTeamCtrlType[0] = 1;
+                        // fall through
+                    case 0:
+                    case 9:
+                    case 18:
+                        g_GameWork.m_anTeamCtrlType[1] = 1;
+                        ClearChar(6);
+                        ClearChar(7);
+                        break;
+                    case 11:
+                        g_GameWork.m_anTeamCtrlType[0] = 1;
+                        // fall through
+                    case 2:
+                        g_GameWork.m_anTeamCtrlType[1] = 1;
+                        // fall through
+                    case 3:
+                        for (long i = 2; i < 8; i++) {
+                            ClearChar(i);
+                        }
+                        break;
+                    case 12:
+                        g_GameWork.m_anTeamCtrlType[0] = 1;
+                        // fall through
+                    case 4:
+                    case 6:
+                        g_GameWork.m_anTeamCtrlType[1] = 1;
+                        // fall through
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 17:
+                    case 20:
+                    case 22:
+                    case 23:
+                        for (long i = 4; i < 8; i++) {
+                            ClearChar(i);
+                        }
+                        break;
+                    default:
+                        ClearChar(6);
+                        ClearChar(7);
+                        break;
+                }
+                break;
+        }
+
+        // The NPCs of the stage.
+        g_GameWork.m_anNpcType[0] = 1;
+        switch (g_GameWork.m_nStage) {
+            case 6:
+                g_GameWork.m_anNpcType[1] = 3;
+                g_GameWork.m_anNpcType[2] = 4;
+                g_GameWork.m_anNpcType[3] = 5;
+                break;
+            case 7:
+                g_GameWork.m_anNpcType[1] = 2;
+                break;
+            case 11:
+                g_GameWork.m_anNpcType[1] = 9;
+                break;
+            case 15:
+                g_GameWork.m_anNpcType[1] = 0x13;
+                break;
+            case 17:
+                g_GameWork.m_anNpcType[1] = 0x14;
+                break;
+        }
+
+        // The party games.
+        switch (g_GameWork.m_nGameMode) {
+            case GAME_MODE_BASKET:
+                if (g_GameWork.m_nGameType == GAME_TYPE_PARTY) {
+                    g_GameWork.m_anUnk78[0] = 1;
+                    g_GameWork.m_anNpcType[0] = 1;
+                    g_GameWork.m_anNpcType[1] = 2;
+                    g_GameWork.m_anNpcType[2] = 11;
+                }
+                break;
+            case GAME_MODE_DODGE:
+                if (g_GameWork.m_nGameType == GAME_TYPE_PARTY) {
+                    g_GameWork.m_anUnk78[0] = 0;
+                    g_GameWork.m_anNpcType[0] = 1;
+                    g_GameWork.m_anNpcType[1] = 12;
+                }
+                break;
+            case GAME_MODE_VOLLEY:
+                if (g_GameWork.m_nGameType == GAME_TYPE_PARTY) {
+                    // One player per team, no periods and no time. (The
+                    // original also looks for a character chosen twice
+                    // here, without using the result.)
+                    g_GameWork.m_nPeriod = 0;
+                    g_GameWork.m_Unk0B = 1;
+                    g_GameWork.m_Unk0E = 0;
+                    g_GameWork.m_fUnk20 = 0.0f;
+                    ClearChar(1);
+                    ClearChar(3);
+                    ClearChar(5);
+                    ClearChar(7);
+                    g_GameWork.m_anUnk78[0] = 1;
+                    for (long i = 0; i < 4; i++) {
+                        g_GameWork.m_anTeamCtrlType[i] = 0;
+                        SetGoalIdx(i, i % 2);
+                    }
+                    g_GameWork.m_nViewSplit = 0;
+                    g_GameWork.m_Unk150 = 1;
+                    g_GameWork.m_nUnk44 = 999;
+                    g_GameWork.m_anNpcType[0] = 1;
+                    switch (g_GameWork.m_nStage) {
+                        case 0x29:
+                            g_GameWork.m_anNpcType[1] = 13;
+                            break;
+                        case 0x2A:
+                            g_GameWork.m_anNpcType[1] = 14;
+                            break;
+                        default:
+                            g_GameWork.m_anNpcType[1] = 6;
+                            break;
+                    }
+                }
+                break;
+            case GAME_MODE_BOSS:
+                g_GameWork.m_fUnk20 = 0.0f;
+                ClearChar(1);
+                ClearChar(3);
+                ClearChar(5);
+                ClearChar(7);
+                g_GameWork.m_anUnk78[0] = 0;
+                g_GameWork.m_nViewSplit = 0;
+                for (long i = 0; i < 4; i++) {
+                    g_GameWork.m_anTeamCtrlType[i] = 0;
+                    SetGoalIdx(i, i % 2);
+                }
+                g_GameWork.m_anNpcType[0] = 1;
+                g_GameWork.m_anNpcType[1] = 0;
+                if (g_GameWork.m_anPartyGameParam[0] >= 2) {
+                    g_GameWork.m_anNpcType[1] = 15;
+                }
+                break;
+        }
+
+        g_GameWork.m_fUnk38 = 0.0f;
+        GameWorkReset_();
+        g_GameWork.m_nFlag18 = 0;
+    }
 
     CShadowTexMan *CShadowTexMan::m_pInstance;
 
@@ -3303,5 +6594,41 @@ namespace msw {
             return 0;
         }
         return pMan->m_pTexObj;
+    }
+
+    int CShadowTexMan::IsEnable(long nType)
+    {
+        CShadowTexMan *pMan = m_pInstance;
+        if (pMan == 0) {
+            return 0;
+        }
+        if (pMan->m_bEnable == 0) {
+            return 0;
+        }
+        switch (nType) {
+            case 0:
+                switch (CGame::g_GameWork.m_nGameMode) {
+                    case CGame::GAME_MODE_BASKET:
+                    case CGame::GAME_MODE_VOLLEY:
+                    case CGame::GAME_MODE_HOCKEY:
+                        if (bcs::CWorldEnv::GetViewSplitNum() >= 2) {
+                            return 1;
+                        }
+                        return 0;
+                    case CGame::GAME_MODE_DODGE:
+                        if (bcs::CWorldEnv::GetViewSplitNum() >= 2) {
+                            return 1;
+                        }
+                        if (CGame::g_GameWork.m_Unk151) {
+                            return 1;
+                        }
+                        return 0;
+                }
+                return 0;
+            case 1:
+            case 2:
+                return 1;
+        }
+        return 0;
     }
 }

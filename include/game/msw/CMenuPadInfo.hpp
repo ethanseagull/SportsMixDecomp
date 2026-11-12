@@ -61,6 +61,9 @@ namespace msw {
             // (added for game/msw/CCockpitMenuBase.cpp) Its pad parameter
             // functions write the same bytes.
             friend class CCockpitMenuBase;
+            // (added for game/msw/CGame.cpp) The pause task sets the leader
+            // pad (0x44) to the pad that paused.
+            friend class CGamePauseTask;
 
             // 0x10 bytes per pad from 0x04. (2026-11-11, game/menu/unit_6EE84.cpp)
             // The pads start at 0x04, not 0x00: the original's loops over

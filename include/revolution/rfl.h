@@ -76,9 +76,16 @@ typedef struct RFLMiddleDB {
 // start (copied out with wcscpy); the size, 0x3C, is from the stack frames
 // of CMiiSel::SetMiiPage, which keeps two of them. The rest is not used by
 // the game's own code.
+// Size 8. Identifies one Mii; copied as two words.
+typedef struct RFLCreateID {
+    unsigned char data[8];
+} RFLCreateID;
+
 typedef struct RFLAdditionalInfo {
     wchar_t name[11];             // 0x00
-    unsigned char m_Unk16[0x1E];  // 0x16
+    unsigned char m_Unk16[0x16];  // 0x16
+    // 0x2C (added for msw::CGame::ScoreBookApplyCountWork_, name guessed)
+    RFLCreateID createID;
     // 0x34. (added for MenuF game/menu/unit_6EE84.cpp; name guessed) The
     // top bit picks the Mii's voice (CSelectMenu::CharSel_CallMiiVoice), so
     // it is taken to be the sex; the rest of the word is not used.
@@ -87,10 +94,6 @@ typedef struct RFLAdditionalInfo {
     unsigned char m_Unk38[0x4];   // 0x38
 } RFLAdditionalInfo;
 
-// Size 8. Identifies one Mii; copied as two words.
-typedef struct RFLCreateID {
-    unsigned char data[8];
-} RFLCreateID;
 
 // A Mii as stored, 0x4C bytes. Its contents are not used by the game's own
 // code, so they are not spelled out here.
@@ -112,6 +115,9 @@ typedef struct RFLIconSetting {
 // (added for DOL game/bcs/CMiiMan.cpp) RFL functions. Names are the SDK's
 // where the behaviour makes them evident; marked where guessed.
 RFLErrcode RFLGetStoreData(RFLStoreData *pData, RFLDataSource source, unsigned short index);
+// (DOL fn_80335800; added for msw::CGame::GameWork::SetDefault) Whether
+// slot index of the console's Mii database holds a Mii.
+int RFLIsAvailableOfficialData(unsigned short index);
 // fn_80335B40: looks createId up in the official database (100 slots); non-zero
 // and *pIndex set when found.
 int RFLSearchOfficialData(const RFLCreateID *pId, unsigned short *pIndex);

@@ -20,6 +20,13 @@ namespace msw {
         // four-entry table) and the font itself, null when not loaded.
         const char *GetFontName(long nFont);
         nw4r::ut::Font *GetFont(long nFont);
+        // (names guessed; the DOL's fn_802114F8, fn_80211514 and
+        // fn_80211528, added for game/msw/ArchiveFont.cpp) The number of
+        // fonts (4), the glyph list font nFont is built with, and the
+        // bcs::G2D::CFontMan slot it goes in.
+        long GetFontNum();
+        const char *GetGlyphList(long nFont);
+        long GetFontSlot(long nFont);
     }
 }
 

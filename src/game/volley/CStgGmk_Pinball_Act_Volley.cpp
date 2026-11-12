@@ -77,7 +77,7 @@ void msw::CStgGmk_Pinball_Act_Volley::OnBallCatch(CCollBodyUnit *pBody, CBall *p
         }
 
         if (pBall->IsShootMode()) {
-            CStgSrt *pSrt = GetSrt();
+            CStgSrtMove *pSrt = GetSrt();
             // Declared in this order for the original's stack layout.
             bcs::FVEC3 bodyPos = pBody->GetPos();
             bcs::FVEC3 ballPos = pBall->GetPos();

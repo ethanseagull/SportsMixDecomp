@@ -114,7 +114,7 @@ namespace msw {
             { "s09_tbox_01", "s09_tbox_01", "s09_tbox_01", 0, anm_suffix, "s09_tbox", 0, 0 },
         };
 
-        long idx = GetType();
+        long idx = GetMdlIdx();
         idx = idx > 2 ? 2 : (idx < 0 ? 0 : idx);
         CStgMdl::Create(CGenericGimmickCreator(CLoadData::GetRes(0), &mdl_param[idx]));
     }

@@ -187,6 +187,16 @@ namespace bcs {
                 FsmqPush(state);
             }
 
+            // (name guessed; the DOL's fn_8017EFE8, out of line for
+            // msw::CGame) FsmqChangeState, returning the state that was at
+            // the head of the queue before.
+            long FsmqChangeStateRet(long state)
+            {
+                long prev = FsmqGetState();
+                FsmqChangeState(state);
+                return prev;
+            }
+
             // (added for BasketF game/basket/CNpcGhostBasketBase.cpp; inline
             // there, out of line as FsmqSetState__Q23bcs35CFsmQueue<Q23msw16CNpcBehemothBoss>Fl
             // in BossF, which gives this overload its name) Drops the queue

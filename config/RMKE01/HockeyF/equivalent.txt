@@ -129,7 +129,6 @@ HockeyF __ct__Q33msw14GIMMICK_HOCKEY16CEffectCoinScoreFPQ23bcs5CTaskRCQ23bcs5FVE
 HockeyF __dt__Q23bcs106CPool<Q33msw7STAGE1113CStgRndAnmObj,Q23bcs42CPoolNode<Q33msw7STAGE1113CStgRndAnmObj,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction order only (shared bcs/CPool.hpp, same as BasketF)
 HockeyF __dt__Q23bcs41CFixedPool<Ul,32,Q23bcs15CPoolNode<Ul,0>>Fv near 98.8 instruction order only (shared bcs/CPool.hpp, same as BasketF)
 HockeyF __dt__Q23bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction order only (shared bcs/CPool.hpp, same as BasketF)
-HockeyF __dt__Q23msw13CChrManHockeyFv near 99.1 register allocation only (r29/r30), same as the boss sibling
 HockeyF __dt__Q23msw14CStageHockey11Fv near 99.0 instruction order only (same as BasketF CStageBasket11)
 HockeyF __dt__Q23msw24CStageHockeyCrushSkate86Fv near 99.0 register choice only in the inlined CBgFirePillarCluster/CPool list destructors (same as CStageHockey11/CStageBasket11)
 HockeyF __dt__Q33msw7STAGE1120CBgFirePillarClusterFv near 98.1 instruction order only (shared CStage11Base.hpp, same as BasketF)

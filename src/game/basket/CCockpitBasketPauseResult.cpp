@@ -374,7 +374,8 @@ long msw::CCockpitBasketPauseResult::SetCountNum(long nPeriod)
 {
     for (long i = 0; i < PERIOD_NUM; i++) {
         // Shows the labels of the periods played so far.
-        m_pPaneAccessor->SetPaneDisp(s_CountPaneId[i], i < nPeriod ? 1 : 0);
+        unsigned char bDisp = i < nPeriod ? 1 : 0;
+        m_pPaneAccessor->SetPaneDisp(s_CountPaneId[i], bDisp);
     }
     return 0;
 }

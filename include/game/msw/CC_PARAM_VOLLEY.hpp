@@ -265,8 +265,660 @@ namespace msw {
                 float m_Unk3D8; // 0x3D8
                 float m_Unk3DC; // 0x3DC
                 unsigned long m_Unk3E0; // 0x3E0
+        }; // size 0x3E4 (the NewCcParam_ functions allocate 0x3E4 bytes)
+    }
+
+    // Default parameter block, constructed by the static initialiser at the
+    // end of the parameter file.
+    namespace cc_data_volley_default {
+        extern CHR_CORE_VOLLEY::CC_PARAM_VOLLEY m_CcParam;
+    }
+
+    // One namespace per character: the character's own values, and one class
+    // per game level, each with a _STAR variant for the star player. Unlike
+    // the boss mode, the EASY and NORMAL classes (and their _STAR variants)
+    // change values here; HARD and EXPERT add nothing. (__init2 is empty;
+    // what it is for is not known.)
+    namespace cc_data_volley_Mario {
+        class CC_PARAM_VOLLEY_Mario : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Mario();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Mario_EASY : public CC_PARAM_VOLLEY_Mario {
+            public: CC_PARAM_VOLLEY_Mario_EASY();
+        };
+        class CC_PARAM_VOLLEY_Mario_EASY_STAR : public CC_PARAM_VOLLEY_Mario_EASY {
+            public: CC_PARAM_VOLLEY_Mario_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Mario_NORMAL : public CC_PARAM_VOLLEY_Mario {
+            public: CC_PARAM_VOLLEY_Mario_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Mario_NORMAL_STAR : public CC_PARAM_VOLLEY_Mario_NORMAL {
+            public: CC_PARAM_VOLLEY_Mario_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Mario_HARD : public CC_PARAM_VOLLEY_Mario {
+            public: CC_PARAM_VOLLEY_Mario_HARD();
+        };
+        class CC_PARAM_VOLLEY_Mario_HARD_STAR : public CC_PARAM_VOLLEY_Mario_HARD {
+            public: CC_PARAM_VOLLEY_Mario_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Mario_EXPERT : public CC_PARAM_VOLLEY_Mario {
+            public: CC_PARAM_VOLLEY_Mario_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Mario_EXPERT_STAR : public CC_PARAM_VOLLEY_Mario_EXPERT {
+            public: CC_PARAM_VOLLEY_Mario_EXPERT_STAR();
         };
     }
+
+    namespace cc_data_volley_Luigi {
+        class CC_PARAM_VOLLEY_Luigi : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Luigi();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Luigi_EASY : public CC_PARAM_VOLLEY_Luigi {
+            public: CC_PARAM_VOLLEY_Luigi_EASY();
+        };
+        class CC_PARAM_VOLLEY_Luigi_EASY_STAR : public CC_PARAM_VOLLEY_Luigi_EASY {
+            public: CC_PARAM_VOLLEY_Luigi_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Luigi_NORMAL : public CC_PARAM_VOLLEY_Luigi {
+            public: CC_PARAM_VOLLEY_Luigi_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Luigi_NORMAL_STAR : public CC_PARAM_VOLLEY_Luigi_NORMAL {
+            public: CC_PARAM_VOLLEY_Luigi_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Luigi_HARD : public CC_PARAM_VOLLEY_Luigi {
+            public: CC_PARAM_VOLLEY_Luigi_HARD();
+        };
+        class CC_PARAM_VOLLEY_Luigi_HARD_STAR : public CC_PARAM_VOLLEY_Luigi_HARD {
+            public: CC_PARAM_VOLLEY_Luigi_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Luigi_EXPERT : public CC_PARAM_VOLLEY_Luigi {
+            public: CC_PARAM_VOLLEY_Luigi_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Luigi_EXPERT_STAR : public CC_PARAM_VOLLEY_Luigi_EXPERT {
+            public: CC_PARAM_VOLLEY_Luigi_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Peach {
+        class CC_PARAM_VOLLEY_Peach : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Peach();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Peach_EASY : public CC_PARAM_VOLLEY_Peach {
+            public: CC_PARAM_VOLLEY_Peach_EASY();
+        };
+        class CC_PARAM_VOLLEY_Peach_EASY_STAR : public CC_PARAM_VOLLEY_Peach_EASY {
+            public: CC_PARAM_VOLLEY_Peach_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Peach_NORMAL : public CC_PARAM_VOLLEY_Peach {
+            public: CC_PARAM_VOLLEY_Peach_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Peach_NORMAL_STAR : public CC_PARAM_VOLLEY_Peach_NORMAL {
+            public: CC_PARAM_VOLLEY_Peach_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Peach_HARD : public CC_PARAM_VOLLEY_Peach {
+            public: CC_PARAM_VOLLEY_Peach_HARD();
+        };
+        class CC_PARAM_VOLLEY_Peach_HARD_STAR : public CC_PARAM_VOLLEY_Peach_HARD {
+            public: CC_PARAM_VOLLEY_Peach_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Peach_EXPERT : public CC_PARAM_VOLLEY_Peach {
+            public: CC_PARAM_VOLLEY_Peach_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Peach_EXPERT_STAR : public CC_PARAM_VOLLEY_Peach_EXPERT {
+            public: CC_PARAM_VOLLEY_Peach_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Daisy {
+        class CC_PARAM_VOLLEY_Daisy : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Daisy();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Daisy_EASY : public CC_PARAM_VOLLEY_Daisy {
+            public: CC_PARAM_VOLLEY_Daisy_EASY();
+        };
+        class CC_PARAM_VOLLEY_Daisy_EASY_STAR : public CC_PARAM_VOLLEY_Daisy_EASY {
+            public: CC_PARAM_VOLLEY_Daisy_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Daisy_NORMAL : public CC_PARAM_VOLLEY_Daisy {
+            public: CC_PARAM_VOLLEY_Daisy_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Daisy_NORMAL_STAR : public CC_PARAM_VOLLEY_Daisy_NORMAL {
+            public: CC_PARAM_VOLLEY_Daisy_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Daisy_HARD : public CC_PARAM_VOLLEY_Daisy {
+            public: CC_PARAM_VOLLEY_Daisy_HARD();
+        };
+        class CC_PARAM_VOLLEY_Daisy_HARD_STAR : public CC_PARAM_VOLLEY_Daisy_HARD {
+            public: CC_PARAM_VOLLEY_Daisy_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Daisy_EXPERT : public CC_PARAM_VOLLEY_Daisy {
+            public: CC_PARAM_VOLLEY_Daisy_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Daisy_EXPERT_STAR : public CC_PARAM_VOLLEY_Daisy_EXPERT {
+            public: CC_PARAM_VOLLEY_Daisy_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Yoshi {
+        class CC_PARAM_VOLLEY_Yoshi : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Yoshi();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Yoshi_EASY : public CC_PARAM_VOLLEY_Yoshi {
+            public: CC_PARAM_VOLLEY_Yoshi_EASY();
+        };
+        class CC_PARAM_VOLLEY_Yoshi_EASY_STAR : public CC_PARAM_VOLLEY_Yoshi_EASY {
+            public: CC_PARAM_VOLLEY_Yoshi_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Yoshi_NORMAL : public CC_PARAM_VOLLEY_Yoshi {
+            public: CC_PARAM_VOLLEY_Yoshi_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Yoshi_NORMAL_STAR : public CC_PARAM_VOLLEY_Yoshi_NORMAL {
+            public: CC_PARAM_VOLLEY_Yoshi_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Yoshi_HARD : public CC_PARAM_VOLLEY_Yoshi {
+            public: CC_PARAM_VOLLEY_Yoshi_HARD();
+        };
+        class CC_PARAM_VOLLEY_Yoshi_HARD_STAR : public CC_PARAM_VOLLEY_Yoshi_HARD {
+            public: CC_PARAM_VOLLEY_Yoshi_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Yoshi_EXPERT : public CC_PARAM_VOLLEY_Yoshi {
+            public: CC_PARAM_VOLLEY_Yoshi_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Yoshi_EXPERT_STAR : public CC_PARAM_VOLLEY_Yoshi_EXPERT {
+            public: CC_PARAM_VOLLEY_Yoshi_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Wario {
+        class CC_PARAM_VOLLEY_Wario : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Wario();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Wario_EASY : public CC_PARAM_VOLLEY_Wario {
+            public: CC_PARAM_VOLLEY_Wario_EASY();
+        };
+        class CC_PARAM_VOLLEY_Wario_EASY_STAR : public CC_PARAM_VOLLEY_Wario_EASY {
+            public: CC_PARAM_VOLLEY_Wario_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Wario_NORMAL : public CC_PARAM_VOLLEY_Wario {
+            public: CC_PARAM_VOLLEY_Wario_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Wario_NORMAL_STAR : public CC_PARAM_VOLLEY_Wario_NORMAL {
+            public: CC_PARAM_VOLLEY_Wario_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Wario_HARD : public CC_PARAM_VOLLEY_Wario {
+            public: CC_PARAM_VOLLEY_Wario_HARD();
+        };
+        class CC_PARAM_VOLLEY_Wario_HARD_STAR : public CC_PARAM_VOLLEY_Wario_HARD {
+            public: CC_PARAM_VOLLEY_Wario_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Wario_EXPERT : public CC_PARAM_VOLLEY_Wario {
+            public: CC_PARAM_VOLLEY_Wario_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Wario_EXPERT_STAR : public CC_PARAM_VOLLEY_Wario_EXPERT {
+            public: CC_PARAM_VOLLEY_Wario_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Waluigi {
+        class CC_PARAM_VOLLEY_Waluigi : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Waluigi();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Waluigi_EASY : public CC_PARAM_VOLLEY_Waluigi {
+            public: CC_PARAM_VOLLEY_Waluigi_EASY();
+        };
+        class CC_PARAM_VOLLEY_Waluigi_EASY_STAR : public CC_PARAM_VOLLEY_Waluigi_EASY {
+            public: CC_PARAM_VOLLEY_Waluigi_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Waluigi_NORMAL : public CC_PARAM_VOLLEY_Waluigi {
+            public: CC_PARAM_VOLLEY_Waluigi_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Waluigi_NORMAL_STAR : public CC_PARAM_VOLLEY_Waluigi_NORMAL {
+            public: CC_PARAM_VOLLEY_Waluigi_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Waluigi_HARD : public CC_PARAM_VOLLEY_Waluigi {
+            public: CC_PARAM_VOLLEY_Waluigi_HARD();
+        };
+        class CC_PARAM_VOLLEY_Waluigi_HARD_STAR : public CC_PARAM_VOLLEY_Waluigi_HARD {
+            public: CC_PARAM_VOLLEY_Waluigi_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Waluigi_EXPERT : public CC_PARAM_VOLLEY_Waluigi {
+            public: CC_PARAM_VOLLEY_Waluigi_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Waluigi_EXPERT_STAR : public CC_PARAM_VOLLEY_Waluigi_EXPERT {
+            public: CC_PARAM_VOLLEY_Waluigi_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Donkey {
+        class CC_PARAM_VOLLEY_Donkey : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Donkey();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Donkey_EASY : public CC_PARAM_VOLLEY_Donkey {
+            public: CC_PARAM_VOLLEY_Donkey_EASY();
+        };
+        class CC_PARAM_VOLLEY_Donkey_EASY_STAR : public CC_PARAM_VOLLEY_Donkey_EASY {
+            public: CC_PARAM_VOLLEY_Donkey_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Donkey_NORMAL : public CC_PARAM_VOLLEY_Donkey {
+            public: CC_PARAM_VOLLEY_Donkey_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Donkey_NORMAL_STAR : public CC_PARAM_VOLLEY_Donkey_NORMAL {
+            public: CC_PARAM_VOLLEY_Donkey_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Donkey_HARD : public CC_PARAM_VOLLEY_Donkey {
+            public: CC_PARAM_VOLLEY_Donkey_HARD();
+        };
+        class CC_PARAM_VOLLEY_Donkey_HARD_STAR : public CC_PARAM_VOLLEY_Donkey_HARD {
+            public: CC_PARAM_VOLLEY_Donkey_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Donkey_EXPERT : public CC_PARAM_VOLLEY_Donkey {
+            public: CC_PARAM_VOLLEY_Donkey_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Donkey_EXPERT_STAR : public CC_PARAM_VOLLEY_Donkey_EXPERT {
+            public: CC_PARAM_VOLLEY_Donkey_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Diddy {
+        class CC_PARAM_VOLLEY_Diddy : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Diddy();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Diddy_EASY : public CC_PARAM_VOLLEY_Diddy {
+            public: CC_PARAM_VOLLEY_Diddy_EASY();
+        };
+        class CC_PARAM_VOLLEY_Diddy_EASY_STAR : public CC_PARAM_VOLLEY_Diddy_EASY {
+            public: CC_PARAM_VOLLEY_Diddy_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Diddy_NORMAL : public CC_PARAM_VOLLEY_Diddy {
+            public: CC_PARAM_VOLLEY_Diddy_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Diddy_NORMAL_STAR : public CC_PARAM_VOLLEY_Diddy_NORMAL {
+            public: CC_PARAM_VOLLEY_Diddy_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Diddy_HARD : public CC_PARAM_VOLLEY_Diddy {
+            public: CC_PARAM_VOLLEY_Diddy_HARD();
+        };
+        class CC_PARAM_VOLLEY_Diddy_HARD_STAR : public CC_PARAM_VOLLEY_Diddy_HARD {
+            public: CC_PARAM_VOLLEY_Diddy_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Diddy_EXPERT : public CC_PARAM_VOLLEY_Diddy {
+            public: CC_PARAM_VOLLEY_Diddy_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Diddy_EXPERT_STAR : public CC_PARAM_VOLLEY_Diddy_EXPERT {
+            public: CC_PARAM_VOLLEY_Diddy_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Kinopio {
+        class CC_PARAM_VOLLEY_Kinopio : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Kinopio();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Kinopio_EASY : public CC_PARAM_VOLLEY_Kinopio {
+            public: CC_PARAM_VOLLEY_Kinopio_EASY();
+        };
+        class CC_PARAM_VOLLEY_Kinopio_EASY_STAR : public CC_PARAM_VOLLEY_Kinopio_EASY {
+            public: CC_PARAM_VOLLEY_Kinopio_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Kinopio_NORMAL : public CC_PARAM_VOLLEY_Kinopio {
+            public: CC_PARAM_VOLLEY_Kinopio_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Kinopio_NORMAL_STAR : public CC_PARAM_VOLLEY_Kinopio_NORMAL {
+            public: CC_PARAM_VOLLEY_Kinopio_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Kinopio_HARD : public CC_PARAM_VOLLEY_Kinopio {
+            public: CC_PARAM_VOLLEY_Kinopio_HARD();
+        };
+        class CC_PARAM_VOLLEY_Kinopio_HARD_STAR : public CC_PARAM_VOLLEY_Kinopio_HARD {
+            public: CC_PARAM_VOLLEY_Kinopio_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Kinopio_EXPERT : public CC_PARAM_VOLLEY_Kinopio {
+            public: CC_PARAM_VOLLEY_Kinopio_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Kinopio_EXPERT_STAR : public CC_PARAM_VOLLEY_Kinopio_EXPERT {
+            public: CC_PARAM_VOLLEY_Kinopio_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Koopa {
+        class CC_PARAM_VOLLEY_Koopa : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Koopa();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Koopa_EASY : public CC_PARAM_VOLLEY_Koopa {
+            public: CC_PARAM_VOLLEY_Koopa_EASY();
+        };
+        class CC_PARAM_VOLLEY_Koopa_EASY_STAR : public CC_PARAM_VOLLEY_Koopa_EASY {
+            public: CC_PARAM_VOLLEY_Koopa_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Koopa_NORMAL : public CC_PARAM_VOLLEY_Koopa {
+            public: CC_PARAM_VOLLEY_Koopa_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Koopa_NORMAL_STAR : public CC_PARAM_VOLLEY_Koopa_NORMAL {
+            public: CC_PARAM_VOLLEY_Koopa_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Koopa_HARD : public CC_PARAM_VOLLEY_Koopa {
+            public: CC_PARAM_VOLLEY_Koopa_HARD();
+        };
+        class CC_PARAM_VOLLEY_Koopa_HARD_STAR : public CC_PARAM_VOLLEY_Koopa_HARD {
+            public: CC_PARAM_VOLLEY_Koopa_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Koopa_EXPERT : public CC_PARAM_VOLLEY_Koopa {
+            public: CC_PARAM_VOLLEY_Koopa_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Koopa_EXPERT_STAR : public CC_PARAM_VOLLEY_Koopa_EXPERT {
+            public: CC_PARAM_VOLLEY_Koopa_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_KoopaJr {
+        class CC_PARAM_VOLLEY_KoopaJr : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_KoopaJr();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_KoopaJr_EASY : public CC_PARAM_VOLLEY_KoopaJr {
+            public: CC_PARAM_VOLLEY_KoopaJr_EASY();
+        };
+        class CC_PARAM_VOLLEY_KoopaJr_EASY_STAR : public CC_PARAM_VOLLEY_KoopaJr_EASY {
+            public: CC_PARAM_VOLLEY_KoopaJr_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_KoopaJr_NORMAL : public CC_PARAM_VOLLEY_KoopaJr {
+            public: CC_PARAM_VOLLEY_KoopaJr_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_KoopaJr_NORMAL_STAR : public CC_PARAM_VOLLEY_KoopaJr_NORMAL {
+            public: CC_PARAM_VOLLEY_KoopaJr_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_KoopaJr_HARD : public CC_PARAM_VOLLEY_KoopaJr {
+            public: CC_PARAM_VOLLEY_KoopaJr_HARD();
+        };
+        class CC_PARAM_VOLLEY_KoopaJr_HARD_STAR : public CC_PARAM_VOLLEY_KoopaJr_HARD {
+            public: CC_PARAM_VOLLEY_KoopaJr_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_KoopaJr_EXPERT : public CC_PARAM_VOLLEY_KoopaJr {
+            public: CC_PARAM_VOLLEY_KoopaJr_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_KoopaJr_EXPERT_STAR : public CC_PARAM_VOLLEY_KoopaJr_EXPERT {
+            public: CC_PARAM_VOLLEY_KoopaJr_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Moogle {
+        class CC_PARAM_VOLLEY_Moogle : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Moogle();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Moogle_EASY : public CC_PARAM_VOLLEY_Moogle {
+            public: CC_PARAM_VOLLEY_Moogle_EASY();
+        };
+        class CC_PARAM_VOLLEY_Moogle_EASY_STAR : public CC_PARAM_VOLLEY_Moogle_EASY {
+            public: CC_PARAM_VOLLEY_Moogle_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Moogle_NORMAL : public CC_PARAM_VOLLEY_Moogle {
+            public: CC_PARAM_VOLLEY_Moogle_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Moogle_NORMAL_STAR : public CC_PARAM_VOLLEY_Moogle_NORMAL {
+            public: CC_PARAM_VOLLEY_Moogle_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Moogle_HARD : public CC_PARAM_VOLLEY_Moogle {
+            public: CC_PARAM_VOLLEY_Moogle_HARD();
+        };
+        class CC_PARAM_VOLLEY_Moogle_HARD_STAR : public CC_PARAM_VOLLEY_Moogle_HARD {
+            public: CC_PARAM_VOLLEY_Moogle_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Moogle_EXPERT : public CC_PARAM_VOLLEY_Moogle {
+            public: CC_PARAM_VOLLEY_Moogle_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Moogle_EXPERT_STAR : public CC_PARAM_VOLLEY_Moogle_EXPERT {
+            public: CC_PARAM_VOLLEY_Moogle_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Saboten {
+        class CC_PARAM_VOLLEY_Saboten : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Saboten();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Saboten_EASY : public CC_PARAM_VOLLEY_Saboten {
+            public: CC_PARAM_VOLLEY_Saboten_EASY();
+        };
+        class CC_PARAM_VOLLEY_Saboten_EASY_STAR : public CC_PARAM_VOLLEY_Saboten_EASY {
+            public: CC_PARAM_VOLLEY_Saboten_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Saboten_NORMAL : public CC_PARAM_VOLLEY_Saboten {
+            public: CC_PARAM_VOLLEY_Saboten_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Saboten_NORMAL_STAR : public CC_PARAM_VOLLEY_Saboten_NORMAL {
+            public: CC_PARAM_VOLLEY_Saboten_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Saboten_HARD : public CC_PARAM_VOLLEY_Saboten {
+            public: CC_PARAM_VOLLEY_Saboten_HARD();
+        };
+        class CC_PARAM_VOLLEY_Saboten_HARD_STAR : public CC_PARAM_VOLLEY_Saboten_HARD {
+            public: CC_PARAM_VOLLEY_Saboten_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Saboten_EXPERT : public CC_PARAM_VOLLEY_Saboten {
+            public: CC_PARAM_VOLLEY_Saboten_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Saboten_EXPERT_STAR : public CC_PARAM_VOLLEY_Saboten_EXPERT {
+            public: CC_PARAM_VOLLEY_Saboten_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Ninja {
+        class CC_PARAM_VOLLEY_Ninja : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Ninja();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Ninja_EASY : public CC_PARAM_VOLLEY_Ninja {
+            public: CC_PARAM_VOLLEY_Ninja_EASY();
+        };
+        class CC_PARAM_VOLLEY_Ninja_EASY_STAR : public CC_PARAM_VOLLEY_Ninja_EASY {
+            public: CC_PARAM_VOLLEY_Ninja_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Ninja_NORMAL : public CC_PARAM_VOLLEY_Ninja {
+            public: CC_PARAM_VOLLEY_Ninja_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Ninja_NORMAL_STAR : public CC_PARAM_VOLLEY_Ninja_NORMAL {
+            public: CC_PARAM_VOLLEY_Ninja_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Ninja_HARD : public CC_PARAM_VOLLEY_Ninja {
+            public: CC_PARAM_VOLLEY_Ninja_HARD();
+        };
+        class CC_PARAM_VOLLEY_Ninja_HARD_STAR : public CC_PARAM_VOLLEY_Ninja_HARD {
+            public: CC_PARAM_VOLLEY_Ninja_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Ninja_EXPERT : public CC_PARAM_VOLLEY_Ninja {
+            public: CC_PARAM_VOLLEY_Ninja_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Ninja_EXPERT_STAR : public CC_PARAM_VOLLEY_Ninja_EXPERT {
+            public: CC_PARAM_VOLLEY_Ninja_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Siroma {
+        class CC_PARAM_VOLLEY_Siroma : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Siroma();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Siroma_EASY : public CC_PARAM_VOLLEY_Siroma {
+            public: CC_PARAM_VOLLEY_Siroma_EASY();
+        };
+        class CC_PARAM_VOLLEY_Siroma_EASY_STAR : public CC_PARAM_VOLLEY_Siroma_EASY {
+            public: CC_PARAM_VOLLEY_Siroma_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Siroma_NORMAL : public CC_PARAM_VOLLEY_Siroma {
+            public: CC_PARAM_VOLLEY_Siroma_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Siroma_NORMAL_STAR : public CC_PARAM_VOLLEY_Siroma_NORMAL {
+            public: CC_PARAM_VOLLEY_Siroma_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Siroma_HARD : public CC_PARAM_VOLLEY_Siroma {
+            public: CC_PARAM_VOLLEY_Siroma_HARD();
+        };
+        class CC_PARAM_VOLLEY_Siroma_HARD_STAR : public CC_PARAM_VOLLEY_Siroma_HARD {
+            public: CC_PARAM_VOLLEY_Siroma_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Siroma_EXPERT : public CC_PARAM_VOLLEY_Siroma {
+            public: CC_PARAM_VOLLEY_Siroma_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Siroma_EXPERT_STAR : public CC_PARAM_VOLLEY_Siroma_EXPERT {
+            public: CC_PARAM_VOLLEY_Siroma_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Slime {
+        class CC_PARAM_VOLLEY_Slime : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Slime();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Slime_EASY : public CC_PARAM_VOLLEY_Slime {
+            public: CC_PARAM_VOLLEY_Slime_EASY();
+        };
+        class CC_PARAM_VOLLEY_Slime_EASY_STAR : public CC_PARAM_VOLLEY_Slime_EASY {
+            public: CC_PARAM_VOLLEY_Slime_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Slime_NORMAL : public CC_PARAM_VOLLEY_Slime {
+            public: CC_PARAM_VOLLEY_Slime_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Slime_NORMAL_STAR : public CC_PARAM_VOLLEY_Slime_NORMAL {
+            public: CC_PARAM_VOLLEY_Slime_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Slime_HARD : public CC_PARAM_VOLLEY_Slime {
+            public: CC_PARAM_VOLLEY_Slime_HARD();
+        };
+        class CC_PARAM_VOLLEY_Slime_HARD_STAR : public CC_PARAM_VOLLEY_Slime_HARD {
+            public: CC_PARAM_VOLLEY_Slime_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Slime_EXPERT : public CC_PARAM_VOLLEY_Slime {
+            public: CC_PARAM_VOLLEY_Slime_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Slime_EXPERT_STAR : public CC_PARAM_VOLLEY_Slime_EXPERT {
+            public: CC_PARAM_VOLLEY_Slime_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Kuroma {
+        class CC_PARAM_VOLLEY_Kuroma : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Kuroma();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Kuroma_EASY : public CC_PARAM_VOLLEY_Kuroma {
+            public: CC_PARAM_VOLLEY_Kuroma_EASY();
+        };
+        class CC_PARAM_VOLLEY_Kuroma_EASY_STAR : public CC_PARAM_VOLLEY_Kuroma_EASY {
+            public: CC_PARAM_VOLLEY_Kuroma_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Kuroma_NORMAL : public CC_PARAM_VOLLEY_Kuroma {
+            public: CC_PARAM_VOLLEY_Kuroma_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Kuroma_NORMAL_STAR : public CC_PARAM_VOLLEY_Kuroma_NORMAL {
+            public: CC_PARAM_VOLLEY_Kuroma_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Kuroma_HARD : public CC_PARAM_VOLLEY_Kuroma {
+            public: CC_PARAM_VOLLEY_Kuroma_HARD();
+        };
+        class CC_PARAM_VOLLEY_Kuroma_HARD_STAR : public CC_PARAM_VOLLEY_Kuroma_HARD {
+            public: CC_PARAM_VOLLEY_Kuroma_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Kuroma_EXPERT : public CC_PARAM_VOLLEY_Kuroma {
+            public: CC_PARAM_VOLLEY_Kuroma_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Kuroma_EXPERT_STAR : public CC_PARAM_VOLLEY_Kuroma_EXPERT {
+            public: CC_PARAM_VOLLEY_Kuroma_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Mii00 {
+        class CC_PARAM_VOLLEY_Mii00 : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Mii00();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Mii00_EASY : public CC_PARAM_VOLLEY_Mii00 {
+            public: CC_PARAM_VOLLEY_Mii00_EASY();
+        };
+        class CC_PARAM_VOLLEY_Mii00_EASY_STAR : public CC_PARAM_VOLLEY_Mii00_EASY {
+            public: CC_PARAM_VOLLEY_Mii00_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Mii00_NORMAL : public CC_PARAM_VOLLEY_Mii00 {
+            public: CC_PARAM_VOLLEY_Mii00_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Mii00_NORMAL_STAR : public CC_PARAM_VOLLEY_Mii00_NORMAL {
+            public: CC_PARAM_VOLLEY_Mii00_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Mii00_HARD : public CC_PARAM_VOLLEY_Mii00 {
+            public: CC_PARAM_VOLLEY_Mii00_HARD();
+        };
+        class CC_PARAM_VOLLEY_Mii00_HARD_STAR : public CC_PARAM_VOLLEY_Mii00_HARD {
+            public: CC_PARAM_VOLLEY_Mii00_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Mii00_EXPERT : public CC_PARAM_VOLLEY_Mii00 {
+            public: CC_PARAM_VOLLEY_Mii00_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Mii00_EXPERT_STAR : public CC_PARAM_VOLLEY_Mii00_EXPERT {
+            public: CC_PARAM_VOLLEY_Mii00_EXPERT_STAR();
+        };
+    }
+
+    namespace cc_data_volley_Mii01 {
+        class CC_PARAM_VOLLEY_Mii01 : public CHR_CORE_VOLLEY::CC_PARAM_VOLLEY {
+            public:
+                CC_PARAM_VOLLEY_Mii01();
+                void __init2();
+        };
+        class CC_PARAM_VOLLEY_Mii01_EASY : public CC_PARAM_VOLLEY_Mii01 {
+            public: CC_PARAM_VOLLEY_Mii01_EASY();
+        };
+        class CC_PARAM_VOLLEY_Mii01_EASY_STAR : public CC_PARAM_VOLLEY_Mii01_EASY {
+            public: CC_PARAM_VOLLEY_Mii01_EASY_STAR();
+        };
+        class CC_PARAM_VOLLEY_Mii01_NORMAL : public CC_PARAM_VOLLEY_Mii01 {
+            public: CC_PARAM_VOLLEY_Mii01_NORMAL();
+        };
+        class CC_PARAM_VOLLEY_Mii01_NORMAL_STAR : public CC_PARAM_VOLLEY_Mii01_NORMAL {
+            public: CC_PARAM_VOLLEY_Mii01_NORMAL_STAR();
+        };
+        class CC_PARAM_VOLLEY_Mii01_HARD : public CC_PARAM_VOLLEY_Mii01 {
+            public: CC_PARAM_VOLLEY_Mii01_HARD();
+        };
+        class CC_PARAM_VOLLEY_Mii01_HARD_STAR : public CC_PARAM_VOLLEY_Mii01_HARD {
+            public: CC_PARAM_VOLLEY_Mii01_HARD_STAR();
+        };
+        class CC_PARAM_VOLLEY_Mii01_EXPERT : public CC_PARAM_VOLLEY_Mii01 {
+            public: CC_PARAM_VOLLEY_Mii01_EXPERT();
+        };
+        class CC_PARAM_VOLLEY_Mii01_EXPERT_STAR : public CC_PARAM_VOLLEY_Mii01_EXPERT {
+            public: CC_PARAM_VOLLEY_Mii01_EXPERT_STAR();
+        };
+    }
+
 }
 
 #endif /* !MSW_CC_PARAM_VOLLEY_HPP_ */

@@ -66,10 +66,12 @@ namespace msw {
             void SetUp(float x, float y, float z);
 
             // (name guessed) Point the direction from the position towards
-            // rTarget; inline in msw::CStgObj::LookAt.
+            // rTarget; inline in msw::CStgObj::LookAt. It goes through
+            // bcs::FVEC3FromTo: with bcs::FVEC3Sub called directly the two
+            // float registers come out numbered the other way round.
             void SetLookAtPos(const bcs::FVEC3 &rTarget)
             {
-                bcs::FVEC3Sub(&m_Dir, &rTarget, &m_Pos);
+                bcs::FVEC3FromTo(&m_Dir, &m_Pos, &rTarget);
                 m_nFlag |= 2;
             }
 

@@ -36,7 +36,7 @@ game/volley/CBallVolley.cpp:
 	.ctors      start:0x00000008 end:0x0000000C
 	.rodata     start:0x00000248 end:0x000014B0
 	.data       start:0x00000B48 end:0x00001C00
-	.bss        start:0x00000100 end:0x00000530
+	.bss        start:0x00000100 end:0x00000148
 
 game/volley/CItemBallVolley.cpp:
 	.text       start:0x000200FC end:0x0002019C
@@ -51,22 +51,11 @@ game/volley/CCameraVolley.cpp:
 	.rodata     start:0x00001570 end:0x00001578
 	.data       start:0x00002010 end:0x00002058
 
-game/volley/CC_PARAM_VOLLEY_Yoshi.cpp:
-	.text       start:0x00021F94 end:0x00033214
-	.rodata     start:0x00001578 end:0x000017C0
-
-game/volley/CC_PARAM_VOLLEY_Mii01_HARD_STAR.cpp:
-	.text       start:0x00033214 end:0x00033244
-
-game/volley/CC_PARAM_VOLLEY_Mii01_HARD.cpp:
-	.text       start:0x00033244 end:0x00033274
-
-game/volley/CC_PARAM_VOLLEY_Mii01_EXPERT_STAR.cpp:
-	.text       start:0x00033274 end:0x000332A4
-
-game/volley/CC_PARAM_VOLLEY_Mii01_EXPERT.cpp:
-	.text       start:0x000332A4 end:0x000332E0
+game/volley/CC_PARAM_VOLLEY.cpp:
+	.text       start:0x00021F94 end:0x000332E0
 	.ctors      start:0x0000000C end:0x00000010
+	.rodata     start:0x00001578 end:0x000017C0
+	.bss        start:0x00000148 end:0x00000530
 
 game/volley/CChrCoreVolley.cpp:
 	.text       start:0x000332E0 end:0x0003B628

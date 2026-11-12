@@ -167,6 +167,25 @@ namespace msw {
             static float GetStageOuterWorldBack(long nCourt);
             static float GetStageCourtWorldFront(long nCourt);
             static float GetStageCourtWorldBack(long nCourt);
+            // (DOL; added for DodgeF game/dodge/CComManDodgeGame.cpp; return
+            // types and meanings guessed from the names) The sides of court
+            // nCourt in the world; the edges of the whole stage; the outer
+            // front and back beyond court nCourt; the Z of the line between
+            // the courts at rPos; the ball's position in the world; the
+            // court pChr stands on; the XZ distance between two world
+            // positions.
+            static float GetStageCourtWorldLeft(long nCourt);
+            static float GetStageCourtWorldRight(long nCourt);
+            static float GetStageWorldLeft();
+            static float GetStageWorldRight();
+            static float GetStageWorldFront();
+            static float GetStageWorldBack();
+            static float GetStageOuterFront(long nCourt);
+            static float GetStageOuterBack(long nCourt);
+            static float GetCourtBorderWorldZ(const bcs::FVEC3 &rPos);
+            static bcs::FVEC3 GetBallWorldPos(long nBall);
+            static long GetTerritoryCourtIdx(const CChrCore *pChr);
+            static float GetWorldDisXZ(const bcs::FVEC3 &rPos0, const bcs::FVEC3 &rPos1);
             // Clears bit nChr of rBits; the character nearest to rPos among
             // those of nBits (negative for none).
             static void ResetEnableBit(unsigned long &rBits, long nChr);

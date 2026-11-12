@@ -261,8 +261,7 @@ namespace msw {
     {
         CTournamentTrophy *pTrophy = new CTournamentTrophy;
         long nIndex;
-        nw4r::g3d::ResFile res(
-            static_cast<nw4r::g3d::ResFileData *>(EvDemo::GetArcResDataMdl(nIndex, nArc, "trophy", 0)));
+        nw4r::g3d::ResFile res = EvDemo::GetArcResDataMdl(nIndex, nArc, "trophy", 0);
 
         pTrophy->m_pTrophy = CTrophyObj::CreateTrophy(res, CTournament::GetCup(), CTournament::GetGameMode(), nTrophy);
         CTrophyObj::CreateTrophyIn(pTrophy->m_pTrophy, res, CTournament::GetCup(), CTournament::GetGameMode());

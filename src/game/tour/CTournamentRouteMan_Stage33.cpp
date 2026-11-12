@@ -258,8 +258,7 @@ namespace msw {
         inline CRouteDataMove *CreateRainbowRoute(const CRouteBase::_PARAM &param, unsigned long nFrame, long nRoad)
         {
             long nIndex;
-            nw4r::g3d::ResFile file(
-                static_cast<nw4r::g3d::ResFileData *>(EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "rainbow", 0)));
+            nw4r::g3d::ResFile file = EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "rainbow", 0);
             CRouteBase::_PARAM data;
             data.fLength = param.fLength;
             data.vStart.Set(1.0f, 0.0f, -400.0f);

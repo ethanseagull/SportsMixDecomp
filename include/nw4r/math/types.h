@@ -47,6 +47,10 @@ namespace nw4r {
             VEC3 operator+(const VEC3 &rhs) const;
             VEC3 operator-(const VEC3 &rhs) const;
             VEC3 operator*(float f) const;
+            // Added for TourF game/tour/CTournamentRouteMan.cpp
+            // (msw::CRouteDokan::PushRoute), which emits it weak and calls
+            // it out of line.
+            VEC3 &operator+=(const VEC3 &rhs);
         };
 
         // pOut = p1 + p2, p1 - p2 and p * f. In the original these are inline
@@ -146,6 +150,12 @@ namespace nw4r {
             VEC3 tmp;
             VEC3Scale(&tmp, this, f);
             return tmp;
+        }
+
+        inline VEC3 &VEC3::operator+=(const VEC3 &rhs)
+        {
+            VEC3Add(this, this, &rhs);
+            return *this;
         }
 
         // An axis-aligned box. Added for MenuF game/menu/CBgChr.cpp (the

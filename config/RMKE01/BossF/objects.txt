@@ -11,7 +11,7 @@ Matching game/boss/CEffectCtrlBoss.cpp
 Matching game/boss/TournamentBoss.cpp
 Matching game/boss/CCockpitBossLayoutBase.cpp
 Matching game/boss/CCollManBoss.cpp
-Equivalent game/boss/CChrManBoss.cpp
+Matching game/boss/CChrManBoss.cpp
 Equivalent game/boss/CChrDrvPadBoss.cpp
 Matching game/boss/CChrMarkerBoss.cpp
 Matching game/boss/CBallManBoss.cpp

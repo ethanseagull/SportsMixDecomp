@@ -19,14 +19,7 @@ CChrMan *CChrManBoss::CreateInstance(bcs::CTask *pParent)
 
 CChrManBoss::~CChrManBoss()
 {
-    if (m_ppChrCore != 0) {
-        for (long i = 0; i < m_nChrCoreNum; i++) {
-            if (m_ppChrCore[i] != 0) {
-                delete m_ppChrCore[i];
-            }
-            m_ppChrCore[i] = 0;
-        }
-    }
+    DeleteChrCore_();
 }
 
 void CChrManBoss::Create_()

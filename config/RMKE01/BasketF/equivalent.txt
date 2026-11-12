@@ -279,7 +279,6 @@ BasketF __ct__Q33msw14GIMMICK_BASKET16CEffectCoinScoreFPQ23bcs5CTaskRCQ23bcs5FVE
 BasketF __dt__Q23bcs106CPool<Q33msw7STAGE1113CStgRndAnmObj,Q23bcs42CPoolNode<Q33msw7STAGE1113CStgRndAnmObj,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
 BasketF __dt__Q23bcs41CFixedPool<Ul,32,Q23bcs15CPoolNode<Ul,0>>Fv near 98.8 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
 BasketF __dt__Q23bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
-BasketF __dt__Q23msw13CChrManBasketFv near 99.1 register allocation/instruction order only
 BasketF __dt__Q23msw14CStageBasket11Fv near 99.0 instruction order only
 BasketF __dt__Q33msw11CC15_BASKET19CcSiromaMagicCircleFv near 98.9 register numbering / order of independent loads only
 BasketF __dt__Q33msw7STAGE1120CBgFirePillarClusterFv near 98.1 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants

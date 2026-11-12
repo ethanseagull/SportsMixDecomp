@@ -83,3 +83,5 @@ Equivalent game/basket/CComManBasketGame.cpp
 Equivalent game/basket/CChrCoreBasketKoopaJr.cpp
 Equivalent game/basket/CChrCoreBasketMii00.cpp
 Equivalent game/basket/CChrCoreBasketMii01.cpp
+Equivalent game/basket/CChrCoreBasketMario.cpp
+Equivalent game/basket/CChrCoreBasketDonkey.cpp

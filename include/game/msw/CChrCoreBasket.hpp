@@ -120,6 +120,10 @@ namespace msw {
             // of blockers run after every step of the air trick.
             float GetRotY_ToGoal_NonOffset() const;
             void SubStateAirTrickCmnBlockerCheck_(STATE_WORK_AIR_TRICK *pWork);
+            // (added for game/basket/CChrCoreBasketDonkey.cpp; meaning
+            // guessed from the name) The point the air trick aims across the
+            // goal from (Donkey Kong's jump keeps to the side of it).
+            void GetAirTrickTargetAxis_(bcs::FVEC3 &rAxis) const;
             // Added for game/basket/CChrCoreBasketMoogle.cpp (names from the
             // module's imports; parameter meanings guessed). The body
             // collision's push settings, and the shot of the ball with sound
@@ -503,10 +507,15 @@ namespace msw {
         float m_fMoveLen;              // 0x20
         float m_fMoveRate;             // 0x24
         float m_fRotY;                 // 0x28, the yaw the trick turns to
-        unsigned char m_Unk2C[0x30 - 0x2C];
+        // 0x2C (name guessed): Donkey Kong's trick clears it when the dunk
+        // starts.
+        float m_fUnk2C;
         // 0x30: the cactus's speed per frame, or the point the move ends at.
         bcs::FVEC3 m_MoveVec;
-        unsigned char m_Unk3C[0x40 - 0x3C];
+        // 0x3C (name guessed): the character of the other team that
+        // answers the trick with a block; SubStateAirTrickCmnBlockerCheck_
+        // drops it when it is no longer blocking (status bit 0x2000).
+        CChrCoreBasket *m_pBlocker;
         long m_nStep;                  // 0x40, the step of the trick (state numbers 0 to 0x12)
         unsigned char m_Unk44[0x48 - 0x44];
         float m_fJumpUnk;              // 0x48, passed on to CChrCore::m_fJumpUnk224
@@ -558,10 +567,19 @@ namespace msw {
     // The characters without members or overrides of their own known yet
     // (added for game/basket/CChrManBasket.cpp, which allocates them with
     // the sizes given; only the constructors are declared).
+    // Mario: his special shot is a dunk of its own (a hop back, a jump in
+    // three steps onto the ring).
     class CChrCoreBasketMario : public CChrCoreBasket {
         public:
             CChrCoreBasketMario();
             virtual ~CChrCoreBasketMario();
+            virtual int IsAirTrickDunkMode() const;                    // 0x88
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void LoopStateAirTrick();                          // 0x588
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush); // 0xC54
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
     };
 
     class CChrCoreBasketDaisy : public CChrCoreBasket {
@@ -576,10 +594,22 @@ namespace msw {
             virtual ~CChrCoreBasketWario();
     };
 
+    // Donkey Kong: his special shot pounds the ground on landing from a
+    // first jump, which shakes the camera and sends out a shock wave
+    // (CC07_BASKET::CcDonkeyQuake), then dunks.
     class CChrCoreBasketDonkey : public CChrCoreBasket {
         public:
             CChrCoreBasketDonkey();
             virtual ~CChrCoreBasketDonkey();
+            virtual int IsAirTrickDunkMode() const;                    // 0x88
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void LoopStateAirTrick();                          // 0x588
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush); // 0xC54
+            virtual void CallbackMotTrg_AtkOn_(long, long);            // 0xC80
+            virtual void CallbackMotTrg_AtkOff_(long, long);           // 0xC84
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
     };
 
     // Bowser Jr.: his special shot throws a spray of paint balls

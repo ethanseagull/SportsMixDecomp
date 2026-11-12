@@ -105,7 +105,7 @@ BasketF LoopStateBlockWorkLose__Q23msw14CChrCoreBasketFv near 99.9 99.9: registe
 BasketF LoopStateCatch__Q23msw14CChrCoreBasketFv near 96.3 register choice and instruction order; the jump-flag test is a double cntlzw boolean in the original vs rlwinm. in ours (equivalent branch form); mr. vs cmpwi on IsAnmFlipPlay's result
 BasketF LoopStateCatch__Q23msw19CNpcGhostBasketBaseFv near 99.6 one dead branch.
 BasketF LoopStateDamage__Q23msw14CChrCoreBasketFv near 100.0 only fnmsubs takes its two multiply operands in the other order (same product); everything else identical after the FsmqNext fix
-BasketF LoopStateDash__Q23msw14CChrCoreBasketFv near 97.7 97.7: FsmqGetNextState head/tail reload, push load order, li 0/ori 3 flag pattern
+BasketF LoopStateDash__Q23msw14CChrCoreBasketFv near 98.9 97.7: FsmqGetNextState head/tail reload, push load order, li 0/ori 3 flag pattern
 BasketF LoopStateDisappear__Q33msw11CC15_BASKET19CcSiromaMagicCircleFv near 99.9 register numbering / order of independent loads only
 BasketF LoopStateDisappears__Q23msw19CNpcGhostBasketBaseFv near 99.8 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateDunk__Q23msw14CChrCoreBasketFv near 99.9 register choice / instruction order only (inlined Fsmq head/tail loads)
@@ -121,11 +121,10 @@ BasketF LoopStateLayUp__Q23msw14CChrCoreBasketFv near 97.8 97.8: cntlzw 0/1 conv
 BasketF LoopStateLoop__Q33msw11CC15_BASKET19CcSiromaMagicCircleFv near 99.2 register numbering / order of independent loads only
 BasketF LoopStateMove__Q23msw16CNpcStringBasketFv near 99.9 99.9: register numbering in the 0.0f == y compare
 BasketF LoopStateNeutral__Q23msw14CChrCoreBasketFv near 99.9 99.9: register choice only
-BasketF LoopStatePassCatch__Q23msw14CChrCoreBasketFv unverified 98.3 98.3%: registers and order, plus the original reloads the queue head and tail (0x18, 0x1C) inside the inlined FsmqGetNextState of the landing step where ours reuses them (no store in between; not reproduced)
+BasketF LoopStatePassCatch__Q23msw14CChrCoreBasketFv unverified 98.7 98.3%: registers and order, plus the original reloads the queue head and tail (0x18, 0x1C) inside the inlined FsmqGetNextState of the landing step where ours reuses them (no store in between; not reproduced)
 BasketF LoopStatePassCatch__Q23msw19CNpcGhostBasketBaseFv near 99.7 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStatePass__Q23msw19CNpcGhostBasketBaseFv unverified 99.3 99.3%: original calls MethdSetPassCatchJumpWaitFrame (CChrCoreBasket slot 0xA78, (FVEC3&, float)) without loading f1, so the float it passes is whatever f1 held; ours passes the pass frame.
 BasketF LoopStatePursuit__Q23msw19CNpcGhostBasketBaseFv near 99.8 register choice / schedule only (UpDateCollBody_: argument load order).
-BasketF LoopStateRun__Q23msw14CChrCoreBasketFv near 99.6 99.6: original's inline FsmqGetNextState reloads queue head and tail (two extra loads of the same values)
 BasketF LoopStateSizeChange__Q23msw14CChrCoreBasketFv near 99.8 99.8: FsmqGetWork tail/head load order
 BasketF LoopStateSliding__Q23msw14CChrCoreBasketFv near 99.9 99.9: register choice, operand order inside fnmsubs/fmadds
 BasketF LoopStateSmashCut__Q23msw19CChrCoreBasketYoshiFv near 85.9 control flow, calls, constants and fields match; ours keeps one .rodata base register where the original reloads lis/@l per constant (toolchain.md literal pooling), and cmpwi vs mr. on IsAnmFlipPlay
@@ -202,7 +201,7 @@ BasketF Set__Q23msw22CCockpitBasketHarapekoFv near 93.0 s_PaneName address forme
 BasketF SetupGame__Q23msw19CCockpitBasketCoderFv near 97.3 register allocation only (loop counters and table pointers); SetVisible(bool) bit insert compiled as srwi+rlwimi instead of rlwinm+rlwimi (same flag byte result); as HockeyF
 BasketF ShotArtsBall___Q23msw21CChrCoreBasketWaluigiFl near 99.6 float register choice for the 1/60 multiply operands and one byte load into r0 vs r9
 BasketF StartGuideTelop__Q23msw16CGameGuideBasketFlPCQ23msw8CChrCore near 99.9 99.9: only .rodata offsets of its float constants (original has 20 unread bytes -3.0,3.0,0,0,0 after pi/2)
-BasketF StartScoreView___Q23msw13CChrManBasketFl near 93.8 register allocation/instruction order only; the inline FsmqGetNextState/FsmqNext reload the queue head/tail from memory in the original where ours reuses registers (no store in between), and the clamps keep the bound in another register
+BasketF StartScoreView___Q23msw13CChrManBasketFl near 95.1 register allocation/instruction order only; the inline FsmqGetNextState/FsmqNext reload the queue head/tail from memory in the original where ours reuses registers (no store in between), and the clamps keep the bound in another register
 BasketF SubBSplineMove___Q23msw14CChrCoreBasketFffRffffRCQ23bcs5FVEC3 near 98.9 98.9: stack slots and store order of the spline control-point vectors
 BasketF SubBattleMove___Q23msw14CChrCoreBasketFRQ33msw14CChrCoreBasket11BATTLEPARAM near 98.0 98.0: stack slots and store order of the spline control-point vectors
 BasketF SubDefNormal___Q23msw16CChrDrvPadBasketFv unverified 93.2 Float constants addressed per literal as in the original (pool-off stand-in in the .cpp). Left: the original has extra field loads (likely reloads ours keeps in registers) and a few instructions more; OnMsg has an empty case 9 in its compare tree, SubOffDribble an unused compare of MethdRDB's result; MethdPass a 0x10 bigger frame; not proven harmless.

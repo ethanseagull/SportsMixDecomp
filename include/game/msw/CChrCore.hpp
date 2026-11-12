@@ -1397,7 +1397,10 @@ namespace msw {
             void OnFlagF4(unsigned long nBit) { m_nFlagF4 |= nBit; }
 
         protected:
-            unsigned long m_Unk60;
+            // 0x60 (name guessed): the parent of the tasks the character
+            // makes (VolleyF's CChrCoreVolleyDaisy hangs her flower garden
+            // under it).
+            bcs::CTask *m_pTaskParent;
             CChrDrv *m_pDriver[2];       // 0x64 (count guessed from the index's place)
             long m_nDriver;              // 0x6C, index of the driver in use, negative for none
         public:

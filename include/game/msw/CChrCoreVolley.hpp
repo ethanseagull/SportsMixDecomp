@@ -500,6 +500,12 @@ namespace msw {
         public:
             CChrCoreVolleyDaisy();
             virtual ~CChrCoreVolleyDaisy();
+            virtual void Reset_();                                     // 0x384
+            virtual void SubStateBlockJumpLandStart_(STATE_WORK_BLOCK_JUMP *); // 0xCD8
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual void SubStateAirTrickPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xD38
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+            virtual void SubStateAirTrickPlayLandMotion_(STATE_WORK_AIR_TRICK *); // 0xD5C
     };
 
     class CChrCoreVolleyYoshi : public CChrCoreVolley {

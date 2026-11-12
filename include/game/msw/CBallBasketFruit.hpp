@@ -64,6 +64,13 @@ namespace msw {
             virtual float GetWallBoundRateXZ() const;
             virtual void CalcBoundRandXZBG();
 
+            // (names guessed; added for
+            // game/basket/CBallManBasketHungryBossPackun.cpp) See m_nStringId
+            // and m_nKind.
+            unsigned long GetStringId() const { return m_nStringId; }
+            void SetStringId(unsigned long nId) { m_nStringId = nId; }
+            long GetKind() const { return m_nKind; }
+
         private:
             // The life of a loose fruit, drawn between the
             // BASKET_PRM_COMMON_HUNGRY_*_BALL_LIFE_MIN/MAX of a fruit held by

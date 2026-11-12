@@ -18,13 +18,25 @@ namespace msw {
     // below are the ones in that vtable. NewMdl is inline (HockeyF's
     // CStageHockey17::CGoalObj17::NewMdl inlines it); GetRingPos,
     // GetBoardPos, GetBoardVec and DunkRelease are weak copies at the end of
-    // CGoalObjHockey.cpp too, but their bodies are not written yet. The
+    // CGoalObjHockey.cpp too. The
     // class adds no members: CGoalObj is 0x6498 bytes.
     class CGoalObjHockey : public CGoalObj {
         public:
             CGoalObjHockey(bcs::CTask *pParent, long idx);
             virtual ~CGoalObjHockey();
 
+            virtual void SetPosAuto();
+            // The ring and the board are where the goal stands.
+            virtual const bcs::FVEC3 &GetRingPos() const { return GetPos(); }
+            virtual const bcs::FVEC3 &GetBoardPos() const { return GetPos(); }
+            virtual const bcs::FVEC3 &GetBoardVec() const { return GetVec(); }
+            virtual void GoalIn();
+            virtual float DunkStart(DUNK_POW pow, const bcs::FVEC3 &rPos);
+            virtual void DunkRelease() {}
+            virtual void DunkCancel();
+
+            // Declared last (an override, so no slot moves): the weak copies
+            // come out in reverse declaration order and NewMdl is first.
             // Model 0 is an empty stand-in, the others the goal's model of
             // the goal's sub-type.
             virtual CStgMdl *NewMdl(long heap, unsigned long idx)
@@ -39,16 +51,6 @@ namespace msw {
                 }
                 return pGoalMdl;
             }
-
-            virtual void SetPosAuto();
-            // The ring and the board are where the goal stands.
-            virtual const bcs::FVEC3 &GetRingPos() const { return GetPos(); }
-            virtual const bcs::FVEC3 &GetBoardPos() const { return GetPos(); }
-            virtual const bcs::FVEC3 &GetBoardVec() const { return GetVec(); }
-            virtual void GoalIn();
-            virtual float DunkStart(DUNK_POW pow, const bcs::FVEC3 &rPos);
-            virtual void DunkRelease() {}
-            virtual void DunkCancel();
     };
 }
 

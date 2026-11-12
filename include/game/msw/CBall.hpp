@@ -468,6 +468,11 @@ namespace msw {
             // DOL. The ball's offset from the hand of the character holding
             // it (VolleyF's CChrCoreVolleyLuigi lifts it while it comes in).
             void SetAttachPos(const bcs::FVEC3 &rOfs, int);
+            // (DOL; added for BasketF game/basket/CBallManBasketHungryBossPackun.cpp,
+            // meanings guessed from the names) Adds rOfs to the attach
+            // offset; sets the spin of the ball (radians per frame).
+            void AddAttachPos(const bcs::FVEC3 &rOfs);
+            void SetRotSpeed(float fSpeed);
             // (DOL; added for DodgeF CChrCoreDodgeWaluigi, return types
             // guessed) Puts the ball at rPos at once; attaches it to node
             // nNode of pMdl; frees it again.
@@ -568,6 +573,9 @@ namespace msw {
             void CalcYVG(float fStartY, float fTopY, float fEndY, float fFrame, float &rVel, float &rGravity) const;
             void SE_Stop(long nSlot, float fFade);
             int IsItemEffect() const;
+            // (DOL; added for BasketF game/basket/unit_65AF0.cpp) Not zero
+            // while the ball carries an item.
+            int IsItemBall() const;
             void LinkItemEffect_(unsigned long nId);
             void ClearOffsetPos();
 

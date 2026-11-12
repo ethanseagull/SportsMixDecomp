@@ -206,7 +206,7 @@ namespace msw {
             virtual int CanbeRebirth() const;                          // 0xB70
             virtual int MethdRebirth();                                // 0xB74
             virtual void CheckCountWork__();                           // 0xC10
-            virtual void CalcMoveSpeedRate_(float, long);              // 0xC18
+            virtual float CalcMoveSpeedRate_(float, long);              // 0xC18
             virtual void Util_SetEffect(SET_EFFECT_TYPE);              // 0xC1C
             virtual void Util_AttachEffect(ATTACH_EFFECT_TYPE, long);  // 0xC20
             virtual int CallbackDribbleTap_();                         // 0xC48

@@ -855,6 +855,9 @@ namespace msw {
             void SetTurnStartTelopType_(long nType, float fFrame);
             // Counts m_fStateCount down; not zero once it has run out.
             int StateWorkDecStateCount_();
+            // (fn_8017CA6C, name guessed; called only by the destructor)
+            // Ends the game's tasks, cameras, effects and sounds.
+            void Finalize();
             void ClearGameResult_();
             // Static: the party game calls it without an object.
             static void SetGameResultAll_(long nResult);
@@ -877,38 +880,109 @@ namespace msw {
             // (non-virtual; CGameBoss's virtual of the same name calls it)
             void LoopStateEntranceDemo();
             // The states of CGame's own table that are not virtual (state
-            // numbers from the table fn_8017F6E8 builds; names guessed except
-            // LoopStateEntranceDemo). 0 loads the game, 2 starts it, 3 is the
-            // entrance demo, 22 creates the game's objects, 23 starts the
-            // BGM, 5 and 6 run the virtual WaitStart and MainLoop hooks, 24-26
-            // synchronise an online game, 27 does nothing, 28 saves, 29 shows
-            // a message.
+            // numbers from the table InitState builds; names guessed except
+            // LoopStateEntranceDemo). 0 loads the game, 21 starts it, 2 is
+            // the entrance demo, 22 creates the game's objects, 23 starts
+            // the BGM, 4 and 5 run the virtual WaitStart and MainLoop hooks,
+            // 24-26 synchronise an online game, 27 does nothing, 28 saves, 29
+            // shows a message.
             void CtorStateGameLoad();       // state 0
+            void LoopStateGameLoad();       // (fn_80180E2C)
             void DtorStateGameLoad();
-            void DtorStateGameStart();      // state 2
-            void DtorStateEntranceDemo();   // state 3
+            void CtorStateGameStart();      // state 21 (fn_8018190C)
+            void LoopStateGameStart();      // (fn_80181A24)
+            void DtorStateGameStart();
+            void CtorStateEntranceDemo();   // state 2 (fn_80181D10)
+            void DtorStateEntranceDemo();
             void CtorStateGameCreate();     // state 22
+            void LoopStateGameCreate();     // (fn_8018209C)
             void DtorStateGameCreate();
             void CtorStateBgmStart();       // state 23
             void LoopStateBgmStart();
             void DtorStateBgmStart();
-            void CtorStateWaitStartBase();  // state 5
+            void CtorStateWaitStartBase();  // state 4
+            void LoopStateWaitStartBase();  // (fn_80182E88)
             void DtorStateWaitStartBase();
-            void CtorStateMainLoopBase();   // state 6
+            void CtorStateMainLoopBase();   // state 5
+            void LoopStateMainLoopBase();   // (fn_80183170)
             void DtorStateMainLoopBase();
             void CtorStateNoop();           // state 27
             void LoopStateNoop();
             void DtorStateNoop();
             void CtorStateSave();           // state 28
+            void LoopStateSave();           // (fn_801851A8)
             void DtorStateSave();
             void CtorStateMessage();        // state 29
+            void LoopStateMessage();        // (fn_80185364)
             void DtorStateMessage();
             void CtorStateOnlineSync0();    // state 24
+            void LoopStateOnlineSync0();    // (fn_80186C6C)
             void DtorStateOnlineSync0();
             void CtorStateOnlineSync1();    // state 25
+            void LoopStateOnlineSync1();    // (fn_80186F38)
             void DtorStateOnlineSync1();
             void CtorStateOnlineSync2();    // state 26
+            void LoopStateOnlineSync2();    // (fn_8018726C)
             void DtorStateOnlineSync2();
+
+            // (fn_8017F6E8, name guessed; called by the constructor) Builds
+            // the state table above and starts state 0.
+            void InitState();
+
+            // The table's hooks for the virtual states: non-virtual wrappers
+            // (a member pointer to a virtual function would be a different
+            // constant), emitted weak after InitState. States 1, 3, 6-20.
+            void CtorStateGameInit_() { CtorStateGameInit(); }
+            void LoopStateGameInit_() { LoopStateGameInit(); }
+            void DtorStateGameInit_() { DtorStateGameInit(); }
+            void CtorStateGameSetup_() { CtorStateGameSetup(); }
+            void LoopStateGameSetup_() { LoopStateGameSetup(); }
+            void DtorStateGameSetup_() { DtorStateGameSetup(); }
+            void CtorStateGoalEvent_() { CtorStateGoalEvent(); }
+            void LoopStateGoalEvent_() { LoopStateGoalEvent(); }
+            void DtorStateGoalEvent_() { DtorStateGoalEvent(); }
+            void CtorStateTurnResult_() { CtorStateTurnResult(); }
+            void LoopStateTurnResult_() { LoopStateTurnResult(); }
+            void DtorStateTurnResult_() { DtorStateTurnResult(); }
+            void CtorStateTimeUp_() { CtorStateTimeUp(); }
+            void LoopStateTimeUp_() { LoopStateTimeUp(); }
+            void DtorStateTimeUp_() { DtorStateTimeUp(); }
+            void CtorStateChgCourt_() { CtorStateChgCourt(); }
+            void LoopStateChgCourt_() { LoopStateChgCourt(); }
+            void DtorStateChgCourt_() { DtorStateChgCourt(); }
+            void CtorStateTurnOver_() { CtorStateTurnOver(); }
+            void LoopStateTurnOver_() { LoopStateTurnOver(); }
+            void DtorStateTurnOver_() { DtorStateTurnOver(); }
+            void CtorStateChgOffense_() { CtorStateChgOffense(); }
+            void LoopStateChgOffense_() { LoopStateChgOffense(); }
+            void DtorStateChgOffense_() { DtorStateChgOffense(); }
+            void CtorStateGameSet_() { CtorStateGameSet(); }
+            void LoopStateGameSet_() { LoopStateGameSet(); }
+            void DtorStateGameSet_() { DtorStateGameSet(); }
+            void CtorStateGameResult_() { CtorStateGameResult(); }
+            void LoopStateGameResult_() { LoopStateGameResult(); }
+            void DtorStateGameResult_() { DtorStateGameResult(); }
+            void CtorStateResultMenu_() { CtorStateResultMenu(); }
+            void LoopStateResultMenu_() { LoopStateResultMenu(); }
+            void DtorStateResultMenu_() { DtorStateResultMenu(); }
+            void CtorStateEndMenu_() { CtorStateEndMenu(); }
+            void LoopStateEndMenu_() { LoopStateEndMenu(); }
+            void DtorStateEndMenu_() { DtorStateEndMenu(); }
+            void CtorStateRestart_() { CtorStateRestart(); }
+            void LoopStateRestart_() { LoopStateRestart(); }
+            void DtorStateRestart_() { DtorStateRestart(); }
+            void CtorStateChgField_() { CtorStateChgField(); }
+            void LoopStateChgField_() { LoopStateChgField(); }
+            void DtorStateChgField_() { DtorStateChgField(); }
+            void CtorStateGameExit_() { CtorStateGameExit(); }
+            void LoopStateGameExit_() { LoopStateGameExit(); }
+            void DtorStateGameExit_() { DtorStateGameExit(); }
+            void CtorStateEventDemo_() { CtorStateEventDemo(); }
+            void LoopStateEventDemo_() { LoopStateEventDemo(); }
+            void DtorStateEventDemo_() { DtorStateEventDemo(); }
+            void CtorStateExceptDemo_() { CtorStateExceptDemo(); }
+            void LoopStateExceptDemo_() { LoopStateExceptDemo(); }
+            void DtorStateExceptDemo_() { DtorStateExceptDemo(); }
 
         public:
             // Added for BossF game/boss/GameBoss.cpp (DOL, static; names

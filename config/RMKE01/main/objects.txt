@@ -50,6 +50,7 @@ Matching game/msw/vm/CVMCpu.cpp
 Matching game/msw/menu/CVibEff.cpp
 Matching game/msw/CEventDemoBase.cpp
 Equivalent game/msw/CStgGmk_Pylon.cpp
+Equivalent game/msw/CBallMan.cpp
 Equivalent game/msw/CItemBall.cpp
 NonMatching game/msw/CEffectTable.cpp
 Equivalent game/msw/CEffectAttachTable.cpp

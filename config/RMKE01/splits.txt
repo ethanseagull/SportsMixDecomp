@@ -154,7 +154,7 @@ game/msw/CBall.cpp:
 	.text       start:0x800C4938 end:0x800CBEA8
 
 game/msw/CBallMan.cpp:
-	.text       start:0x800CC6C0 end:0x800CD674
+	.text       start:0x800CC6C0 end:0x800CD6DC
 
 game/msw/CBallMarker.cpp:
 	.text       start:0x800CD6DC end:0x800CE904

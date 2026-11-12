@@ -79,6 +79,7 @@ main EventDemoSetUp__Q23msw5CGameFv near 89.8 the inlined FsmqGetState empty tes
 main FindWave__Q23msw19CStgGmk_WaveClusterCFRQ23bcs5FVEC3RQ23bcs5FVEC3f near 99.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main Force___Q43msw6CC_CMN5LUIGI14CcOvacuumForceFf near 99.2 float callee-saved register allocation only
 main GameWorkReset___Q23msw5CGameFv unverified 46.9 46.9%: ours inlines ClearLastGoalInfo (the original calls it), merges the two identical SetTurnStartMode branches and drops a sign extension; same stores
+main GetActiveBallNum___Q23msw8CBallManFv near 99.1 register allocation only: the loop counter and the strength-reduced table offset are given each other's registers (li order swapped); same instructions, same memory accesses and branches
 main GetAttachName__Q23msw18CEffectAttachTableCFl near 91.8 prologue order only: the original saves r31 before loading m_ppName, ours after; same instructions otherwise, registers renumbered
 main GetButtonSECode__Q23msw18CCockpitButtonInfoFll unverified 77.2 below 85%: the validity test branches the other way (original falls through to return the invalid value, ours to the load); same instructions otherwise
 main GetButtonText__Q23msw18CCockpitButtonInfoFl unverified 74.4 below 85%: the validity test branches the other way (original falls through to return the invalid value, ours to the load); same instructions otherwise
@@ -147,6 +148,7 @@ main Main__Q23msw18CCockpitModelTelopFv near 99.2 register numbering only
 main Main__Q23msw19CItemBallShellWreckFv near 96.3 96.3%: float register numbering and instruction order in the paired-single motion block and the fade branch; same operations, constants and branches
 main Main__Q23msw19CStgGmk_Trolley_MdlFf near 99.9 register allocation of the scale quotients only
 main Main__Q23msw22CCockpitModelTelopHoldFv near 98.5 m_hEffect[i] loaded after CEffectCtrl::GetInstance instead of before (GetInstance does not write it); register numbering
+main Main__Q23msw8CBallManFv near 99.1 register allocation only: the loop counter and the strength-reduced table offset are given each other's registers (li order swapped); same instructions, same memory accesses and branches
 main NewMdl__Q23msw15CStgGmk_TrolleyFlUl near 91.8 inlines CStgGmk_Trolley_Mdl's constructor: the same register reuse for the constant 0 as there; same stores
 main ObjProcGroup__Q23bcs9CScnGroupFUlUlPv near 99.5 99.5%: original has one unreachable b after case 4; branch offsets shift
 main OnAttackHit__Q23msw19CStgGmk_Pinball_ActFPCQ23msw12CCollAtkUnitPCQ23msw13CCollBodyUnitRCQ23bcs5FVEC3Ul near 97.8 one temporary's stack slot, load order and register swap
@@ -257,6 +259,7 @@ main __ct__Q23msw19CStgGmk_Trolley_ActFPQ23msw7CStgGmk near 100.0 stack slots on
 main __ct__Q23msw19CStgGmk_Trolley_MdlFPQ23msw7CStgGmkl near 96.2 the type 0 for the first car is copied from the register already zeroed for m_nHeyhoId (li/mr choice and store order); same stores
 main __ct__Q23msw21CItemBallChangeEffectFPQ23bcs5CTaskUl near 87.9 87.9%: the rlwinm clearing bit 0x4 of the word at 0x08 is scheduled two instructions early; nothing else differs
 main __ct__Q23msw23CStgGmk_WaterPillar_ActFPQ23msw7CStgGmk near 100.0 objdiff 100% but stack slots of two temporaries (a 3-word copy and three float stores) are swapped; same values and instructions
+main __ct__Q23msw8CBallManFPQ23bcs5CTaskl near 99.2 register allocation only: the loop counter and the strength-reduced table offset are given each other's registers (li order swapped); same instructions, same memory accesses and branches
 main __ct__Q33msw4menu13CDispTaskLinkFv near 96.1 96.1%: the original loads s_nNextId twice back to back (one copy feeds the increment, one the id); ours loads it once. Redundant read of a plain counter with nothing in between, so the value is the same; 10 source shapes tried on two models
 main __dt__Q23bcs10CMdlShadowFv unverified 77.9 77.9%: calls ~CMdlObj where the original inlines it (same-file inline: the original file runs from CMdlObj ~0x80054FDC to ~0x80065F30); own body identical
 main __dt__Q23msw16CCockpitMenuBaseFv unverified 68.5 body identical; original inlines the CCockpitPartsInfo/WindowInfo/ButtonInfo base destructors (delete[] + null) because they share its source file, we call them from their own units; merge the units to finish

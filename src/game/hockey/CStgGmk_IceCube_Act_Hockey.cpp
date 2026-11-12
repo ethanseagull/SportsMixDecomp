@@ -93,17 +93,17 @@ void CStgGmk_IceCube_Mdl_Hockey::Main(float rate)
     }
 }
 
-float CStgGmk_IceCube_Mdl_Hockey::GetParam_OrgWidth() const
+float CStgGmk_IceCube_Mdl_Hockey::GetMdlWidth() const
 {
     return 3.5f;
 }
 
-float CStgGmk_IceCube_Mdl_Hockey::GetParam_OrgDepth() const
+float CStgGmk_IceCube_Mdl_Hockey::GetMdlDepth() const
 {
     return 3.5f;
 }
 
-float CStgGmk_IceCube_Mdl_Hockey::GetParam_OrgHeight() const
+float CStgGmk_IceCube_Mdl_Hockey::GetMdlHeight() const
 {
     return 1.5f;
 }

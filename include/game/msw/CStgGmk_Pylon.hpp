@@ -33,9 +33,9 @@ namespace msw {
             // the actor's radius by half the first two and its height by the
             // third). All 1.0, defined right after Main (no module refers to
             // them, so they have no name in the DOL).
-            virtual float GetParam_OrgWidth() const;
-            virtual float GetParam_OrgDepth() const;
-            virtual float GetParam_OrgHeight() const;
+            virtual float GetMdlWidth() const;
+            virtual float GetMdlDepth() const;
+            virtual float GetMdlHeight() const;
 
         private:
             long m_nMdlIdx; // 0x12C, which model of the table (only one)

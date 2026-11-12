@@ -86,7 +86,7 @@ Matching game/hockey/CStageHockey10.cpp
 Equivalent game/hockey/CStgGmk_Pinball_Act_Hockey.cpp
 Equivalent game/hockey/CCockpitHockeySmashVS.cpp
 Matching game/hockey/unit_CE254.cpp
-NonMatching game/hockey/CStgGmk_IceCube_Act_Hockey.cpp flags=noauto
+Equivalent game/hockey/CStgGmk_IceCube_Act_Hockey.cpp flags=noauto
 Equivalent game/hockey/CCameraHockeyGame.cpp
 Equivalent game/hockey/unit_AE7E8.cpp
 NonMatching game/hockey/Gmk_Container_Hockey.cpp

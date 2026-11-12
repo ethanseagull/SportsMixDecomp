@@ -25,7 +25,7 @@ HockeyF DetectGoalHit___Q23msw14CCollManHockeyFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23
 HockeyF DetectMapHit___Q23msw14CCollManHockeyFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 96.2 register numbering, order of a few float instructions in the camera-edge test and two redundant reloads of 'to'; same constants, calls, field accesses and branch targets
 HockeyF DispBallIcon__Q23msw18CRadarIcon2DHockeyFlRCQ23bcs5FVEC3ff near 99.7 only the relocation name of the pane-name table differs (named static vs the original's anonymous label)
 HockeyF Disp__Q23msw19CBallMarker2DHockeyFv near 99.3 register numbering and the order of two loop increments
-HockeyF EffectCoinGetCreate___Q23msw17CGimmickManHockeyFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 95.4 original reloads m_pMdl before CreateAttachEffect (no store in between, same value) and schedules the 2*20 multiply later; same as DodgeF's near copy
+HockeyF EffectCoinGetCreate___Q23msw17CGimmickManHockeyFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 96.9 the inlined CEffectCoinGet ctor's 2*20 multiply (Twice) is scheduled after the m_fRotSpeed store in ours, before it in the original; the rotation-speed static is anonymous in the original; same values, calls and stores
 HockeyF GameResult_In__Q23msw14CCockpitHockeyFv near 99.1 99.1%: register choice only for the period words, loop pointers and result pointers (as CCockpitBasket::GameResult_In); same calls, constants, loads and stores
 HockeyF GetExisGreenShellDist__Q23msw17CComManHockeyGameFQ23bcs5FVEC3RfRQ23bcs5FVEC3 near 99.7 99.7%: stack slots of FallGShell_GetPos's returned temporary and the first XZ vector are exchanged; same instructions.
 HockeyF GetExisQPanelDist__Q23msw17CComManHockeyGameFlQ23bcs5FVEC3RfRQ23bcs5FVEC3 near 99.7 99.7%: stack slots of QPanel_GetPos's returned temporary and the first XZ vector are exchanged; same instructions.
@@ -133,7 +133,6 @@ HockeyF WallHitCheck__Q23msw26CStgGmk_Pinball_Act_HockeyFPQ23bcs5FVEC3PQ23bcs5FV
 HockeyF _SendMessage__Q23msw20CTmGameHandlerHockeyFllll near 99.8 99.8%: in the closing m_aScore[i] = CGame::GetTeamScore(i) loop the loop pointer and counter take each other's saved registers (r29/r30); same instructions otherwise
 HockeyF __ct__Q23msw14CStageHockey11FPQ23bcs5CTask near 99.9 instruction order only (same as BasketF CStageBasket11)
 HockeyF __ct__Q23msw19CBallMarker2DHockeyFl near 96.8 the layer 1 comes from li where the original copies a register already holding 1; register numbering
-HockeyF __ct__Q23msw19CItemBallHockeyBombFPQ23msw5CBallf near 98.4 original reloads m_pMdl before CreateAttachEffect; ours reuses the null-checked value (same field, nothing stored between)
 HockeyF __ct__Q23msw24CStageHockeyCrushSkate86FPQ23bcs5CTask near 99.9 register choice only in the inlined CBgFirePillarCluster pool setup (same as CStageHockey11/CStageBasket11)
 HockeyF __ct__Q33msw14GIMMICK_HOCKEY16CEffectCoinScoreFPQ23bcs5CTaskRCQ23bcs5FVEC3RCQ23bcs5FVEC3fl near 99.5 float register choice and one load scheduled differently
 HockeyF __dt__Q23bcs106CPool<Q33msw7STAGE1113CStgRndAnmObj,Q23bcs42CPoolNode<Q33msw7STAGE1113CStgRndAnmObj,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction order only (shared bcs/CPool.hpp, same as BasketF)

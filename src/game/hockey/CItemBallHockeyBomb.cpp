@@ -189,7 +189,7 @@ namespace msw {
 
     inline void CItemBallHockeyBomb::StartFuse_()
     {
-        if (m_pMdl == 0) {
+        if (GetMdl() == 0) {
             return;
         }
         if (m_hEffect == 0) {

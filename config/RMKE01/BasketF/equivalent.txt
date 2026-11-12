@@ -56,7 +56,7 @@ BasketF DispContinue__Q23msw16CGameGuideBasketFv near 97.3 97.3: registers of th
 BasketF DispPlayerIconSetCore___Q23msw13CChrManBasketFPCQ23msw8CChrCore near 99.8 stack slots of the three FVEC3 temporaries differ only
 BasketF DispPlayerIcon___Q23msw13CChrManBasketFPCQ23msw8CChrCore near 99.8 stack slots of the three FVEC3 temporaries differ only
 BasketF DtorStateDunk__Q23msw14CChrCoreBasketFv near 99.7 register choice / instruction order only (inlined Fsmq head/tail loads)
-BasketF EffectCoinGetCreate___Q23msw17CGimmickManBasketFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 95.4 95.4%: original reloads m_pMdl before CreateAttachEffect (no store between), 2*20 multiply scheduled differently; register/schedule only, same difference as the recorded Volley/Hockey/Dodge copies
+BasketF EffectCoinGetCreate___Q23msw17CGimmickManBasketFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 96.9 the inlined CEffectCoinGet ctor's 2*20 multiply (Twice) is scheduled after the m_fRotSpeed store in ours, before it in the original; the rotation-speed static is anonymous in the original; same values, calls and stores
 BasketF GameResult_In__Q23msw14CCockpitBasketFv near 99.0 99.0%: register choice only.
 BasketF GetAppendPos___Q23msw30CBallManBasketHungryBossPackunCFRlRQ23bcs5FVEC3 near 89.1 89.1: two stack FVEC3s swap slots, ours reloads global BASKET_PRM_COMMON_APPEND_AREA_X_NUM once more before the z loop (same value), rest scheduling
 BasketF GetArtsCurveValue___Q23msw13CChrManBasketCFl near 99.8 lfs offsets into .rodata differ only: the original's .rodata has 8 more bytes (fDist static and a 5.0 of the stripped Util_SearchAerialPassmeetTo_) before these constants
@@ -258,7 +258,6 @@ BasketF Util_SendPassRequest___Q23msw13CChrManBasketFlPCQ23msw8CChrCore near 87.
 BasketF WholeUpDatePosition___Q23msw19CChrCoreBasketNinjaFRCQ23bcs5FVEC3 near 91.4 loop index form, one fewer saved GPR, temp stack slots, pool offsets; values identical (reviewer confirmed)
 BasketF WholeUpDatePosition___Q23msw19CChrCoreBasketNinjaFv near 91.2 loop index form, one fewer saved GPR, temp stack slots, pool offsets; values identical (reviewer confirmed)
 BasketF __ct__Q23msw14CStageBasket11FPQ23bcs5CTask near 99.9 instruction order only
-BasketF __ct__Q23msw19CItemBallBasketBombFPQ23msw5CBall near 98.8 98.8%: original reloads m_pMdl before CreateAttachEffect; ours reuses the checked value (nothing stored between).
 BasketF __ct__Q33msw11CC03_BASKET19CcDaisyFlowerGardenFPQ23bcs5CTaskPQ23msw8CChrCorelRCQ23bcs5FVEC3 near 99.9 stack slots of state-table temporaries
 BasketF __ct__Q33msw11CC05_BASKET16CcWarioSmokeBombFPQ23bcs5CTaskPQ23msw8CChrCoreQ34nw4r3g3d7ResFileQ34nw4r3g3d7ResFilePCQ33msw7CC_DATA20ARTS_OPT_CREATE_INFORCQ23bcs5FVEC3RCQ23bcs10QUATERNIONRCQ23bcs5FVEC3 near 98.2 float register numbering and the place of one fmr/lfs pair only
 BasketF __ct__Q33msw11CC14_BASKET14CcNinjaFactoryFPQ23bcs5CTaskPQ23msw8CChrCorePCQ23msw13CCollBodyUnitPQ23msw5CBall near 99.9 ptmf stack slots only

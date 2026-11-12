@@ -24,7 +24,7 @@ BossF CtorStateDunk___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss15STATE_WORK_DUN
 BossF CtorStateJumpShoot__Q23msw12CChrCoreBossFv near 98.9 Float constants per literal as in the original (pool-off stand-in, own file since the split). Left: the FsmqGetWork queue index in r4/r5 the other way round, and ours reloads the just-stored shot frame from 0xC for the 15.0 clamp where the original keeps the call result in f0 (frsp); same value, same stores.
 BossF CtorStateReceive__Q23msw12CChrCoreBossFv near 95.9 register numbering and instruction order only (autopilot regs found no better declaration order)
 BossF DropBall___Q23msw12CChrCoreBossFf near 99.9 literal pool offsets only: the file's float pool lacks the literals of the functions not written yet, so constants sit at other offsets (same values)
-BossF EffectCoinGetCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 95.4 original reloads m_pMdl before CreateAttachEffect (no store in between, same value) and schedules the 2*20 multiply later; same as the recorded Volley/Hockey/Dodge/Basket copies
+BossF EffectCoinGetCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 96.9 the inlined CEffectCoinGet ctor's 2*20 multiply (Twice) is scheduled after the m_fRotSpeed store in ours, before it in the original; the rotation-speed static is anonymous in the original; same values, calls and stores
 BossF EffectCoinScoreCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3RCQ23bcs5FVEC3l near 97.9 register choice only (loop counter and clamped count swap registers; one mr scheduled differently)
 BossF FireReceiver___Q23msw18CChrCoreBossKuromaFv near 98.2 delete-flag test clrlwi. vs clrlwi/cntlzw/srwi (same predicate); store order/stack slots of DetectMapHit locals; register numbering
 BossF FireReceiver___Q23msw19CChrCoreBossKinopioFv near 98.1 float registers in x*x+z*z and scheduling of the paired-single address setup
@@ -135,7 +135,6 @@ BossF UpdateHomePos__Q23msw11CComDrvBossFv near 94.3 first loop: the original in
 BossF Util_DunkStart___Q23msw12CChrCoreBossFllfl near 99.0 register allocation/instruction order only
 BossF Util_ReceiveBall___Q23msw12CChrCoreBossFPQ23msw5CBallllil near 99.4 register numbering of the team/player bytes only
 BossF __ct__Q23msw11CCameraBossFl near 99.6 register allocation only
-BossF __ct__Q23msw17CItemBallBossBombFPQ23msw5CBall near 98.5 original reloads m_pMdl before CreateAttachEffect; ours reuses the value from the null check (same field, nothing written between)
 BossF __ct__Q23msw21CBallTargetMarkerBossFPQ23bcs5CTaskUli near 99.8 stack slots of the inlined SetState ptmf temporaries differ; same stores and values
 BossF __ct__Q33msw12GIMMICK_BOSS16CEffectCoinScoreFPQ23bcs5CTaskRCQ23bcs5FVEC3fl near 99.4 float register choice, one m_pMdl load scheduled differently (no store in between); same as the Basket/Hockey copies
 BossF __ct__Q33msw13CHR_CORE_BOSS9CStickObjFPQ23bcs5CTaskQ34nw4r3g3d6ResMdlPQ23bcs7CMdlObjll near 99.9 stack slots only: the four SetState pointer-to-member temporaries are copied to different stack offsets; same values, stores and calls

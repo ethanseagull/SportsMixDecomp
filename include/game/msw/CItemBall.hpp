@@ -97,6 +97,10 @@ namespace msw {
             int IsEnd() const;
             // (name guessed) Not zero once TrgShootStart_ has run.
             int IsShot() const { return m_nTrgFlag & (1 << (TRG_SHOOT_START + 1)); }
+            // (name guessed) The item model. Being const, it makes the
+            // bomb fuses read m_pMdl again for CreateAttachEffect after the
+            // null check, as the original does.
+            bcs::CMdlObj *GetMdl() const { return m_pMdl; }
 
         protected:
             // (fn_800CEC70, name guessed) Builds the item model of `type`

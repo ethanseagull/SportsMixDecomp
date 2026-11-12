@@ -8,6 +8,10 @@ namespace bcs {
     class CScnObj;
 }
 
+namespace CC14_DODGE {
+    class CcNinjaCloneBody;
+}
+
 namespace msw {
 
     namespace CHR_CORE_DODGE {
@@ -346,7 +350,7 @@ namespace msw {
             virtual float SubStateArtsShotGetTrickMotFrame_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD6C
             virtual float SubStateArtsShotGetTrickDoFrame_(STATE_WORK_AIR_TRICK_CMN *, long); // 0xD70
             virtual void SubStateArtsShotGetTrickRotFrame_(STATE_WORK_AIR_TRICK_CMN *); // 0xD74, return type guessed
-            virtual void SubStateArtsShotGetTrickStartRot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD78, return type guessed
+            virtual float SubStateArtsShotGetTrickStartRot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD78 (float: the ninja's override returns f1)
             virtual void SubStateArtsShotStartTargetMarker_(STATE_WORK_AIR_TRICK_CMN *); // 0xD7C, return type guessed
             virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD80
             virtual void SubStateArtsShotIsStartArtsShot_(STATE_WORK_AIR_TRICK_CMN *); // 0xD84, return type guessed
@@ -641,7 +645,12 @@ namespace msw {
         // 0x04: flag bits. The Moogle clears bit 1 when his after-shot
         // timer runs out and waits for bit 3 (meanings not known).
         unsigned long m_nFlag04;
-        unsigned char m_Unk08[0xAC - 0x08];
+        unsigned char m_Unk08[0x90 - 0x08];
+        // 0x90 (name guessed): frames to wait before the shot (the ninja's
+        // SubStateArtsShotStartArtsShot_ sets 100 and IsEndArtsShot_ counts
+        // it down).
+        float m_fShotWait;
+        unsigned char m_Unk94[0xAC - 0x94];
         float m_fJumpUnk;              // 0xAC, for CChrCore::m_fJumpUnk224
         bcs::FVEC3 m_TargetPos;        // 0xB0, where the trick turns to
         unsigned char m_UnkBC[0xC8 - 0xBC];
@@ -892,23 +901,83 @@ namespace msw {
     };
 
     // Size 0x944.
+    // The ninja: his special shot calls up two clones of himself
+    // (CC14_DODGE::CcNinjaCloneBody, game/dodge/CcNinjaCloneBody.cpp) beside
+    // him; each gets a copy of the ball and throws it at its own target.
     class CChrCoreDodgeNinja : public CChrCoreDodge {
         public:
+            enum { CLONE_NUM = 2 };
+
             CChrCoreDodgeNinja();
             virtual ~CChrCoreDodgeNinja();
+            virtual void GetSpRootPos(bcs::FVEC3 &rPos) const;          // 0x2C
+            virtual long GetDodgeArtsTargetMarkerPos(bcs::FVEC3 &rPos, long nIndex); // 0x274
+            virtual long GetDodgeArtsTargetMarkerNum() const;          // 0x278
+            virtual void Reset_();                                     // 0x384
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual void SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRICK_CMN *pWork, long); // 0xD68
+            virtual float SubStateArtsShotGetTrickStartRot_(STATE_WORK_AIR_TRICK_CMN *pWork); // 0xD78
+            virtual void SubStateArtsShotStartTargetMarker_(STATE_WORK_AIR_TRICK_CMN *pWork); // 0xD7C
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *pWork); // 0xD80
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *pWork); // 0xD98
+            virtual void SubStateArtsShotReadyArtsShot_(STATE_WORK_AIR_TRICK_CMN *pWork); // 0xD9C
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *pWork); // 0xDA0
+            virtual void SubStateArtsShotStartArtsShot_(STATE_WORK_AIR_TRICK_CMN *pWork); // 0xDA4
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *pWork); // 0xDA8
+            virtual int SubStateArtsShotIsEndArtsShot_(STATE_WORK_AIR_TRICK_CMN *pWork); // 0xDAC
+            virtual void SubStateArtsShotShootBall_(STATE_WORK_AIR_TRICK_CMN *pWork); // 0xDB0
+            virtual long GetMotIDType_SideStep() const { return 1; }    // 0xFF8
+            virtual long GetMotIDType_DivingCatch() const { return 1; } // 0x1000
+            // His own virtuals, 0x11A0..0x11B8. A clone throws its ball at
+            // rPos (called by clone nIndex when its shot motion fires).
+            virtual void TrgCloneShoot(const bcs::FVEC3 &rPos, long nIndex); // 0x11A0
+            // The clones' balls: copies of the ball he holds
+            // (CBallMan::AddBall), one per clone, attached to its model.
+            virtual void DivideBallCreate();                           // 0x11A4
+            virtual CBall *DivideBallGet(long nIndex);                 // 0x11A8
+            virtual const CBall *DivideBallGet(long nIndex) const;     // 0x11AC
+            virtual void DivideBallDelete(long nIndex);                // 0x11B0
+            virtual void ReleaseBallDelete(long nIndex);               // 0x11B4
+            virtual void DivideBallDeleteAll();                        // 0x11B8
 
         protected:
-            unsigned char m_Unk930[0x944 - 0x930];
+            // (inline helpers, names guessed) The task of clone nIndex, or
+            // null once it is gone; deletes the clones.
+            CC14_DODGE::CcNinjaCloneBody *GetClone_(long nIndex) const;
+            void DeleteClone_();
+
+            // Which of the three arrangements of the special shot was drawn
+            // (SubStateArtsShotSetTrickMoveParam_): row of the table of
+            // positions in game/dodge/CcNinjaCloneBody.cpp.
+            long m_nPosType;                         // 0x930
+            unsigned long m_ahClone[CLONE_NUM];      // 0x934, task ids of the clones
+            unsigned long m_ahDivideBall[CLONE_NUM]; // 0x93C, task ids of their balls
     };
 
     // Size 0x934.
+    // The White Mage: her special shot draws a magic circle
+    // (CC15_DODGE::CcSiromaMagicCircle, game/dodge/CcSiromaMagicCircle.cpp)
+    // on the target marker, which fires with an effect at the shot.
     class CChrCoreDodgeSiroma : public CChrCoreDodge {
         public:
             CChrCoreDodgeSiroma();
             virtual ~CChrCoreDodgeSiroma();
+            virtual void Reset_();                                     // 0x384
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK_CMN *pWork); // 0xD98
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK_CMN *pWork); // 0xDA0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *pWork); // 0xDA8
+            virtual int SubStateArtsShotIsEndArtsShot_(STATE_WORK_AIR_TRICK_CMN *pWork); // 0xDAC
 
         protected:
-            unsigned char m_Unk930[0x934 - 0x930];
+            // (inline helper, name guessed) Deletes the magic circle, if any.
+            void ReleaseMagic_();
+
+            // 0x930, task id of the magic circle, 0 for none (the
+            // constructor does not clear it).
+            unsigned long m_hMagic;
     };
 
     // Size 0x934.

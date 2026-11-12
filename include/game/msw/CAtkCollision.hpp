@@ -8,6 +8,7 @@ namespace bcs {
 namespace msw {
     class CCollAtkUnit;
     class CCollBodyUnit;
+    class CCollUnit;
 
     // A set of attack collision units, 0xC bytes (msw::CItem embeds one at
     // 0x170). A DOL class.
@@ -70,6 +71,14 @@ namespace msw {
             // added for the DOL's pinball ball)
             void SetHitEffectFrame(long index, float fFrame);
             void SetSize(long index, const bcs::FVEC3 &rSize);
+
+            // (added for BasketF's CcSiromaMagicCircle; meanings guessed)
+            // The camera shake and the sound of a hit; both ends of every
+            // unit's capsule; unit `index`.
+            void SetHitCamVibIDAll(long nId);
+            void SetHitSeIDAll(long nSe);
+            void SetPosAll(const bcs::FVEC3 &rPos, const bcs::FVEC3 &rPos2);
+            CCollUnit *GetColl(long index) const;
 
         private:
             unsigned long m_Unk00[3];

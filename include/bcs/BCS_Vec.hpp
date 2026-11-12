@@ -272,6 +272,21 @@ namespace bcs {
         return work;
     }
 
+    // (added for BasketF game/basket/CChrCoreBasketNinja.cpp; BasketF has
+    // weak copies of both) The length of rVec, and of rVec in the XZ plane.
+    inline float BCS_Vec_GetLen(const FVEC3 &rVec)
+    {
+        return PSVECMag((const Vec *)&rVec);
+    }
+
+    inline float BCS_Vec_GetLenXZ(const FVEC3 &rVec)
+    {
+        FVEC3 xz;
+
+        xz.Set(rVec.x, 0.0f, rVec.z);
+        return BCS_Vec_GetLen(xz);
+    }
+
     // (name guessed) rOut = rIn scaled to length 1, or zero when rIn is zero.
     inline void BCS_Vec_Normalize(FVEC3 &rOut, const FVEC3 &rIn)
     {

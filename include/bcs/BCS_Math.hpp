@@ -13,6 +13,30 @@ namespace bcs {
         return deg * (3.14159265f / 180.0f);
     }
 
+    // (added for BasketF game/basket/CChrCoreBasketNinja.cpp) The absolute
+    // value. A template: BasketF has a weak copy named BCS_Abs<f>.
+    template <class T>
+    inline T BCS_Abs(T x);
+
+    template <>
+    inline float BCS_Abs<float>(float x)
+    {
+        return __fabsf(x);
+    }
+
+    // (added for the same unit; BasketF has a weak copy, ROUND_PI__3bcsFf)
+    // An angle brought into [0, 2 pi].
+    inline float ROUND_PI(float rad)
+    {
+        while (rad > 6.2831855f) {
+            rad -= 6.2831855f;
+        }
+        while (rad < 0.0f) {
+            rad += 6.2831855f;
+        }
+        return rad;
+    }
+
     // (meaning guessed from the name) The arc cosine of x, in radians;
     // probably table based. A DOL function.
     float BCS_ACosT(float x);

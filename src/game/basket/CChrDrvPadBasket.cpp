@@ -11,6 +11,17 @@
 #include "game/msw/CChrManBasket.hpp"
 #include "game/msw/CGame.hpp"
 
+namespace CChrDrvPadBasket_cpp {
+// uncalled stand-in / pool-off stand-in: the original addresses every float constant of this
+// file with its own lis, which this compiler does when the first .rodata object of the file is
+// weak (a function-local const). The module link strips this function and its constant.
+// (Per file: the other modules' pad drivers keep the pool, so it is not in CChrDrvPad.hpp.)
+void UnusedPoolOff()
+{
+    const long k = 0;
+}
+}
+
 // Set by the file's static initialiser and used by nothing in the file, as
 // in about 60 other files of the game modules (see CBallManBasket.cpp).
 namespace {

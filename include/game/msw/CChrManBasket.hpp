@@ -161,6 +161,12 @@ namespace msw {
             void AllDispPlayerIcon_();
             void ClearPlayerIcon_(const CChrCore *pChr, int);
             void AllClearPlayerIcon_(int);
+            // (added for game/basket/CChrCoreBasketNinja.cpp; names guessed)
+            // The two above on the instance: weak copies of
+            // ClearPlayerIcon__Q23msw13CChrManBasketFPCQ23msw8CChrCorei are in
+            // BasketF.
+            static void ClearPlayerIcon(const CChrCore *pChr, int n) { GetInstance()->ClearPlayerIcon_(pChr, n); }
+            static void DispPlayerIconSetCore(const CChrCore *pChr) { GetInstance()->DispPlayerIconSetCore_(pChr); }
             // Not zero when a pad drives pChr (driver type 1).
             int IsPadTypePlayer_(const CChrCore *pChr) const;
             // The shot clock (the game work's word at 0x30): in seconds,

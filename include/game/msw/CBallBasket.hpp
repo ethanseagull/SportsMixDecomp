@@ -173,6 +173,12 @@ namespace msw {
             // (name guessed) Waluigi's special shot sets it on each ball it
             // throws.
             void SetArtsShotUnk(float fValue) { m_fArtsShotUnk384 = fValue; }
+            // (name from the weak copy in BasketF's CChrCoreBasketNinja.cpp)
+            // The same member: the ninja's special shot sets 0.17 before
+            // it shoots.
+            void SetArtsShootSpeed(float fSpeed) { m_fArtsShotUnk384 = fSpeed; }
+            // (name guessed) Clears bits of m_nBasketFlag.
+            void OffBasketFlag(unsigned long nBit) { m_nBasketFlag &= ~nBit; }
 
         protected:
             unsigned char m_Unk318[0x320 - 0x318];

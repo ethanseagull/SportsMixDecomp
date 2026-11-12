@@ -22,7 +22,10 @@ namespace msw {
             // argument meanings guessed): nUnit units of collision kind
             // nKind.
             CBodyCollision(long, long nUnit, long nKind, unsigned long);
-            ~CBodyCollision();
+            // Virtual: BasketF's CcNinjaClone::Release deletes one through
+            // the word at 0x0 (slot 0x8, with 1), so the first word is
+            // the vptr.
+            virtual ~CBodyCollision();
             void SetTargetFlagAll(unsigned long flag);
             void SetPushRankAll(long rank);
             void SetPushPowerAll(long power);
@@ -42,6 +45,9 @@ namespace msw {
             void SetCollType(long index, long type);
             void SetDisableAll();
             void SetPos(long index, const bcs::FVEC3 &rPos);
+            // (DOL; added for BasketF's CChrCoreBasketNinja, which passes
+            // the same point twice) Both ends of unit index.
+            void SetPos(long index, const bcs::FVEC3 &rPos, const bcs::FVEC3 &rPos2);
             void SetSize(long index, const bcs::FVEC3 &rSize);
             void SetSize(long index, float x, float y, float z);
             void SetPushEnable(long index);
@@ -117,7 +123,7 @@ namespace msw {
             void SetOwnerHandleAll(unsigned long handle);
 
         private:
-            unsigned long m_Unk00[3];
+            unsigned long m_Unk04[2]; // 0x04, after the vptr
     };
 }
 

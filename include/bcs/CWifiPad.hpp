@@ -26,6 +26,9 @@ namespace bcs {
             static int IsBothHandStroke(float fRemocon, float fNunchuk, long nPad);
             static int IsNunchukStroke(float fPower, long nPad);
             static int IsRemoconStroke(float fPower, long nPad);
+            // (DodgeF) How hard the Nunchuk is shaken; stops the rumble.
+            static float GetNunchukPower(long nPad);
+            static void StopMotor(long nPad);
     };
 }
 

@@ -7,7 +7,7 @@ Matching game/menu/CFade.cpp
 Matching game/menu/CMenuMdlTableSet.cpp pch=MenuF_g3d
 Matching game/menu/CInfoTabChange.cpp
 Matching game/menu/CEffectCtrlMenu.cpp
-Equivalent game/menu/CDepthOfFieldValue.cpp
+Matching game/menu/CDepthOfFieldValue.cpp
 Matching game/menu/CButton0.cpp
 Equivalent game/menu/CButton1.cpp
 Equivalent game/menu/CButtonEntry.cpp

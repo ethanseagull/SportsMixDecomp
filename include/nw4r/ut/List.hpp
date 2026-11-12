@@ -30,13 +30,15 @@ namespace nw4r {
         // The last object when pObj is null.
         void *List_GetPrev(const List *pList, const void *pObj);
 
-        // (added for DOL game/msw/CMenuPartBase.cpp) The number of objects.
-        // Inline with a pointer check that panics from "list.h" line 210;
-        // its two strings are weak objects of this function.
-        inline unsigned short List_GetSize(const List *pList)
+        // The number of objects. Inline, with a null check that reports
+        // file "list.h", line 210 (VolleyF game/volley/CcDaisyFlowerGarden.cpp
+        // emits its two strings as @STRING@List_GetSize objects). Returned
+        // as int: the caller there compares it signed (cmpwi/bgt), which an
+        // unsigned short return folds to a test for zero.
+        inline int List_GetSize(const List *pList)
         {
             if (pList == 0) {
-                db::Panic("list.h", 210, "NW4R:Pointer must not be NULL (list)");
+                nw4r::db::Panic("list.h", 210, "NW4R:Pointer must not be NULL (list)");
             }
             return pList->nNum;
         }

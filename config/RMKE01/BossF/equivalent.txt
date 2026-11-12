@@ -4,8 +4,12 @@ BossF ActLoopSpikeGo__Q23msw11CComDrvBossFv near 100.0 0.0f read from another sl
 BossF ActLoopStickAttack__Q23msw11CComDrvBossFv near 99.3 register numbering inside the inlined paired-single helpers (FVEC3LenSq, FVEC3Add); 0.0f is read from another slot of unit_4F0C4's float pool (the original pool has a 0.0f right after 4.0f, ours after 5.5f; same value); same instructions otherwise
 BossF ActLoopThrowItem__Q23msw11CComDrvBossFv near 99.3 register numbering inside the inlined paired-single helpers (FVEC3LenSq, FVEC3Add); 0.0f is read from another slot of unit_4F0C4's float pool (same value, pool order differs); same instructions otherwise
 BossF AddCoinValue__Q23msw16CCockpitBossCoinFlll near 99.0 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
+BossF CalcXZVel2__Q23msw9CBallBossCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3RQ23bcs5FVEC3RfRfffff near 97.1 registers only (one address computed earlier)
+BossF CallbackBodyPush___Q23msw9CBallBossFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 99.5 register choice inside the paired-single length-squared helper only
 BossF CanbeSpike__Q23msw12CChrCoreBossCFi near 99.9 f29/f30 swapped (base height vs prediction frame); register choice only
 BossF ChangeTextFont__Q23msw21CCockpitBossBallPowerFli near 97.0 register allocation only (nPane and the pane accessor temporaries swap registers); same calls, constants, loads, stores and branches
+BossF CheckCollision___Q23msw9CBallBossFv near 98.6 instruction order/register allocation only
+BossF CollSubCheckBG___Q23msw9CBallBossFRQ23bcs5FVEC3RQ23bcs5FVEC3 near 98.7 stack slots, and hit flag held as 16-bit (ori/clrlwi) vs int; same truth value
 BossF CreateBallIcon__Q23msw16CRadarIcon2DBossFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc unverified 94.1 original frame is 0x80 (ours 0x50) and it stores a .rodata float (0.0f?) to stack slots 0x0C, 0x1C, 0x20 at entry: a local object (likely a vector/size passed by reference later) that our source lacks; the rest is the same calls in a slightly different block order with renumbered registers. Find that object before calling it correct
 BossF CreateCharaIcon__Q23msw16CRadarIcon2DBossFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc unverified 94.4 original frame is 0x80 (ours 0x50) and it stores a .rodata float (0.0f?) to stack slots 0x0C, 0x1C, 0x20 at entry: a local object (likely a vector/size passed by reference later) that our source lacks; the rest is the same calls in a slightly different block order with renumbered registers. Find that object before calling it correct
 BossF CreateMiniTelop__Q23msw12CCockpitBossFllPQ23bcs5FVEC3 near 99.0 register choice and load order inside the inlined paired-single FVEC3Add (pos + offset); same operation; DodgeF copy differs the same way
@@ -26,6 +30,7 @@ BossF EffectCoinGetCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3Q33msw9DROP_CO
 BossF EffectCoinScoreCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3RCQ23bcs5FVEC3l near 97.9 register choice only (loop counter and clamped count swap registers; one mr scheduled differently)
 BossF FireReceiver___Q23msw18CChrCoreBossKuromaFv near 98.2 delete-flag test clrlwi. vs clrlwi/cntlzw/srwi (same predicate); store order/stack slots of DetectMapHit locals; register numbering
 BossF FireReceiver___Q23msw19CChrCoreBossKinopioFv near 98.1 float registers in x*x+z*z and scheduling of the paired-single address setup
+BossF FuncMove___Q23msw9CBallBossFRQ23bcs5FVEC3RQ23bcs5FVEC3ff unverified 78.5 78.5: paired-single scheduling, ps_mr copies and temp slots differ; same operations seen, not proven (sonnet tried too)
 BossF GetAirTrickTargetPos___Q23msw12CChrCoreBossCFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3f near 98.9 register allocation/instruction order only
 BossF GetCrossPosCircleXZ__FQ23bcs5FVEC3Q23bcs5FVEC3Q23bcs5FVEC3fRfRQ23bcs5FVEC3 near 99.0 stack slots of the subtraction temporaries and the XZ copy swapped, register choice; same instructions otherwise
 BossF GetFirstLookInfo_MultiPlay__Q23msw11CCameraBossFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 92.6 stack slots, registers and stfsux addressing of the position table; same calls and constants
@@ -36,6 +41,8 @@ BossF GetLenHosei__Q23msw11CCameraBossFRCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 96.3 st
 BossF GetNearestPosOnSegXZ__FQ23bcs5FVEC3Q23bcs5FVEC3Q23bcs5FVEC3RQ23bcs5FVEC3 unverified 81.0 81%: same instructions in another order (the two paired-single subtractions interleaved differently, the end-point copy loads z,y,x instead of x,y,z) and register choice; below the 85% floor, so not proven
 BossF GetReceivePoseDir___Q23msw12CChrCoreBossFf near 99.4 register allocation and instruction order only
 BossF GetTargetInfo__Q23msw21CCockpitBossBallPowerFlRQ23bcs5FVEC3RQ34nw4r3lyt4Size near 97.4 instruction order only: the addi of the sPowerPane address is scheduled after the subf instead of before
+BossF GetVolleyPosAfterFrame__Q23msw9CBallBossCFRQ23bcs5FVEC3fi unverified 82.9 82.9: paired-single scale/add interleaving and psq load/store count differ (8 instrs longer); same operations seen, not proven
+BossF GetVolleyVelAfterFrame__Q23msw9CBallBossCFRQ23bcs5FVEC3fi near 98.6 stack slots/frame size only: original keeps an unused vector copy as one stack object
 BossF LifeGaugeInWait__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
 BossF LifeGaugeIn__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
 BossF LifeGaugeOutWait__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
@@ -54,6 +61,7 @@ BossF LoopStateNeutral__Q23msw12CChrCoreBossFv near 96.8 register choice; the to
 BossF LoopStateShootStance__Q23msw12CChrCoreBossFv near 99.8 register choice only: the inlined CFsmQueue::FsmqNext computes head+1 into a new register instead of in place; same instructions otherwise
 BossF LoopStateSideStep__Q23msw12CChrCoreBossFv near 99.6 register allocation/order only
 BossF LoopStateSleep__Q23msw21CBallTargetMarkerBossFv near 99.7 x and z of the ball position swap float registers
+BossF LoopStateTouchDown__Q23msw9CBallBossFv near 99.9 instruction order/register allocation only
 BossF LoopStateTurnResult__Q23msw9CGameBossFv near 99.5 register allocation only (same inlined check as LoopStateMainLoop)
 BossF LoopStateTurn__Q23msw12CChrCoreBossFv near 98.8 register allocation and instruction order only
 BossF LoopStateTurn__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFv near 99.7 the two float loads of the angle addition are in the other order; register allocation only
@@ -78,6 +86,7 @@ BossF SetBallPowerState__Q23msw21CCockpitBossBallPowerFll near 99.0 only the rod
 BossF SetBallPowerValueColor__Q23msw21CCockpitBossBallPowerFli near 86.7 instruction order only: the addi of the sPowerPane address is scheduled before the subf instead of after
 BossF SetBallPowerValue__Q23msw21CCockpitBossBallPowerFls unverified 82.2 instruction order only (82%, short function): the sPowerPane addi, the accessor load and li r6,0 are scheduled in a different order; same instructions otherwise
 BossF SetBossLifePercent__Q23msw17CCockpitBossCoderFf near 100.0 frameMax 30.0f sits at a different .rodata offset (0x7A8 vs 0x780, same value); instructions identical otherwise
+BossF SetChrReflectMode__Q23msw9CBallBossFlf near 99.6 instruction order/register allocation only
 BossF SetCoinValue__Q23msw16CCockpitBossCoinFll near 98.9 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 BossF SetEndEffect__Q23msw25CItemBallChangeEffectBossFv near 21.7 tail call vs framed call only: only difference: original calls bcs::CTaskMan::GetTask inside a 0x10 frame, ours tail-calls it (same callee, same lwz 0x34 argument, result returned unchanged); reviewer confirmed
 BossF SetFaceIcon__Q23msw17CCockpitBossCoderFPQ33bcs3G2D9CPaneCtrl near 96.3 instruction order and registers only: the chrNo array copy and the m_nPlayerNum load are scheduled differently; same calls, constants, loads, stores and branches
@@ -85,8 +94,13 @@ BossF SetFaceIcon__Q23msw17CCockpitBossCoderFPQ33bcs3G2D9CPaneCtrlllPCQ23msw8CCh
 BossF SetHeightObjState___Q23msw21CBallTargetMarkerBossFv near 98.8 float register choice (fmadds operand order, fdivs clamp temporaries) and one lwz scheduled earlier; same operations and constants
 BossF SetLifeValue__Q23msw17CCockpitBossCoderFlff near 87.3 register allocation only: the original keeps the pane accessor in its own saved register (five saved GPRs via _savegpr_27), ours shares it with the looked-up life pane (four, saved with stw); same calls, constants, loads, stores and branches
 BossF SetOutTelop__Q23msw17CCockpitBossCoderFli near 99.6 register allocation and order of the sLifePane index arithmetic only; same calls, constants, loads, stores and branches
+BossF SetPassModeParam___Q23msw9CBallBossFRCQ23bcs5FVEC3ffff near 96.8 original keeps always-true 10.0>4.0 test in MapRange inline; rest register order
+BossF SetSpikeParam___Q23msw9CBallBossFRQ43msw4BALL4BOSS14SPIKE_SHOT_ARG near 99.4 instruction order/register allocation only
 BossF SetStateReceive___Q23msw12CChrCoreBossFPQ23msw5CBallll near 99.5 f0/f1 swapped (0.0f constant vs the copy of the ball velocity); register choice only
-BossF SetVsBossSpikeShotMode__Q23msw9CBallBossFRQ43msw4BALL4BOSS14SPIKE_SHOT_ARG near 94.0 instruction order/register allocation only
+BossF SetVsBossDunkShotMode__Q23msw9CBallBossFRCQ23bcs5FVEC3l near 98.7 stack slots/frame size only: original keeps an unused vector copy as one stack object
+BossF SetVsBossPassMode__Q23msw9CBallBossFRCQ23bcs5FVEC3lllllUl near 97.6 original keeps always-true 10.0>4.0 test in MapRange inline; rest register order
+BossF SetVsBossSpikeShotMode__Q23msw9CBallBossFRQ43msw4BALL4BOSS14SPIKE_SHOT_ARG near 99.8 instruction order/register allocation only
+BossF SetVsBossTossUpMode__Q23msw9CBallBossFRCQ23bcs5FVEC3lUl near 98.3 instruction order/register allocation only
 BossF Set__Q23msw17CCockpitBossCoderFv near 98.9 register allocation only: the label-pane loops' counter and pointer registers and one font-name temporary are swapped; same calls, constants, loads, stores and branches
 BossF Set__Q23msw21CCockpitBossBallPowerFv near 99.9 register allocation only: the accessor temporary of the final SetPaneDisp gets r4 instead of r5
 BossF SetupGame__Q23msw17CCockpitBossCoderFv near 99.7 register allocation only: the SetOutTelop loop counter gets a different register; same calls, constants, loads, stores and branches

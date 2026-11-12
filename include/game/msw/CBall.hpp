@@ -81,7 +81,9 @@ namespace msw {
                 // is skipped by everything that looks for a ball in play.
                 FLAG_SLEEP = 0x00000002,
                 // Set and cleared by SetDestroyOnReset.
-                FLAG_DESTROY_ON_RESET = 0x00020000
+                FLAG_DESTROY_ON_RESET = 0x00020000,
+                // (name guessed) CBallMan::Main deletes a ball with this bit.
+                FLAG_DELETE_REQUEST = 0x00040000
             };
 
             CBall(bcs::CTask *pParent, long nBallNo);
@@ -427,6 +429,11 @@ namespace msw {
             int IsSleep() const { return m_nFlag & FLAG_SLEEP; }
             // (name guessed) Not zero after SetDestroyOnReset(1).
             int IsDestroyOnReset() const { return m_nFlag & FLAG_DESTROY_ON_RESET; }
+            // (name guessed) Not zero once the ball asked CBallMan to delete it.
+            int IsDeleteRequest() const { return m_nFlag & FLAG_DELETE_REQUEST; }
+            // DOL (added for main game/msw/CBallMan.cpp; return type guessed).
+            // Not zero for a star ball.
+            int IsStarBall() const;
             // (name guessed)
             const bcs::FVEC3 &GetPos() const { return m_Pos; }
             const bcs::FVEC3 &GetTargetPos() const { return m_vTargetPos; }

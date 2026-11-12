@@ -31,7 +31,7 @@ namespace msw {
             virtual ~CDropCoinMan();
             virtual void Main();
             // (name guessed) Empty; the only virtual the class adds.
-            virtual void SetUp();
+            virtual void SendMessage(long nMsg, long a, long b, long c); // (name guessed: CGimmickMan::SendMessage_ forwards its four arguments here; empty)
 
             // The model file of coin type `type` in the item archive.
             static nw4r::g3d::ResFile GetRsrcFile(DROP_COIN::CoinType type);

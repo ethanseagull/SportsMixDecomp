@@ -23,7 +23,22 @@ namespace nw4r {
         // project; the member and function names are guessed.
         class ResAnmClr {
             public:
-                explicit ResAnmClr(ResAnmClrData *pData = 0) : m_pData(pData) {}
+                // (guessed) The default constructor holds a check that folds
+                // away (a null pointer tested for alignment), like ResFile's.
+                // It has no effect, but it keeps a member array of handles
+                // (BossF CBallBoss::m_aPowerAnmClr) built by a plain store
+                // loop as in the original instead of a peeled, unrolled one.
+                // The original has no assertion strings for this class, so
+                // the check here makes no call. Stand-in for whatever the
+                // original constructor really held.
+                ResAnmClr() : m_pData(0)
+                {
+                    ResAnmClrData *p = 0;
+                    if ((unsigned long)p & 0x3) {
+                        m_pData = 0;
+                    }
+                }
+                explicit ResAnmClr(ResAnmClrData *pData) : m_pData(pData) {}
 
                 bool IsValid() const { return m_pData != 0; }
 

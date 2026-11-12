@@ -7,9 +7,6 @@
 #include "game/msw/CMainStep.hpp"
 #include <stdio.h>
 
-// Defined elsewhere in the DOL, unnamed there: msw::CGame::m_pInstance's
-// virtual GetDodgeVariableChrNum_(n), 0 without a game.
-extern "C" long fn_8018A2C8(long n);
 // Another file's table of the sports' two-letter codes ("DO", "VO", ...),
 // indexed by CGame::GameWork::m_nGameMode (unnamed in the DOL).
 extern "C" const char *lbl_8047F2E8[];
@@ -239,7 +236,7 @@ namespace msw {
                     long nNo = -1;
                     switch (nMode) {
                     case 'DO': {
-                        long nChr = fn_8018A2C8(0);
+                        long nChr = CGame::GetDodgeVariableChrNum(0);
                         if (nChr == 1) {
                             nChr = 2;
                         }

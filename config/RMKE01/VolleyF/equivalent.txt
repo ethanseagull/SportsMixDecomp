@@ -128,9 +128,11 @@ VolleyF Stage10_GetGoodPos__Q23msw17CComDrvVolleyGameCFRQ23bcs5FVEC3RCQ23msw7CCo
 VolleyF Stage12_GetPinballToTarget__Q23msw17CComDrvVolleyGameCFRCQ23bcs5FVEC3f near 96.7 float register choice and order of two loads/stores building the XZ vector, plus the paired-single length test's output register; same calls, offsets and constants
 VolleyF Stage15_GetCaseToTarget__Q23msw17CComDrvVolleyGameCFRCQ23bcs5FVEC3f near 97.1 float register choice and instruction order in the two inlined XZ normalises; same calls, offsets and constants
 VolleyF Stage15_GetSafePosFromCase__Q23msw17CComDrvVolleyGameCFRQ23bcs5FVEC3l near 99.9 one float register choice for the range sum (f1 vs f0); same instructions otherwise
+VolleyF SubStateAirTrickCreateSplitBall___Q23msw21CChrCoreVolleyWaluigiFv near 99.7 register allocation/load scheduling of the offset table only
 VolleyF SubStateAirTrickFireHeartBomb___Q23msw19CChrCoreVolleyPeachFv near 89.1 original computes 5/2 and the 4>0 test at run time (one more saved register, stack slot), ours folds them; register choice; unread -1.0f placed after the int-to-float constant
 VolleyF SubStateAirTrickFireKoopaFireBall___Q23msw19CChrCoreVolleyKoopaFPQ33msw14CChrCoreVolley20STATE_WORK_AIR_TRICK near 99.7 register choice only: the new fireball pointer gets r31 instead of reusing r30 (the model pointer); 99.7%
 VolleyF SubStateAirTrickFireSlimeChild___Q23msw19CChrCoreVolleySlimeFPQ33msw14CChrCoreVolley20STATE_WORK_AIR_TRICK near 99.2 float register allocation only (same instructions, stack layout and constants)
+VolleyF SubStateAirTrickIsEndArtsShot___Q23msw21CChrCoreVolleyWaluigiFPQ33msw14CChrCoreVolley20STATE_WORK_AIR_TRICK near 99.9 operand order of one commutative fadds (frame + 12) only
 VolleyF SubStateAirTrickIsReadyArtsShot___Q23msw20CChrCoreVolleyDonkeyFPQ33msw14CChrCoreVolley20STATE_WORK_AIR_TRICK near 99.9 register choice only (autopilot found no declaration order); 99.9%
 VolleyF SubStateAirTrickIsReadyArtsShot___Q23msw21CChrCoreVolleySabotenFPQ33msw14CChrCoreVolley20STATE_WORK_AIR_TRICK near 99.2 step 1 compares the clamped frame count after an frsp of the single value just stored (a no-op rounding); ours compares the same register without it; 99.2%
 VolleyF SubStateAirTrickPlayArtsShotMotion___Q23msw20CChrCoreVolleySiromaFPQ33msw14CChrCoreVolley20STATE_WORK_AIR_TRICK near 99.5 register allocation only
@@ -145,6 +147,7 @@ VolleyF SubStateBlockJumpIsActEnd___Q23msw20CChrCoreVolleySiromaFPQ33msw14CChrCo
 VolleyF SubStateBlockJumpIsActEnd___Q23msw21CChrCoreVolleyKinopioFPQ33msw14CChrCoreVolley21STATE_WORK_BLOCK_JUMP near 99.9 instruction scheduling only
 VolleyF SubStateReceiveDoProcDiveReceive___Q23msw19CChrCoreVolleyYoshiFPQ33msw14CChrCoreVolley18STATE_WORK_RECEIVE near 99.8 f2/f3 swapped in the angle wrap (same as the boss sibling)
 VolleyF SubStateReceiveDoProcDiveReceive___Q23msw20CChrCoreVolleySiromaFPQ33msw14CChrCoreVolley18STATE_WORK_RECEIVE near 99.7 register allocation only (angle wrap loop)
+VolleyF TrgVolleyArtsOver__Q33msw11CC06_VOLLEY18CBallVolleyWaluigiFllUl near 99.9 1.0f pool offset only (unread constants missing ahead of it); same value
 VolleyF TrgVolleyGoalIn___Q23msw17CGameVolleyVsBossFllllllRCQ23bcs5FVEC3Ul near 99.1 original reads m_nGameFlag again before the |= 1 (no store in between, same value); ours keeps the first read in a register; rest identical
 VolleyF UpdateDefColl__Q23msw26CStgGmk_Trolley_Act_VolleyFRCQ23bcs5FVEC3ffff near 92.7 registers and frame: one more saved float register (frame 0x120 vs 0x110); the inlined CStgSrt::GetMtx tests its flags as (flag&7)!=0 normalised and as extracted bits in the original, as masks in ours (equivalent branch forms); same calls, constants, loads and stores
 VolleyF UpdateEdge___Q23msw14CStageVolley10Fv near 96.4 stack layout of the matrix copies (frame 0x170 vs 0x130) and one more saved register; same calls and stores

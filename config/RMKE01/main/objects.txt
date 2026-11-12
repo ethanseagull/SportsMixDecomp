@@ -29,6 +29,7 @@ Matching game/msw/CStage01Base.cpp
 Matching game/msw/CStgDrv.cpp
 Matching game/bcs/G2D/CTexMap.cpp
 Equivalent game/msw/CDropCoinMan.cpp
+Equivalent game/msw/CGimmickMan.cpp
 NonMatching game/msw/CGame.cpp
 Matching game/msw/menu/CStateSave.cpp
 Matching game/msw/CCockpitResultTime.cpp
@@ -50,6 +51,7 @@ Matching game/msw/vm/CVMCpu.cpp
 Matching game/msw/menu/CVibEff.cpp
 Matching game/msw/CEventDemoBase.cpp
 Equivalent game/msw/CStgGmk_Pylon.cpp
+Equivalent game/msw/CBallMan.cpp
 Equivalent game/msw/CItemBall.cpp
 NonMatching game/msw/CEffectTable.cpp
 Equivalent game/msw/CEffectAttachTable.cpp

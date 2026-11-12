@@ -88,6 +88,17 @@ namespace msw {
             // (name guessed) The level at 0x44.
             long GetLevel() const { return m_nLevel; }
 
+            // (DOL, unnamed: fn_8012EE48, fn_8012EE54, fn_8012EE6C,
+            // fn_8012EFC4, fn_8012ED18; names guessed from the CGimmickMan
+            // functions that call them) The walk of the panels, the panel
+            // nearest rPos, the base rotation (radians, 0 to 2 pi) of view
+            // nIdx (0-3), and the item popup rates.
+            CQPanel *GetFirst();
+            CQPanel *GetNext(CQPanel *pPanel);
+            CQPanel *GetNear(const bcs::FVEC3 &rPos);
+            void SetViewBaseRot(long nIdx, float fRot);
+            void SetItemPopRate(const ITEM_POP_SET_ARG *pArg, long);
+
         protected:
             // In the DOL.
             void SetItemPopRate_(long nIdx, const ITEM_POPUP_RATE_TBL_TBL &rTbl);

@@ -285,7 +285,7 @@ namespace msw {
             virtual void CallbackAttackHit_(const CCollAtkUnit *, const CCollBodyUnit *, const bcs::FVEC3 &, unsigned long); // 0xC5C
             virtual void CallbackBallSnatched_(CBall *);               // 0xC60
             virtual int CallbackDefReflectHit_(const CCollDefUnit *, const CBall *, bcs::FVEC3 &, bcs::FVEC3 &); // 0xC64
-            virtual void SubStateParalyzeSetEffect_();                 // 0xC94
+            virtual float SubStateParalyzeSetEffect_();                // 0xC94
             virtual void SubStateParalyzeEndEffect_();                 // 0xC98
 
 

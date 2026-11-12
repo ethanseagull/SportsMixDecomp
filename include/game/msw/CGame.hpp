@@ -339,7 +339,7 @@ namespace msw {
             virtual void SetPeriodResult_();                             // 0x128
             virtual void SetGameResult_();                               // 0x12C
             virtual void CalcAddSkillPoint_();                           // 0x130
-            virtual void SetMissionResult_();                            // 0x134
+            virtual void SetMissionResult_() {}                          // 0x134 (weak in BasketF)
             virtual int SetGameResultNext_();                            // 0x138 (int: BossF returns 0)
             virtual void AddTeamCoin_(long, long);                       // 0x13C
             virtual void UseTeamCoin_(long, long);                       // 0x140
@@ -362,13 +362,13 @@ namespace msw {
             virtual void EventDemoSetUp();                               // 0x184
             virtual int CheckDemoSkipInput_();                          // 0x188
             virtual void TrgArtsEvent_(long);                            // 0x18C
-            virtual void StartArtsEvent_(long);                          // 0x190
-            virtual void EndArtsEvent_(long);                            // 0x194
+            virtual void StartArtsEvent_(long) {}                        // 0x190 (weak in BasketF)
+            virtual void EndArtsEvent_(long) {}                          // 0x194 (weak in BasketF)
             virtual void SetFirstGoalIdx_();                             // 0x198
             virtual long GetFirstGoalIdxMode_();                         // 0x19C (BossF returns 0)
             virtual void ChangeGoalIdx_();                               // 0x1A0
             virtual void ChangeCameraBaseDir_();                         // 0x1A4
-            virtual int IsSetOver_();                                    // 0x1A8 (BossF returns 1)
+            virtual int IsSetOver_() { return 0; }                       // 0x1A8 (BossF returns 1; weak in BasketF)
             virtual int IsGameSet_();                                    // 0x1AC (int: BasketF CGameBasketHungryBossPackun)
             virtual void RsrcLoadStart_();                               // 0x1B0
             virtual int RsrcIsLoadEnd_();                               // 0x1B4
@@ -603,6 +603,20 @@ namespace msw {
             // meaning guessed from the name): not zero while an arts event is
             // asked for and has not started yet.
             static int IsReqArtsEvent();
+            static long GetHockeyResultGoalId();      // (not in the DOL: stripped)
+            // (names guessed; fn_801866FC, fn_80186710, fn_80186A8C,
+            // fn_80186AA8, fn_80186AF4, fn_80186BB0, fn_80189D28) A game
+            // exists; its word at 0xCC once its resources are loaded; its word
+            // at 0x148; its resources are loaded; the pause while a remote is
+            // missing (pad check) and its end; the tournament's 0x1C value in
+            // a single-console hockey game of play type 0, 2 or 4.
+            static int IsGameExist();
+            static long GetLoadedUnkCC();
+            static long GetUnk148();
+            static int IsRsrcLoadEnd();
+            static void PadCheckPause();
+            static void PadCheckResume();
+            static long GetHockeyUnk1C();
             // (DOL, static; added for BossF game/boss/CChrCoreBossMethod.cpp;
             // meanings guessed from the names) The arts gauge of team nTeam
             // (1.0 is full); puts the leaders' faces on the cockpit again.
@@ -719,6 +733,9 @@ namespace msw {
             static void SetFlag2000Mode(int bOn);     // fn_8018A174 (name guessed)
             static void SetVolleyServeMode(int bOn);
             static void SetDodgeArtsCatchMode(int bOn, long);
+            static int IsDodgeArtsCatchMode();           // (not in the DOL: stripped)
+            static long GetDodgeVariableChrNum(long n);  // fn_8018A2C8 (name guessed)
+            static long GetDodgeChrMaxLife(long n);      // (not in the DOL: stripped)
             static void SetReboundMode(int bOn);
             static void SetGoalEventMode(int bOn);
             static void SetGoalFinishMode(int bOn);
@@ -859,6 +876,39 @@ namespace msw {
             int IsReqArtsEvent_();
             // (non-virtual; CGameBoss's virtual of the same name calls it)
             void LoopStateEntranceDemo();
+            // The states of CGame's own table that are not virtual (state
+            // numbers from the table fn_8017F6E8 builds; names guessed except
+            // LoopStateEntranceDemo). 0 loads the game, 2 starts it, 3 is the
+            // entrance demo, 22 creates the game's objects, 23 starts the
+            // BGM, 5 and 6 run the virtual WaitStart and MainLoop hooks, 24-26
+            // synchronise an online game, 27 does nothing, 28 saves, 29 shows
+            // a message.
+            void CtorStateGameLoad();       // state 0
+            void DtorStateGameLoad();
+            void DtorStateGameStart();      // state 2
+            void DtorStateEntranceDemo();   // state 3
+            void CtorStateGameCreate();     // state 22
+            void DtorStateGameCreate();
+            void CtorStateBgmStart();       // state 23
+            void LoopStateBgmStart();
+            void DtorStateBgmStart();
+            void CtorStateWaitStartBase();  // state 5
+            void DtorStateWaitStartBase();
+            void CtorStateMainLoopBase();   // state 6
+            void DtorStateMainLoopBase();
+            void CtorStateNoop();           // state 27
+            void LoopStateNoop();
+            void DtorStateNoop();
+            void CtorStateSave();           // state 28
+            void DtorStateSave();
+            void CtorStateMessage();        // state 29
+            void DtorStateMessage();
+            void CtorStateOnlineSync0();    // state 24
+            void DtorStateOnlineSync0();
+            void CtorStateOnlineSync1();    // state 25
+            void DtorStateOnlineSync1();
+            void CtorStateOnlineSync2();    // state 26
+            void DtorStateOnlineSync2();
 
         public:
             // Added for BossF game/boss/GameBoss.cpp (DOL, static; names

@@ -258,7 +258,7 @@ namespace msw {
             CTmScript *m_pScript;         // 0x80
             CTournamentExit *m_pExit;     // 0x84: the "leave the tournament" menu
             bcs::CTask *m_pDemo;          // 0x88
-            unsigned long m_Unk8C;        // 0x8C
+            bcs::FVEC3 *m_pFireworksPos; // 0x8C: where the fireworks go off
             float m_fTimer;               // 0x90: time of the timer queue
             float m_fTimerOver;           // 0x94: how far the running timer is late
             TIMER *m_pTimerPool;          // 0x98
@@ -283,7 +283,7 @@ namespace msw {
             signed char m_UnkC9;          // 0xC9
             signed char m_UnkCA;          // 0xCA
             signed char m_UnkCB;          // 0xCB
-            unsigned short m_UnkCC;       // 0xCC
+            short m_nTurnAdd;             // 0xCC: added to the turn count by the next CtorStateTurnStart
             short m_UnkCE;                // 0xCE
             signed char m_UnkD0;          // 0xD0
             signed char m_nMoveTeam0;     // 0xD1

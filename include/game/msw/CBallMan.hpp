@@ -3,10 +3,7 @@
 
 #include "bcs/CUnivTask.hpp"
 #include "bcs/FVEC3.hpp"
-
-namespace bcs {
-    struct BCS_Color;
-}
+#include "bcs/BCS_Color.hpp"
 
 namespace msw {
 
@@ -25,7 +22,10 @@ namespace msw {
     // the functions with a body are read from the body ("int" for a zero,
     // "void" for nothing), those of the DOL functions from their code or
     // guessed. The names of the parameters and members are guesses.
-    class CBallMan : public bcs::CUnivTask {
+    //
+    // The base is bcs::CUnivTaskEx: the DOL destructor tests `this` twice
+    // before calling bcs::CTask's.
+    class CBallMan : public bcs::CUnivTaskEx {
         public:
             CBallMan(bcs::CTask *pParent, long nBallMax);
             virtual ~CBallMan();
@@ -75,7 +75,9 @@ namespace msw {
             virtual float GetShootFlyFrame_(const bcs::FVEC3 &, const bcs::FVEC3 &, long) const;
             virtual int IsExistStarBall_() const;
             virtual void SetStageBallColor_();
-            virtual void GetStageBallColor_(bcs::BCS_Color &rColor);
+            // Copies the stage's ball colour to rColor and returns 1, or
+            // returns 0 when the stage has none.
+            virtual int GetStageBallColor_(bcs::BCS_Color &rColor);
 
             // These call the function of the same name with a trailing
             // underscore on m_pInstance and return zero without one. (only
@@ -116,6 +118,28 @@ namespace msw {
             // pass from rFrom to rTo takes. (return type from the virtual;
             // HockeyF's CChrManHockey::Util_SearchPassmeetTo_ drops it)
             static float GetPassFlyFrame(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, long);
+            // (DOL, static; added for main game/msw/CBallMan.cpp) The same
+            // wrappers for the other virtual functions; the float one returns
+            // 0.0f without an instance.
+            static float GetRaiseGoalInRate();
+            static int IsInfinityReboundMode();
+            static int IsDisableReboundMode();
+            static void SetBallPos(long nBall, const bcs::FVEC3 *pPos);
+            static void SetJumpBallMode(long nBall);
+            // (not in the game, written in CBallMan.cpp for the place of
+            // the inline functions they call; return types from those)
+            static CBall *GetFarPosBall(const bcs::FVEC3 &rPos);
+            static CBall *GetNearTargetPosBall(const bcs::FVEC3 &rPos);
+            static CBall *GetFarTargetPosBall(const bcs::FVEC3 &rPos);
+            static void SetInfinityReboundMode(int bOn);
+            static void SetDisableReboundMode(int bOn);
+            static int IsDisableAirBallMode();
+            static void SetDisableAirBallMode(int bOn);
+            static int IsBallNowRebound(long nBall);
+
+            // (fn_800CD1A0, unnamed in the DOL; name guessed) Takes the
+            // stage's ball colour and creates the game's balls.
+            static void Create();
 
             static CBallMan *GetInstance();
             // Not zero when there is an instance.
@@ -124,13 +148,16 @@ namespace msw {
             static CBallMan *m_pInstance;
 
         protected:
-            float m_Unk34;                // 0x34
-            float m_Unk38;                // 0x38
-            float m_Unk3C;                // 0x3C
-            float m_Unk40;                // 0x40
-            float m_Unk44;                // 0x44
-            unsigned long m_Unk48;        // 0x48, zero from the constructor
-            unsigned long m_Unk4C;        // 0x4C, zero from the constructor
+            // (names from the static getters that return them)
+            float m_fWallBoundDecRate;    // 0x34, 0.625 from the constructor
+            float m_fFloorBoundDecRateXZ; // 0x38, 0.875
+            float m_fFloorBoundDecRateY;  // 0x3C, 0.75
+            float m_fFloorRoundDecRateXZ; // 0x40, 0.9375
+            float m_fChrReflectSpeed;     // 0x44, 0.05
+            // (names guessed) The stage's ball colour (SetStageBallColor_)
+            // and whether there is one.
+            bcs::BCS_Color m_StageBallColor; // 0x48, zero from the constructor
+            int m_bStageBallColor;        // 0x4C, zero from the constructor
             unsigned long *m_pBallHandle; // 0x50, task id of each ball, zero for none
             long m_nBallNum;              // 0x54, entries in m_pBallHandle
     };

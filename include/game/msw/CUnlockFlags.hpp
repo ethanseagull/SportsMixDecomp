@@ -43,6 +43,10 @@ namespace msw {
             // guessed) Opens cup nCup of level nLevel in sport nGameMode.
             void SetCup(long nCup, long nLevel, long nGameMode, int b);
             void PushEtc(long nId, long nEtc, long nGameMode);
+            // (added for TourF game/tour/CTournamentStep.cpp; argument
+            // names guessed) Unlock a stage or a party game.
+            void PushStage(long nId, long nUnk1, long nUnk2, long nStage, long nGameMode);
+            void PushParty(long nId, long nUnk1, long nUnk2, long nParty, long nGameMode);
 
         private:
             unsigned long m_nData;

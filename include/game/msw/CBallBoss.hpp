@@ -158,7 +158,8 @@ namespace msw {
             void UpdateCountWork_();
             void FuncMove_(bcs::FVEC3 &rPos, bcs::FVEC3 &rVel, float fGravity, float fRate);
             int CollSubCheckBG_(bcs::FVEC3 &rPos, bcs::FVEC3 &rVel);
-            void SetPassModeParam_(const bcs::FVEC3 &rPos, float, float, float, float);
+            // Returns the frames the flight takes (0 when it goes nowhere).
+            float SetPassModeParam_(const bcs::FVEC3 &rPos, float, float, float, float);
             void SetBadPassParam_(long, long, PASS_PARAM_ &rParam);
             int SetSpikeParam_(BALL::BOSS::SPIKE_SHOT_ARG &rArg);
             float CalcXZVel2(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, bcs::FVEC3 &rVel, float &, float &rFrame,
@@ -184,6 +185,8 @@ namespace msw {
             inline void InitFlight_(const bcs::FVEC3 &rTarget);
             inline void CalcFlightAccel_(bcs::FVEC3 &rAccel, const bcs::FVEC3 &rDir, float fDecel, float fGravity,
                                          float fTime, int bSpin) const;
+            // (name guessed) Records who shot the ball and at which goal.
+            inline void SetShotInfo_(long nTeam, long nGoal, long nChr);
 
         protected:
             long m_Unk318;                  // 0x318

@@ -30,10 +30,25 @@ namespace bcs {
             // stand for is not known, 0 gives the slower text scroll).
             static GXRenderModeObj *GetRenderModeObj();
             static unsigned char GetRegionLanguage();
+            // (fn_80052194, name guessed; added for msw::CChrMarker) The
+            // language of the game's text, as the byte fn_8005211C keeps
+            // (0 Japanese, 1 English, 2 German, 3 French, 4 Spanish,
+            // 5 Italian, read from the marker models CChrMarker picks).
+            static unsigned char GetLanguage();
             // (added for MenuF game/menu/CTopMenu.cpp; return type
             // guessed) Non-zero when the console's parental controls forbid
             // messaging with others.
             static int CheckPCMessageRestriction();
+
+            // (added for DOL game/msw/CGame.cpp; return types guessed) The
+            // speed of the universal clock; whether the pause of the layers
+            // in nMask is ready or on; pauses or resumes them; whether the
+            // 3D fade runs.
+            static void SetUnivSpeed(float fSpeed);
+            static int IsPauseReady(unsigned long nMask);
+            static int IsPause(unsigned long nMask);
+            static void SetPause(unsigned long nMask, int bPause);
+            static int IsPlay3DFade();
     };
 }
 

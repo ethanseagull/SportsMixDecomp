@@ -36,6 +36,8 @@ namespace msw {
             // nw4r::g3d::ResFile; whether that or the bare pointer is the
             // declared return type cannot be told from the code.
             static nw4r::g3d::ResFile GetRes(long index);
+            // (added for DOL game/msw/CGame.cpp) The wipe model's file.
+            static nw4r::g3d::ResFile GetWipeMdlFile();
             // A character's model file inside archive `index`. (meaning of
             // the last argument not known: the callers pass the high byte of
             // msw::CEvDemoRes::_CHR_INFO's word at 0x08)

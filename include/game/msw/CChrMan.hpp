@@ -130,6 +130,10 @@ namespace msw {
             static CChrObstacle *ObstacleSearch(CChrObstacle *pPrev);
             // Shows or hides the markers over the characters. Static.
             static void SetChrMarkerDisp(int bDisp);
+            // (fn_800EC220, name guessed) Whether the markers are shown: the
+            // opposite of the bit SetChrMarkerDisp(0) sets; 1 with no
+            // instance. Static.
+            static int IsChrMarkerDisp();
             // DOL. The instance, or null.
             static CChrMan *GetInstance();
             // DOL, static. Not zero when the instance exists.

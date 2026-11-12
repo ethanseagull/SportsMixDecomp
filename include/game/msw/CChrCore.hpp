@@ -1076,6 +1076,7 @@ namespace msw {
             // (names guessed) Inline in the modules: the character managers
             // write the members directly.
             void SetCamNo(long nCam) { m_nCamNo = nCam; }
+            long GetCamNo() const { return m_nCamNo; }
             // Sets the bit IsDisable tests: the character takes no part.
             void SetDisable() { m_UnkEC |= 0x40000000; }
             void OnStatusFlag(unsigned long nBit) { m_nStatusFlag |= nBit; }

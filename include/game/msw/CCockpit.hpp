@@ -80,6 +80,13 @@ namespace msw {
             // (DOL, static; return type guessed) Resets the characters' face
             // icons (HockeyF's CChrManHockey::AllReset_).
             static void InitFaceIcon();
+            // (added for DOL game/msw/CGame.cpp; static, return types
+            // guessed) Shows nCoin coins on team nTeam's counter; whether
+            // telop nObjId has played its start animation; shows or hides
+            // the special gauges.
+            static void SetTeamCoin(long nTeam, long nCoin);
+            static int IsEndOfStartAnim(long nObjId);
+            static void SetSPGaugeDispEnable(int bEnable);
             // CMenuTask::SendObjEventTrigger on the task; -1 without a task.
             static long SendObjEventTrigger(long nObjId, long nEvent, void *pParam);
             // (added for MenuF game/menu/CWiFiFrindVS.cpp) The task's result

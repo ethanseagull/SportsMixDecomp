@@ -29,13 +29,13 @@ Matching game/msw/CStage01Base.cpp
 Matching game/msw/CStgDrv.cpp
 Matching game/bcs/G2D/CTexMap.cpp
 Equivalent game/msw/CDropCoinMan.cpp
-NonMatching game/msw/CGameSpeedCtrl.cpp
+NonMatching game/msw/CGame.cpp
 Matching game/msw/menu/CStateSave.cpp
 Matching game/msw/CCockpitResultTime.cpp
 Matching game/msw/CEffectTableList.cpp
-NonMatching game/msw/CArrowSignalBase.cpp
+Equivalent game/msw/CChrMarker.cpp
 Equivalent game/msw/CStgGmk_WaterPillar.cpp
-NonMatching game/msw/CStage17Base/CTurnTable.cpp
+Equivalent game/msw/CStage17Base.cpp
 Matching game/msw/CMenuLinkList.cpp
 Matching game/msw/CStgGmkAct.cpp
 Matching game/bcs/CWifiPadBase.cpp

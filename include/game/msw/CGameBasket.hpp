@@ -88,7 +88,7 @@ namespace msw {
             virtual void SetCockpitTimeDisp_(int);
             virtual void SetCockpitScoreDisp_(int);
             virtual void SetCockpitPeriodDisp_(int);
-            virtual void GetGoalDemoType_(long, long) const;
+            virtual long GetGoalDemoType_(long, long) const;
             virtual long GetGoalDemoTelop_(long, long, long, int) const;
             virtual void StartGoalTelop_();
             virtual long GetExceptionalCameraType_();

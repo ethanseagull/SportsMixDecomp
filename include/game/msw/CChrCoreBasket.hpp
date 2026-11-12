@@ -91,6 +91,9 @@ namespace msw {
             // (added for game/basket/CChrCoreBasketWaluigi.cpp) Sets
             // pWork->m_fShotFrame from the current motion's shot trigger.
             void SubStateArtsShotDoGetBallShotTrg_(STATE_WORK_AIR_TRICK *pWork);
+            // (added for game/basket/CcWarioSmokeMgr.cpp; meaning guessed
+            // from the name) The point the trick moves back to.
+            void SubStateArtsShotCalcSetbackPos_(bcs::FVEC3 &rPos);
 
             // Added for game/basket/CChrCoreBasketSaboten.cpp (BasketF;
             // return types and meanings guessed from the names and calls).
@@ -612,6 +615,16 @@ namespace msw {
         public:
             CChrCoreBasketWario();
             virtual ~CChrCoreBasketWario();
+            virtual void CallbackMotTrg_AtkOn_(long, long);            // 0xC80
+            virtual void CallbackMotTrg_AtkOff_(long, long);           // 0xC84
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCBC
+            virtual void SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCC0
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *pWork, long); // 0xCE4
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
     };
 
     // Donkey Kong: his special shot pounds the ground on landing from a

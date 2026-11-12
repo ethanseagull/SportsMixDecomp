@@ -79,6 +79,9 @@ namespace msw {
             void SetHitSeIDAll(long nSe);
             void SetPosAll(const bcs::FVEC3 &rPos, const bcs::FVEC3 &rPos2);
             CCollUnit *GetColl(long index) const;
+            // (added for BasketF game/basket/CcWarioSmokeMgr.cpp; DOL) The
+            // size of every unit.
+            void SetSizeAll(const bcs::FVEC3 &rSize);
 
         private:
             unsigned long m_Unk00[3];

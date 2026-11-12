@@ -1123,6 +1123,9 @@ namespace msw {
             const bcs::FVEC3 &GetPrevPos() const { return m_PrevPos; }
             // The yaw (radians) from the character towards pChr.
             float GetRotY_ToChr(const CChrCore *pChr) const;
+            // (added for game/basket/CChrCoreBasketMii00.cpp) The yaw from
+            // pChr towards the character.
+            float GetRotY_FromChr(const CChrCore *pChr) const;
             // Frame, motion id and play of animation slot nSlot (the
             // fighting code uses slot 3).
             float AnimGetFrame(unsigned long nSlot) const;

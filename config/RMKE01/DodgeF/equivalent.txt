@@ -99,6 +99,7 @@ DodgeF SetCountScore__Q23msw19CCockpitDodgeResultFPlPlll near 98.4 register choi
 DodgeF SetDamageDemoType__Q23msw11EvDemoDodgeFll near 98.7 98.7%: register choice only (identical after renumbering)
 DodgeF SetDamegeCamera__Q23msw15CEventDemoDodgeFll near 99.8 99.8%: case 0 swaps the parent and task registers; regs search no gain
 DodgeF SetLifeGaugeState__Q23msw13CCockpitDodgeFlllll near 99.9 99.9%: one register for the OrDie object pointer.
+DodgeF SetParameter__Q23msw25CCockpitDodgeTelopCourtInFPQ23msw8CCockpitlUlPCw near 95.0 register allocation only: which arguments are kept in saved registers (r28-r31) differs; same calls, constants and memory accesses
 DodgeF SetPeriodValue__Q23msw18CCockpitDodgeCoderFl near 97.8 register choice only: loop counter, table pointer and the held compare result get other saved registers; same calls, constants, loads, stores and branches
 DodgeF SetPushVel__Q23msw23CStgGmk_Pylon_Act_DodgeFRCQ23bcs5FVEC3 near 99.6 99.6%: two addi for stack vectors swapped
 DodgeF SetSPGauge__Q23msw18CCockpitDodgeCoderFlf near 99.0 register choice only: scratch registers of the int-to-float conversion and the gauge address differ; same instructions and constants
@@ -108,6 +109,7 @@ DodgeF SetVelocity__Q23msw18CItemBallBombDodgeFv near 99.3 register numbering/in
 DodgeF Set__Q23msw16CLockCursorDodgeFv near 99.9 register allocation/order only
 DodgeF Set__Q23msw17CCockpitDodgeCoinFv near 99.3 register choice only (as CCockpitHockeyCoin::Set)
 DodgeF Set__Q23msw18CCockpitDodgeCoderFv near 99.5 register choice only: volatile temporaries (r5/r11, r11/r12) and the saved registers of the set-count and gauge loops differ; same calls, constants, loads, stores and branches
+DodgeF Set__Q23msw21CCockpitDodgeTelopOutFv near 99.7 register allocation only: pAccessor and the new CPaneCtrl swap r26/r27 inside the inline CreateLytObj; same calls, constants and memory accesses
 DodgeF SetupGame__Q23msw18CCockpitDodgeCoderFv near 99.5 register choice only: the loop counter, the table pointer and the pane-accessor temporary get other saved registers (as in HockeyF CCockpitHockeyCoder::ScoreOut); same calls, constants, loads, stores and branches
 DodgeF StartDamageDemo__Q23msw11EvDemoDodgeFv near 97.8 97.8%: the original keeps a cmpwi 1/beq to the switch end for the empty case 1 plus one dead b; equivalent branch form
 DodgeF Start__Q33msw13CStageDodge0310CWaterInfoFli near 93.4 original also computes max(WATER_NUM,0) with srawi/andc as the loop bound after the >0 guard; same iteration count; registers.

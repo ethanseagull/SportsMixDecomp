@@ -5,6 +5,7 @@
 #include "game/msw/CCockpitLayoutBase.hpp"
 
 namespace msw {
+    class CCockpit;
 
     // Size 0x6C (CCockpitDodge::CreateObjImpl allocates it). A telop shown
     // when a player enters the court (DodgeF
@@ -20,6 +21,10 @@ namespace msw {
             virtual void Disp();
             virtual int Set();
             virtual void Remove();
+
+            // (static) Shows name pName on the side of team nTeam of telop
+            // nObjId of pCockpit. Argument names guessed.
+            static void SetParameter(CCockpit *pCockpit, long nObjId, unsigned long nTeam, const wchar_t *pName);
     };
 }
 

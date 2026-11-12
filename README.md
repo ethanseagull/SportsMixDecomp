@@ -1,9 +1,11 @@
 SportsMixDecomp
-[![Code Progress]][progress] [![Data Progress]][progress]
+[![Code Progress]][progress] [![Data Progress]][progress] [![Functions]][progress] [![Linked]][progress]
 ===============
 
 [Code Progress]: https://api.decmp.dev/ethanseagull/SportsMixDecomp.svg?mode=shield&measure=code&label=Code
 [Data Progress]: https://api.decmp.dev/ethanseagull/SportsMixDecomp.svg?mode=shield&measure=data&label=Data
+[Functions]: https://api.decmp.dev/ethanseagull/SportsMixDecomp.svg?mode=shield&measure=functions&label=Functions
+[Linked]: https://api.decmp.dev/ethanseagull/SportsMixDecomp.svg?mode=shield&measure=complete_code&label=Linked
 [progress]: https://decmp.dev/ethanseagull/SportsMixDecomp
 
 A work-in-progress decompilation of Mario Sports Mix (Wii), aimed at readable, working C/C++ source.

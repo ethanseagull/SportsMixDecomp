@@ -4395,7 +4395,7 @@ OnGameMsgProc__Q23msw16CComDrvDodgeGameFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CH
 OnAlarm0__Q23msw16CComDrvDodgeGameFl = .text:0x000A48EC; // type:function size:0x4C scope:global
 OnAlarm1__Q23msw16CComDrvDodgeGameFl = .text:0x000A4938; // type:function size:0x14 scope:global
 OnAlarm2__Q23msw16CComDrvDodgeGameFl = .text:0x000A494C; // type:function size:0x188 scope:global
-fn_6_A4AD4 = .text:0x000A4AD4; // type:function size:0x14
+__sinit_\unit_A40EC_cpp = .text:0x000A4AD4; // type:function size:0x14 scope:local
 IsExistChrToTargetWorldForRunEx__Q23msw16CComDrvDodgeGameFRCQ23bcs5FVEC3 = .text:0x000A4AE8; // type:function size:0x120 scope:global
 MethdShoot__Q23msw16CComDrvDodgeGameFv = .text:0x000A4C08; // type:function size:0xA4 scope:global
 MethdPass__Q23msw16CComDrvDodgeGameFPQ23msw8CChrCore = .text:0x000A4CAC; // type:function size:0x18 scope:global

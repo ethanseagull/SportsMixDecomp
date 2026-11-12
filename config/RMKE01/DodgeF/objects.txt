@@ -72,6 +72,7 @@ Equivalent game/dodge/CStgGmk_Pinball_Act_Dodge.cpp
 Equivalent game/dodge/CStgGmk_Pylon_Act_Dodge.cpp
 Equivalent game/dodge/CComDrvDodgeGameGimmick.cpp
 Equivalent game/dodge/CCockpitDodgeResult.cpp
+Matching game/dodge/unit_A40EC.cpp
 Equivalent game/dodge/CCockpitDodgeCoder.cpp
 Equivalent game/dodge/CChrCoreDodgeDodgeOrDie.cpp
 Matching game/dodge/CStageManDodgeDodgeOrDie.cpp

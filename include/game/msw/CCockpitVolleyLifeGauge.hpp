@@ -8,7 +8,7 @@ namespace msw {
     // Size 0x68 (CCockpitVolley::CreateObjImpl allocates it, object 51):
     // the life gauge of the boss match (game/volley/CCockpitVolleyBoss.cpp).
     // Virtuals from the VolleyF vtable; return types and argument names
-    // are guesses. The members are not mapped (0x60 is a float).
+    // are guesses.
     class CCockpitVolleyLifeGauge : public CCockpitVolleyLayoutBase {
         public:
             CCockpitVolleyLifeGauge(long nId, float fSortZ);
@@ -25,9 +25,15 @@ namespace msw {
 
             // nIdx is a team colour, nNo a character of the team.
             void SetLifeValue(long nIdx, long nNo, long nLife);
+            // Number nValue in text box pane nPane; a negative value hides
+            // the pane.
+            void SetCountText(long nPane, long nValue);
+            // (no caller in VolleyF; the module link removed it)
+            int IsEndGaugeLineAnim(long nAnim);
 
         private:
-            unsigned char m_Unk60[0x68 - 0x60];
+            float m_fLayoutSortZ; // 0x60, from the constructor (SetSortZ in Set)
+            long m_nChrNum;       // 0x64, characters per team
     };
 }
 

@@ -9,6 +9,9 @@ matcher several turns per function. This does the comparison and labels it:
                 only register allocation differs            -> near candidate
   schedule      same instructions in another order (registers ignored)
                                                             -> near candidate
+  stack         same instructions in any order once registers and stack-slot
+                offsets (locals at other r1 offsets, frame size) are ignored
+                                                            -> near candidate
   real          instructions differ; hints say how (frame size, constants,
                 calls, loads/stores, conversions, branches, constant addressing)
   missing       the function is not in the compiled object
@@ -103,6 +106,22 @@ def no_regs(insns):
     return [(mn, re.sub(r"\b[rf]\d{1,2}\b", "R", ops)) for mn, ops in insns]
 
 
+STACK_OFF = re.compile(r"-?(?:0x[0-9a-fA-F]+|\d+)\(r1\)")
+STACK_ADDR = re.compile(r"^(r\d{1,2}), r1, -?(?:0x[0-9a-fA-F]+|\d+)$")
+
+
+def no_stack(insns):
+    """Mask stack-slot offsets: r1-relative loads/stores, local addresses (addi rX, r1, N)
+    and the frame size, so locals placed in other slots compare equal."""
+    out = []
+    for mn, ops in insns:
+        ops = STACK_OFF.sub("S(r1)", ops)
+        if mn == "addi":
+            ops = STACK_ADDR.sub(r"\1, r1, S", ops)
+        out.append((mn, ops))
+    return out
+
+
 def hints(a, b):
     out = []
     fa = [o for m, o in a if m == "stwu"][:1]
@@ -162,6 +181,8 @@ def classify(orig, ours):
         return "registers", []
     if Counter(no_regs(a)) == Counter(no_regs(b)):
         return "schedule", []
+    if Counter(no_regs(no_stack(a))) == Counter(no_regs(no_stack(b))):
+        return "stack", []
     return "real", hints(a, b)
 
 
@@ -196,7 +217,7 @@ def analyse(version, unit, module, wanted=None):
 
 
 def verdict(cls, score):
-    if cls in ("registers", "schedule"):
+    if cls in ("registers", "schedule", "stack"):
         if score is not None and score >= 85.0:
             return 'near: equivalent.py add <Module> <function> "register allocation/order only"'
         return "register/order only but under 85%: try tools/decomp/autopilot.py regs, else unverified"

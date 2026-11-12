@@ -33,7 +33,6 @@ Equivalent game/msw/CGimmickMan.cpp
 NonMatching game/msw/CGame.cpp
 Matching game/msw/menu/CStateSave.cpp
 Matching game/msw/CCockpitResultTime.cpp
-Matching game/msw/CEffectTableList.cpp
 Equivalent game/msw/CChrMarker.cpp
 Equivalent game/msw/CStgGmk_WaterPillar.cpp
 Equivalent game/msw/CStage17Base.cpp
@@ -53,8 +52,7 @@ Matching game/msw/CEventDemoBase.cpp
 Equivalent game/msw/CStgGmk_Pylon.cpp
 Equivalent game/msw/CBallMan.cpp
 Equivalent game/msw/CItemBall.cpp
-NonMatching game/msw/CEffectTable.cpp
-Equivalent game/msw/CEffectAttachTable.cpp
+Equivalent game/msw/CEffectTable.cpp
 Equivalent game/bcs/CSndTask.cpp
 Equivalent game/msw/menu/CMovieScnObj.cpp
 Equivalent game/msw/CC_CMN/SLIME/CcSquadFactory.cpp

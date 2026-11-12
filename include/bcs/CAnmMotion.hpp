@@ -50,6 +50,16 @@ namespace bcs {
             virtual void VFunc90();
             virtual void VFunc94();
             virtual int VFunc98(long, unsigned long);   // 0x98, tested for nonzero by the caller
+            // 0x9C to 0xAC (added for game/msw/CChrOptMdlObj.cpp, DOL; the
+            // vtable ends at 0xAC). 0xA0 and 0xA4 are called with 3: whether
+            // the motion is blending from the previous one (bits 0 and 1 of
+            // the word at 0x18), and the float at 0x30 (the blend frames,
+            // passed back to Play by msw::CChrOptTask).
+            virtual int VFunc9C();
+            virtual int VFuncA0(long);
+            virtual float VFuncA4(long);
+            virtual void VFuncA8();
+            virtual void VFuncAC();
             // Binds the motions of `file` to pMdl. (meanings of the last two
             // arguments not known)
             void Create(const CMdlObj *pMdl, nw4r::g3d::ResFile file, const NODE_EX_INFO *pInfo, unsigned long,
@@ -62,6 +72,10 @@ namespace bcs {
             void Play(long idx, unsigned long flag, float rate, float blend, float frame);
             // Clears bit 0 of the word at 0x18.
             void Stop();
+            // (DOL fn_800095A0, unnamed; name guessed) Clears bit 1 (looped) of
+            // the word at 0x18 of the current motion. msw::CChrOptMdlObj
+            // passes 3; the argument is not read.
+            void ResetLoopedFlag(long);
             // (DOL) The frame of trigger nTrg of animation nAnim. (meaning
             // of the float not known)
             float SearchTrgFrame(long nAnim, unsigned long nTrg, float) const;

@@ -25,6 +25,11 @@ namespace msw {
             // pScale to the first of the two functions SetScale calls on
             // each effect; added for game/msw/CStgGmk_Case.cpp)
             void SetEmitterScale(const bcs::FVEC3 *pScale);
+            // (DOL fn_80122B48, unnamed; name guessed) Calls on every effect
+            // the bcs::EF::CEffect function that sets (bOn) or clears flag
+            // 0x40000 and stores fSpeed at 0x168; msw::CChrCore::Eff_SetSpeed
+            // and msw::CChrOptTask pass 1.
+            void SetSpeedOverride(int bOn, float fSpeed);
             // Rotation in radians.
             void SetRotateRad(const bcs::FVEC3 *pRot);
             // (parameter names and return types guessed) Fades the cluster

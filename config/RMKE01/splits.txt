@@ -168,7 +168,9 @@ game/msw/CC_DATA.cpp:
 	.text       start:0x800D2C4C end:0x800D2F58
 
 game/msw/CChrOptMdlObj.cpp:
-	.text       start:0x800D339C end:0x800D3A3C
+	.text       start:0x800D339C end:0x800D5070
+	.data       start:0x8046C258 end:0x8046C378
+	.sdata2     start:0x805C2600 end:0x805C2610
 
 game/msw/CChrCore.cpp:
 	.text       start:0x800D5140 end:0x800E96FC
@@ -329,7 +331,8 @@ game/msw/CMenuPaneAccessor.cpp:
 	.text       start:0x8013F838 end:0x8013FD74
 
 game/msw/CMenuTask.cpp:
-	.text       start:0x8013FDA0 end:0x801403FC
+	.text       start:0x8013FDA0 end:0x80140484
+	.data       start:0x80471600 end:0x80471618
 
 game/msw/CMenuPad.cpp:
 	.text       start:0x801413A0 end:0x80141830
@@ -500,7 +503,9 @@ game/msw/CNpcGhost.cpp:
 	.text       start:0x801B8374 end:0x801B9EE8
 
 game/msw/CCockpitLayoutBase.cpp:
-	.text       start:0x801BA114 end:0x801BA86C
+	.text       start:0x801BA114 end:0x801BA944
+	.data       start:0x804821DC end:0x80482238
+	.sdata2     start:0x805C4790 end:0x805C4798
 
 game/msw/CCockpitPartMove.cpp:
 	.text       start:0x801BA9EC end:0x801BAA6C

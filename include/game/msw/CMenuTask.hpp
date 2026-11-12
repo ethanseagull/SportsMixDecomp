@@ -9,12 +9,15 @@ namespace msw {
 
     // A task that keeps a list of CMenuLinkBase objects. Lives in the DOL.
     // It adds no virtual function to bcs::CTask's four (its vtable has four
-    // entries). Size 0x44: msw::CCockpitPause has its second base,
+    // entries); Main and Disp are overridden with empty inline bodies
+    // (weak copies after SetPauseObj in the DOL). Size 0x44: msw::CCockpitPause has its second base,
     // bcs::CFsm<CCockpitPause>, at 0x44 (the `@68@` thunks in BossF).
     class CMenuTask : public bcs::CTask {
         public:
             CMenuTask(bcs::CTask *pParent);
             virtual ~CMenuTask();
+            virtual void Main() {}
+            virtual void Disp() {}
 
             // Each looks up the CMenuLinkBase with id nObjId in the list
             // and calls one of its virtuals (read from the DOL bodies).
@@ -34,6 +37,18 @@ namespace msw {
             // Run Main / Disp of every object in the list.
             void ModListMainLoop();
             void ModListDispLoop();
+
+            // (no symbols; names from their callers CCockpit::IsEndObj and
+            // CCockpit::RemoveObj) 1 when no object has id nObjId; marks
+            // every object with that id for deletion and returns how many.
+            int IsEndObj(long nObjId);
+            long RemoveObj(long nObjId);
+            // (no symbol, stripped; name guessed) Calls SetVisible(bVisible);
+            // 0, or -1.
+            long SetVisibleObj(long nObjId, int bVisible);
+            // Adds 1 to (bPause) or takes 1 from (not below 0) every
+            // object's pause count.
+            void SetPauseObj(int bPause);
 
         private:
             CMenuLinkList m_LinkList; // 0x34

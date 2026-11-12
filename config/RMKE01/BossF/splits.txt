@@ -45,9 +45,13 @@ game/boss/CC_PARAM_BOSS.cpp:
 	.rodata     start:0x000003E8 end:0x00000588
 	.bss        start:0x00000048 end:0x00000280
 
-game/boss/CChrCoreBoss.cpp:
-	.text       start:0x00018E08 end:0x0001EA14
-	.rodata     start:0x00000588 end:0x000007E8
+game/boss/unit_18E08.cpp:
+	.text       start:0x00018E08 end:0x0001C248
+	.rodata     start:0x00000588 end:0x000006C8
+
+game/boss/unit_1C248.cpp:
+	.text       start:0x0001C248 end:0x0001EA14
+	.rodata     start:0x000006C8 end:0x000007E8
 	.data       start:0x00001258 end:0x000012F0
 
 game/boss/unit_1EA14.cpp:

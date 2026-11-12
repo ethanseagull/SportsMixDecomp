@@ -4,6 +4,7 @@
 #include "nw4r/lyt/common.h"
 #include "nw4r/math/types.h"
 #include "nw4r/ut/Color.hpp"
+#include "nw4r/ut/LinkList.h"
 #include "nw4r/ut/RuntimeTypeInfo.h"
 
 namespace nw4r {
@@ -123,6 +124,8 @@ namespace nw4r {
                 bool IsLocationAdjust() const { return (mFlag & 4) != 0; }
                 const math::VEC3 &GetTranslate() const { return mTranslate; }
                 Pane *GetParent() const { return mpParent; }
+                // (added for HockeyF game/hockey/CCockpitHockeyMap.cpp, ogws name)
+                ut::LinkList<Pane, 4> &GetChildList() { return mChildList; }
 
                 // Added for MenuF game/menu/CBgDisplay.cpp (ogws names).
                 unsigned char GetBasePositionH() const { return detail::GetHorizontalPosition(mBasePosition); }
@@ -140,7 +143,10 @@ namespace nw4r {
             private:
                 unsigned char m_Unk04[0x8];
                 Pane *mpParent;              // 0x0C, null at the root
-                unsigned char m_Unk10[0x1C];
+                // (added for HockeyF game/hockey/CCockpitHockeyMap.cpp) The
+                // children; each child's list node is at its offset 4.
+                ut::LinkList<Pane, 4> mChildList; // 0x10
+                unsigned char m_Unk1C[0x10];
                 math::VEC3 mTranslate;       // 0x2C
                 math::VEC3 mRotate;          // 0x38
                 math::VEC2 mScale;           // 0x44

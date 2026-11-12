@@ -16,7 +16,7 @@ namespace msw {
             public:
                 CC_PARAM_VOLLEY();
 
-                unsigned long m_Unk00; // 0x0
+                long m_Unk00; // 0x0 (signed: LoopStateSpike compares it with 1)
                 unsigned long m_Unk04; // 0x4
                 unsigned long m_Unk08; // 0x8
                 float m_Unk0C; // 0xC

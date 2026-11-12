@@ -12,6 +12,10 @@ namespace msw {
             static void *GetPtr(long index); // return type guessed
             // Its path: the start of the entry (entries are 0x110 bytes).
             static const char *GetFilePath(long index);
+            // (name guessed; the DOL's fn_8018FB5C) The entry's m_nId (the
+            // word at 0x100), what bcs::CLoadMan::IsLoadEnd takes with the
+            // path.
+            static unsigned long GetFileId(long index);
             static unsigned long GetSize(long index); // return type guessed
             // Non-zero once the entry has been read.
             static int IsComplete(long index); // return type guessed

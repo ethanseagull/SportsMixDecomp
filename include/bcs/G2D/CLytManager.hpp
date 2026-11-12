@@ -2,6 +2,7 @@
 #define BCS_G2D_CLYTMANAGER_HPP_
 
 #include "bcs/FVEC3.hpp"
+#include "revolution/mem.h"
 
 namespace bcs {
     namespace G2D {
@@ -27,9 +28,16 @@ namespace bcs {
                 // aspect mode bAdjust. The vector (the DOL's fn_8003FE7C,
                 // name guessed; written to pScale, which the function takes
                 // after `this`) has the horizontal scale in x and 1 in y and
-                // z; GetLocationAdjustScaleH is the vertical one.
+                // z; GetLocationAdjustScaleH returns that scale alone.
                 void GetLocationAdjustScale(FVEC3 *pScale, int bAdjust);
                 float GetLocationAdjustScaleH(int bAdjust);
+                // (added for game/msw/CNowLoading.cpp) The vertical
+                // counterpart of GetLocationAdjustScaleH.
+                float GetLocationAdjustScaleV(int bAdjust);
+                // (name guessed; the DOL's fn_8003F580, added for
+                // game/msw/CNowLoading.cpp) The allocator for nw4r::lyt,
+                // set up from a heap on the first call.
+                static MEMAllocator *GetAllocator();
                 // (name guessed) Bit 0 of the word at 0x44, what C3DCoin
                 // passes to both.
                 int GetAdjustMode() const { return m_nFlag & 1; }

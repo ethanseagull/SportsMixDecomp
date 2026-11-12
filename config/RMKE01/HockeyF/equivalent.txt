@@ -34,6 +34,7 @@ HockeyF GetTargetPos_StageCommon__Q23msw15CComManHockeyCSFQ23bcs5FVEC3f near 90.
 HockeyF GoalFlowUpdate__Q23msw14CStageHockey15Ff near 99.7 register numbering only (identical after renumbering), 99.7%
 HockeyF InitParameters__Q23msw21CCockpitHockeyVSCountFv unverified 47.7 our compiler auto-inlines AttachPlayerNo and InitSetCountPane into it (the original calls them); with #pragma auto_inline off (scratch test, not kept) the function is 100%, so the body is right
 HockeyF InitSetCountPane__Q23msw21CCockpitHockeyVSCountFll near 91.1 instruction order and register choice only: the two strength-reduced loop pointers are set up and stepped in the other order
+HockeyF KickSplashEffect__26CStgGmk_IceCube_Act_HockeyFv near 95.9 register choice (pool base r31 vs pSrt/effect pointer swapped, one fmr target) and the order of three stack stores of the line endpoints only
 HockeyF LookAt__Q23msw7CStgObjFRCQ23bcs5FVEC3 near 97.9 97.9%: weak inline (as in BasketF); the two psq_l/ps_sub operands land in f0/f1 swapped (operand order inside the shared bcs::FVEC3Sub helper). Float registers only.
 HockeyF LoopStateAirTrick__Q23msw19CChrCoreHockeyLuigiFv near 99.8 register choice only (r3/r4 in inlined FsmqGetWork_)
 HockeyF MainCamera_Normal__Q23msw15CCameraHockeyCSFv near 98.3 schedule and float register choice around the CalcCurveBlend calls, as BasketF CCameraBasketHB::MainCamera_Normal (98.5% near); calls, constants and memory accesses identical
@@ -51,10 +52,12 @@ HockeyF Main__Q33msw14GIMMICK_HOCKEY16CEffectCoinScoreFv near 99.4 register choi
 HockeyF Main___Q23msw14CStageHockey17Ff near 90.3 90.3%: register allocation (one saved GPR fewer: _savegpr_23 vs 22), the AABB corners copied with lfs/stfs instead of lwz/stw (same bytes; our nw4r::math::VEC3 is not a POD), and abDoorOpen[i] addressed by a moving pointer instead of base+offset stwx; same calls, constants and branches
 HockeyF MethdPassCall___Q23msw16CChrDrvPadHockeyFl near 99.7 load order of queue head/tail and the two team bytes
 HockeyF MovePos___Q33msw11CC09_HOCKEY22CcKinopioBoundMushroomFf near 99.6 register choice in three fmadds (as VolleyF)
+HockeyF OnBodyDamage__26CStgGmk_IceCube_Act_HockeyFPQ23msw13CCollBodyUnitPCQ23msw12CCollAtkUnitRCQ23bcs5FVEC3 near 99.7 float register numbering of the two fabs operands only
 HockeyF OnBodyDamage__Q23msw26CStgGmk_Pinball_Act_HockeyFPQ23msw13CCollBodyUnitPCQ23msw12CCollAtkUnitRCQ23bcs5FVEC3 near 96.4 register numbering and load order of the copied positions; the reflect test is ble+b in the original and bgt in ours (same condition, same targets)
 HockeyF OnDamage__Q23msw26CStgGmk_Pinball_Act_HockeyFPQ23msw13CCollBodyUnitPQ23msw5CBall near 98.1 register numbering; reflect test ble+b vs bgt (same condition); CStgSrt::SetVel's direction-flag test is extrwi. in the original and rlwinm. in ours (same bit 1), as in DodgeF's sibling
 HockeyF OnMsgMain__Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG near 99.9 register choice for the character pointer
 HockeyF OnMsg__Q23msw16CChrDrvPadHockeyFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG near 99.0 register choice and load order in rumble cases 0x53/0x54
+HockeyF OnReflectHit__26CStgGmk_IceCube_Act_HockeyFPCQ23msw12CCollDefUnitPCQ23msw5CBallRQ23bcs5FVEC3RQ23bcs5FVEC3 unverified 77.5 same value: original masks low byte and top 16 bits separately (clrlwi/clrrwi/ori/or), ours merges them into rlwinm/rlwimi; 9 plain forms over two models gave no gain
 HockeyF OnReflectHit__Q23msw23CStgGmk_Case_Act_HockeyFPCQ23msw12CCollDefUnitPCQ23msw5CBallRQ23bcs5FVEC3RQ23bcs5FVEC3 near 99.0 register numbering inside the paired-single dot product, and the return value 0x801 built as li 1 / ori 0x800 in the original but one li in ours (same value); same calls, loads, stores, constants and branches (as CStgGmk_Trolley_Act_Hockey::OnReflectHit)
 HockeyF OnReflectHit__Q23msw26CStgGmk_Pinball_Act_HockeyFPCQ23msw12CCollDefUnitPCQ23msw5CBallRQ23bcs5FVEC3RQ23bcs5FVEC3 near 97.7 register numbering; reflect test ble+b vs bgt (same condition); the result 0xA01 is built li 1 + ori 0xA00 in the original and li 0xA01 in ours (same value)
 HockeyF OnReflectHit__Q23msw26CStgGmk_Trolley_Act_HockeyFPCQ23msw12CCollDefUnitPCQ23msw5CBallRQ23bcs5FVEC3RQ23bcs5FVEC3 near 97.4 register numbering inside the paired-single vector helpers, and the return value 0x401 built as li 1 / ori 0x400 in the original but as one li in ours (same value); same calls, loads, stores and branches
@@ -102,6 +105,7 @@ HockeyF TrgDamage___Q23msw19CItemBallHockeyBombFv near 93.4 load order of the 18
 HockeyF TrgDestroy___Q23msw19CItemBallHockeyBombFv near 99.4 load order of the 180.0f/0.0f constants for CBombExplosion and the register choice that follows; same values passed
 HockeyF TrgGoalIn___Q23msw19CItemBallHockeyBombFv near 99.4 load order of the 180.0f/0.0f constants for CBombExplosion and the register choice that follows; same values passed
 HockeyF TrgShootStart___Q23msw19CItemBallHockeyBombFv near 99.5 load order of the 180.0f/0.0f constants for CBombExplosion and the register choice that follows; same values passed
+HockeyF UpdateColl__26CStgGmk_IceCube_Act_HockeyFv near 99.6 float register numbering in the inlined length-squared test of BCS_Vec_Normalize only
 HockeyF UpdateMdl__Q23msw14CStageHockey13FUlf near 98.1 register choice and common-subexpression reuse only (as CStageBasket13::UpdateMdl): in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls
 HockeyF Util_SearchArtsPassTo___Q23msw13CChrManHockeyFl near 99.1 register allocation only
 HockeyF Util_SearchPassmeetTo___Q23msw13CChrManHockeyFlfRQ23bcs5FVEC3 near 99.2 two stack-address registers swap; team byte sign-extended in place instead of via r0
@@ -116,7 +120,6 @@ HockeyF __dt__Q23bcs41CFixedPool<Ul,32,Q23bcs15CPoolNode<Ul,0>>Fv near 98.8 inst
 HockeyF __dt__Q23bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction order only (shared bcs/CPool.hpp, same as BasketF)
 HockeyF __dt__Q23msw13CChrManHockeyFv near 99.1 register allocation only (r29/r30), same as the boss sibling
 HockeyF __dt__Q23msw14CStageHockey11Fv near 99.0 instruction order only (same as BasketF CStageBasket11)
-HockeyF __dt__Q23msw24CStageHockeyCrushSkate85Fv near 96.4 96.4%: the original tests the ice cube cluster member's address twice (a second beq on the same cr0, an extra inline destructor level of CStgGmk_IceCubeCluster_Hockey that is not modelled; its own out-of-line destructor shows it too). Redundant branch only.
 HockeyF __dt__Q23msw24CStageHockeyCrushSkate86Fv near 99.0 register choice only in the inlined CBgFirePillarCluster/CPool list destructors (same as CStageHockey11/CStageBasket11)
 HockeyF __dt__Q33msw7STAGE1120CBgFirePillarClusterFv near 98.1 instruction order only (shared CStage11Base.hpp, same as BasketF)
 HockeyF __sinit_\CChrCoreHockeySlime_cpp unverified 84.3 register allocation and order of the colour-table stores (stmw of five registers instead of four stw); the twelve colours were decoded from the original and are the same

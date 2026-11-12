@@ -175,6 +175,7 @@ void msw::CChrCoreHockeyKinopio::SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_
 // 8 in front of the goal; the first is Toad's, and the second is larger.
 void msw::CChrCoreHockeyKinopio::SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long)
 {
+    long nCourt;
     const CC_DATA::ARTS_OPT_CREATE_INFO *pInfo =
         CC_DATA::GetArtsOptionMdl_CreateInfo(GetChrIdS(), CGame::g_GameWork.GetGameMode());
     if (!pInfo) {
@@ -205,7 +206,7 @@ void msw::CChrCoreHockeyKinopio::SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRIC
     }
     bcs::FVEC3 pos(0.5f * (rect.x + rect.y), 0.0f, goal.z + fOfs);
 
-    long nCourt = GetTargetCourtIdx();
+    nCourt = GetTargetCourtIdx();
     bcs::BCS_Color color = CC_DATA::GetChrOptColor_Kinopio(m_nColor);
     for (long i = 0; i < 2; i++) {
         float fScale = 0.5f * (i & 1) + 0.25f;

@@ -13,6 +13,10 @@ typedef struct Vec {
 } Vec;
 
 typedef float Mtx[3][4];
+typedef float Mtx44[4][4];
+
+// (added for game/msw/CNowLoading.cpp) An orthographic projection.
+void C_MTXOrtho(Mtx44 m, float t, float b, float l, float r, float n, float f);
 
 void PSMTXCopy(const Mtx src, Mtx dst);
 void PSMTXIdentity(Mtx m);

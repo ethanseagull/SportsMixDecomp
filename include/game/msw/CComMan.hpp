@@ -232,6 +232,25 @@ namespace msw {
             static int GetViewPointPosFromOthers(bcs::FVEC3 &rOut, const bcs::FVEC3 &rMy, const bcs::FVEC3 &rTarget,
                                                  const bcs::FVEC3 &rGmkPos, float fRange, float fMargin);
 
+            // (added for VolleyF game/volley/CComDrvVolleyGame.cpp, meanings
+            // guessed) The z of the net line of rPos's court (in the court's
+            // frame); whether character nChr is played by a human.
+            static float GetCourtBorderZ(const bcs::FVEC3 &rPos);
+            static int IsPadChr(long nChr);
+            // Whether rPos lies inside the rectangle; the root action of
+            // pChr's driver (-1 for none).
+            static int IsInnerRect(float fLeft, float fRight, float fFront, float fBack, const bcs::FVEC3 &rPos);
+            static long GetRootActType(CChrCore *pChr);
+            // A random character of team nTeam played by a human (null for
+            // none); pChr's position in the court's frame on the floor;
+            // whether a computer character of team nTeam runs root action
+            // nAct.
+            static CChrCore *GetPadDrvChrCoreRand(long nTeam);
+            static bcs::FVEC3 GetChrPosXZ(const CChrCore *pChr);
+            static int IsExistComRootActChr(long nTeam, long nAct);
+            // The court rPos (in the court's frame) lies in.
+            static long GetCourtIdxByPos(const bcs::FVEC3 &rPos);
+
             static CComMan *g_pInstance;
     };
 }

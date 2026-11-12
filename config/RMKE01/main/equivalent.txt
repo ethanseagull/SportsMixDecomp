@@ -42,6 +42,8 @@ main CanbePause__Q23msw14CGamePauseTaskCFv near 87.9 register renaming; the fina
 main ChangeCameraBaseDir__Q23msw5CGameFv near 96.1 inlined GetViewTargetTeam's game-mode switch lowered as a compare chain instead of a binary tree
 main ChangeCameraBaseDir___Q23msw5CGameFv near 90.1 inlined game-mode switch lowered as a compare chain instead of a binary tree; base register vs @l addressing
 main ChangeGoalIdx___Q23msw5CGameFv unverified 81.2 81.2%: inlined switches lowered differently (compare chain vs binary tree), IsLocalVsMode's result kept in a register
+main ChangeInputPointerModeForce__Q23msw8CMenuPadFl near 97.1 register allocation/order only
+main ChangeInputStickModeForce__Q23msw8CMenuPadFl near 98.2 register allocation/order only
 main ChangeResFile__Q23bcs10CAnmMotionFQ34nw4r3g3d7ResFile near 98.6 register choice and instruction order only
 main ChangeRes__Q23bcs10CAnmMatClrFQ34nw4r3g3d6ResMdlQ34nw4r3g3d9ResAnmClr near 98.1 m_Res loaded once more than the original by the inline InitFrame (no store between, same value); otherwise registers/order
 main ChangeRes__Q23bcs10CAnmTexPatFQ34nw4r3g3d6ResMdlQ34nw4r3g3d12ResAnmTexPat near 94.6 m_Res loaded once more than the original by the inline InitFrame (no store between, same value); otherwise registers/order
@@ -76,21 +78,12 @@ main CtorStateChgCourt__Q23msw5CGameFv near 96.7 switch compiled as a linear com
 main CtorStateEntranceDemo__Q23msw5CGameFv near 99.1 switch compiled as a linear compare chain where the original builds a compare tree, and inline CFsmQueue operations expanding with other branch/register shape; same cases and calls
 main CtorStateEventDemo__Q23msw5CGameFv near 93.1 cmpw/bne in ours where the original uses subf/cntlzw/beq for the same equality test, and one register reloaded; same result
 main CtorStateGameResult__Q23msw5CGameFv near 96.7 switch compiled as a linear compare chain where the original builds a compare tree, and inline CFsmQueue operations expanding with other branch/register shape; same cases and calls
-main CtorStateOnlineSync0__Q23msw5CGameFv near 98.4 register choice only: the inline FsmqGetWork keeps the queue head in r5 and the work base in r4 in the original, swapped in ours; same loads, compares and store
-main CtorStateOnlineSync1__Q23msw5CGameFv near 98.4 register choice only: the inline FsmqGetWork keeps the queue head in r5 and the work base in r4 in the original, swapped in ours; same loads, compares and store
-main CtorStateOnlineSync2__Q23msw5CGameFv near 98.5 register choice only: the inline FsmqGetWork keeps the queue head in r5 and the work base in r4 in the original, swapped in ours; same loads, compares and store
 main CtorState_BREAK__Q23msw16CStgGmk_Case_ActFv near 96.7 branch layout of the null-handle select (li 0 on its own path in the original) and store order of the scale vector; same values
 main CtorState_BREAK__Q23msw17CStgGmk_Pylon_ActFv near 100.0 store order of the three equal FVEC3 components (x stored last in the original); same values
 main CtorState_BREAK__Q23msw19CStgGmk_Pinball_ActFv near 94.5 null cluster set by explicit li 0 and register reuse in original; ours saves one more register
 main CtorState_MOVE__Q23msw16CStgGmk_Case_ActFv near 93.9 the CStgSrt flag store is scheduled after the vector stores in the original; stack slots of the two velocity limit vectors swapped
 main CtorState_MOVE__Q23msw17CStgGmk_Pylon_ActFv near 92.3 original keeps the local CGmkRef in memory (dead vptr store at sp+8, parent read back); ours in a register, so FVEC3 temporaries' stack slots shift
 main CtorState_MOVE__Q23msw19CStgGmk_Pinball_ActFv near 98.9 rlwinm. vs extrwi. for the same bit (CStgSrt::GetRotMtx), one stack slot
-main CtorState_RESPAWN__Q23msw19CStgGmk_Pinball_ActFv near 99.7 register allocation/order only (diff.py: registers/schedule)
-main CtorState_STANDBY__Q23msw16CStgGmk_Wave_ActFv near 99.6 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
-main CtorState_STANDBY__Q23msw17CStgGmk_Pylon_ActFv near 99.5 registers inside the inlined CFsmQueue helpers
-main CtorState_START__Q23msw23CStgGmk_WaterPillar_ActFv near 99.7 register allocation only (argument registers of the effect calls)
-main CtorState_STAY__Q23msw23CStgGmk_WaterPillar_ActFv near 99.3 register allocation only
-main CtorState_WAVE__Q23msw16CStgGmk_Wave_ActFv near 99.9 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main DeleteJointObj__Q23bcs7CScnObjFv unverified 73.2 73.2%: inlining depth only (AppendDelayDeleteObject inlined one level deeper here); byte-identical under Wii/1.5 and 1.7
 main DemoSkipInputCheck__Q23msw5CGameFl unverified 80.3 80.3%: the pad-type switch (three identical bodies) is lowered differently; register choice
 main Disp__Q23bcs10CStrapTaskFv near 97.9 one li scheduled earlier; same instructions
@@ -205,17 +198,9 @@ main LoopStateThrow__Q23msw11CItemGShellFv near 95.4 original reloads m_nFlag (0
 main LoopStateThrow__Q23msw11CItemRShellFv near 95.7 original reloads m_nFlag (0xD8) before clearing 0x200, ours reuses the loaded value (nothing writes it between); register numbering and order
 main LoopStateTurnResult__Q23msw5CGameFv unverified 64.4 ours merges the three FsmqChangeState tails into one
 main LoopStateWaitStartBase__Q23msw5CGameFv near 90.1 switch compiled as a linear compare chain where the original builds a compare tree, and inline CFsmQueue operations expanding with other branch/register shape; same cases and calls
-main LoopState_FALL__Q23msw17CStgGmk_Pylon_ActFv near 99.9 register numbering only
-main LoopState_INACTIVE__Q23msw16CStgGmk_Case_ActFv near 99.7 register allocation only in the inlined FsmqChangeState
 main LoopState_MOVE__Q23msw16CStgGmk_Case_ActFv near 99.6 stack slots of the effect rotation temporaries only
 main LoopState_MOVE__Q23msw19CStgGmk_Pinball_ActFv near 99.5 two stack slots swapped, float register choice
 main LoopState_MOVE__Q23msw19CStgGmk_Trolley_ActFv near 93.1 the AABB corners are copied as floats instead of words, stack slots and the order of two address computations; same values
-main LoopState_SLEEP__Q23msw19CStgGmk_Pinball_ActFv near 99.7 register allocation/order only (diff.py: registers/schedule)
-main LoopState_STANDBY__Q23msw16CStgGmk_Wave_ActFv near 99.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
-main LoopState_STANDBY__Q23msw17CStgGmk_Pylon_ActFv near 99.7 registers inside the inlined CFsmQueue helpers
-main LoopState_START__Q23msw23CStgGmk_WaterPillar_ActFv near 99.8 register allocation only in the inlined FsmqChangeState
-main LoopState_STAY__Q23msw23CStgGmk_WaterPillar_ActFv near 99.7 register allocation only in the inlined FsmqChangeState
-main LoopState_WAVE__Q23msw16CStgGmk_Wave_ActFv near 99.8 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main MainBury___Q23msw9CDropCoinFv near 99.9 one fmadds with its multiplied operands swapped (commutative)
 main MainMove___Q23msw9CDropCoinFv near 97.7 register choice in the inlined reflection; -3.0f constant loaded earlier in the original
 main Main__Q23bcs10CStrapTaskFv near 98.5 one store scheduled before another; same stores
@@ -234,6 +219,7 @@ main Main__Q33msw6CC_CMN10CMdlEffectFv near 96.5 instruction order and registers
 main MakeDL__Q33bcs3G2D10CScissorDLFv unverified 83.2 83%: original keeps two dead u16 stack stores (sth of the F32ToU16 results), widens the sizes to int and truncates to 16 bits at the call instead of at the clamp assignment; otherwise scheduling and stack slots. Same values reach SetGDScissor in every case as far as read, not proven
 main MakeDL__Q33bcs3G2D12CLineStripDLFv near 99.7 register numbering only (renumbered diff empty)
 main MirrorResult__Q23bcs13CAnmChrMotionFPQ34nw4r3g3d12ChrAnmResultUcUs unverified 82.6 row addresses kept in saved registers across PSVECCrossProduct/Normalize where the original recomputes them (frame 0x20 vs 0x10, 545 vs 527 instructions); not fully explained; two models tried
+main Mount__Q23bcs10CRsoModuleFv near 99.3 loop counter and import-table byte offset registers swapped only
 main NewMdl__Q23msw15CStgGmk_TrolleyFlUl near 91.8 inlines CStgGmk_Trolley_Mdl's constructor: the same register reuse for the constant 0 as there; same stores
 main ObjProcGroup__Q23bcs9CScnGroupFUlUlPv near 99.5 99.5%: original has one unreachable b after case 4; branch offsets shift
 main OnAttackHit__Q23msw19CStgGmk_Pinball_ActFPCQ23msw12CCollAtkUnitPCQ23msw13CCollBodyUnitRCQ23bcs5FVEC3Ul near 97.8 one temporary's stack slot, load order and register swap
@@ -293,7 +279,6 @@ main PushTeamItem___Q23msw5CGameFll near 95.0 switch compiled as a linear compar
 main RemoveChildAt__Q23bcs9CScnGroupFUl unverified 80.0 80%: GetChild inlined here, called in the original; rest identical
 main RemoveEntryAll__Q23bcs10CCameraManFv near 97.4 identical instructions; relocation named _f_bss in the original vs m_pCamera (same address 0x804BF580)
 main RemoveGuideTelop___Q23msw13CGameGuideManFv near 97.9 inlined CGameGuideTelop::Remove: original re-reads m_nTelopId (0x3C) right after comparing it, no store in between, ours reuses the value; otherwise identical
-main RepeatPlay__Q33msw10CStgSeSlot7CSESlotFflPQ43msw10CStgSeSlot7CSESlot8CPosFuncfflUllfff near 99.0 original reloads m_nFlag (0x20) for the inlined SetNextDelay test, ours keeps it in a register; no store between, same value
 main RepeatPlay__Q33msw10CStgSeSlot7CSESlotFflRCQ23bcs5FVEC3fflUllfff near 99.7 registers only: n|8 value and the mode constant 1 swapped
 main Reset___Q23msw13CGameGuideManFv near 98.5 inlined CGameGuideTelop::Remove: original re-reads m_nTelopId (0x3C) right after comparing it, no store in between, ours reuses the value; otherwise identical
 main RestoreSpeed__Q23msw14CGameSpeedCtrlFfil near 99.9 order of two float stores
@@ -323,6 +308,7 @@ main SetDelayResultButton__Q23msw14CCockpitResultFv near 98.1 98.1%: identical i
 main SetDispFlag__Q33msw7cockpit10CEffectSetFi near 99.8 register allocation only (loop pointer and EF manager swap r8/r10); declaration-order search no gain
 main SetFirstGoalIdx___Q23msw5CGameFv unverified 75.9 switch compare tree vs our linear chain and other branch form; not proven equal by tool
 main SetFlags__Q23msw10CEventDemoFUl unverified 41.4 same four lwz/or/stw on WORK 0x14..0x20; original does each word in turn, ours hoists the loads (schedule only, 41%, 7 forms tried)
+main SetFrame__Q23bcs10CAnmMatClrFf unverified 0.0 ours inlines CAnmMatClr::CalcResult where the original calls it (auto-inline budget); same work in the same order, behaviour unchanged. Accepted below the floor by user ruling 2026-11-12 (notes/decisions.md)
 main SetFrame__Q23bcs10CFrameCtrlFf near 99.7 register choice and instruction order only
 main SetFrame__Q23msw10CEventMoveFf near 99.6 paired-single register choice in the inlined FVEC3Add/FVEC3Sum only
 main SetFront__Q23msw7CStgSrtFRCQ23bcs5FVEC3 near 97.3 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
@@ -339,8 +325,6 @@ main SetPeriodResult___Q23msw5CGameFv unverified 52.3 52.3%: register allocation
 main SetPointLightColor__Q23msw14CEffectClusterF8_GXColor8_GXColor near 89.8 schedule only: second colour word loaded after the member-pointer lwzu/copy instead of before; same stores and calls
 main SetResultButton__Q23msw14CCockpitResultFll near 98.5 98.5%: float register numbering in the delay computation; callee is the unnamed task constructor fn_8023D858
 main SetRotY__Q23msw7CStgSrtFf near 99.0 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
-main SetScript__Q33msw2vm9CVMScriptFPv unverified 77.7 original inlines CVMData::Init inside the inlined ~CVMData; ours calls Init (CVMData.cpp), same effect; likely fixed by merging vm/CVMData+opcodes+CVMCpu+CVMScript into one file
-main SetScript__Q33msw2vm9CVMScriptFRCQ33msw2vm9CVMScript unverified 72.8 original inlines CVMData::Init inside the inlined ~CVMData; ours calls Init (CVMData.cpp), same effect; likely fixed by merging vm/CVMData+opcodes+CVMCpu+CVMScript into one file
 main SetTeamArtsGauge___Q23msw5CGameFlff near 87.0 register choice and float move order
 main SetTeamCoin__Q23msw5CGameFlUl near 91.8 register choice and the placement of the clamp's merge block
 main SetTeamPeriodScore__Q23msw5CGameFlll unverified 69.6 69.6%: the period row is addressed from row+0x20 in ours; same loads and stores
@@ -374,17 +358,19 @@ main UpdateColl__Q23msw17CStgGmk_Pylon_ActFv near 99.3 fmadds operand order and 
 main UpdateColl__Q23msw19CStgGmk_Pinball_ActFv near 99.4 stack slot order of atkPos and three FVEC3 temporaries
 main UpdateColl__Q23msw19CStgGmk_Trolley_ActFv near 97.1 stack slots of the SetPos temporaries and the capsule ends only (both builds drop the store of the second capsule end's x/z)
 main UpdateFade__Q23msw11CChrOptTaskFf near 99.5 register choice only: the hide bit and the model pointer are swapped between r3 and r4 in the hide-flag updates
+main UpdateFrame__Q23bcs10CAnmMatClrFf unverified 0.0 ours inlines CAnmMatClr::CalcResult where the original calls it (auto-inline budget); same work in the same order, behaviour unchanged. Accepted below the floor by user ruling 2026-11-12 (notes/decisions.md)
 main UpdateFrame__Q23bcs15CAnmBlendMotionFf near 94.7 reload of the unchanged 16-bit layer/part count (0x28/0x2A; no store to it between the loads) plus register choice and instruction order
 main UpdateFrame__Q23msw10CEventMoveFf near 99.1 paired-single register choice and the stack slots of the two difference temporaries only
 main UpdateFrame__Q23msw13CEvDemoMdlObjFf near 99.0 original reloads m_pMotNameData from memory where ours reuses the register (same value)
 main UpdateGmkPos__Q23msw13CPinballMechaFv near 99.6 register allocation/order only (diff.py: registers/schedule)
+main UpdateInputMode__Q23msw8CMenuPadFv near 91.4 same loads, stores, calls and branches; the original keeps two dead FVEC2 temporaries on the stack (zero and a copy of the pointer position, frame 0x90 vs 0x80) and addresses m_nInput through a separate index register; register numbering follows
 main UpdateMdlMtx__Q23msw19CStgGmk_Trolley_ActFv near 97.9 the first inlined CStgSrt matrix rebuild tests its flag bits through computed bools (neg/or/srwi, extrwi.) where ours tests them directly; stack slots
+main UpdateNoInputCount__Q23msw8CMenuPadFv near 92.0 same loads, stores and branches; the original addresses m_nInput with a separate index induction variable (add+lwz) instead of sharing the float-array pointer
 main UpdateParam__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main UpdateWavePos__Q23msw16CStgGmk_Wave_ActFf near 99.3 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main UpdateWaveTimer__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main Update__Q23msw11CStgSrtMoveFf near 93.5 scheduling and float registers in the paired-single maths; inlined GetRotMtx tests flag bit 2 with rlwinm. where the original has extrwi. (same bit, same branch); stack, calls, constants, offsets, branches identical
-main Update__Q33msw10CStgSeSlot7CSESlotFf near 97.2 original re-reads m_fDelay/m_fStopDelay after each > 0 test, ours reuses the loaded value (no store between); frame size and register choice follow; same calls, constants and branches (as CEffSlot::Update)
-main Update__Q33msw14CStgEffectSlot8CEffSlotFf near 92.6 same zero-constant register effect as Eff_CreateAttachFadeIn; original re-reads m_fCreateDelay/m_fEndDelay after the compare and loads the fade-in after FindList, ours reuses the value (no store in between, so same values); same calls and branches
+main Update__Q33msw14CStgEffectSlot8CEffSlotFf near 92.6 same zero-constant register effect as Eff_CreateAttachFadeIn (constant 0 for the CreateAttachEffect args kept in a saved GPR and reused as GetCluster's null, original reloads li 0); otherwise same instructions
 main UseTeamCoin___Q23msw5CGameFll unverified 78.8 78.8%: register allocation and address recomputation; same calls and stores (inspected)
 main VFunc48__Q23bcs13CAnmChrMotionFv near 99.6 register choice and instruction order only
 main VFunc88__Q23bcs10CAnmMotionCFl near 98.8 add operand order and register choice only

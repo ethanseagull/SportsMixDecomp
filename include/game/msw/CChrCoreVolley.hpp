@@ -99,7 +99,7 @@ namespace msw {
             virtual int Util_GetWalkMotID();                           // 0x350
             virtual int Util_GetLandMotID(long);                       // 0x354
             virtual int Util_GetJumpUpMotID(int);                      // 0x358
-            virtual void Util_GetJumpLandMotID(int);                   // 0x35C
+            virtual int Util_GetJumpLandMotID(int);                    // 0x35C
             virtual int Util_GetDamageMotID(long, long, long);         // 0x360
             virtual void Util_SetOffenseLeaderFirstState(long);        // 0x364
             virtual void Util_SetDefenseLeaderFirstState();            // 0x368
@@ -111,7 +111,7 @@ namespace msw {
             virtual void UpdateFunc_();                                // 0x380
             virtual void Reset_();                                     // 0x384
             virtual float GetPrmMoveSpeed() const;                     // 0x38C
-            virtual long GetPrmBodySize() const;                       // 0x390
+            virtual const PRM_BODY_SIZE *GetPrmBodySize() const;                     // 0x390
             virtual void SendMessage_(long, long, long, long);         // 0x394
             virtual void CtorStateNeutral();                           // 0x3BC
             virtual void LoopStateNeutral();                           // 0x3C0
@@ -232,7 +232,7 @@ namespace msw {
             virtual void SubStateBlockJumpJumpStart_(STATE_WORK_BLOCK_JUMP *); // 0xCBC
             virtual void SubStateBlockJumpDoJumpMove_(STATE_WORK_BLOCK_JUMP *); // 0xCC0
             virtual int SubStateBlockJumpIsJumpEnd_(STATE_WORK_BLOCK_JUMP *); // 0xCC4
-            virtual void SubStateBlockJumpJumpEnd_(STATE_WORK_BLOCK_JUMP *); // 0xCC8
+            virtual int SubStateBlockJumpJumpEnd_(STATE_WORK_BLOCK_JUMP *); // 0xCC8 (int: returns 0)
             virtual void SubStateBlockJumpActStart_(STATE_WORK_BLOCK_JUMP *); // 0xCCC
             virtual int SubStateBlockJumpIsActEnd_(STATE_WORK_BLOCK_JUMP *); // 0xCD0
             virtual int SubStateBlockJumpActEnd_(STATE_WORK_BLOCK_JUMP *);  // 0xCD4
@@ -244,7 +244,7 @@ namespace msw {
             virtual void SubStateSpikeDoSmashSpikeEffect_(STATE_WORK_SPIKE *); // 0xCEC
             virtual void SubStateSpikeDoLandStart_(STATE_WORK_SPIKE *); // 0xCF0
             virtual void SubStateAirTrickStartTrick_(STATE_WORK_AIR_TRICK *); // 0xCF4
-            virtual float SubStateAirTrickSetTrickFrameParam_(STATE_WORK_AIR_TRICK *, long); // 0xCF8
+            virtual void SubStateAirTrickSetTrickFrameParam_(STATE_WORK_AIR_TRICK *, long); // 0xCF8 (void: unit_4377C)
             virtual void SubStateAirTrickSetTrickJumpParam_(STATE_WORK_AIR_TRICK *, long); // 0xCFC
             virtual void SubStateAirTrickSetTrickMoveParam_(STATE_WORK_AIR_TRICK *, long);  // 0xD00
             virtual float SubStateAirTrickGetTrickMotFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD04
@@ -308,7 +308,8 @@ namespace msw {
             // The rectangle of the court half the character defends.
             void Util_GetGuardCourtRect_(bcs::FVEC4 &rRect);
             void ClearMoveParamWork_(CC_DATA::CHR_PARAM::MOVE_PARAM &rParam);
-            void SubStateAirTrickDoJumpMove_(STATE_WORK_AIR_TRICK *pWork);
+            // (int: unit_4377C; returns Util_DoJumpMoveEX's result)
+            int SubStateAirTrickDoJumpMove_(STATE_WORK_AIR_TRICK *pWork);
             // Added for game/volley/CChrCoreVolleySiroma.cpp (DOL; return
             // types guessed). The ball can be caught around the character's
             // root; the receive pose for a direction and the state that
@@ -360,25 +361,140 @@ namespace msw {
             // possible). pWork may be null.
             long SubStateReceiveChoiceProcType_(STATE_WORK_RECEIVE *pWork);
             int IsChargeBall_(const CBall *pBall) const;
+            // (added for game/volley/unit_4377C.cpp, the spike and air
+            // trick states; DOL, meanings guessed) The slow motion around
+            // a spike's hit (kind, ball offset, two ranges, rate and
+            // frames) and its end after fFrame frames; the end of a
+            // combination; the ball is spiked (spike kind, kind of shot,
+            // power rate, charged, item); the ball can be caught at a
+            // model node; not zero for the setter of a combination.
+            void EnableSlowCheck_(long nType, const bcs::FVEC3 &rOfs, const bcs::FVEC3 &rRange1,
+                                  const bcs::FVEC3 &rRange2, float fRate, float fFrame, float fFrame2);
+            void DisableSlowCheck_(float fFrame);
+            void CombinationEnd_();
+            void Util_SpikeBall_(CBall *pBall, long nSpikeType, long nShotType, float fPower, int bCharge,
+                                 int bItem);
+            void SetBallCatchEnableVNode_(float fRange, const bcs::FVEC3 &rOfs, long nNode);
+            int IsCombinationSetter_() const;
+            // Not zero when a combination's spike swings by itself; the
+            // point a spike jump homes in on for pBall; the sound of a smash
+            // spike (-1: none).
+            int SubStateSpikeDoCombAutoSwingCheck_(STATE_WORK_SPIKE *pWork);
+            void SubStateSpikeDoGetHomingTargetPos_(STATE_WORK_SPIKE *pWork, CBall *pBall);
+            long SubStateSpikeGetSmashSpikeSmashSe_();
+            // (inline in unit_4377C.cpp, names guessed; never emitted) One
+            // step of the spike's jump and move; asks the driver for the
+            // kind of spike.
+            inline int SubStateSpikeDoJumpMove_(STATE_WORK_SPIKE *pWork);
+            inline void SubStateSpikeAskSpikeType_(STATE_WORK_SPIKE *pWork);
+
+            // Added for game/volley/CChrCoreVolley.cpp (the neutral, run,
+            // turn, block jump, item shoot, motion play, damage, dizzy, fall
+            // and rebirth states; names from the symbols, meanings guessed).
+            // The work of the neutral and run states.
+            struct STATE_WORK_NEUTRAL;
+            struct STATE_WORK_RUN;
+            // The pose the character waits in for the target ball (0 none,
+            // 1 toss, 2 receive, 3 receive stance, 4 serve).
+            long SubStateGetNeutralPoseType_();
+            // (in another unit) Plays the motion of receive pose nPose; the
+            // ball may be caught by the receive of kind nType.
+            void SubStateSetReceivePose_(long nPose);
+            void SetBallCatchEnable_(long nType);
+            // (in another unit) The run up of a spike: cleared, and grown
+            // by a run of fDist from rPos towards fRotY.
+            void RunUpLengthClear_();
+            void RunUpAdd_(const bcs::FVEC3 &rPos, float fRotY, float fDist);
+            // One frame of the run state, by pose type.
+            void SubStateRunNormal_(STATE_WORK_RUN *pWork);
+            void SubStateRunReceivePose_(STATE_WORK_RUN *pWork);
+            void SubStateRunReceiveStance_(STATE_WORK_RUN *pWork);
+            void SubStateRunServePose_(STATE_WORK_RUN *pWork);
+            // The motion of pose nPose, part nPart (0 the start, 1 the loop,
+            // 2 the end; meaning guessed) of the receive, the toss and the
+            // jump toss. The toss poses have one direction only.
+            long GetReceivePoseMotID_(long nPose, long nPart);
+            float GetTossBaseDir_();
+            long GetTossPoseDir_(float fDir);
+            long GetTossPoseMotID_(long nPose, long nPart);
+            float GetJumpTossBaseDir_();
+            long GetJumpTossPoseDir_(float fDir);
+            long GetJumpTossPoseMotID_(long nPose, long nPart);
+            // (in another unit) The run speed fSpeed as the character's
+            // condition changes it.
+            float CalcContiditionMoveSpeed_(float fSpeed) const;
+            // The start and each frame of a damage of each kind; the Loop
+            // functions return not zero when it is over. The hit back of a
+            // middle and a large damage takes its speed and height.
+            void SubStateDamageCtorMDmg_(STATE_WORK_DAMAGE *pWork, float fSpeed, float fUp);
+            int SubStateDamageLoopMDmg_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorLDmg_(STATE_WORK_DAMAGE *pWork, float fSpeed, float fUp);
+            int SubStateDamageLoopLDmg_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorDizzy_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopDizzy_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorBurn_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorTumble_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopTumble_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorReceiveDmg_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopReceiveDmg_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorSpikeMiss_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopSpikeMiss_(STATE_WORK_DAMAGE *pWork);
+
+            // (added for game/volley/unit_4377C.cpp) The icon shown over a
+            // character (0x18 bytes, from its constructor and MainFunc).
+            class CExAttachIcon {
+                public:
+                    CExAttachIcon();
+                    virtual ~CExAttachIcon();
+                    void MainFunc(float fStep);
+                    void StartDisp();
+                    void StopDisp(int bNow);
+
+                private:
+                    unsigned char m_Unk04[0x18 - 0x4];
+            };
 
         protected:
             // Not mapped yet; size 0x964.
-            unsigned char m_Unk574[0x720 - 0x574];
+            // 0x574 (name guessed): the character's parameters for the game
+            // level (GetCcParam_ returns it).
+            const CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *m_pCcParam;
+            // 0x578 (name guessed): bit 0 while the character serves
+            // (IsVolleyServeMode).
+            unsigned long m_nServeFlag;
+            unsigned char m_Unk57C[0x640 - 0x57C];
+            // 0x640 (name guessed, as in CChrCoreBoss): the lowest height
+            // above the character a ball can be tossed at
+            // (SubStateGetNeutralPoseType_).
+            float m_fTossHeight;
+            unsigned char m_Unk644[0x720 - 0x644];
             // 0x720, 0x72C (names guessed, as in CChrCoreBoss; read by
             // GetVolleySpikeOffsetPos and CanbeSpike): where the ball is
             // hit in a spike, from the character, for a normal and for a
             // charged ball.
             bcs::FVEC3 m_SpikeOfs;
             bcs::FVEC3 m_SpikeOfsCharge;
-            unsigned char m_Unk738[0x768 - 0x738];
+            // 0x738 (name guessed; LoopStateSpike): the same for the power
+            // spike (motion 0x2F).
+            bcs::FVEC3 m_SpikeOfsPower;
+            unsigned char m_Unk744[0x768 - 0x744];
             // 0x768 (name guessed): where a ball pulled in by an air trick
             // sits relative to the hand (CChrCoreVolleySiroma copies it).
             bcs::FVEC3 m_AdsorbOfs;
-            unsigned char m_Unk774[0x794 - 0x774];
+            // 0x774 (name guessed, as in CChrCoreBoss): the yaw of each
+            // receive pose from the direction of the ball (LoopStateNeutral).
+            float m_afReceiveRot[8];
             // 0x794 (name guessed, as in CChrCoreBoss): the height of each
             // receive pose the ball is taken at.
             float m_afReceiveHeight[8];
-            unsigned char m_Unk7B4[0x838 - 0x7B4];
+            unsigned char m_Unk7B4[0x7D4 - 0x7B4];
+            // 0x7D4 (name guessed): the same for the toss poses.
+            float m_afTossRot[8];
+            unsigned char m_Unk7F4[0x830 - 0x7F4];
+            // 0x830 (name guessed): set to 0.1 when a spike jump starts
+            // (LoopStateSpike; SetBallCatchDisable_ writes it too).
+            float m_fBallCatchUnk830;
+            unsigned char m_Unk834[0x838 - 0x834];
             // 0x838, 0x868 (names guessed): the target marker's position,
             // and a value CChrCoreVolleySiroma sets with the marker.
             bcs::FVEC3 m_TargetMarkerPos;
@@ -387,7 +503,10 @@ namespace msw {
             // SetTargetMarkerPosClip__ with the marker's position): the
             // court the target marker is kept on.
             long m_nTargetMarkerCourt;
-            unsigned char m_Unk854[0x868 - 0x854];
+            // 0x854 (name guessed; GetVolleyTargetMarkerFixedType): the
+            // kind of the spike's target marker (1 charged, 2 super, 3 star).
+            long m_nTargetMarkerFixedType;
+            unsigned char m_Unk858[0x868 - 0x858];
             float m_fTargetMarkerUnk868;
             unsigned char m_Unk86C[0x888 - 0x86C];
             // 0x888, 0x88C (names guessed): cleared when a block is hit
@@ -397,7 +516,12 @@ namespace msw {
             // 0x890 (name guessed): two values the receive states leave for
             // CheckCountWork__ (from the work's 0xD4 and 0xD8).
             float m_afCountWork[2];
-            unsigned char m_Unk898[0x8C4 - 0x898];
+            unsigned char m_Unk898[0x8AC - 0x898];
+            // 0x8AC (name guessed): frames of the run up before a spike;
+            // kept at most 10 when the run state takes a pose or walks
+            // (LoopStateRun, SubStateRunNormal_).
+            float m_fRunUpFrame;
+            unsigned char m_Unk8B0[0x8C4 - 0x8B0];
             // 0x8C4 (name guessed): set by MethdCombination.
             long m_bCombination;
             // 0x8C8, 0x8CC (names guessed; GetVolleyCombinationRole and
@@ -409,7 +533,9 @@ namespace msw {
             // 0x918 (name guessed): not zero when CanbeLanding checks the
             // floor under the character.
             long m_bCheckLanding;
-            unsigned char m_Unk91C[0x964 - 0x91C];
+            unsigned char m_Unk91C[0x94C - 0x91C];
+            // 0x94C (name guessed): the icon over the character.
+            CExAttachIcon m_ExAttachIcon;
     };
 
     // (field names guessed; only what the character units read is mapped)
@@ -447,9 +573,9 @@ namespace msw {
 
     // (field names guessed; only what the character units read is mapped)
     struct CChrCoreVolley::STATE_WORK_AIR_TRICK {
-        unsigned char m_Unk00[0x4];
-        unsigned long m_nFlag;       // 0x04, bit 0 once the ball is shot
-        unsigned char m_Unk08[0x4];
+        long m_nStep;                // 0x00 (LoopStateAirTrick)
+        unsigned long m_nFlag;       // 0x04, bit 0 once the ball is shot, bit 1 when the time ran out
+        long m_nShotChoice;          // 0x08, the driver's answer to message 0x94 (-1: none yet)
         float m_fJumpUnk;            // 0x0C, for CChrCore::m_fJumpUnk224
         bcs::FVEC3 m_TargetPos;      // 0x10, where the trick goes to
         float m_fRotY;               // 0x1C
@@ -475,7 +601,10 @@ namespace msw {
 
     // (field names guessed)
     struct CChrCoreVolley::STATE_WORK_BLOCK_JUMP {
-        unsigned char m_Unk00[0x4];
+        // 0x00: 0 waiting to jump, 1 the jump starts, 2 rising, 3 falling,
+        // 4-6 the same for a block without a jump, 7 done; -1 a fall
+        // (game/volley/CChrCoreVolley.cpp)
+        long m_nStep;
         unsigned long m_nFlag;       // 0x04
         float m_fRotY;               // 0x08, negative for none
         // 0x0C, 0x1C, 0x2C: the move a hit block knocks the character back
@@ -483,17 +612,40 @@ namespace msw {
         CC_DATA::CHR_PARAM::MOVE_PARAM m_MoveParam; // 0x0C
         CChrCore::DIR_MOVE m_DirMove; // 0x1C
         float m_fDirMoveUnk2C;       // 0x2C, cleared with the move
-        unsigned char m_Unk30[0x38 - 0x30];
+        // 0x30 (name guessed): frames to wait before the jump.
+        float m_fDelay;
+        // 0x34 (name guessed): -1 to 1, how far the block leans to a side
+        // (the blend of the left and right block motions).
+        float m_fSlide;
         float m_fCollSize;           // 0x38, passed to UpdateCollDefSetParam_ (name guessed)
         float m_fActStartFrame;      // 0x3C
         float m_fActTrgFrame;        // 0x40, negative once done
         bcs::FVEC3 m_EffOfs;         // 0x44, the block effect's offset
+        // 0x50 (name guessed; SubStateBlockJumpColSlide_): the direction
+        // the block is pushed to the side towards, negative for none.
+        float m_fSlideRotY;
     };
 
     // (field names guessed)
     struct CChrCoreVolley::STATE_WORK_SPIKE {
         long m_nStep;                // 0x00
         unsigned long m_nFlag;       // 0x04
+        // (the rest added for game/volley/unit_4377C.cpp; names guessed)
+        CBall *m_pBall;              // 0x08, the ball the spike homes in on
+        CChrCore::ROT_LERP1 m_RotLerp; // 0x0C
+        long m_nSpikeType;           // 0x1C, the driver's answer to message 0x91 (-1: none)
+        float m_fShotFrame;          // 0x20, the motion frame the ball is hit at
+        float m_fAskWait;            // 0x24, frames before the driver is asked for the swing
+        float m_fPower;              // 0x28, the power of a super spike
+        float m_fWait;               // 0x2C, frames before the jump
+        float m_fCatchRange;         // 0x30
+        long m_nGuideType;           // 0x34, the guide shown (-1: none)
+        bcs::FVEC3 m_TargetPos;      // 0x38, where the jump goes
+        float m_fHeightAdjust;       // 0x44
+        float m_fRotY;               // 0x48, towards the spike's target
+        float m_fMoveFrame;          // 0x4C
+        CC_DATA::CHR_PARAM::MOVE_PARAM m_MoveParam; // 0x50
+        CChrCore::DIR_MOVE m_DirMove; // 0x60
     };
 
     class CChrCoreVolleyMario : public CChrCoreVolley {
@@ -832,14 +984,57 @@ namespace msw {
             virtual void SubStateAirTrickPlayLandMotion_(STATE_WORK_AIR_TRICK *); // 0xD5C
     };
 
+    // The ninja: his air trick makes two clones of himself
+    // (CC14_VOLLEY::CcNinjaCloneBody, each holding a copy of the ball) that
+    // spike with him (game/volley/CcNinjaCloneBody.cpp). His block hides
+    // his body for a moment.
     class CChrCoreVolleyNinja : public CChrCoreVolley {
         public:
+            enum { CLONE_NUM = 2 };
+
             CChrCoreVolleyNinja();
             virtual ~CChrCoreVolleyNinja();
+            virtual void GetSpRootPos(bcs::FVEC3 &) const;             // 0x2C
+            virtual long GetVolleyTargetMarkerNum() const;             // 0x9C
+            virtual int GetVolleyTargetMarkerPos(bcs::FVEC3 &, long);  // 0xAC
+            virtual void Reset_();                                     // 0x384
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void CallbackMotTrg_BodyVisible_(long, long);      // 0xC7C
             virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
+            virtual void SubStateBlockJumpJumpStart_(STATE_WORK_BLOCK_JUMP *); // 0xCBC
+            virtual int SubStateBlockJumpIsJumpEnd_(STATE_WORK_BLOCK_JUMP *); // 0xCC4
+            virtual void SubStateBlockJumpLandStart_(STATE_WORK_BLOCK_JUMP *); // 0xCD8
+            virtual void SubStateBlockJumpBlockHit_(const CCollDefUnit *); // 0xCE0
+            virtual void SubStateAirTrickSetTrickJumpParam_(STATE_WORK_AIR_TRICK *, long); // 0xCFC
+            virtual void SubStateAirTrickSetTrickMoveParam_(STATE_WORK_AIR_TRICK *, long); // 0xD00
+            virtual float SubStateAirTrickGetTrickDoFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD08
+            virtual float SubStateAirTrickGetTrickRotFrame_(STATE_WORK_AIR_TRICK *); // 0xD0C
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsTMStartAuto_(STATE_WORK_AIR_TRICK *); // 0xD14
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual void SubStateAirTrickDoBallAdsorb_(STATE_WORK_AIR_TRICK *); // 0xD2C
+            virtual void SubStateAirTrickReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD34
+            virtual void SubStateAirTrickPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xD38
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+            virtual void SubStateAirTrickShootBall_(STATE_WORK_AIR_TRICK *); // 0xD4C
 
         protected:
-            unsigned char m_Unk964[0x970 - 0x964]; // allocated with 0x970 bytes
+            // Moves the clones out from him by fRate (0 to 1) of their way
+            // (the second rate is not used).
+            void SetCloneBodyPosRate_(float fRate, float);
+            // (inline helpers, names guessed, after CChrCoreBasketNinja)
+            // Makes the clones missing; deletes the clones and forgets
+            // them; changes the state of the clones.
+            void CreateClone_();
+            void DeleteClone_();
+            void ChangeStateClone_(long nState);
+            // (inline helper, name guessed) Puts the clones' target markers
+            // at their default places.
+            void ResetCloneTargetPos_();
+
+            // (names guessed; allocated with 0x970 bytes)
+            long m_nPosType;                       // 0x964, which arrangement of the three was drawn
+            unsigned long m_ahClone[CLONE_NUM];    // 0x968, task ids of the clones, 0 for none
     };
 
     // The White Mage: her block puts a light wall up over the net, her

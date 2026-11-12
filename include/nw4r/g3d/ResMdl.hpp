@@ -63,12 +63,16 @@ namespace nw4r {
                 ResMat GetResMat(ResName name) const;
                 // (DOL; added for VolleyF game/volley/CBallTargetMarker.cpp)
                 ResMat GetResMat(int index) const;
+                // (DOL; added for game/msw/CStgMdl.cpp)
+                ResMat GetResMat(unsigned long index) const;
                 // (DOL) The node of that name; an invalid handle if there is
                 // none.
                 ResNode GetResNode(const char *pName) const;
                 // (DOL; added for bcs::CAnmMotion) By index, and the number
                 // of nodes.
                 ResNode GetResNode(unsigned long idx) const;
+                // (DOL; added for game/msw/CStgMdl.cpp)
+                ResNode GetResNode(int idx) const;
                 unsigned long GetResNodeNumEntries() const;
                 // (DOL) The number of materials.
                 unsigned long GetResMatNumEntries() const;

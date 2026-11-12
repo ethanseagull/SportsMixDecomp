@@ -10,6 +10,8 @@ extern "C" {
 typedef struct MEMAllocator MEMAllocator;
 
 void *MEMAllocFromAllocator(MEMAllocator *pAllocator, unsigned long size);
+// Added for HockeyF game/hockey/CRadarIcon2DHockeyGoal.cpp.
+void MEMFreeToAllocator(MEMAllocator *pAllocator, void *pMem);
 
 #ifdef __cplusplus
 }

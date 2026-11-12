@@ -104,7 +104,10 @@ game/bcs/CRenderMan.cpp:
 	.text       start:0x80073DAC end:0x8007852C
 
 game/bcs/CRsoModule.cpp:
-	.text       start:0x80078814 end:0x80078928
+	.text       start:0x80078680 end:0x800789D4
+	.rodata     start:0x804342F8 end:0x80434310
+	.data       start:0x80468AA0 end:0x80468BC0
+	.sbss       start:0x805C0A28 end:0x805C0A2C
 
 game/bcs/CSndTask.cpp:
 	.text       start:0x8007A560 end:0x8007A818
@@ -348,7 +351,7 @@ game/msw/CMenuTask.cpp:
 	.data       start:0x80471600 end:0x80471618
 
 game/msw/CMenuPad.cpp:
-	.text       start:0x801413A0 end:0x80141830
+	.text       start:0x801413A0 end:0x80141848
 
 game/msw/CMenuPadInfo.cpp:
 	.text       start:0x80142130 end:0x80142164
@@ -417,7 +420,8 @@ game/msw/CStgDrv.cpp:
 	.data       start:0x80474BC0 end:0x80474BE8
 
 game/msw/CStgGmk.cpp:
-	.text       start:0x8016FF7C end:0x80170054
+	.text       start:0x8016FF7C end:0x80170108
+	.data       start:0x80474BE8 end:0x80474CB8
 
 game/msw/CStgGmkAct.cpp:
 	.text       start:0x80170108 end:0x80170174
@@ -428,7 +432,13 @@ game/msw/CStgGmkMan.cpp:
 	.sbss       start:0x805C0CB0 end:0x805C0CB8
 
 game/msw/CStgMdl.cpp:
-	.text       start:0x80170BC8 end:0x80172104
+	.text       start:0x80170BC8 end:0x801730A8
+	.ctors      start:0x8042D214 end:0x8042D218
+	.rodata     start:0x8043CD70 end:0x8043CD7C
+	.data       start:0x80474E70 end:0x80475110
+	.sdata      start:0x805BFD10 end:0x805BFD2C
+	.sbss       start:0x805C0CB8 end:0x805C0CD8
+	.sdata2     start:0x805C3500 end:0x805C3520
 
 game/msw/CStgObj.cpp:
 	.text       start:0x80173E5C end:0x80174694
@@ -667,7 +677,11 @@ game/msw/CEvDemoRes.cpp:
 	.text       start:0x801FEF0C end:0x801FFE78
 
 game/msw/ArchiveFont.cpp:
-	.text       start:0x802113AC end:0x802114F4
+	.text       start:0x802113AC end:0x802115A4
+	.ctors      start:0x8042D254 end:0x8042D258
+	.rodata     start:0x80444AE8 end:0x80444B50
+	.bss        start:0x804D7A00 end:0x804D7A10
+	.sdata2     start:0x805C50A0 end:0x805C50A8
 
 game/msw/CStgGmk_Wave.cpp:
 	.text       start:0x802115A4 end:0x80215608

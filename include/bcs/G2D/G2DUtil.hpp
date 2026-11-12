@@ -75,6 +75,11 @@ namespace bcs {
         void ReplacePanePicture(nw4r::lyt::Pane *pPane, nw4r::lyt::Pane *pSrc);
         void ReplacePanePicture(nw4r::lyt::Pane *pPane, const _GXTexObj *pTexObj, long nTexMap);
 
+        // Added for HockeyF game/hockey/CRadarIcon2DHockeyGoal.cpp: shows or
+        // hides pPane (and, by its size, probably its children; return
+        // type guessed).
+        void SetVisiblePane(nw4r::lyt::Pane *pPane, int bVisible);
+
         // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp. Moves
         // pPane under pParent. Return type and the names of the last two
         // arguments are guesses (called with 1, 0).
@@ -96,6 +101,17 @@ namespace bcs {
         // Added for MenuF game/menu/CSelectMenuLayoutBase.cpp: releases a
         // font made from a layout archive (return type guessed).
         void RemoveArchiveFont(nw4r::ut::ArchiveFont *pFont);
+        // (added for DOL game/msw/ArchiveFont.cpp; DOL fn_80027004, name
+        // guessed) A new font from the .brfna resource pRes, keeping only
+        // the glyphs of the comma-separated block list pGlyphs (it asks
+        // nw4r::ut::ArchiveFont::GetRequireBufferSize with both).
+        nw4r::ut::ArchiveFont *CreateArchiveFont(const void *pRes, const char *pGlyphs);
+        // (added for DOL game/msw/ArchiveFont.cpp; DOL .sdata lbl_805BF920
+        // and lbl_805BF924, names guessed) Glyph lists for
+        // CreateArchiveFont: an empty one (all glyphs) and
+        // "wii_name,jis_level_1".
+        extern const char *GLYPH_LIST_ALL;
+        extern const char *GLYPH_LIST_WII_NAME;
 
         // (name guessed; no symbol) The object that drives pPane, made by
         // pPaneCtrl; null when either is missing. Inline in the game: the

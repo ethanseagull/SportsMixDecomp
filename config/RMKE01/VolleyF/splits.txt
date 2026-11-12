@@ -58,8 +58,12 @@ game/volley/CC_PARAM_VOLLEY.cpp:
 	.bss        start:0x00000148 end:0x00000530
 
 game/volley/CChrCoreVolley.cpp:
-	.text       start:0x000332E0 end:0x0003B628
-	.rodata     start:0x000017C0 end:0x00001A20
+	.text       start:0x000332E0 end:0x000380D8
+	.rodata     start:0x000017C0 end:0x000018D8
+
+game/volley/unit_380D8.cpp:
+	.text       start:0x000380D8 end:0x0003B628
+	.rodata     start:0x000018D8 end:0x00001A20
 	.data       start:0x00002058 end:0x000020E0
 
 game/volley/unit_3B628.cpp:
@@ -355,10 +359,19 @@ game/volley/CPerfectDemoVolley.cpp:
 	.rodata     start:0x00008128 end:0x00008158
 	.data       start:0x0001BCE0 end:0x0001BD28
 
+game/volley/unit_9FDD0.cpp:
+	.text       start:0x0009FDD0 end:0x000A3A9C
+	.rodata     start:0x00008158 end:0x000081F8
+	.data       start:0x0001BD28 end:0x0001BD48
+
 game/volley/CComDrvVolleyGame.cpp:
-	.text       start:0x0009FDD0 end:0x000AB1D8
-	.rodata     start:0x00008158 end:0x000082C0
-	.data       start:0x0001BD28 end:0x0001C168
+	.text       start:0x000A3A9C end:0x000AA504
+	.rodata     start:0x000081F8 end:0x000082A0
+	.data       start:0x0001BD48 end:0x0001C168
+
+game/volley/unit_AA504.cpp:
+	.text       start:0x000AA504 end:0x000AB1D8
+	.rodata     start:0x000082A0 end:0x000082C0
 
 game/volley/unit_AB1D8.cpp:
 	.text       start:0x000AB1D8 end:0x000ABAE0

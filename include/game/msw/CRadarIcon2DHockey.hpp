@@ -6,8 +6,8 @@
 namespace msw {
 
     // The radar icons of the hockey game (HockeyF). Size 0x7C: adds no data
-    // to CRadarIcon2D. (Its vtable has one more virtual after Finalize,
-    // taking (bcs::FVEC3 &, float, float); not declared yet.)
+    // to CRadarIcon2D. Overrides DispBallIcon: the puck's icon takes the
+    // colour of the team holding it.
     class CRadarIcon2DHockey : public CRadarIcon2D {
         public:
             CRadarIcon2DHockey(long nId);
@@ -20,6 +20,7 @@ namespace msw {
             virtual void CreateBallIcon(ICON_PARAMETER *pParam, long nBall, const char *pNullName,
                                         const char *pBaseName, const char *pPictureName);
             virtual void Finalize();
+            virtual void DispBallIcon(long nView, const bcs::FVEC3 &rCamAt, float fX, float fY);
     };
 }
 

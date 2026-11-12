@@ -76,6 +76,9 @@ namespace msw {
             // guessed). Whether the mission forbids the computer of team
             // nTeam the named kind of shot.
             static int IsMissionComThrowingShootDisable(long nTeam);
+            // (added for VolleyF game/volley/CComDrvVolleyGame.cpp) Whether
+            // mission rule nRule applies to team nTeam.
+            static int IsMissionRuleEnable(long nRule, long nTeam);
             static int IsMissionComDunkShootDisable(long nTeam);
             static int IsMissionComLayupShootDisable(long nTeam);
             // (added for game/basket/unit_B09B4.cpp) ... and the special shot.

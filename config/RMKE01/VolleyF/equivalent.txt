@@ -18,6 +18,7 @@ VolleyF CreateBoundMushroom___Q23msw21CChrCoreVolleyKinopioFv near 97.9 register
 VolleyF CreateCharaIcon__Q23msw18CRadarIcon2DVolleyFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc near 99.9 99.9%, registers only: same source as BasketF's (also near); the layout handle from 0x1C(this) in the inlined GetLytObj is kept in another saved register
 VolleyF CreateMdl___Q33msw11CC05_VOLLEY16CcWarioSmokeUnitFRCQ23bcs5FVEC3 near 93.3 stack slots only: original writes three unused zero floats to stack temps; store scheduling; same as Dodge/Basket copies
 VolleyF Create___Q23msw17CBallTargetMarkerFi near 92.8 register allocation (savegpr_23 vs 24) and the model-name table addressed per load instead of from a kept base register; same calls, constants and stores
+VolleyF Create___Q23msw22CChrTargetMarkerVolleyFv near 99.7 original has one extra clrlwi before nor of the 16-bit view mask; only the low 16 bits are stored (sth)
 VolleyF Create___Q23msw30CBallTargetMarkerRhythmReceiveFi near 99.0 name-table offsets shifted by 8 (.data starts with ResMat::ref's __FUNCTION__ in ours) and register choice
 VolleyF CtorStateAppear__Q33msw11CC03_VOLLEY19CcDaisyFlowerGardenFv near 99.2 register allocation only (2.0 - frame rate and the zero store)
 VolleyF CtorStateDisappear__Q33msw11CC15_VOLLEY19CcSiromaMagicCircleFv near 89.4 Copies the {effect, sort type} rodata struct to a stack slot (bigger frame, lwz/stw then lha) instead of reading it in place; loop and calls identical, register numbering shifts
@@ -156,6 +157,7 @@ VolleyF SubStateReceiveDoProcDiveReceive___Q23msw19CChrCoreVolleyYoshiFPQ33msw14
 VolleyF SubStateReceiveDoProcDiveReceive___Q23msw20CChrCoreVolleySiromaFPQ33msw14CChrCoreVolley18STATE_WORK_RECEIVE near 99.7 register allocation only (angle wrap loop)
 VolleyF TrgVolleyArtsOver__Q33msw11CC06_VOLLEY18CBallVolleyWaluigiFllUl near 99.9 1.0f pool offset only (unread constants missing ahead of it); same value
 VolleyF TrgVolleyGoalIn___Q23msw17CGameVolleyVsBossFllllllRCQ23bcs5FVEC3Ul near 99.1 original reads m_nGameFlag again before the |= 1 (no store in between, same value); ours keeps the first read in a register; rest identical
+VolleyF UpdateColor___Q23msw22CChrTargetMarkerVolleyFv near 99.8 register numbering only
 VolleyF UpdateDefColl__Q23msw26CStgGmk_Trolley_Act_VolleyFRCQ23bcs5FVEC3ffff near 92.7 registers and frame: one more saved float register (frame 0x120 vs 0x110); the inlined CStgSrt::GetMtx tests its flags as (flag&7)!=0 normalised and as extracted bits in the original, as masks in ours (equivalent branch forms); same calls, constants, loads and stores
 VolleyF UpdateEdge___Q23msw14CStageVolley10Fv near 96.4 stack layout of the matrix copies (frame 0x170 vs 0x130) and one more saved register; same calls and stores
 VolleyF UpdateMdl__Q23msw14CStageVolley13FUlf near 98.1 register choice and common-subexpression reuse only (as CStageBasket13::UpdateMdl): in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls
@@ -169,6 +171,7 @@ VolleyF __ct__Q23msw17CBallTargetMarkerFPQ23bcs5CTaskUli near 99.8 state-table p
 VolleyF __ct__Q23msw17CCameraVolleyBossFl near 99.6 register allocation only (99.6%)
 VolleyF __ct__Q23msw19CItemBallVolleyBombFPQ23msw5CBall near 98.5 original reloads m_pMdl before CreateAttachEffect; ours reuses the null-checked value (same field, nothing stored between)
 VolleyF __ct__Q23msw21CReadyStartDemoVolleyFPCsPQ23bcs5CTaskl near 99.0 register choice/order of the two table address loads only (99.0%)
+VolleyF __ct__Q23msw22CChrTargetMarkerVolleyFPQ23bcs5CTaskli near 99.8 stack slots of by-value member-pointer temporaries in inlined SetState only (as CBallTargetMarker ctor)
 VolleyF __ct__Q23msw30CBallTargetMarkerRhythmReceiveFPQ23bcs5CTaskli near 99.8 state-table ptmf loads offset by 8: our .data starts with ResMat::ref's __FUNCTION__, which the original emits late; code otherwise identical
 VolleyF __ct__Q33msw11CC03_VOLLEY19CcDaisyFlowerGardenFPQ23bcs5CTaskPQ23msw8CChrCorelRCQ23bcs5FVEC3 near 99.9 stack slots of the pointer-to-member temporaries only (as CcSiromaMagicCircle)
 VolleyF __ct__Q33msw11CC05_VOLLEY16CcWarioSmokeBombFPQ23bcs5CTaskPQ23msw8CChrCoreQ34nw4r3g3d7ResFileQ34nw4r3g3d7ResFilePCQ33msw7CC_DATA20ARTS_OPT_CREATE_INFORCQ23bcs5FVEC3RCQ23bcs10QUATERNIONRCQ23bcs5FVEC3 near 98.2 float register numbering and placement of one fmr/lfs pair only; same as Dodge/Basket copies

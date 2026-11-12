@@ -19,6 +19,18 @@ namespace bcs {
             static unsigned long GetDown(long nPad);
             static int IsDown(unsigned long nButton, long nPad);
             static int IsTrg(unsigned long nButton, long nPad);
+            // (added for game/bcs/CWifiPad.cpp; names and return types
+            // guessed from the CWifiPad functions that wrap them) Buttons
+            // just released, the buttons just pressed / released on remote
+            // nPad, the stick, whether the Nunchuk style is in use, and
+            // stopping the rumble.
+            static int IsRelease(unsigned long nButton, long nPad);
+            static unsigned long GetTrg(long nPad);
+            static unsigned long GetRelease(long nPad);
+            static float GetStickX(long nPad);
+            static float GetStickY(long nPad);
+            static int IsNunchukStyle(long nPad);
+            static void StopMotor(long nPad);
     };
 }
 

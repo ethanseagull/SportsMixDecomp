@@ -14,7 +14,8 @@ namespace bcs {
             static long GetLocalPadIDFromOnlinePadID(long id);
             static long GetMyLocalPadID(long id);
 
-        private:
+        protected:
+            // (protected for bcs::CWifiPad, which inlines it everywhere)
             static bool IsInMatch()
             {
                 dwc::CDwc *pDwc = dwc::CDwc::GetInstance();

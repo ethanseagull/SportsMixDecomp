@@ -84,3 +84,4 @@ Equivalent game/volley/CCockpitVolleyResult.cpp
 Matching game/volley/unit_B0780.cpp
 Equivalent game/volley/CComDrvVolleyRR.cpp
 Matching game/volley/unit_B16D4.cpp
+Equivalent game/volley/unit_C0918.cpp

@@ -165,6 +165,21 @@ namespace msw {
             static bcs::FVEC3 DropCoin_GetPos(const CDropCoin *pCoin);
             static long DropCoin_GetNearChr(const CDropCoin *pCoin, unsigned long nBits);
 
+            // (DOL; added for VolleyF game/volley/unit_C0918.cpp; meanings
+            // guessed from the names and the callers) Whether the way from
+            // rMy to rTarget passes the gimmick lying along rFrom-rTo
+            // (fRange wide); a safe place from a gimmick at rGmkPos moving
+            // along rGmkVel (fRot: a random turn, radians); the position to
+            // go round a gimmick at rGmkPos (nDir as the RunCorrect helpers
+            // take and return it).
+            static int IsHitGimmickToTarget(const bcs::FVEC3 &rMy, const bcs::FVEC3 &rTarget, const bcs::FVEC3 &rFrom,
+                                            const bcs::FVEC3 &rTo, float fRange);
+            static bcs::FVEC3 GetSafePosFromGimmick(const bcs::FVEC3 &rMy, const bcs::FVEC3 &rTarget,
+                                                   const bcs::FVEC3 &rGmkPos, const bcs::FVEC3 &rGmkVel,
+                                                   float fRange, float fRot);
+            static long GetPosTurnAroundGimmick(bcs::FVEC3 &rPos, const bcs::FVEC3 &rMy, const bcs::FVEC3 &rTarget,
+                                                const bcs::FVEC3 &rGmkPos, float fRange, long nDir);
+
             static CComMan *g_pInstance;
     };
 }

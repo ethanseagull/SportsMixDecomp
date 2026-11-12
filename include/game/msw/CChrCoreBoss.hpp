@@ -40,6 +40,10 @@ namespace msw {
             // (added for game/boss/unit_5FF80.cpp, which defines it) The
             // work of the dunk state.
             struct STATE_WORK_DUNK;
+            // (added for game/boss/unit_18E08.cpp, which defines them) The
+            // work of the neutral state and of the run state.
+            struct STATE_WORK_NEUTRAL;
+            struct STATE_WORK_RUN;
 
             CChrCoreBoss();
             virtual ~CChrCoreBoss();
@@ -185,7 +189,7 @@ namespace msw {
             virtual int CallbackDefReflectHit_(const CCollDefUnit *, const CBall *, bcs::FVEC3 &, bcs::FVEC3 &); // 0xC64
             virtual void CallbackMotTrg_BodyVisible_(long, long);      // 0xC7C
             virtual void SubStateDamageCtorMame_(STATE_WORK_DAMAGE *); // 0xC88
-            virtual void SubStateDamageLoopMame_(STATE_WORK_DAMAGE *); // 0xC8C
+            virtual int SubStateDamageLoopMame_(STATE_WORK_DAMAGE *);  // 0xC8C (int: CChrCoreBoss::LoopStateDamage tests it)
 
             // CChrCoreBoss's own virtuals, 0xC9C to the end of the vtable at
             // 0xD9C. Return types guessed from the bodies, as in CChrCore.
@@ -329,23 +333,81 @@ namespace msw {
             // (inline in the original) One step of the air trick's jump and
             // of its move; returns what Util_DoJumpMoveEX returned.
             int SubStateAirTrickDoJumpMove_(STATE_WORK_AIR_TRICK *pWork);
+            // Added for game/boss/unit_18E08.cpp (the neutral, run, turn,
+            // item shoot and motion play states; names from the symbols,
+            // meanings guessed). The pose the character waits in for the
+            // target ball (0 none, 1 toss, 2 receive, 3 receive stance).
+            long SubStateGetNeutralPoseType_();
+            // (inline in the original) Sets the toss pose up.
+            void SubStateInitTossPose_(STATE_WORK_NEUTRAL *pWork);
+            // (in game/boss/unit_1EA14.cpp) Plays the motion of receive
+            // pose nPose.
+            void SubStateSetReceivePose_(long nPose);
+            // One frame of the run state, by pose type.
+            void SubStateRunNormal_(STATE_WORK_RUN *pWork);
+            void SubStateRunReceivePose_(STATE_WORK_RUN *pWork);
+            void SubStateRunReceiveStance_(STATE_WORK_RUN *pWork);
+            // The motion of pose nPose, part nPart (0 the start, 1 the loop,
+            // 2 the end; meaning guessed) of the receive, the toss and the
+            // jump toss. The toss poses have one direction only.
+            long GetReceivePoseMotID_(long nPose, long nPart);
+            float GetTossBaseDir_();
+            long GetTossPoseDir_(float fDir);
+            long GetTossPoseMotID_(long nPose, long nPart);
+            float GetJumpTossBaseDir_();
+            long GetJumpTossPoseDir_(float fDir);
+            long GetJumpTossPoseMotID_(long nPose, long nPart);
+            // (in game/boss/unit_1EA14.cpp's neighbours) The ball may be
+            // caught within fRange around virtual node nNode (offset by pos).
+            void SetBallCatchEnableVNode_(float fRange, long nNode);
+            void SetBallCatchEnableVNode_(float fRange, const bcs::FVEC3 &pos, long nNode);
+            void SetBallCatchEnableVNode_(float fRange, float fHeight, const bcs::FVEC3 &pos, long nNode);
+            // The run speed fSpeed as the character's condition changes it.
+            float CalcContiditionMoveSpeed_(float fSpeed) const;
+            // Added for game/boss/unit_1C248.cpp (the damage state; names
+            // from the symbols). The start and each frame of a damage of
+            // each kind; the Loop functions return not zero when it is over.
+            void SubStateDamageCtorMDmg_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopMDmg_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorLDmg_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopLDmg_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorDizzy_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopDizzy_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorBurn_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopTumble_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorReceiveDmg_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopReceiveDmg_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorSpikeMiss_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopSpikeMiss_(STATE_WORK_DAMAGE *pWork);
 
         protected:
             // Not mapped yet. The size, 0x818, is what CChrManBoss::CreateObj_
             // allocates for most characters.
-            unsigned char m_Unk574[0x6FC - 0x574];
+            // 0x574 (name guessed): the character's parameters for the game
+            // level (GetCcParam_ returns it).
+            const CHR_CORE_BOSS::CC_PARAM_BOSS *m_pCcParam;
+            unsigned char m_Unk578[0x640 - 0x578];
+            // 0x640 (name guessed): the lowest height above the character a
+            // ball can be tossed at (SubStateGetNeutralPoseType_).
+            float m_fTossHeight;
+            unsigned char m_Unk644[0x6FC - 0x644];
             // 0x6FC, 0x708 (names guessed; GetVolleySpikeOffsetPos reads
             // them): where the ball is hit in a spike, from the character,
             // for a normal and for a charged ball.
             bcs::FVEC3 m_SpikeOfs;
             bcs::FVEC3 m_SpikeOfsCharge;
-            unsigned char m_Unk714[0x734 - 0x714];
+            // 0x714 (name guessed): the yaw of each receive pose from the
+            // direction of the ball.
+            float m_afReceiveRot[8];
             // 0x734 (name and count guessed: the constructor clears four
             // arrays of eight floats at 0x714, 0x734, 0x754 and 0x774). The
             // height above the character a receive in each pose takes the
             // ball at (CChrCoreBossSiroma adds GetPosY to it).
             float m_afReceiveHeight[8];
-            unsigned char m_Unk754[0x808 - 0x754];
+            unsigned char m_Unk754[0x774 - 0x754];
+            // 0x774 (name guessed): the same for the toss poses.
+            float m_afTossRot[8];
+            unsigned char m_Unk794[0x808 - 0x794];
             // 0x808 (name guessed): the task id of the shoot stance's stick
             // (CHR_CORE_BOSS::CStickObj), 0 when there is none.
             unsigned long m_hStickObj;

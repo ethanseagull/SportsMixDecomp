@@ -214,7 +214,7 @@ namespace msw {
             virtual int CallbackDefReflectHit_(const CCollDefUnit *, const CBall *, bcs::FVEC3 &, bcs::FVEC3 &); // 0xC64
             virtual void CallbackMotTrg_BodyVisible_(long, long);      // 0xC7C
             virtual void SubStateDamageCtorMame_(STATE_WORK_DAMAGE *); // 0xC88
-            virtual void SubStateDamageLoopMame_(STATE_WORK_DAMAGE *); // 0xC8C
+            virtual int SubStateDamageLoopMame_(STATE_WORK_DAMAGE *);  // 0xC8C (int: CChrCoreBoss::LoopStateDamage tests it)
             virtual void SubStateParalyzeSetEffect_();                 // 0xC94
             virtual void SubStateParalyzeEndEffect_();                 // 0xC98
 

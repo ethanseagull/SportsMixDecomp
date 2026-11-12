@@ -8,7 +8,7 @@ SportsMixDecomp
 [Linked]: https://api.decmp.dev/ethanseagull/SportsMixDecomp.svg?mode=shield&measure=complete_code&label=Linked
 [progress]: https://decmp.dev/ethanseagull/SportsMixDecomp
 
-A work-in-progress decompilation of Mario Sports Mix (Wii), with the aim of readable, working C/C++ source that can be ported to other platforms.
+A work-in-progress decompilation of Mario Sports Mix (Wii), with the aim of readable, working C/C++ source.
 
 This repository does **not** contain any game assets or assembly whatsoever. An existing copy of the game is required.
 
@@ -22,7 +22,7 @@ What is decompiled
 
 The game is `main.dol` plus nine code modules, loaded as RSO files: `SystemF`, `MenuF`, `TourF`, `BasketF`, `VolleyF`, `DodgeF`, `HockeyF`, `BossF` and `DebugF`. decomp-toolkit cannot read RSO, so `tools/rso2rel.py` converts each module to REL; the build relinks the RELs and checks them against the converted originals (code, data and relocations). Packing them back into RSO is not done yet.
 
-Game code (the `msw::` and `bcs::` classes) comes first. Nintendo's SDK, NW4R and the C runtime in `main.dol` are last, as a port replaces them.
+Game code (the `msw::` and `bcs::` classes) comes first. Nintendo's SDK, NW4R and the C runtime in `main.dol` come last.
 
 Each function ends up in one of three states:
 

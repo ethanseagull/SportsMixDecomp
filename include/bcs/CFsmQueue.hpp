@@ -286,7 +286,12 @@ namespace bcs {
             void FsmqNext()
             {
                 if (!FsmqIsEmpty()) {
-                    long head = FsmqWrap(m_nQueueHead + 1, m_nQueueSize);
+                    long head = m_nQueueHead + 1;
+                    if (head >= m_nQueueSize) {
+                        head %= m_nQueueSize;
+                    } else if (head < 0) {
+                        head += m_nQueueSize;
+                    }
                     m_nQueueHead = head;
                     if (head == m_nQueueTail) {
                         if (m_pStateTable) {

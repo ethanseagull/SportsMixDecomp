@@ -177,11 +177,12 @@ int msw::CCollManBasket::DetectMapHit_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, fl
             // The gap between the courts. (what the 0.1 and the comparison
             // with the height of rPos are for is not known)
             float gap = court[1].z - court[0].w;
+            float y = rPos.y;
             float depth = gap - 0.1f;
-            if (depth > rPos.y) {
+            if (depth > y) {
                 depth = gap;
             } else {
-                depth -= rPos.y;
+                depth -= y;
             }
             if (depth > 0.0f) {
                 float center = 0.5f * (court[0].w + court[1].z);

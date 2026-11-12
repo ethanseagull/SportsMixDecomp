@@ -4,6 +4,7 @@
 #include "bcs/FVEC3.hpp"
 #include "game/msw/CStgEffectSlot.hpp"
 #include "game/msw/CStgSeSlot.hpp"
+#include "game/msw/CStgSrt.hpp"
 
 namespace msw {
 
@@ -44,8 +45,8 @@ namespace msw {
             virtual CStgObj *GetParent() { return m_pParent; }
             virtual const CStgObj *GetParent() const { return m_pParent; }
             // Inline in the original (the address of the embedded CStgSrtMove).
-            virtual CStgSrtMove *GetSrt() { return reinterpret_cast<CStgSrtMove *>(m_Srt); }
-            virtual const CStgSrtMove *GetSrt() const { return reinterpret_cast<const CStgSrtMove *>(m_Srt); }
+            virtual CStgSrtMove *GetSrt() { return &m_Srt; }
+            virtual const CStgSrtMove *GetSrt() const { return &m_Srt; }
             virtual void SetMdl(CStgMdl *pMdl) { m_pMdl = pMdl; }
             virtual const CStgMdl *GetMdl(long idx) const;
             virtual void SetFrameRateF(float rate) { m_fFrameRate = rate; }
@@ -67,20 +68,17 @@ namespace msw {
             virtual unsigned long OnReflectHit(const CCollDefUnit *pDef, const CBall *pBall, bcs::FVEC3 &rPos,
                                                bcs::FVEC3 &rVel);
             virtual unsigned long OnCalcSum() const { return 0; }
-            virtual void RegistAttackHitCallback(CAtkCollision &rColl);
+            virtual void RegistAttackHitCallback(CAtkCollision &rColl) { RegistAttackHitCallback(&rColl); }
             virtual void RegistAttackHitCallback(CAtkCollision *pColl);
-            virtual void RegistBodyPushCallback(CBodyCollision &rColl);
+            virtual void RegistBodyPushCallback(CBodyCollision &rColl) { RegistBodyPushCallback(&rColl); }
             virtual void RegistBodyPushCallback(CBodyCollision *pColl);
-            virtual void RegistBodyDamageCallback(CBodyCollision &rColl);
+            virtual void RegistBodyDamageCallback(CBodyCollision &rColl) { RegistBodyDamageCallback(&rColl); }
             virtual void RegistBodyDamageCallback(CBodyCollision *pColl);
-            virtual void RegistBallCatchCallback(CBodyCollision &rColl);
+            virtual void RegistBallCatchCallback(CBodyCollision &rColl) { RegistBallCatchCallback(&rColl); }
             virtual void RegistBallCatchCallback(CBodyCollision *pColl);
-            virtual void RegistReflectHitCallback(CDefCollision &rColl);
+            virtual void RegistReflectHitCallback(CDefCollision &rColl) { RegistReflectHitCallback(&rColl); }
             virtual void RegistReflectHitCallback(CDefCollision *pColl);
-            virtual CSESlot::CPosFunc *SE_GetDefaultFunc()
-            {
-                return reinterpret_cast<CSESlot::CPosFunc *>(m_PosFunc);
-            }
+            virtual CSESlot::CPosFunc *SE_GetDefaultFunc() { return &m_PosFunc; }
 
             // (name guessed; DOL fn_8016F6C0) The per-frame update:
             // SetFrameRateF(rate), the effect and sound slots, OnUpdate(rate),
@@ -91,12 +89,34 @@ namespace msw {
             unsigned long CalcSum() const;
 
         private:
-            // 0x18: the sound slots' default position callback, a
-            // CSESlot::CPosFunc of a DOL class without an exported name
-            // (its vptr, then this actor; CStgAct's constructor sets both).
-            unsigned long m_PosFunc[2];
+            // (name guessed; the DOL class has no exported name, vtable
+            // 0x80474BB0) The sound slots' default position: the actor's.
+            class CSEPosFunc : public CSESlot::CPosFunc {
+                public:
+                    CSEPosFunc(CStgAct *pAct) : m_pAct(pAct) {}
+                    virtual void GetPos(bcs::FVEC3 *pPos) { *pPos = m_pAct->GetSrt()->GetPos(); }
+
+                private:
+                    CStgAct *m_pAct; // 0x04
+            };
+
+            // The collision callbacks the pointer forms of the Regist*
+            // functions install, with the actor as pArg: each passes the
+            // event to the actor's On* function (names guessed, as
+            // msw::CStgGmkAct's).
+            static void AttackHitCallback_(const CCollAtkUnit *pAtk, const CCollBodyUnit *pBody,
+                                           const bcs::FVEC3 &rPos, unsigned long flag, void *pArg);
+            static void BodyPushCallback_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, void *pArg,
+                                          bcs::FVEC3 *pPush);
+            static unsigned long BodyDamageCallback_(CCollBodyUnit *pBody, const CCollAtkUnit *pAtk,
+                                                     const bcs::FVEC3 &rPos, void *pArg);
+            static void BallCatchCallback_(CCollBodyUnit *pBody, CBall *pBall, void *pArg);
+            static unsigned long ReflectHitCallback_(const CCollDefUnit *pDef, const CBall *pBall, bcs::FVEC3 &rPos,
+                                                     bcs::FVEC3 &rVel, void *pArg);
+
+            CSEPosFunc m_PosFunc;         // 0x18
             CStgObj *m_pParent;           // 0x20
-            unsigned char m_Srt[0x144];   // 0x24, the CStgSrtMove GetSrt returns
+            CStgSrtMove m_Srt;            // 0x24, GetSrt
             CStgMdl *m_pMdl;              // 0x168, set by SetMdl, read by GetMdl(long) const
             float m_fFrameRate;           // 0x16C
     };

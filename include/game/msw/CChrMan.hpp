@@ -152,6 +152,12 @@ namespace msw {
             // away.
             static void InitLeader(int);
             static void AllStockItemDelete();
+            // (DOL, static; added for game/msw/CGame.cpp) Stops every
+            // character's motion.
+            static void AllMotStop();
+            // (DOL, static; added for game/msw/CGame.cpp; meaning guessed
+            // from the name) Makes the characters' bust pictures again.
+            static void RemakeChrBustImg(int);
             static void ResetEventDoll();
             // DOL, static. The character of team nTeam that has the ball,
             // or null. (BasketF's CStageBasket09 passes 0)
@@ -190,6 +196,10 @@ namespace msw {
             static void AllReset();
             static void AllSendReset();
             static void AllSetState(long nState, long, long);
+            // (DOL, static; added for game/msw/CGame.cpp) AllSetState at the
+            // next turn (CGame's goal event passes 0, the scorer and -1 for
+            // an own goal).
+            static void ReserveAllSetState(long nState, long, long);
             static void AllStop(CChrCore::STOP_MODE, CChrCore::STOP_MODE);
             static int CanbeTurnOver();
             // (DOL, static; added for VolleyF game/volley/CGameVolleyVsBoss.cpp)

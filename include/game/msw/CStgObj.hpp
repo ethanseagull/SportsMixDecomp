@@ -27,8 +27,11 @@ namespace msw {
     // GetSrt, SetPos, SetFront, LookAt, GetMdlNum, GetMdl, GetAct and GetDrv.
     // BasketF has all of them in game/basket/CStgGmk_WaterWorks_Basket.cpp.
     // Return types not visible in a body are guesses.
-    class CStgObj : public bcs::CUnivTask {
+    class CStgObj : public bcs::CUnivTaskEx {
         public:
+            // Room for mdlNum models (game/msw/CStgObj.cpp, DOL 0x80173E5C;
+            // msw::CStgGmk's constructor calls it).
+            CStgObj(bcs::CTask *pParent, unsigned long mdlNum);
             virtual ~CStgObj();
             virtual void Main();
 

@@ -32,6 +32,8 @@ namespace nw4r {
             void GetTranslate(math::VEC3 *pTrans) const;
             // (added for TourF msw::CRouteDataMove)
             void GetScale(math::VEC3 *pScale) const;
+            // (DOL; added for game/msw/CStgMdl.cpp) The node's matrix.
+            void GetMtx(math::MTX34 *pMtx) const;
         };
 
         // Handle to a skeletal animation resource: one pointer, null when

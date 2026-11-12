@@ -1,14 +1,51 @@
 #include "game/msw/CStgObj.hpp"
 #include "game/msw/CStgAct.hpp"
 #include "game/msw/CStgMdl.hpp"
+#include "bcs/BCS_Util.hpp"
 #include "bcs/FMTX34.hpp"
 #include "bcs/New.hpp"
 #include "game/msw/CStgSrt.hpp"
 
-// msw::CStgObj's own functions. The constructor, destructor and vtable are
-// elsewhere in the DOL.
+// msw::CStgObj: the constructor, destructor (and with it the vtable) and
+// the non-inline virtual functions.
 
 namespace msw {
+
+    CStgObj::CStgObj(bcs::CTask *pParent, unsigned long mdlNum)
+        : bcs::CUnivTaskEx(pParent, -1)
+        , m_nMdlNum(mdlNum)
+        , m_ppMdl(0)
+        , m_pAct(0)
+        , m_pDrv(0)
+        , m_nIdx(-1)
+    {
+        OnUnk08(1);
+        m_ppMdl = new CStgMdl *[mdlNum];
+        bcs::BCS_CpuClear32(m_ppMdl, mdlNum * sizeof(CStgMdl *));
+    }
+
+    // Deletes the driver, the actor and the models.
+    CStgObj::~CStgObj()
+    {
+        if (m_pDrv) {
+            delete m_pDrv;
+        }
+        m_pDrv = 0;
+        if (m_pAct) {
+            delete m_pAct;
+        }
+        m_pAct = 0;
+        for (unsigned long i = 0; i < m_nMdlNum; i++) {
+            if (m_ppMdl[i]) {
+                delete m_ppMdl[i];
+            }
+            m_ppMdl[i] = 0;
+        }
+        if (m_ppMdl) {
+            delete m_ppMdl;
+        }
+        m_ppMdl = 0;
+    }
 
     // Makes the models, the actor and the driver, then creates the models
     // and links the parts together.

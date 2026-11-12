@@ -98,8 +98,10 @@ Equivalent game/msw/CBodyCollision.cpp
 Equivalent game/bcs/G2D/CLineStripDL.cpp
 Equivalent game/msw/CC_CMN/CMdlEffect.cpp
 Equivalent game/msw/CCockpitMarkerIcon2D.cpp
-Matching game/bcs/CTask.cpp
+NonMatching game/bcs/CTask.cpp
 Matching game/msw/CStgObj.cpp
 Equivalent game/msw/CStgSrt.cpp
 Equivalent game/msw/EvDemo.cpp
 Equivalent game/msw/CEvDemoMdlObj.cpp
+Equivalent game/msw/CStgAct.cpp
+NonMatching game/msw/CStgMdl.cpp

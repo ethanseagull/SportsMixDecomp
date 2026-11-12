@@ -144,7 +144,7 @@ namespace msw {
                 // 0x28 (name guessed): the shot clock's length, read by the
                 // inline CGame::GetMaxShotTime_ (BossF game/boss/GameBoss.cpp).
                 float m_fMaxShotTime;
-                unsigned char m_Unk2C[0x30 - 0x2C];
+                float m_fUnk2C;            // 0x2C (meaning not known; SetDefault puts 600)
                 // 0x30 (name guessed): the shot clock in frames (BasketF's
                 // CChrManBasket counts it down and shows it in seconds).
                 float m_fShotTime;
@@ -230,7 +230,9 @@ namespace msw {
                 // 0x180 (meaning not known): while it is zero HockeyF's
                 // CFighting shows the fight gauge icons over the fighters.
                 long m_nUnk180;
-                unsigned char m_Unk184[0x188 - 0x184];
+                // 0x184 (names guessed): the pads of the whole game as bits,
+                // twice (InitTeamPadBits_ stores the same value in both).
+                unsigned short m_anAllPadBits[2];
                 // 0x188, 0x190 (names guessed): the pads of each team as bits,
                 // offline and in an online match (CGame::GetTeamPadBits).
                 unsigned short m_anTeamPadBits[4];
@@ -239,7 +241,7 @@ namespace msw {
                 unsigned char m_anGoalTeam[4];          // 0x19C, the team of each goal (SetGoalIdx)
                 unsigned char m_anUnk1A0[4];            // 0x1A0 (fn_8018AA28: [a] = b)
                 unsigned char m_anUnk1A4[4];            // 0x1A4 (fn_8018AA28: [b] = a)
-                unsigned char m_Unk1A8[4];
+                long m_nUnk1A8;                         // 0x1A8 (SetDefault clears it)
                 long m_nReturnStep;                     // 0x1AC
                 unsigned char m_Unk1B0[4];
                 long m_nStartFadeType;                  // 0x1B4
@@ -616,6 +618,11 @@ namespace msw {
             static int IsRsrcLoadEnd();
             static void PadCheckPause();
             static void PadCheckResume();
+            // (fn_80186770, fn_801868E4; names guessed) Stops the game in
+            // the do-nothing state 27 (screens black, sounds paused), and
+            // leaves it for the title menu (page 2, or 8 without bToMenu).
+            static void EnterHaltState();
+            static void ExitHaltState(int bToMenu);
             static long GetHockeyUnk1C();
             // (DOL, static; added for BossF game/boss/CChrCoreBossMethod.cpp;
             // meanings guessed from the names) The arts gauge of team nTeam
@@ -692,6 +699,11 @@ namespace msw {
             // (added for MenuF game/menu/CSelectMenu.cpp) Assigns the pads
             // to the characters by the play type.
             static void SetPadAssignSemiAuto();
+            // (fn_8018D38C, name guessed; nothing in the game calls it) Sets
+            // the computer teams and clears the characters the play type does
+            // not use; dodgeball puts two extra characters (type 4) after
+            // the players, except in its party game.
+            static void SetCharSemiAuto();
             static void SetCharName(long nChr, const wchar_t *pName, long nLen);
             static void SetMiiStoreData(long nChr, const RFLStoreData &data);
             static void SetTeamCtrlType(long nTeam, long nType);
@@ -853,8 +865,16 @@ namespace msw {
             void BgResetFade_();
             int IsScrnFadeEnd_(unsigned long nMask) const;
             void SetTurnStartTelopType_(long nType, float fFrame);
+            // (DOL member, called by the sports' change of court; name from
+            // the symbol) Queues the change of court (9), after the court
+            // change event demo (19) when event demos are on.
+            void ChgCourtDemoSetup_();
             // Counts m_fStateCount down; not zero once it has run out.
             int StateWorkDecStateCount_();
+            // (name guessed; inline in the wait-start and main-loop states)
+            // In the attract demo (GameWork::m_nUnk180 set): not zero once
+            // m_fUnk14C has counted down or a button is pressed.
+            int IsDemoPlayEnd_();
             // (fn_8017CA6C, name guessed; called only by the destructor)
             // Ends the game's tasks, cameras, effects and sounds.
             void Finalize();
@@ -925,6 +945,10 @@ namespace msw {
             void LoopStateOnlineSync2();    // (fn_8018726C)
             void DtorStateOnlineSync2();
 
+            // (fn_8017E0C0, name guessed; called by the constructor) Fills
+            // the pad bits of each team (GameWork 0x184-0x197) for the play
+            // type, or from the online pads.
+            void InitTeamPadBits_();
             // (fn_8017F6E8, name guessed; called by the constructor) Builds
             // the state table above and starts state 0.
             void InitState();
@@ -1069,7 +1093,10 @@ namespace msw {
             // roulette's state; names guessed).
             CItemRoulette *m_apItemRoulette[4];
             long m_nUnk148;       // 0x148 (meaning not known; BossF's game setup sets 1)
-            unsigned char m_Unk14C[0x150 - 0x14C];
+            // 0x14C (meaning not known; the constructor sets 1800.0f):
+            // SendMessage_ clears it on some messages while
+            // g_GameWork.m_nUnk180 is set.
+            float m_fUnk14C;
     };
 }
 

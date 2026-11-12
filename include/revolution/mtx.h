@@ -26,6 +26,8 @@ void PSMTXConcat(const Mtx a, const Mtx b, Mtx ab);
 unsigned long PSMTXInverse(const Mtx src, Mtx inv);
 // dst = src with (x, y, z) added to the translation.
 void PSMTXTransApply(const Mtx src, Mtx dst, float x, float y, float z);
+// dst = src scaled by (x, y, z) (added for DOL game/bcs/CMdlRef.cpp).
+void PSMTXScaleApply(const Mtx src, Mtx dst, float x, float y, float z);
 
 // dst = m * src (src as a point); src and dst may be the same.
 void PSMTXMultVec(const Mtx m, const Vec *src, Vec *dst);

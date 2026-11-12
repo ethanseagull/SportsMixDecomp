@@ -19,7 +19,10 @@ namespace nw4r {
                 static const ut::detail::RuntimeTypeInfo typeInfo;
 
                 virtual ~TextBox();
-                virtual unsigned short GetStringBufferLength() const;           // 0x70
+                // 0x70 is Pane's LoadMtx, which TextBox overrides (DOL vtable
+                // lbl_804BE668); GetStringBufferLength is not virtual.
+                virtual void LoadMtx(const DrawInfo &rInfo);                    // 0x70
+                unsigned short GetStringBufferLength() const;
                 virtual void AllocStringBuffer(unsigned short nLen);            // 0x74
                 virtual void FreeStringBuffer();                                // 0x78
                 virtual unsigned short SetString(const wchar_t *pStr, unsigned short nDstIdx); // 0x7C

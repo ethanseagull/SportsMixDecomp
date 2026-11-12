@@ -64,6 +64,12 @@ namespace bcs {
             static void Load(const char *pPath, unsigned long nId, unsigned short nFlags, short nUnk108,
                              short nAlign, short nUnk10C);
             static int IsLoadEnd(const char *pPath, unsigned long nId);
+            // (added for DOL game/msw/CGameVib.cpp; names guessed from the
+            // char-path versions just before them) fn_8004CD30: data of a
+            // loaded FILE_INPUT; fn_8004D890: non-zero once all nNum files
+            // from pFile on have loaded.
+            static void *GetPtr(const FILE_INPUT *pFile);
+            static int IsLoadEnd(const FILE_INPUT *pFile, long nNum);
             static unsigned long GetSize(const char *pPath, unsigned long nId);
     };
 }

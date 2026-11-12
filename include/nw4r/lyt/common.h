@@ -2,6 +2,7 @@
 #define NW4R_LYT_COMMON_H_
 
 #include "nw4r/db/Panic.hpp"
+#include "nw4r/ut/Color.hpp"
 
 // Helpers of the layout library. The name of this file is part of the
 // binary: the position setters pass "common.h" to their assertions (MenuF
@@ -35,6 +36,10 @@ namespace nw4r {
                 NW4R_ASSERT_AT((newVal < HORIZONTALPOSITION_MAX), "common.h", 227, "NW4R:Failed assertion newVal < HORIZONTALPOSITION_MAX");
                 *pVar = (unsigned char)(GetVerticalPosition(*pVar) * HORIZONTALPOSITION_MAX + newVal);
             }
+
+            // col with its alpha multiplied by alpha / 255 (DOL 0x8042A9A0;
+            // added for DOL game/bcs/G2D/CLineStripDL.cpp).
+            ut::Color MultipleAlpha(const ut::Color col, unsigned char alpha);
 
             inline void SetVerticalPosition(unsigned char *pVar, unsigned char newVal)
             {

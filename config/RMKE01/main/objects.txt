@@ -15,6 +15,7 @@ Matching game/msw/CStgGmkMan.cpp
 Equivalent game/msw/CSceneCalc.cpp
 Equivalent game/msw/CCockpitChrIcon2D.cpp
 Equivalent game/bcs/dwc/CDwcFriend.cpp
+Equivalent game/bcs/CMdlRef.cpp
 Equivalent game/bcs/CMdlShadow.cpp
 Equivalent game/bcs/CMusicData.cpp
 Equivalent game/msw/CStage04Base.cpp
@@ -31,9 +32,11 @@ Matching game/bcs/G2D/CTexMap.cpp
 Equivalent game/msw/CDropCoinMan.cpp
 Equivalent game/msw/CGimmickMan.cpp
 NonMatching game/msw/CGame.cpp
+Equivalent game/msw/CGameVib.cpp
 Matching game/msw/menu/CStateSave.cpp
+Equivalent game/msw/CCockpitResult.cpp
 Matching game/msw/CCockpitResultTime.cpp
-Matching game/msw/CEffectTableList.cpp
+NonMatching game/msw/CC_DATA.cpp
 Equivalent game/msw/CChrMarker.cpp
 Equivalent game/msw/CStgGmk_WaterPillar.cpp
 Equivalent game/msw/CStage17Base.cpp
@@ -53,8 +56,7 @@ Matching game/msw/CEventDemoBase.cpp
 Equivalent game/msw/CStgGmk_Pylon.cpp
 Equivalent game/msw/CBallMan.cpp
 Equivalent game/msw/CItemBall.cpp
-NonMatching game/msw/CEffectTable.cpp
-Equivalent game/msw/CEffectAttachTable.cpp
+Equivalent game/msw/CEffectTable.cpp
 Equivalent game/bcs/CSndTask.cpp
 Equivalent game/msw/menu/CMovieScnObj.cpp
 Equivalent game/msw/CC_CMN/SLIME/CcSquadFactory.cpp
@@ -92,3 +94,7 @@ Equivalent game/msw/CGameGuideMan.cpp
 Equivalent game/msw/CEffectCluster.cpp
 Equivalent game/msw/CAtkCollision.cpp
 Matching game/bcs/CWifiPad.cpp
+Equivalent game/msw/CBodyCollision.cpp
+Equivalent game/bcs/G2D/CLineStripDL.cpp
+Equivalent game/msw/CC_CMN/CMdlEffect.cpp
+Equivalent game/msw/CCockpitMarkerIcon2D.cpp

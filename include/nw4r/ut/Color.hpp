@@ -49,6 +49,11 @@ namespace nw4r {
             // game/msw/CGameExDemoBase.cpp, which passes colours to
             // GXSetTevColor).
             operator GXColor() const { return *reinterpret_cast<const GXColor *>(this); }
+
+            // The colour as one packed RGBA word (added for the DOL's
+            // game/bcs/G2D/CLineStripDL.cpp, which writes it to a display
+            // list).
+            unsigned long ToU32() const { return *reinterpret_cast<const unsigned long *>(this); }
         };
     }
 }

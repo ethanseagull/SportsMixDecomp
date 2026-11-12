@@ -96,6 +96,21 @@ namespace msw {
                 m_fCreateDelay = -1.0f;
             }
 
+            bool IsCreateWait() const
+            {
+                if (m_fCreateDelay > 0.0f) {
+                    return true;
+                }
+                return false;
+            }
+            bool IsEndWait() const
+            {
+                if (m_fEndDelay > 0.0f) {
+                    return true;
+                }
+                return false;
+            }
+
             void SetEnd(long mode, float delay)
             {
                 m_fEndDelay = delay;
@@ -317,17 +332,20 @@ namespace msw {
     void CStgEffectSlot::CEffSlot::Update(float rate)
     {
         if (GetCluster() == 0) {
-            if (m_fCreateDelay > 0.0f) {
+            if (IsCreateWait()) {
                 m_fCreateDelay -= rate;
                 if (m_fCreateDelay <= 0.0f) {
                     m_fCreateDelay = -1.0f;
                     CreateAttach(m_nEff, m_pObj, m_nNode, m_pOfs, m_nArg0, m_nArg1, m_nArg2, m_nFlag);
                     if (m_nCreateMode == CREATE_ATTACH_FADEIN) {
-                        FadeIn(m_fFadeIn);
+                        CEffectCluster *pCluster = GetCluster();
+                        if (pCluster != 0) {
+                            pCluster->SetFadeinTime(m_fFadeIn);
+                        }
                     }
                 }
             }
-        } else if (m_fEndDelay > 0.0f) {
+        } else if (IsEndWait()) {
             m_fEndDelay -= rate;
             if (m_fEndDelay <= 0.0f) {
                 m_fEndDelay = -1.0f;

@@ -217,7 +217,9 @@ game/msw/CComDrv.cpp:
 	.text       start:0x80109A0C end:0x8010CE1C
 
 game/msw/CEventDemoBase.cpp:
-	.text       start:0x8011141C end:0x8011158C
+	.text       start:0x8011141C end:0x801116E4
+	.data       start:0x8046EFC0 end:0x8046F010
+	.sbss       start:0x805C0BF0 end:0x805C0BF8
 
 game/msw/CEventModel.cpp:
 	.text       start:0x80111CCC end:0x80116308

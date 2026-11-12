@@ -25,6 +25,9 @@ namespace msw {
         // the button sequence that calls it) Opens everything for player
         // nPlayer.
         void FullOpen(long nPlayer);
+        // (added for BossF game/boss/GameBoss.cpp; return type and meaning
+        // guessed) Checks the unlocks earned by the game just played.
+        void CheckClear();
     }
 }
 

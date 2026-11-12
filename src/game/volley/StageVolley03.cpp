@@ -515,8 +515,13 @@ void CGmkSnd::Main()
     m_Pos = pos;
 
     bcs::CSndTask *pSnd = static_cast<bcs::CSndTask *>(bcs::CTaskMan::GetTask(m_nSndId));
-    if (pSnd != 0 && !pSnd->IsDelete() && (!pSnd->IsPrepared() || pSnd->IsAttachedSound())) {
-        return;
+    if (pSnd != 0 && !pSnd->IsDelete()) {
+        if (!pSnd->IsPrepared()) {
+            return;
+        }
+        if (pSnd->IsAttachedSound()) {
+            return;
+        }
     }
 
     switch (++m_nStep) {

@@ -12,6 +12,11 @@ namespace msw {
             // return type guessed) Not zero while a tournament game runs.
             static int IsTournamentGame();
             static int IsExtraMatchGame(); // returns 0 or 1; type guessed
+            // (added for BossF game/boss/GameBoss.cpp; return types and
+            // meanings guessed) Sets the tournament's demo type (the boss
+            // game passes 0x5A); whether the mission has been cleared.
+            static void SetDemoType(long nType);
+            static int IsMissionClear();
             static int IsMixTournamentGame(); // type guessed
             // The byte at 0x1054 of the tournament's work area.
             static long GetGameMode();

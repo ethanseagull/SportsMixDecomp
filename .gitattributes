@@ -11,3 +11,6 @@
 
 # decomp-toolkit writes files with LF
 config/**/*.txt  text eol=lf
+
+# objdiff report for decmp.dev: keep byte-exact
+progress/**/*.json -text

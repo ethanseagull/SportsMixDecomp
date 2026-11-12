@@ -1,6 +1,7 @@
 #ifndef CCOCKPITMENUBASE_HPP_
 #define CCOCKPITMENUBASE_HPP_
 
+#include "game/msw/CCockpit.hpp"
 #include "game/msw/CCockpitButtonInfo.hpp"
 #include "game/msw/CCockpitLayoutBase.hpp"
 #include "game/msw/CCockpitPartsInfo.hpp"
@@ -49,11 +50,57 @@ namespace msw {
             // guessed) Whether the menu has gone out.
             int IsMenuOut();
 
+            // (DOL fn_801EE3E4; name guessed; added for
+            // game/msw/CCockpitMenuBase.cpp) Moves pad nPad's cursor: by the
+            // pointer or by the stick, and sets the pointer's look. Also
+            // called from outside the class (fn_8023A708).
+            void CursorControl(long nPad);
+
+        protected:
+            // (names guessed; inline, no symbol; added for
+            // game/msw/CCockpitMenuBase.cpp) Button kind ids start at 0xCF.
+            // SetResultButton makes button nButton's result id (-1 for no
+            // button) the cockpit's word at 0x70; DecideResult ends the
+            // menu (m_Unk90 == 1) or makes that word the cockpit's result.
+            void SetResultButton(long nButton)
+            {
+                long nId;
+                bool bValid = false;
+                if (nButton < CCockpitButtonInfo::m_nNum && CCockpitButtonInfo::m_nNum > 0) {
+                    bValid = true;
+                }
+                if (bValid) {
+                    nId = CCockpitButtonInfo::m_pInfo[nButton].m_nMenuResultId;
+                } else {
+                    nId = -1;
+                }
+                if (CCockpitButtonInfo::m_nNum != 0) {
+                    CCockpit *pCockpit = CCockpit::GetTask();
+                    if (pCockpit != 0) {
+                        pCockpit->SetUnk70(nId);
+                    }
+                }
+            }
+
+            void DecideResult()
+            {
+                if (m_Unk90 == 1) {
+                    m_nState = 4;
+                } else if (CCockpitButtonInfo::m_nNum != 0) {
+                    CCockpit *pCockpit = CCockpit::GetTask();
+                    if (pCockpit != 0) {
+                        pCockpit->CommitResult();
+                    }
+                }
+            }
+
         protected:
             unsigned long m_Unk84; // 0x84, not set by the constructor
-            unsigned long m_Unk88; // 0x88
-            float m_Unk8C;         // 0x8C, counted down by Main
-            long m_Unk90;          // 0x90
+            // 0x88: 1 while the menu has made the cockpit's pointer object
+            // (StepIn; StepOut and the destructor remove it).
+            unsigned long m_Unk88;
+            float m_Unk8C;         // 0x8C, counted down by Main; A is taken at 0
+            long m_Unk90;          // 0x90, 1: a decided button ends the menu (m_nState 4)
             long m_Unk94;          // 0x94
     };
 }

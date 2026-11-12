@@ -79,11 +79,5 @@ namespace msw {
             m_fTexS1 = fS1;
             m_fTexT1 = fT1;
         }
-
-        // Not in the original: its vtable has no slot for UpdateFrame (it
-        // ends at 0x108), but include/bcs/CScnObj.hpp declares one at 0x10C
-        // as pure, so the class needs a body to be made. Empty, as nothing
-        // calls it.
-        void CMovieScnObj::UpdateFrame(float) {}
     }
 }

@@ -30,7 +30,6 @@ namespace bcs {
         m_nDLXluSize = nSize;
     }
 
-    // Outside the EU .text slice (0x80044BD4, in the gap after it).
     void CGDLObj::ObjProc(unsigned long nTask, unsigned long nParam, void *pInfo)
     {
         if (IsProcDisabled(nTask)) {
@@ -58,10 +57,12 @@ namespace bcs {
             case 4:
                 CalcViewMtx(static_cast<const FMTX34 *>(pInfo));
                 break;
-            case 5:
+            case 5: {
                 // The original computes the translucent flag first.
-                static_cast<CScnObjGather *>(pInfo)->Add(this, HasDLOpa(), HasDLXlu(), reinterpret_cast<const CFrustum *>(nParam));
+                int bXlu = HasDLXlu();
+                static_cast<CScnObjGather *>(pInfo)->Add(this, HasDLOpa(), bXlu, reinterpret_cast<const CFrustum *>(nParam));
                 break;
+            }
             case 6:
                 if (HasDLOpa()) {
                     GXCallDisplayList(m_pDLOpa, m_nDLOpaSize);

@@ -1,22 +1,23 @@
-MSM-decomp
-[![Build Status]][actions] [![Code Progress]][progress] [![Data Progress]][progress]
-=============
+SportsMixDecomp
+[![Code Progress]][progress] [![Data Progress]][progress] [![Functions]][progress] [![Linked]][progress]
+===============
 
-[Build Status]: https://github.com/EltyDev/MSM-decomp/actions/workflows/build.yml/badge.svg
-[actions]: https://github.com/EltyDev/MSM-decomp/actions/workflows/build.yml
+[Code Progress]: https://api.decmp.dev/ethanseagull/SportsMixDecomp.svg?mode=shield&measure=code&label=Code
+[Data Progress]: https://api.decmp.dev/ethanseagull/SportsMixDecomp.svg?mode=shield&measure=data&label=Data
+[Functions]: https://api.decmp.dev/ethanseagull/SportsMixDecomp.svg?mode=shield&measure=functions&label=Functions
+[Linked]: https://api.decmp.dev/ethanseagull/SportsMixDecomp.svg?mode=shield&measure=complete_code&label=Linked
+[progress]: https://decmp.dev/ethanseagull/SportsMixDecomp
 
-[Code Progress]: https://decomp.dev/eltydev/msm-decomp.svg?mode=shield&measure=code&label=Code
-[Data Progress]: https://decomp.dev/eltydev/msm-decomp.svg?mode=shield&measure=data&label=Data
-[progress]: https://decomp.dev/eltydev/msm-decomp
+[![Mario Sports Mix progress](https://api.decmp.dev/data/ethanseagull/SportsMixDecomp/overview.svg)](https://decmp.dev/ethanseagull/SportsMixDecomp)
 
-A work-in-progress decompilation of Mario Sports Mix.
+A work-in-progress decompilation of Mario Sports Mix (Wii), with the aim of readable, working C/C++ source.
 
 This repository does **not** contain any game assets or assembly whatsoever. An existing copy of the game is required.
 
 Supported versions:
 
-- `RMKE01`: Rev 0 (USA), the default
-- `RMKP01`: Rev 0 (EU)
+- `RMKE01`: Rev 0 (USA), the default and the version all current work targets
+- `RMKP01`: Rev 0 (EU), an older configuration for `main.dol` only
 
 Dependencies
 ============
@@ -89,6 +90,10 @@ Building
   ninja
   ```
 
+  The build ends by checking the hash of every binary built from `Matching` units.
+
+  On Windows, use a native Python and ninja: the MSYS ones that come with devkitPro (if it is on `PATH`) break this toolchain. `py -m ninja` works after `pip install ninja`.
+
 Diffing
 =======
 
@@ -99,3 +104,26 @@ Download the latest release from [encounter/objdiff](https://github.com/encounte
 Select an object from the left sidebar to begin diffing. Changes to the project will rebuild automatically: changes to source files, headers, `configure.py`, `splits.txt` or `symbols.txt`.
 
 ![](assets/objdiff.png)
+
+Progress
+========
+
+Progress is tracked on [decmp.dev](https://decmp.dev/ethanseagull/SportsMixDecomp). The game files cannot be on CI, so CI does not build: after a verified local build, `python tools/decomp/publish_report.py` copies the objdiff report to `progress/RMKE01/report.json` (names, sizes and match percentages only), and the `progress` workflow uploads it on push.
+
+Helper scripts
+==============
+
+`tools/decomp/` holds the scripts used day to day, among them:
+
+- `status.py`: progress totals, the work queue, or one unit's functions and scores
+- `next.py`: the next thing to work on
+- `draft.py`, `ghidra_draft.py`: rough C drafts of a function (m2c, Ghidra) to start from
+- `similar.py`, `copies.py`, `port_unit.py`: find matched copies of a function or unit (the sports modules share a lot of code)
+- `layout.py`: a class's size, bases, vtable and fields, gathered from every function that uses it
+- `equivalent.py`: record a function as near or unverified, with the reason
+- `mark.py`: set a unit's status
+
+License
+=======
+
+[CC0 1.0](LICENSE). This covers the source in this repository only, not the game.

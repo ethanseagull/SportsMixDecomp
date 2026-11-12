@@ -12,9 +12,11 @@ HockeyF CheckStickParam__Q23msw16CChrDrvPadHockeyFv near 96.4 float register cho
 HockeyF ConveyorUpdate__Q23msw14CStageHockey09Ff near 99.9 99.9%: register choice only (bomb flag held in r21 vs r10); same instructions and order otherwise
 HockeyF Conveyor_OnStart__Q23msw14CStageHockey09FlQ43msw12CStage09Base9CConveyor8FLOW_DIRif near 98.8 98.8%: register choice and load order of the two EV_INTERVAL globals before BCS_RandMax; same arithmetic and calls
 HockeyF CreateBallIcon__Q23msw18CRadarIcon2DHockeyFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc near 99.9 register choice only; pane-name table addressed through our named static instead of the original's anonymous label
+HockeyF CreateBallMarker__Q23msw17CCockpitHockeyMapFPQ34nw4r3lyt4PanePQ33bcs3G2D9CPaneCtrl near 98.8 register allocation only: the original keeps the rot pane and its name in separate saved registers (one more saved GPR, frame 0x50 vs 0x40); same calls, loads and branches
 HockeyF CreateCharaIcon__Q23msw18CRadarIcon2DHockeyFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc near 99.9 register choice for one saved handle; pane-name table addressed through our named static instead of the original's anonymous label
 HockeyF CreateGoalIcon__Q23msw22CRadarIcon2DHockeyGoalFPQ33msw22CRadarIcon2DHockeyGoal14ICON_PARAMETERlPCcPCcPCcPCc near 99.9 register choice for one saved handle; static tables addressed through named statics instead of anonymous labels
 HockeyF CreateGoal__Q23msw14CStageHockey07Fv near 99.3 99.3%: boss position vector (X, 0.0f, Z) loaded in a different order into the same stack vector; same values
+HockeyF CreatePlayerMarker__Q23msw17CCockpitHockeyMapFlPQ34nw4r3lyt4PanePQ33bcs3G2D9CPaneCtrl near 99.5 register allocation only (saved GPR numbering in the pane setup)
 HockeyF CtorStateAirTrick__Q23msw14CChrCoreHockeyFv near 99.8 register choice only (queue head/work base r4/r5 swapped in inline FsmqGetWork)
 HockeyF CtorStateAirTrick__Q23msw21CChrCoreHockeyWaluigiFv near 99.8 same instructions after register renumbering (diff.py: match); objdiff's 0.2% is a relocation detail
 HockeyF CtorState_OPEN__Q23msw28CStgGmk_Container_Act_HockeyFv near 94.5 register reuse only (ours CSEs constant 0 into a saved register)
@@ -97,6 +99,7 @@ HockeyF ScoreOut__Q23msw18CCockpitHockeyCoinFv near 99.0 register choice only: l
 HockeyF ScoreOut__Q23msw19CCockpitHockeyCoderFv near 99.0 register allocation only (loop counter and table pointer swap registers); same instructions and memory accesses
 HockeyF SendEvent__Q23msw22CRadarIcon2DHockeyGoalFlPv near 93.9 one mr scheduled before instead of after the branch
 HockeyF SendMessage__Q23msw14CStageHockey11Fllll near 99.8 instruction order only
+HockeyF SetCameraPosition__Q23msw17CCockpitHockeyMapFf near 99.9 register choice only: the two operands of one fmuls (sum and 0.5f) sit in swapped FPRs
 HockeyF SetCoinValue__Q23msw18CCockpitHockeyCoinFll near 98.9 register allocation only: the original gives the two GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 HockeyF SetCommonData__Q23msw17CComDrvHockeyGameFv near 98.7 register choice only (r0/r2 swapped in the team compare)
 HockeyF SetCountNum__Q23msw25CCockpitHockeyPauseResultFl near 99.2 registers only (as CCockpitBasketPauseResult::SetCountNum): the pane accessor and the computed show flag swap r30/r31; same instructions, order and stack frame
@@ -104,6 +107,7 @@ HockeyF SetCountScore__Q23msw20CCockpitHockeyResultFPlPlll near 92.2 92.2%: the 
 HockeyF SetFaceIcon__Q23msw19CCockpitHockeyCoderFPQ33bcs3G2D9CPaneCtrlllPCQ23msw8CChrCore near 98.1 register allocation only (loop counter and table pointer swap registers); same instructions and memory accesses; SetVisible(bool) bit insert compiled as srwi+rlwimi instead of rlwinm+rlwimi (same flag byte result; the original matches a two-statement Pane::SetVisible, see report)
 HockeyF SetFaceIcon__Q23msw21CCockpitHockeySmashVSFPQ33bcs3G2D9CPaneCtrllll near 92.6 register allocation and instruction order; in the pad-label loop the game computes i == nPad before GetPaneName, we after (same call arguments); pane table load is lwzx in the original, add + lwz 0x40 in ours (same load)
 HockeyF SetFaceIcon__Q23msw21CCockpitHockeyVSCountFllli near 99.3 register allocation only (the icon-table row pointer and the accessor in swapped saved registers)
+HockeyF SetPlayerPosition__Q23msw17CCockpitHockeyMapFlfffll near 97.3 register allocation only: saved FPRs for map size and clamped position swapped, saved GPRs of the LinkList loops renumbered; same loads, stores and calls
 HockeyF SetRimoconShakeIcon__Q23msw21CCockpitHockeySmashVSFlRCQ23bcs5FVEC3li near 98.5 register allocation only: the game reuses one fewer callee-saved register (savegpr_24 vs _23)
 HockeyF SetSPGauge__Q23msw19CCockpitHockeyCoderFlf near 99.0 register allocation only around the int-to-float conversion; same instructions
 HockeyF SetTelop3DScoreCount__Q23msw14CCockpitHockeyFllllllllil near 97.5 97.5%: only the order of the stores into the stack parameter struct differs (as CCockpitBasket::SetTelop3DScoreCount); same values, offsets and call

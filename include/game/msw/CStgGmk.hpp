@@ -41,11 +41,17 @@ namespace msw {
             // keep these two of CStgGmk). Defined below the class.
             virtual CStgAct *NewAct(long heap);
             virtual CStgDrv *NewDrv(long heap);
+            // A plain model, as CStgObj's. Inline: the vtables of CStgGmk
+            // and msw::CStageNet both name the weak copy that
+            // game/msw/CStageNet.cpp emits (DOL 0x8016AD10).
+            virtual CStgMdl *NewMdl(long heap, unsigned long idx);
 
             // Overrides of msw::CStgObj's hooks; CStgObj::OnCalcSum is not
             // overridden here.
             virtual void OnPreCreate() {}
-            virtual void OnPostCreate();
+            // Empty inline: CStgGmk's vtable names a 4-byte weak copy
+            // (DOL 0x8014B4E4).
+            virtual void OnPostCreate() {}
             virtual void OnSceneEntry() {}
             virtual void OnSceneLeave() {}
 
@@ -87,6 +93,7 @@ namespace msw {
     // A plain gimmick actor and driver.
     inline CStgAct *CStgGmk::NewAct(long heap) { return new (heap) CStgGmkAct(this); }
     inline CStgDrv *CStgGmk::NewDrv(long heap) { return new (heap) CStgDrv(this); }
+    inline CStgMdl *CStgGmk::NewMdl(long heap, unsigned long idx) { return new (heap) CStgMdl(this); }
 }
 
 #endif /* !MSW_CSTGGMK_HPP_ */

@@ -67,10 +67,37 @@ namespace msw {
                     virtual bool CreateAnm(CStageAnm *pAnm, bcs::CMdlObj *pMdl) const;
             };
 
+            // (names guessed) The creator of a model found in an archive:
+            // the DOL vtable __vt__Q33msw7CStgMdl15CGenericCreator, a
+            // pointer to the resource file and the archive entry. Made on
+            // the stack by VolleyF's CStageVolley10.
+            class CGenericCreator : public CCreator {
+                public:
+                    CGenericCreator(const nw4r::g3d::ResFile &rRes, CArn *pArn, long nIdx)
+                        : m_pRes(&rRes), m_pArn(pArn), m_nIdx(nIdx)
+                    {
+                    }
+
+                    virtual bool CreateMdlObj(bcs::CMdlObj *pMdl) const;
+                    virtual bool CreateAnm(CStageAnm *pAnm, bcs::CMdlObj *pMdl) const;
+                    // (names guessed) The archive entry made. Inline: the
+                    // DOL has the weak copies, the getter right after
+                    // CreateMdlObj (its caller), the setter at the end of
+                    // game/msw/CStgMdl.cpp.
+                    virtual long GetIndex() const { return m_nIdx; }
+                    virtual void SetIndex(long idx) { m_nIdx = idx; }
+
+                private:
+                    const nw4r::g3d::ResFile *m_pRes; // 0x04
+                    CArn *m_pArn;                     // 0x08
+                    long m_nIdx;                      // 0x0C
+            };
+
             // The creator of a gimmick model: the DOL vtable
             // __vt__Q33msw7CStgMdl22CGenericGimmickCreator and three words.
-            // Declaring its first virtual function without a body keeps the
-            // compiler from emitting the vtable.
+            // Its functions are in game/msw/CStgMdl.cpp. Declared after
+            // CGenericCreator: that file emits the creators' vtables in
+            // reverse declaration order (MVA, gimmick, archive).
             class CGenericGimmickCreator : public CCreator {
                 public:
                     CGenericGimmickCreator(nw4r::g3d::ResFile res, const MDL_PARAM *pParam)
@@ -84,30 +111,14 @@ namespace msw {
                     }
 
                     virtual bool CreateMdlObj(bcs::CMdlObj *pMdl) const;
+                    virtual bool CreateShadowMdl(bcs::CMdlShadow *pMdl) const;
+                    virtual bool CreateRefMdl(bcs::CMdlRef *pMdl) const;
+                    virtual bool CreateAnm(CStageAnm *pAnm, bcs::CMdlObj *pMdl) const;
 
-                private:
+                protected:
                     nw4r::g3d::ResFile m_Res;  // 0x04
                     const MDL_PARAM *m_pParam; // 0x08
                     const char *m_pName;       // 0x0C (name and meaning guessed; msw::CStgGenericGmkMdl sets it)
-            };
-
-            // (names guessed) The creator of a model found in an archive:
-            // the DOL vtable __vt__Q33msw7CStgMdl15CGenericCreator, a
-            // pointer to the resource file and the archive entry. Made on
-            // the stack by VolleyF's CStageVolley10.
-            class CGenericCreator : public CCreator {
-                public:
-                    CGenericCreator(const nw4r::g3d::ResFile &rRes, CArn *pArn, long nIdx)
-                        : m_pRes(&rRes), m_pArn(pArn), m_nIdx(nIdx)
-                    {
-                    }
-
-                    virtual bool CreateMdlObj(bcs::CMdlObj *pMdl) const;
-
-                private:
-                    const nw4r::g3d::ResFile *m_pRes; // 0x04
-                    CArn *m_pArn;                     // 0x08
-                    long m_nIdx;                      // 0x0C
             };
 
             // The same with animations (MVA), made on the stack by the
@@ -149,10 +160,11 @@ namespace msw {
             enum { ANM_ARG_NUM = 8 };
 
         private:
-            // (DOL 0x80172104 and 0x80172468, names guessed) Run over the
-            // model's materials when Create makes it; not written yet.
-            void SetupReflectMat_(bcs::CMdlObj *pMdl);
-            void SetupMat_(bcs::CMdlObj *pMdl);
+            // (names guessed) Run over the model's materials when Create
+            // makes it: bind the reflection texture, and the screen capture,
+            // to the textures named for them. True when one was found.
+            bool SetupReflectMat_(bcs::CMdlObj *pMdl);
+            bool SetupMat_(bcs::CMdlObj *pMdl);
 
         private:
             CStgObj *m_pParent;          // 0x00

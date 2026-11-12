@@ -10,11 +10,26 @@
 #include "nw4r/g3d/ResAnmChr.hpp"
 #include "nw4r/g3d/ResNode.hpp"
 #include "nw4r/ut/Color.hpp"
+#include "bcs/CCapture.hpp"
+#include "bcs/CWorldEnv.hpp"
+#include "game/msw/CArn.hpp"
+#include "game/msw/CFgMdl.hpp"
+#include "game/msw/CStgMdlObj.hpp"
+#include "nw4r/g3d/ResMat.hpp"
+#include "nw4r/g3d/ResMdl.hpp"
+#include "nw4r/math/types.h"
+#include "revolution/mtx.h"
+#include "string.h"
 
-// msw::CStgMdl, a model of a stage object, and msw::CStgGenericGmkMdl.
-// Written so far up to AnmQueueUpdate_; the material set-up the creation
-// calls (0x80172104, 0x80172468), the creators' functions and the static
-// initialiser that follow in the DOL are not.
+// msw::CStgMdl, a model of a stage object, msw::CStgGenericGmkMdl, and the
+// creators that make a model's parts.
+
+namespace bcs {
+    // (DOL lbl_804CFE50, name guessed; in the bcs part of .bss, next to
+    // bcs::CRenderMan's) The texture the stage models' "reflect" textures
+    // are bound to.
+    extern GXTexObj g_ReflectTexObj;
+}
 
 namespace msw {
 
@@ -22,6 +37,8 @@ namespace msw {
     // which every stage model takes as its base colour (game/msw/CGame.cpp
     // keeps it up to date).
     extern bcs::BCS_Color g_BgCurColor;
+
+    CStgMdl::CCreator CStgMdl::NullCreator;
 
     CStgGenericGmkMdl::CStgGenericGmkMdl(CStgObj *pParent, nw4r::g3d::ResFile res, const MDL_PARAM *pParam,
                                          const char *pName)
@@ -559,4 +576,222 @@ namespace msw {
             }
         }
     }
+
+    // The names of the textures the material set-up binds.
+    static const char *s_pReflectTexName = "reflect";
+    static const char *s_pScreenTexName = "screen";
+    static const char *s_pScreenProjTexName = "screen_proj";
+
+    // Whether name is pStr, whose length is len.
+    static inline bool IsTexName(nw4r::g3d::ResName name, const char *pStr, unsigned long len)
+    {
+        bool bSame = false;
+        if (len == name.GetLength() && strcmp(name.GetName(), pStr) == 0) {
+            bSame = true;
+        }
+        return bSame;
+    }
+
+    // Binds the reflection texture to every texture named "reflect".
+    bool CStgMdl::SetupReflectMat_(bcs::CMdlObj *pMdl)
+    {
+        bool bFound = false;
+        for (unsigned long i = 0; i < pMdl->GetResMdl().GetResMatNumEntries(); i++) {
+            nw4r::g3d::ResMat mat = pMdl->GetResMdl().GetResMat(i);
+            if (mat.IsValid()) {
+                nw4r::g3d::ResTexObj texObj = mat.GetResTexObj();
+                unsigned long num = mat.GetNumResTexPlttInfo();
+                for (unsigned long j = 0; j < num; j++) {
+                    static const unsigned long s_nLen = strlen(s_pReflectTexName);
+                    if (IsTexName(mat.GetResTexPlttInfo(j).GetTexResName(), s_pReflectTexName, s_nLen)) {
+                        *texObj.GetTexObj(static_cast<_GXTexMapID>(j)) = bcs::g_ReflectTexObj;
+                        texObj.Validate(static_cast<_GXTexMapID>(j));
+                        bFound = true;
+                    }
+                }
+                pMdl->ResetAnm();
+            }
+        }
+        return bFound;
+    }
+
+    // Binds the screen capture to every texture named "screen" or
+    // "screen_proj"; a "screen" texture also gets a matrix that fits the
+    // capture to the screen's aspect ratio.
+    bool CStgMdl::SetupMat_(bcs::CMdlObj *pMdl)
+    {
+        bool bFound = false;
+        for (unsigned long i = 0; i < pMdl->GetResMdl().GetResMatNumEntries(); i++) {
+            nw4r::g3d::ResMat mat = pMdl->GetResMdl().GetResMat(i);
+            if (mat.IsValid()) {
+                nw4r::g3d::ResTexObj texObj = mat.GetResTexObj();
+                unsigned long num = mat.GetNumResTexPlttInfo();
+                for (unsigned long j = 0; j < num; j++) {
+                    static const unsigned long s_nScreenLen = strlen(s_pScreenTexName);
+                    static const unsigned long s_nScreenProjLen = strlen(s_pScreenProjTexName);
+                    int kind = 0;
+                    nw4r::g3d::ResTexPlttInfo info = mat.GetResTexPlttInfo(j);
+                    if (IsTexName(info.GetTexResName(), s_pScreenTexName, s_nScreenLen)) {
+                        kind = 1;
+                    } else if (IsTexName(info.GetTexResName(), s_pScreenProjTexName, s_nScreenProjLen)) {
+                        kind = 2;
+                    }
+                    if (kind != 0) {
+                        bcs::CCapture *pCapture = bcs::CCapture::GetInstance(0);
+                        if (pCapture) {
+                            *texObj.GetTexObj(static_cast<_GXTexMapID>(j)) = *pCapture->GetTexObj();
+                            texObj.Validate(static_cast<_GXTexMapID>(j));
+                            bFound = true;
+                            nw4r::g3d::ResTexSrt srt = mat.GetResTexSrt();
+                            if (srt.IsValid() && kind == 1) {
+                                float scale = bcs::CWorldEnv::m_vatViewAspectType == 1 ? 1.0f : 4.0f / 3.0f;
+                                float offset = 0.5f * (1.0f - scale);
+                                nw4r::math::MTX34 mtx;
+                                PSMTXIdentity(mtx);
+                                mtx._00 = scale;
+                                mtx._03 = offset;
+                                srt.SetEffectMtx(0, &mtx);
+                            }
+                        }
+                    }
+                }
+                pMdl->ResetAnm();
+            }
+        }
+        return bFound;
+    }
+
+    // Makes the model of the archive entry GetIndex() returns, with every
+    // root node at the rest pose.
+    bool CStgMdl::CGenericCreator::CreateMdlObj(bcs::CMdlObj *pMdl) const
+    {
+        const nw4r::g3d::ResFile *pRes = m_pRes;
+        const CArn *pArn = m_pArn;
+        long idx = GetIndex();
+        if (idx < 0 || idx >= pArn->GetNum()) {
+            return false;
+        }
+        nw4r::g3d::ResMdl mdl = pRes->GetResMdl(pArn->GetName(idx));
+        if (!mdl.IsValid()) {
+            return false;
+        }
+        unsigned short kind = CArn::s_MdlKindTbl[pArn->GetEntry(idx).nKind];
+        unsigned long flag = CStageAnm::GetMdlCreateFlag(*pRes, pArn, idx);
+        for (nw4r::g3d::ResNode node = mdl.GetResNode(0); node.IsValid(); node = node.GetNextSibling()) {
+            node.SetScale(1.0f, 1.0f, 1.0f);
+            node.SetRotate(0.0f, 0.0f, 0.0f);
+            node.SetTranslate(0.0f, 0.0f, 0.0f);
+        }
+        if (!pMdl->Create(mdl, flag, 0)) {
+            return false;
+        }
+        unsigned short prio = pArn->GetEntry(idx).nDrawPriority;
+        if (prio != 0) {
+            pMdl->SetDrawPriority(prio, prio);
+        } else {
+            pMdl->SetDrawPriority(idx >> 3, idx >> 3);
+        }
+        if (kind == 4) {
+            unsigned long num = pMdl->GetResMdl().GetResMatNumEntries();
+            for (unsigned long i = 0; i < num; i++) {
+                bcs::CMdlObj::CopiedMatAccess access(pMdl, i);
+                nw4r::g3d::ResMatMisc misc = access.GetResMatMisc(false);
+                if (misc.IsValid()) {
+                    misc.SetFogIdx(-1);
+                }
+            }
+        }
+        pMdl->OnFlag(0x10000);
+        return true;
+    }
+
+    bool CStgMdl::CGenericCreator::CreateAnm(CStageAnm *pAnm, bcs::CMdlObj *pMdl) const
+    {
+        if (!pAnm || !pMdl) {
+            return false;
+        }
+        return pAnm->Create(pMdl, *m_pRes, m_pArn, m_nIdx);
+    }
+
+    bool CStgMdl::CGenericGimmickCreator::CreateMdlObj(bcs::CMdlObj *pMdl) const
+    {
+        if (!pMdl || !m_pParam || !m_Res.IsValid() || !m_pParam->pMdlName) {
+            return false;
+        }
+        nw4r::g3d::ResFile res = m_Res;
+        nw4r::g3d::ResMdl mdl = res.GetResMdl(m_pParam->pMdlName);
+        if (!mdl.IsValid()) {
+            return false;
+        }
+        static_cast<CStgMdlObj *>(pMdl)->Create(mdl, m_pParam->unk0C, 0);
+        return true;
+    }
+
+    // Build a shadow model (with a 64 x 64 texture) and a reference model
+    // from mdl. (guess) The original passes the model through inline
+    // functions like these, as the gimmick creator's CStgMdlObj::Create
+    // does: the copy of mdl is made at the call, after the flag is read.
+    static inline void CreateShadowMdl_(bcs::CMdlShadow *pMdl, nw4r::g3d::ResMdl mdl, unsigned long flag)
+    {
+        pMdl->Create(mdl, 0x40, flag, 0);
+    }
+
+    static inline void CreateRefMdl_(bcs::CMdlRef *pMdl, nw4r::g3d::ResMdl mdl, unsigned long flag)
+    {
+        pMdl->Create(mdl, flag, 0);
+    }
+
+    bool CStgMdl::CGenericGimmickCreator::CreateShadowMdl(bcs::CMdlShadow *pMdl) const
+    {
+        if (!pMdl || !m_pParam || !m_Res.IsValid() || !m_pParam->pShadowName) {
+            return false;
+        }
+        nw4r::g3d::ResFile res = m_Res;
+        nw4r::g3d::ResMdl mdl = res.GetResMdl(m_pParam->pShadowName);
+        if (!mdl.IsValid()) {
+            return false;
+        }
+        CreateShadowMdl_(pMdl, mdl, m_pParam->unk0C);
+        return true;
+    }
+
+    bool CStgMdl::CGenericGimmickCreator::CreateRefMdl(bcs::CMdlRef *pMdl) const
+    {
+        if (!pMdl || !m_pParam || !m_Res.IsValid() || !m_pParam->pRefName) {
+            return false;
+        }
+        nw4r::g3d::ResFile res = m_Res;
+        nw4r::g3d::ResMdl mdl = res.GetResMdl(m_pParam->pRefName);
+        if (!mdl.IsValid()) {
+            return false;
+        }
+        CreateRefMdl_(pMdl, mdl, m_pParam->unk0C);
+        return true;
+    }
+
+    bool CStgMdl::CGenericGimmickCreator::CreateAnm(CStageAnm *pAnm, bcs::CMdlObj *pMdl) const
+    {
+        if (!pAnm || !pMdl || !m_pParam || !m_Res.IsValid() || !m_pParam->ppAnmSuffix) {
+            return false;
+        }
+        nw4r::g3d::ResFile res = m_Res;
+        pAnm->SetAnmParam(m_pParam->pAnmParam);
+        return pAnm->Create(pMdl, res, m_pParam->ppAnmSuffix, m_pName ? m_pName : m_pParam->pAnmName,
+                            m_pParam->unk18);
+    }
+
+    bool CStgMdl::CGenericMVAGimmickCreator::CreateMdlObj(bcs::CMdlObj *pMdl) const
+    {
+        if (!pMdl || !m_pParam || !m_Res.IsValid() || !m_pParam->pMdlName) {
+            return false;
+        }
+        nw4r::g3d::ResFile res = m_Res;
+        nw4r::g3d::ResMdl mdl = res.GetResMdl(m_pParam->pMdlName);
+        if (!mdl.IsValid()) {
+            return false;
+        }
+        static_cast<CFgMdl *>(pMdl)->Create(mdl, m_pParam->unk0C, 0);
+        return true;
+    }
+
 }

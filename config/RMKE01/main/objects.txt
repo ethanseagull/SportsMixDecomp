@@ -101,4 +101,7 @@ Equivalent game/msw/CStgSrt.cpp
 Equivalent game/msw/EvDemo.cpp
 Equivalent game/msw/CEvDemoMdlObj.cpp
 Equivalent game/msw/CStgAct.cpp
-NonMatching game/msw/CStgMdl.cpp
+Equivalent game/msw/CStgMdl.cpp
+Matching game/msw/CStgGmk.cpp
+Equivalent game/bcs/CRsoModule.cpp flags=noauto
+Matching game/msw/ArchiveFont.cpp

@@ -17,6 +17,8 @@ namespace nw4r {
             unsigned long mtxId;         // 0x10, the node's matrix index (added for DOL bcs::CalcChrAnmResultFromMtx)
             unsigned char m_Unk14[0x48]; // 0x14
             long toParentNode;           // 0x5C offset of the parent node from this one (added for DOL bcs::CalcChrAnmResultFromMtx)
+            long toChildNode;            // 0x60
+            long toNextSibling;          // 0x64 (added for DOL game/msw/CStgMdl.cpp)
         };
 
         // Handle to a node of a model resource: one pointer, null when the
@@ -87,6 +89,27 @@ namespace nw4r {
                     }
                     return ResNode(0);
                 }
+
+                // (added for DOL game/msw/CStgMdl.cpp) The next node of the
+                // same parent; same shape and checks as GetParentNode.
+                ResNode GetNextSibling() const
+                {
+                    long ofs = ref().toNextSibling;
+                    if (ofs != 0) {
+                        ResNodeData *p = reinterpret_cast<ResNodeData *>(reinterpret_cast<unsigned char *>(m_pData) + ofs);
+                        if (reinterpret_cast<unsigned long>(p) & 0x3) {
+                            db::Panic("g3d_resnode_ac.h", 44, "NW4R:Failed assertion !((u32)p & 0x3)");
+                        }
+                        return ResNode(p);
+                    }
+                    return ResNode(0);
+                }
+
+                // (DOL; added for game/msw/CStgMdl.cpp) Set the node's rest
+                // pose.
+                void SetScale(float x, float y, float z);
+                void SetRotate(float x, float y, float z);
+                void SetTranslate(float x, float y, float z);
 
                 // (DOL) The node's rest pose as an animation result.
                 void CalcChrAnmResult(ChrAnmResult *pResult) const;

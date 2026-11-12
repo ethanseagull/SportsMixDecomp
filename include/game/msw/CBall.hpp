@@ -556,6 +556,9 @@ namespace msw {
             void CalcYVG(float fStartY, float fTopY, float fEndY, float fFrame, float &rVel, float &rGravity) const;
             void SE_Stop(long nSlot, float fFade);
             int IsItemEffect() const;
+            // (DOL; added for BasketF game/basket/unit_65AF0.cpp) Not zero
+            // while the ball carries an item.
+            int IsItemBall() const;
             void LinkItemEffect_(unsigned long nId);
             void ClearOffsetPos();
 

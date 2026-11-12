@@ -243,6 +243,9 @@ namespace msw {
             // (added for game/basket/CChrCoreBasketSlime.cpp; parameter
             // meanings guessed) Leaves an after-image of the character.
             void CreateIllusion(float fAlpha, float fRate);
+            // (added for game/basket/unit_65C5C.cpp; return type guessed)
+            // Not virtual (absent from the vtable); always 0 in BasketF.
+            int MethdUseItemStar(long);
             // (added for game/basket/CChrManBasket.cpp; return types and
             // meanings guessed from the names) The motion frames at which a
             // just shot starts and ends, for a near, middle and far shot.

@@ -1174,6 +1174,9 @@ namespace msw {
             // (DOL; added for BasketF game/basket/CComDrvBasketGame.cpp) The
             // item kind of the stocked item, negative for none.
             long GetStockItemType() const;
+            // (DOL; added for BasketF game/basket/unit_65B7C.cpp) Drops the
+            // stocked item.
+            void DeleteStockItem();
 
             // Added for BossF game/boss/CChrDrvPadBoss.cpp (names guessed).
             // Inline in the module: the pad driver reads both words directly.

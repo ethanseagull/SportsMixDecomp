@@ -4,10 +4,37 @@
 
 // Most of this file is not in the module: the .rodata keeps the static locals
 // of CBgMdl::Initialize, Set and ChangeRot, CSelectMenuBgMdlObj::Main and the
-// CBgViewCamera constructor, whose functions the original link stripped.
-// Only the two functions below, the weak getters of the bcs model classes
-// (emitted with a vtable that was stripped too) and the static initialiser
-// remain.
+// CBgViewCamera constructor, whose functions the original link stripped
+// while keeping their data. The unread tables, strings and constants are
+// named below in the original's order (names and the members of the tables
+// guessed) and kept by MenuF's force_active list in config.yml; nothing reads
+// them. See notes/toolchain.md, "Unread constants of stripped code".
+
+namespace {
+
+    // A resource of the background files: its name and a number (the ball
+    // of each game for the BG_ball_* models).
+    struct ResEntry {
+        const char *pName;
+        unsigned char nId;
+    };
+}
+
+namespace CBgMdl_cpp {
+    extern const ResEntry UnusedMdlTable[6] = {
+        { "bg_ball_rot", 0 },
+        { "ball_bound", 0 },
+        { "BG_ball_BK", 1 },
+        { "BG_ball_VB", 2 },
+        { "BG_ball_DB", 3 },
+        { "BG_ball_HK", 4 },
+    };
+    extern const ResEntry UnusedAnmTable[3] = {
+        { "bg_ball_rot", 0 },
+        { "bg_ball_rot_4", 0 },
+        { "ball_bound", 0 },
+    };
+}
 
 namespace {
 
@@ -21,6 +48,19 @@ namespace {
         "ball_out",
         "ball_set"
     };
+
+}
+
+namespace CBgMdl_cpp {
+    extern const unsigned char UnusedBallIdTable[5] = { 0, 2, 3, 4, 5 };
+    extern const char UnusedCameraAnmName[] = "bg_ball_rot_cam00";
+    extern const char UnusedCameraName[] = "Camera";
+    extern const char UnusedLightName[] = "bg_ball_chr_lgt.lgt";
+    // Initialize()'s static local resLen in the original.
+    extern const long UnusedResLen = 5;
+}
+
+namespace {
 
     // (meaning guessed) One position of the ball models.
     struct BallPos {
@@ -37,7 +77,7 @@ namespace {
     };
 
     // (meaning guessed) A direction, probably of the light.
-    bcs::FVEC3 s_LightDir(0.12f, -0.35f, -1.0f);
+    bcs::FVEC3 s_LightDir(0.12f, -0.35000002f, -1.0f);
 }
 
 // The motion node is named by the state.
@@ -64,8 +104,21 @@ inline void msw::SelectMenu::CSelectMenuBgMdlObj::StartMove(float fFrames, long 
     m_nFlag200 = nFlag;
 }
 
+// (guessed) Dead float comparisons, a stand-in for the stripped code that
+// used these constants first: the original's literal pool has 60.0f and 1.0f
+// ahead of the ones the functions below create (see notes/decisions.md, "Dead
+// float comparison"). They generate no code.
+inline void msw::SelectMenu::CBgMdl::UnusedReferences() const
+{
+    if (m_fMoveTime == 60.0f) {
+    }
+    if (m_fMoveTime == 1.0f) {
+    }
+}
+
 void msw::SelectMenu::CBgMdl::ChangeBall(long nBall)
 {
+    UnusedReferences();
     switch (nBall) {
         case 0:
             SetSelectPosMdlObjId(1);
@@ -80,6 +133,10 @@ void msw::SelectMenu::CBgMdl::ChangeBall(long nBall)
             SetSelectPosMdlObjId(4);
             break;
     }
+}
+
+namespace CBgMdl_cpp {
+    extern const float UnusedFloat0 = 10000.0f;
 }
 
 void msw::SelectMenu::CBgMdl::SetSelectPosMdlObjId(long nId)
@@ -107,4 +164,35 @@ void msw::SelectMenu::CBgMdl::SetSelectPosMdlObjId(long nId)
             return;
         }
     }
+}
+
+// The rest of the stripped code's constants: they follow the functions'
+// literals in the original. The ones named after static locals of the
+// original are noted.
+namespace CBgMdl_cpp {
+    extern const float UnusedFloat1 = 16.0f / 9.0f;
+    extern const float UnusedFloat2 = 4.0f / 3.0f;
+    // Set()'s static locals viewNo and frame.
+    extern const long UnusedViewNo = 0;
+    extern const long UnusedFrame = 0;
+    extern const float UnusedFloat3[3] = { 0.017453292f, 35.0f, 0.1f };
+    // ChangeRot()'s static local speed.
+    extern const float UnusedSpeed = 1.0f;
+    // CSelectMenuBgMdlObj::Main()'s static local rotYSpeedDiv, then
+    // constants of the same function.
+    extern const float UnusedRotYSpeedDiv = 15.0f;
+    extern const float UnusedFloat4[4] = { 2.0625f, 0.0f, 15.0f, 6.2831855f };
+    // CBgViewCamera's constructor's static locals far, near, fovy and roll.
+    extern const float UnusedFar = 10000.0f;
+    extern const float UnusedNear = 0.1f;
+    extern const float UnusedFovy = 35.0f;
+    extern const float UnusedRoll = 0.0f;
+}
+
+// (guessed) CSelectMenuBgMdlObj's destructor stands in for its stripped
+// functions: with it this file emits the class's vtable, and with that the
+// weak copies of the inline bcs getters the original keeps here (the link
+// strips the vtable and the destructor again).
+msw::SelectMenu::CSelectMenuBgMdlObj::~CSelectMenuBgMdlObj()
+{
 }

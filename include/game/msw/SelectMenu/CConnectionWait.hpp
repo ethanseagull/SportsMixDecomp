@@ -7,22 +7,26 @@ namespace msw {
     namespace SelectMenu {
 
         // Size 0x64. The "connecting" indicator the Wi-Fi screens put up
-        // while they wait (menu object 0xFF of CSelectMenu). Only the members
-        // used so far (added for MenuF game/menu/CFriendInfo.cpp); its own
-        // members are not mapped, and the meaning of the constructor's last
-        // two arguments is not known.
+        // while they wait ("WIN_H", menu object 0xFF of CSelectMenu). Added
+        // for MenuF game/menu/CFriendInfo.cpp; defined in
+        // game/menu/CWiFiTopA.cpp. Member names are guesses.
         class CConnectionWait : public CSelectMenuLayoutBase {
             public:
-                CConnectionWait(long nId, int nUnk, float fUnk);
+                // bDisconnect shows the "disconnect" picture instead of the
+                // "connect" one; fOffsetY moves three of the panes up or
+                // down.
+                CConnectionWait(long nId, int bDisconnect, float fOffsetY);
                 virtual ~CConnectionWait();
                 virtual void Main();
+                // Event 0x2E closes the window (0), others give -1.
                 virtual long SendEvent(long nEvent, void *pParam);
-                virtual void Disp();
+                virtual void Disp() {}
                 virtual int Set();
                 virtual void Remove();
 
             private:
-                unsigned char m_Unk5C[0x64 - 0x5C];
+                int m_bDisconnect;              // 0x5C
+                float m_fOffsetY;               // 0x60
         };
     }
 }

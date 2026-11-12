@@ -19,6 +19,26 @@ modules:
   name: MenuF
   force_active:
   - MenuModuleMain
+  - UnusedMdlTable__10CBgMdl_cpp
+  - UnusedAnmTable__10CBgMdl_cpp
+  - UnusedBallIdTable__10CBgMdl_cpp
+  - UnusedCameraAnmName__10CBgMdl_cpp
+  - UnusedCameraName__10CBgMdl_cpp
+  - UnusedLightName__10CBgMdl_cpp
+  - UnusedResLen__10CBgMdl_cpp
+  - UnusedFloat0__10CBgMdl_cpp
+  - UnusedFloat1__10CBgMdl_cpp
+  - UnusedFloat2__10CBgMdl_cpp
+  - UnusedViewNo__10CBgMdl_cpp
+  - UnusedFrame__10CBgMdl_cpp
+  - UnusedFloat3__10CBgMdl_cpp
+  - UnusedSpeed__10CBgMdl_cpp
+  - UnusedRotYSpeedDiv__10CBgMdl_cpp
+  - UnusedFloat4__10CBgMdl_cpp
+  - UnusedFar__10CBgMdl_cpp
+  - UnusedNear__10CBgMdl_cpp
+  - UnusedFovy__10CBgMdl_cpp
+  - UnusedRoll__10CBgMdl_cpp
   - UnusedMdlTable__13CCharaMdl_cpp
   - UnusedPlayerNode__13CCharaMdl_cpp
   - UnusedPlayerTable__13CCharaMdl_cpp

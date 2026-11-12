@@ -1,6 +1,8 @@
 #ifndef BCS_DWC_CDWC_HPP_
 #define BCS_DWC_CDWC_HPP_
 
+#include "dwc.h"
+
 namespace bcs {
     namespace dwc {
         class CDwcFriendList;
@@ -68,6 +70,26 @@ namespace bcs {
                 long GetMatchingLevel() const;
                 int IsShouldMatchAustraliaOnly() const;
                 void StartAnybodyMatching(long nNum, long nPlayerNum, long nGameKind, long nSkill, int bLimit);
+                // Added for MenuF game/menu/CWiFiTopA.cpp (return types and
+                // argument names guessed). Logging in with the player's
+                // account and the names of its nNum players; the account
+                // data back; whether it changed since it was last saved,
+                // and forgetting that; the player's friend code; starting
+                // and finishing the connection; the data other players see
+                // (status and public storage data); whether the storage
+                // has been read; how many friends' servers have answered.
+                void Login(const DWCstAccUserData *pUserData, const wchar_t **ppNames, long nNum);
+                void GetUserData(DWCstAccUserData *pUserData) const;
+                int IsDirtyUserData() const;
+                void ResetDirtyUserData();
+                unsigned long long GetFriendCode() const;
+                int Start();
+                int Finish();
+                int IsFinishComplete() const;
+                void SetOwnStatusAppData(const void *pData, long nSize);
+                void SaveEntryOwnPublicData(const void *pData, long nSize);
+                int IsStorageComplete() const;
+                long GetFriendServersAsyncCount() const;
         };
     }
 }

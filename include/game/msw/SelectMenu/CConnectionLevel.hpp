@@ -30,7 +30,12 @@ namespace msw {
                 virtual int IsButtonKindOfStickMode(long nBtnKindId);
 
             private:
-                unsigned char m_Unk5A0[0x4]; // 0x5A0
+                // Inlined in the game; only its local static has a symbol
+                // (added for game/menu/CWiFiTopA.cpp).
+                void CheckButtonAnim();
+
+                // (names guessed; added for game/menu/CWiFiTopA.cpp)
+                long m_nLevel;               // 0x5A0, nLevel less one: the stars shown
 
             public:
                 // 0x5A4. (name guessed) The player's answer: 1000 accepted,
@@ -38,7 +43,10 @@ namespace msw {
                 long m_nResult;
 
             private:
-                unsigned char m_Unk5A8[0x5B4 - 0x5A8];
+                // (names guessed; added for game/menu/CWiFiTopA.cpp)
+                float m_fInputWait;          // 0x5A8, frames before the buttons answer
+                const CSelectMenu::WiFiSingleData *m_pMyData; // 0x5AC
+                const CSelectMenu::WiFiSingleData *m_pEmData; // 0x5B0
         };
     }
 }

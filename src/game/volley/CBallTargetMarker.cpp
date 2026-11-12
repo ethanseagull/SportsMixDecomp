@@ -429,15 +429,6 @@ void msw::CBallTargetMarker::Main()
     }
 }
 
-// The original has this as a weak copy (an inline body in bcs/CScnObj.hpp,
-// emitted after Main by some vtable here; the DOL never defines it). Making
-// it inline in the shared header would emit weak copies in units that match
-// without it, so it is defined out of line here: same code, strong binding.
-unsigned char bcs::CScnObj::GetAlphaRate() const
-{
-    return m_nAlphaRate;
-}
-
 // Fades and scales the marker with the frames left before the ball comes
 // down: hidden more than APPEAR_FRAME frames before the ball's display
 // window, shrinking over the window, fading out once the ball is down.

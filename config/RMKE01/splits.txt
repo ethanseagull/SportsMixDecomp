@@ -352,14 +352,11 @@ game/msw/CGameSnd.cpp:
 	.sbss       start:0x805C0C60 end:0x805C0C70
 	.sdata2     start:0x805C31C8 end:0x805C31F0
 
-game/msw/CStgGmk_Case_Mdl.cpp:
-	.text       start:0x8014BE64 end:0x8014C400
-
-game/msw/CStgGmk_Case_Act.cpp:
-	.text       start:0x8014C95C end:0x80150084
-
 game/msw/CStgGmk_Case.cpp:
-	.text       start:0x80150120 end:0x80150708
+	.text       start:0x8014BE64 end:0x80150AB4
+	.rodata     start:0x8043C750 end:0x8043C7D8
+	.data       start:0x80471DD8 end:0x804723E8
+	.sdata2     start:0x805C3218 end:0x805C3280
 
 game/msw/CGoalMdl.cpp:
 	.text       start:0x80150D88 end:0x80151A24

@@ -6,6 +6,7 @@
 #include "nw4r/db/Warning.hpp"
 #include "nw4r/lyt/animation.h"
 #include "nw4r/lyt/Pane.hpp"
+#include "nw4r/ut/Rect.h"
 #include "revolution/mem.h"
 
 // The name of this file is part of the binary: Layout::AllocMemory passes
@@ -60,6 +61,23 @@ namespace nw4r {
                     NW4R_WARNING(pMem, "can't alloc memory.");
                     return pMem;
                 }
+
+                // (added for HockeyF game/hockey/CRadarIcon2DHockeyGoal.cpp)
+                static void FreeMemory(void *pMem) { MEMFreeToAllocator(mspAllocator, pMem); }
+
+                // (added for HockeyF game/hockey/CRadarIcon2DHockeyGoal.cpp)
+                // Destroys pObj and frees its memory; nothing for null.
+                template <typename T>
+                static void DeleteObj(T *pObj)
+                {
+                    if (pObj != 0) {
+                        pObj->~T();
+                        FreeMemory(pObj);
+                    }
+                }
+
+                // (added for HockeyF game/hockey/CRadarIcon2DHockeyGoal.cpp)
+                ut::Rect GetLayoutRect() const;
 
                 // A new T built in memory from mspAllocator; null when the
                 // allocation fails.

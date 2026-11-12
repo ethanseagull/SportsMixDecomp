@@ -57,6 +57,17 @@ void msw::CCollManDodge::Disp()
     CCollMan::Disp();
 }
 
+// (names guessed) The smaller and the larger of two values.
+template <typename T> static inline T Min(T a, T b)
+{
+    return a > b ? b : a;
+}
+
+template <typename T> static inline T Max(T a, T b)
+{
+    return a < b ? b : a;
+}
+
 // The extra collision sphere of goal `idx` (flags bits 0-7), tested only
 // for a ball (nKind 1) that a team holds (flags bits 16-23, team + 1) and
 // only when the sphere is enabled: the goal that team attacks keeps the
@@ -165,6 +176,7 @@ int msw::CCollManDodge::DetectMapHit_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, flo
             bcs::FVEC4 court[2];
             float t;
             float gap;
+            float y;
             float depth;
 
             DetectExColl_(result, rPos, rNormal, rTime, rFrom, rTo, fRadius, nKind, flags);
@@ -206,10 +218,10 @@ int msw::CCollManDodge::DetectMapHit_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, flo
             }
 
             // The rectangle around both.
-            rect.x = court[0].x > court[1].x ? court[1].x : court[0].x;
-            rect.y = court[0].y < court[1].y ? court[1].y : court[0].y;
-            rect.z = court[0].z > court[1].z ? court[1].z : court[0].z;
-            rect.w = court[0].w < court[1].w ? court[1].w : court[0].w;
+            rect.x = Min(court[0].x, court[1].x);
+            rect.y = Max(court[0].y, court[1].y);
+            rect.z = Min(court[0].z, court[1].z);
+            rect.w = Max(court[0].w, court[1].w);
 
             if (nKind == 2) {
                 break;
@@ -225,40 +237,37 @@ int msw::CCollManDodge::DetectMapHit_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, flo
             // Keep out of the space beside the narrower court.
             if (rect.x < court[0].x) {
                 bcs::FVEC4 area(rect.x - 100.0f, court[0].x, court[0].z - 100.0f,
-                                court[0].w < court[1].z ? court[1].z : court[0].w);
+                                Max(court[0].w, court[1].z));
                 result |= DetectMapHitOuterRgn_(rPos, rNormal, rTime, area, 0.0f, rFrom, rPos, fRadius, reflect);
             }
             if (rect.y > court[0].y) {
                 bcs::FVEC4 area(court[0].y, 100.0f + rect.y, court[0].z - 100.0f,
-                                court[0].w < court[1].z ? court[1].z : court[0].w);
+                                Max(court[0].w, court[1].z));
                 result |= DetectMapHitOuterRgn_(rPos, rNormal, rTime, area, 0.0f, rFrom, rPos, fRadius, reflect);
             }
             if (rect.x < court[1].x) {
-                bcs::FVEC4 area(rect.x - 100.0f, court[1].x, court[0].w > court[1].z ? court[1].z : court[0].w,
+                bcs::FVEC4 area(rect.x - 100.0f, court[1].x, Min(court[0].w, court[1].z),
                                 100.0f + court[1].w);
                 result |= DetectMapHitOuterRgn_(rPos, rNormal, rTime, area, 0.0f, rFrom, rPos, fRadius, reflect);
             }
             if (rect.y > court[1].y) {
-                bcs::FVEC4 area(court[1].y, 100.0f + rect.y, court[0].w > court[1].z ? court[1].z : court[0].w,
+                bcs::FVEC4 area(court[1].y, 100.0f + rect.y, Min(court[0].w, court[1].z),
                                 100.0f + court[1].w);
                 result |= DetectMapHitOuterRgn_(rPos, rNormal, rTime, area, 0.0f, rFrom, rPos, fRadius, reflect);
             }
 
             // And out of the gap between the two courts, if there is one.
             gap = court[1].z - court[0].w;
+            y = rPos.y;
             depth = gap - 0.1f;
-            if (depth > rPos.y) {
+            if (depth > y) {
                 depth = gap;
             } else {
-                depth -= rPos.y;
+                depth -= y;
             }
             if (depth > 0.0f) {
-                bcs::FVEC4 area;
                 float center = 0.5f * (court[0].w + court[1].z);
-                area.x = rect.x;
-                area.y = rect.y;
-                area.z = center - 0.5f * depth;
-                area.w = center + 0.5f * depth;
+                bcs::FVEC4 area(rect.x, rect.y, center - 0.5f * depth, center + 0.5f * depth);
                 result |= DetectMapHitOuterRgnZ_(rPos, rNormal, rTime, area, 0.0f, rFrom, rPos, fRadius, reflect);
             }
             return result;

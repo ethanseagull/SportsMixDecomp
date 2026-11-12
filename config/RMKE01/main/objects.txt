@@ -24,6 +24,7 @@ Equivalent game/msw/CStage02Base.cpp
 Equivalent game/bcs/CMiiMan.cpp
 Matching game/msw/CStgGmkClusterImpl.cpp
 Equivalent game/msw/CStgGmk_Trolley.cpp
+Equivalent game/msw/CMenuPad.cpp
 Matching game/msw/CMenuPadInfo.cpp
 Matching game/msw/CStageNet.cpp
 Matching game/msw/CStage01Base.cpp
@@ -86,7 +87,7 @@ Equivalent game/msw/CMenuPartBase.cpp
 Equivalent game/msw/CStgEffectSlot.cpp flags=noauto
 Equivalent game/msw/CCockpitMenuBase.cpp
 Equivalent game/bcs/G2D/CLayoutBase.cpp
-Equivalent game/msw/CStgSeSlot.cpp
+Equivalent game/msw/CStgSeSlot.cpp flags=noauto
 Equivalent game/msw/CGameGuideMan.cpp
 Equivalent game/msw/CEffectCluster.cpp
 Equivalent game/msw/CAtkCollision.cpp

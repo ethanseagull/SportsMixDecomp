@@ -237,7 +237,7 @@ namespace msw {
 
     inline void CItemBallBasketBomb::StartFuse_()
     {
-        if (m_pMdl == 0) {
+        if (GetMdl() == 0) {
             return;
         }
         if (m_hEffect == 0) {

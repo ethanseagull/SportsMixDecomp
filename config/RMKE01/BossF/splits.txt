@@ -55,14 +55,30 @@ game/boss/unit_1C248.cpp:
 	.data       start:0x00001258 end:0x000012F0
 
 game/boss/unit_1EA14.cpp:
-	.text       start:0x0001EA14 end:0x00025E20
-	.rodata     start:0x000007E8 end:0x00000920
+	.text       start:0x0001EA14 end:0x000246C8
+	.rodata     start:0x000007E8 end:0x000008B8
 
-game/boss/CChrCore.cpp:
-	.text       start:0x00025E20 end:0x0002E720
+game/boss/unit_246C8.cpp:
+	.text       start:0x000246C8 end:0x00025E20
+	.rodata     start:0x000008B8 end:0x00000920
+
+game/boss/CChrCoreBoss.cpp:
+	.text       start:0x00025E20 end:0x0002E560
 	.ctors      start:0x00000008 end:0x0000000C
 	.rodata     start:0x00000920 end:0x00000A10
-	.data       start:0x000012F0 end:0x00004A18
+	.data       start:0x000012F0 end:0x00002138
+
+game/boss/CChrCoreBossDaisy.cpp:
+	.text       start:0x0002E560 end:0x0002E5F8
+	.data       start:0x00002138 end:0x00002ED8
+
+game/boss/CChrCoreBossDiddy.cpp:
+	.text       start:0x0002E5F8 end:0x0002E68C
+	.data       start:0x00002ED8 end:0x00003C78
+
+game/boss/CChrCoreBossDonkey.cpp:
+	.text       start:0x0002E68C end:0x0002E720
+	.data       start:0x00003C78 end:0x00004A18
 
 game/boss/CChrCoreBossKinopio.cpp:
 	.text       start:0x0002E720 end:0x0002F300

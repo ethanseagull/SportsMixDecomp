@@ -681,7 +681,7 @@ long msw::CChrCoreBoss::SubStateGetNeutralPoseType_()
     // A pass from a team mate that can be tossed on.
     if (pBall->IsPassMode() && pBall->GetTouchNum() >= 1 && pBall->GetShotTeamIdx() == GetTeamNo() &&
         pBall->GetShotChrIdx() != GetPlayerNo() && pBall->GetTouchDownFrame(pBall->GetBgCollRadius()) <= 60.0f &&
-        pBall->GetPos().y >= m_fTossHeight + GetPosY() &&
+        pBall->GetPos().y >= m_aTossCatchPos[0].m_Low.y + GetPosY() &&
         IsInnerXZ(pBall->GetTargetPos(), GetCcParam_()->m_Unk60)) {
         return 1;
     }
@@ -783,7 +783,7 @@ long msw::CChrCoreBoss::GetReceivePoseDir_(float fDir)
     return nPose;
 }
 
-long msw::CChrCoreBoss::GetReceivePoseMotID_(long nPose, long nPart)
+short msw::CChrCoreBoss::GetReceivePoseMotID_(long nPose, long nPart)
 {
     return s_ReceivePoseMot[nPose][nPart];
 }
@@ -805,7 +805,7 @@ long msw::CChrCoreBoss::GetTossPoseDir_(float)
     return 0;
 }
 
-long msw::CChrCoreBoss::GetTossPoseMotID_(long nPose, long nPart)
+short msw::CChrCoreBoss::GetTossPoseMotID_(long nPose, long nPart)
 {
     return s_TossPoseMot[nPose][nPart];
 }
@@ -827,7 +827,7 @@ long msw::CChrCoreBoss::GetJumpTossPoseDir_(float)
     return 0;
 }
 
-long msw::CChrCoreBoss::GetJumpTossPoseMotID_(long nPose, long nPart)
+short msw::CChrCoreBoss::GetJumpTossPoseMotID_(long nPose, long nPart)
 {
     return s_JumpTossPoseMot[nPose][nPart];
 }

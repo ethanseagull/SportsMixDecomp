@@ -21,6 +21,10 @@ namespace bcs {
 
                 // Releases the archive loaded under pName (return type guessed).
                 void Cleanup(const char *pName);
+                // (added for HockeyF game/hockey/CRadarIcon2DHockeyGoal.cpp)
+                // An accessor for folder pRootFolderName of loaded archive
+                // pFileName; null on failure.
+                nw4r::lyt::ArcResourceAccessor *NewArcResourceAccessor(const char *pFileName, const char *pRootFolderName);
                 // Added for MenuF game/menu/CMenu.cpp (return type guessed;
                 // the menu passes 0 as the second argument).
                 void GetResourceFromDvdMan(const char *pPath, unsigned long);

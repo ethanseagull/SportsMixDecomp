@@ -73,6 +73,9 @@ namespace msw {
                     unsigned long Start(int bLoop);
                     void SetNextDelay();
                     void UpdateDelay(float rate);
+                    bool IsDelayWait() const;
+                    bool IsStopWait() const;
+                    bool IsRepeat() const;
                     void Set(long se, long n, long mode, unsigned long a, long b, float f4, float vol, float f6);
                     void SetPos(CPosFunc *pFunc);
                     unsigned long Play(long se, long n, unsigned long a, long b, float f4, float vol, float f6);

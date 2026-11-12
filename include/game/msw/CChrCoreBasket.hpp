@@ -25,10 +25,43 @@ namespace msw {
                 // 0x210: the height of Toad's trick jump
                 // (CChrCoreBasketKinopio::SubStateArtsShotSetTrickJumpParam_).
                 float m_fArtsJumpHeight;
-                unsigned char m_Unk214[0x240 - 0x214];
+                // 0x214-0x268 (names guessed; game/basket/unit_23654.cpp, the
+                // common special shot): the frames before the trick ends that
+                // its jump reaches the top, the setback's shortest and
+                // longest distance from the goal (by the distance to the
+                // three-point line), the turn of the setback in degrees and
+                // the distance under which it does not turn, the frames
+                // before the trick ends that its move ends, the trick's
+                // frames, the frames its motion is shortened by, the frames
+                // of the shot's wait and fall, how far the fall goes down.
+                float m_fArtsJumpTopFrame;     // 0x214
+                float m_fArtsSetbackMin;       // 0x218
+                float m_fArtsSetbackMax;       // 0x21C
+                float m_fArtsSetbackRotDeg;    // 0x220
+                float m_fArtsSetbackRotDist;   // 0x224
+                float m_fArtsMoveEndFrame;     // 0x228
+                float m_fArtsTrickFrame;       // 0x22C
+                float m_fArtsTrickMotCut;      // 0x230
+                float m_fArtsWaitFrame;        // 0x234
+                float m_fArtsFallFrame;        // 0x238
+                float m_fArtsFallHeight;       // 0x23C
                 // 0x240 (name guessed): Waluigi's special shot gives each of
                 // its balls this value / 60 (CBallBasket::SetArtsShotUnk).
                 float m_fArtsBallUnk240;
+                // 0x244-0x268 (names guessed): the hitback after the shot
+                // (its frames, distance, and jump), then the blend frames of
+                // the trick, loop, shot (from the loop, and straight from the
+                // trick) and landing motions.
+                float m_fArtsHitbackFrame;     // 0x244
+                float m_fArtsHitbackDist;      // 0x248
+                float m_fArtsHitbackJump0;     // 0x24C
+                float m_fArtsHitbackJump1;     // 0x250
+                float m_fArtsHitbackJump2;     // 0x254
+                float m_fArtsTrickBlend;       // 0x258
+                float m_fArtsLoopBlend;        // 0x25C
+                float m_fArtsShotBlend;        // 0x260
+                float m_fArtsShotBlendNoLoop;  // 0x264
+                float m_fArtsLandBlend;        // 0x268
         };
     }
 
@@ -91,6 +124,9 @@ namespace msw {
             // (added for game/basket/CChrCoreBasketWaluigi.cpp) Sets
             // pWork->m_fShotFrame from the current motion's shot trigger.
             void SubStateArtsShotDoGetBallShotTrg_(STATE_WORK_AIR_TRICK *pWork);
+            // (added for game/basket/CcWarioSmokeMgr.cpp; meaning guessed
+            // from the name) The point the trick moves back to.
+            void SubStateArtsShotCalcSetbackPos_(bcs::FVEC3 &rPos);
 
             // Added for game/basket/CChrCoreBasketSaboten.cpp (BasketF;
             // return types and meanings guessed from the names and calls).
@@ -116,7 +152,14 @@ namespace msw {
             // Steps of the air trick shared by the characters.
             void SubStateAirTrickCmnCtor_();
             void SubStateAirTrickMove_(STATE_WORK_AIR_TRICK *pWork, float, float);
-            void SubStateAirTrickCmnDunk_(STATE_WORK_AIR_TRICK *pWork);
+            // (returns 1 at the step the dunk ends with, 0 before)
+            int SubStateAirTrickCmnDunk_(STATE_WORK_AIR_TRICK *pWork);
+            // (added for game/basket/unit_23654.cpp; meanings guessed from
+            // the names) Stops the sounds of the special move's slots; the
+            // start (motion nMot) and the end of hanging from the ring.
+            void AllStopSPSlotSE();
+            void Util_DunkStart(long nMot, long, float, long);
+            void Util_DunkEnd(int);
             void SubBSplineMove_(float fFrame, float fFrameNum, float &rRate, float fLen, float fRotY, float,
                                  const bcs::FVEC3 &rOfs);
             // Blocks pChr's air trick dunk when it runs into this one.
@@ -457,7 +500,7 @@ namespace msw {
             virtual int SubStateArtsShotIsStartArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCD4
             virtual void SubStateArtsShotCalcRotParam_(CChrCore::ROT_LERP1 &, float, float); // 0xCD8
             virtual void SubStateArtsShotClearMoveParamWork_(CC_DATA::CHR_PARAM::MOVE_PARAM &); // 0xCDC
-            virtual void SubStateArtsShotDoJumpMove_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual int SubStateArtsShotDoJumpMove_(STATE_WORK_AIR_TRICK *); // 0xCE0, returns Util_DoJumpMoveEX's result
             virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xCE4
             virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCE8
             virtual void SubStateArtsShotReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCEC
@@ -501,8 +544,8 @@ namespace msw {
         // 0x00-0x04: three motions of the trick (GetAirTrickMotID of flows
         // 7, 8 and 15; the cactus stores them, SubStateAirTrickCmnDunk_
         // presumably plays them).
-        short m_nMotId[3];
-        unsigned char m_Unk06[0x8 - 0x6];
+        // (0x06: a fourth, which the common constructor sets to -1 too)
+        short m_nMotId[4];
         unsigned long m_nFlag;         // 0x08, bit 9 set while Luigi's vacuum pulls
         // 0x0C-0x24, as the cactus's trick uses them (names guessed): the
         // frames of the move so far and in all, the motion frame of the last
@@ -528,7 +571,7 @@ namespace msw {
         // drops it when it is no longer blocking (status bit 0x2000).
         CChrCoreBasket *m_pBlocker;
         long m_nStep;                  // 0x40, the step of the trick (state numbers 0 to 0x12)
-        unsigned char m_Unk44[0x48 - 0x44];
+        long m_nUnk44;                 // 0x44, cleared by CtorStateAirTrick
         float m_fJumpUnk;              // 0x48, passed on to CChrCore::m_fJumpUnk224
         bcs::FVEC3 m_TargetPos;        // 0x4C, where the trick moves to
         float m_fUnk58;                // 0x58, the frame of the move by m_MoveParam (the Moogle)
@@ -539,14 +582,16 @@ namespace msw {
         float m_fTrickFrame;           // 0x90, the frames of the current step
         // 0x94: the frames of the current step so far (the Black Mage).
         float m_fTrickCount;
-        unsigned char m_Unk98[0x9C - 0x98];
+        float m_fTrickMotFrame;        // 0x98, the frames of the trick motion (SubStateArtsShotSetTrickFrameParam_)
         float m_fAnimSpeed;            // 0x9C, the speed of the trick motions (Waluigi)
         long m_nUnkA0;                 // 0xA0, (meaning not known) below 1 the shot motion stops twice
         // 0xA4: the frame of the shot motion the ball leaves at
         // (SubStateArtsShotDoGetBallShotTrg_ sets it).
         float m_fShotFrame;
-        long m_nUnkA8;                 // 0xA8, Luigi sets 40
-        unsigned char m_UnkAC[0x4];
+        // 0xA8, 0xAC: the camera quake the shot starts (CGame::StartCameraQuake;
+        // none when negative). Luigi sets 40.
+        long m_nUnkA8;
+        long m_nUnkAC;
         // 0xB0: the yaw the shot aims at; negative for straight at the goal
         // (Luigi's target marker sets it).
         float m_fTargetRotY;
@@ -612,6 +657,16 @@ namespace msw {
         public:
             CChrCoreBasketWario();
             virtual ~CChrCoreBasketWario();
+            virtual void CallbackMotTrg_AtkOn_(long, long);            // 0xC80
+            virtual void CallbackMotTrg_AtkOff_(long, long);           // 0xC84
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCBC
+            virtual void SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCC0
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *pWork, long); // 0xCE4
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
     };
 
     // Donkey Kong: his special shot pounds the ground on landing from a

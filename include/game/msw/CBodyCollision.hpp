@@ -101,6 +101,10 @@ namespace msw {
             void SetDisable(long index);
             void SetCatchEnable(long index);
             void ResetTargetFlag(long index, unsigned long flag);
+            // (DOL; added for BossF game/boss/CBallBoss.cpp, meanings guessed
+            // from the names)
+            void AddTargetFlag(long index, unsigned long flag);
+            void SetTmpNoHitFlag(long index, unsigned long flag);
             void SetBallCatchCallback(long index, BallCatchCallback pFunc, void *pArg);
             void SetYRot(long index, float fRotY);
             float GetRadius(long index) const;
@@ -114,6 +118,12 @@ namespace msw {
             // (added for game/msw/CC_CMN/LUIGI/CcOvacuumForce.cpp; DOL)
             void SetSizeAll(const bcs::FVEC3 &rSize);
             void SetYRotAll(float fRotY);
+            // (added for BasketF game/basket/CcWarioSmokeMgr.cpp; DOL,
+            // meanings guessed) The units hit (and push) as an attack too,
+            // with attack type nType and no hit sound (-1).
+            void SetAttackEnableAll();
+            void SetAtkTypeAll(unsigned long nType);
+            void SetHitSeIDAll(long nSe);
             // (added for game/msw/CStgGmk_Case.cpp; DOL) Unit index (its
             // return type is a guess: the unit is read as a CCollUnit).
             CCollUnit *GetColl(long index) const;

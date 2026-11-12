@@ -124,7 +124,9 @@ game/bcs/CWorldEnv.cpp:
 	.text       start:0x8007DF9C end:0x8007EB64
 
 game/bcs/G2D/CLayoutBase.cpp:
-	.text       start:0x800A26F0 end:0x800A31B4
+	.text       start:0x800A2524 end:0x800A34B0
+	.data       start:0x80469F78 end:0x8046A000
+	.sdata2     start:0x805C2298 end:0x805C22B0
 
 game/bcs/G2D.cpp:
 	.text       start:0x800AA14C end:0x800ADA84
@@ -139,7 +141,8 @@ game/bcs/CWifiPadBase.cpp:
 	.text       start:0x800C1558 end:0x800C16C0
 
 game/bcs/CWifiPad.cpp:
-	.text       start:0x800C16C0 end:0x800C256C
+	.text       start:0x800C16C0 end:0x800C2618
+	.sdata2     start:0x805C2430 end:0x805C2440
 
 game/bcs/CXmlReader.cpp:
 	.text       start:0x800C2618 end:0x800C33DC
@@ -183,13 +186,14 @@ game/msw/CChrMan.cpp:
 	.text       start:0x800EBBA4 end:0x800EF44C
 
 game/msw/CChrMarker.cpp:
-	.text       start:0x800EFFDC end:0x800F1408
-
-game/msw/CArrowSignalBase.cpp:
-	.text       start:0x800F1410 end:0x800F14A0
-
-game/msw/CChr1on1MarkerBase.cpp:
-	.text       start:0x800F16DC end:0x800F260C
+	.text       start:0x800EFFDC end:0x800F29D8
+	.ctors      start:0x8042D1EC end:0x8042D1F0
+	.rodata     start:0x80438CF8 end:0x80439028
+	.data       start:0x8046E3C0 end:0x8046E8B0
+	.bss        start:0x804D3330 end:0x804D3340
+	.sdata      start:0x805BFB40 end:0x805BFB50
+	.sbss       start:0x805C0BD8 end:0x805C0BE0
+	.sdata2     start:0x805C2748 end:0x805C2788
 
 game/msw/CChrMdlObj.cpp:
 	.text       start:0x800F29D8 end:0x800F5B9C
@@ -207,7 +211,7 @@ game/msw/CBodyCollision.cpp:
 	.text       start:0x801072C0 end:0x801084B0
 
 game/msw/CAtkCollision.cpp:
-	.text       start:0x80108510 end:0x801093A8
+	.text       start:0x80108510 end:0x8010943C
 
 game/msw/CDefCollision.cpp:
 	.text       start:0x8010943C end:0x801099C4
@@ -217,7 +221,9 @@ game/msw/CComDrv.cpp:
 	.text       start:0x80109A0C end:0x8010CE1C
 
 game/msw/CEventDemoBase.cpp:
-	.text       start:0x8011141C end:0x8011158C
+	.text       start:0x8011141C end:0x801116E4
+	.data       start:0x8046EFC0 end:0x8046F010
+	.sbss       start:0x805C0BF0 end:0x805C0BF8
 
 game/msw/CEventModel.cpp:
 	.text       start:0x80111CCC end:0x80116308
@@ -250,6 +256,8 @@ game/msw/CEffectCtrl.cpp:
 
 game/msw/CEffectCluster.cpp:
 	.text       start:0x801227AC end:0x80123568
+	.data       start:0x8046F70C end:0x8046F7CC
+	.sdata      start:0x805BFBB8 end:0x805BFBC0
 
 game/msw/CEffectTableList.cpp:
 	.text       start:0x8012444C end:0x801244C0
@@ -342,8 +350,20 @@ game/msw/CMenuPadInfo.cpp:
 	.text       start:0x80142130 end:0x80142164
 	.sbss       start:0x805C0C40 end:0x805C0C48
 
+game/msw/menu/Localize.cpp:
+	.text       start:0x80142284 end:0x80142F04
+	.rodata     start:0x8043B238 end:0x8043B480
+	.data       start:0x80471670 end:0x804716E8
+	.sdata      start:0x805BFC28 end:0x805BFC98
+	.sdata2     start:0x805C3120 end:0x805C3190
+
 game/msw/CNowLoading.cpp:
-	.text       start:0x80142FB4 end:0x80142FD0
+	.text       start:0x80142F04 end:0x80143614
+	.rodata     start:0x8043B480 end:0x8043B4B0
+	.data       start:0x804716E8 end:0x80471700
+	.sdata      start:0x805BFC98 end:0x805BFCA8
+	.sbss       start:0x805C0C48 end:0x805C0C50
+	.sdata2     start:0x805C3190 end:0x805C31A8
 
 game/msw/dwc/CGameDwc.cpp:
 	.text       start:0x80143614 end:0x80145B40
@@ -417,10 +437,8 @@ game/msw/CTournament.cpp:
 	.text       start:0x801768EC end:0x8017B85C
 
 game/msw/CGame.cpp:
-	.text       start:0x8017C3AC end:0x80187D70
-
-game/msw/CGameSpeedCtrl.cpp:
-	.text       start:0x8018952C end:0x8018957C
+	.text       start:0x8017C3AC end:0x8018DD88
+	.ctors      start:0x8042D21C end:0x8042D220
 
 game/msw/CGameVib.cpp:
 	.text       start:0x8018DD88 end:0x8018DEF4
@@ -503,12 +521,11 @@ game/msw/CNpcGhost.cpp:
 	.text       start:0x801B8374 end:0x801B9EE8
 
 game/msw/CCockpitLayoutBase.cpp:
-	.text       start:0x801BA114 end:0x801BA944
-	.data       start:0x804821DC end:0x80482238
+	.text       start:0x801BA114 end:0x801BAB24
+	.ctors      start:0x8042D234 end:0x8042D238
+	.data       start:0x804821D0 end:0x80482238
+	.bss        start:0x804D7410 end:0x804D7430
 	.sdata2     start:0x805C4790 end:0x805C4798
-
-game/msw/CCockpitPartMove.cpp:
-	.text       start:0x801BA9EC end:0x801BAA6C
 
 game/msw/cockpit/CMissionCount.cpp:
 	.text       start:0x801BBF24 end:0x801BD93C
@@ -581,10 +598,14 @@ game/msw/CStgGmk_Pinball.cpp:
 	.sdata2     start:0x805C4D80 end:0x805C4E10
 
 game/msw/CStgEffectSlot.cpp:
-	.text       start:0x801E78D0 end:0x801E82B8
+	.text       start:0x801E782C end:0x801E86A8
+	.data       start:0x804857B8 end:0x80485828
+	.sdata2     start:0x805C4E10 end:0x805C4E18
 
 game/msw/CStgSeSlot.cpp:
-	.text       start:0x801E874C end:0x801E918C
+	.text       start:0x801E86A8 end:0x801E9F40
+	.data       start:0x80485828 end:0x804858D8
+	.sdata2     start:0x805C4E18 end:0x805C4E20
 
 game/msw/CTmGameHandler.cpp:
 	.text       start:0x801E9F48 end:0x801EAD84
@@ -677,10 +698,9 @@ game/msw/CStgGmk_Trolley.cpp:
 	.sdata2     start:0x805C5278 end:0x805C52E0
 
 game/msw/CStage17Base.cpp:
-	.text       start:0x80226894 end:0x80228618
-
-game/msw/CStage17Base/CTurnTable.cpp:
-	.text       start:0x80228674 end:0x8022870C
+	.text       start:0x80226894 end:0x80228FD8
+	.data       start:0x80489C80 end:0x80489E40
+	.sdata2     start:0x805C52E0 end:0x805C5338
 
 game/msw/menu/CDispTaskList.cpp:
 	.text       start:0x802294CC end:0x802299B4
@@ -699,8 +719,11 @@ game/msw/CMenuOption.cpp:
 	.text       start:0x80230A28 end:0x802319E0
 
 game/msw/menu/CMovieScnObj.cpp:
-	.text       start:0x80236454 end:0x802366DC
-	.bss        start:0x804D8BE0 end:0x804D8C00
+	.text       start:0x80235D40 end:0x80236704
+	.ctors      start:0x8042D268 end:0x8042D26C
+	.data       start:0x8048ADC0 end:0x8048AF00
+	.bss        start:0x804D8AE0 end:0x804D8C00
+	.sdata2     start:0x805C5678 end:0x805C5690
 
 game/msw/CNpcString.cpp:
 	.text       start:0x802380A4 end:0x80239480
@@ -771,6 +794,8 @@ game/msw/CCockpitResultTime.cpp:
 
 game/msw/CGameGuideMan.cpp:
 	.text       start:0x80269E04 end:0x8026A8F4
+	.rodata     start:0x804501D0 end:0x804501E0
+	.data       start:0x8048ED18 end:0x8048EEA0
 
 game/msw/CDataWork.cpp:
 	.text       start:0x8026F110 end:0x8026F114

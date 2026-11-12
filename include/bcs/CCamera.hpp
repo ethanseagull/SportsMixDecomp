@@ -39,8 +39,9 @@ namespace bcs {
             // (meaning of -1 guessed). Return type guessed.
             void SetActive(long view);
             // (DOL; added for BossF game/boss/GameBoss.cpp; return type
-            // guessed) Starts camera quake nQuake.
-            void StartQuake(long nQuake);
+            // guessed) Starts camera quake nQuake; not zero when it started
+            // (msw::CGame tests it).
+            int StartQuake(long nQuake);
             // (added for TourF msw::CTournamentRouteMan; parameter names
             // guessed) A quake of fFrame frames with the strength rPower.
             void StartQuakeDirect(long nPriority, const FVEC3 &rPower, float fFrame, short, unsigned short);

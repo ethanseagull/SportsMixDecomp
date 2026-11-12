@@ -16,6 +16,8 @@ namespace nw4r {
 
 namespace bcs {
     class CMdlObj;
+    class CAnmMotion;
+    class CAnmMatClr;
     class CScnGroup;
     class CScnObj;
     struct BCS_Color;
@@ -27,6 +29,8 @@ namespace msw {
     class CCollAtkUnit;
     class CItemBall;
     class CCollBodyUnit;
+    class CAtkCollision;
+    class CBodyCollision;
 
     // Arguments of the volleyball shots. (that BALL and VOLLEY are
     // namespaces and not classes is a guess, see notes/toolchain.md)
@@ -514,7 +518,8 @@ namespace msw {
                            float fVolume, float fArg6);
             // (DOL; return types guessed) Used by BasketF's
             // msw::CBallBasketFruit.
-            void TrgItemEffect_(long);
+            // (BossF's CBallBoss tests bit 0x10 of the result.)
+            unsigned long TrgItemEffect_(long);
             void AdjustGravity_();
             void SetAlphaRate(float fRate);
             void SetCollPushRadius(float fRadius);
@@ -522,10 +527,38 @@ namespace msw {
             void SetCollCatchRadius(float fRadius);
             void SetScale(float fScale);
 
+            // (DOL; added for BossF game/boss/CBallBoss.cpp, return types and
+            // parameter meanings guessed from the names and the callers)
+            // The body collision callbacks CreateCollBody_ registers; pArg
+            // is the ball.
+            static unsigned long CallbackBodyDamage(CCollBodyUnit *pBody, const CCollAtkUnit *pAtk,
+                                                    const bcs::FVEC3 &rPos, void *pArg);
+            static void CallbackBodyPush(CCollBodyUnit *pBody, CCollBodyUnit *pOther, void *pArg,
+                                         bcs::FVEC3 *pPush);
+            void EffectStopTail_();
+            void SetBlinkDisable();
+            void Detach_();
+            void SetSquashParam(const bcs::FVEC3 &rDir, float, float, float, float);
+            void RotReduce_(float fRate);
+            void VelReduce_(float fRate);
+            void ResetVelGravity_();
+            void Eff_CreateSimple(long nEffect, const bcs::FVEC3 &rPos, unsigned long, unsigned long);
+            void Eff_CreateSimple(long nEffect, const bcs::FVEC3 &rPos, float, unsigned long, unsigned long);
+            // Solves the vertical motion: the start velocity and gravity of a
+            // flight of fFrame frames from fStartY over fTopY to fEndY.
+            void CalcYVG(float fStartY, float fTopY, float fEndY, float fFrame, float &rVel, float &rGravity) const;
+            void SE_Stop(long nSlot, float fFade);
+            int IsItemEffect() const;
+            void LinkItemEffect_(unsigned long nId);
+            void ClearOffsetPos();
+
         protected:
             unsigned long m_nFlag;         // 0x94
             long m_nBallNo;                // 0x98, the ball's place in CBallMan's table
-            unsigned char m_Unk9C[0x8];    // 0x9C
+            // 0x9C (name guessed): the step of the running state (BossF's
+            // CBallBoss counts its touch-down steps with it).
+            long m_nStateStep;
+            unsigned char m_UnkA0[0x4];    // 0xA0
             // (names guessed) Per-frame steps: the DOL sets both to the same
             // value; CBallBasket counts its timers down by them and passes
             // m_fMoveRate to FuncMove_.
@@ -541,7 +574,16 @@ namespace msw {
             // 0xB8 (name guessed): a third scene object of the ball;
             // MenuF's msw::CTopMenuBall colours it with m_pMdlObj.
             bcs::CMdlObj *m_pSubObj2;
-            unsigned char m_UnkBC[0x18];   // 0xBC
+            // 0xBC, 0xC4 (names guessed): the animations CreateMdlObj_
+            // attaches to m_pMdlObj (BossF CBallBoss).
+            bcs::CAnmMotion *m_pAnmMotion;
+            unsigned char m_UnkC0[0x4];    // 0xC0
+            bcs::CAnmMatClr *m_pAnmMatClr;
+            // 0xC8, 0xCC (names guessed): the ball's attack and body
+            // collision (BossF CBallBoss::CreateCollBody_ builds the body).
+            CAtkCollision *m_pAtkColl;
+            CBodyCollision *m_pBodyColl;
+            unsigned char m_UnkD0[0x4];    // 0xD0
             // 0xD4 (name not known; added for BossF game/boss/unit_18E08.cpp):
             // a point of the ball's flight; the boss characters face it in
             // their receive poses and draw the ball's line from it to
@@ -551,22 +593,42 @@ namespace msw {
             // VolleyF's CBallTargetMarker puts its marker there, DodgeF's item
             // balls set it (CItemBallBaseDodge::SetTargetPos).
             bcs::FVEC3 m_vTargetPos;
-            unsigned char m_UnkEC[0xC];    // 0xEC
+            // 0xEC (name guessed): the position of the frame before (BossF's
+            // CBallBoss checks the map from here to m_Pos and sets both on a
+            // bounce).
+            bcs::FVEC3 m_PrevPos;
             bcs::FVEC3 m_Pos;              // 0xF8
-            unsigned char m_Unk104[0x0C];  // 0x104
+            // 0x104 (name guessed): the velocity of the frame before.
+            bcs::FVEC3 m_PrevVel;
             bcs::FVEC3 m_Velocity;         // 0x110 (name guessed)
             unsigned char m_Unk11C[0x18];  // 0x11C
             // 0x134 (name guessed from CBall::ClearOffsetPos, which writes it)
             bcs::FVEC3 m_OffsetPos;
             Quaternion m_Rot;              // 0x140, the ball's turn (name guessed)
             bcs::FVEC3 m_vRotAxis;         // 0x150 (name guessed)
-            unsigned char m_Unk15C[0x4];   // 0x15C
+            float m_fRotSpeed;             // 0x15C (name guessed; BossF sets 15 degrees on a bounce)
             float m_fGravity;              // 0x160 (name guessed; passed to CBallBasket::FuncMove_)
-            unsigned char m_Unk164[0x5C];  // 0x164
+            unsigned char m_Unk164[0x4];   // 0x164
+            // 0x168 (name guessed): the ball's scale; BossF's CBallBoss grows
+            // it with the coin power and multiplies its radii by it.
+            float m_fScale;
+            unsigned char m_Unk16C[0x10];  // 0x16C
+            long m_Unk17C;                 // 0x17C (meaning not known)
+            unsigned char m_Unk180[0xC];   // 0x180
+            // 0x18C (meaning not known): BossF's CBallBoss copies its attach
+            // lift here.
+            float m_f18C;
+            unsigned char m_Unk190[0x30];  // 0x190
             long m_nShootType;             // 0x1C0, returned by GetDodgeShootType (name guessed)
             unsigned char m_Unk1C4[0xC];   // 0x1C4
             float m_fAlphaRate;            // 0x1D0 (name guessed; SetAlphaRate's value)
-            unsigned char m_Unk1D4[0x144]; // 0x1D4
+            unsigned char m_Unk1D4[0x8];   // 0x1D4
+            // 0x1DC-0x1E4 (meanings not known): a squash of the model that
+            // BossF's CBallBoss reads while the ball fades out.
+            float m_f1DC;
+            long m_n1E0;
+            float m_f1E4;
+            unsigned char m_Unk1E8[0x130]; // 0x1E8
     };
 }
 

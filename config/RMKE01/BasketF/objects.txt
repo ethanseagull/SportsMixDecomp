@@ -8,6 +8,7 @@ Matching game/basket/TournamentBasket.cpp
 Matching game/basket/CCockpitBasketLayoutBase.cpp
 Equivalent game/basket/CCollManBasket.cpp
 Matching game/basket/CCameraBasket.cpp
+Equivalent game/basket/unit_23654.cpp
 Equivalent game/basket/CRadarIcon2DBasket.cpp
 Matching game/basket/CStageBasket01.cpp
 Equivalent game/basket/CCameraBasketHB.cpp
@@ -62,6 +63,7 @@ Equivalent game/basket/CChrCoreBasketSaboten.cpp
 Equivalent game/basket/CChrCoreBasketKuroma.cpp
 Matching game/basket/CStgGmk_Trolley_Act_Basket.cpp
 Equivalent game/basket/CChrCoreBasketWaluigi.cpp
+Equivalent game/basket/CcWarioSmokeMgr.cpp
 Equivalent game/basket/CStageBasket11.cpp flags=noauto
 Matching game/basket/CStgGmk_Case_Act_Basket.cpp
 Matching game/basket/CQPanelBasket.cpp

@@ -4,11 +4,18 @@
 #include "bcs/CFsmQueue.hpp"
 #include "bcs/FVEC3.hpp"
 #include "bcs/CTask.hpp"
+#include "bcs/CTaskMan.hpp"
 #include "revolution/rfl.h"
 
 namespace msw {
 
     class CGameCamera;
+    // Tasks of the game defined in game/msw/CGame.cpp (names guessed).
+    class CGamePauseTask;
+    class CGameStopTask;
+    class CGameTaskGroup;
+    class CItemRoulette;
+    class CGameSpeedCtrl;
 
     // Base of the per-sport game tasks. Only what callers outside the class
     // need so far; the layout past the bases is not mapped.
@@ -82,6 +89,12 @@ namespace msw {
                 long GetStage() const { return m_nStage; }
                 // Compared as a signed int (BasketF CGameBasketHungryBossPackun).
                 long GetUnk150() const { return m_Unk150; }
+                // (name guessed) The team that attacks first: the signed
+                // byte at 0x0E (GameWorkReset_ copies it to 0x0F).
+                long GetFirstOffenseTeam() const { return (signed char)m_Unk0E; }
+                // (fn_80189798, name guessed) Fills the work with the
+                // defaults (SetDefaultParam).
+                void SetDefault();
 
                 // 0x00 (meaning not known): HockeyF's CFighting compares it
                 // with a team number (the fight gauge and the shake icon).
@@ -91,8 +104,9 @@ namespace msw {
                 // 0x06 (meaning not known): with 11 to 13 here the tournament
                 // leaves team 0 to the computer as well.
                 unsigned char m_nUnk06;
-                unsigned char m_nUnk07;    // 0x07, read signed through GetUnk07
-                unsigned char m_Unk08[2];
+                unsigned char m_nUnk07;    // 0x07, read signed through GetUnk07 (SetCup stores it)
+                unsigned char m_nTournamentLevel; // 0x08 (SetTournamentLevel)
+                unsigned char m_nRound;           // 0x09 (SetRound)
                 // 0x0A, the stage being played (name guessed; the DOL's
                 // CEventDemoBase::_Init copies it, and HockeyF tests 0x11
                 // before calling CStageHockey17)
@@ -108,7 +122,7 @@ namespace msw {
                 // same read in BasketF's CComManBasketGame).
                 signed char m_nUserTeam;
                 long m_nGameLevel;         // 0x10, 0-3 (EASY, NORMAL, HARD, EXPERT; names guessed)
-                unsigned char m_Unk14[0x18 - 0x14];
+                long m_nQPanelLevel;       // 0x14 (SetQPanelLevel)
                 // 0x18: flag bits (name guessed). BasketF's
                 // CStageManBasket::Main_ skips the change-of-offense sound
                 // while any of 0x4306 is set; with 0x8000 set the dodge
@@ -138,7 +152,9 @@ namespace msw {
                 // 0x38 (meaning not known): BasketF's party game clears it
                 // when a game is set up.
                 float m_fUnk38;
-                unsigned char m_Unk3C[0x40 - 0x3C];
+                // 0x3C (meaning not known): AddTeamCoin_/UseTeamCoin_ copy it
+                // into m_anCoinHistTime of the team.
+                long m_nUnk3C;
                 // 0x40, flag words whose bit 0 the boss game's "?" panels test
                 // (game/boss/CQPanelManBoss.cpp): with bit 0 of 0x40 set a coin
                 // panel gives no coin; with bit 0 of 0x1C8 set the panels pop up
@@ -146,8 +162,41 @@ namespace msw {
                 unsigned long m_nUnk40;    // 0x40
                 // 0x44 (meaning not known): VolleyF's ready-start demo passes
                 // it with m_Unk0B to the serve telop.
-                long m_nUnk44;
-                unsigned char m_Unk48[0x150 - 0x48];
+                long m_nUnk44;             // (SetWinPoint stores it)
+                // 0x48-0x14F: per-character (8) and per-team (4) settings,
+                // read and written by the static Set/Get functions of the
+                // same names (DOL, game/msw/CGame.cpp).
+                signed char m_anCharType[8];            // 0x48
+                unsigned char m_anCharColor[8];         // 0x50
+                unsigned char m_anCharExFlag[8];        // 0x58
+                unsigned char m_anCharAssignPadNo[8];   // 0x60
+                unsigned char m_anCharAssignPlayerNo[8]; // 0x68
+                signed char m_anNpcType[8];             // 0x70
+                signed char m_anUnk78[4];               // 0x78 (fn_8018A7C0 reads it)
+                unsigned char m_anTeamCtrlType[4];      // 0x7C
+                unsigned char m_anTeamColorIdx[4];      // 0x80
+                // 0x84: the constructor stores each online pad's local pad
+                // number here in a Wi-Fi game (fn_8018A828 reads it).
+                unsigned char m_anUnk84[4];
+                unsigned char m_anGoalIdx[4];           // 0x88
+                float m_afTeamComLevel[4];              // 0x8C
+                long m_anTeamCoin[4];                   // 0x9C
+                unsigned long m_anTeamDisableDropCoin[4]; // 0xAC
+                // 0xBC: coins changes counted since 0xCC last ran out (names
+                // guessed; IncCoinHistCount counts 0xCC down)
+                long m_anCoinHistCount[4];
+                long m_anCoinHistTime[4];               // 0xCC
+                long m_anTeamItem[4];                   // 0xDC
+                long m_anPeriodStartCoin[4];            // 0xEC
+                unsigned char m_anTeamResult[4];        // 0xFC
+                long m_anPeriodStartScore[4];           // 0x100
+                long m_anTeamMaxLife[4];                // 0x110
+                long m_anTeamInitLife[4];               // 0x120
+                long m_anTeamSkillPoint[4];             // 0x130
+                unsigned char m_anTeamRebirthLife[4];   // 0x140
+                signed char m_anTeamChrChangeCtrlType[4]; // 0x144
+                bool m_abTeamAutoSpikeJump[4];     // 0x148
+                unsigned char m_anPassCountLimit[4];    // 0x14C
                 // 0x150 (meaning not known): with 1 here BasketF's party
                 // game sets bit 0 of CChrManBasket's flags when play starts.
                 unsigned char m_Unk150;
@@ -158,26 +207,51 @@ namespace msw {
                 // 0x152 (name guessed): how many goals the court has
                 // (HockeyF CCollManHockey loops over them).
                 unsigned char m_nGoalNum;
-                unsigned char m_Unk153[0x160 - 0x153];
+                unsigned char m_nSportsMode; // 0x153 (SetSportsMode)
+                // 0x154-0x17C: the record of the last goal (SetGoal*; names
+                // after the setters).
+                long m_nGoalTeam;          // 0x154
+                long m_nGoalChar;          // 0x158
+                long m_nGoalBaseScore;     // 0x15C
                 // 0x160: counted by tournament mission 0x3E (HockeyF) and
                 // passed to the coin mission (0x4E) check after a basket
                 // (BasketF); meaning not known.
-                long m_Unk160;
-                unsigned char m_Unk164[0x180 - 0x164];
+                long m_Unk160;             // (SetGoalCoin and SetGoalEffectCoin store it)
+                long m_nGoalScore;         // 0x164
+                float m_fGoalShootRate;    // 0x168, 0-1 (SetGoalShootType clamps it)
+                long m_nGoalShootType;     // 0x16C
+                long m_nGoalBonusType;     // 0x170
+                long m_nGoalBonusColor;    // 0x174
+                long m_nGoalBonusPoint;    // 0x178 (SetGoalBonusRate stores it too)
+                long m_nGoalOwnGoal;       // 0x17C
                 // 0x180 (meaning not known): while it is zero HockeyF's
                 // CFighting shows the fight gauge icons over the fighters.
                 long m_nUnk180;
-                unsigned char m_Unk184[0x1C8 - 0x184];
+                unsigned char m_Unk184[0x188 - 0x184];
+                // 0x188, 0x190 (names guessed): the pads of each team as bits,
+                // offline and in an online match (CGame::GetTeamPadBits).
+                unsigned short m_anTeamPadBits[4];
+                unsigned short m_anTeamOnlinePadBits[4];
+                signed char m_anPadDefaultType[4];      // 0x198
+                unsigned char m_anGoalTeam[4];          // 0x19C, the team of each goal (SetGoalIdx)
+                unsigned char m_anUnk1A0[4];            // 0x1A0 (fn_8018AA28: [a] = b)
+                unsigned char m_anUnk1A4[4];            // 0x1A4 (fn_8018AA28: [b] = a)
+                unsigned char m_Unk1A8[4];
+                long m_nReturnStep;                     // 0x1AC
+                unsigned char m_Unk1B0[4];
+                long m_nStartFadeType;                  // 0x1B4
+                long m_anPartyGameParam[4];             // 0x1B8
                 unsigned long m_nUnk1C8;   // 0x1C8
                 // 0x1CC: screen split; msw::cockpit::GetViewSplitNum gives 1
                 // view for 0, 4 for 3, else 2 (name guessed). The volley coin
                 // cockpit places its counters only for 0.
                 long m_nViewSplit;
-                unsigned char m_Unk1D0[0x430 - 0x1D0];
+                RFLStoreData m_aMiiStoreData[8];        // 0x1D0, 0x4C each
                 // 0x430 (meaning not known): DodgeF's CStageDodge04 places
                 // its background at 14 * (m_nUnk430 % 3 - 1) in x.
-                long m_nUnk430;
-                unsigned char m_Unk434[0x638 - 0x434];
+                long m_nUnk430;            // (SetStageParam stores it)
+                long m_nGimmickParamIdx;   // 0x434
+                wchar_t m_aCharName[8][0x20]; // 0x438, each character's name
             };
 
             CGame(bcs::CTask *pParent, GAME_MODE mode);
@@ -276,14 +350,14 @@ namespace msw {
             virtual long GetDodgeVariableChrNum_(long) const { return 0; } // 0x160
             virtual long GetDodgeChrMaxLife_(long) const { return 0; }   // 0x164
             virtual void SetPassCountLimit_(long, long);                 // 0x168
-            virtual void GetPassCountLimit_(long) const;                 // 0x16C
+            virtual long GetPassCountLimit_(long) const;                 // 0x16C
             virtual int IsNowBonusTime_() const { return 0; }            // 0x170 (int: BasketF CGameBasketHungryBossPackun)
             virtual int IsVolleyScored_() const { return 0; }            // 0x174
             virtual int IsVolleyServeClockOver_() const { return 0; }    // 0x178
             virtual long _GetHockeyResultGoalId() { return -1; }         // 0x17C
             virtual void EntranceDemoSetUp() {}                          // 0x180
             virtual void EventDemoSetUp();                               // 0x184
-            virtual void CheckDemoSkipInput_();                          // 0x188
+            virtual int CheckDemoSkipInput_();                          // 0x188
             virtual void TrgArtsEvent_(long);                            // 0x18C
             virtual void StartArtsEvent_(long);                          // 0x190
             virtual void EndArtsEvent_(long);                            // 0x194
@@ -294,14 +368,14 @@ namespace msw {
             virtual int IsSetOver_();                                    // 0x1A8 (BossF returns 1)
             virtual int IsGameSet_();                                    // 0x1AC (int: BasketF CGameBasketHungryBossPackun)
             virtual void RsrcLoadStart_();                               // 0x1B0
-            virtual void RsrcIsLoadEnd_();                               // 0x1B4
+            virtual int RsrcIsLoadEnd_();                               // 0x1B4
             virtual void RsrcInitialize_();                              // 0x1B8
             virtual void RsrcUnLoad_();                                  // 0x1BC
             virtual void CheckBgmChange_();                              // 0x1C0
             virtual float GetTeamArtsGauge_(long);                       // 0x1C4 (float: BossF compares f1)
             virtual void ClearTeamArtsGauge_(long);                      // 0x1C8
-            virtual void AddTeamArtsGauge_(long, float, float);          // 0x1CC
-            virtual void SetTeamArtsGauge_(long, float, float);          // 0x1D0
+            virtual float AddTeamArtsGauge_(long, float, float);          // 0x1CC
+            virtual float SetTeamArtsGauge_(long, float, float);          // 0x1D0
             virtual void SetCockpitArtsGaugeRatio_(long, float, float);  // 0x1D4
             virtual void SetCockpitArtsGaugeSpAnim_(long, int);          // 0x1D8
             virtual void SetDispRadarIcon_(int);                         // 0x1DC
@@ -330,12 +404,12 @@ namespace msw {
             virtual void PushTeamItem_(long, long);                      // 0x238
             virtual void PopTeamItem_(long);                             // 0x23C
             virtual void TeamItemStartRoulette_(long, long);             // 0x240
-            virtual void IsTeamItemRouletteRole_(long);                  // 0x244
-            virtual void CanbeTeamItemPush_(long);                       // 0x248
-            virtual void GetGoalDemoType_(long, long) const;             // 0x24C
+            virtual int IsTeamItemRouletteRole_(long);                  // 0x244
+            virtual int CanbeTeamItemPush_(long);                       // 0x248
+            virtual long GetGoalDemoType_(long, long) const;             // 0x24C
             virtual long GetGoalDemoTelop_(long, long, long, int) const { return -1; } // 0x250
             virtual void StartGoalTelop_() {}                            // 0x254
-            virtual void CanbeScoredView_();                             // 0x258
+            virtual int CanbeScoredView_();                             // 0x258
             virtual void StartScoredView_(long);                         // 0x25C
             virtual void EndScoredView_();                               // 0x260
             virtual long GetExceptionalCameraType_() { return 0; }       // 0x264
@@ -348,12 +422,12 @@ namespace msw {
             virtual int MenuCallGameEnd_() { return 0; }                 // 0x280
             virtual long MenuChoiceEndMenu_(long) { return -1; }         // 0x284
             virtual long MenuChoiceNextEndMenu_(long) { return -1; }     // 0x288
-            virtual void MenuGetResult_();                               // 0x28C
+            virtual long MenuGetResult_();                               // 0x28C
             virtual void CockpitCheckArrowState_() {}                    // 0x290
             virtual void CameraReset_();                                 // 0x294
             virtual void ArtsEventBegin_();                              // 0x298
             virtual float GetArtsEventFrameNum_();                       // 0x29C (the DOL body loads f1)
-            virtual void ArtsEventLoop_();                               // 0x2A0
+            virtual int ArtsEventLoop_();                               // 0x2A0
             virtual void ArtsEventEnd_();                                // 0x2A4
 
             static void SetDefaultParam();
@@ -363,7 +437,7 @@ namespace msw {
             // (DOL, static; argument meanings not known: DodgeF's bomb blasts
             // pass a quake number and -1, -1; HockeyF's CFighting passes
             // (0x2F, -1, -1) when a fight ends)
-            static void StartCameraQuake(long nType, long, long);
+            static int StartCameraQuake(long nType, long, long);
             // (DOL; meaning of the argument not known, CDropCoinMan passes
             // 1) Non-zero while the game is in its main loop state.
             static int IsMainLoopState(int);
@@ -423,7 +497,7 @@ namespace msw {
             // guessed) The length of character nChr's name, and the name
             // copied into pBuf (nBufLen characters at most).
             static long GetCharNameLen(long nChr);
-            static void GetCharName(long nChr, wchar_t *pBuf, long nBufLen);
+            static long GetCharName(long nChr, wchar_t *pBuf, long nBufLen);
             // (DOL, static; added for MenuF game/menu/unit_4BB48.cpp; return
             // type guessed) Which team (0 or 1) this console plays in a
             // Wi-Fi game.
@@ -517,7 +591,7 @@ namespace msw {
             // the slow-motion effect (start with four parameters, stop, and
             // whether one is running).
             static long GetTeamMaxLife(long nTeam);
-            static void StartSlowEffect(float, float, float, float);
+            static unsigned long StartSlowEffect(float, float, float, float);
             static void StopSlowEffect();
             static int IsNowSlowEffect();
             // DOL, static. Not zero while an arts (special move) event plays (guess).
@@ -558,6 +632,9 @@ namespace msw {
             static void TelopCreate(long nTelop, int, long);
             static void TelopRemove(long nTelop);
             static int TelopIsEnd(long nTelop);
+            // (fn_8017F0FC, unnamed in the DOL; name guessed) IsLineMsgDispEnable_
+            // on m_pInstance; 0 without an instance.
+            static int IsLineMsgDispEnable();
             // The speed lines effect over the screen for fFrame frames, and
             // (fn_8018BED0, unnamed in the DOL) its early end.
             static void StartSaturatedLinework(float fFrame);
@@ -607,7 +684,127 @@ namespace msw {
             static void SetTeamMaxLife(long nTeam, long nLife);
             static void SetTeamRebirthLife(long nTeam, long nLife);
 
+            // The rest of the static functions of game/msw/CGame.cpp (DOL;
+            // names from the symbols unless marked, return types guessed
+            // where no caller reads them).
+            static void TrgBasketGoalIn(long nChr, long nTeam, long nShootType, long nKind, float,
+                                        const bcs::FVEC3 &rGoalPos, long);
+            static void TrgVolleyGoalIn(long, long, long, long, long, long, const bcs::FVEC3 &, unsigned long);
+            static void TrgHockeyGoalIn(long nChr, long nTeam, long nShootType, long nKind, float,
+                                        const bcs::FVEC3 &rGoalPos, unsigned long);
+            static int IsVolleyServeClockOver();
+            static void BgSetFadeOut(float fFrom, float fFrames);
+            static void ChangeCameraBaseDir();        // fn_8017DF70 (name guessed)
+            static void SetGamePauseUnk38(long n);    // fn_8017DF50 (name guessed)
+            static long GetExceptionalCameraType();
+            static void TelopEnd(long nTelop);        // fn_8017E858 (name guessed)
+            static int IsTourFinalMatch();
+            static CGameCamera *GetGameCamera(long nView); // fn_8017EB78 (name guessed)
+            static int IsVsMode();
+            static int IsLocalVsMode();               // fn_80189CD8 (name guessed)
+            static int IsExistGoalRing();
+            static long GetGimmickParamIdx();         // fn_80189FE0 (name guessed)
+            static void SetNowPeriod(long nPeriod);
+            enum GAME_TURN_START_MODE {
+                GAME_TURN_START_MODE_0 = 0 // (values not known; GameWorkReset_ passes 0)
+            };
+            static void SetTurnStartMode(GAME_TURN_START_MODE mode);
+            static void SetChgFieldDemoMode(int bOn);
+            static void SetFlag2000Mode(int bOn);     // fn_8018A174 (name guessed)
+            static void SetVolleyServeMode(int bOn);
+            static void SetDodgeArtsCatchMode(int bOn, long);
+            static void SetReboundMode(int bOn);
+            static void SetGoalEventMode(int bOn);
+            static void SetGoalFinishMode(int bOn);
+            static void AddCharExFlag(long nChr, unsigned long nFlag);
+            static long GetTeamUnk78(long nTeam);     // fn_8018A7C0 (name guessed)
+            static long GetLocalPadNo(long nPad);     // fn_8018A828 (name guessed)
+            static const bcs::FVEC3 &GetBoardPos(long nGoal);
+            static const bcs::FVEC3 &GetBoardDir(long nGoal);
+            static void SetViewTeam(long nView, long nTeam); // fn_8018AA28 (name guessed)
+            static void SetGoalBaseScore(long n);
+            static void SetGoalBonusRate(long n);
+            static void SetGoalBonusColor(long n);
+            static void SetGoalShootType(long nType, float fRate);
+            static void SetGoalTeam(long nTeam);
+            static void SetGoalChar(long nChr);
+            static void SetGoalOwnGoal(int bOwnGoal);
+            static long GetPeriodStartScore(long nTeam);
+            static long GetTeamInitLife(long nTeam);
+            static long GetTeamRebirthLife(long nTeam);
+            static long GetPeriodStartCoin(long nTeam);
+            static void ClearTeamCoin(long nTeam);
+            static unsigned long GetTeamDisableDropCoin(long nTeam);
+            static void ClearTeamDisableDropCoin(long nTeam);
+            static void SetTeamDisableDropCoin(long nTeam, unsigned long nFlag);
+            static void UseTeamCoin(long nTeam, long nCoin);
+            static void ClearTeamItem(long nTeam);    // fn_8018B09C (name guessed)
+            static long GetTeamItem(long nTeam, long);
+            static void PushTeamItem(long nTeam, long nItem);   // fn_8018B0D0 (name guessed)
+            static long PopTeamItem(long nTeam);      // fn_8018B100 (name guessed)
+            static void TeamItemStartRoulette(long nTeam, long); // fn_8018B168 (name guessed)
+            static float AddTeamArtsGauge(long nTeam, float, float);
+            static float SetTeamArtsGauge(long nTeam, float, float);
+            static long GetCharAssignPlayerNo(long nChr);
+            static long GetCharAssignPadNo(long nChr);
+            static long GetTeamChrChangeCtrlType(long nTeam);
+            static void SetTeamAutoSpikeJumpType(long nTeam, int bAuto);
+            static long GetTeamAutoSpikeJumpType(long nTeam);
+            static void SetTeamSkillPoint(long nTeam, long nPoint);
+            static long GetMyTeamSkillPoint();        // fn_8018C404 (name guessed)
+            static void SetRuleOptionFlag(unsigned long nFlag);
+            static void SetCockpitCoinGetTelopMove(long, long); // fn_8018C5B8 (name guessed)
+            static long GetMiiChrType(RFLStoreData &rData);
+            static void SetTeamPeriodScore(long nTeam, long nPeriod, long nScore);
+            static void SetTeamCoin(long nTeam, unsigned long nCoin);
+            static void AddTeamGainCoin(long nTeam, long nCoin);
+            static CGameSpeedCtrl *CreateSpeedCtrl();
+            static unsigned long GetTeamPadBits(long nTeam);     // fn_80187C60 (name guessed)
+            static long GetMiiName(RFLStoreData &rData, wchar_t *pBuf, long nBufLen); // fn_8018C1CC (name guessed)
+            static void SetAllTeamAutoSpikeJumpType(int bAuto); // fn_8018C36C (name guessed)
+            static long GetMaxCoin() { return m_pInstance->GetMaxCoin_(); }
+
+            // The score of each team and period (lbl_804D6E78, 0x1B0 bytes;
+            // cleared by SetDefaultParam and GameWorkReset_). Only the parts
+            // read here are named.
+            struct ScoreWork {
+                long m_anScore[4];               // 0x00 (GetTeamScore)
+                long m_anTotalCoin[4];           // 0x10 (SetPeriodResult_, at most 9999)
+                long m_aanPeriodScore[4][5];     // 0x20 (GetTeamPeriodScore)
+                unsigned char m_Unk70[0x1B0 - 0x70];
+            };
+            static ScoreWork g_ScoreWork;
+
+        protected:
+            // (name guessed) Starts quake nQuake on the game's cameras.
+            int StartCameraQuake_(long nQuake, long nChr, long nView);
+            void ResetArtsEventPauseBit_(unsigned long nBit);
+            int CheckGoalDemoRnd_(long nRate) const;
+            void StartGoalDemo_(long nType, long nTeam, const bcs::FVEC3 &rPos, long nSide, long nTelop, float fSpeed);
+            int IsEndGoalDemo_();
+            void EndGoalDemo_();
+            // (name guessed) Ends the speed lines, if they run.
+            void EndSaturatedLinework_()
+            {
+                if (m_nSatLineId) {
+                    bcs::CTask *pTask = bcs::CTaskMan::GetTask(m_nSatLineId);
+                    m_nSatLineId = 0;
+                    if (pTask && !pTask->IsDelete()) {
+                        pTask->Delete();
+                    }
+                }
+            }
+            // (fn_8017D7A8, name guessed) Runs the background fade each frame.
+            void BgFadeUpdate_();
+            static int IsPartyGame() { return g_GameWork.m_nGameType == GAME_TYPE_PARTY; }
+
+        public:
+
             static GameWork g_GameWork;
+            // (DOL) Pause bits; msw::CChrMarker::Main does nothing while
+            // bit 2 is set, the boss ball (BossF CBallBoss) tests 0x4.
+            // (meaning of the bits not known)
+            static unsigned long g_uPauseBit;
             static CGame *m_pInstance;
 
             // Added for BasketF game/basket/CGameBasketHungryBossPackun.cpp
@@ -648,7 +845,7 @@ namespace msw {
             // word at 0xEC).
             void ScrnFadeStart_(unsigned long nMask, long nType, float fFrame);
             void SetGamePauseEnable_(int bEnable);
-            void StartSlowEffect_(float, float, float, float);
+            unsigned long StartSlowEffect_(float, float, float, float);
             void StopSlowEffect_();
             void ScrnSetBlackOut_();
             void GameWorkReset_();
@@ -678,31 +875,69 @@ namespace msw {
             // 0x94: the game camera of each view (BossF's GenerateInstance
             // fills them from CGameCamera::GetInstance).
             CGameCamera *m_apCamera[4];
-            unsigned char m_UnkA4[0xC4 - 0xA4];
+            // 0xA4 (names guessed): the pause controller task the
+            // constructor creates (0x80 bytes); its word at 0x34 allows
+            // pausing (SetGamePauseEnable_).
+            CGamePauseTask *m_pPauseTask;
+            // 0xA8: the hit-stop task (0x44 bytes, StartStopEffect).
+            CGameStopTask *m_pStopTask;
+            // 0xAC: the parent of the tasks that run during an arts event
+            // (0x48 bytes; ArtsEventBegin_ empties it).
+            CGameTaskGroup *m_pArtsTaskRoot;
+            unsigned long m_nGoalDemoId; // 0xB0, the goal demo task's id (StartGoalDemo_)
+            unsigned long m_nSatLineId;  // 0xB4, the speed lines' task id (StartSaturatedLinework)
+            // 0xB8: the parent of the game's short-lived tasks (GetTempParent).
+            bcs::CTask *m_pTempParent;
+            // 0xBC: the id of the slow-motion task (a CGameSpeedCtrl), 0 for none.
+            unsigned long m_nSlowTaskId;
+            unsigned long m_nScoredViewId; // 0xC0, the scored view's task id
             // 0xC4 (name guessed): a task of the arts event; BossF's
             // EndArtsEvent_ deletes it.
             bcs::CTask *m_pArtsEventTask;
-            unsigned char m_UnkC8[0xD0 - 0xC8];
+            // 0xC8 (name guessed): set when the game exits
+            // (CtorStateGameExit); Main stops calling MainFunc then.
+            long m_bExit;
+            long m_nUnkCC;        // 0xCC
             long m_nNextState;    // 0xD0, the state the wait-start state goes on to
             long m_nStateStep;    // 0xD4, the step inside the running state
             float m_fStateCount;  // 0xD8, frames left (StateWorkDecStateCount_)
             // 0xDC: flag bits; bit 0 stops goals from scoring, bit 2 means
             // the game is set.
             unsigned long m_nGameFlag;
-            unsigned char m_UnkE0[0x104 - 0xE0];
+            // 0xE0-0xE8 (names guessed): the background fade: its mode (10
+            // fading in, 20 fading out, 0 none), the frames to wait before it
+            // starts and the step per frame (BgSetFadeIn/BgSetFadeOut).
+            long m_nBgFadeMode;
+            float m_fBgFadeWait;
+            float m_fBgFadeStep;
+            // 0xEC: 1 while an arts event has been asked for (TrgArtsEvent_).
+            long m_nReqArtsEvent;
+            float m_fArtsEventFrame; // 0xF0 (GetArtsEventFrameNum_)
+            long m_nArtsEventStep;   // 0xF4
+            // 0xF8 (name guessed): the online synchronisation step of the
+            // arts event (ArtsEventLoop_), 0 when done.
+            long m_nArtsEventSync;
+            long m_nTurnStartTelopType;  // 0xFC (SetTurnStartTelopType_)
+            float m_fTurnStartTelopFrame; // 0x100
             // 0x104, 0x108 (meanings not known): BossF's GameInit_ sets 1 and
             // 0; while 0x104 is above 0 the game setup queues the event demo
             // (state 19) with 0x108 in its work.
             long m_nUnk104;
             long m_nUnk108;
-            unsigned char m_Unk10C[0x11C - 0x10C];
+            float m_afTeamArtsGauge[4]; // 0x10C (GetTeamArtsGauge_)
             long m_nUnk11C;       // 0x11C (meaning not known; cleared by BossF's GameInit_)
-            unsigned char m_Unk120[0x12C - 0x120];
+            // 0x120-0x128: the score book's counters (ScoreBookInitCountWork_).
+            long m_anScoreBookCount[3];
             // 0x12C (meaning not known): BossF's SendMessage_ stores 1 or 2
             // with messages 0x20 and 0x21, and the message's value in 0x130.
             long m_nUnk12C;
             long m_Unk130;        // 0x130, the game is set while above 0 (meaning not known)
-            unsigned char m_Unk134[0x148 - 0x134];
+            // 0x134 (meaning not known): a 0x28-byte object the constructor
+            // creates (fn_8026B418) and the finalizer destroys.
+            void *m_pUnk134;
+            // 0x138: each team's item roulette (its word at 0x44 is the
+            // roulette's state; names guessed).
+            CItemRoulette *m_apItemRoulette[4];
             long m_nUnk148;       // 0x148 (meaning not known; BossF's game setup sets 1)
             unsigned char m_Unk14C[0x150 - 0x14C];
     };

@@ -11,6 +11,9 @@ namespace msw {
     class CSave {
         public:
             static void Initialize();
+            // (added for DOL game/msw/CGame.cpp; return type guessed) Not
+            // zero when the game saves (the end menu skips its save step otherwise).
+            static int IsUseSave();
             static int CanbeWrite(); // return type guessed
             static void SaveDataInit();
             // Added for MenuF game/menu/CFriendCode.cpp (return types

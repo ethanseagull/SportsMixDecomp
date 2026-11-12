@@ -31,6 +31,10 @@ namespace bcs {
 
             static void SetRawDataBufferMem(long);
             static int IsComplete(); // return type guessed
+            // (name guessed; the DOL's fn_8004E3C8, added for
+            // game/msw/CNowLoading.cpp) Non-zero while the sbss word at
+            // lbl_805C08C4 is zero.
+            static int IsIdle();
             // Data of a loaded file. What the second argument selects is
             // not known yet.
             static void *GetPtr(const char *pPath, unsigned long);

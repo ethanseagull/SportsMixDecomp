@@ -17,8 +17,8 @@
 #include "game/msw/dwc/CGameDwc.hpp"
 #include "game/msw/menu/CSndBGM.hpp"
 #include "nw4r/g3d/G3DState.hpp"
-#include "nw4r/lyt/Animation.hpp"
-#include "nw4r/lyt/DrawInfo.hpp"
+#include "nw4r/lyt/animation.h"
+#include "nw4r/lyt/drawInfo.h"
 #include "nw4r/lyt/Group.hpp"
 #include "nw4r/lyt/Material.hpp"
 #include "nw4r/lyt/Picture.hpp"
@@ -1344,13 +1344,13 @@ namespace msw {
                 static const int isLocationAdjust = 1;
 
                 const bcs::G2D::CMenuScnGroup::OrthoProjInfo &rInfo = bcs::G2D::CMenuScnGroup::s_OrthoProjInfo;
-                float fLeft = rInfo.m_fLeft;
-                float fRight = rInfo.m_fRight;
-                float fBottom = rInfo.m_fBottom;
-                float fTop = rInfo.m_fTop;
+                float fLeft = rInfo.fLeft;
+                float fRight = rInfo.fRight;
+                float fBottom = rInfo.fBottom;
+                float fTop = rInfo.fTop;
                 nw4r::math::MTX34 viewMtx;
                 Mtx44 projMtx;
-                C_MTXOrtho(projMtx, fTop, fBottom, fLeft, fRight, rInfo.m_fNear, rInfo.m_fFar);
+                C_MTXOrtho(projMtx, fTop, fBottom, fLeft, fRight, rInfo.fNear, rInfo.fFar);
                 PSMTXIdentity(reinterpret_cast<float(*)[4]>(&viewMtx));
                 drawInfo.SetViewMtx(viewMtx);
                 nw4r::ut::Rect viewRect;

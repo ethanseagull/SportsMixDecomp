@@ -50,6 +50,11 @@ namespace msw {
             virtual long GetChrLostScore_(long);                         // 0x2D0
             // GetChrLostScore_: the word at 0x1B4 + 4 * nChr (the score
             // character nChr has lost; meaning guessed from the name).
+            virtual long GetChrGetScore_(long);                          // 0x2D4
+            // (added for game/dodge/CChrCoreDodgeDodgeOrDie.cpp) Adds to
+            // the score character nChr has lost; the party game passes
+            // the damage taken and -1.
+            virtual void AddChrLostScore_(long nChr, long nScore, long);  // 0x2D8
 
         private:
             unsigned char m_Unk150[0x420 - sizeof(CGame)];

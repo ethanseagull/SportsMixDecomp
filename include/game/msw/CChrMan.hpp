@@ -130,6 +130,10 @@ namespace msw {
             static CChrObstacle *ObstacleSearch(CChrObstacle *pPrev);
             // Shows or hides the markers over the characters. Static.
             static void SetChrMarkerDisp(int bDisp);
+            // (fn_800EC220, name guessed) Whether the markers are shown: the
+            // opposite of the bit SetChrMarkerDisp(0) sets; 1 with no
+            // instance. Static.
+            static int IsChrMarkerDisp();
             // DOL. The instance, or null.
             static CChrMan *GetInstance();
             // DOL, static. Not zero when the instance exists.
@@ -177,6 +181,9 @@ namespace msw {
             static void AllSetState(long nState, long, long);
             static void AllStop(CChrCore::STOP_MODE, CChrCore::STOP_MODE);
             static int CanbeTurnOver();
+            // (DOL, static; added for VolleyF game/volley/CGameVolleyVsBoss.cpp)
+            // SendMsg_ on the instance: message id to character nChr.
+            static void SendMsg(long nChr, CChrDrv::MSG_ID id, long, long, unsigned long, unsigned long);
 
         protected:
             unsigned char m_Unk34[0x50 - 0x34]; // two nw4r::ut::List at 0x34 and 0x40, a word at 0x4C

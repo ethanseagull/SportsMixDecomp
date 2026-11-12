@@ -94,6 +94,33 @@ namespace bcs {
                 void SaveEntryOwnPublicData(const void *pData, long nSize);
                 int IsStorageComplete() const;
                 long GetFriendServersAsyncCount() const;
+                // Added for game/bcs/CWifiPad.cpp (all unnamed, fn_800B20B0
+                // to fn_800B2488; names from the CWifiPad functions that
+                // wrap them). The pad state the player of online pad nPad
+                // sent (a 0x7C-byte record per pad at 0x820).
+                int IsNunchukStyle(long nPad) const;
+                float GetCameraAngle(long nPad) const;
+                int IsDown(unsigned long nButton, long nPad) const;
+                int IsTrg(unsigned long nButton, long nPad) const;
+                int IsRelease(unsigned long nButton, long nPad) const;
+                unsigned long GetDown(long nPad) const;
+                unsigned long GetTrg(long nPad) const;
+                unsigned long GetRelease(long nPad) const;
+                float GetStickX(long nPad) const;
+                float GetStickY(long nPad) const;
+                long GetStrokeRaw0(long nPad) const;
+                long GetStrokeRaw1(long nPad) const;
+                long GetStrokeRaw2(long nPad) const;
+                long GetStrokeRaw3(long nPad) const;
+                long GetStrokeRaw4(long nPad) const;
+                long GetStroke0(long nPad) const;
+                long GetStroke1(long nPad) const;
+                long GetStroke2(long nPad) const;
+                long GetStroke3(long nPad) const;
+                long GetStroke4(long nPad) const;
+                void ResetAcc(long nPad);
+                float GetScratchPower(long nPad) const;
+                float GetNunchukPower(long nPad) const;
         };
     }
 }

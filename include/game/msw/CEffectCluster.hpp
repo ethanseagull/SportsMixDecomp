@@ -4,7 +4,6 @@
 #include "bcs/EF/CEffect.hpp"
 #include "bcs/EF/CResource.hpp"
 #include "bcs/FVEC3.hpp"
-#include "revolution/gx/GXStruct.h"
 
 namespace bcs {
     class CMdlObj;
@@ -33,14 +32,21 @@ namespace msw {
             void SetSpeedOverride(int bOn, float fSpeed);
             // Rotation in radians.
             void SetRotateRad(const bcs::FVEC3 *pRot);
-            // (added for TourF msw::CTournamentRouteMan; parameter names
-            // guessed) The colours of the cluster's point light.
-            void SetPointLightColor(GXColor color, GXColor color2);
             // (parameter names and return types guessed) Fades the cluster
             // out over fFrame frames; the effects it holds.
             void SetFadeoutTime(float fFrame);
-            // (added for TourF msw::CTournamentRouteMan) Fades it in.
+            // (DOL; added for game/msw/CStgEffectSlot.cpp) Fades the cluster
+            // in over fFrame frames.
             void SetFadeinTime(float fFrame);
+            // (DOL) Sets the animation rate of every effect.
+            void SetSpeed(float fSpeed);
+            // (DOL fn_80123194, fn_801232C0, fn_8012322C; names guessed
+            // after the bcs::EF::CEffect functions they call on each effect)
+            void SetPrimaryColor(_GXColor color);
+            void SetPointLightColorPreset(long nPreset);
+            void SetSecondaryColor(_GXColor color);
+            // (DOL)
+            void SetPointLightColor(_GXColor color0, _GXColor color1);
             long GetEffectNum();
             bcs::EF::CEffect *GetEffect(long nIndex);
             // (DOL; added for BasketF's CChrCoreBasketNinja) The effect of
@@ -69,6 +75,9 @@ namespace msw {
             // CallEffectFunc. msw::CStgGmk_WaterPillar_Act::OnUpdate fades
             // its effects with it.
             void SetAlpha(float fAlpha);
+            // (DOL; added for BossF game/boss/CBallBoss.cpp) Lets the
+            // cluster's effects run again after a pause.
+            void ClearPauseFlag();
 
             // (name guessed) Calls pFunc with nArg on each effect of the
             // cluster that still exists. Inline in the DOL's
@@ -94,6 +103,59 @@ namespace msw {
                     bcs::EF::CEffect *pEffect = pManager->GetEffect(m_Effect[i].m_hEffect);
                     if (pEffect != 0) {
                         (pEffect->*pFunc)(fArg);
+                    }
+                }
+            }
+
+            // The same for the other argument types the cluster's own
+            // setters pass (inline in each of them in the DOL).
+            void CallEffectFunc(void (bcs::EF::CEffect::*pFunc)(int, float), int nArg, float fArg)
+            {
+                bcs::EF::CManager *pManager = bcs::EF::CManager::GetInstance();
+                for (long i = 0; i < m_nEffectNum; i++) {
+                    bcs::EF::CEffect *pEffect = pManager->GetEffect(m_Effect[i].m_hEffect);
+                    if (pEffect != 0) {
+                        (pEffect->*pFunc)(nArg, fArg);
+                    }
+                }
+            }
+            void CallEffectFunc(void (bcs::EF::CEffect::*pFunc)(const bcs::FVEC3 &), const bcs::FVEC3 &vArg)
+            {
+                bcs::EF::CManager *pManager = bcs::EF::CManager::GetInstance();
+                for (long i = 0; i < m_nEffectNum; i++) {
+                    bcs::EF::CEffect *pEffect = pManager->GetEffect(m_Effect[i].m_hEffect);
+                    if (pEffect != 0) {
+                        (pEffect->*pFunc)(vArg);
+                    }
+                }
+            }
+            void CallEffectFunc(void (bcs::EF::CEffect::*pFunc)(long), long nArg)
+            {
+                bcs::EF::CManager *pManager = bcs::EF::CManager::GetInstance();
+                for (long i = 0; i < m_nEffectNum; i++) {
+                    bcs::EF::CEffect *pEffect = pManager->GetEffect(m_Effect[i].m_hEffect);
+                    if (pEffect != 0) {
+                        (pEffect->*pFunc)(nArg);
+                    }
+                }
+            }
+            void CallEffectFunc(void (bcs::EF::CEffect::*pFunc)(_GXColor), _GXColor color)
+            {
+                bcs::EF::CManager *pManager = bcs::EF::CManager::GetInstance();
+                for (long i = 0; i < m_nEffectNum; i++) {
+                    bcs::EF::CEffect *pEffect = pManager->GetEffect(m_Effect[i].m_hEffect);
+                    if (pEffect != 0) {
+                        (pEffect->*pFunc)(color);
+                    }
+                }
+            }
+            void CallEffectFunc(void (bcs::EF::CEffect::*pFunc)(_GXColor, _GXColor), _GXColor color0, _GXColor color1)
+            {
+                bcs::EF::CManager *pManager = bcs::EF::CManager::GetInstance();
+                for (long i = 0; i < m_nEffectNum; i++) {
+                    bcs::EF::CEffect *pEffect = pManager->GetEffect(m_Effect[i].m_hEffect);
+                    if (pEffect != 0) {
+                        (pEffect->*pFunc)(color0, color1);
                     }
                 }
             }

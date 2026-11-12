@@ -43,7 +43,7 @@ Equivalent game/volley/CStageVolley15.cpp
 Matching game/volley/CStageVolley12.cpp
 Equivalent game/volley/CStageVolley16.cpp
 Matching game/volley/CStageVolley42.cpp
-NonMatching game/volley/CStageVolley03.cpp
+Equivalent game/volley/StageVolley03.cpp
 Equivalent game/volley/CStageVolley05.cpp
 Equivalent game/volley/StageVolley11.cpp flags=noauto
 Matching game/volley/CStgGmk_Case_Act_Volley.cpp
@@ -86,3 +86,5 @@ Equivalent game/volley/CComDrvVolleyRR.cpp
 Matching game/volley/unit_B16D4.cpp
 Equivalent game/volley/unit_C0918.cpp
 Equivalent game/volley/CcDaisyFlowerGarden.cpp
+Equivalent game/volley/CCockpitVolleyBoss.cpp
+Equivalent game/volley/CGameVolleyVsBoss.cpp

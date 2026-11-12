@@ -3,57 +3,82 @@
 
 #include "nw4r/db/Panic.hpp"
 
-// The intrusive doubly linked list of nw4r. Written for this project from
-// the code MenuF game/menu/CBgDisplay.cpp emits for it (the iterator's
-// pointer check, with "LinkList.h" and its line in @STRING@ objects); the
-// names follow the public ogws decompilation's description of nw4r::ut
-// (from memory, no code copied). Only iteration is written.
+// The DOL's NW4R intrusive doubly linked list (nw4r::ut::LinkList). Written
+// for this project from what bcs::G2D::CLayoutBase::FindAnimTransform emits:
+// the list's size word, then its end node; a node is (next, prev). The two
+// iterator checks report file "LinkList.h", lines 403 and 573, which is why
+// the line numbers are literal here. Names follow the public ogws
+// decompilation's description of nw4r::ut (from memory, no code copied).
 
 namespace nw4r {
     namespace ut {
 
-        // The links an element of a LinkList carries.
-        struct LinkListNode {
-            LinkListNode *mpNext; // 0x00
-            LinkListNode *mpPrev; // 0x04
+        class LinkListNode {
+            public:
+                LinkListNode *GetNext() const { return mNext; }
+                LinkListNode *GetPrev() const { return mPrev; }
+
+                LinkListNode *mNext; // 0x00
+                LinkListNode *mPrev; // 0x04
         };
 
         namespace detail {
-            // The list itself: a count and a sentinel node.
+
             class LinkListImpl {
-                protected:
+                public:
+                    unsigned long GetSize() const { return mSize; }
+
                     unsigned long mSize; // 0x00
                     LinkListNode mNode;  // 0x04, the end of the list
             };
         }
 
-        // A list of T whose LinkListNode is at byte offset Ofs of T.
+        // T holds its LinkListNode at byte offset Ofs.
         template <typename T, int Ofs>
         class LinkList : public detail::LinkListImpl {
             public:
                 class Iterator {
                     public:
-                        explicit Iterator(LinkListNode *pNode) : mpNode(pNode) {}
+                        Iterator(LinkListNode *pNode) : mPointer(pNode) {}
 
-                        T *operator->() const { return GetPointerFromNode(mpNode); }
+                        T &operator*() const
+                        {
+                            T *p = this->operator->();
+                            if (p == 0) {
+                                nw4r::db::Panic("LinkList.h", 403, "NW4R:Pointer must not be NULL (p)");
+                            }
+                            return *p;
+                        }
+
+                        T *operator->() const { return GetPointerFromNode(mPointer); }
+
                         Iterator &operator++()
                         {
-                            mpNode = mpNode->mpNext;
+                            mPointer = mPointer->GetNext();
                             return *this;
                         }
-                        bool operator!=(const Iterator &rOther) const { return mpNode != rOther.mpNode; }
+
+                        Iterator operator++(int)
+                        {
+                            Iterator old = *this;
+                            ++*this;
+                            return old;
+                        }
+
+                        bool operator==(const Iterator &rOther) const { return mPointer == rOther.mPointer; }
+                        bool operator!=(const Iterator &rOther) const { return mPointer != rOther.mPointer; }
 
                     private:
-                        LinkListNode *mpNode;
+                        LinkListNode *mPointer;
                 };
 
-                Iterator GetBeginIter() { return Iterator(mNode.mpNext); }
+                Iterator GetBeginIter() { return Iterator(mNode.GetNext()); }
                 Iterator GetEndIter() { return Iterator(&mNode); }
 
                 static T *GetPointerFromNode(LinkListNode *p)
                 {
                     if (p == 0) {
-                        db::Panic("LinkList.h", 573, "NW4R:Pointer must not be NULL (p)");
+                        nw4r::db::Panic("LinkList.h", 573, "NW4R:Pointer must not be NULL (p)");
                     }
                     return reinterpret_cast<T *>(reinterpret_cast<char *>(p) - Ofs);
                 }

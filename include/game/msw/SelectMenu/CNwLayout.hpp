@@ -3,7 +3,7 @@
 
 #include "bcs/CGDLObj.hpp"
 #include "nw4r/g3d/ResMat.hpp"
-#include "nw4r/lyt/Animation.hpp"
+#include "nw4r/lyt/animation.h"
 #include "nw4r/lyt/Pane.hpp"
 #include "nw4r/lyt/layout.h"
 #include "revolution/gx/GXEnum.h"

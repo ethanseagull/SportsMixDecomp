@@ -15,6 +15,17 @@ namespace bcs {
             public:
                 // Argument names guessed.
                 void PlayAnim(long nAnim, float fSpeed, float fFrame);
+                // (DOL fn_800A3390, no symbol; name guessed) Enables every
+                // transform of animation nAnim (none when nAnim is negative),
+                // after disabling all of the layout's when bExclusive is 1.
+                // How many it enabled.
+                long SetAnimEnable(long nAnim, int bExclusive);
+
+            protected:
+                // (added for DOL game/bcs/G2D/CLayoutBase.cpp, where PlayAnim
+                // is; names guessed)
+                float m_fSpeed; // 0x48
+                long m_nAnim;   // 0x4C, the animation PlayAnim started
         };
     }
 }

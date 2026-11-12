@@ -90,6 +90,11 @@ namespace msw {
             static CBall *GetNearPosBall(const bcs::FVEC3 &rPos);
             static void DelBall(long nBall);
             static CBall *AddBall(CBall *pBall);
+            // (DOL; added for BossF game/boss/CBallBoss.cpp, names from the
+            // symbols, meanings guessed) The speed kept on a wall bounce and
+            // the speed of a ball a character knocks back.
+            static float GetWallBoundDecRate();
+            static float GetChrReflectSpeed();
             // (fn_800CD520, unnamed in the DOL) IsExistStarBall_ on the
             // instance, zero without one.
             static int IsExistStarBall();

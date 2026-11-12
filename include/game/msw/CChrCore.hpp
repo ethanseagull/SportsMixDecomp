@@ -963,6 +963,9 @@ namespace msw {
             // the name; CChrMarkerVolley::AppearCheck asks it outside the
             // party game) In the DOL.
             int IsPadCtrl() const;
+            // (DOL; added for VolleyF game/volley/CGameVolleyVsBoss.cpp) Not
+            // zero when the character's team is attacking.
+            int IsOffenseTeam() const;
             // DOL. The goal the character's team attacks (BasketF
             // CStageBasket06::SendMessage lights that goal's side).
             long GetTargetGoalIdx() const;
@@ -1026,6 +1029,9 @@ namespace msw {
             // (msw::cockpit::CSPGaugeInputDisp::SetDispAnim in the DOL passes
             // it to CGame::GetPadDefaultType and CMenuPad::IsNunchakuStyle).
             long GetPadNo() const { return m_nPadNo; }
+            // In the DOL (return type guessed). The guide compares it with 1
+            // (game/msw/CGameGuideMan.cpp).
+            long DriverGetPadType() const;
             // Added for BossF game/boss/CCockpitBossCoder.cpp (name guessed),
             // see m_nCtrlPlayerNo.
             long GetCtrlPlayerNo() const { return m_nCtrlPlayerNo; }
@@ -1076,6 +1082,7 @@ namespace msw {
             // (names guessed) Inline in the modules: the character managers
             // write the members directly.
             void SetCamNo(long nCam) { m_nCamNo = nCam; }
+            long GetCamNo() const { return m_nCamNo; }
             // Sets the bit IsDisable tests: the character takes no part.
             void SetDisable() { m_UnkEC |= 0x40000000; }
             void OnStatusFlag(unsigned long nBit) { m_nStatusFlag |= nBit; }
@@ -1237,6 +1244,9 @@ namespace msw {
             void SE_PlayMove(long nSlot, long nSe, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
             // Stops the effect in slot nSlot.
             void Eff_Stop(long nSlot);
+            // (DOL; added for DodgeF CChrCoreDodgeDodgeOrDie, return type
+            // guessed) The character kind effects are coloured for.
+            long GetEffChrType() const;
             // (DOL; added for DodgeF CChrCoreDodgeWaluigi) The play speed of
             // the motion in slot nSlot, and of the effect in slot nSlot.
             float AnimGetSpeed(unsigned long nSlot) const;
@@ -1303,6 +1313,12 @@ namespace msw {
             bcs::FVEC3 &GetJumpVel() { return *reinterpret_cast<bcs::FVEC3 *>(&m_fJumpVelX); }
             void SE_Play(long nSlot, long nSe, unsigned long, long, float, float, float);
             void SE_Stop(long nSlot, float fFrames);
+            // (added for BasketF game/basket/unit_23654.cpp; meanings guessed
+            // from the names) Stops sound group nGroup; ends (0) the
+            // endure state; attaches the ball again at node nNode.
+            void SE_StopGroup(long nGroup, float fFrames);
+            void SetEndure(int bEndure);
+            void ReattachBall(long nNode, float, unsigned long);
             void AnimSetSpeed(unsigned long nSlot, float fSpeed);
             // Plays sound nSe at pPos (null: at the character). (BasketF had
             // it returning void; VolleyF's return type kept.)

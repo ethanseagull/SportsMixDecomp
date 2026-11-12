@@ -47,6 +47,10 @@ namespace bcs {
             void BeginDraw();
             void Draw(long nX, long nY, long nW, long nH, float fS0, float fT0, float fS1, float fT1);
             void EndDraw();
+            // Added for game/msw/menu/CMovieScnObj.cpp (DOL fn_80069DCC,
+            // name guessed): bit 0x8000 of the state word at 0x34. The menu
+            // movie player stops the movie whenever it is set.
+            int IsError() const;
 
             // Added for MenuF game/menu/CBgDisplay.cpp (inline: emitted out
             // of line there as GetTHPVideoInfo__Q23bcs6CMovieCFv).

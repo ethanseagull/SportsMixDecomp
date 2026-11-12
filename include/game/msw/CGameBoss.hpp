@@ -79,7 +79,7 @@ namespace msw {
             virtual int MenuCallInterval_();
             virtual int MenuCallPause_();
             virtual float GetArtsEventFrameNum_();
-            virtual void ArtsEventLoop_();
+            virtual int ArtsEventLoop_();
 
             // The class's own virtual functions, 0x2A8-0x2C8.
             virtual void Initialize_();

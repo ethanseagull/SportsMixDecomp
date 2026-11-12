@@ -58,6 +58,9 @@ namespace msw {
             // (added for game/menu/CTitle.cpp) CSelectMenu's title screen
             // steps write the flags at 0x04 and 0x06 and the byte at 0x07.
             friend class CSelectMenu;
+            // (added for game/msw/CCockpitMenuBase.cpp) Its pad parameter
+            // functions write the same bytes.
+            friend class CCockpitMenuBase;
 
             // 0x10 bytes per pad from 0x04. (2026-11-11, game/menu/unit_6EE84.cpp)
             // The pads start at 0x04, not 0x00: the original's loops over

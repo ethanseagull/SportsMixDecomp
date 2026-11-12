@@ -49,6 +49,9 @@ namespace msw {
             static void Finalize();
             static CGameCamera *GetInstance(long view);
             static long GetInstanceNum();
+            // (DOL; added for BossF game/boss/CBallBoss.cpp, meaning of the
+            // first argument not known) Where the ball is heading.
+            void SetBallTargetPos(int, const bcs::FVEC3 &rPos);
             // Static (the DOL body takes no object and returns 1). HockeyF's
             // CGoalMdlHockey::NewMdl gives the goal a fading model when it
             // is true.
@@ -97,6 +100,21 @@ namespace msw {
             float GetRate(float fValue, float fMin, float fMax) const;
             void MakeingFrontCamDataBase(const bcs::FVEC3 &rPos, const bcs::FVEC3 &rTarget, float, float, float,
                                          float, float, float, float, float);
+            // DOL members used by HockeyF's CCameraHockeyGame (return types and
+            // parameter names guessed).
+            int IsSingleChrCamera() const;
+            int IsSpModeForBaHo() const;
+            CChrCore *GetFirstPadChrCore() const;
+            int IsComCore(const CChrCore *pCore) const;
+            void GetHoldBallChrPos(bcs::FVEC3 &rPos, long) const;
+            // The camera target of the slanted attack and defence views.
+            void MakeingOffSlantCamTar(bcs::FVEC3 &rTarget, const bcs::FVEC3 &rPos, const bcs::FVEC3 &rBase,
+                                       float) const;
+            void MakeingDefSlantCamTar(bcs::FVEC3 &rTarget, const bcs::FVEC3 &rPos, const bcs::FVEC3 &rBase,
+                                       float) const;
+            // The floats at 0x108 to 0x110 as one vector (HockeyF passes their
+            // address to the slant helpers above).
+            const bcs::FVEC3 &GetUnk108Vec() const { return *reinterpret_cast<const bcs::FVEC3 *>(&m_Unk108); }
 
         protected:
             // 0xFC: flags. With 0x80 set the camera stands still
@@ -137,7 +155,12 @@ namespace msw {
             unsigned long m_Unk1D8;
 
         private:
-            unsigned char m_Unk1DC[0x228 - 0x1DC];
+            unsigned char m_Unk1DC[0x224 - 0x1DC];
+
+        protected:
+            // 0x224: HockeyF's CCameraHockeyGame::IsNormalCamMode wants it
+            // below 0.1 (meaning not known; a float).
+            float m_Unk224;
 
         protected:
             // 0x228, 0x230, 0x234: read by VolleyF's CCameraVolleyBoss

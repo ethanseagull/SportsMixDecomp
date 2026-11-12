@@ -12,6 +12,10 @@ namespace msw {
             static void *GetPtr(long index); // return type guessed
             // Its path: the start of the entry (entries are 0x110 bytes).
             static const char *GetFilePath(long index);
+            // (name guessed; the DOL's fn_8018FB5C) The entry's m_nId (the
+            // word at 0x100), what bcs::CLoadMan::IsLoadEnd takes with the
+            // path.
+            static unsigned long GetFileId(long index);
             static unsigned long GetSize(long index); // return type guessed
             // Non-zero once the entry has been read.
             static int IsComplete(long index); // return type guessed
@@ -32,6 +36,8 @@ namespace msw {
             // nw4r::g3d::ResFile; whether that or the bare pointer is the
             // declared return type cannot be told from the code.
             static nw4r::g3d::ResFile GetRes(long index);
+            // (added for DOL game/msw/CGame.cpp) The wipe model's file.
+            static nw4r::g3d::ResFile GetWipeMdlFile();
             // A character's model file inside archive `index`. (meaning of
             // the last argument not known: the callers pass the high byte of
             // msw::CEvDemoRes::_CHR_INFO's word at 0x08)

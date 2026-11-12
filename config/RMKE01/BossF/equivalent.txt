@@ -73,6 +73,7 @@ BossF MethdTimeOver__Q23msw12CChrCoreBossFl near 98.4 after the switch ours relo
 BossF MethdTurnOver__Q23msw12CChrCoreBossFl near 99.5 r7/r8 swapped in the inlined queue push; register choice only
 BossF NormalizeCanMoveWorldPos__Q23msw11CComDrvBossCFRQ23bcs5FVEC3 near 97.5 float register allocation (radius sum, inlined FVEC3LenSq, final adds); same instructions and stack slots
 BossF OnMsgN__Q23msw14CChrDrvPadBossFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG near 99.7 float register choice only (512.0f in f2 vs f3 in case 0x97)
+BossF SendMessage___Q23msw9CGameBossFllll near 100.0 register allocation/order only (diff.py: schedule, 100.0% rounded)
 BossF SetBallPowerState__Q23msw21CCockpitBossBallPowerFll near 99.0 only the rodata offset of sPowerPane differs (0x8e8 vs 0x910): the original .rodata holds 0x28 more bytes of @LOCAL@ statics from dead-stripped inline helpers (GaugeBossLineAnim, LifeGaugeAnim, CoinBackAnim, BossLifeGaugeIn, SetSPGaugeAnim); same table, same code
 BossF SetBallPowerValueColor__Q23msw21CCockpitBossBallPowerFli near 86.7 instruction order only: the addi of the sPowerPane address is scheduled before the subf instead of after
 BossF SetBallPowerValue__Q23msw21CCockpitBossBallPowerFls unverified 82.2 instruction order only (82%, short function): the sPowerPane addi, the accessor load and li r6,0 are scheduled in a different order; same instructions otherwise
@@ -85,6 +86,7 @@ BossF SetHeightObjState___Q23msw21CBallTargetMarkerBossFv near 98.8 float regist
 BossF SetLifeValue__Q23msw17CCockpitBossCoderFlff near 87.3 register allocation only: the original keeps the pane accessor in its own saved register (five saved GPRs via _savegpr_27), ours shares it with the looked-up life pane (four, saved with stw); same calls, constants, loads, stores and branches
 BossF SetOutTelop__Q23msw17CCockpitBossCoderFli near 99.6 register allocation and order of the sLifePane index arithmetic only; same calls, constants, loads, stores and branches
 BossF SetStateReceive___Q23msw12CChrCoreBossFPQ23msw5CBallll near 99.5 f0/f1 swapped (0.0f constant vs the copy of the ball velocity); register choice only
+BossF SetVsBossSpikeShotMode__Q23msw9CBallBossFRQ43msw4BALL4BOSS14SPIKE_SHOT_ARG near 94.0 instruction order/register allocation only
 BossF Set__Q23msw17CCockpitBossCoderFv near 98.9 register allocation only: the label-pane loops' counter and pointer registers and one font-name temporary are swapped; same calls, constants, loads, stores and branches
 BossF Set__Q23msw21CCockpitBossBallPowerFv near 99.9 register allocation only: the accessor temporary of the final SetPaneDisp gets r4 instead of r5
 BossF SetupGame__Q23msw17CCockpitBossCoderFv near 99.7 register allocation only: the SetOutTelop loop counter gets a different register; same calls, constants, loads, stores and branches
@@ -104,6 +106,7 @@ BossF TrgGoalIn___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.
 BossF TrgReceive___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
 BossF TrgShootStart___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
 BossF UpdateCockpitCount___Q23msw9CGameBossFv near 92.4 the original also compares g_GameWork.m_fUnk20 <= 0 (fcmpo/cror) and never uses the result; ours drops the dead compare (empty if, unused bool and empty-inline stand-ins all eliminated). Rest is register numbering. No behaviour change.
+BossF UpdateCollBody___Q23msw9CBallBossFv near 99.8 register allocation/instruction order only
 BossF UpdateHomePos__Q23msw11CComDrvBossFv near 94.3 first loop: the original indexes the three local tables and the two member arrays with base+offset counters (lfsx, add), ours steps pointers; hence one saved GPR more (r21) and a 0x10 larger frame in the original; register numbering elsewhere; same operations in the same order
 BossF Util_DunkStart___Q23msw12CChrCoreBossFllfl near 99.0 register allocation/instruction order only
 BossF __ct__Q23msw11CCameraBossFl near 99.6 register allocation only

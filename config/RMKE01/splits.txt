@@ -72,7 +72,8 @@ game/bcs/CScnObj.cpp:
 	.text       start:0x80041888 end:0x80044B00
 
 game/bcs/CGDLObj.cpp:
-	.text       start:0x80044B00 end:0x80044BD4
+	.text       start:0x80044B00 end:0x80044DD8
+	.data       start:0x80466BB8 end:0x80466CC8
 
 game/bcs/CHBMenu.cpp:
 	.text       start:0x80045AAC end:0x80046D40

@@ -40,7 +40,7 @@ Matching game/msw/CMenuLinkList.cpp
 Matching game/msw/CStgGmkAct.cpp
 Matching game/bcs/CWifiPadBase.cpp
 NonMatching game/msw/CGameSnd.cpp
-NonMatching game/bcs/CGDLObj.cpp
+Matching game/bcs/CGDLObj.cpp
 Equivalent game/msw/cockpit/CMissionCount.cpp
 Matching game/msw/CEvDemoRes/_CHR_INFO.cpp
 Equivalent game/msw/CItemShellCmn.cpp

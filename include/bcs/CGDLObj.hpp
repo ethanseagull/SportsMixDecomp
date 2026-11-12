@@ -7,13 +7,16 @@ namespace bcs {
 
     // A scene object drawn from prebuilt GX display lists, one for the
     // opaque pass and one for the translucent pass. A DOL class. It
-    // overrides only ObjProc; its vtable (lbl_80466BB8) ends at 0x108 like
+    // overrides only GetObjType and ObjProc; its vtable (lbl_80466BB8) ends at 0x108 like
     // bcs::CScnObj's (the zero word after it is padding). Members from 0x118 are
     // read from the constructor and the setters; the names are guesses.
     class CGDLObj : public CScnObj {
         public:
             CGDLObj();
             virtual ~CGDLObj();
+            // 0x0C: inline (weak copies in MenuF game/menu/CBgDisplay and in
+            // the DOL at 0x8003B61C).
+            virtual long GetObjType() const { return 7; }
             virtual void ObjProc(unsigned long, unsigned long, void *);
 
             void SetDLOpa(void *pDL, unsigned long nSize);

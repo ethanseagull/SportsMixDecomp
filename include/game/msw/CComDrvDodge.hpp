@@ -54,6 +54,11 @@ namespace msw {
             // 2..8 pass or shoot (see ActLoopOffRunCharge).
             long LotActChargeAfterOffRunCharge() const;
             CChrCore *GetPassTargetChrCore() const;
+            // (added for game/dodge/CComManDodgeGame.cpp; meaning guessed
+            // from the name) The outfield character this driver's character
+            // is assigned to, and its index (negative for none).
+            long GetAssignOuterChrCoreIdx() const;
+            CChrCore *GetAssignOuterChrCore() const;
 
             // Added for game/dodge/CComDrvDodgeGameGimmick.cpp: escaping
             // and going round the stage gimmicks, bombs and obstacles.

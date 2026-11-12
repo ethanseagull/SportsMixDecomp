@@ -91,4 +91,4 @@ Equivalent game/dodge/unit_3AAC8.cpp
 Matching game/dodge/unit_A4AE8.cpp
 Matching game/dodge/unit_A5464.cpp
 Equivalent game/dodge/unit_D8380.cpp
-NonMatching game/dodge/CComManDodgeGame.cpp
+Equivalent game/dodge/CComManDodgeGame.cpp

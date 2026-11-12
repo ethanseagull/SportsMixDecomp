@@ -17,6 +17,9 @@ namespace nw4r {
     namespace ut {
         class ArchiveFont;
     }
+    namespace math {
+        struct VEC2;
+    }
 }
 
 namespace bcs {
@@ -76,6 +79,13 @@ namespace bcs {
         // type and argument names guessed; DodgeF CLockCursorDodge::Disp
         // tests the result against 0 and uses rOut only when it is 0).
         int GetWorldScreenPosition(const FVEC3 &rPos, long nCamera, FVEC3 &rOut);
+
+        // (added for DOL game/msw/CMenuPartBase.cpp; no symbols, names and
+        // types guessed) Whether rPos is inside pPane (0 for a null or
+        // hidden pane), and whether animation nAnim of pPaneObj and its
+        // children has ended (1 for a null object).
+        int IsHitPane(nw4r::lyt::Pane *pPane, const nw4r::math::VEC2 &rPos);
+        int IsAnimEndRecursive(CPaneObj *pPaneObj, long nAnim);
 
         // Added for MenuF game/menu/CSelectMenuLayoutBase.cpp: releases a
         // font made from a layout archive (return type guessed).

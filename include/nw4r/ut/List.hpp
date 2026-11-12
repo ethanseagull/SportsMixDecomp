@@ -1,6 +1,8 @@
 #ifndef NW4R_UT_LIST_HPP_
 #define NW4R_UT_LIST_HPP_
 
+#include "nw4r/db/Panic.hpp"
+
 namespace nw4r {
     namespace ut {
 
@@ -27,6 +29,27 @@ namespace nw4r {
         void *List_GetNext(const List *pList, const void *pObj);
         // The last object when pObj is null.
         void *List_GetPrev(const List *pList, const void *pObj);
+
+        // (added for DOL game/msw/CMenuPartBase.cpp) The number of objects.
+        // Inline with a pointer check that panics from "list.h" line 210;
+        // its two strings are weak objects of this function.
+        inline unsigned short List_GetSize(const List *pList)
+        {
+            if (pList == 0) {
+                db::Panic("list.h", 210, "NW4R:Pointer must not be NULL (list)");
+            }
+            return pList->nNum;
+        }
+
+        inline void *List_GetFirst(const List *pList)
+        {
+            return List_GetNext(pList, 0);
+        }
+
+        inline void *List_GetLast(const List *pList)
+        {
+            return List_GetPrev(pList, 0);
+        }
     }
 }
 

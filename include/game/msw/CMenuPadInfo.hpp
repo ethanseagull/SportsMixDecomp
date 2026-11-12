@@ -43,6 +43,9 @@ namespace msw {
             // (names guessed; inline, no symbol; added for
             // game/msw/CCokcpitMenuDataList.cpp) The halfword at 0x0A of
             // pad nPad's entry, which GetPadStates gathers.
+            // (added for DOL game/msw/CMenuPartBase.cpp; name guessed)
+            unsigned char GetPlayerNo(long nPad) const { return m_aPad[nPad].m_nPlayerNo; }
+
             unsigned short GetPadState(long nPad) const { return m_aPad[nPad].m_nState; }
             void SetPadState(long nPad, unsigned short nState) { m_aPad[nPad].m_nState = nState; }
             // (name guessed; inline, no symbol; added for

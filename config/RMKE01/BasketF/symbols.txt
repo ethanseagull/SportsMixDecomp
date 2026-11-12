@@ -893,7 +893,7 @@ SubStateArtsShotPlayLandMotion___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket2
 SubStateArtsShotPlayLandEffect___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK = .text:0x00025CFC; // type:function size:0x50 scope:global
 GetTargetMarkerPos__Q23msw14CChrCoreBasketFRQ23bcs5FVEC3 = .text:0x00025D4C; // type:function size:0x8 scope:global
 MoveTargetMarkerPos__Q23msw14CChrCoreBasketFf = .text:0x00025D54; // type:function size:0x8 scope:global
-fn_4_25D5C = .text:0x00025D5C; // type:function size:0x14
+__sinit_\unit_23654_cpp = .text:0x00025D5C; // type:function size:0x14 scope:local
 GetMotID_ItemShoot__Q23msw14CChrCoreBasketFli = .text:0x00025D70; // type:function size:0x8 scope:global
 CtorStateNeutral__Q23msw14CChrCoreBasketFv = .text:0x00025D78; // type:function size:0x474 scope:global
 LoopStateNeutral__Q23msw14CChrCoreBasketFv = .text:0x000261EC; // type:function size:0x768 scope:global

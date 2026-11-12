@@ -5,6 +5,12 @@ namespace bcs {
     class CTask;
 }
 
+namespace nw4r {
+    namespace g3d {
+        class ResFile;
+    }
+}
+
 namespace msw {
 
     // What a sport passes to EvDemo::CreateVictoryDemo: four lists of
@@ -28,10 +34,12 @@ namespace msw {
 
         // Looks up the model resource `pName` in archive `nArc` (a
         // msw::CLoadData entry; a null pSub picks a default sub-folder) and
-        // returns its data, or 0. nIndex receives the archive entry's
+        // returns it (an invalid file when not found; the DOL function
+        // returns the handle in r3 and makes NW4R's alignment check, and
+        // TourF callers copy-construct from it). nIndex receives the archive entry's
         // number (-1 when not found). Read from the DOL function; parameter
         // names guessed.
-        void *GetArcResDataMdl(long &nIndex, long nArc, const char *pName, const char *pSub);
+        nw4r::g3d::ResFile GetArcResDataMdl(long &nIndex, long nArc, const char *pName, const char *pSub);
         // Sets up the model resources of a loaded archive (pArc may be
         // null; a null pSub picks the default sub-folder). Return type and
         // parameter names guessed.

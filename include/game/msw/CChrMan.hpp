@@ -90,6 +90,11 @@ namespace msw {
             virtual long Util_GetNextChgLeader_(long) = 0;                               // 0xE0
             virtual int Is1on1CameraDirection_();                                        // 0xE4
 
+            // DOL, static (added for BasketF game/basket/CCameraBasketGame.cpp):
+            // Is1on1CameraDirection_ on the instance; the match camera counts
+            // the time it is true before its one-on-one view.
+            static int Is1on1CameraDirection();
+
             // DOL. Makes character nChr the leader of team nTeam.
             // (parameter meanings guessed; Create_ and InitLeader_ pass
             // (i, i, 0) for teams 0 and 1)
@@ -160,6 +165,9 @@ namespace msw {
             // a character that is not disabled has bit 0x20000 of the word
             // at 0xE8 set (taken to be the star state). Static.
             static int IsExistStarChr();
+            // (DOL, static; added for game/volley/CChrCoreVolleyWario.cpp,
+            // meaning guessed) Not zero while an arts shot holds the game.
+            static int IsArtsChrStop();
             // (DOL, static; return type and argument meanings not known)
             // Passes a message to the NPCs. BasketF's CBallBasketFruit sends
             // (0xB, 0, -1, ball number, 0) when a fruit on a string explodes.

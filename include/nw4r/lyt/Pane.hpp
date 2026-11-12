@@ -81,10 +81,13 @@ namespace nw4r {
                 void SetTranslate(const math::VEC3 &rTranslate) { mTranslate = rTranslate; }
                 // Added for MenuF game/menu/CChrCaption.cpp.
                 void SetAlpha(unsigned char nAlpha) { mAlpha = nAlpha; }
-                // Bit 0 of the flags.
+                // Bit 0 of the flags. Clear, then set, as two statements:
+                // the game masks the flags before inserting the bit
+                // (HockeyF CCockpitHockeySmashVS::SetupGame).
                 void SetVisible(bool bVisible)
                 {
-                    mFlag = (unsigned char)((mFlag & 0xFE) | (bVisible ? 1 : 0));
+                    mFlag &= (unsigned char)~1;
+                    mFlag |= (unsigned char)(bVisible ? 1 : 0);
                 }
                 // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp (SetRotate
                 // also for VolleyF game/volley/CCockpitChrIcon2DVolley.cpp).

@@ -2730,7 +2730,7 @@ SubStateAirTrickDoLandStart___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss20STATE_
 SubStateAirTrickIsOver___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss20STATE_WORK_AIR_TRICK = .text:0x00063474; // type:function size:0xF8 scope:global
 GetArtsEventRot__Q23msw12CChrCoreBossFv = .text:0x0006356C; // type:function size:0xC scope:global
 DoPlayArtsEvent__Q23msw12CChrCoreBossFv = .text:0x00063578; // type:function size:0x148 scope:global
-fn_8_636C0 = .text:0x000636C0; // type:function size:0x14
+__sinit_\unit_5FF80_cpp = .text:0x000636C0; // type:function size:0x14 scope:local
 CtorStateSideStep__Q23msw12CChrCoreBossFv = .text:0x000636D4; // type:function size:0x27C scope:global
 LoopStateSideStep__Q23msw12CChrCoreBossFv = .text:0x00063950; // type:function size:0x520 scope:global
 DtorStateSideStep__Q23msw12CChrCoreBossFv = .text:0x00063E70; // type:function size:0x20 scope:global

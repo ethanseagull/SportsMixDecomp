@@ -627,7 +627,9 @@ game/msw/CStage09Base/CConveyor.cpp:
 	.text       start:0x801EC07C end:0x801EC7E0
 
 game/bcs/G2D/CLineStripDL.cpp:
-	.text       start:0x801EC8D4 end:0x801ECC84
+	.text       start:0x801EC8D4 end:0x801ECE98
+	.data       start:0x80485C48 end:0x80485DA8
+	.sdata2     start:0x805C4E48 end:0x805C4E50
 
 game/msw/CCockpitButtonInfo.cpp:
 	.text       start:0x801ECE98 end:0x801ED5D0

@@ -49,7 +49,6 @@ MenuF LoopStateActive__Q23msw14CTopMenuChrObjFv near 92.6 PlayMotion helper: ori
 MenuF LoopStateDecide__Q23msw14CTopMenuChrObjFv unverified 77.1 PlayMotion constant loads placed after the null check (original hoists 0.0f/1.0f and reuses the register); same calls and values
 MenuF LoopStateToIdle__Q23msw14CTopMenuChrObjFv near 94.0 PlayMotion helper constant loads placed after the null check (original hoists them and reuses the 0.0f register); same calls and values
 MenuF Main__Q23msw14CTopMenuChrObjFv near 98.6 one load of m_pMdl scheduled after the three rotation loads instead of between them; same operations
-MenuF Main__Q23msw18CDepthOfFieldValueFv unverified 81.8 same operations and constants (0.0f, 1.0f, 2.5); the original loads each float constant with its own lis/lfs pair while ours keeps the .rodata base in r31 (this moves to r30, one more saved register) and the scheduling around pow() shifts. No behavioural difference seen, but under the 85% bar; what makes the compiler skip the base register is not known
 MenuF Main__Q33msw10SelectMenu11CBackgroundFv near 98.8 two saved registers swapped (first pane object and animation number); regs search no gain
 MenuF Main__Q33msw10SelectMenu11CFriendInfoFv near 100.0 load order of the two operands of the m_fTrofyWait != 0.0f compare (equality, symmetric)
 MenuF Main__Q33msw10SelectMenu11CFriendListFv near 99.9 register allocation/instruction order only

@@ -142,7 +142,6 @@ DodgeF SetPeriodValue__Q23msw18CCockpitDodgeCoderFl near 97.8 register choice on
 DodgeF SetPushVel__Q23msw23CStgGmk_Pylon_Act_DodgeFRCQ23bcs5FVEC3 near 99.6 99.6%: two addi for stack vectors swapped
 DodgeF SetSPGauge__Q23msw18CCockpitDodgeCoderFlf near 99.0 register choice only: scratch registers of the int-to-float conversion and the gauge address differ; same instructions and constants
 DodgeF SetSetCountDisp__Q23msw18CCockpitDodgeCoderFi near 99.6 register choice only: the set index temporaries swap r5/r7; same calls, constants, loads, stores and branches
-DodgeF SetTextNext__Q23msw19CCockpitDodgeResultFll near 99.2 r30/r31 swapped (pane accessor vs show flag), as CCockpitBasketResult::SetTextNext
 DodgeF SetVelocity__Q23msw18CItemBallBombDodgeFv near 99.3 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF Set__Q23msw16CLockCursorDodgeFv near 99.9 register allocation/order only
 DodgeF Set__Q23msw17CCockpitDodgeCoinFv near 99.3 register choice only (as CCockpitHockeyCoin::Set)

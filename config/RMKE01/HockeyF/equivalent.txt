@@ -95,7 +95,6 @@ HockeyF SetFaceIcon__Q23msw21CCockpitHockeyVSCountFllli near 99.3 register alloc
 HockeyF SetRimoconShakeIcon__Q23msw21CCockpitHockeySmashVSFlRCQ23bcs5FVEC3li near 98.5 register allocation only: the game reuses one fewer callee-saved register (savegpr_24 vs _23)
 HockeyF SetSPGauge__Q23msw19CCockpitHockeyCoderFlf near 99.0 register allocation only around the int-to-float conversion; same instructions
 HockeyF SetTelop3DScoreCount__Q23msw14CCockpitHockeyFllllllllil near 97.5 97.5%: only the order of the stores into the stack parameter struct differs (as CCockpitBasket::SetTelop3DScoreCount); same values, offsets and call
-HockeyF SetTextNext__Q23msw20CCockpitHockeyResultFll near 99.2 99.2%: register allocation only (the i < nPeriod flag lands in another saved register).
 HockeyF Set__Q23msw18CCockpitHockeyCoinFv near 99.3 register choice only: loop counter and game-mode local swap r26/r27, telop pane r29 vs r28, two lis swap r3/r4
 HockeyF Set__Q23msw19CCockpitHockeyCoderFv near 99.6 register allocation only (loop counter and table pointer swap registers); same instructions and memory accesses
 HockeyF Set__Q23msw21CCockpitHockeySmashVSFv unverified 84.1 84.1%: tables now one struct (frame and r25-r31 match); remaining only register numbering of a temp and int->float conversion/store order

@@ -121,7 +121,6 @@ VolleyF SetScoreValue__Q23msw19CCockpitVolleyCoderFll unverified 81.2 same contr
 VolleyF SetServeScoreAnim__Q23msw18CCockpitVolleyCoinFl near 99.1 register choice only: loop counter and pane-accessor temporary swap r27/r28
 VolleyF SetTeamScore__Q23msw14CCockpitVolleyFv near 99.6 register allocation only (score and coder pointer swapped in the inlined SetTeamScore(long,long,int))
 VolleyF SetTelop3DScoreCount__Q23msw14CCockpitVolleyFllllllllil near 99.3 order of the constant stores into SET_PARAM only (same values and offsets), as HockeyF's near copy
-VolleyF SetTextNext__Q23msw20CCockpitVolleyResultFll near 99.2 register allocation only
 VolleyF Set__Q23msw18CCockpitVolleyBossFv near 99.6 register allocation only: each font name is held in a different saved register (r30 in the original)
 VolleyF Set__Q23msw18CCockpitVolleyCoinFv near 99.4 register choice / schedule only (as CCockpitHockeyCoin::Set)
 VolleyF Set__Q23msw19CCockpitVolleyCoderFv near 99.8 register allocation only: the label loop's table pointer and accessor temporaries swap saved registers; same calls, constants, loads, stores and branches

@@ -192,7 +192,6 @@ BasketF SetScoreValue__Q23msw19CCockpitBasketCoderFll near 99.4 register allocat
 BasketF SetScore__Q23msw22CCockpitBasketHarapekoFllii near 97.8 register choice and instruction order only
 BasketF SetTeamFaceIcon__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 97.4 register choice; second table pointer as base+0x48 vs direct address (same address); single-bit set as clear-then-insert vs shift-then-insert
 BasketF SetTelop3DScoreCount__Q23msw14CCockpitBasketFllllllllil near 97.5 97.5%: only the order of the stores into the parameter struct differs.
-BasketF SetTextNext__Q23msw20CCockpitBasketResultFll near 99.2 99.2%: r30/r31 swapped (pane accessor vs loop flag)
 BasketF SetUpDisappear__Q33msw11CC14_BASKET12CcNinjaCloneFv near 98.3 .rodata pool and table offsets shifted; values identical
 BasketF Set__Q23msw18CCockpitBasketCoinFv near 99.3 register choice only (as CCockpitHockeyCoin::Set)
 BasketF Set__Q23msw19CCockpitBasketCoderFv near 99.6 register allocation only (loop counter and table pointer swap registers); same instructions and memory accesses; as HockeyF

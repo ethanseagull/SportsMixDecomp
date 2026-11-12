@@ -40,7 +40,6 @@ HockeyF GoalFlowUpdate__Q23msw14CStageHockey15Ff near 99.7 register numbering on
 HockeyF InitParameters__Q23msw21CCockpitHockeyVSCountFv unverified 47.7 our compiler auto-inlines AttachPlayerNo and InitSetCountPane into it (the original calls them); with #pragma auto_inline off (scratch test, not kept) the function is 100%, so the body is right
 HockeyF InitSetCountPane__Q23msw21CCockpitHockeyVSCountFll near 91.1 instruction order and register choice only: the two strength-reduced loop pointers are set up and stepped in the other order
 HockeyF KickSplashEffect__26CStgGmk_IceCube_Act_HockeyFv near 95.9 register choice (pool base r31 vs pSrt/effect pointer swapped, one fmr target) and the order of three stack stores of the line endpoints only
-HockeyF LookAt__Q23msw7CStgObjFRCQ23bcs5FVEC3 near 97.9 97.9%: weak inline (as in BasketF); the two psq_l/ps_sub operands land in f0/f1 swapped (operand order inside the shared bcs::FVEC3Sub helper). Float registers only.
 HockeyF LoopStateAirTrick__Q23msw14CChrCoreHockeyFv near 99.8 register choice only (queue head/work base r4/r5 swapped in inline FsmqGetWork)
 HockeyF LoopStateAirTrick__Q23msw19CChrCoreHockeyLuigiFv near 99.8 register choice only (r3/r4 in inlined FsmqGetWork_)
 HockeyF LoopStateAirTrick___Q23msw14CChrCoreHockeyFv near 99.6 register choice only (queue head/work base r4/r5 swapped in inline FsmqGetWork)

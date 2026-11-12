@@ -40,7 +40,113 @@ namespace nw4r {
                 y = fy;
                 z = fz;
             }
+
+            // Added for BasketF game/basket/CChrCoreBasketNinja.cpp, which
+            // emits the first and third weak and calls all three (defined
+            // below, after the routines they use).
+            VEC3 operator+(const VEC3 &rhs) const;
+            VEC3 operator-(const VEC3 &rhs) const;
+            VEC3 operator*(float f) const;
         };
+
+        // pOut = p1 + p2, p1 - p2 and p * f. In the original these are inline
+        // routines written in paired-single assembly (x and y as a pair, z
+        // alone), as the weak VEC3 operators of BasketF's
+        // CChrCoreBasketNinja show; the compiler does not produce these
+        // instructions from float code. The same exception as bcs::FVEC3Add
+        // of bcs/BCS_Vec.hpp, with a plain C++ body for other compilers.
+        inline VEC3 *VEC3Add(register VEC3 *pOut, register const VEC3 *p1, register const VEC3 *p2)
+        {
+#ifdef __MWERKS__
+            register float a;
+            register float b;
+            register float work;
+
+            asm {
+                psq_l a, 0(p1), 0, 0
+                psq_l b, 0(p2), 0, 0
+                ps_add work, a, b
+                psq_st work, 0(pOut), 0, 0
+                psq_l a, 8(p1), 1, 0
+                psq_l b, 8(p2), 1, 0
+                ps_add work, a, b
+                psq_st work, 8(pOut), 1, 0
+            }
+#else
+            pOut->x = p1->x + p2->x;
+            pOut->y = p1->y + p2->y;
+            pOut->z = p1->z + p2->z;
+#endif
+            return pOut;
+        }
+
+        inline VEC3 *VEC3Sub(register VEC3 *pOut, register const VEC3 *p1, register const VEC3 *p2)
+        {
+#ifdef __MWERKS__
+            register float a;
+            register float b;
+            register float work;
+
+            asm {
+                psq_l a, 0(p1), 0, 0
+                psq_l b, 0(p2), 0, 0
+                ps_sub work, a, b
+                psq_st work, 0(pOut), 0, 0
+                psq_l a, 8(p1), 1, 0
+                psq_l b, 8(p2), 1, 0
+                ps_sub work, a, b
+                psq_st work, 8(pOut), 1, 0
+            }
+#else
+            pOut->x = p1->x - p2->x;
+            pOut->y = p1->y - p2->y;
+            pOut->z = p1->z - p2->z;
+#endif
+            return pOut;
+        }
+
+        inline VEC3 *VEC3Scale(register VEC3 *pOut, register const VEC3 *p, register float f)
+        {
+#ifdef __MWERKS__
+            register float a;
+            register float work;
+
+            asm {
+                psq_l a, 0(p), 0, 0
+                ps_muls0 work, a, f
+                psq_st work, 0(pOut), 0, 0
+                psq_l a, 8(p), 1, 0
+                ps_muls0 work, a, f
+                psq_st work, 8(pOut), 1, 0
+            }
+#else
+            pOut->x = p->x * f;
+            pOut->y = p->y * f;
+            pOut->z = p->z * f;
+#endif
+            return pOut;
+        }
+
+        inline VEC3 VEC3::operator+(const VEC3 &rhs) const
+        {
+            VEC3 tmp;
+            VEC3Add(&tmp, this, &rhs);
+            return tmp;
+        }
+
+        inline VEC3 VEC3::operator-(const VEC3 &rhs) const
+        {
+            VEC3 tmp;
+            VEC3Sub(&tmp, this, &rhs);
+            return tmp;
+        }
+
+        inline VEC3 VEC3::operator*(float f) const
+        {
+            VEC3 tmp;
+            VEC3Scale(&tmp, this, f);
+            return tmp;
+        }
 
         // An axis-aligned box. Added for MenuF game/menu/CBgChr.cpp (the
         // screen boxes of the top menu's characters).

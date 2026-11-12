@@ -1,6 +1,8 @@
 #ifndef BCS_FVEC3_HPP_
 #define BCS_FVEC3_HPP_
 
+#include "nw4r/math/types.h"
+
 namespace bcs {
 
     // Three floats. Only the layout is known (msw::CTableSetMdlObj::
@@ -32,6 +34,19 @@ namespace bcs {
             z = v.z;
         }
 
+        // From the result of a nw4r::math::VEC3 operator. Added for BasketF
+        // game/basket/CChrCoreBasketNinja.cpp. In the original FVEC3 derives
+        // from nw4r::math::VEC3 and this constructor takes its base
+        // nw4r::math::_VEC3 (BasketF calls
+        // __ct__Q23bcs5FVEC3FRCQ34nw4r4math5_VEC3, which first runs VEC3's
+        // constructor); that base is not given here, as it would change how
+        // every FVEC3 and VEC3 in the game is copied.
+        FVEC3(const nw4r::math::VEC3 &v)
+        {
+            x = v.x;
+            y = v.y;
+            z = v.z;
+        }
         // (name guessed) Inline in the modules.
         void Set(float fx, float fy, float fz)
         {

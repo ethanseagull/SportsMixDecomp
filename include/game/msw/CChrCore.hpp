@@ -1026,6 +1026,9 @@ namespace msw {
             // (msw::cockpit::CSPGaugeInputDisp::SetDispAnim in the DOL passes
             // it to CGame::GetPadDefaultType and CMenuPad::IsNunchakuStyle).
             long GetPadNo() const { return m_nPadNo; }
+            // In the DOL (return type guessed). The guide compares it with 1
+            // (game/msw/CGameGuideMan.cpp).
+            long DriverGetPadType() const;
             // Added for BossF game/boss/CCockpitBossCoder.cpp (name guessed),
             // see m_nCtrlPlayerNo.
             long GetCtrlPlayerNo() const { return m_nCtrlPlayerNo; }

@@ -135,6 +135,13 @@ namespace msw {
             static void CreatePointerObj(float fSortZ);
             static void RemovePointerObj();
             static CCockpitPointer *GetPointerObj();
+            // (added for DOL game/msw/CGameGuideMan.cpp; names and argument
+            // meanings guessed) The guide telop object nObjId (0x1001 or
+            // 0x1002) closes; the line message box (object 0x1015) shows
+            // the state nMode (0 to 3) and the text pText.
+            static void CloseGuideTelop(long nObjId, int);
+            static void SetLineMsgMode(int nMode);
+            static void SetLineMsgText(const wchar_t *pText);
             // (DOL fn_8013A688; name, argument meanings and
             // return type guessed) Asks pPointer for pad nPad's pointer
             // position and, when it is over a button of pMenu that

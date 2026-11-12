@@ -55,7 +55,9 @@ namespace nw4r {
                 virtual void Unk30();
                 virtual void Unk34();
                 virtual void Unk38();
-                virtual void Unk3C();
+                // 0x3C (added for DodgeF game/dodge/CCockpitDodgeTelopInOutChange.cpp):
+                // the pane named pName below this one, or null.
+                virtual Pane *FindPaneByName(const char *pName, bool bRecursive);
                 virtual void Unk40();
                 virtual void Unk44();
                 virtual void Unk48();

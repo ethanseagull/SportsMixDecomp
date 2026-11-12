@@ -75,7 +75,16 @@ namespace bcs {
                 unsigned char m_Unk18[0x24]; // 0x18
                 void *m_pAnim;               // 0x3C: 0x10 bytes per animation (name guessed)
                 unsigned long m_nAnimNum;    // 0x40: entries of m_pAnim (name guessed)
-                unsigned char m_Unk44[0x4];  // 0x44
+                // 0x44, flags. Bit 3 is read by DodgeF's COutSignDodge::Main
+                // (game/dodge/CCockpitDodgeTelopInOutChange.cpp) through
+                // IsAnimStop; its meaning is a guess.
+                unsigned long m_nUnk44Hi : 28;
+                unsigned long m_bAnimStop : 1;
+                unsigned long m_nUnk44Lo : 3;
+
+            public:
+                // (no symbol; name guessed) Bit 3 of the flags at 0x44.
+                int IsAnimStop() const { return m_bAnimStop; }
         };
     }
 }

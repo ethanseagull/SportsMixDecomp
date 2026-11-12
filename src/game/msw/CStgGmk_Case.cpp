@@ -65,7 +65,7 @@ namespace {
 
 namespace msw {
 
-    CStgGmk_Case_Mdl::CStgGmk_Case_Mdl(CStgGmk *pParent, long type) : CStgMdl(pParent), m_pDebugObj(0), m_nType(type)
+    CStgGmk_Case_Mdl::CStgGmk_Case_Mdl(CStgGmk *pParent, long type) : CStgMdl(pParent), m_pDebugObj(0), m_nMdlIdx(type)
     {
     }
 
@@ -923,7 +923,7 @@ namespace msw {
         if (pMdl != 0 && pParent != 0) {
             long type = GetParam_MdlIdx();
             pParent->SetSubType(type);
-            static_cast<CStgGmk_Case_Mdl *>(pMdl)->SetType(type);
+            static_cast<CStgGmk_Case_Mdl *>(pMdl)->SetMdlIdx(type);
             pMdl->Create();
             pMdl->SceneEntry();
         }

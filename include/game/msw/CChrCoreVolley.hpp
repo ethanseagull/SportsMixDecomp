@@ -206,7 +206,7 @@ namespace msw {
             virtual int CanbeRebirth() const;                          // 0xB70
             virtual int MethdRebirth();                                // 0xB74
             virtual void CheckCountWork__();                           // 0xC10
-            virtual void CalcMoveSpeedRate_(float, long);              // 0xC18
+            virtual float CalcMoveSpeedRate_(float, long);              // 0xC18
             virtual void Util_SetEffect(SET_EFFECT_TYPE);              // 0xC1C
             virtual void Util_AttachEffect(ATTACH_EFFECT_TYPE, long);  // 0xC20
             virtual int CallbackDribbleTap_();                         // 0xC48
@@ -344,10 +344,33 @@ namespace msw {
             // (added for game/volley/CChrCoreVolleyWario.cpp; DOL) Sets
             // the turn rRot to yaw fRotY over fFrame frames.
             void CalcRotParam_(ROT_LERP1 &rRot, float fRotY, float fFrame);
+            // Added for game/volley/unit_63388.cpp (non-virtual Canbe* and
+            // Methd* helpers; meanings guessed). Not zero when a charge may
+            // start; starts a fall from a height; sets the receive state's
+            // work up for a ball shot by a special move (the character
+            // endures it); not zero when the stocked item may be used now.
+            int CanbeCharge();
+            int MethdFall_();
+            void SetReceiveEndureWork_(CBall *pBall, STATE_WORK_RECEIVE *pWork);
+            int CanbeUseItem_(CBall *pBall);
+            // (in another unit) Drops the held ball towards fRotY.
+            void DropBall_(float fRotY);
+            void SetServeMode_(int bServe);
+            // How a receive of the target ball would be made (4: none
+            // possible). pWork may be null.
+            long SubStateReceiveChoiceProcType_(STATE_WORK_RECEIVE *pWork);
+            int IsChargeBall_(const CBall *pBall) const;
 
         protected:
             // Not mapped yet; size 0x964.
-            unsigned char m_Unk574[0x768 - 0x574];
+            unsigned char m_Unk574[0x720 - 0x574];
+            // 0x720, 0x72C (names guessed, as in CChrCoreBoss; read by
+            // GetVolleySpikeOffsetPos and CanbeSpike): where the ball is
+            // hit in a spike, from the character, for a normal and for a
+            // charged ball.
+            bcs::FVEC3 m_SpikeOfs;
+            bcs::FVEC3 m_SpikeOfsCharge;
+            unsigned char m_Unk738[0x768 - 0x738];
             // 0x768 (name guessed): where a ball pulled in by an air trick
             // sits relative to the hand (CChrCoreVolleySiroma copies it).
             bcs::FVEC3 m_AdsorbOfs;
@@ -374,21 +397,47 @@ namespace msw {
             // 0x890 (name guessed): two values the receive states leave for
             // CheckCountWork__ (from the work's 0xD4 and 0xD8).
             float m_afCountWork[2];
-            unsigned char m_Unk898[0x964 - 0x898];
+            unsigned char m_Unk898[0x8C4 - 0x898];
+            // 0x8C4 (name guessed): set by MethdCombination.
+            long m_bCombination;
+            // 0x8C8, 0x8CC (names guessed; GetVolleyCombinationRole and
+            // GetVolleyCombinationStep): the character's part in a
+            // combination (2: the attacker) and how far it has got.
+            long m_nCombinationRole;
+            long m_nCombinationStep;
+            unsigned char m_Unk8D0[0x918 - 0x8D0];
+            // 0x918 (name guessed): not zero when CanbeLanding checks the
+            // floor under the character.
+            long m_bCheckLanding;
+            unsigned char m_Unk91C[0x964 - 0x91C];
     };
 
     // (field names guessed; only what the character units read is mapped)
     struct CChrCoreVolley::STATE_WORK_RECEIVE {
         long m_nStep;                // 0x00
         long m_nSubStep;             // 0x04, counts the motions of a step
-        unsigned char m_Unk08[0x8];
+        // 0x08 (name guessed): the kind of receive (SetStateReceive_'s
+        // second argument; CanbeRun and CanbeJump let a receive of kind 4
+        // be left).
+        long m_nKind;
+        long m_nPose;                // 0x0C, the receive pose (see GetReceivePoseDir_)
         unsigned long m_nFlag;       // 0x10
         float m_fTrgFrame;           // 0x14, a frame of the receive motion
         float m_fTargetRotY;         // 0x18, negative for none
         float m_fRotY;               // 0x1C
         unsigned char m_Unk20[0x8];
         bcs::FVEC3 m_Dir;            // 0x28, the direction the ball is sent (only x and z read)
-        unsigned char m_Unk34[0x58 - 0x34];
+        unsigned char m_Unk34[0x38 - 0x34];
+        float m_fUnk38;              // 0x38 (meaning not known)
+        float m_fUnk3C;              // 0x3C (meaning not known)
+        float m_fUnk40;              // 0x40, from CChrCore::m_fUnk268 (meaning not known)
+        unsigned char m_Unk44[0x48 - 0x44];
+        // 0x48, 0x4C, 0x50 (meanings not known): from the ball's
+        // BALL::VOLLEY::ENDURE_PRM (SetReceiveEndureWork_).
+        float m_fEndure48;
+        float m_fEndure4C;
+        float m_fEndure50;
+        unsigned char m_Unk54[0x58 - 0x54];
         long m_nReceiveType;         // 0x58, passed to ReceiveBall_
         long m_nFlickType;           // 0x5C, passed instead when the ball is flicked away
         unsigned char m_Unk60[0xC8 - 0x60];

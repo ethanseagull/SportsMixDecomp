@@ -131,6 +131,28 @@ namespace nw4r {
             return pOut;
         }
 
+        // x * x + y * y + z * z (added for bcs::CAnmBlendMotion, which
+        // inlines it as paired-single code; same exception and fallback as
+        // the three above).
+        inline float VEC3LenSq(register const VEC3 *p)
+        {
+#ifdef __MWERKS__
+            register float yz;
+            register float x;
+
+            asm {
+                psq_l yz, 4(p), 0, 0
+                psq_l x, 0(p), 1, 0
+                ps_mul yz, yz, yz
+                ps_madd x, x, x, yz
+                ps_sum0 x, x, yz, yz
+            }
+            return x;
+#else
+            return p->x * p->x + p->y * p->y + p->z * p->z;
+#endif
+        }
+
         inline VEC3 VEC3::operator+(const VEC3 &rhs) const
         {
             VEC3 tmp;
@@ -226,6 +248,12 @@ namespace nw4r {
         // part of a 3x4 matrix, and a 3x3 matrix with no translation.
         MTX33 *MTX34ToMTX33(MTX33 *pOut, const MTX34 *pM);
         MTX34 *MTX33ToMTX34(MTX34 *pOut, const MTX33 *pM);
+
+        // (DOL; added for bcs::CAnmBlendMotion) Sets every element to 0.
+        MTX34 *MTX34Zero(MTX34 *pOut);
+        // (DOL; added for bcs::CalcChrAnmResultFromMtx) Whether the matrix
+        // is the identity.
+        bool MTX34IsIdentity(const MTX34 *pM);
 
         // (DOL) *pOut = *pM scaled by *pS. Added for the DOL's
         // msw::CStgSrt::GetMtx.

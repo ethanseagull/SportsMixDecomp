@@ -10,21 +10,24 @@ namespace bcs {
     class CFrameCtrl {
         public:
             enum {
-                FLAG_LOOP = 1
+                FLAG_LOOP = 1,
+                // (names guessed; added for the motion classes) Set by
+                // SetFrame: the frame wrapped (kept until cleared), wrapped
+                // in this call, and stopped at an end of a non-looping
+                // animation.
+                FLAG_LOOPED = 2,
+                FLAG_WRAP = 4,
+                FLAG_END = 8
             };
 
             CFrameCtrl() : m_nFlag(0), m_fFrame(0.0f), m_fRate(1.0f), m_fEndFrame(0.0f) {}
 
             void SetFrame(float frame);
 
-            void SetLoop(bool bLoop)
-            {
-                if (bLoop) {
-                    m_nFlag |= FLAG_LOOP;
-                } else {
-                    m_nFlag &= ~FLAG_LOOP;
-                }
-            }
+            // (DOL 0x80007088) Not inline: other files of the DOL call it
+            // (bcs::CCameraAnm at 0x80012EB4, code at 0x80014100 and
+            // 0x801FE408); defined in CAnmMotion.cpp right after SetFrame.
+            void SetLoop(bool bLoop);
 
             unsigned long m_nFlag; // 0x00
             float m_fFrame;        // 0x04

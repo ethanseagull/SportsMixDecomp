@@ -36,6 +36,15 @@ namespace msw {
                 m_Scale.z = scale;
                 m_nFlag |= 4;
             }
+            // (added for VolleyF CStgGmk_WaterWorks_Volley_Act::OnUpdate,
+            // which inlines it) The same with a scale per axis.
+            void SetScale(float x, float y, float z)
+            {
+                m_Scale.x = x;
+                m_Scale.y = y;
+                m_Scale.z = z;
+                m_nFlag |= 4;
+            }
 
             void SetFront(const bcs::FVEC3 &rFront);
             // (added for game/msw/CStgGmk_Trolley.cpp) The same from the

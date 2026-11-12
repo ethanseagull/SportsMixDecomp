@@ -6545,9 +6545,7 @@ namespace msw {
         }
 
         g_GameWork.m_fUnk38 = 0.0f;
-        // GameWorkReset_ uses no member; the original calls it from this
-        // static function without an object.
-        m_pInstance->GameWorkReset_();
+        GameWorkReset_();
         g_GameWork.m_nFlag18 = 0;
     }
 

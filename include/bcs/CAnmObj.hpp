@@ -25,6 +25,12 @@ namespace bcs {
 
             CAnmObj() : m_nAnmFlag(0) {}
             virtual ~CAnmObj() {}
+            // 0x0C, 0x14, 0x10: inline (the weak copies sit in the tail of
+            // the DOL's animation file, IsScnObj first, then IsAnmObj and
+            // GetObjType; declared in the reverse of that order).
+            virtual long GetObjType() const { return 2; }
+            virtual int IsAnmObj() const { return 1; }
+            virtual int IsScnObj() const { return 0; }
             virtual void ObjProc(unsigned long, unsigned long, void *); // 0x1C
             virtual void SetFrame(float frame);                         // 0x20 (name guessed) takes a float
             virtual float GetFrame() const;                             // 0x24, reads the float at 0x1C
@@ -44,6 +50,8 @@ namespace bcs {
 
         protected:
             void OffAnmFlag(unsigned long flag) { m_nAnmFlag &= ~flag; }
+            // (added for bcs::CAnmMatClr) Nonzero when the bit is set.
+            unsigned long TestAnmFlag(unsigned long flag) const { return m_nAnmFlag & flag; }
 
         private:
             // 0x08 (name guessed). The class ends here: the 0x34-byte

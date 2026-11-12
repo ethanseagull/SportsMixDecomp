@@ -51,10 +51,10 @@ namespace bcs {
 
     // (DOL) The rotation of the matrix as a quaternion.
     void BCS_Quat_FromMatrix(QUATERNION &rQuat, const FMTX34 &rMtx);
-    // (name guessed; DOL fn_80054CB0, after BCS_Quat_FromMatrix) The
-    // spherical blend from rFrom (t = 0) to rTo (t = 1). Added for the
-    // DOL's msw::CStgSrt::LookAt.
-    void BCS_Quat_Slerp(QUATERNION &rOut, const QUATERNION &rFrom, const QUATERNION &rTo, float t);
+    // (DOL fn_80054CB0, the function after it; name and argument meanings
+    // guessed from bcs::CAnmBlendMotion, which blends rotations with it)
+    // The spherical interpolation from rFrom to rTo by fRate (0 to 1).
+    void BCS_Quat_Slerp(QUATERNION &rOut, const QUATERNION &rFrom, const QUATERNION &rTo, float fRate);
 }
 
 #endif /* !BCS_BCS_MATH_HPP_ */

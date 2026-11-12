@@ -1,4 +1,5 @@
 #include "game/msw/CStgMdl.hpp"
+#include "game/msw/CStgGenericGmkMdl.hpp"
 #include "bcs/BCS_Color.hpp"
 #include "bcs/CMdlObj.hpp"
 #include "bcs/CMdlRef.hpp"
@@ -87,7 +88,7 @@ namespace msw {
         if (OnPreCreate()) {
             bcs::CMdlObj *pMdl = NewMdl(0);
             if (pMdl) {
-                if (!rCreator.CreateMdl(pMdl)) {
+                if (!rCreator.CreateMdlObj(pMdl)) {
                     if (pMdl) {
                         bcs::CScnObj::AppendDelayDeleteObject(pMdl);
                     }

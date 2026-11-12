@@ -117,10 +117,14 @@ namespace bcs {
                 if (FsmqIsEmpty()) {
                     return 0;
                 }
-                if (!m_pWorkQueue || !m_nWorkSize) {
+                // (the pointer in a local: BasketF's CChrCoreBasket states
+                // keep the head in r5 and the pointer in r4 only so;
+                // game/basket/unit_25D70.cpp, 2026-11-12)
+                void *pWork = m_pWorkQueue;
+                if (!pWork || !m_nWorkSize) {
                     return 0;
                 }
-                return static_cast<char *>(m_pWorkQueue) + m_nWorkSize * m_nQueueHead;
+                return static_cast<char *>(pWork) + m_nWorkSize * m_nQueueHead;
             }
 
             template <class W>
@@ -215,6 +219,31 @@ namespace bcs {
             {
                 int bEmpty = FsmqIsEmpty();
                 long tail = m_nQueueTail;
+                long next = FsmqWrap(tail + 1, m_nQueueSize);
+                m_pStateQueue[tail] = state;
+                m_nQueueTail = next;
+                if (bEmpty && m_pStateTable) {
+                    m_pNextState = &m_pStateTable[state];
+                }
+                void *pWork;
+                if (m_pWorkQueue == 0 || m_nWorkSize == 0) {
+                    pWork = 0;
+                } else {
+                    pWork = static_cast<char *>(m_pWorkQueue) + m_nWorkSize * tail;
+                    BCS_CpuClear(pWork, m_nWorkSize);
+                }
+                return pWork;
+            }
+
+            // (name guessed; added for VolleyF game/volley/unit_63388.cpp,
+            // CChrCoreVolley::MethdJump) FsmqPushState with the tail read
+            // before the head, as FsmqPush has it: the original reloads the
+            // queue in that order when a call separates FsmqClear from the
+            // push.
+            void *FsmqPushWork(long state)
+            {
+                long tail = m_nQueueTail;
+                int bEmpty = m_nQueueHead == tail;
                 long next = FsmqWrap(tail + 1, m_nQueueSize);
                 m_pStateQueue[tail] = state;
                 m_nQueueTail = next;

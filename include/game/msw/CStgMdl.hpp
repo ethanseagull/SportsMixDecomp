@@ -50,18 +50,20 @@ namespace msw {
 
             // Builds the parts of a model for Create(const CCreator &). An
             // interface with the vptr at 0x00; its vtable has no destructor.
-            // The DOL functions in the vtables of its derived classes have
-            // no exported names: the first one makes the model (it looks up
-            // MDL_PARAM::pMdlName), the next ones the shadow, the reference
-            // model and the animations (names guessed). CCreator's own four
-            // are inline in the DOL (weak copies returning 0, 0x8014BDE4 to
-            // 0x8014BDFC); they are declared without bodies here so that no
-            // unit emits its vtable.
+            // The names of the four slots are those of their weak copies in
+            // VolleyF: game/volley/CStgGmk_WaterWorks_Volley_Act.cpp is the
+            // only file of the game that emits __vt__Q33msw7CStgMdl8CCreator
+            // and the four bodies (which return 0), so they are declared
+            // here without bodies and defined inline in that file only;
+            // with bodies here every file that builds a creator would emit
+            // them. The DOL functions in the vtables of the derived classes
+            // have no exported names: CreateMdlObj looks up
+            // MDL_PARAM::pMdlName. Return types guessed.
             class CCreator {
                 public:
-                    virtual bool CreateMdl(bcs::CMdlObj *pMdl) const;
-                    virtual bool CreateShadowMdl(bcs::CMdlShadow *pShadow) const;
-                    virtual bool CreateRefMdl(bcs::CMdlRef *pRef) const;
+                    virtual bool CreateMdlObj(bcs::CMdlObj *pMdl) const;
+                    virtual bool CreateShadowMdl(bcs::CMdlShadow *pMdl) const;
+                    virtual bool CreateRefMdl(bcs::CMdlRef *pMdl) const;
                     virtual bool CreateAnm(CStageAnm *pAnm, bcs::CMdlObj *pMdl) const;
             };
 
@@ -81,7 +83,7 @@ namespace msw {
                     {
                     }
 
-                    virtual bool CreateMdl(bcs::CMdlObj *pMdl) const;
+                    virtual bool CreateMdlObj(bcs::CMdlObj *pMdl) const;
 
                 private:
                     nw4r::g3d::ResFile m_Res;  // 0x04
@@ -100,7 +102,7 @@ namespace msw {
                     {
                     }
 
-                    virtual bool CreateMdl(bcs::CMdlObj *pMdl) const;
+                    virtual bool CreateMdlObj(bcs::CMdlObj *pMdl) const;
 
                 private:
                     const nw4r::g3d::ResFile *m_pRes; // 0x04
@@ -120,7 +122,7 @@ namespace msw {
                     {
                     }
 
-                    virtual bool CreateMdl(bcs::CMdlObj *pMdl) const;
+                    virtual bool CreateMdlObj(bcs::CMdlObj *pMdl) const;
                     // The extra slot (0x18, the last). Inline: the DOL's
                     // game/msw/CStgGmk_Case.cpp emits the weak copy the
                     // vtable uses, right after its Create.
@@ -286,23 +288,6 @@ namespace msw {
 
 #include "bcs/CMdlObj.hpp"
 #include "game/msw/CStgMdlObjBase.hpp"
-
-namespace msw {
-
-    // A gimmick model made from a MDL_PARAM of a resource file. A DOL class,
-    // 0x140 bytes, vtable 0x80474E70 (game/msw/CStgMdl.cpp): the creator it
-    // passes to CStgMdl::Create, and whether to use it.
-    class CStgGenericGmkMdl : public CStgMdl {
-        public:
-            CStgGenericGmkMdl(CStgObj *pParent, nw4r::g3d::ResFile res, const MDL_PARAM *pParam, const char *pName);
-            virtual ~CStgGenericGmkMdl();
-            virtual void Create();
-
-        private:
-            CGenericGimmickCreator m_Creator; // 0x12C
-            int m_bUseCreator;                // 0x13C (name guessed), 1 after construction
-    };
-}
 
 namespace msw {
 

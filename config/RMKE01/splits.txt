@@ -14,19 +14,11 @@ Sections:
 	.sbss2      type:bss align:4
 
 game/bcs/CAnmMotion.cpp:
-	.text       start:0x80008824 end:0x80009B54
-
-game/bcs/CAnmBlendMotion.cpp:
-	.text       start:0x8000A5B4 end:0x8000D044
-
-game/bcs/CAnmTexSrt.cpp:
-	.text       start:0x8000D1EC end:0x8000DCE8
-
-game/bcs/CAnmTexPat.cpp:
-	.text       start:0x8000DCE8 end:0x8000E830
-
-game/bcs/CAnmMatClr.cpp:
-	.text       start:0x8000F670 end:0x8000F7D4
+	.text       start:0x80006F20 end:0x8001114C
+	.rodata     start:0x8042D340 end:0x8042D360
+	.data       start:0x80463D00 end:0x80464640
+	.sdata      start:0x805BF840 end:0x805BF8A4
+	.sdata2     start:0x805C1A00 end:0x805C1A20
 
 game/bcs/CCameraMan.cpp:
 	.text       start:0x80011720 end:0x80011818
@@ -656,15 +648,10 @@ game/msw/CCockpitMenuBase.cpp:
 game/msw/CCockpitMenuBaseButtonA.cpp:
 	.text       start:0x801EEB28 end:0x801EF30C
 
-game/msw/vm/CVMData.cpp:
-	.text       start:0x801F702C end:0x801F75E4
-
 game/msw/vm/CVMCpu.cpp:
-	.text       start:0x801FADC4 end:0x801FAEFC
-
-game/msw/vm/CVMScript.cpp:
-	.text       start:0x801FAF78 end:0x801FB608
-	.data       start:0x80487028 end:0x80487048
+	.text       start:0x801F702C end:0x801FB608
+	.data       start:0x80486BD8 end:0x80487060
+	.sdata2     start:0x805C4FC0 end:0x805C4FC8
 
 game/msw/CEventNodeBase.cpp:
 	.text       start:0x801FC05C end:0x801FC65C

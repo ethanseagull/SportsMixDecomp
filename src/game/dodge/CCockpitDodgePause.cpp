@@ -146,15 +146,17 @@ namespace {
         }
     }
 
-    // (name guessed; inline) The cockpit object nObjId, or null.
-    inline msw::CMenuLinkBase *FindPage(long nObjId)
+    // (name guessed; inline) The cockpit object nObjId as a T, or null. The
+    // cast is inside the inline: casting at the call site gives other registers.
+    template <class T>
+    inline T *FindPage(long nObjId)
     {
         msw::CCockpit *pCockpit = msw::CCockpit::GetTask();
 
         if (pCockpit == 0) {
             return 0;
         }
-        return pCockpit->FindObj(nObjId);
+        return static_cast<T *>(pCockpit->FindObj(nObjId));
     }
 
     // (guess) As in CCockpitBasketLayoutBase.cpp: the original destructor
@@ -272,9 +274,9 @@ void msw::CCockpitDodgePause::ScoreBoard_Loop()
         case 0: {
             CCockpit *pCockpit = CCockpit::GetTask();
             const long *pObjId = s_ScoreBoardObjId;
-            CCockpitPauseResult *pResult = static_cast<CCockpitPauseResult *>(FindPage(*pObjId));
-            CCockpitPauseResultChr *pResultChr = static_cast<CCockpitPauseResultChr *>(FindPage(pObjId[1]));
-            CCockpitDodgePauseResult *pDodgeResult = static_cast<CCockpitDodgePauseResult *>(FindPage(pObjId[2]));
+            CCockpitPauseResult *pResult = FindPage<CCockpitPauseResult>(*pObjId);
+            CCockpitPauseResultChr *pResultChr = FindPage<CCockpitPauseResultChr>(pObjId[1]);
+            CCockpitDodgePauseResult *pDodgeResult = FindPage<CCockpitDodgePauseResult>(pObjId[2]);
 
             if (pCockpit != 0 && pResult != 0 && pResultChr != 0 && pDodgeResult != 0) {
                 long aTotal[2];

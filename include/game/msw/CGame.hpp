@@ -878,7 +878,7 @@ namespace msw {
             // (fn_8017CA6C, name guessed; called only by the destructor)
             // Ends the game's tasks, cameras, effects and sounds.
             void Finalize();
-            void ClearGameResult_();
+            static void ClearGameResult_();
             // Static: the party game calls it without an object.
             static void SetGameResultAll_(long nResult);
 
@@ -894,7 +894,7 @@ namespace msw {
             unsigned long StartSlowEffect_(float, float, float, float);
             void StopSlowEffect_();
             void ScrnSetBlackOut_();
-            void GameWorkReset_();
+            static void GameWorkReset_(); // uses no member; SetParamSemiAuto (static) calls it
             void PlayGameResultBGM_();
             int IsReqArtsEvent_();
             // (non-virtual; CGameBoss's virtual of the same name calls it)

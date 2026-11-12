@@ -19,6 +19,23 @@ namespace msw {
             CStgGmk(bcs::CTask *pParent, unsigned long arg);
             virtual ~CStgGmk();
 
+            // The overrides of msw::CStgObj's virtuals (NewAct to OnSceneLeave)
+            // are declared between GetClusterIndex and OnEntranceDemoStart:
+            // that does not move a vtable slot, but the weak inline copies
+            // come out in reverse declaration order, and every module has
+            // ...OnEntranceDemoStart, OnPreCreate, GetClusterIndex... and
+            // ...OnSceneLeave, OnSceneEntry, OnPreCreate, NewDrv, NewAct,
+            // GetClusterIndex... (BasketF/DodgeF/VolleyF/HockeyF symbols).
+            virtual void SetType(int type) { m_nType = type; }
+            virtual int GetType() const { return m_nType; }
+            virtual void SetCluster(CStgGmkClusterImpl *pCluster, long idx)
+            {
+                m_pCluster = pCluster;
+                m_nClusterIdx = idx;
+            }
+            virtual CStgGmkClusterImpl *GetCluster() const { return m_pCluster; }
+            virtual long GetClusterIndex() const { return m_nClusterIdx; }
+
             // Inline: BasketF's game/basket/CGoalObjBasket.cpp and HockeyF's
             // game/hockey/CGoalObjHockey.cpp have weak copies (their goals
             // keep these two of CStgGmk). Defined below the class.
@@ -31,15 +48,7 @@ namespace msw {
             virtual void OnPostCreate();
             virtual void OnSceneEntry() {}
             virtual void OnSceneLeave() {}
-            virtual void SetType(int type) { m_nType = type; }
-            virtual int GetType() const { return m_nType; }
-            virtual void SetCluster(CStgGmkClusterImpl *pCluster, long idx)
-            {
-                m_pCluster = pCluster;
-                m_nClusterIdx = idx;
-            }
-            virtual CStgGmkClusterImpl *GetCluster() const { return m_pCluster; }
-            virtual long GetClusterIndex() const { return m_nClusterIdx; }
+
             virtual void OnEntranceDemoStart() {}
             virtual void OnGameInit() {}
             virtual void OnGameStart() {}

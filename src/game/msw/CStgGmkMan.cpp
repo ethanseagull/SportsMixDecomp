@@ -15,6 +15,12 @@ namespace msw {
 
     CStgGmkMan *CStgGmkMan::m_pInstance;
 
+    // Inlined into CreateInstance; the module link strips this copy. Defined
+    // here because the original emits the list's weak destructor (needed by
+    // the list's vtable, which this constructor installs) ahead of
+    // ~CStgGmkMan.
+    CStgGmkMan::CStgGmkMan() {}
+
     CStgGmkMan::~CStgGmkMan() {}
 
     CStgGmkMan *CStgGmkMan::GetInstance()

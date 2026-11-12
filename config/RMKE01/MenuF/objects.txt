@@ -22,6 +22,7 @@ Equivalent game/menu/CEntryExplain.cpp
 Matching game/menu/CHowTo.cpp
 Equivalent game/menu/CButtonA.cpp
 Equivalent game/menu/CButtonACode.cpp
+Equivalent game/menu/CCharaMdl.cpp
 Equivalent game/menu/CScoreBook.cpp
 Matching game/menu/CScoreTop.cpp
 Equivalent game/menu/CGameSelect.cpp
@@ -32,10 +33,10 @@ Equivalent game/menu/CPlayMode.cpp
 Equivalent game/menu/CTeam.cpp
 Equivalent game/menu/CPlayerInfo.cpp
 Equivalent game/menu/CPartySelect.cpp
-NonMatching game/menu/CBgMdl.cpp
+Equivalent game/menu/CBgMdl.cpp
 Equivalent game/menu/CPlayerSelect.cpp
 Equivalent game/menu/CWiFiFrindVS.cpp
-Equivalent game/menu/CChrMenuCtrl.cpp
+Matching game/menu/CChrMenuCtrl.cpp
 Equivalent game/menu/CCupChr.cpp
 Equivalent game/menu/CMenu.cpp
 Equivalent game/menu/CTitle.cpp

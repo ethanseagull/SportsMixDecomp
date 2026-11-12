@@ -24,7 +24,8 @@ namespace msw {
             void SetAppendTableParam(unsigned long nIndex, short nValue);
 
         private:
-            unsigned char m_Unk60[0x68 - 0x60];
+            long m_nType;      // 0x60, the constructor's nType: which "out" animation plays
+            short m_nParam[2]; // 0x64, SetAppendTableParam's entries: the character, the team colour
     };
 }
 

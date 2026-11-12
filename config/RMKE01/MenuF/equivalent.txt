@@ -94,12 +94,12 @@ MenuF SetGuestMiiPage__Q33msw10SelectMenu7CMiiSelFv near 99.1 99.1%: register ch
 MenuF SetLineAnim__Q33msw10SelectMenu11CBackgroundFl near 100.0 one float literal loaded from .rodata 0x580 instead of 0x57C: same constant, shifted by the reversed static order in SetLineTextString
 MenuF SetLineTextString__Q33msw10SelectMenu11CBackgroundFPCw near 99.3 pane and typeInfo swap r25/r26 in the inlined DynamicCast; .rodata offsets of the same statics differ because the original stores the function's statics in reverse order
 MenuF SetMiiPage__Q33msw10SelectMenu7CMiiSelFv near 98.0 98.0%: register choice and schedule of loop pointers; stack layout matches
-MenuF SetMovieVisible__Q33msw10SelectMenu6CTitleFl near 94.3 inline nw4r::lyt::Pane::SetVisible combines the flag byte halves in the other order (mask then insert); same result
 MenuF SetPageNode__Q33msw10SelectMenu9CRuleInfoFPvl near 89.9 register allocation only: the original keeps 5 callee-saved registers (_savegpr_27, string pool base rematerialised in the matched branch), ours 4 saved with stw and the pool base kept in a register; the extra instructions are only moves and saves, calls, constants and memory accesses are the same
+MenuF SetPlayerDeploy__Q33msw10SelectMenu9CCharaMdlFl near 99.9 stack slots of the ResFile copy (0xc vs 0x8) and the ResAnmChr argument copy (0x8 vs 0xc) are swapped; same code and data otherwise (relcmp: the 4 slot bytes are the only MenuF difference when linked)
 MenuF SetPosChara__Q33msw10SelectMenu6CBgChrFl near 98.2 register choice only; regs search no gain
 MenuF SetRuleText__Q33msw10SelectMenu11CCharaLevelFl near 99.9 operand order of one commutative add
 MenuF SetScorePos__Q33msw10SelectMenu11CFriendInfoFPQ23msw9WiFiSkill near 91.4 stack frame 0xa0 vs 0x80 from an unused local VEC3 copied as separate floats instead of one block; float constants 4 bytes lower (folded backEvent statics)
-MenuF SetSelectPosMdlObjId__Q33msw10SelectMenu6CBgMdlFl near 98.5 register choice only: the two model and animation pointers of the second move take different saved registers; same instructions, offsets and calls
+MenuF SetSelectPosMdlObjId__Q33msw10SelectMenu6CBgMdlFl near 99.0 register choice only: nOldId/nNewId and the two model and animation pointers of the moves take different (saved) registers; same instructions, offsets and calls; data and relocations of the whole MenuF REL match (relcmp, Matching trial)
 MenuF SetSkillLine__Q33msw10SelectMenu11CFriendInfoFPQ23msw9WiFiSkillRQ34nw4r4math4VEC2fff near 99.1 register choice, one operand order; float constants 4 bytes lower because the two CheckButtonAnim backEvent statics are folded out of .rodata
 MenuF SetTabSelect__Q33msw10SelectMenu10CPartyInfoFl near 92.8 original loads the tab count s_TabNum[m_Unk9C] (const table) a second time for the loop bound; ours reuses the value already loaded: one addi+lwzx fewer, one saved register fewer (savegpr_19 vs 18), the m_nTabSelect store scheduled earlier, register choice; same value
 MenuF SetTabSelect__Q33msw10SelectMenu11CFriendInfoFli near 99.4 register allocation only
@@ -200,6 +200,5 @@ MenuF __ct__Q23msw14CTopMenuChrObjFPQ23bcs5CTaskl near 98.6 stack slots of the b
 MenuF __ct__Q23msw17CPlayerInfoRenderFPQ23bcs5CTaskR12RFLStoreDatall near 99.9 stack slots of the by-value pointer-to-member copies differ; same code otherwise
 MenuF __ct__Q23msw5CMenuFPQ23bcs5CTask near 99.8 stack slot order only: inline CFsm() null-PTMF temporary at sp+0x8 vs sp+0xE0, state-table temporaries shifted by 0xC
 MenuF __dt__Q33msw10SelectMenu9CCourtChrFv near 99.1 register choice only; regs search no gain
-MenuF __sinit_\CBgMdl_cpp near 99.8 only the offsets of the float literals inside the .rodata pool differ (the original pool also holds the literals of the stripped CBgMdl functions); same constants, stores and stack temporaries
 MenuF __sinit_\CCourtChr_cpp near 99.8 register choice only
 MenuF __sinit_\CTopMenuChrObj_cpp near 97.5 two registers swapped in the static initialiser; same stores

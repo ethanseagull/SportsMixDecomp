@@ -12,6 +12,19 @@
 #include "game/msw/SAVE_DATA_PLAYER.hpp"
 #include "game/msw/TournamentWork.hpp"
 
+// (guessed) The original wide string pool starts with L"" and L"\n", ahead
+// of _BuildMissionMessage's formats, so something earlier in the file used
+// them; L"" is read by nothing left in the file. This uncalled stand-in
+// puts them there; the module link strips it (only the pool is kept). See
+// notes/decisions.md, "Uncalled stand-in functions".
+namespace TournamentRule_cpp {
+    void UnusedStrings(const wchar_t **ppStr)
+    {
+        ppStr[0] = L"";
+        ppStr[1] = L"\n";
+    }
+}
+
 namespace msw {
 
     namespace {
@@ -634,6 +647,21 @@ namespace msw {
             TournamentRule::_SetupTeamChar(param.nTeam1, nSide ^ 1, 2);
         }
     }
+}
+
+// (guessed) The original .rodata has 1440.0f ahead of SetupGame's static
+// locals, so something earlier in the file used it. This uncalled
+// stand-in creates it there; the module link strips it, and SetupGame reads
+// the same pooled constant. See notes/decisions.md, "Uncalled stand-in
+// functions". (namespace msw continues below)
+namespace TournamentRule_cpp {
+    void UnusedMaxShotTime(float *pTime)
+    {
+        *pTime = 1440.0f;
+    }
+}
+
+namespace msw {
 
     long TournamentRule::SetupGame(CTmScript *pScript, long nMatch, long nTeam0, long nTeam1, long nScriptArg, int bScriptFlag) {
         _PARAM param;

@@ -10,7 +10,7 @@ NonMatching game/msw/CNowLoading.cpp
 Equivalent game/msw/CEvNodeData.cpp
 Equivalent game/msw/EvDemoVs.cpp
 Equivalent game/bcs/CScnObj.cpp
-Equivalent game/msw/CStgGmkMan.cpp
+Matching game/msw/CStgGmkMan.cpp
 Equivalent game/msw/CSceneCalc.cpp
 Equivalent game/msw/CCockpitChrIcon2D.cpp
 Equivalent game/bcs/dwc/CDwcFriend.cpp
@@ -77,3 +77,4 @@ Equivalent game/bcs/CCameraMan.cpp
 Equivalent game/bcs/CCameraAnmCalc.cpp
 Matching game/bcs/CListNodeBase.cpp
 Equivalent game/msw/CStgGmk_Wave.cpp
+Equivalent game/msw/CStgGmk_Case.cpp

@@ -34,6 +34,9 @@ namespace msw {
             const CStgGmk *GetNext(const CStgGmk *pGmk, int type) const;
 
         private:
+            // Only CreateInstance makes one (it inlines this).
+            CStgGmkMan();
+
             // (names guessed) The walk shared by the getters: the gimmick of
             // pNode or of the first node after it whose type matches.
             CStgGmk *Find_(bcs::CListNodeBase *pNode, int type);

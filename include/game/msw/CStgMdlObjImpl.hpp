@@ -17,9 +17,19 @@ namespace msw {
             // Changes the materials of `mdl` for the stage, with `rColor`.
             void PatchMaterial_(nw4r::g3d::ResMdl mdl, bcs::BCS_Color &rColor);
 
+        protected:
+            // (names guessed after CFgMdl's accessors, which are inline:
+            // game/msw/CStgGmk_Case.cpp in the DOL emits the setters)
+            float m_fAlphaTestNearRange; // 0x04
+            float m_fAlphaTestFarRange;  // 0x08
+            float m_fFadeDir;            // 0x0C
+            float m_fFadeAngle0;         // 0x10
+            float m_fFadeAngle1;         // 0x14
+            float m_fUnk18;              // 0x18
+            float m_fUnk1C;              // 0x1C
+            unsigned long m_nFadeEnable; // 0x20
+
         private:
-            float m_aUnk04[7];      // 0x04
-            unsigned long m_Unk20;  // 0x20
             unsigned long m_Unk24;  // 0x24
     };
 }

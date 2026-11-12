@@ -31,9 +31,10 @@ main Create__Q23bcs10CAnmTexPatFPCQ23bcs7CMdlObjQ34nw4r3g3d12ResAnmTexPatil near
 main Create__Q23bcs10CAnmTexSrtFPCQ23bcs7CMdlObjQ34nw4r3g3d12ResAnmTexSrtil near 98.3 resource pointer reloaded once where the original reuses it while setting up the frame (TexPat Create also loads res in another order); calls, constants, offsets identical
 main Create__Q23msw13CDefCollisionFlllUl near 98.0 register choice only: loop counter and byte offset registers swapped in the three store loops
 main Create___Q43msw6CC_CMN5SLIME14CcSquadFactoryFPQ23msw8CChrCorePCf near 99.8 instruction order only: the three pointer increments at the loop end are scheduled in another order
+main CtorState_BREAK__Q23msw16CStgGmk_Case_ActFv near 96.7 branch layout of the null-handle select (li 0 on its own path in the original) and store order of the scale vector; same values
 main CtorState_BREAK__Q23msw17CStgGmk_Pylon_ActFv near 100.0 store order of the three equal FVEC3 components (x stored last in the original); same values
 main CtorState_BREAK__Q23msw19CStgGmk_Pinball_ActFv near 94.5 null cluster set by explicit li 0 and register reuse in original; ours saves one more register
-main CtorState_DEFAULT__Q23msw17CStgGmk_Pylon_ActFv near 99.4 registers inside the inlined CFsmQueue helpers
+main CtorState_MOVE__Q23msw16CStgGmk_Case_ActFv near 93.9 the CStgSrt flag store is scheduled after the vector stores in the original; stack slots of the two velocity limit vectors swapped
 main CtorState_MOVE__Q23msw17CStgGmk_Pylon_ActFv near 92.3 original keeps the local CGmkRef in memory (dead vptr store at sp+8, parent read back); ours in a register, so FVEC3 temporaries' stack slots shift
 main CtorState_MOVE__Q23msw19CStgGmk_Pinball_ActFv near 98.9 rlwinm. vs extrwi. for the same bit (CStgSrt::GetRotMtx), one stack slot
 main CtorState_RESPAWN__Q23msw19CStgGmk_Pinball_ActFv near 99.7 register allocation/order only (diff.py: registers/schedule)
@@ -43,6 +44,7 @@ main CtorState_START__Q23msw23CStgGmk_WaterPillar_ActFv near 99.7 register alloc
 main CtorState_STAY__Q23msw23CStgGmk_WaterPillar_ActFv near 99.3 register allocation only
 main CtorState_WAVE__Q23msw16CStgGmk_Wave_ActFv near 99.9 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main DeleteJointObj__Q23bcs7CScnObjFv unverified 73.2 73.2%: inlining depth only (AppendDelayDeleteObject inlined one level deeper here); byte-identical under Wii/1.5 and 1.7
+main Disp__Q23msw16CStgGmk_Case_MdlFl near 99.9 instruction order only (colour argument stack setup of the draw calls scheduled differently)
 main Disp__Q33msw31@unnamed@CCockpitChrIcon2D_cpp@12CChrIconTaskFPQ23msw17CMenuPaneAccessorl near 99.3 99.3%: register numbering only (GetPaneObj bound check r6/r0 vs r0/r3; FVEC3Add float registers)
 main DoHoming___Q23msw11CItemRShellFv near 97.8 register allocation and scheduling only (original reloads velocity temporaries from the stack; quaternion setup order)
 main DoParabolaThrow__Q23msw9CDropCoinFRCQ23bcs5FVEC3ff near 99.2 float register choice only
@@ -89,6 +91,8 @@ main LoopStateBreak__Q23msw13CItemShellCmnFv near 97.9 float register numbering 
 main LoopStateThrow__Q23msw11CItemGShellFv near 95.4 original reloads m_nFlag (0xD8) before clearing 0x200, ours reuses the loaded value (nothing writes it between); register numbering and order
 main LoopStateThrow__Q23msw11CItemRShellFv near 95.7 original reloads m_nFlag (0xD8) before clearing 0x200, ours reuses the loaded value (nothing writes it between); register numbering and order
 main LoopState_FALL__Q23msw17CStgGmk_Pylon_ActFv near 99.9 register numbering only
+main LoopState_INACTIVE__Q23msw16CStgGmk_Case_ActFv near 99.7 register allocation only in the inlined FsmqChangeState
+main LoopState_MOVE__Q23msw16CStgGmk_Case_ActFv near 99.6 stack slots of the effect rotation temporaries only
 main LoopState_MOVE__Q23msw19CStgGmk_Pinball_ActFv near 99.5 two stack slots swapped, float register choice
 main LoopState_MOVE__Q23msw19CStgGmk_Trolley_ActFv near 93.1 the AABB corners are copied as floats instead of words, stack slots and the order of two address computations; same values
 main LoopState_SLEEP__Q23msw19CStgGmk_Pinball_ActFv near 99.7 register allocation/order only (diff.py: registers/schedule)
@@ -101,6 +105,7 @@ main MainBury___Q23msw9CDropCoinFv near 99.9 one fmadds with its multiplied oper
 main MainMove___Q23msw9CDropCoinFv near 97.7 register choice in the inlined reflection; -3.0f constant loaded earlier in the original
 main Main__Q23msw11CPinballManFf near 99.1 register allocation/order only (diff.py: registers/schedule)
 main Main__Q23msw15CGameBlurEffectFv near 97.8 instruction order and float register choice only, in the colour/alpha and scale computation before SetBlurEffect and the clamp of the fade-out rate
+main Main__Q23msw16CStgGmk_Case_MdlFf near 99.7 register allocation only (the two scale quotients and the translation loads in swapped float registers)
 main Main__Q23msw18CCockpitModelTelopFv near 99.2 register numbering only
 main Main__Q23msw19CItemBallShellWreckFv near 96.3 96.3%: float register numbering and instruction order in the paired-single motion block and the fade branch; same operations, constants and branches
 main Main__Q23msw19CStgGmk_Trolley_MdlFf near 99.9 register allocation of the scale quotients only
@@ -108,6 +113,8 @@ main Main__Q23msw22CCockpitModelTelopHoldFv near 98.5 m_hEffect[i] loaded after 
 main NewMdl__Q23msw15CStgGmk_TrolleyFlUl near 91.8 inlines CStgGmk_Trolley_Mdl's constructor: the same register reuse for the constant 0 as there; same stores
 main ObjProcGroup__Q23bcs9CScnGroupFUlUlPv near 99.5 99.5%: original has one unreachable b after case 4; branch offsets shift
 main OnAttackHit__Q23msw19CStgGmk_Pinball_ActFPCQ23msw12CCollAtkUnitPCQ23msw13CCollBodyUnitRCQ23bcs5FVEC3Ul near 97.8 one temporary's stack slot, load order and register swap
+main OnBodyDamage__Q23msw16CStgGmk_Case_ActFPQ23msw13CCollBodyUnitPCQ23msw12CCollAtkUnitRCQ23bcs5FVEC3 near 99.8 register choice only (attack word and kind in swapped registers)
+main OnBodyPush__Q23msw16CStgGmk_Case_ActFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 93.2 instruction order of the target position sum (z loaded before the x store) and float register numbering
 main OnBodyPush__Q23msw17CStgGmk_Pylon_ActFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 97.9 register numbering in the lerp and in building to
 main OnBodyPush__Q23msw19CStgGmk_Pinball_ActFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 93.2 register allocation/order only (diff.py: registers/schedule)
 main OnBodyPush__Q23msw23CStgGmk_WaterPillar_ActFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 98.6 register choice and the stack slots of the two position copies (prev/pos) only
@@ -118,7 +125,6 @@ main OnUpdate__Q23msw23CStgGmk_WaterPillar_ActFf near 97.1 register choice and i
 main Pause__Q23bcs8CSndTaskFfi near 98.1 unsigned range test 0x40<=id<=0x63 compiled as subi+cmplwi 0x23 where the original has two cmplwi; same result, rest identical
 main RemoveChildAt__Q23bcs9CScnGroupFUl unverified 80.0 80%: GetChild inlined here, called in the original; rest identical
 main RemoveEntryAll__Q23bcs10CCameraManFv near 97.4 identical instructions; relocation named _f_bss in the original vs m_pCamera (same address 0x804BF580)
-main Respawn__Q23msw19CStgGmk_Pinball_ActFf near 99.3 register allocation/order only (diff.py: registers/schedule)
 main Roll__Q23msw19CStgGmk_Pinball_MdlFRCQ23bcs5FVEC3ff near 98.5 register allocation/order only (diff.py: registers/schedule)
 main SearchFriendMatchChallengerAll__Q33bcs3dwc14CDwcFriendListCFv near 98.7 98.7%: original retests the valid bit with clrlwi. for the second inlined IsFriendMatchChallenger, ours reuses the first result (cmpwi)
 main SendEvent__Q23msw18CCockpitModelTelopFlPv near 96.4 m_hEffect[0] read once before the switch instead of in each case; same field, no store between
@@ -140,12 +146,11 @@ main SetScript__Q33msw2vm9CVMScriptFRCQ33msw2vm9CVMScript unverified 72.8 origin
 main SetTimeValue__Q33msw7cockpit10CTimeCountFPQ23msw17CMenuPaneAccessorfilllli near 99.6 register allocation only (three saved registers permuted); declaration-order search no gain in 24 tries
 main SetVector3__Q33msw2vm9CVMScriptFiQ23bcs5FVEC3 unverified 74.2 schedule only: next float of v loaded before the previous store in the original
 main Set__Q23msw22CCockpitModelTelopHoldFv near 99.8 register numbering only
-main Sleep__Q23msw17CStgGmk_Pylon_ActFf near 99.3 registers inside the inlined CFsmQueue helpers
-main Sleep__Q23msw19CStgGmk_Pinball_ActFf near 99.3 register allocation/order only (diff.py: registers/schedule)
 main Stage02_IsOnWave__Q23msw12CStage02BaseCFRCQ23bcs5FVEC3 near 99.2 99.2%: float register choice for rWavePos.x + margin (new FPR vs reused f0)
 main Stage04_RegistCart__Q23msw12CStage04BaseFPQ23bcs7CMdlObjl near 98.9 98.9%: node index and CStgSeSlot* swap registers; register choice only
 main StartZone__Q23msw26CStgGmk_WaterPillarClusterFl near 98.7 float register choice only, in the inlined paired-single add and the delay value
 main Start__Q23msw15CGameScoredViewFl near 99.7 register choice only: pointer registers of the two inlined paired-single vector adds
+main UpdateColl__Q23msw16CStgGmk_Case_ActFv near 92.7 original also stores two unused size vectors to the stack in the wall loop (dead stores), so a larger frame and one more saved GPR; register allocation; same calls, values and field accesses
 main UpdateColl__Q23msw17CStgGmk_Pylon_ActFv near 99.3 fmadds operand order and store order for the second unit's position
 main UpdateColl__Q23msw19CStgGmk_Pinball_ActFv near 99.4 stack slot order of atkPos and three FVEC3 temporaries
 main UpdateColl__Q23msw19CStgGmk_Trolley_ActFv near 97.1 stack slots of the SetPos temporaries and the capsule ends only (both builds drop the store of the second capsule end's x/z)
@@ -170,6 +175,7 @@ main _UpdateFloor__Q23msw11CEventModelFv near 99.0 stack slots of the two FVEC3S
 main __ct__Q23msw10CEventMoveFPQ23msw11CEventModelPQ23msw14CEventNodeBasei near 99.9 only the .sdata2 relocation of 0.0f differs (constant pool not carved for this unit)
 main __ct__Q23msw13CDefCollisionFlllUl near 98.2 register choice only: loop counter and byte offset registers swapped in the three store loops
 main __ct__Q23msw13CGameGoalDemoFPQ23bcs5CTaskllRCQ23bcs5FVEC3llf near 99.7 register choice only: the two pointer registers of the second and third inlined paired-single vector add (pos += at) are swapped
+main __ct__Q23msw16CStgGmk_Case_ActFPQ23msw7CStgGmk near 99.7 stack slots of the __ptmf_null copy and the ResetVelocity zero vector swapped, float register numbering; same calls, constants and field stores
 main __ct__Q23msw17CStgGmk_Pylon_ActFPQ23msw7CStgGmk near 99.9 stack slot of the null-ptmf temporary
 main __ct__Q23msw19CStgGmk_Pinball_ActFPQ23msw7CStgGmk near 99.9 stack slots of copied temporaries only
 main __ct__Q23msw19CStgGmk_Trolley_ActFPQ23msw7CStgGmk near 100.0 stack slots only: two temporaries (a copied FVEC3 and the zero vector of ResetVelocity) swap places in the frame
@@ -178,6 +184,7 @@ main __ct__Q23msw21CItemBallChangeEffectFPQ23bcs5CTaskUl near 87.9 87.9%: the rl
 main __ct__Q23msw23CStgGmk_WaterPillar_ActFPQ23msw7CStgGmk near 100.0 objdiff 100% but stack slots of two temporaries (a 3-word copy and three float stores) are swapped; same values and instructions
 main __ct__Q33msw4menu13CDispTaskLinkFv near 96.1 96.1%: the original loads s_nNextId twice back to back (one copy feeds the increment, one the id); ours loads it once. Redundant read of a plain counter with nothing in between, so the value is the same; 10 source shapes tried on two models
 main __dt__Q23bcs10CMdlShadowFv unverified 77.9 77.9%: calls ~CMdlObj where the original inlines it (same-file inline: the original file runs from CMdlObj ~0x80054FDC to ~0x80065F30); own body identical
+main __dt__Q23msw16CStgGmk_Case_ActFv unverified 81.9 81.9%: original inlines ~CStgGmkAct (vtable stores, DeleteBallCollProxy, ~CStgAct); ours calls the DOL's ~CStgGmkAct out of line, same effects (as Pylon/Pinball)
 main __dt__Q23msw16CStgGmk_Wave_ActFv unverified 79.4 79.4%: original calls CStgAct dtor and touches 5 more fields (incl. +0x64) with an extra null check; ours calls CStgGmkAct dtor - base dtor chain / inlined member destruction not reproduced
 main __dt__Q23msw17CStgGmk_Pylon_ActFv unverified 81.2 original inlines ~CStgGmkAct (vtable reset, DeleteBallCollProxy, ~CStgAct); ours calls it out of line (as Pinball)
 main __dt__Q23msw19CStgGmk_Pinball_ActFv unverified 81.9 original inlines ~CStgGmkAct (vtables, slot 0x184 DeleteBallCollProxy, ~CStgAct); ours calls ~CStgGmkAct out of line, same effects

@@ -55,7 +55,9 @@ namespace nw4r {
                 virtual void Unk30();
                 virtual void Unk34();
                 virtual void Unk38();
-                virtual void Unk3C();
+                // 0x3C (added for DodgeF game/dodge/CCockpitDodgeTelopInOutChange.cpp):
+                // the pane named pName below this one, or null.
+                virtual Pane *FindPaneByName(const char *pName, bool bRecursive);
                 virtual void Unk40();
                 virtual void Unk44();
                 virtual void Unk48();
@@ -81,10 +83,13 @@ namespace nw4r {
                 void SetTranslate(const math::VEC3 &rTranslate) { mTranslate = rTranslate; }
                 // Added for MenuF game/menu/CChrCaption.cpp.
                 void SetAlpha(unsigned char nAlpha) { mAlpha = nAlpha; }
-                // Bit 0 of the flags.
+                // Bit 0 of the flags. Clear, then set, as two statements:
+                // the game masks the flags before inserting the bit
+                // (HockeyF CCockpitHockeySmashVS::SetupGame).
                 void SetVisible(bool bVisible)
                 {
-                    mFlag = (unsigned char)((mFlag & 0xFE) | (bVisible ? 1 : 0));
+                    mFlag &= (unsigned char)~1;
+                    mFlag |= (unsigned char)(bVisible ? 1 : 0);
                 }
                 // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp (SetRotate
                 // also for VolleyF game/volley/CCockpitChrIcon2DVolley.cpp).

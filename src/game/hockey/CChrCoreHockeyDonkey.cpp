@@ -21,7 +21,24 @@ namespace msw {
                     : CcEarthQuake(pParent, pOwner, rPos, fScale)
                 {
                 }
-                virtual ~CcDonkeyQuakeHockey() {}
+                // (guessed) The original .rodata ends with 0.5, -1, 90, 100
+                // and 6 after the shock wave's 5, which nothing left in the
+                // file reads (the same five as in CChrCoreHockeyMoogle.cpp;
+                // most likely from a stripped header function). The
+                // destructor is the only function compiled after
+                // GetCollHitEffectFrm_, so the dead comparisons that keep
+                // them go here, written out: as bare expression statements
+                // they leave the destructor's code unchanged (an inline
+                // UnusedReferences call or an if would add a vtable store).
+                // See notes/decisions.md, "Dead float comparison".
+                virtual ~CcDonkeyQuakeHockey()
+                {
+                    (void)(m_fRadius == 0.5f);
+                    (void)(m_fRadius == -1.0f);
+                    (void)(m_fRadius == 90.0f);
+                    (void)(m_fRadius == 100.0f);
+                    (void)(m_fRadius == 6.0f);
+                }
 
             protected:
                 virtual float GetCollHitEffectFrm_() const;
@@ -39,14 +56,6 @@ namespace {
     }
 }
 
-// The original .rodata ends with 0.5, -1, 90, 100 and 6 after the shock
-// wave's 5, which nothing left in the file reads (the same five as in
-// CChrCoreHockeyMoogle.cpp; most likely from a stripped header function).
-// They are left out here: the dead comparisons that keep them (notes/
-// decisions.md, "Unreferenced data kept by dead references") can only go in
-// GetCollHitEffectFrm_, the last function to read a constant, and there they
-// make the compiler load its 5 through a base register. So this unit's
-// .rodata is 0x14 bytes short.
 inline float msw::CC07_HOCKEY::CcDonkeyQuakeHockey::GetCollHitEffectFrm_() const
 {
     return 5.0f;

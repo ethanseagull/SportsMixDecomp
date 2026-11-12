@@ -55,7 +55,7 @@ Equivalent game/hockey/CGimmickManHockey.cpp
 Matching game/hockey/CChrCoreHockeyMario.cpp
 Matching game/hockey/CChrCoreHockeyMoogle.cpp
 Equivalent game/hockey/CChrCoreHockeyKoopa.cpp
-Equivalent game/hockey/CChrCoreHockeyDonkey.cpp
+Matching game/hockey/CChrCoreHockeyDonkey.cpp
 Matching game/hockey/CChrCoreHockeySaboten.cpp
 Matching game/hockey/CChrCoreHockeyMii00.cpp
 Matching game/hockey/CChrCoreHockeyMii01.cpp
@@ -84,3 +84,4 @@ Equivalent game/hockey/CCockpitHockeyTelopReady.cpp
 Equivalent game/hockey/CChrCoreHockeySlime.cpp
 Equivalent game/hockey/CStageHockey10.cpp
 Equivalent game/hockey/CStgGmk_Pinball_Act_Hockey.cpp
+Equivalent game/hockey/CCockpitHockeySmashVS.cpp

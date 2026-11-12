@@ -3,6 +3,9 @@
 
 #include "bcs/FVEC3.hpp"
 #include "bcs/New.hpp"
+// The model's header comes first: the vtables come out in the reverse
+// order of the class declarations, and the DOL has the model's last.
+#include "game/msw/CStgGmk_Case_Mdl.hpp"
 #include "game/msw/CStgGmk.hpp"
 #include "game/msw/CStgGmk_Case_Act.hpp"
 #include "game/msw/CStgMdl.hpp"
@@ -20,19 +23,7 @@ namespace msw {
         public:
             CStgGmk_Case_Drv(CStgGmk *pParent);
             virtual ~CStgGmk_Case_Drv();
-    };
-
-    // The model of a case. A DOL class, size 0x134 (constructor
-    // __ct__Q23msw16CStgGmk_Case_MdlFPQ23msw7CStgGmkl, the case's type as
-    // the second argument); msw::CStgMdl's vptr stays at 0x128. Only what
-    // the modules' inline factories need is declared.
-    class CStgGmk_Case_Mdl : public CStgMdl {
-        public:
-            CStgGmk_Case_Mdl(CStgGmk *pParent, long type);
-            virtual ~CStgGmk_Case_Mdl();
-
-        private:
-            unsigned char m_Unk12C[0x8]; // 0x12C
+            virtual void Main(float rate);
     };
 
     // (purpose guessed from the names) One case (crate) of the ship stage
@@ -60,7 +51,7 @@ namespace msw {
             virtual void SetDefaultPos(const bcs::FVEC3 &rPos) { m_DefaultPos = rPos; }
             virtual const bcs::FVEC3 &GetDefaultPos() const { return m_DefaultPos; }
             virtual void Respawn();
-            virtual bool IsActive() const;
+            virtual int IsActive() const;
             virtual void Inactivate();
             virtual void Sleep();
             virtual bool IsLanding() const;
@@ -77,21 +68,27 @@ namespace msw {
             virtual bcs::FVEC3 GetVel() const
             {
                 bcs::FVEC3 vel(0.0f, 0.0f, 0.0f);
-                // TODO: the velocity is the FVEC3 at 0xCC of msw::CStgSrt
-                // (inside its m_UnkC8 padding). Replace this by an accessor
-                // of CStgSrt (GetVel) once that header can be edited.
-                vel = *reinterpret_cast<const bcs::FVEC3 *>(reinterpret_cast<const char *>(GetSrt()) + 0xCC);
+                vel = GetSrt()->GetVel();
                 return vel;
             }
             virtual float GetWidth() const { return GetCaseAct()->GetParam_Width(); }
             virtual float GetDepth() const { return GetCaseAct()->GetParam_Depth(); }
 
+            // The modes' cases make their own actors; this one is the
+            // DOL's default.
+            virtual CStgAct *NewAct(long heap) { return new (heap) CStgGmk_Case_Act(this); }
             virtual CStgDrv *NewDrv(long heap) { return new (heap) CStgGmk_Case_Drv(this); }
+
+            // (names guessed) The kind of case: the model in use, which
+            // also picks the actor's parameters (GetSubType_). The
+            // constructor's argument; the actor sets it at each respawn.
+            long GetSubType() const { return m_nSubType; }
+            void SetSubType(long type) { m_nSubType = type; }
 
         protected:
             // (name guessed) The type given to the constructor; the
             // container factories hand it on to the model.
-            long GetCaseType() const { return m_Unk68; }
+            long GetCaseType() const { return m_nSubType; }
 
         private:
             // The actor is always a CStgGmk_Case_Act. (name guessed)
@@ -99,8 +96,9 @@ namespace msw {
             {
                 return static_cast<const CStgGmk_Case_Act *>(GetAct());
             }
+            CStgGmk_Case_Act *GetCaseAct() { return static_cast<CStgGmk_Case_Act *>(GetAct()); }
 
-            unsigned long m_Unk68;   // 0x68
+            long m_nSubType;         // 0x68
             bcs::FVEC3 m_DefaultPos; // 0x6C
     };
 }

@@ -410,6 +410,12 @@ namespace msw {
             static long DemoSkipInputCheck(long nPad);
             static void SetCockpitPartMove(long, long);
             static const wchar_t *GetCharName(long nPlayer);
+            // (DOL, static; added for DodgeF
+            // game/dodge/CCockpitDodgeTelopInOutChange.cpp; return types
+            // guessed) The length of character nChr's name, and the name
+            // copied into pBuf (nBufLen characters at most).
+            static long GetCharNameLen(long nChr);
+            static void GetCharName(long nChr, wchar_t *pBuf, long nBufLen);
             // (DOL, static; added for MenuF game/menu/unit_4BB48.cpp; return
             // type guessed) Which team (0 or 1) this console plays in a
             // Wi-Fi game.

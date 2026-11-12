@@ -43,6 +43,10 @@ namespace msw {
             static float GetDatF(long nId, float fLevel);
             // (DOL) Number of the pad-driven characters of team nTeam.
             static long GetExistPadDrvNum(long nTeam);
+            // (DOL; added for HockeyF game/hockey/unit_AE7E8.cpp) The ball
+            // holder (null / negative for none); callers pass -1.
+            static CChrCore *GetHoldBallChrCore(long);
+            static long GetHoldBallChrIdx(long);
             // (DOL) Index of the ball in play; negative for none.
             static long GetActiveBallIdx();
 

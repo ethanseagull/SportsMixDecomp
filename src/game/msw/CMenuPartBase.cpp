@@ -257,10 +257,6 @@ namespace msw {
         }
     }
 
-    CMenuPartBase::~CMenuPartBase()
-    {
-    }
-
     CMenuPartBase *CMenuPartList::FindObject(long nId)
     {
         if (nId < 0) {
@@ -564,10 +560,6 @@ namespace msw {
             }
         }
         return 1;
-    }
-
-    void CMenuPartBase::Disp()
-    {
     }
 
 }

@@ -61,6 +61,16 @@ namespace {
         return nPower > 5 ? 5 : (nPower < 0 ? 0 : nPower);
     }
 
+    inline float Min(float a, float b)
+    {
+        return a > b ? b : a;
+    }
+
+    inline float Max(float a, float b)
+    {
+        return a < b ? b : a;
+    }
+
     // The point at t between a and b.
     inline float Lerp(float a, float b, float t)
     {
@@ -90,11 +100,23 @@ namespace {
     {
         bcs::FVEC3 move;
         bcs::FVEC3 half;
-        bcs::FVEC3Scale(&move, &rVel, fTime);
         bcs::FVEC3Scale(&half, &rAccel, 0.5f * fTime);
+        bcs::FVEC3Scale(&move, &rVel, fTime);
         bcs::FVEC3Add(&move, &move, &half);
         bcs::FVEC3Add(&rVel, &rVel, &rAccel);
         bcs::FVEC3Add(&rPos, &rPos, &move);
+    }
+
+    // One step of a flight: rMove = how far it goes in fTime frames
+    // (fTime frames of rVel plus half of rAccel, the change of velocity
+    // over the step), then rVel takes rAccel.
+    inline void StepFlight(bcs::FVEC3 &rMove, bcs::FVEC3 &rVel, const bcs::FVEC3 &rAccel, float fTime)
+    {
+        bcs::FVEC3 half;
+        bcs::FVEC3Scale(&rMove, &rVel, fTime);
+        bcs::FVEC3Scale(&half, &rAccel, 0.5f * fTime);
+        bcs::FVEC3Add(&rMove, &rMove, &half);
+        bcs::FVEC3Add(&rVel, &rVel, &rAccel);
     }
 
     // rOut = rIn flattened onto the XZ plane and scaled to length 1 (zero
@@ -105,10 +127,41 @@ namespace {
         bcs::BCS_Vec_Normalize(rOut, xz);
     }
 
+    // rOut = rPos with its height replaced by fY.
+    inline void SetXZ(bcs::FVEC3 &rOut, const bcs::FVEC3 &rPos, float fY)
+    {
+        rOut.x = rPos.x;
+        rOut.z = rPos.z;
+        rOut.y = fY;
+    }
+
+    // Takes every coin a team holds away from it.
+    inline void DropTeamCoin(long nTeam)
+    {
+        long nCoin = msw::CGame::GetTeamCoin(nTeam);
+        msw::CGame::AddTeamCoin(nTeam, -nCoin);
+    }
+
+    // The distance from rFrom to rTo in the XZ plane.
+    inline float GetDistXZ(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo)
+    {
+        bcs::FVEC3 from(rFrom.x, 0.0f, rFrom.z);
+        bcs::FVEC3 to(rTo.x, 0.0f, rTo.z);
+        return nw4r::math::FSqrt(bcs::FVEC3DistSq(&from, &to));
+    }
+
+    // rOut.x and rOut.z = those of rIn times fScale (rOut.y is left alone).
+    inline void ScaleXZ(bcs::FVEC3 &rOut, const bcs::FVEC3 &rIn, float fScale)
+    {
+        rOut.x = rIn.x * fScale;
+        rOut.z = rIn.z * fScale;
+    }
+
     // Tells every game camera where the ball is heading.
     inline void SetCameraBallTargetPos(int bFlag, const bcs::FVEC3 &rPos)
     {
-        for (long i = 0; i < msw::CGameCamera::GetInstanceNum(); i++) {
+        long n = msw::CGameCamera::GetInstanceNum();
+        for (long i = 0; i < n; i++) {
             msw::CGameCamera *pCamera = msw::CGameCamera::GetInstance(i);
             if (pCamera != 0) {
                 pCamera->SetBallTargetPos(bFlag, rPos);
@@ -172,6 +225,13 @@ namespace msw {
         if (m_pBodyColl != 0) {
             m_pBodyColl->SetTmpNoHitFlag(0, bit);
         }
+    }
+
+    inline void CBallBoss::SetShotInfo_(long nTeam, long nGoal, long nChr)
+    {
+        m_nShotTeamIdx = nTeam;
+        m_nShotChrIdx = nChr;
+        m_n334 = nGoal;
     }
 
     inline void CBallBoss::InitFlight_(const bcs::FVEC3 &rTarget)
@@ -307,7 +367,7 @@ namespace msw {
             }
             if (file.HasResAnmClr()) {
                 long first = -1;
-                for (long i = 0; i < 6; i++) {
+                for (long i = 0; i < sizeof(s_aPowerAnmClrName) / sizeof(s_aPowerAnmClrName[0]); i++) {
                     m_aPowerAnmClr[i] = file.GetResAnmClr(s_aPowerAnmClrName[i]);
                     if (m_aPowerAnmClr[i].IsValid() && first < 0) {
                         first = i;
@@ -551,28 +611,26 @@ namespace msw {
 
     void CBallBoss::UpdateRainbow_()
     {
-        if (m_bCollOff != 0 || IsSleepMode()) {
-            return;
-        }
-        long prev = m_nPrevCoinPower;
-        long power = m_nCoinPower;
-        if (power == prev) {
-            return;
-        }
-        long level = power;
-        if (power > 0) {
-            level = GetPowerLevel(power);
-            if (prev < 5 && power >= 5) {
-                PlaySePos(0xE0C, 0, 1, -1, 0.0f, 1.0f, 0.0f);
+        if (m_bCollOff == 0 && !IsSleepMode()) {
+            long prev = m_nPrevCoinPower;
+            if (m_nCoinPower != prev) {
+                long power = m_nCoinPower;
+                long level = power;
+                if (power > 0) {
+                    level = GetPowerLevel(power);
+                    if (prev < 5 && power >= 5) {
+                        PlaySePos(0xE0C, 0, 1, -1, 0.0f, 1.0f, 0.0f);
+                    }
+                    if (s_aPowerTailEffect[level] >= 0) {
+                        Eff_CreateAttach(8, s_aPowerTailEffect[level], 0, 0, 3);
+                    } else {
+                        Eff_Stop(8);
+                    }
+                }
+                ChangePowerColor_(level);
+                m_nPrevCoinPower = m_nCoinPower;
             }
-            if (s_aPowerTailEffect[level] >= 0) {
-                Eff_CreateAttach(8, s_aPowerTailEffect[level], 0, 0, 3);
-            } else {
-                Eff_Stop(8);
-            }
         }
-        ChangePowerColor_(level);
-        m_nPrevCoinPower = m_nCoinPower;
     }
 
     void CBallBoss::UpdateCollAtk_()
@@ -677,20 +735,19 @@ namespace msw {
         }
         if (bWallPush) {
             bcs::FVEC3 from = m_Pos;
+            bcs::FVEC3 to;
+            bcs::FVEC3 pos;
+            bcs::FVEC3 normal;
             float dist = 0.1f * GetFrameRateF();
             bcs::FVEC3 push = *pPush;
             if (push.x * push.x + push.z * push.z >= dist * dist) {
-                bcs::FVEC3 xz(push.x, 0.0f, push.z);
-                bcs::BCS_Vec_Normalize(push, xz);
+                NormalizeXZ(push, push);
                 push.x *= dist;
                 push.z *= dist;
             }
-            bcs::FVEC3 to;
             to.x = from.x + push.x;
             to.z = from.z + push.z;
             to.y = from.y;
-            bcs::FVEC3 pos;
-            bcs::FVEC3 normal;
             float time;
             CCollMan::DetectMapHit(pos, normal, time, from, to, -10.0f, 2, 0);
             pOther->DoBodyPushCallback(pBody, 0);
@@ -760,8 +817,7 @@ namespace msw {
         if (m_bCollOff != 0) {
             EffectStopTail_();
             Eff_StopAll();
-        }
-        if (m_nCoinPower > 0) {
+        } else if (m_nCoinPower > 0) {
             long level = GetPowerLevel(m_nCoinPower);
             if (IsShootMode() && m_nCoinPower >= 5 && m_n42C == 0) {
                 level++;
@@ -833,9 +889,8 @@ namespace msw {
                 }
             } else {
                 m_f38C += 0.33333334f * m_fMoveRate;
-                float lift = m_f38C > 10.0f ? 10.0f : (m_f38C < 0.0f ? 0.0f : m_f38C);
-                m_f38C = lift;
-                m_f18C = lift;
+                m_f38C = m_f38C > 10.0f ? 10.0f : (m_f38C < 0.0f ? 0.0f : m_f38C);
+                m_f18C = m_f38C;
             }
         } else {
             CBall::LoopStateAttach();
@@ -1056,22 +1111,26 @@ namespace msw {
         int bEnd = 0;
         switch (m_nStateStep) {
             case 0:
-                if (m_fFadeCount > 0.0f) {
-                    m_fFadeCount -= m_fMoveRate;
-                } else {
+                if (m_fFadeCount <= 0.0f) {
                     if (CGame::IsReqArtsEvent() || CGame::IsArtsEventMode()) {
                         break;
                     }
                     m_nStateStep++;
+                } else {
+                    m_fFadeCount -= m_fMoveRate;
                 }
                 if (m_pMdlObj != 0 && m_n1E0 > 0) {
                     float squash;
-                    if (m_n1E0 == 3) {
-                        squash = (1.0f - m_f1E4) * m_f1DC;
-                    } else if (m_n1E0 == 2) {
-                        squash = m_f1DC;
-                    } else {
-                        squash = m_f1E4 * m_f1DC;
+                    switch (m_n1E0) {
+                        case 3:
+                            squash = (1.0f - m_f1E4) * m_f1DC;
+                            break;
+                        case 2:
+                            squash = m_f1DC;
+                            break;
+                        default:
+                            squash = m_f1E4 * m_f1DC;
+                            break;
                     }
                     m_pMdlObj->m_vTransOffset.y = (squash * GetBgCollRadius()) * -1.0f;
                 }
@@ -1172,8 +1231,10 @@ namespace msw {
         if (GetState() == 12) {
             return 0;
         }
+        bcs::FVEC3 hitPos;
         float radius = GetBgCollRadius();
         bcs::FVEC3 flow(0.0f, 0.0f, 0.0f);
+        int bHit = 0;
         int ret = 0;
         if (m_Pos.y <= radius && m_Velocity.y <= 0.0f) {
             unsigned long attr;
@@ -1202,32 +1263,31 @@ namespace msw {
                 m_vRideObjPos = objPos;
             }
         }
-        bcs::FVEC3 hitPos;
         float time;
-        int bHit = 0;
         if (CCollMan::DetectMapHit(hitPos, rNormal, time, m_PrevPos, m_Pos, -10.0f, 2, 0)) {
             bHit = 1;
         }
         if (m_nFlag & 0x40) {
-            if (bHit) {
+            if (!bHit) {
+                m_nFlag &= ~0x40;
+            } else {
                 hitPos = m_Pos;
                 bHit = 0;
-            } else {
-                m_nFlag &= ~0x40;
             }
         }
         if (bHit) {
             SetSquashParam(rNormal, 1.0f, 0.0f, 0.0f, 6.0f);
-            if (hitPos.y < radius) {
-                hitPos.y = radius;
-            }
+            hitPos.y = Max(hitPos.y, radius);
             ret = 1;
             rPos = hitPos;
             if (hitPos.y <= radius && m_Velocity.y < 0.0f && m_Velocity.y >= -0.0375f) {
                 m_Velocity.y = 0.0f;
             }
         } else if (m_Pos.y < radius && m_Velocity.y < 0.0f) {
-            if (m_fMoveRate > 0.0f) {
+            // The original tests the whole condition again here (the
+            // compiler reuses the first compare), probably a macro or a
+            // copied line; it is always true at this point.
+            if (m_Pos.y < radius && m_Velocity.y < 0.0f && m_fMoveRate > 0.0f) {
                 m_PrevPos.x += flow.x;
                 m_PrevPos.z += flow.z;
                 rNormal.Set(0.0f, 1.0f, 0.0f);
@@ -1296,9 +1356,11 @@ namespace msw {
             if (TrgItemEffect_(3) & 0x10) {
                 m_nBossFlag |= BOSSFLAG_ITEM_HIT;
             }
+            bcs::FVEC3 target = m_Pos; // (guessed) set but not used
+            target.y = 0.0f;
             m_nFlag |= 0x3000;
             UpdateCameraTarget_(0);
-            CGame::AddTeamCoin(0, -CGame::GetTeamCoin(0));
+            DropTeamCoin(0);
             ClearVsBossCoinPower();
             SetTouch_(-1, -1);
             CGame::SetOffenseTeam(0);
@@ -1323,17 +1385,19 @@ namespace msw {
         m_nShotTeamIdx = nTeam;
     }
 
-    void CBallBoss::SetPassModeParam_(const bcs::FVEC3 &rTarget, float fSpeed, float fRate, float fFrame,
+    float CBallBoss::SetPassModeParam_(const bcs::FVEC3 &rTarget, float fSpeed, float fRate, float fFrame,
                                       float fHeight)
     {
+        const bcs::FVEC3 &rPos = m_Pos;
         bcs::FVEC3 target = rTarget;
         float frame = fFrame;
         InitFlight_(target);
-        float dist = CalcXZVel2(m_Pos, target, m_Velocity, m_f320, frame, fSpeed, fSpeed * fRate, fFrame, fHeight);
+        float dist = CalcXZVel2(rPos, target, m_Velocity, m_f320, frame, fSpeed, fSpeed * fRate, fFrame, fHeight);
         if (dist <= 0.0f && frame <= 0.0f) {
             UpdateCameraTarget_(1);
-            return;
+            return 0.0f;
         }
+        float result = frame;
         float top = MapRange(dist, 4.0f, 10.0f, 6.0f, 7.0f);
         float minTop = 5.0f;
         float add = 1.0f;
@@ -1342,8 +1406,8 @@ namespace msw {
             top = 0.0f;
             add *= 0.25f;
         }
-        if (m_Pos.y > top) {
-            top = m_Pos.y + add;
+        if (rPos.y > top) {
+            top = rPos.y + add;
         }
         if (target.y > top) {
             top = target.y + add;
@@ -1351,13 +1415,14 @@ namespace msw {
         if (minTop < top) {
             minTop = top;
         }
-        CalcYVG(m_Pos.y, minTop, target.y, frame, m_Velocity.y, m_fGravity);
+        CalcYVG(rPos.y, minTop, target.y, frame, m_Velocity.y, m_fGravity);
         m_fRotSpeed = 0.2617994f;
         if (m_vTargetPos.y > 0.0f) {
             GetPosAfterFrame(m_vTargetPos, GetTouchDownFrame(GetBgCollRadius()));
             m_vTargetPos.y = 0.0f;
         }
         UpdateCameraTarget_(1);
+        return result;
     }
 
     void CBallBoss::SetVsBossPassMode(const bcs::FVEC3 &rTarget, long nType, long nChr, long nTeam, long nPassChr,
@@ -1376,9 +1441,7 @@ namespace msw {
         GetItemEffect_();
         PASS_PARAM_ param;
         SetBadPassParam_(0, nType, param);
-        bcs::FVEC3 from(m_Pos.x, 0.0f, m_Pos.z);
-        bcs::FVEC3 to(target.x, 0.0f, target.z);
-        float dist = nw4r::math::FSqrt(bcs::FVEC3DistSq(&from, &to));
+        float dist = GetDistXZ(m_Pos, target);
         float top = MapRange(dist, 4.0f, 10.0f, 6.0f, 7.0f);
         float minTop = 5.0f;
         float add = 0.0f;
@@ -1397,10 +1460,12 @@ namespace msw {
             minTop = top;
         }
         float speed = param.m_f00;
+        float endSpeed = speed * param.m_f04;
+        float height = param.m_f0C;
+        float minFrame = param.m_f08;
         InitFlight_(target);
-        float frame = param.m_f08;
-        if (CalcXZVel2(m_Pos, target, m_Velocity, m_f320, frame, speed, speed * param.m_f04, param.m_f08,
-                       param.m_f0C) <= 0.0f &&
+        float frame = minFrame;
+        if (CalcXZVel2(m_Pos, target, m_Velocity, m_f320, frame, speed, endSpeed, minFrame, height) <= 0.0f &&
             frame <= 0.0f) {
             UpdateCameraTarget_(1);
         } else {
@@ -1510,9 +1575,7 @@ namespace msw {
             ClearVolleyChargePower();
         }
         SetTouch_(rArg.m_nUnk30, rArg.m_nUnk2C);
-        m_nShotTeamIdx = rArg.m_nUnk30;
-        m_nShotChrIdx = rArg.m_nUnk2C;
-        m_n334 = rArg.m_nUnk34;
+        SetShotInfo_(rArg.m_nUnk30, rArg.m_nUnk34, rArg.m_nUnk2C);
         SetShotChrNoHit_();
         m_nShootType = 1;
         m_n340 = 0x7F;
@@ -1546,6 +1609,7 @@ namespace msw {
     int CBallBoss::SetSpikeParam_(BALL::BOSS::SPIKE_SHOT_ARG &rArg)
     {
         bcs::FVEC3 target = rArg.m_vUnk00;
+        const bcs::FVEC3 &rPos = m_Pos;
         m_n35C = rArg.m_nUnk0C;
         if (!((1 << m_n35C) & CanbeVolleySpikeVariation())) {
             m_n35C = 0;
@@ -1554,14 +1618,15 @@ namespace msw {
         if (target.y < radius) {
             target.y = radius;
         }
-        int bDirect = 1;
         InitFlight_(target);
+        int bDirect = 1;
         float speedMin = rArg.m_fUnk58;
         float speedMax = rArg.m_fUnk60;
         float speedRate = rArg.m_fUnk64;
         float minFrame = rArg.m_fUnk6C;
         float heightMin = rArg.m_fUnk74;
         float heightMax = rArg.m_fUnk78;
+        float slowRate = rArg.m_fUnk70;
         switch (rArg.m_nUnk20) {
             case 0:
                 bDirect = 1;
@@ -1571,8 +1636,8 @@ namespace msw {
                 break;
         }
         float slow = 1.0f;
-        if (!bDirect && rArg.m_fUnk70 > 0.0f) {
-            slow -= 0.01f * rArg.m_fUnk70;
+        if (!bDirect && slowRate > 0.0f) {
+            slow -= 0.01f * slowRate;
         }
         slow = slow < 0.1f ? 0.1f : slow;
         switch (rArg.m_nUnk0C) {
@@ -1601,7 +1666,7 @@ namespace msw {
         m_nShootType = 1;
         float speed = 0.016666668f * (slow * Lerp(speedMin, speedMax, 0.0f));
         float frame;
-        float dist = CalcXZVel2(m_Pos, target, m_Velocity, m_f320, frame, speed, speed * speedRate, minFrame, 0.0f);
+        float dist = CalcXZVel2(rPos, target, m_Velocity, m_f320, frame, speed, speed * speedRate, minFrame, 0.0f);
         if (dist <= 0.0f) {
             UpdateCameraTarget_(1);
             return 0;
@@ -1661,7 +1726,7 @@ namespace msw {
                     float center = 0.5f * (left + right);
                     bcs::FVEC3 toTarget = target;
                     bcs::FVEC3 toMirror = target;
-                    toMirror.x = center + (center - target.x);
+                    toMirror.x = center + (center - toTarget.x);
                     toTarget.x -= m_Pos.x;
                     toTarget.z -= m_Pos.z;
                     toMirror.x -= m_Pos.x;
@@ -1693,19 +1758,14 @@ namespace msw {
                 vel = -vel;
                 accel = -accel;
             }
-            m_vSpinAccel.x = side.x * accel;
-            m_vSpinAccel.z = side.z * accel;
+            ScaleXZ(m_vSpinAccel, side, accel);
             bcs::FVEC3 add;
-            add.x = side.x * vel;
-            add.z = side.z * vel;
+            ScaleXZ(add, side, vel);
             m_fSpinCount = frameUp;
             m_Velocity.x += add.x;
             m_Velocity.z += add.z;
         }
-        if (bDirect) {
-            m_fGravity = 0.0f;
-            m_Velocity.y = (1.0f / frameUp) * (target.y - m_Pos.y);
-        } else {
+        if (!bDirect) {
             float net = CStageMan::GetInstance()->GetNetHeightTop();
             if (heightMin > heightMax) {
                 float tmp = heightMin;
@@ -1718,7 +1778,10 @@ namespace msw {
             } else {
                 top = net + heightMin;
             }
-            CalcYVG(m_Pos.y, top, target.y, frame, m_Velocity.y, m_fGravity);
+            CalcYVG(rPos.y, top, target.y, frame, m_Velocity.y, m_fGravity);
+        } else {
+            m_Velocity.y = (1.0f / frameUp) * (target.y - rPos.y);
+            m_fGravity = 0.0f;
         }
         m_fRotSpeed = 0.27925268f;
         float r = GetBgCollRadius();
@@ -1756,7 +1819,7 @@ namespace msw {
 
     void CBallBoss::SetVsBossDunkShotMode(const bcs::FVEC3 &rTarget, long nChr)
     {
-        bcs::FVEC3 target = rTarget;
+        bcs::FVEC3 target = rTarget; // (guessed) copied but not used
         Detach_();
         CmnShotInit_();
         SetTouch_(0, nChr);
@@ -1767,7 +1830,7 @@ namespace msw {
         m_n334 = 1;
         SetShotChrNoHit_();
         bcs::FVEC3 dir;
-        bcs::FVEC3Sub(&dir, &target, &m_Pos);
+        bcs::FVEC3Sub(&dir, &rTarget, &m_Pos);
         bcs::BCS_Vec_Normalize(dir, dir);
         bcs::FVEC3Scale(&dir, &dir, 1.0f);
         m_Velocity = dir;
@@ -1779,13 +1842,14 @@ namespace msw {
 
     void CBallBoss::SetVsBossArtsDunkMode(const bcs::FVEC3 &, long, int bEnd)
     {
-        bcs::FVEC3 target(m_Pos.x, 0.0f, m_Pos.z);
+        bcs::FVEC3 target;
+        SetXZ(target, m_Pos, 0.0f);
         Eff_CreateSimple(0x555, m_Pos, 3, 0);
         PlaySePos(0xE0D, 0, 1, -1, 0.0f, 1.0f, 0.0f);
         PlaySePos(0xDFD, 0, 1, -1, 0.0f, 1.0f, 0.0f);
         if (bEnd) {
             Eff_StopAll();
-            CGame::AddTeamCoin(0, -CGame::GetTeamCoin(0));
+            DropTeamCoin(0);
             ClearVsBossCoinPower();
             m_fFadeCount = 0.0f;
             m_f350 = 26.0f;
@@ -1803,7 +1867,7 @@ namespace msw {
             ChangeState(0);
             return;
         }
-        target.Set(m_Pos.x, 4.7f, m_Pos.z);
+        SetXZ(target, m_Pos, 4.7f);
         if (m_n428 == 0) {
             bcs::FVEC3 ofs;
             bcs::BCS_VecZ_RotY(ofs, 6.0f, bcs::ROUND_PI(-0.7853982f));
@@ -1910,8 +1974,7 @@ namespace msw {
         pChr->GetCompPos(dir);
         bcs::FVEC3Sub(&dir, &m_Pos, &dir);
         if (bcs::BCS_Vec_GetLenXZ(dir) > 0.0f) {
-            bcs::FVEC3 xz(dir.x, 0.0f, dir.z);
-            bcs::BCS_Vec_Normalize(dir, xz);
+            NormalizeXZ(dir, dir);
             dir.y = 1.0f;
             bcs::BCS_Vec_Normalize(dir, dir);
         } else {
@@ -1940,8 +2003,8 @@ namespace msw {
 
     float CBallBoss::GetTouchDownFrame2(float fHeight, float fVelOfs) const
     {
-        float vel = m_Velocity.y - fVelOfs;
         float gravity = m_fGravity + m_vSpinAccel.y;
+        float vel = m_Velocity.y - fVelOfs;
         float y = m_Pos.y;
         float frame = 0.0f;
         if (bcs::BCS_Abs(gravity) <= 0.00001f) {
@@ -1957,7 +2020,7 @@ namespace msw {
                 if (num <= 1) {
                     frame = roots[0];
                 } else {
-                    frame = roots[0] < roots[1] ? roots[1] : roots[0];
+                    frame = Max(roots[0], roots[1]);
                     if (frame < 0.0f) {
                         frame = 0.0f;
                     }
@@ -1965,7 +2028,7 @@ namespace msw {
             }
         }
         if (frame > 0.0f) {
-            frame += m_f354;
+            return frame + m_f354;
         }
         return frame;
     }
@@ -1987,46 +2050,49 @@ namespace msw {
                 if (num <= 1) {
                     frame = roots[0];
                 } else if (bFirst) {
-                    frame = roots[0] > roots[1] ? roots[1] : roots[0];
+                    frame = Min(roots[0], roots[1]);
                     if (frame <= 0.0f) {
-                        frame = roots[0] < roots[1] ? roots[1] : roots[0];
+                        frame = Max(roots[0], roots[1]);
                     }
                 } else {
-                    frame = roots[0] < roots[1] ? roots[1] : roots[0];
+                    frame = Max(roots[0], roots[1]);
                 }
             }
         }
         if (frame > 0.0f) {
-            frame += m_f354;
+            return frame + m_f354;
         }
         return frame;
     }
 
     void CBallBoss::GetVolleyPosAfterFrame(bcs::FVEC3 &rPos, float fFrame, int bSpin) const
     {
-        float wait = m_f354;
+        rPos = m_Pos;
         bcs::FVEC3 vel = m_Velocity;
         float gravity = m_fGravity;
-        rPos = m_Pos;
-        if (fFrame <= wait) {
+        if (fFrame <= m_f354) {
             return;
         }
-        float time = fFrame - wait;
+        float time = fFrame - m_f354;
         float speed = bcs::BCS_Vec_GetLenXZ(vel);
+        float decel = m_f320;
         bcs::FVEC3 dir = vel;
         NormalizeXZ(dir, dir);
-        float decel = m_f320;
         if (m_f320 * time + speed < 0.0f) {
             float stop = bcs::BCS_Abs(speed / m_f320);
             bcs::FVEC3 accel;
             CalcFlightAccel_(accel, dir, m_f320, gravity, stop, bSpin);
-            MoveFlight(rPos, vel, accel, stop);
+            bcs::FVEC3 move;
+            StepFlight(move, vel, accel, stop);
+            bcs::FVEC3Add(&rPos, &rPos, &move);
             time -= stop;
             decel = 0.0f;
         }
         bcs::FVEC3 accel;
         CalcFlightAccel_(accel, dir, decel, gravity, time, bSpin);
-        MoveFlight(rPos, vel, accel, time);
+        bcs::FVEC3 move;
+        StepFlight(move, vel, accel, time);
+        bcs::FVEC3Add(&rPos, &rPos, &move);
     }
 
     void CBallBoss::GetPosAfterFrame(bcs::FVEC3 &rPos, float fFrame) const
@@ -2041,19 +2107,18 @@ namespace msw {
 
     void CBallBoss::GetVolleyVelAfterFrame(bcs::FVEC3 &rVel, float fFrame, int bSpin) const
     {
-        float wait = m_f354;
+        rVel = m_Velocity;
+        bcs::FVEC3 pos = m_Pos; // (guessed) unused
         bcs::FVEC3 vel = m_Velocity;
         float gravity = m_fGravity;
-        rVel = vel;
-        bcs::FVEC3 pos = m_Pos;
-        if (fFrame <= wait) {
+        if (fFrame <= m_f354) {
             return;
         }
-        float time = fFrame - wait;
+        float time = fFrame - m_f354;
         float speed = bcs::BCS_Vec_GetLenXZ(vel);
+        float decel = m_f320;
         bcs::FVEC3 dir = vel;
         NormalizeXZ(dir, dir);
-        float decel = m_f320;
         if (m_f320 * time + speed < 0.0f) {
             float stop = bcs::BCS_Abs(speed / m_f320);
             bcs::FVEC3 accel;
@@ -2132,11 +2197,11 @@ namespace msw {
             return 0.0f;
         }
         float frame = dist / (0.5f * (fSpeed0 + fSpeed1));
-        if (fMinFrame > 0.0f && fMinFrame >= frame) {
-            frame = fMinFrame;
+        if (fMinFrame > 0.0f) {
+            frame = Max(fMinFrame, frame);
         }
-        if (fMaxFrame > 0.0f && fMaxFrame <= frame) {
-            frame = fMaxFrame;
+        if (fMaxFrame > 0.0f) {
+            frame = Min(fMaxFrame, frame);
         }
         float avg = dist / frame;
         rFrame = frame;
@@ -2178,7 +2243,8 @@ namespace msw {
 
     void CBallBoss::SetVsBossTossUpMode(const bcs::FVEC3 &, long nTeam, unsigned long)
     {
-        bcs::FVEC3 target(m_Pos.x, 0.0f, m_Pos.z);
+        bcs::FVEC3 target;
+        SetXZ(target, m_Pos, 0.0f);
         int bKeep = 0;
         int bPower = 0;
         long nShootType = m_nShootType;
@@ -2188,7 +2254,7 @@ namespace msw {
                 bKeep = 1;
             }
         }
-        CGame::AddTeamCoin(0, -CGame::GetTeamCoin(0));
+        DropTeamCoin(0);
         ClearVsBossCoinPower();
         if (bPower) {
             Eff_CreateSimple(0x555, m_Pos, 3, 0);
@@ -2322,5 +2388,23 @@ namespace msw {
         m_n428 = 0;
         m_n42C = 1;
         m_nFlag &= ~0x4;
+    }
+}
+
+namespace CBallBoss_cpp {
+    // uncalled stand-in: the original slice ends with weak copies of
+    // msw::CStageMan::GetFloorFlowRot and GetFloorFlow (the copies the
+    // module's CStageManBoss vtable uses), emitted after a function that made
+    // both virtual calls and was stripped by the link. VolleyF keeps that
+    // function: BALL_VOLLEY::CBallTouchDownMark::Main, which turns a touch
+    // down mark with the floor flow. This function makes the same two calls
+    // so the copies are emitted in the same place; nothing calls it, and the
+    // module link strips it.
+    void UnusedFloorFlow(const bcs::FVEC3 &rPos)
+    {
+        msw::CStageMan *pStage = msw::CStageMan::GetInstance();
+        pStage->GetFloorFlowRot(rPos, msw::CStageMan::FLOW_TYPE(1));
+        bcs::FVEC3 flow;
+        pStage->GetFloorFlow(flow, rPos, msw::CStageMan::FLOW_TYPE(1));
     }
 }

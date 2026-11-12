@@ -517,6 +517,7 @@ namespace msw {
         public:
             CChrCoreVolleyDaisy();
             virtual ~CChrCoreVolleyDaisy();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
             virtual void Reset_();                                     // 0x384
             virtual void SubStateBlockJumpLandStart_(STATE_WORK_BLOCK_JUMP *); // 0xCD8
             virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
@@ -550,6 +551,7 @@ namespace msw {
         public:
             CChrCoreVolleyWario();
             virtual ~CChrCoreVolleyWario();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
             virtual void SubStateAirTrickStartTrick_(STATE_WORK_AIR_TRICK *); // 0xCF4
             virtual float SubStateAirTrickGetTrickDoFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD08
             virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
@@ -573,6 +575,7 @@ namespace msw {
 
             CChrCoreVolleyWaluigi();
             virtual ~CChrCoreVolleyWaluigi();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
             virtual void Reset_();                                     // 0x384
             virtual void CtorStateAirTrick();                          // 0x584
             virtual void DtorStateAirTrick();                          // 0x58C
@@ -784,6 +787,7 @@ namespace msw {
         public:
             CChrCoreVolleyNinja();
             virtual ~CChrCoreVolleyNinja();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const;
 
         protected:
             unsigned char m_Unk964[0x970 - 0x964]; // allocated with 0x970 bytes

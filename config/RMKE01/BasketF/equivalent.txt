@@ -42,6 +42,7 @@ BasketF CreateMdl___Q33msw11CC05_BASKET16CcWarioSmokeUnitFRCQ23bcs5FVEC3 near 93
 BasketF CreateObjImpl__Q23msw14CCockpitBasketFll near 94.2 94.2%: in cases 10, 19-21, 25 the original copies the new object to its result register before and after the null check, ours once after. Same calls, constants, case order.
 BasketF Create___Q23msw13CChrManBasketFv near 99.3 register allocation/instruction order only (ghost loop counter registers)
 BasketF CtorStateAirTrick__Q23msw14CChrCoreBasketFv near 95.5 instruction order and registers: the original loads m_nPlayerNo for CGame::SendMessage before the GetArtsShootType virtual call (kept in a saved register), ours after; ours extsb's straight into the argument register (one mr fewer); FsmqGetWork's r4/r5 swapped
+BasketF CtorStateAlleyoop__Q23msw14CChrCoreBasketFv near 99.8 register choice / instruction order only (inlined Fsmq head/tail loads)
 BasketF CtorStateAppear__Q23msw16CNpcStringBasketFv near 99.4 99.4: register numbering only
 BasketF CtorStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.0 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CtorStateAttach__Q23msw16CBallBasketFruitFv near 99.4 float register choice for the tilt-centre and 0/1 axis constants; same loads, operations and stores
@@ -50,6 +51,7 @@ BasketF CtorStateCatch__Q23msw19CNpcGhostBasketBaseFv near 99.1 register choice 
 BasketF CtorStateDamage__Q23msw14CChrCoreBasketFv near 99.8 99.8: register numbering only (regs search no gain)
 BasketF CtorStateDisappears__Q23msw19CNpcGhostBasketBaseFv near 99.6 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CtorStateDizzy__Q23msw14CChrCoreBasketFv near 99.7 99.7: register numbering only (regs search no gain)
+BasketF CtorStateDunk__Q23msw14CChrCoreBasketFv near 99.7 register choice / instruction order only (inlined Fsmq head/tail loads)
 BasketF CtorStateFall__Q23msw14CChrCoreBasketFv near 99.4 99.4: register numbering only
 BasketF CtorStateJumpCatch__Q23msw14CChrCoreBasketFv near 91.5 register choice and order; mr. vs cmpwi on IsAnmFlipPlay's result; fnmsubs multiplies the same two values with operands swapped (commutative)
 BasketF CtorStateJumpUpper__Q23msw19CChrCoreBasketSlimeFv near 95.5 95.5%: second float of the const param struct read through a copy of the base register; same values/stores
@@ -58,12 +60,14 @@ BasketF CtorStateMove__Q23msw19CNpcGhostBasketBaseFv near 99.7 register choice /
 BasketF CtorStateNeutral__Q23msw14CChrCoreBasketFv near 99.7 99.7: stores to m_UnkEC and m_nStatusFlag in the other order, register choice
 BasketF CtorStatePassCatch__Q23msw14CChrCoreBasketFv near 99.4 register choice only: FsmqGetWork's queue head and work base swap r3/r4
 BasketF CtorStatePursuit__Q23msw19CNpcGhostBasketBaseFv near 98.4 register choice / schedule only (UpDateCollBody_: argument load order).
+BasketF CtorStateReboundDunk__Q23msw14CChrCoreBasketFv near 99.9 register choice / instruction order only (inlined Fsmq head/tail loads)
 BasketF CtorStateSmashCut__Q23msw19CChrCoreBasketSlimeFv near 95.5 95.5%: second float of the const param struct read through a copy of the base register; same values/stores
 BasketF CtorStateSmashCut__Q23msw19CChrCoreBasketYoshiFv near 99.5 instruction order and registers only
 BasketF DetectMapHit___Q23msw14CCollManBasketFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 98.4 98.4%, schedule only: the 0.0f load at entry is scheduled later and the two-court gap calculation assigns float registers differently; constants, calls, memory accesses and branch targets identical
 BasketF DispContinue__Q23msw16CGameGuideBasketFv near 97.3 97.3: registers of the cached m_pChr; block order of the not-a-pad-player branch in the jump-shot check
 BasketF DispPlayerIconSetCore___Q23msw13CChrManBasketFPCQ23msw8CChrCore near 99.8 stack slots of the three FVEC3 temporaries differ only
 BasketF DispPlayerIcon___Q23msw13CChrManBasketFPCQ23msw8CChrCore near 99.8 stack slots of the three FVEC3 temporaries differ only
+BasketF DtorStateDunk__Q23msw14CChrCoreBasketFv near 99.7 register choice / instruction order only (inlined Fsmq head/tail loads)
 BasketF EffectCoinGetCreate___Q23msw17CGimmickManBasketFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 95.4 95.4%: original reloads m_pMdl before CreateAttachEffect (no store between), 2*20 multiply scheduled differently; register/schedule only, same difference as the recorded Volley/Hockey/Dodge copies
 BasketF FsmqDoChain__Q23bcs26CFsmQueue<Q23msw8CChrCore>Fv near 97.9 one temp register differs
 BasketF FsmqGetWork<Q33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK>__Q23bcs26CFsmQueue<Q23msw8CChrCore>CFv_PQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK near 98.2 register allocation only
@@ -110,6 +114,7 @@ BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketNinjaFv near 98.1 VEC3->FVEC3 c
 BasketF LoopStateAirTrick__Q23msw20CChrCoreBasketDonkeyFv near 94.4 stack slots of the vector temporaries and register choice differ; (m_nStatusFlag & 4) != 0 for flows 0, 2 and 6 is extrwi in ours, rlwinm/cntlzw/cntlzw in the original (same 0/1 value)
 BasketF LoopStateAirTrick__Q23msw20CChrCoreBasketSiromaFv near 99.6 register numbering / order of independent loads only
 BasketF LoopStateAirTrick__Q23msw21CChrCoreBasketSabotenFv near 95.4 bool (flag&4)!=0 via extrwi vs double cntlzw (same value), one redundant b, fmadds operand order, stack slots/registers
+BasketF LoopStateAlleyoop__Q23msw14CChrCoreBasketFv near 99.6 register choice / instruction order only (inlined Fsmq head/tail loads)
 BasketF LoopStateAppear__Q33msw11CC03_BASKET19CcDaisyFlowerGardenFv near 98.5 redundant cmpwi/ble zero-trip guard before the ring loop, &hitPos via addi instead of mr, float register numbering and ps_add operand order (reviewer confirmed)
 BasketF LoopStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateBlockWorkLose__Q23msw14CChrCoreBasketFv near 99.9 99.9: register choice only
@@ -120,6 +125,7 @@ BasketF LoopStateDash__Q23msw14CChrCoreBasketFv near 97.7 97.7: FsmqGetNextState
 BasketF LoopStateDisappear__Q33msw11CC15_BASKET19CcSiromaMagicCircleFv near 99.9 register numbering / order of independent loads only
 BasketF LoopStateDisappears__Q23msw19CNpcGhostBasketBaseFv near 99.8 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateDizzy__Q23msw14CChrCoreBasketFv near 99.3 99.3: register numbering only (regs search no gain)
+BasketF LoopStateDunk__Q23msw14CChrCoreBasketFv near 99.9 register choice / instruction order only (inlined Fsmq head/tail loads)
 BasketF LoopStateFall__Q23msw14CChrCoreBasketFv near 99.9 99.9: instruction order (queue head/tail load order, ps move scheduling)
 BasketF LoopStateFire__Q33msw11CC15_BASKET19CcSiromaMagicCircleFv near 99.9 register numbering / order of independent loads only
 BasketF LoopStateGameSet__Q23msw27CGameBasketHungryBossPackunFv near 99.0 register allocation only: in the inlined bcs::CFsmQueue::FsmqPush the old tail and the wrapped next index swap registers; same instructions and memory accesses
@@ -129,6 +135,7 @@ BasketF LoopStateIdle__Q23msw19CNpcGhostBasketBaseFv near 99.3 register allocati
 BasketF LoopStateItemShoot__Q23msw14CChrCoreBasketFv near 96.2 96.2: original frame 0x10 larger (stack slots), status flag reloaded once more, mr. vs cmpwi on the +-4 motion select
 BasketF LoopStateJumpCatch__Q23msw14CChrCoreBasketFv near 90.4 register choice (pool base r31 vs r28) and order; mr. vs cmpwi on IsAnmFlipPlay's result
 BasketF LoopStateJumpUpper__Q23msw19CChrCoreBasketSlimeFv near 99.7 99.7%: r3/r4 choice for the work pointer only
+BasketF LoopStateLayUp__Q23msw14CChrCoreBasketFv near 97.8 97.8: cntlzw 0/1 conversion of & 4 (same truth), stack slots, registers
 BasketF LoopStateLoop__Q33msw11CC15_BASKET19CcSiromaMagicCircleFv near 99.2 register numbering / order of independent loads only
 BasketF LoopStateMotPlay__Q23msw19CNpcGhostBasketBaseFv near 99.5 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateMove__Q23msw16CNpcStringBasketFv near 99.9 99.9: register numbering in the 0.0f == y compare
@@ -243,6 +250,12 @@ BasketF SubStateArtsShotSetTrickMoveParam___Q23msw14CChrCoreBasketFPQ33msw14CChr
 BasketF SubStateDamageCtorBurn___Q23msw14CChrCoreBasketFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 94.9 94.9: SetCondition argument setup scheduled before the branch instead of after; same values
 BasketF SubStateDamageLoopDizzy___Q23msw14CChrCoreBasketFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 99.3 99.3: register numbering plus inline FsmqPushState reloads queue tail just stored by FsmqCutNext (same value)
 BasketF SubStateDashMove___Q23msw14CChrCoreBasketFRQ33msw14CChrCoreBasket15STATE_WORK_DASH near 99.5 99.5: load order of the two operands of one fadds
+BasketF SubStateDunkCmnAskLayupBranch___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNK near 99.9 99.9: one equivalent branch form
+BasketF SubStateDunkCmnDunk___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNK near 95.0 95.0: register choice and instruction order (schedule)
+BasketF SubStateDunkCmnHomingMove___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNK near 97.7 97.7: unused FVEC3 copy in other stack slots (frame 0x20 bigger), 0.1/0.08 else-if blocks laid out reversed, commutative fadds operands swapped
+BasketF SubStateDunkCmnLand___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNK near 99.7 99.7: register choice / instruction order only
+BasketF SubStateDunkCmnMove___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNK near 96.2 96.2: vector temporaries' stack slots, lhz vs lha+clrlwi 16 (same value), original cntlzw 0/1 conversion of m_nStatusFlag & 1 before the test (same truth), registers
+BasketF SubStateDunkCtor___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNKflfl near 99.1 99.1: register choice, operand order of nStart + nLoop + nJump
 BasketF SubStateNeedBlockWork___Q23msw14CChrCoreBasketFif near 99.9 99.9: register choice only
 BasketF SubStateRunBlockWorkMove___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket14STATE_WORK_RUN near 98.5 98.5: one duplicated beq on the same compare, FsmqPushState head/tail load order, flag stored as li 0/ori 1 vs li 1 (same value)
 BasketF SubStateRunNormal___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket14STATE_WORK_RUN near 99.8 99.8: register choice only

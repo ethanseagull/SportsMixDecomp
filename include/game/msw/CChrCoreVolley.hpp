@@ -426,7 +426,12 @@ namespace msw {
         unsigned char m_Unk00[0x4];
         unsigned long m_nFlag;       // 0x04
         float m_fRotY;               // 0x08, negative for none
-        unsigned char m_Unk0C[0x38 - 0xC];
+        // 0x0C, 0x1C, 0x2C: the move a hit block knocks the character back
+        // with (CChrCoreVolleyKoopaJr::SubStateBlockJumpBlockHit_).
+        CC_DATA::CHR_PARAM::MOVE_PARAM m_MoveParam; // 0x0C
+        CChrCore::DIR_MOVE m_DirMove; // 0x1C
+        float m_fDirMoveUnk2C;       // 0x2C, cleared with the move
+        unsigned char m_Unk30[0x38 - 0x30];
         float m_fCollSize;           // 0x38, passed to UpdateCollDefSetParam_ (name guessed)
         float m_fActStartFrame;      // 0x3C
         float m_fActTrgFrame;        // 0x40, negative once done
@@ -706,6 +711,24 @@ namespace msw {
         public:
             CChrCoreVolleyKoopaJr();
             virtual ~CChrCoreVolleyKoopaJr();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const; // 0xC9C
+            virtual void SubStateBlockJumpCollSet_(STATE_WORK_BLOCK_JUMP *); // 0xCAC
+            virtual int SubStateBlockIsNormalType_() const { return 0; } // 0xCB0
+            virtual int SubStateBlockIsNoFlickType_() const { return 1; } // 0xCB8
+            virtual void SubStateBlockJumpActStart_(STATE_WORK_BLOCK_JUMP *); // 0xCCC
+            virtual int SubStateBlockJumpIsActEnd_(STATE_WORK_BLOCK_JUMP *); // 0xCD0
+            virtual int SubStateBlockJumpActEnd_(STATE_WORK_BLOCK_JUMP *);  // 0xCD4
+            virtual void SubStateBlockJumpBlockHit_(const CCollDefUnit *); // 0xCE0
+            virtual void SubStateSpikeDoSmashSpikeEffect_(STATE_WORK_SPIKE *); // 0xCEC
+            virtual void SubStateAirTrickSetTrickMoveParam_(STATE_WORK_AIR_TRICK *, long); // 0xD00
+            virtual float SubStateAirTrickGetTrickRotFrame_(STATE_WORK_AIR_TRICK *); // 0xD0C
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+            virtual void SubStateAirTrickPlayLandMotion_(STATE_WORK_AIR_TRICK *); // 0xD5C
+
+            // Throws the paint balls of the air trick into the other court.
+            void SubStateAirTrickFirePaintBomb_();
     };
 
     class CChrCoreVolleyMoogle : public CChrCoreVolley {

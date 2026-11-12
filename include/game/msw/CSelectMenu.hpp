@@ -1,8 +1,11 @@
 #ifndef CSELECTMENU_HPP_
 #define CSELECTMENU_HPP_
 
+#include "bcs/CFsm.hpp"
+#include "bcs/CLoadMan.hpp"
 #include "game/msw/CMenuTask.hpp"
 #include "game/msw/CSave.hpp"
+#include "game/msw/menu/CStateSave.hpp"
 #include "revolution/rfl.h"
 
 namespace bcs {
@@ -25,13 +28,22 @@ namespace msw {
 
     // The task behind the SelectMenu screens (MenuF). Its constructor calls
     // CMenuTask's. Only the members used so far; the two name getters are
-    // non-static and neither reads `this`. The class has a second
-    // polymorphic part (its destructor has a `@68@` thunk) that is not
-    // written here, so do not create or destroy one through this header.
-    // (msw::CMenu does `new CSelectMenu`: that only needs the size, 0xAB8,
-    // and the out-of-line constructor.)
-    class CSelectMenu : public CMenuTask {
+    // non-static and neither reads `this`. The second base,
+    // bcs::CFsm<CSelectMenu> at 0x44 (the `@68@` destructor thunk, the
+    // vtable's second part), runs the screens: one state per screen, and
+    // its state number (m_nState, 0x54) is the current screen.
+    // (game/menu/CSelectMenu.cpp; msw::CMenu does `new CSelectMenu`.)
+    class CSelectMenu : public CMenuTask, public bcs::CFsm<CSelectMenu> {
         public:
+            // (added for game/menu/CSelectMenu.cpp; names guessed) The
+            // number of screens (states), of history entries and of
+            // archives.
+            enum {
+                STATE_NUM = 0x33,
+                HISTORY_NUM = 0x34,
+                ARCHIVE_NUM = 14
+            };
+
             CSelectMenu(bcs::CTask *pParent);
             virtual ~CSelectMenu();
             // Overrides of bcs::CTask's (vtable slots 3 and 4).
@@ -46,6 +58,9 @@ namespace msw {
 
             const char *GetArchiveFileName(long nArchive);
             const char *GetArchiveRootFolderName(long nArchive);
+            // Added for MenuF game/menu/CBgDisplay.cpp: the fade-out time
+            // of the menu music (static: its callers pass no object).
+            static float GetBgmFadeOutTime();
             // Added for MenuF game/menu/CEntryExplain.cpp. The archive id
             // of mode nMode from a byte table; the current mode when nMode
             // is negative.
@@ -309,9 +324,17 @@ namespace msw {
             void Title_SetUpRandGame();
             void RemoveObj(long nObjId);
             // The music of screen nUnk, 0 for none.
-            long GetMenuBGMId(long nUnk);
+            // (game/menu/CSelectMenu.cpp: it returns the entry of a table,
+            // null for none) The menu music and whether it is started at
+            // once.
+            struct MenuBGM {
+                long m_nSeq;
+                long m_bPlay;
+            };
+            const MenuBGM *GetMenuBGMId(long nUnk);
             void StopMenuBGM();
-            void Chara_SetDecideChara(long nPad, long nChara, long nUnk0, long nUnk1, long nUnk2);
+            // (game/menu/CSelectMenu.cpp) Returns the slot, -1 for none.
+            long Chara_SetDecideChara(long nPad, long nChara, long nUnk0, long nUnk1, long nUnk2);
             // The index of a character pad nPad has not decided yet, or a
             // negative value when all are.
             long Chara_FindNotDecideCharaIndex(long nPad);
@@ -369,7 +392,13 @@ namespace msw {
                 unsigned char m_nCharaSub;   // 0x11, the character's variant, 0xFF none
                 unsigned char m_nState;      // 0x12, 1 and up once chosen
                 unsigned char m_Unk13[1];    // 0x13
-                unsigned char m_Unk14[4];    // 0x14
+                // 0x14 to 0x17. (game/menu/CSelectMenu.cpp: copied as a
+                // halfword and two bytes) m_nMiiMode is what
+                // Mii_GetMiiMode returns: whether the Mii is a guest Mii,
+                // 0xFF for none.
+                unsigned short m_Unk14;              // 0x14
+                unsigned char m_Unk16;       // 0x16
+                unsigned char m_nMiiMode;    // 0x17
                 // 0x18, 0x1C. (added for game/menu/CCharSel.cpp) The Mii
                 // of a Mii slot, as CCourtChr::SetCharaModel takes it.
                 long m_nMiiIndex;
@@ -619,30 +648,155 @@ namespace msw {
             // Both return the slot index of the character given back.
             long Chara_CancelDecideChara(long nEntry, long nChara);
             long Chara_CancelDecideCharaWithMotion(long nEntry, long nChara);
-            void Chara_SetDecideCharaWithMotion(long nEntry, long nChara, long nColor, long nBtnKindId);
+            long Chara_SetDecideCharaWithMotion(long nEntry, long nChara, long nColor, long nBtnKindId);
             void SetCancelBackMode(long nPad, long nMode, CSelectMenuLayoutBase *pObj, long nUnk);
+
+
+            // Added for game/menu/CSelectMenu.cpp, the file that defines
+            // most of the members above (names from the symbols; return
+            // types and argument names guessed).
+            // An entry of the menu history (see m_History).
+            struct History {
+                unsigned char m_nState;
+                unsigned char m_nNextState;
+            };
+            // The button each pad was on, for one screen (shared with the
+            // backup in menu::CStateSave).
+            typedef menu::CStateSave::PadBtnKindId PadBtnKindId;
+
+            void Initialize();
+            void InitVariable();
+            void Finalize();
+            // Makes menu object nObjId: AddObj's result, -2 when it exists,
+            // -3 when there is no class for it.
+            long CreateObj(long nObjId);
+            static bcs::CLoadMan::FILE_INPUT *GetArchiveFileInfo(long nArchive);
+            // Loading, freeing and the state of archive nArchive.
+            static void Load(long nArchive);
+            static void UnLoad(long nArchive);
+            static int IsLoaded(long nArchive);
+            static int IsComplete(long nArchive);
+            static int IsReading(long nArchive);
+            // Follows the leading pad and the pads' pointer use (every
+            // frame, from Main).
+            void PadStateCheck();
+            History *GetMenuHistory(unsigned char nState);
+            History *GetMenuHistoryByNextState(unsigned char nNextState);
+            unsigned char GetPrevMode(unsigned char nState);
+            void PopHistoryByState(unsigned char nState, unsigned char nNextState);
+            unsigned short GetHistoryButtonKindId(unsigned char nState, long nPad);
+            void ClearHistoryButtonKindId(long nState);
+            // Whether screen nState is kept in the history.
+            int IsPushStateHistory(long nState);
+            long Chara_GetDecideCharaNum(long nEntry);
+            long Chara_GetSaveCharaIndex(long nIndex, long &rEntry, long &rChara, long &rCharaSub, long &rColor,
+                                         long &rPlayerKind);
+            long Chara_FindLastCharaIndex(long nEntry);
+            void Chara_CancelLastDecideChara();
+            RFLDataSource Mii_GetSaveMiiDataSource(long nIndex);
+            unsigned char Mii_GetSaveMiiMode(long nIndex);
+            long Mii_GetSaveMiiIndex(long nIndex);
+            unsigned long long Mii_GetSaveMiiCreateId(long nIndex);
+            // The name of Mii data (a guest Mii's from the message list).
+            wchar_t *GetMiiName(RFLStoreData data);
+            void DecrementDelayFrameCount();
+            float GetMenuBGMFadeoutTime();
+            void PlayMenuBGMToTop(long nBgm);
+            void PlayMenuSE(long nSe);
+            void SelectEnd_In();
+            void SelectEnd_Loop();
+            void SelectEnd_Out();
+            void SelectNull_In();
+            void SelectNull_Loop();
+            void SelectNull_Out();
+            void TimeOver_In();
+            void TimeOver_Loop();
+            void TimeOver_Out();
+            void Test_In();
+            void Test_Loop();
+            void Test_Out();
+            void Test2_In();
+            void Test2_Loop();
+            void Test2_Out();
+            // Wi-Fi: a random sex for a Mii, a name for character nChara's
+            // Mii, swapping the players' Miis, whether a Mii is a guest.
+            long WiFiMiiSexRand(RFLStoreData data);
+            void WiFiMiiCharSetName(RFLStoreData *pData, long nChara);
+            void WiFiExChangeMii();
+            int CheckGuestMii(RFLStoreData data);
+            void SetDefaultOption(long nGame);
+            // Keeps the menu's state in menu::CStateSave between visits
+            // and puts it back.
+            void Backup();
+            int Restore();
+            void WindowOK_Close();
+            void WindowA_Close();
+            // The Wi-Fi error window; 1 while it is open.
+            long WifiErrorCheck();
+            void WifiFriendMatchChallenger();
+
+            // (no symbols; inline in the class) Small accessors the original
+            // emits out of line in game/menu/CSelectMenu.cpp.
+            void SelectCourtBackOff(int bOff) { m_UnkA68 = bOff; }
+            void RestorePlayMode() { m_nPlayMode = m_Unk26B; }
+            void RestoreWiFiData()
+            {
+                m_nGameKind = m_nWifiSavedGameKind;
+                m_nStageSub = m_nWifiSavedStageSub;
+                m_nStage = m_nWifiSavedStage;
+            }
+            unsigned char GetPlayerNum() { return m_nPlayerNum; }
+            void SetMatchFrind(long bStarMii) { m_bStarMii = bStarMii; }
+            unsigned char GetCursorInputMode(long nPad) { return m_aPadSelect[nPad].m_Unk00; }
+            unsigned char GetMenuMode() { return m_Unk9B; }
+            void SetModeEnd(int bEnd) { m_Unk98 = bEnd == 1; }
+            void SetEndWaitTime(float fTime) { m_fUnk94 = fTime; }
+            void SetNextMode(unsigned long nMode) { m_nNextMode = nMode; }
+            void SetPrevModeState(unsigned char nState) { m_Unk9D = nState; }
+            void SetPlayerNum(long nNum) { m_nPlayerNum = nNum; }
+            unsigned char GetCupId() { return m_nStage; }
+            void SetCupId(long nCup)
+            {
+                if (nCup == 0xFF) {
+                    m_nPrevStage = m_nStage;
+                }
+                m_nStage = nCup;
+            }
+            void SetStageId(long nStage)
+            {
+                if (nStage == 0xFF) {
+                    m_nPrevStageSub = m_nStageSub;
+                }
+                m_nStageSub = nStage;
+            }
+            template <class T>
+            T *GetObj(long nObjId)
+            {
+                return static_cast<T *>(FindObj(nObjId));
+            }
+
+        private:
+            // (no symbol; name guessed) Moves player nPad's cursor on pObj
+            // from button nOld to nNew (inline in InputDataToMenuObj).
+            void MoveButtonCursor(CSelectMenuLayoutBase *pObj, long nPad, unsigned short &rCurrent,
+                                  unsigned short nOld, short nNew);
+
+        public:
+            // The archives (built by InitLoad).
+            static bcs::CLoadMan::FILE_INPUT s_FileInputTable[ARCHIVE_NUM];
 
             // Data, added for the same unit. The class is 0xAB8 bytes (the
             // size layout.py finds); only two members are named so far.
             // The second polymorphic part mentioned above (a `@68@` thunk)
             // lies somewhere in the padding and is not modelled yet.
-        private:
-            // CMenuTask ends at 0x44 (see CMenuTask.hpp); this was written
-            // as m_Unk4C[0x8] when CMenuTask was taken to be 0x4C bytes,
-            // which put every member below 8 bytes low
-            // (CSelectMenuLayoutBase::GetCurrentButtonKindId reads m_nMode
-            // at 0x54 and the array at 0x9E). The `@68@` part may start here.
-            unsigned char m_Unk44[0x10];     // 0x44
-
         public:
-            // 0x54. (name guessed) The current screen: read by
-            // GetPrevMode, GoBackToMode and most screen steps.
-            long m_nMode;
+            // 0x44 to 0x8B: bcs::CFsm<CSelectMenu>. Its state number
+            // (0x54) is the current screen, read by GetPrevMode,
+            // GoBackToMode and most screen steps (this member was called
+            // m_nMode before the base was known).
+            using bcs::CFsm<CSelectMenu>::m_nState;
+            using bcs::CFsm<CSelectMenu>::m_nMode;
 
-        private:
-            unsigned char m_Unk58[0x34];     // 0x58
-
-        public:
             // (names guessed; added for game/menu/CHowTo.cpp)
             short m_nStep;                   // 0x8C, the sub-step of the screen's Loop
         private:
@@ -764,13 +918,23 @@ namespace msw {
             // for the others.
             unsigned char m_nPadPlayer[4];
         private:
-            unsigned char m_Unk284[0x204];   // 0x284
+        public:
+            // 0x284 to 0x487. (added for game/menu/CSelectMenu.cpp; names
+            // guessed) The menu history, newest first: each screen left
+            // and the screen it went on to (0xFF: none), the buttons the
+            // pads were on per screen, and the number of entries.
+            History m_History[HISTORY_NUM];                         // 0x284
+            PadBtnKindId m_HistoryBtnKindId[STATE_NUM];             // 0x2EC
+            long m_nHistoryNum;                                     // 0x484
         public:
             // 0x488. (added for game/menu/unit_6EE84.cpp) The six character
             // slots GetCharaSelectParam returns.
             CharaSelectParam m_aCharaSelectParam[6];
         private:
-            unsigned char m_Unk578[0xF0];    // 0x578
+        public:
+            // 0x578. (added for game/menu/CSelectMenu.cpp) The slots as the
+            // save data keeps them (SetCharaSelectSaveParam).
+            CharaSelectParam m_aCharaSaveParam[6];
         public:
             // 0x668 to 0x68B. (names guessed; added for
             // game/menu/unit_6EE84.cpp) The random character draw of each
@@ -783,7 +947,12 @@ namespace msw {
             // CharSel_In; not read there.
             long m_Unk688;
         private:
-            unsigned char m_Unk68C[0x17];    // 0x68C
+            // 0x68C to 0x6B3: laid out as a CharaSelectParam (Backup copies
+            // it so); its Mii part is the second Wi-Fi player's Mii below.
+            long m_Unk68C[4];                // 0x68C
+            unsigned char m_Unk69C[4];       // 0x69C
+            unsigned short m_Unk6A0;         // 0x6A0 (lhz in Backup)
+            unsigned char m_Unk6A2;          // 0x6A2
         public:
             // 0x6A3 to 0x6B3. (names guessed; added for
             // game/menu/CPlusMinus.cpp) The Mii _SetStarMii gives the
@@ -793,7 +962,8 @@ namespace msw {
             RFLDataSource m_StarMiiSource;   // 0x6A8
             RFLCreateID m_StarMiiCreateId;   // 0x6AC
         private:
-            unsigned char m_Unk6B4[0x18];    // 0x6B4
+        public:
+            long m_Unk6B4[6];                // 0x6B4 (game/menu/CSelectMenu.cpp: cleared by InitVariable)
         public:
             // 0x6CC. (added for game/menu/CEntry.cpp; name guessed) Frames
             // the controller error window of the entry screen waits.
@@ -850,14 +1020,18 @@ namespace msw {
             // window shows; null for the player's own.
             dwc::CFriend *m_Unk708;
         private:
-            unsigned char m_Unk70C[0x4];     // 0x70C
+        public:
+            long m_Unk70C;                   // 0x70C (game/menu/CSelectMenu.cpp: cleared by Initialize)
         public:
             CSave::PlayerData *m_pPlayerData; // 0x710, CSave::GetPlayerData(-1)
         private:
             // 0x714. (added for game/menu/CWiFiTopA.cpp; name guessed)
             // What WifiConnectStep gives bcs::dwc::CDwc::SetOwnStatusAppData.
             unsigned char m_OwnStatusAppData[0x44];
-            unsigned char m_Unk758[0x4];     // 0x758
+        public:
+            // 0x758. (added for game/menu/CSelectMenu.cpp; name guessed)
+            // The message window the Window* functions opened.
+            CMenuLinkBase *m_pWindow;
         public:
             // Size 0x1EC. (added for game/menu/CWiFiGame.cpp; names
             // guessed) What each side of a friend match sends the other
@@ -963,7 +1137,13 @@ namespace msw {
             // WifiConnectStep clears the player's public data.
             long m_bWifiNewUser;
         private:
-            unsigned char m_Unk994[0x6C];    // 0x994
+            unsigned char m_Unk994[0x60];    // 0x994
+        public:
+            // 0x9F4. (added for game/menu/CSelectMenu.cpp; name guessed)
+            // Frames before the next look for a friend wanting a match.
+            float m_fFriendMatchWait;
+        private:
+            unsigned char m_Unk9F8[0x8];     // 0x9F8
         public:
             long m_UnkA00;                   // 0xA00
             // 0xA04, 0xA08. (names guessed; added for
@@ -978,7 +1158,10 @@ namespace msw {
             // The step of FriendMatchChancelCheck.
             long m_nCancelStep;
         private:
-            unsigned char m_UnkA10[0x4];     // 0xA10
+        public:
+            // 0xA10. (added for game/menu/CSelectMenu.cpp) Cleared by
+            // Initialize (meaning not known).
+            float m_fUnkA10;
         public:
             // 0xA14. (added for game/menu/CTopMenu.cpp; name guessed) The
             // sport TopMenu_SelectAnim last lit, -1 for none.
@@ -987,7 +1170,11 @@ namespace msw {
             // When 1, WifiWait_In sets up the court and the camera first.
             long m_bWifiWaitCourt;
         private:
-            unsigned char m_UnkA1C[0x8];     // 0xA1C
+        public:
+            // 0xA1C. (added for game/menu/CSelectMenu.cpp; name guessed)
+            // The characters WiFiMiiCharSetName gave the opponent's Miis'
+            // names to.
+            long m_nWifiMiiChara[2];
         public:
             // 0xA24. (name guessed; added for game/menu/unit_6EE84.cpp) Set
             // when the character under a pad's cursor was taken by another
@@ -1040,7 +1227,10 @@ namespace msw {
             // is accepted.
             long m_UnkA78;
         private:
-            unsigned char m_UnkA7C[0x18];    // 0xA7C
+        public:
+            // 0xA7C. (added for game/menu/CSelectMenu.cpp; name guessed)
+            // The name GetMiiName returns.
+            wchar_t m_MiiNameWork[0xC];
         public:
             // 0xA94. (name guessed; added for game/menu/CRuleSel.cpp)
             // Frames left before the rules screen steps a setting again.
@@ -1111,7 +1301,12 @@ namespace msw {
     // Size 0xD8. The stages of a party game (names guessed).
     struct PartyStageNoInfo {
         unsigned char m_nStageNo[4][4]; // 0x00, added to the index of m_Label
-        unsigned char m_Unk10[0x48];    // 0x10
+        // 0x10 to 0x57. (game/menu/CSelectMenu.cpp, which holds the
+        // tables) Two rows of bytes, then per cup and stage the rhythm
+        // game's record index (as s_RhythmRecord in CCourtSelect.cpp;
+        // -1 none).
+        unsigned char m_Unk10[2][4];    // 0x10
+        long m_nRecord[4][4];           // 0x18
         long m_nStageId[4][4];          // 0x58, CCourt::SetStageId
         char m_Label[0x40];             // 0x98, a message label in "List_Stage"
     };

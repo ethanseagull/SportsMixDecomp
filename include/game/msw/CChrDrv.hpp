@@ -31,6 +31,10 @@ namespace msw {
     struct CChrDrv::_CHR_MSG {
         long m_nParam0; // 0x00
         long m_nParam1; // 0x04
+        // 0x08 (added for BasketF game/basket/unit_AF3BC.cpp): a third
+        // word; CComDrvBasketGame::OnGameMsgProc passes it on as a
+        // character index or a value.
+        long m_nParam2;
     };
 }
 

@@ -2,6 +2,13 @@
 #define SELECTMENU_CBGDISPLAY_HPP_
 
 #include "game/msw/CSelectMenuLayoutBase.hpp"
+#include "wchar.h"
+
+namespace nw4r {
+    namespace lyt {
+        class Pane;
+    }
+}
 
 namespace msw {
 
@@ -46,11 +53,31 @@ namespace msw {
 
     namespace SelectMenu {
 
+        class CNwLayout;
+
         // Size 0x24E8 (layout.py). The movie and texts behind the select
-        // menu's screens; menu object 0x3E of CSelectMenu. Only what
-        // game/menu/CCourtSelect.cpp needs.
+        // menu's screens; menu object 0x3E of CSelectMenu. Defined in
+        // game/menu/CBgDisplay.cpp (the original file is
+        // SelectMenuBgDisp.cpp, the name its assertion passes). It plays
+        // the stage movie of the current choice in a picture pane of its
+        // own layout (a CNwLayout), or the menu music, and shows the texts
+        // of a BgDispParam. Member names are guesses.
         class CBgDisplay : public CSelectMenuLayoutBase {
             public:
+                // Events of SendEvent (names guessed).
+                enum {
+                    EVENT_SET_PARAM = 0x4A,  // pParam: const BgDispParam *
+                    EVENT_SET_MOVIE = 0x4B,  // pParam: the movie file name
+                    EVENT_SET_MODE = 0x4D,   // pParam: MODE_*
+                    EVENT_SET_BGM = 0x4E     // pParam: the music, negative for none
+                };
+
+                // Values of m_nMode.
+                enum {
+                    MODE_MOVIE = 0,
+                    MODE_BGM = 1
+                };
+
                 CBgDisplay(long nId);
                 virtual ~CBgDisplay();
                 virtual void Main();
@@ -59,9 +86,58 @@ namespace msw {
                 virtual int Set();
                 virtual void Remove();
 
+                void Initialize();
+                CNwLayout *NwLayout();
+                void MovieControl();
+                void BgmControl();
+                long SetParam(const BgDispParam *pParam);
                 void SetParameter(const BgDispParam *pParam);
                 // (argument meaning guessed)
                 void SetMessageTextNum(long nNum);
+                void SetDispParameter();
+                // Shows pane nSel of the nNum panes whose name numbers are in
+                // pPanes and hides the others (0xFF hides them all).
+                void SetDispPanes(const unsigned char *pPanes, unsigned char nNum, unsigned char nSel);
+                long PlayPaneAnim(nw4r::lyt::Pane *pPane, long nAnim, int bEnable, int bRecursive, int bReset);
+                long SetAnimBack(long nAnim);
+                long StopAllAnimBack();
+                // Shows or hides pane nPane of the layout, when there is one.
+                // Defined in the .cpp.
+                inline void SetPaneVisible(long nPane, bool bVisible);
+
+            private:
+                long m_nMode;                   // 0x5C, MODE_*
+                long m_Unk60;                   // 0x60
+                long m_nMovieStep;              // 0x64
+                long m_nBgmStep;                // 0x68
+                const char *m_pMovieName;       // 0x6C, the movie asked for
+                const char *m_pOpenMovieName;   // 0x70, the movie opened
+                const char *m_pWaitMovieName;   // 0x74, the movie asked for when m_fMovieWait started
+                float m_fMovieWait;             // 0x78
+                long m_nBgm;                    // 0x7C, the music asked for
+                long m_nPlayBgm;                // 0x80, the music playing
+                long m_nWaitBgm;                // 0x84, the music asked for when m_fBgmWait started
+                float m_fBgmWait;               // 0x88
+                unsigned char m_nLayout;        // 0x8C, which layout file
+                CNwLayout *m_pNwLayout;         // 0x90
+                long m_Unk94;                   // 0x94
+                long m_Unk98;                   // 0x98
+                wchar_t m_StageName[0x100];     // 0x9C
+                wchar_t m_IntroText[0x800];     // 0x29C
+                wchar_t m_CupText[0x800];       // 0x129C
+                wchar_t m_RuleText[5][0x20];    // 0x229C
+                wchar_t m_ScoreText[0x40];      // 0x23DC
+                wchar_t m_ScoreLabel[0x40];     // 0x245C
+                // 0x24DC to 0x24E4: BgDispParam's bytes, read as signed.
+                signed char m_nType;            // 0x24DC
+                signed char m_bStage;           // 0x24DD
+                signed char m_nGameKind;        // 0x24DE
+                signed char m_nRuleFlag;        // 0x24DF
+                signed char m_nCup;             // 0x24E0
+                signed char m_nPartyCup;        // 0x24E1
+                signed char m_nPartyCup2;       // 0x24E2
+                signed char m_nPartyStage;      // 0x24E3
+                signed char m_nPartyLevel;      // 0x24E4
         };
     }
 }

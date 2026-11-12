@@ -50,7 +50,13 @@ namespace msw {
             // object's pause count.
             void SetPauseObj(int bPause);
 
-        private:
+            // (added for MenuF game/menu/CSelectMenu.cpp; inline, emitted
+            // there) SendObjEventTrigger without a parameter.
+            long SendObjEvent(long nObjId, long nEvent) { return SendObjEventTrigger(nObjId, nEvent, 0); }
+
+        protected:
+            // (protected for MenuF game/menu/CSelectMenu.cpp, whose
+            // RemoveObj takes the object out of the list itself)
             CMenuLinkList m_LinkList; // 0x34
     };
 }

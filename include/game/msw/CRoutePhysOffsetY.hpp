@@ -22,7 +22,10 @@ namespace msw {
             void CalcSpeed(float fSpeed, float fHeight);
 
         private:
-            unsigned char m_Unk34[0x20]; // 0x34
+            float m_fRotY;         // 0x34
+            float m_fLength;       // 0x38
+            bcs::FVEC3 m_vSpeed;   // 0x3C: per frame
+            bcs::FVEC3 m_vGravity; // 0x48: per frame squared
     }; // size 0x54
 }
 

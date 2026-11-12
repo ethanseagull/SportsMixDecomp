@@ -215,7 +215,7 @@ namespace msw {
             virtual void CallbackMotTrg_BodyVisible_(long, long);      // 0xC7C
             virtual void SubStateDamageCtorMame_(STATE_WORK_DAMAGE *); // 0xC88
             virtual int SubStateDamageLoopMame_(STATE_WORK_DAMAGE *);  // 0xC8C (int: CChrCoreBoss::LoopStateDamage tests it)
-            virtual void SubStateParalyzeSetEffect_();                 // 0xC94
+            virtual float SubStateParalyzeSetEffect_();                // 0xC94
             virtual void SubStateParalyzeEndEffect_();                 // 0xC98
 
             // CChrCoreVolley's own virtuals, 0xC9C to the end of the vtable at

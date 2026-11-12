@@ -20,9 +20,20 @@ namespace nw4r {
 
             Color() { SetWhite(); }
             explicit Color(unsigned long rgba) { *reinterpret_cast<unsigned long *>(this) = rgba; }
+            // Added for MenuF game/menu/CBgDisplay.cpp (emitted out of line
+            // there as __ct__Q34nw4r2ut5ColorFiiii).
+            Color(int red, int green, int blue, int alpha) { Set(red, green, blue, alpha); }
             // Copied as one word, not byte by byte.
             Color(const Color &c) { *reinterpret_cast<unsigned long *>(this) = *reinterpret_cast<const unsigned long *>(&c); }
             ~Color() {}
+
+            void Set(int red, int green, int blue, int alpha)
+            {
+                r = (unsigned char)red;
+                g = (unsigned char)green;
+                b = (unsigned char)blue;
+                a = (unsigned char)alpha;
+            }
 
             void SetWhite() { *reinterpret_cast<unsigned long *>(this) = 0xFFFFFFFF; }
 

@@ -14,6 +14,10 @@ namespace bcs {
     // name) The point at t of a beta spline from rFrom through rCtrl to
     // rTo, in the XZ plane.
     void BCS_Vec_BetaSplineCurveXZ(FVEC3 &rOut, const FVEC3 &rFrom, const FVEC3 &rCtrl, const FVEC3 &rTo, float t);
+    // (DOL; added for DodgeF CCameraDodgeGame; meaning guessed from the
+    // name and its use) The value at t of a beta spline through the three
+    // points (x0, y0), (x1, y1), (x2, y2).
+    float BCS_Vec_BetaSplineCurveInter3(float x0, float y0, float x1, float y1, float x2, float y2, float t);
 
     // (argument names guessed) rOut = (sin(rotY), 0, cos(rotY)) * len: a
     // vector of length len along +Z turned by rotY (radians) about Y. In the
@@ -26,6 +30,9 @@ namespace bcs {
     // (argument names guessed) rOut = rIn turned by rotY (radians) about Y.
     // In the DOL.
     void BCS_Vec_RotY(FVEC3 &rOut, const FVEC3 &rIn, float rotY);
+    // (added for TourF game/tour/CTournamentRouteMan.cpp) The same about X.
+    // In the DOL.
+    void BCS_Vec_RotX(FVEC3 &rOut, const FVEC3 &rIn, float rotX);
 
     // (argument names and meaning guessed) The angle (radians) between two
     // vectors; msw::CStgGmk_WaterPillarCluster::GetZoneByPos gives it the

@@ -25,6 +25,9 @@ namespace nw4r {
 
 namespace msw {
     namespace menu {
+        // (added for MenuF game/menu/CSelectMenu.cpp; return type
+        // guessed) The folder of the current language's files.
+        const char *GetLocalizeFolderName();
         // Added for BasketF game/basket/CCockpitBasket.cpp: the players per
         // team for play type nType (GameWork byte 6). Types guessed.
         long GetTeamPlayerNum(long nType);

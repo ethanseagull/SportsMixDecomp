@@ -20,6 +20,7 @@ namespace nw4r {
 
         class ResourceAccessor;
         class DrawInfo;
+        class GroupContainer;
 
         // Lives in the DOL. Size 0x20 (bcs::G2D::CLayoutDL's own members
         // start there). Virtuals in vtable order from 0x08 (up to 0x2C added
@@ -46,6 +47,8 @@ namespace nw4r {
 
                 AnimTransformList &GetAnimTransformList() { return mAnimTransList; }
                 Pane *GetRootPane() const { return mpRootPane; }
+                // (added for MenuF game/menu/CBgDisplay.cpp)
+                GroupContainer *GetGroupContainer() const { return static_cast<GroupContainer *>(mpGroupContainer); }
 
                 static MEMAllocator *mspAllocator;
 

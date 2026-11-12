@@ -1,6 +1,7 @@
 #ifndef BCS_G2D_CLYTRESOURCE_HPP_
 #define BCS_G2D_CLYTRESOURCE_HPP_
 
+#include "bcs/CLoadMan.hpp"
 namespace nw4r {
     namespace lyt {
         class ArcResourceAccessor;
@@ -23,6 +24,11 @@ namespace bcs {
                 // Added for MenuF game/menu/CMenu.cpp (return type guessed;
                 // the menu passes 0 as the second argument).
                 void GetResourceFromDvdMan(const char *pPath, unsigned long);
+                // (added for MenuF game/menu/CSelectMenu.cpp; return types
+                // guessed) Loading an archive in the background, and its
+                // state: negative while it is not complete.
+                void LoadDataASync(const CLoadMan::FILE_INPUT *pFile);
+                long IsCompleteDataASync(const CLoadMan::FILE_INPUT *pFile);
 
                 // Added for DOL game/bcs/G2D/CLayoutBase.cpp (no symbols;
                 // names guessed). A new font link, kept in the list at 0x30;

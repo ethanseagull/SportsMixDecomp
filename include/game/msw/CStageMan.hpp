@@ -517,6 +517,9 @@ namespace msw {
             long GetStageNo() const { return m_nStageNo; }
             // Loads and builds the stage chosen with SetStageNo.
             void Initialize_();
+            // (added for MenuF game/menu/CSelectMenu.cpp; inline, emitted
+            // there; name from the symbol)
+            void Init() { Initialize_(); }
 
             static bool IsValidInstance();
             static CStageMan *GetInstance();

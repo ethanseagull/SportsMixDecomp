@@ -93,6 +93,18 @@ namespace msw {
                 unsigned short m_nState;     // 0x0A (name guessed)
                 unsigned char m_Unk0C[8];    // 0x0C, to the next pad's 0x04
 
+                // (no symbol; name guessed; added for game/menu/CSelectMenu.cpp)
+                // Bit 0x04 of the flags at 0x06 marks the pads that do not
+                // lead the menus.
+                void SetLeader(int bLeader)
+                {
+                    if (bLeader != 1) {
+                        m_nFlags06 |= 4;
+                    } else {
+                        m_nFlags06 &= ~4;
+                    }
+                }
+
                 // (see CMenuPadInfo::IsUsedCursor)
                 int IsUsedCursor() const { return m_bUnk06_02 | m_bUnk06_01; }
 

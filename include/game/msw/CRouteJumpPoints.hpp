@@ -23,9 +23,16 @@ namespace msw {
                 float fUnk48;         // 0x48
                 short nEvent[4];      // 0x4C: timer events, -1 for none
                 float fUnk54;         // 0x54
-                short nUnk58;         // 0x58
-                short nUnk5A;         // 0x5A
-                long nUnk5C;          // 0x5C
+                short nUnk58;         // 0x58: 1: the middle jumps are walked (no jump)
+                short nUnk5A;         // 0x5A: timer event of the first jump, -1 for none
+                // 0x5C, 0x5E: the timer events of the middle jumps and of
+                // the last one, -1 for none (CRouteJumpPoints::PushRoute
+                // reads them as halfwords; the stage files fill both with
+                // one -1).
+                union {
+                    long nUnk5C;
+                    short anJumpEvent[2];
+                };
                 long nSe;             // 0x60: sound number
             };
 
@@ -50,7 +57,8 @@ namespace msw {
             const JUMP_DATA *m_pJumpData; // 0x34
             float m_fRotY;                // 0x38
             long m_nPointNum;             // 0x3C
-            char m_Unk40[0x80];           // 0x40
+            long m_anPoint[8];            // 0x40: map objects jumped on, -1 at both ends
+            bcs::FVEC3 m_avPoint[8];      // 0x60: their positions
     }; // size 0xC0
 }
 

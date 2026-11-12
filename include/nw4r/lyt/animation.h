@@ -21,6 +21,16 @@ namespace nw4r {
             };
         }
 
+        // A group an animation file names. Size 0x14: the name and a flag
+        // (added for MenuF game/menu/CBgDisplay.cpp).
+        struct AnimationGroupRef {
+            const char *GetName() const { return name; }
+
+            char name[17];       // 0x00
+            unsigned char flag;  // 0x11
+            unsigned char padding[2];
+        };
+
         // One .brlan file. Size 0x10, no destructor (arrays of it are built
         // with __construct_new_array and no destructor).
         class AnimResource {
@@ -31,6 +41,9 @@ namespace nw4r {
                 const res::AnimationBlock *GetResourceBlock() const { return mpResBlock; }
                 unsigned short GetFrameSize() const { return mpResBlock->frameSize; }
                 bool IsLoopData() const { return mpResBlock->loop != 0; }
+                // (DOL; added for MenuF game/menu/CBgDisplay.cpp)
+                unsigned short GetGroupNum() const;
+                const AnimationGroupRef *GetGroupArray() const;
 
             private:
                 const void *mpFileHeader;              // 0x00
@@ -46,6 +59,8 @@ namespace nw4r {
                 virtual ~AnimTransform();
 
                 unsigned short GetFrameSize() const;
+                // (DOL; added for MenuF game/menu/CBgDisplay.cpp)
+                bool IsLoopData() const;
                 float GetFrame() const { return mFrame; }
                 void SetFrame(float fFrame) { mFrame = fFrame; }
                 const res::AnimationBlock *GetAnimResource() const { return mpRes; }
@@ -55,6 +70,20 @@ namespace nw4r {
             protected:
                 const res::AnimationBlock *mpRes; // 0x0C
                 float mFrame;                     // 0x10
+        };
+
+        // An animation bound to a pane or a material (added for MenuF
+        // game/menu/CBgDisplay.cpp).
+        class AnimationLink {
+            public:
+                AnimTransform *GetAnimTransform() const { return mAnimTrans; }
+                bool IsEnable() const { return !mbDisable; }
+
+            private:
+                ut::LinkListNode mLink;     // 0x00
+                AnimTransform *mAnimTrans;  // 0x08
+                unsigned short mIdx;        // 0x0C
+                bool mbDisable;             // 0x0E
         };
     }
 }

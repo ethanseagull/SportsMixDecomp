@@ -11,6 +11,16 @@ namespace msw {
             void Finalize();
 
             static CDataWork s_Instance;
+
+            // (added for MenuF game/menu/CSelectMenu.cpp; inline, emitted
+            // there; names from the symbols) The instance, and a flag kept
+            // for the attract demo (meaning guessed).
+            static CDataWork *GetInstance() { return &s_Instance; }
+            int GetCntInfoDemo() const { return m_bCntInfoDemo; }
+            void SetCntInfoDemo(int bDemo) { m_bCntInfoDemo = bDemo; }
+
+        private:
+            int m_bCntInfoDemo; // 0x00
     };
 }
 

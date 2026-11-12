@@ -39,7 +39,13 @@ namespace bcs {
             State *m_pStateTable; // 0x04, array of m_nStateNum entries
             CState *m_pState;     // 0x08, current state
             CState *m_pNextState; // 0x0C, null when no change is pending
-            long m_nState;        // 0x10
+            // 0x10. m_nMode is a second name for it: the MenuF sources
+            // written before msw::CSelectMenu's CFsm base was known call
+            // that class's screen number m_nMode (to be renamed there).
+            union {
+                long m_nState;
+                long m_nMode;
+            };
             long m_nStateNum;     // 0x14
             CStateTemplate<CFsm<T> > m_NullState; // 0x18, current state until the first change
 
@@ -74,6 +80,20 @@ namespace bcs {
                 m_pOwner = pOwner;
                 m_pStateTable = new (0) State[nNum];
                 m_nStateNum = nNum;
+            }
+
+            // (added for MenuF game/menu/CSelectMenu.cpp, which emits both
+            // out of line; names from the symbols) The same two with the
+            // heap of the table given.
+            void InitFsm(T *pOwner, long nNum, long nHeap)
+            {
+                m_pOwner = pOwner;
+                m_pStateTable = new (nHeap) State[nNum];
+                m_nStateNum = nNum;
+            }
+            void SetStateFunc(long nState, StateFunc pCtor, StateFunc pLoop, StateFunc pDtor)
+            {
+                m_pStateTable[nState].Set(m_pOwner, pCtor, pLoop, pDtor);
             }
 
             // (name guessed) Sets the three hooks of state nState.

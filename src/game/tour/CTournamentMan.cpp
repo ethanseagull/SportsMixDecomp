@@ -1195,7 +1195,7 @@ namespace msw {
         TournamentWork::MakePointData(m_aPointHead, m_aLink, LINK_MAX, nLink);
     }
 
-    void CTournamentMan::MakeRouteSelect(unsigned short *pRoute, unsigned char nStart, unsigned char nGoal,
+    long CTournamentMan::MakeRouteSelect(unsigned short *pRoute, unsigned char nStart, unsigned char nGoal,
                                          unsigned char nMask, const unsigned char *pVia, float fRand)
     {
         short aCost[0x200];
@@ -1213,7 +1213,7 @@ namespace msw {
         }
         TournamentWork::MakeRouteCost(aCost, m_aPointHead, m_aLink, nStart, nMask, 0);
         TournamentWork::GetPointFastRoute(nStart, nGoal, nMask, aCost, m_aPointHead, m_aLink, m_aMove, MOVE_MAX, 0);
-        TournamentWork::SelectFastRouteBasic(nStart, pRoute, nNum, 0, m_aMove, fRand);
+        return TournamentWork::SelectFastRouteBasic(nStart, pRoute, nNum, 0, m_aMove, fRand);
     }
 
     long CTournamentMan::GetEffectSlot(long nFirst, long nLast)

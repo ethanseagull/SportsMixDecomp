@@ -5,6 +5,8 @@
 #include "revolution/gx/GXEnum.h"
 #include "revolution/gx/GXStruct.h"
 
+struct _GXTexObj;
+
 namespace nw4r {
     namespace g3d {
 
@@ -62,9 +64,25 @@ namespace nw4r {
 
         class ResTexObj {
             public:
-                explicit ResTexObj(void *pData = 0) : m_pData(pData) {}
+                // With NW4R's alignment check (added for MenuF
+                // game/menu/CBgDisplay.cpp: its constructor loop over a
+                // ResTexObj array has the shape the check gives, and it and
+                // CCourtChr.cpp carry the check's strings as
+                // @STRING@__ct__Q34nw4r3g3d9ResTexObjFPv objects). Every
+                // use so far passes a constant, so the call is folded away
+                // and its line is not known; 0 stands in for it.
+                explicit ResTexObj(void *pData = 0) : m_pData(pData)
+                {
+                    if ((unsigned long)pData & 0x3) {
+                        db::Panic("g3d_resmat_ac.h", 0, "NW4R:Failed assertion !((u32)p & 0x3)");
+                    }
+                }
 
                 bool IsValid() const { return m_pData != 0; }
+
+                // DOL. The texture object bound to slot mapId (added for MenuF
+                // game/menu/CCharaName.cpp; not const in the mangled name).
+                _GXTexObj *GetTexObj(_GXTexMapID mapId);
 
             private:
                 void *m_pData; // 0x00

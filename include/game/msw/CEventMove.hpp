@@ -33,8 +33,9 @@ namespace msw {
                 return m_fEndFrame <= m_fFrame;
             }
 
-        private:
-            // (CEventModel links the move and writes its offsets)
+        protected:
+            // (CEventModel links the move and writes its offsets; protected
+            // for msw::CRouteMove of TourF)
             friend class CEventModel;
 
             // msw::CEventModel's SetMoveOffset, SetMoveOffsetRot and

@@ -59,8 +59,8 @@ namespace msw {
                 nw4r::ut::List_Init(&m_List, 0);
             }
 
-            // Defined in another unit (MenuF 0x573C).
-            static CCameraMenuBG *GetInstance();
+            // Inline: the copy at MenuF 0x573C is game/menu/CSelectMenu.cpp's.
+            static CCameraMenuBG *GetInstance() { return &s_Instance; }
 
             void Initialize(long view, nw4r::g3d::ResFile file);
             void Finalize();

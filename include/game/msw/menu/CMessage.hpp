@@ -21,6 +21,11 @@ namespace msw {
                 // The text of label pLabel in file nFile; null when nFile is
                 // negative or pLabel null.
                 const wchar_t *GetTextByLabel(short nFile, const char *pLabel);
+                // (added for MenuF game/menu/CSelectMenu.cpp; return types
+                // guessed) Text nIndex of file nFile, and the index of label
+                // pLabel in it.
+                const wchar_t *GetText(short nFile, short nIndex);
+                short GetLabelIndex(short nFile, const char *pLabel);
 
                 // (no symbol; a guess) The callers test the address of
                 // s_Instance against null, so they reach it through an

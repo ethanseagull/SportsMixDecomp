@@ -29,6 +29,9 @@ namespace msw {
 
             // The select menu task, null when it has gone.
             bcs::CTask *GetMainTask();
+            // (added for MenuF game/menu/CSelectMenu.cpp; inline, name
+            // guessed) The CMainStep step to go to when the menus end.
+            void SetNextStep(long nStep) { m_nNextStep = nStep; }
 
         private:
             void Initialize();

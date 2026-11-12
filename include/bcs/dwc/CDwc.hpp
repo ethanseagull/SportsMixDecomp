@@ -41,6 +41,10 @@ namespace bcs {
                 // types guessed). Whether a connection is up; sends nSize
                 // bytes of pData as this player's data.
                 int IsConnect() const;
+                // (added for MenuF game/menu/CSelectMenu.cpp; return type
+                // guessed) Whether a friend's match request can be taken
+                // now.
+                int CanbeRefuseFriendMatch();
                 void SetMySingleDataA(const void *pData, long nSize);
                 // Added for MenuF game/menu/CFriendCode.cpp (return types
                 // guessed). The friend roster, and asking for the friends'

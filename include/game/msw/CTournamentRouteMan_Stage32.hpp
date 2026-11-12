@@ -11,6 +11,9 @@ namespace msw {
     // one: the original emits it after the inline functions of the file.
     class CTournamentRouteMan_Stage32 : public CTournamentRouteMan {
         public:
+            // Inline: CTournamentRouteMan::CreateInstance constructs it.
+            CTournamentRouteMan_Stage32(CStageManTournament *pStageMan) : CTournamentRouteMan(pStageMan) {}
+
             virtual void Initialize();
             virtual CRouteBase *CreateRoute(long nType, long nFrom, long nTo);
             virtual void TimerEvent(long nEvent, long nParam, float fParam, unsigned long ulParam, int b);

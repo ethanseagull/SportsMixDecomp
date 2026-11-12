@@ -42,6 +42,9 @@ namespace bcs {
             // guessed) Starts camera quake nQuake; not zero when it started
             // (msw::CGame tests it).
             int StartQuake(long nQuake);
+            // (added for TourF msw::CTournamentRouteMan; parameter names
+            // guessed) A quake of fFrame frames with the strength rPower.
+            void StartQuakeDirect(long nPriority, const FVEC3 &rPower, float fFrame, short, unsigned short);
 
             // (name guessed) The constructor's priority; bcs::CCameraMan
             // treats a camera of priority 0x10 or less as the debug camera.

@@ -11,6 +11,7 @@ extern "C" {
 // Texture formats (only those used so far).
 typedef enum _GXTexFmt {
     GX_TF_I8 = 1,
+    GX_TF_RGB565 = 4,
     GX_TF_RGB5A3 = 5
 } GXTexFmt;
 
@@ -22,7 +23,11 @@ typedef enum _GXTexWrapMode {
 
 typedef enum _GXTexFilter {
     GX_NEAR,
-    GX_LINEAR
+    GX_LINEAR,
+    GX_NEAR_MIP_NEAR,
+    GX_LIN_MIP_NEAR,
+    GX_NEAR_MIP_LIN,
+    GX_LIN_MIP_LIN
 } GXTexFilter;
 
 typedef enum _GXAnisotropy {
@@ -41,11 +46,20 @@ void GXInitTexObj(GXTexObj *pObj, void *pImage, unsigned short nWidth, unsigned 
 // Added for the DOL's game/bcs/CMdlShadow.cpp: bytes of a texture image.
 unsigned long GXGetTexBufferSize(unsigned short nWidth, unsigned short nHeight, unsigned long format,
                                  unsigned char bMipmap, unsigned char nMaxLod);
+// Added for MenuF game/menu/CCharaName.cpp: the size of a texture object.
+unsigned short GXGetTexObjWidth(const GXTexObj *pObj);
+unsigned short GXGetTexObjHeight(const GXTexObj *pObj);
 // Added for the DOL's game/msw/CGameExDemoBase.cpp.
 void GXLoadTexObj(const GXTexObj *pObj, int map);
 
 void GXInitTexObjLOD(GXTexObj *pObj, GXTexFilter minFilter, GXTexFilter magFilter, float fMinLod, float fMaxLod,
                      float fLodBias, unsigned char bBiasClamp, unsigned char bEdgeLod, GXAnisotropy maxAniso);
+
+// Added for MenuF game/menu/CBgDisplay.cpp.
+void *GXGetTexObjData(const GXTexObj *pObj);
+unsigned char GXGetTexObjMipMap(const GXTexObj *pObj);
+GXTexFmt GXGetTexObjFmt(const GXTexObj *pObj);
+void GXInvalidateTexAll(void);
 
 #ifdef __cplusplus
 }

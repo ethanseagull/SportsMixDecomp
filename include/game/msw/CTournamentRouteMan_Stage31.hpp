@@ -10,6 +10,9 @@ namespace msw {
     // members of its own. Created by CTournamentRouteMan::CreateInstance.
     class CTournamentRouteMan_Stage31 : public CTournamentRouteMan {
         public:
+            // Inline: CTournamentRouteMan::CreateInstance constructs it.
+            CTournamentRouteMan_Stage31(CStageManTournament *pStageMan) : CTournamentRouteMan(pStageMan) {}
+
             virtual ~CTournamentRouteMan_Stage31();
             virtual void Initialize();
             virtual CRouteBase *CreateRoute(long nType, long nFrom, long nTo);

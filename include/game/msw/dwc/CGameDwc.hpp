@@ -135,14 +135,40 @@ namespace msw {
                 // of CSelectMenu::m_bStarMii when the game starts.
                 long m_nRole;
 
-            private:
-                unsigned char m_UnkDC8[0xDCC - 0xDC8];
+                // 0xDC8. (added for MenuF game/menu/CSelectMenu.cpp; meaning
+                // not known) Set with m_UnkDCC when a Wi-Fi game starts.
+                long m_UnkDC8;
 
-            public:
                 // 0xDCC: cleared by msw::CCockpitBasket::GameResult_In
                 // before it sends empty data to the opponent (meaning not
                 // known).
                 long m_UnkDCC;
+                long m_UnkDD0;
+                // 0xDD4. (added for MenuF game/menu/CSelectMenu.cpp) Cleared
+                // when the select menu is made (meaning not known).
+                long m_UnkDD4;
+
+                // (added for MenuF game/menu/CSelectMenu.cpp; inline, emitted
+                // there; names from the symbols) The friend roster of the
+                // connection, m_nRole, and clearing the error step.
+                bcs::dwc::CDwcFriendList *GetFriendList() { return m_Dwc.GetFriendList(); }
+                long GetPlayMode() { return m_nRole; }
+                static void InitErrorStat() { m_ErrorStep = 0; }
+
+                static long m_ErrorStep;
+                // (added for MenuF game/menu/CSelectMenu.cpp; names from the
+                // symbols, the inline's name guessed) What the error asks
+                // for: -1 to clear (back to the Wi-Fi menus), -2 to reset
+                // (back to the title), 0 nothing.
+                static long m_Clear;
+                static long m_Reset;
+                static long GetErrorType()
+                {
+                    if (m_Clear == 1) {
+                        return -1;
+                    }
+                    return m_Reset == 1 ? -2 : 0;
+                }
         };
     }
 }

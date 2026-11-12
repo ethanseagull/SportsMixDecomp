@@ -24,6 +24,10 @@ namespace msw {
             // position plus its offset.
             void GetMatrix(bcs::FMTX34 &rMtx) const;
 
+            // The position (without the offset). Inline: TourF game/tour/
+            // CTournamentStep.cpp has a weak copy.
+            const bcs::FVEC3 &GetPos() const { return m_vPos; }
+
         protected:
             bcs::FVEC3 m_vPos;            // 0x04
             bcs::FVEC3 m_vRot;            // 0x10, radians

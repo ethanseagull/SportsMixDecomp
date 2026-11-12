@@ -57,4 +57,23 @@ static inline void F32ToS16(register float in, short *pOut)
 #endif
 }
 
+// The same to an unsigned halfword through GQR3 (unsigned 16-bit, scale 0),
+// as MenuF's SelectMenu::CNwLayout::SetRestoreBuffer does with a pane's
+// size: `psq_st f1, 0(r4), 1, qr3` then `lhz`.
+static inline void F32ToU16(register float in, unsigned short *pOut)
+{
+#ifdef __MWERKS__
+    register unsigned short ret;
+    unsigned long tmp;
+    register unsigned long *pTmp = &tmp;
+    asm {
+        psq_st in, 0(pTmp), 1, 3
+        lhz ret, 0(pTmp)
+    }
+    *pOut = ret;
+#else
+    *pOut = (unsigned short)(in < 0.0f ? 0.0f : (in > 65535.0f ? 65535.0f : in));
+#endif
+}
+
 #endif /* !FASTCAST_HPP_ */

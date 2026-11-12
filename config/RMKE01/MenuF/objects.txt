@@ -24,6 +24,7 @@ Matching game/menu/CHowTo.cpp
 Equivalent game/menu/CButtonA.cpp
 Equivalent game/menu/CButtonACode.cpp
 Equivalent game/menu/CCharaMdl.cpp
+Equivalent game/menu/CCharaName.cpp
 Equivalent game/menu/CScoreBook.cpp
 Matching game/menu/CScoreTop.cpp
 Equivalent game/menu/CGameSelect.cpp
@@ -70,3 +71,5 @@ Equivalent game/menu/CMiiSel.cpp
 Equivalent game/menu/unit_6EE84.cpp
 Equivalent game/menu/CTopMenuChrObj.cpp
 Equivalent game/menu/CCourtSelect.cpp
+Equivalent game/menu/CSelectMenu.cpp
+Equivalent game/menu/CBgDisplay.cpp

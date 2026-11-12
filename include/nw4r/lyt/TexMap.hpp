@@ -1,8 +1,7 @@
 #ifndef NW4R_LYT_TEXMAP_HPP_
 #define NW4R_LYT_TEXMAP_HPP_
 
-// The SDK's texture object (GXTexObj). Only named here.
-struct _GXTexObj;
+#include "revolution/gx/GXTexture.h"
 
 namespace nw4r {
     namespace lyt {
@@ -14,6 +13,22 @@ namespace nw4r {
         // memory, no code copied).
         class TexMap {
             public:
+                // Added for MenuF game/menu/CBgDisplay.cpp: an empty texture
+                // with linear filtering.
+                TexMap() : mpImage(0), mWidth(0), mHeight(0), mMinLOD(0.0f), mMaxLOD(0.0f), mLODBias(0)
+                {
+                    mBits.textureFormat = 0;
+                    mBits.mipmap = 0;
+                    mBits.wrapS = 0;
+                    mBits.wrapT = 0;
+                    mBits.minFilter = 1;
+                    mBits.magFilter = 1;
+                    mBits.biasClampEnable = 0;
+                    mBits.edgeLODEnable = 0;
+                    mBits.anisotropy = 0;
+                    SetNoPalette();
+                }
+
                 TexMap(const _GXTexObj &rTexObj)
                 {
                     Set(rTexObj);
@@ -24,6 +39,12 @@ namespace nw4r {
                 // Added for VolleyF game/volley/CCockpitChrIcon2DVolley.cpp
                 // (Material::SetTexture): a member-wise copy.
                 void Set(const TexMap &rTexMap) { *this = rTexMap; }
+
+                // Added for MenuF game/menu/CBgDisplay.cpp (out of line in the DOL).
+                void SetTexParam(void *pImage, unsigned short width, unsigned short height, GXTexFmt format,
+                                 GXTexWrapMode wrapS, GXTexWrapMode wrapT, bool bMipmap);
+                void SetLODParam(GXTexFilter minFilter, GXTexFilter magFilter, float minLOD, float maxLOD,
+                                 float lodBias, bool bBiasClamp, bool bEdgeLOD, GXAnisotropy anisotropy);
 
                 void *GetImage() const { return mpImage; }
                 void SetImage(void *pImage) { mpImage = pImage; }

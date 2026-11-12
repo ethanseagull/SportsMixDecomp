@@ -13,6 +13,9 @@ namespace msw {
     // functions of the file. GetChipType is the base class's.
     class CTournamentRouteMan_Stage33 : public CTournamentRouteMan {
         public:
+            // Inline: CTournamentRouteMan::CreateInstance constructs it.
+            CTournamentRouteMan_Stage33(CStageManTournament *pStageMan) : CTournamentRouteMan(pStageMan) {}
+
             virtual void Initialize();
             virtual CRouteBase *CreateRoute(long nType, long nFrom, long nTo);
             virtual void TimerEvent(long nEvent, long nParam, float fParam, unsigned long ulParam, int b);

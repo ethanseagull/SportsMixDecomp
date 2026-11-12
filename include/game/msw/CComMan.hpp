@@ -120,6 +120,10 @@ namespace msw {
                                                unsigned long nIgnoreBits, int);
             static CChrCore *GetChrCoreRand(long nTeam);
             static bcs::FVEC3 GetChrPos(long nChr);
+            // (DOL; added for DodgeF game/dodge/unit_D7800.cpp) The position
+            // of character nChr on the ground (y taken to be 0; meaning guessed
+            // from the name).
+            static bcs::FVEC3 GetChrPosXZ(long nChr);
             static float GetStageCourtCenterX(long nCourt);
             static float GetStageCourtCenterZ(long nCourt);
             static long GetNearBestPos2on3(const bcs::FVEC3 *pMy, const bcs::FVEC3 *pTarget, long nIdx);

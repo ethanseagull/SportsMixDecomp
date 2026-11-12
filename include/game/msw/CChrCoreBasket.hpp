@@ -52,11 +52,31 @@ namespace msw {
                 long m_nLayUpHoldFrame;        // 0x168
                 float m_fLayUpHeight;          // 0x16C
                 long m_nLayUpJumpFrame;        // 0x170
-                unsigned char m_Unk174[0x1E8 - 0x174];
+                unsigned char m_Unk174[0x1CC - 0x174];
+                // 0x1CC-0x1E4 (names guessed; game/basket/unit_2FD1C.cpp, the
+                // smash cut): two values the cut keeps as floats in its work
+                // (meaning not known), the reach of the cut, then the turn
+                // of the spinning cut on the way up and how much of it the
+                // fall takes back (degrees), and its jump frames.
+                long m_nSmashCutUnk1CC;        // 0x1CC
+                long m_nSmashCutUnk1D0;        // 0x1D0
+                float m_fSmashCutRadius;       // 0x1D4
+                unsigned char m_Unk1D8[0x1DC - 0x1D8];
+                long m_nSmashCutRotDeg;        // 0x1DC
+                long m_nSmashCutRotBackDeg;    // 0x1E0
+                long m_nSmashCutJumpFrame;     // 0x1E4
                 // 0x1E8: the frames Yoshi's smash cut holds its second step
                 // (CChrCoreBasketYoshi::CtorStateSmashCut).
                 long m_nSmashCutHoldFrame;
-                unsigned char m_Unk1EC[0x210 - 0x1EC];
+                // 0x1EC-0x1F8 (names guessed; game/basket/unit_2FD1C.cpp):
+                // the frames of the spinning cut's second turn (none when
+                // not above 0), the frames of its fall, the height of its
+                // jump, and the speed of the straight cut.
+                long m_nSmashCutTurnFrame;     // 0x1EC
+                long m_nSmashCutFallFrame;     // 0x1F0
+                float m_fSmashCutHeight;       // 0x1F4
+                float m_fSmashCutSpeed;        // 0x1F8
+                unsigned char m_Unk1FC[0x210 - 0x1FC];
                 // 0x210: the height of Toad's trick jump
                 // (CChrCoreBasketKinopio::SubStateArtsShotSetTrickJumpParam_).
                 float m_fArtsJumpHeight;
@@ -261,6 +281,14 @@ namespace msw {
             // without the offset GetTargetGoalPosOffZ_ adds, and the check
             // of blockers run after every step of the air trick.
             float GetRotY_ToGoal_NonOffset() const;
+            // (added for game/basket/unit_9AFD4.cpp, the computer driver's
+            // actions; meanings guessed) The yaw the character moves at (-1
+            // when it stands), the charge of the smash, the frames into the
+            // jump shot and the dunk.
+            float GetNowMoveDir() const;
+            long GetSmashChargeRate() const;
+            float GetJumpShootLocalFrame() const;
+            float GetDunkLocalFrame() const;
             void SubStateAirTrickCmnBlockerCheck_(STATE_WORK_AIR_TRICK *pWork);
             // (added for game/basket/CChrCoreBasketDonkey.cpp; meaning
             // guessed from the name) The point the air trick aims across the
@@ -398,6 +426,17 @@ namespace msw {
             // The success rate of a shot of kind nKind.
             float Util_CalcShootRate(long nKind);
             void SetStateCombinationPlay(int bPlay);
+
+            // Added for game/basket/unit_2FD1C.cpp (the block cut, side step
+            // and smash cut states; names from the symbols, meanings
+            // guessed). The work of the block cut (mapped there); the two
+            // steps of the smash cut (a spinning jump, and a straight run
+            // for some characters); sends message id to the drivers of the
+            // other team.
+            struct STATE_WORK_BLOCK_CUT;
+            void SubStateSmashCut_(STATE_WORK_SMASH_CUT *pWork);
+            void SubStateSmashCutStraight_(STATE_WORK_SMASH_CUT *pWork);
+            void Util_SendMsgToEnemy(CChrDrv::MSG_ID id, long, long, unsigned long, unsigned long);
 
             // Overrides of CChrCore's virtuals, in vtable order (the slots of
             // __vt__Q23msw14CChrCoreBasket, read from BasketF, that name
@@ -813,15 +852,25 @@ namespace msw {
     // (field names guessed; only what the character units read is mapped)
     struct CChrCoreBasket::STATE_WORK_SMASH_CUT {
         long m_nStep;                  // 0x00, the step of the cut (Yoshi: 0 to 4)
-        unsigned char m_Unk04[0x10 - 0x4];
+        // 0x04-0x0C (names guessed; game/basket/unit_2FD1C.cpp): cleared
+        // by the constructor; the yaw the driver steers the straight cut to
+        // (-1: none, cleared after each frame) and the yaw it runs at.
+        long m_nUnk04;
+        float m_fSteerRotY;
+        float m_fMoveRotY;
         // 0x10: not negative while Toad may put his mushroom down
         // (meaning guessed); Yoshi adds the frame step to it.
         float m_fUnk10;
-        unsigned char m_Unk14[0x18 - 0x14];
+        // 0x14: the frames of the whole cut (the jump, the turns and the
+        // fall; the straight cut's run).
+        float m_fFrameNum;
         float m_fHoldFrame;            // 0x18, Yoshi: the frames his second step is held
         float m_fRotY;                 // 0x1C, Yoshi: the yaw he turns to
         float m_fAnimSpeed;            // 0x20, Yoshi: the speed of his motions
-        unsigned char m_Unk24[0x2C - 0x24];
+        // 0x24, 0x28 (meaning not known): CC_PARAM_BASKET2's 0x1CC and
+        // 0x1D0 as floats.
+        float m_fUnk24;
+        float m_fUnk28;
         float m_fRadius;               // 0x2C, the reach of the cut (Toad's mushroom takes it as its size)
     };
 

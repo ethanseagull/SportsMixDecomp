@@ -315,6 +315,7 @@ main SetDelayResultButton__Q23msw14CCockpitResultFv near 98.1 98.1%: identical i
 main SetDispFlag__Q33msw7cockpit10CEffectSetFi near 99.8 register allocation only (loop pointer and EF manager swap r8/r10); declaration-order search no gain
 main SetFirstGoalIdx___Q23msw5CGameFv unverified 75.9 switch compare tree vs our linear chain and other branch form; not proven equal by tool
 main SetFlags__Q23msw10CEventDemoFUl unverified 41.4 same four lwz/or/stw on WORK 0x14..0x20; original does each word in turn, ours hoists the loads (schedule only, 41%, 7 forms tried)
+main SetFrame__Q23bcs10CAnmMatClrFf unverified 0.0 ours inlines CAnmMatClr::CalcResult where the original calls it (auto-inline budget); same work in the same order, behaviour unchanged. Accepted below the floor by user ruling 2026-11-12 (notes/decisions.md)
 main SetFrame__Q23bcs10CFrameCtrlFf near 99.7 register choice and instruction order only
 main SetFrame__Q23msw10CEventMoveFf near 99.6 paired-single register choice in the inlined FVEC3Add/FVEC3Sum only
 main SetFront__Q23msw7CStgSrtFRCQ23bcs5FVEC3 near 97.3 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
@@ -365,6 +366,7 @@ main UpdateColl__Q23msw17CStgGmk_Pylon_ActFv near 99.3 fmadds operand order and 
 main UpdateColl__Q23msw19CStgGmk_Pinball_ActFv near 99.4 stack slot order of atkPos and three FVEC3 temporaries
 main UpdateColl__Q23msw19CStgGmk_Trolley_ActFv near 97.1 stack slots of the SetPos temporaries and the capsule ends only (both builds drop the store of the second capsule end's x/z)
 main UpdateFade__Q23msw11CChrOptTaskFf near 99.5 register choice only: the hide bit and the model pointer are swapped between r3 and r4 in the hide-flag updates
+main UpdateFrame__Q23bcs10CAnmMatClrFf unverified 0.0 ours inlines CAnmMatClr::CalcResult where the original calls it (auto-inline budget); same work in the same order, behaviour unchanged. Accepted below the floor by user ruling 2026-11-12 (notes/decisions.md)
 main UpdateFrame__Q23bcs15CAnmBlendMotionFf near 94.7 reload of the unchanged 16-bit layer/part count (0x28/0x2A; no store to it between the loads) plus register choice and instruction order
 main UpdateFrame__Q23msw10CEventMoveFf near 99.1 paired-single register choice and the stack slots of the two difference temporaries only
 main UpdateFrame__Q23msw13CEvDemoMdlObjFf near 99.0 original reloads m_pMotNameData from memory where ours reuses the register (same value)

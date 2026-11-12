@@ -162,6 +162,10 @@ namespace msw {
             // (DOL; added for VolleyF game/volley/CComDrvVolleyRR.cpp) Turn
             // to face the front.
             void ActCallLookFront();
+            // (DOL; added for BasketF game/basket/unit_9AFD4.cpp) Turn to
+            // the ball; a random number below fMax.
+            void ActCallLookBall();
+            float RandMaxF(float fMax) const;
             // (DOL) A random number between fMin and fMax (RandRangeF below
             // is the other generator; which is which is not known).
             float RandRange(float fMin, float fMax) const;
@@ -235,6 +239,18 @@ namespace msw {
             // guessed) Whether the character faces rPos (world), within
             // the angle given in degrees.
             int IsDirTarget(const bcs::FVEC3 &rPos, long nDeg) const;
+            // (DOL; added for VolleyF game/volley/CComDrvVolleyGame.cpp,
+            // meanings guessed) The size of the driver's court along x and
+            // z; its edges brought in by fMargin.
+            float GetMyCourtSizeX() const;
+            float GetMyCourtSizeZ() const;
+            float GetMyCourtParamLeft(float fMargin) const;
+            float GetMyCourtParamRight(float fMargin) const;
+            float GetMyCourtParamFront(float fMargin) const;
+            float GetMyCourtParamBack(float fMargin) const;
+            // The middle of the other team's court.
+            float GetEmCourtCenterX() const;
+            float GetEmCourtCenterZ() const;
 
             // DOL. The common actions, one per frame while running; derived
             // drivers list them in their action tables (g_ActFuncMap).
@@ -260,7 +276,12 @@ namespace msw {
             // 0x58 (meaning not known): DodgeF's CComDrvDodgeGame lowers
             // its outfield run rates once it is above 120 and 180.
             float m_fUnk58;
-            unsigned char m_Unk5C[0x64 - 0x5C];
+            // 0x5C, 0x60 (names guessed; VolleyF's CComDrvVolleyGame::SetComLv
+            // sets both from CGame::GetTeamComLevel, clamped to 0-7): the
+            // computer level of the team, and the one the driver plays at
+            // (raised a little while its team is behind).
+            float m_fComBaseLv;
+            float m_fComLv;
             // 0x64 (name guessed): the driven character's team. HockeyF
             // passes it to CComManHockey::GetKeeperCore, VolleyF compares it
             // with GameWork::GetUserTeam.
@@ -286,7 +307,11 @@ namespace msw {
             // driver; a court number and the grid's kind.
             long m_nCourtIdx;
             long m_nUnk98;
-            unsigned char m_Unk9C[0xC0 - 0x9C];
+            unsigned char m_Unk9C[0xB4 - 0x9C];
+            // 0xB4 (name guessed): the index of the team mate at
+            // m_aMatePos[0] (VolleyF's CComDrvVolleyGame::UpdateAPosition).
+            long m_nMateChrIdx;
+            unsigned char m_UnkB8[0xC0 - 0xB8];
             // 0xC0, 0xCC (name guessed): with m_MyPos the positions of the
             // driver's team (VolleyF's Ninja defence passes the three to
             // CComMan::GetNearBestPos2on3).
@@ -313,7 +338,11 @@ namespace msw {
             // guards, in the court's frame (BasketF's CComDrvBasketGame
             // measures its shots and its defence from them).
             bcs::FVEC3 m_TargetGoalPos;
-            unsigned char m_Unk13C[0x154 - 0x13C];
+            unsigned char m_Unk13C[0x148 - 0x13C];
+            // 0x148 (meaning not known; added for BasketF
+            // game/basket/unit_9AFD4.cpp): CComDrvBasketGame::ActLoopGoSmash
+            // runs from it most of the way to the ball holder.
+            bcs::FVEC3 m_Pos148;
             bcs::FVEC3 m_GuardGoalPos;
             // 0x160 to 0x16C (names guessed): the obstacle a gimmick
             // driver is turning round (VolleyF CComDrvVolleyRR::

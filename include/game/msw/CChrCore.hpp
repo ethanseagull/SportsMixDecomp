@@ -1,6 +1,7 @@
 #ifndef MSW_CCHRCORE_HPP_
 #define MSW_CCHRCORE_HPP_
 
+#include "bcs/CAnmBlendMotion.hpp"
 #include "bcs/CAnmObjMotBase.hpp"
 #include "bcs/CFsmQueue.hpp"
 #include "bcs/FVEC3.hpp"
@@ -1180,6 +1181,11 @@ namespace msw {
             float AnimSearchTrgFrame(long nMotId, unsigned long nTrg, float) const;
             long AnimGetMotID(unsigned long nSlot, long) const;
             void AnimPlay(unsigned long nSlot, long nMotId, int, float, float);
+            // (added for VolleyF game/volley/CChrCoreVolley.cpp) Plays the
+            // blend of motions rArg describes; changes the weights of the
+            // blend playing (afWeight: one per layer) over fFrame frames.
+            void AnimPlay(unsigned long nSlot, bcs::CAnmBlendMotion::ANIM_ARG &rArg);
+            void AnimChgBlend(unsigned long nSlot, float *afWeight, float fFrame);
             // (names guessed) Inline in the modules.
             long DriverGetNo() const { return m_nDriver; }
             bcs::CMdlObj *GetMdl() const { return m_pMdl; }
@@ -1252,6 +1258,11 @@ namespace msw {
             const bcs::FVEC3 &GetRot();
             // Turns towards fRotY by fRate of the difference.
             void RotateYRate_(float fRotY, float fRate);
+            // (added for game/basket/unit_2FD1C.cpp; meanings guessed) Turns
+            // towards fRotY by at most fStep; turns attack collision nIndex
+            // on or off.
+            void RotateYTo_(float fRotY, float fStep);
+            void CollAtkSetEnable_(long nIndex, int bEnable);
             int IsAnimEnd(unsigned long nSlot) const;
             void SetMoveMotType(long nType);
             void PlayVoice(long nVoice, unsigned long);
@@ -1338,6 +1349,9 @@ namespace msw {
             // (added for game/boss/CStickObj.cpp; meaning guessed) Turns the
             // effect in slot nSlot to the yaw fRotY.
             void Eff_SetRotateY(long nSlot, float fRotY);
+            // (added for game/basket/unit_2FD1C.cpp; meaning guessed) Moves
+            // the effect in slot nSlot by rOfs from its node.
+            void Eff_SetTrans(long nSlot, const bcs::FVEC3 &rOfs);
             // (added for game/boss/CStickObj.cpp; meaning guessed) Turns
             // towards pos by fRate of the way.
             void RotateYToPosRate_(const bcs::FVEC3 &pos, float fRate);
@@ -1488,6 +1502,9 @@ namespace msw {
             // Lets the held item go, or drops it at rVel.
             void DetachItem(int);
             void DropItem(const bcs::FVEC3 &rVel, int, int);
+            // (DOL; added for VolleyF game/volley/CChrCoreVolley.cpp) Lets go
+            // of the item held (meaning guessed).
+            void DropAttachItem();
             // (names guessed) Inline in the module: see m_hBall and m_nFlagF4.
             unsigned long GetBallHandle() const { return m_hBall; }
             void OnFlagF4(unsigned long nBit) { m_nFlagF4 |= nBit; }

@@ -92,7 +92,6 @@ BasketF GetShotParam___Q23msw21CItemBallBasketGShellCFRQ33msw11BALL_BASKET10SHOT
 BasketF HitCheckTrain__Q23msw17CComManBasketGameFRQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 99.7 original reloads lo.z from its stack slot inside the z swap, ours reuses the register holding the same value
 BasketF InRectAndRad___Q23msw13CChrManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3fff near 99.9 lfs offsets into .rodata differ only: the original's .rodata has 8 more bytes (fDist static and a 5.0 of the stripped Util_SearchAerialPassmeetTo_) before these constants
 BasketF IsRide__Q33msw14CStageBasket1010CPanelInfoCFRCQ23bcs5FVEC3 near 94.8 94.8%: stack vector stores in a different order
-BasketF LookAt__Q23msw7CStgObjFRCQ23bcs5FVEC3 near 97.9 97.9%: weak inline; the two psq_l/ps_sub operands land in f0/f1 swapped (operand order inside the shared bcs::FVEC3Sub helper). Float registers only.
 BasketF LoopStateAirTrick__Q23msw14CChrCoreBasketFv near 99.8 register choice only: the inlined FsmqGetWork/FsmqNext use r4/r5 swapped
 BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketLuigiFv near 99.8 r3/r4 swapped in the inlined FsmqGetWork_; same as HockeyF Luigi
 BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketMarioFv near 96.5 stack slots of the vector temporaries, register choice and load order differ; (m_nStatusFlag & 4) != 0 for flows 1 and 6 is extrwi in ours, rlwinm/cntlzw/cntlzw in the original (same 0/1 value); .rodata has one extra 4-byte const local (fLenMax) as in Mii00
@@ -169,7 +168,6 @@ BasketF PlayCombination___Q23msw13CChrManBasketFPCQ23msw8CChrCore near 99.2 regi
 BasketF Release__Q33msw11CC14_BASKET12CcNinjaCloneFv near 96.0 counter and pointer register swap
 BasketF Reset__Q23msw16CBallBasketFruitFv near 96.4 integer register choice in the copy of the local scale array from the constant table, and the schedule of the vtable load for GetCollPushRadiusDefault
 BasketF Reset__Q23msw19CNpcGhostBasketBaseFv near 99.7 register allocation only (diff.py: registers); was 100% before the 2026-11-11 merge of main's CChrCore/CNpcBase header changes
-BasketF ScoreBoard_Loop__Q23msw19CCockpitBasketPauseFv near 98.0 register allocation only: the original keeps the basket result page in r2 (the table base register) and the result-chr page in r7, ours r7/r8, saving one more register in stmw/lmw; same loads, stores, calls and branches
 BasketF ScoreInWait__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 BasketF ScoreIn__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 BasketF ScoreOutWait__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
@@ -179,7 +177,6 @@ BasketF SendMessage__Q23msw14CStageBasket11Fllll near 99.8 instruction order onl
 BasketF SendMessage__Q23msw19CNpcGhostBasketBaseFlllll near 99.9 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF SetBallScore__Q23msw22CCockpitBasketHarapekoFll near 98.6 register choice and instruction order only
 BasketF SetCoinValue__Q23msw18CCockpitBasketCoinFll near 98.9 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
-BasketF SetCountNum__Q23msw25CCockpitBasketPauseResultFl near 99.2 registers only: the pane accessor and the computed show flag swap r30/r31; same instructions, order and stack frame
 BasketF SetCountScore__Q23msw20CCockpitBasketResultFPlPlll near 99.6 99.6%: float register choice around m_fUnk00 + m_fUnk04*i only
 BasketF SetDispBallFruit4__Q23msw22CCockpitBasketHarapekoFi near 99.5 register choice and instruction order only
 BasketF SetFaceIcon__Q23msw19CCockpitBasketCoderFPQ33bcs3G2D9CPaneCtrlllPCQ23msw8CChrCore near 98.1 register allocation only (loop counter and table pointer swap registers); SetVisible(bool) bit insert compiled as srwi+rlwimi instead of rlwinm+rlwimi (same flag byte result); as HockeyF

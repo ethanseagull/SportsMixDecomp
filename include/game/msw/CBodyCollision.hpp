@@ -135,8 +135,25 @@ namespace msw {
             // (CScnObj::m_nHandle) of its model object.
             void SetOwnerHandleAll(unsigned long handle);
 
+            // (DOL; names guessed, from the fields they set, as in
+            // CAtkCollision)
+            void SetPushDisableAll();
+            int IsBodyEnable(long index) const;
+            void SetCatchDisableAll();
+            void SetAttackEnable(long index);
+            // Clears the attack bit and bit 8 of every unit.
+            void SetAttackDisableAll();
+            void SetBodyPushCallback(long index, BodyPushCallback pFunc, void *pArg);
+            void SetTeamNoAll(long nTeamNo);
+            void SetChrIdxAll(long nChr);
+            void SetNoHitFlag(long index, unsigned long flag);
+            void SetTmpNoHitFlagAll(unsigned long flag);
+            void AddPosXZAll(const bcs::FVEC3 &rMove);
+
         private:
-            unsigned long m_Unk04[2]; // 0x04, after the vptr
+            // 0x00: vtable
+            CCollBodyUnit *m_pColl;  // 0x04, array of m_nNum (0xC4 bytes each)
+            unsigned long m_nNum;    // 0x08
     };
 }
 

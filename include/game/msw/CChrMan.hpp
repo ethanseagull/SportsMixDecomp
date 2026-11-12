@@ -90,6 +90,11 @@ namespace msw {
             virtual long Util_GetNextChgLeader_(long) = 0;                               // 0xE0
             virtual int Is1on1CameraDirection_();                                        // 0xE4
 
+            // DOL, static (added for BasketF game/basket/CCameraBasketGame.cpp):
+            // Is1on1CameraDirection_ on the instance; the match camera counts
+            // the time it is true before its one-on-one view.
+            static int Is1on1CameraDirection();
+
             // DOL. Makes character nChr the leader of team nTeam.
             // (parameter meanings guessed; Create_ and InitLeader_ pass
             // (i, i, 0) for teams 0 and 1)
@@ -123,6 +128,9 @@ namespace msw {
             // The number of characters: the word at 0x50 of the instance,
             // zero when there is none. Static, like GetChrCore.
             static long GetChrCoreNum();
+            // (static; added for DodgeF game/dodge/unit_A4AE8.cpp) How many
+            // characters of team nTeam are in the infield.
+            static long GetInnerChrNum(long nTeam);
             // (DOL, static; added for BasketF CChrCoreBasketSiroma) The
             // number of obstacles in the list, and the one after pPrev (the
             // first for null).

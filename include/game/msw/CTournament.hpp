@@ -72,6 +72,8 @@ namespace msw {
             static int IsMissionComThrowingShootDisable(long nTeam);
             static int IsMissionComDunkShootDisable(long nTeam);
             static int IsMissionComLayupShootDisable(long nTeam);
+            // (added for game/basket/unit_B09B4.cpp) ... and the special shot.
+            static int IsMissionComSpecialShootDisable(long nTeam);
             // Added for MenuF game/menu/CTournamentLoad.cpp (names of the
             // arguments and return types guessed; the callers pass
             // CSelectMenu::m_nGameKind and -1). The tournament saved for

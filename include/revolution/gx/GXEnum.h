@@ -54,7 +54,9 @@ typedef enum _GXCompare {
 // game/msw/CGameExDemoBase.cpp, with only the values it passes. Names follow
 // the public description of the GX interface.
 typedef enum _GXPrimitive {
-    GX_QUADS = 0x80
+    GX_QUADS = 0x80,
+    // Added for the DOL's game/bcs/G2D/CLineStripDL.cpp.
+    GX_LINESTRIP = 0xB0
 } GXPrimitive;
 
 typedef enum _GXVtxFmt {

@@ -49,6 +49,9 @@
 #include "game/msw/CTournament.hpp"
 #include "game/msw/CTournamentExit.hpp"
 #include "game/msw/CTournamentMan.hpp"
+#include "game/msw/CTournamentCamera.hpp"
+#include "game/msw/CTournamentChip.hpp"
+#include "bcs/CMdlObj.hpp"
 #include "game/msw/CTournamentRouteMan.hpp"
 #include "game/msw/CUnlockFlags.hpp"
 #include "game/msw/Tournament.hpp"
@@ -57,6 +60,18 @@
 #include "game/msw/menu/CVibEff.hpp"
 #include <math.h>
 #include "nw4r/math/triangular.h"
+
+namespace CTournamentStep_cpp {
+    // uncalled stand-in: the original's float pool starts with 0.0f and
+    // 1.0f, ahead of the message names below, so code stripped from the
+    // file used them first. Plain stores create them here, in that order;
+    // the module link strips this function.
+    void UnusedPoolStart(float *pOut)
+    {
+        pOut[0] = 0.0f;
+        pOut[1] = 1.0f;
+    }
+}
 
 // The message files of the menus this file opens.
 static const char *s_pMenuMessage = "GameMenuMessage";
@@ -539,8 +554,11 @@ namespace msw {
             CUnlockFlags::GetCharType(nType, nColor, i);
             long nPos = CUnlockFlags::GetCharFlagPos(nType, nColor, 0);
             unsigned long long nBit = 1ULL << nPos;
-            if ((nFlag & nBit) != 0 && !flags.IsUnlockChar(nType, nColor, nGameMode)) {
-                nChar |= nBit;
+            if ((nFlag & nBit) != 0) {
+                int bUnlock = flags.IsUnlockChar(nType, nColor, nGameMode);
+                if (!bUnlock) {
+                    nChar |= nBit;
+                }
             }
         }
         return nChar;
@@ -573,6 +591,8 @@ namespace msw {
     {
         long nLevel = CTournament::GetLevel();
         long nGameMode = CTournament::GetGameMode();
+        long nType;
+        long nColor;
         CUnlockFlags flags;
         flags.SetPlayerData(-1);
         for (long i = 0; i < nTeamNum; i++) {
@@ -580,26 +600,27 @@ namespace msw {
             if (team.aCharType[0] == -1) {
                 unsigned long long nMask = 0;
                 if (CTournament::IsMixTournamentGame()) {
-                    for (long nMode = 0; nMode <= 3; nMode++) {
-                        nMask |= GetSettingChar(nMode, nLevel);
-                        nMask |= flags.GetUnlockChar(nMode, nLevel, 2);
+                    // Every sport's characters; the loop leaves nGameMode
+                    // at 4 (the mixed tournament) for GetCharRandom.
+                    for (nGameMode = 0; nGameMode <= 3; nGameMode++) {
+                        nMask |= GetSettingChar(nGameMode, nLevel);
+                        nMask |= flags.GetUnlockChar(nGameMode, nLevel, 2);
                     }
                 } else {
                     nMask = GetSettingChar(nGameMode, nLevel);
                     nMask |= flags.GetUnlockChar(nGameMode, nLevel, 2);
                 }
-                long nType;
-                long nColor;
                 CUnlockFlags::GetCharType(nType, nColor,
                                           flags.GetCharRandom(nGameMode, -1, nMask, GetUsedChar(-1, bSkipBoss)));
                 if (team.nPoint == 0xFF) {
                     team.nTargetPoint = team.nPoint = i + 1;
                 }
-                if (nColor >= 0x10) {
-                    nColor -= 0x10;
+                long nCol = nColor;
+                if (nCol >= 0x10) {
+                    nCol -= 0x10;
                 }
                 team.aCharType[0] = nType;
-                team.aCharFlag[0] = (team.aCharFlag[0] & 0xF8) | static_cast<unsigned char>(nColor);
+                team.aCharFlag[0] = (team.aCharFlag[0] & 0xF8) | static_cast<unsigned char>(nCol);
             }
         }
     }
@@ -683,7 +704,7 @@ namespace msw {
     // routes with (1 for a team of human players, 2 otherwise).
     static inline unsigned char GetRouteMask(const TournamentWork::TEAM_INFO &team)
     {
-        return 2 - ((team.aCharFlag[0] >> 7) & 1);
+        return (static_cast<signed char>(team.aCharFlag[0]) >> 7) + 2;
     }
 
     // Which player markers and shadow map point nPoint shows (see
@@ -1611,48 +1632,43 @@ namespace msw {
     void CTournamentStep::_ResetTimer()
     {
         TIMER *pTimer = m_pTimerList;
-        if (pTimer == 0) {
-            return;
+        if (pTimer != 0) {
+            // Run every queued timer now.
+            do {
+                m_nTimerState = pTimer->nState;
+                m_nTimerTeam = pTimer->nTeam;
+                m_fTimerOver = 0.0f;
+                _TimerEvent(pTimer->nState, pTimer->nEvent, pTimer->nParam, pTimer->ulParam, 1);
+                m_pTimerList = pTimer->pNext;
+                pTimer->pNext = m_pTimerFree;
+                m_pTimerFree = pTimer;
+                pTimer = m_pTimerList;
+            } while (pTimer != 0);
+            _SetTimerOwner();
+            m_pTimerList = 0;
+            m_fTimer = 0.0f;
         }
-
-        // Run every queued timer now.
-        do {
-            m_nTimerState = pTimer->nState;
-            m_nTimerTeam = pTimer->nTeam;
-            m_fTimerOver = 0.0f;
-            _TimerEvent(pTimer->nState, pTimer->nEvent, pTimer->nParam, pTimer->ulParam, 1);
-            m_pTimerList = pTimer->pNext;
-            pTimer->pNext = m_pTimerFree;
-            TIMER *pNext = m_pTimerList;
-            m_pTimerFree = pTimer;
-            pTimer = pNext;
-        } while (pTimer != 0);
-        _SetTimerOwner();
-        m_pTimerList = 0;
-        m_fTimer = 0.0f;
     }
 
     void CTournamentStep::_CleanPushTimer()
     {
         TIMER *pTimer = m_pTimerPush;
-        if (pTimer == 0) {
-            return;
+        if (pTimer != 0) {
+            // Run every pushed timer now.
+            do {
+                m_nTimerState = pTimer->nState;
+                m_nTimerTeam = pTimer->nTeam;
+                m_fTimerOver = 0.0f;
+                _TimerEvent(pTimer->nState, pTimer->nEvent, pTimer->nParam, pTimer->ulParam, 1);
+                m_pTimerPush = pTimer->pNext;
+                pTimer->pNext = m_pTimerFree;
+                TIMER *pNext = m_pTimerPush;
+                m_pTimerFree = pTimer;
+                pTimer = pNext;
+            } while (pTimer != 0);
+            _SetTimerOwner();
+            m_pTimerList = 0;
         }
-
-        // Run every pushed timer now.
-        do {
-            m_nTimerState = pTimer->nState;
-            m_nTimerTeam = pTimer->nTeam;
-            m_fTimerOver = 0.0f;
-            _TimerEvent(pTimer->nState, pTimer->nEvent, pTimer->nParam, pTimer->ulParam, 1);
-            m_pTimerPush = pTimer->pNext;
-            pTimer->pNext = m_pTimerFree;
-            TIMER *pNext = m_pTimerPush;
-            m_pTimerFree = pTimer;
-            pTimer = pNext;
-        } while (pTimer != 0);
-        _SetTimerOwner();
-        m_pTimerList = 0;
     }
 
     int CTournamentStep::_IsTimerEvent() const
@@ -2347,10 +2363,10 @@ namespace msw {
 
     // Bit 6 of the flags of the point match nMatch is played at (0 for no
     // match). (name guessed)
-    static inline signed char GetMatchMoveFlag(long nMatch)
+    static inline long GetMatchMoveFlag(long nMatch)
     {
         if (static_cast<signed char>(nMatch) != -1) {
-            unsigned char nPoint = TournamentWork::GetMatchInfo(static_cast<signed char>(nMatch)).m_Unk03[0];
+            long nPoint = TournamentWork::GetMatchInfo(static_cast<signed char>(nMatch)).m_Unk03[0];
             if (nPoint != 0xFF) {
                 return (TournamentWork::GetPointInfo(nPoint)->nFlag >> 6) & 1;
             }
@@ -2920,6 +2936,184 @@ namespace msw {
         CTournamentExit::m_bEnable = false;
     }
 
+    // Whether fTime is past fLimit. (an inline in the original: the
+    // state loops keep the result as an int)
+    static inline int IsAfter(float fTime, float fLimit)
+    {
+        return fTime > fLimit;
+    }
+
+    // As TournamentData::GetPointOffsetTeam, for the two teams of a match.
+    static inline float GetPointOffsetMatch(long nPoint, long nTeam0, long nTeam1)
+    {
+        if (nPoint != -1) {
+            const TournamentWork::POINT_INFO *pPoint = TournamentWork::GetPointInfo(nPoint);
+            if (pPoint->m_Unk0E > 0) {
+                return s_afPointOffset[pPoint->m_Unk0E];
+            }
+            long nOther = GetPointTeam(nPoint);
+            if (nOther >= 0 && nOther != nTeam0 && nOther != nTeam1) {
+                return 2.6f;
+            }
+        }
+        return 0.0f;
+    }
+
+    // Runs the event scripts: each call of CallEventEntry returns what the
+    // script wants next (m_UnkC2), the step waits for it and calls again.
+    void CTournamentStep::LoopStateEventPlay()
+    {
+        CTournamentMan *pMan = CTournamentMan::GetInstance();
+        CTournamentRouteMan *pRouteMan = CTournamentRouteMan::GetInstance();
+        switch (m_nSubStep) {
+        case 10:
+            m_UnkB4 = 0;
+            m_nSubStep = 0;
+            m_fStepTime = 0.0f;
+            m_UnkC2 = m_pScript->CallEventEntry();
+            // fall through
+        case 0:
+            switch (m_UnkC2) {
+            case 2:
+                m_nSubStep = 10;
+                break;
+            case 12:
+                m_nSubStep++;
+                TournamentWork::TournamentInfo().nEventNextState = STATE_MOVE_SETUP;
+                ChangeState(STATE_EVENT_SETUP);
+                break;
+            case 6:
+                // Wait for the time the script asked for.
+                if (IsAfter(m_fStepTime, m_pScript->m_fWaitTimer)) {
+                    m_nSubStep = 10;
+                }
+                break;
+            case 7:
+                if (!_WaitFade()) {
+                    m_nSubStep = 10;
+                }
+                break;
+            case 8:
+                if (pMan->IsCameraEnd()) {
+                    m_nSubStep = 10;
+                }
+                break;
+            default:
+                m_nSubStep = 100;
+                break;
+            }
+            break;
+        case 100:
+            // Start the timers of the characters the script moved.
+            if (!CTournamentRouteMan::IsTimerEvent() && pMan->IsCameraEnd()) {
+                for (long i = 0; i < 16; i++) {
+                    if (m_UnkB4 & (1 << i)) {
+                        pRouteMan->_PopTimer(i + 0x3D8, 0.0f);
+                        _PopTimer(i, m_fTimer);
+                    }
+                }
+                m_nSubStep++;
+            } else {
+                _IsNext(0);
+            }
+            break;
+        case 101:
+            if (!CTournamentRouteMan::IsTimerEvent() && !_IsTimerEvent(STATE_EVENT_PLAY) && pMan->IsCameraEnd()) {
+                if (m_UnkB4 != 0) {
+                    CTournamentExit::m_bEnable = true;
+                }
+                CTournamentMan::m_pInstance->m_ulMoveStop &= ~m_UnkB4;
+                m_nSubStep++;
+            } else {
+                _IsNext(0);
+            }
+            break;
+        case 102:
+            // Wait for the moving characters to arrive.
+            for (long i = 0; i < 16; i++) {
+                unsigned long ulMask = 1 << i;
+                if ((m_UnkB4 & ulMask) && pMan->IsMoveEnd(ulMask)) {
+                    TournamentWork::TEAM_INFO &team = TournamentWork::TeamInfo(i);
+                    team.nPoint = team.nTargetPoint;
+                    pRouteMan->_PopTimer(i + 0x3EC, 0.0f);
+                    _PopTimer(i + 0x14, m_fTimer);
+                    m_UnkB4 &= ~ulMask;
+                }
+            }
+            if (m_UnkB4 == 0 && !CTournamentRouteMan::IsTimerEvent() && !_IsTimerEvent(STATE_EVENT_PLAY) &&
+                pMan->IsCameraEnd()) {
+                m_nSubStep++;
+            } else {
+                _IsNext(0);
+            }
+            break;
+        case 103:
+            pMan->SetCameraTarget(0);
+            pRouteMan->CleanPushTimer();
+            pRouteMan->ResetTimer();
+            _CleanPushTimer();
+            switch (m_UnkC2) {
+            case 10: {
+                // The script makes the two teams play a match.
+                pMan->CleanMoveRoute(m_nMoveTeam0, 1);
+                pMan->CleanMoveRoute(m_nMoveTeam1, 1);
+                CTournamentExit::m_bEnable = true;
+                m_UnkCA = 0;
+                m_UnkCB = 0;
+                _MakeRouteSelect(m_nMoveTeam0, m_nMoveTeam1);
+                float fOffset =
+                    GetPointOffsetMatch(TournamentWork::GetMatchInfo(m_UnkD0).nPoint, m_nMoveTeam1, m_nMoveTeam0);
+                m_ulMoveMask = 0;
+                m_ulMoveMask |=
+                    pMan->SetMoveRoute(m_nMoveTeam1, m_nFadeType == 0, m_aRoute1, m_nRouteNum1, fOffset, 0, 0.0f);
+                m_ulMoveMask |=
+                    pMan->SetMoveRoute(m_nMoveTeam0, m_nFadeType == 0, m_aRoute0, m_nRouteNum0, fOffset, 0, 0.0f);
+                pMan->PushMoveRoute(m_nMoveTeam1, m_aRoute1, m_nRouteNum1);
+                pMan->PushMoveRoute(m_nMoveTeam0, m_aRoute0, m_nRouteNum0);
+                m_UnkC5 = GetMatchMoveFlag(m_UnkD0);
+                m_UnkC6 = _IsStarCupDemo(m_UnkD0);
+                if (m_UnkC6) {
+                    ChangeState(STATE_GAME_CALL_MOVE);
+                } else {
+                    long nPlayer = TournamentWork::GetTournamentInfo().GetPlayerTeam();
+                    if (m_nMoveTeam0 == nPlayer || m_nMoveTeam1 == nPlayer) {
+                        ChangeState(STATE_GAME_CALL_MOVE);
+                    } else {
+                        ChangeState(STATE_NPC_CALL_MOVE);
+                    }
+                }
+                m_UnkC2 = 2;
+                m_nSubStep++;
+                break;
+            }
+            case 11: {
+                // The match is played where the teams stand.
+                long nPlayer = TournamentWork::GetTournamentInfo().GetPlayerTeam();
+                m_UnkCB = 0;
+                m_UnkCA = 1;
+                if (m_nMoveTeam0 == nPlayer || m_nMoveTeam1 == nPlayer) {
+                    m_UnkCA = 0;
+                }
+                m_UnkC6 = _IsStarCupDemo(m_UnkD0);
+                ChangeState(STATE_GAME_CALL_PLAY);
+                CTournamentExit::m_bEnable = true;
+                m_UnkC2 = 2;
+                m_nSubStep++;
+                break;
+            }
+            case 9:
+                m_nSubStep = 10;
+                break;
+            default:
+                m_UnkCB = 0;
+                ChangeState(STATE_EVENT_END);
+                m_nSubStep++;
+                break;
+            }
+            break;
+        }
+    }
+
     void CTournamentStep::DtorStateEventPlay() {}
 
     void CTournamentStep::CtorStateEventEnd()
@@ -3102,22 +3296,6 @@ namespace msw {
             m_nSubStep++;
             break;
         }
-    }
-
-    // As TournamentData::GetPointOffsetTeam, for the two teams of a match.
-    static inline float GetPointOffsetMatch(long nPoint, long nTeam0, long nTeam1)
-    {
-        if (nPoint != -1) {
-            const TournamentWork::POINT_INFO *pPoint = TournamentWork::GetPointInfo(nPoint);
-            if (pPoint->m_Unk0E > 0) {
-                return s_afPointOffset[pPoint->m_Unk0E];
-            }
-            long nOther = GetPointTeam(nPoint);
-            if (nOther >= 0 && nOther != nTeam0 && nOther != nTeam1) {
-                return 2.6f;
-            }
-        }
-        return 0.0f;
     }
 
     void CTournamentStep::TimeStateNpcCallPlay(char nEvent, short nParam, unsigned long ulParam, int bReset)
@@ -4439,6 +4617,19 @@ namespace msw {
         }
     }
 
+    // The fireworks of the cup ceremony (LoopStateGameVictory) and where
+    // they go off, by cup.
+    static const TournamentData::FIREWORKS_INFO s_aVictoryFireworks[] = {
+        {0, 0, 0, 0.0f, 0.0f, 1.3f},
+        {1, 1, 0, 0.0f, 33.0f, 1.3f},
+        {3, 2, 0, 0.0f, 50.0f, 1.3f},
+        {2, 3, 0, 0.0f, 74.0f, 1.3f},
+        {-1, -1, 0, 0.0f, 0.0f, 1.0f},
+    };
+    static bcs::FVEC3 *s_apVictoryFireworksPos[] = {s_avFireworksPos, s_avFireworksPos, s_avFireworksPos,
+                                                    s_avFireworksPosHigh, s_avFireworksPos};
+    static long s_nVictoryFireworksPosNum = 4;
+
     void CTournamentStep::_LoadVictoryMotion(long nTeam)
     {
         const TournamentWork::TEAM_INFO &team = TournamentWork::GetTeamInfo(nTeam);
@@ -4566,6 +4757,275 @@ namespace msw {
     {
         TournamentWork::GetTournamentInfo();
         m_UnkD3 = 0;
+    }
+
+    // The cup ceremony of team m_UnkD3: the winners on the stand, the cup
+    // handed over, the fireworks and the trophy window. A or 2 skips to
+    // step 16.
+    void CTournamentStep::LoopStateGameVictory()
+    {
+        CTournamentMan *pMan = CTournamentMan::GetInstance();
+        if (_WaitFade()) {
+            return;
+        }
+        switch (m_nSubStep) {
+        case 0: {
+            m_fStepTime = 0.0f;
+            _ResetTimer();
+            CTournamentExit::m_bEnable = false;
+            // Load the motions of the winning team and the ceremony.
+            const TournamentWork::TEAM_INFO &team = TournamentWork::GetTeamInfo(m_UnkD3);
+            if (team.nPoint != 0xFF) {
+                long nMax = CTournament::GetTeamMax();
+                for (long i = 0; i < nMax; i++) {
+                    if (team.aCharType[i] != -1 && !CLoadData::IsLoaded(i + 0x67)) {
+                        CLoadData::LoadEventMotion(i + 0x67, team.aCharType[i], 0, 0);
+                        CLoadData::Load(i + 0x67);
+                    }
+                }
+            }
+            CLoadData::Load(0x5D);
+            CEventModel *pTrophy = pMan->GetObjModel(0);
+            if (pTrophy != 0) {
+                pTrophy->SetDisp(0);
+            }
+            pMan->EraseEffect(0x1E6, 0x1E7);
+            pMan->PlayerMarkerDisp(0, 200, 0);
+            pMan->PlayerMarkerDisp(0, 201, 0);
+            if (CStageMan::IsValidInstance()) {
+                CStageMan::GetInstance()->EffectErase(2, 0);
+            }
+            m_nSubStep++;
+            break;
+        }
+        case 1:
+            if (CLoadData::IsComplete(-1)) {
+                EvDemo::InitArcResData(CLoadData::GetPtr(0x5D), 0);
+                m_nSubStep++;
+            }
+            break;
+        case 2: {
+            if (IsAfter(m_fStepTime, 120.0f)) {
+                // The stand, the cup and the winners.
+                pMan->SetSceneOffset(s_avScenePosG[CTournament::GetCup()], bcs::FVEC3(0.0f, 0.0f, 0.0f));
+                CTournamentTrophy *pCup = CTournamentTrophy::CreateModel(0x5D, 1, 1, 2, 1);
+                pCup->SetDrawPriority(-10);
+                pMan->SetupObj(0xCD, pCup);
+                pMan->AttachEffectModel(0x1EB, pCup, 0x594, 3, 0, 0, 1, 0, 0);
+                CEvDemoMdlObj::_SETUP setup(1);
+                setup.nLightSelector = 0;
+                CEvDemoMdlObj *pStand = CEvDemoMdlObj::CreateModel(setup, 0x5D, "honor_pf", "s31_cong");
+                pMan->SetupObj(0xCC, pStand);
+                pMan->SetSceneData(pStand->GetMdlFile());
+                if (pMan->SetCameraActive(1)) {
+                    pMan->LeapDataSceneCamera(0, 0, 0);
+                    pMan->SetCameraRate(-1.0f, 0.0f, 0.0007f);
+                }
+                pMan->SetDataSceneCamera(0, 0, 2.0f, 0);
+                for (long i = 0; i < 16; i++) {
+                    if (i != m_UnkD3 && TournamentWork::TeamInfo(i).nPoint != 0xFF) {
+                        pMan->CleanChrModel(i, 1);
+                        ClearTeam(i);
+                    }
+                }
+                TournamentWork::RandomSelectLeaderChar(12, 0);
+                pMan->AttachEffectCamera(0x1EA, 0x593, &s_vScenePosD, 3, 1, 0, 0);
+                long nWinner = m_UnkD3;
+                pMan->SetupChrModelLeader(0);
+                pMan->SetupChrModelSub(nWinner, 0, 1);
+                pMan->SetSceneNode(pMan->GetObjModel(204), "cong_dai_set", 1, 1);
+                pMan->SetSceneNode(pMan->GetObjModel(205), "trophy_set", 1, 1);
+                CEventModel *pChr = pMan->GetChr(nWinner);
+                TournamentData::SetVictoryRes(pChr, 0x67);
+                pMan->SetSceneNode(pChr, "main_00", 1, 1);
+                pChr = pMan->GetChr(17);
+                TournamentData::SetVictoryRes(pChr, 0x69);
+                pMan->SetSceneNode(pChr, "main_L", 1, 1);
+                pChr = pMan->GetChr(16);
+                TournamentData::SetVictoryRes(pChr, 0x68);
+                pMan->SetSceneNode(pChr, "main_R", 1, 1);
+                _SetupVictoryGallery(nWinner);
+                PlayBgm(0x36);
+                _StartFade(4, 1.0f / 60.0f, 0);
+                m_fStepTime = 0.0f;
+                m_nSubStep++;
+            }
+            break;
+        }
+        case 3:
+            if (pMan->IsCameraEnd()) {
+                pMan->SetDataSceneCamera(0, 0, 0.0f, 0);
+                m_pFireworksPos = s_apVictoryFireworksPos[CTournament::GetCup()];
+                _SetupFireworks(s_aVictoryFireworks, s_nVictoryFireworksPosNum);
+                m_fStepTime = 0.0f;
+                m_nSubStep++;
+            } else if (_IsNext(0)) {
+                m_nSubStep = 16;
+            }
+            break;
+        case 4:
+            m_nSubStep++;
+            break;
+        case 5:
+            if (pMan->IsCameraEnd() && IsAfter(m_fStepTime, 420.0f)) {
+                // The winner jumps onto the stand.
+                pMan->SetDataSceneCamera(0, 1, 0.0f, 0);
+                long nWinner = m_UnkD3;
+                bcs::FVEC3 vOffset = s_avScenePosG[CTournament::GetCup()];
+                _OffsetCupUpChar(nWinner, vOffset);
+                TournamentData::SetJumpPause(pMan->SetSceneNode(pMan->GetChr(nWinner), "main_00", 1, 0), 0.0f);
+                pMan->SetSceneOffset(vOffset, bcs::FVEC3(0.0f, 0.0f, 0.0f));
+                TournamentData::SetJumpPause(pMan->SetSceneNode(pMan->GetChr(17), "main_L", 1, 0), 0.0f);
+                TournamentData::SetJumpPause(pMan->SetSceneNode(pMan->GetChr(16), "main_R", 1, 0), 0.0f);
+                m_fStepTime = 0.0f;
+                m_nSubStep++;
+            } else if (_IsNext(0)) {
+                m_nSubStep = 16;
+            }
+            break;
+        case 6:
+            if (pMan->IsCameraEnd() && IsAfter(m_fStepTime, 50.0f)) {
+                // The winner lifts the cup.
+                CEventModel *pChr = pMan->GetChr(m_UnkD3);
+                pChr->SetMoveOffset(s_avScenePosG[CTournament::GetCup()]);
+                TournamentData::SetVicotoryCupUpPause(pChr, 0.0f);
+                TournamentData::SetVicotorySupport1Pause(pMan->GetChr(17), 0, 0.0f);
+                TournamentData::SetVicotorySupport1Pause(pMan->GetChr(16), 1, 0.0f);
+                CEventModel *pCup = pMan->GetObjModel(205);
+                if (pCup != 0) {
+                    bcs::FVEC3 vZero(0.0f, 0.0f, 0.0f);
+                    pCup->SetPosition(vZero);
+                    pCup->SetRotation(vZero);
+                    pCup->AttachToObject(pChr, "ball_trans", bcs::CScnObj::ATTACHMODE_0);
+                    pCup->SetUpdateMove(0);
+                }
+                m_fStepTime = 0.0f;
+                m_nSubStep++;
+            } else if (_IsNext(0)) {
+                m_nSubStep = 16;
+            }
+            break;
+        case 7:
+            if (IsAfter(m_fStepTime, 200.0f)) {
+                // "Congratulations".
+                CEvDemoMdlObj::_SETUP setup(1);
+                CEvDemoMdlObj *pText = CEvDemoMdlObj::CreateModelEffRes(setup, "te_sco_congratulations.brres",
+                                                                        "te_sco_congratulations");
+                pMan->SetupObj(0xCE, pText);
+                pText->SetCameraView(-1);
+                if (CTournamentCamera::GetDataMode() == 1) {
+                    pText->AnimPlay("te_sco_congratulations_169_01", 0xB, 0.0f, 0.0f, 1);
+                    pMan->AttachEffectAuto(0x1ED, static_cast<bcs::CMdlObj *>(pText->GetScnObj()), 0xEE, 4);
+                } else {
+                    pText->AnimPlay("te_sco_congratulations_01", 0xB, 0.0f, 0.0f, 1);
+                    pMan->AttachEffectAuto(0x1ED, static_cast<bcs::CMdlObj *>(pText->GetScnObj()), 0xEE, 4);
+                }
+                pMan->PlaySe(0xE19, static_cast<const bcs::FVEC3 *>(0), 0xD, 0.0f, 1.0f, 0.0f, 1);
+                m_fStepTime = 0.0f;
+                m_nSubStep++;
+            } else if (_IsNext(0)) {
+                m_nSubStep = 16;
+            }
+            break;
+        case 8:
+            if (IsAfter(m_fStepTime, 200.0f)) {
+                pMan->SetDataSceneCamera(0, 2, 0.0f, 0);
+                TournamentData::SetVicotorySupport2Pause(pMan->GetChr(17), 0, 0.0f);
+                TournamentData::SetVicotorySupport2Pause(pMan->GetChr(16), 1, 0.0f);
+                m_fStepTime = 0.0f;
+                m_nSubStep++;
+            } else if (_IsNext(0)) {
+                m_nSubStep = 16;
+            }
+            break;
+        case 9:
+            if (pMan->IsCameraEnd() && IsAfter(m_fStepTime, 300.0f)) {
+                pMan->SetDataSceneCamera(0, 3, 0.0f, 0);
+                pMan->StopEffect(0x1EA, 0x1EB);
+                pMan->StopSe(30.0f, 0xD, 0xE);
+                m_fStepTime = 0.0f;
+                m_nSubStep++;
+            } else if (_IsNext(0)) {
+                m_nSubStep = 16;
+            }
+            break;
+        case 16: {
+            // Skipped: straight to the last camera.
+            pMan->SetDataSceneCamera(0, 3, -1.0f, 0);
+            pMan->IsCameraEnd();
+            _StartFadeCross(0.05f);
+            pMan->EraseEffect(0x1EC, 0x1ED);
+            pMan->EraseEffect(0x1EA, 0x1EB);
+            CEventModel *pText = pMan->GetObjModel(206);
+            if (pText == 0) {
+                CEvDemoMdlObj::_SETUP setup(1);
+                pText = CEvDemoMdlObj::CreateModelEffRes(setup, "te_sco_congratulations.brres",
+                                                         "te_sco_congratulations");
+                pMan->SetupObj(0xCE, pText);
+                pText->SetCameraView(-1);
+            }
+            if (CTournamentCamera::GetDataMode() == 1) {
+                pText->AnimPlay("te_sco_congratulations_169_03", 9, 0.0f, 0.0f, 1);
+            } else {
+                pText->AnimPlay("te_sco_congratulations_03", 9, 0.0f, 0.0f, 1);
+            }
+            pMan->StopSe(10.0f, 0xD, 0xE);
+            m_fStepTime = 0.0f;
+            _ResetTimer();
+            m_nSubStep = 10;
+            break;
+        }
+        case 10:
+            if (pMan->IsCameraEnd() && IsAfter(m_fStepTime, 150.0f)) {
+                pMan->SetChrDisp(0, -1);
+                m_fStepTime = 0.0f;
+                m_nSubStep++;
+            }
+            break;
+        case 11:
+            if (pMan->IsCameraEnd() && IsAfter(m_fStepTime, 30.0f)) {
+                // The cup alone, for the trophy window.
+                CTournamentTrophy *pCup = CTournamentTrophy::CreateModel(0x5D, 0, 1, 2, 1);
+                pMan->SetupObj(0xCD, pCup);
+                pCup->SetDrawPriority(-10);
+                pMan->AttachEffectModel(0x1EB, pCup, 0x595, 3, 0, 0, 1, 0, 0);
+                pMan->SetSceneNode(4, 0, 0, pCup, "trophy_set", 1, 1);
+                m_fStepTime = 0.0f;
+                m_nSubStep++;
+            }
+            break;
+        case 12:
+            if (pMan->GetObjModel(205) == 0 || IsAfter(m_fStepTime, pMan->GetObjModel(205)->GetMoveFrame())) {
+                pMan->PlaySe(0xE28, static_cast<const bcs::FVEC3 *>(0), 0xD, 0.0f, 1.0f, 0.0f, 1);
+                pMan->SetSceneNode(5, 0, 0, pMan->GetObjModel(205), "trophy_set", 1, 0);
+                m_fStepTime = 0.0f;
+                m_nSubStep++;
+            }
+            break;
+        case 13:
+            if (IsAfter(m_fStepTime, 150.0f)) {
+                m_fStepTime = 0.0f;
+                CNameMesg::CreateGetTrophy();
+                m_nSubStep++;
+            }
+            break;
+        case 14:
+            m_fStepTime = 0.0f;
+            if (CCockpit::GetResult() == 1000 || _IsNext(0)) {
+                CCockpit::ClearResult(-1);
+                m_nSubStep = 15;
+            }
+            break;
+        case 15:
+            if (CNameMesg::IsMenuOutWindow()) {
+                CNameMesg::RemoveWindow();
+                CCockpit::ClearResult(-1);
+                ChangeState(STATE_NEXT_CUP);
+                m_fStepTime = 0.0f;
+                m_nSubStep++;
+            }
+            break;
+        }
     }
 
     void CTournamentStep::DtorStateGameStart() {}
@@ -4852,7 +5312,7 @@ namespace msw {
     {
         long nPoint = bcs::BCS_RandMax(7L);
         TournamentWork::TOURNAMENT_INFO &info = TournamentWork::TournamentInfo();
-        info.m_Unk1058 = 2;
+        info.nExitStep = 2;
         info.nUnk105A = 0x13;
         _SetupDefalutParam(nPoint + 1, info.nPlayerMax, CTournament::GetGameMode());
         m_UnkCE = nPoint + 1;
@@ -5072,6 +5532,200 @@ namespace msw {
 
     void CTournamentStep::DtorStateDemoPlay() {}
 
+    // The sports whose star cup is cleared at the current level, one bit
+    // each; the sport being played counts as cleared.
+    static inline unsigned long GetStarCupClearMask()
+    {
+        unsigned long ulMask = 1 << CTournament::GetGameModeNoMix();
+        for (long i = 0; i <= 3; i++) {
+            if (CTournament::IsCupClear(3, i, CTournament::GetLevel(), -1)) {
+                ulMask |= 1 << i;
+            }
+        }
+        return ulMask;
+    }
+
+    // Makes member nSlot of team character nChar, in its second colour
+    // when the user's team nPlayer has that character in its first one.
+    static inline void SetOpponentChar(TournamentWork::TEAM_INFO &team, long nPlayer, long nSlot, long nChar)
+    {
+        unsigned char nColor = 0;
+        for (long i = 0; i < 3; i++) {
+            if (TournamentWork::GetTeamInfo(nPlayer).aCharType[i] == nChar) {
+                if ((TournamentWork::GetTeamInfo(nPlayer).aCharFlag[i] & 3) == 0) {
+                    nColor = 1;
+                }
+                break;
+            }
+        }
+        team.aCharType[nSlot] = nChar;
+        team.aCharFlag[nSlot] = (team.aCharFlag[nSlot] & 0xF8) | nColor;
+    }
+
+    // The end of demo TOURNAMENT_INFO::nDemoType: chains the story demos
+    // and sets up what comes after them (the next cup, the unlocks, the
+    // match against the star cup's last team).
+    void CTournamentStep::CtorStateDemoEnd()
+    {
+        m_UnkD9 = 0;
+        switch (TournamentWork::GetTournamentInfo().nDemoType) {
+        case 1000:
+        case 1001:
+        case 1010:
+        case 1011:
+        case 1100:
+        case 1101:
+        case 1110:
+        case 1111:
+        case 1200:
+        case 1201:
+        case 1210:
+        case 1211:
+        case 1300:
+        case 1301:
+        case 1310:
+        case 1311:
+            _EndTutorialStep(TournamentWork::GetTournamentInfo().nExitStep, 1);
+            m_nSubStep = 99;
+            break;
+        case 80:
+        case 81:
+            CTournament::SetCup(3);
+            CTournament::SetState(0x1B);
+            TournamentWork::TournamentInfo().nDemoType = 110;
+            TournamentWork::TournamentSave();
+            m_nSubStep = 10;
+            break;
+        case 60:
+            CTournament::SetCup(3);
+            TournamentWork::TournamentInfo().nDemoType = -1;
+            CTournament::SetState(0xF);
+            if (TournamentWork::GetTournamentInfo().nBgm >= 0) {
+                PlayBgm(TournamentWork::GetTournamentInfo().nBgm);
+            }
+            EvDemoVs::CopyResMode(0);
+            break;
+        case 50:
+            _EndDemoStep(71);
+            break;
+        case 110:
+            if (CTournament::IsMixTournamentGame()) {
+                _EndDemoStep(131);
+            } else {
+                _EndDemoStep(130);
+            }
+            break;
+        case 121:
+            _EndDemoStep(130);
+            break;
+        case 130:
+        case 131: {
+            CUnlockFlags flags;
+            flags.SetPlayerData(-1);
+            CUnlockFlags::m_nGameMode = CTournament::GetGameMode();
+            unsigned long ulMask = GetStarCupClearMask();
+            if (ulMask == 0xF && !flags.IsCup(1, 3, 5)) {
+                _EndDemoStep(140);
+            } else {
+                _SetupStarUnlock();
+                _SetClear();
+                _SetupVictoryUnlock(ulMask == 0xF);
+                _ExitStep(TournamentWork::GetTournamentInfo().nExitStep, 1);
+                m_UnkD9 = 1;
+                m_nSubStep = 99;
+            }
+            break;
+        }
+        case 140: {
+            CUnlockFlags flags;
+            flags.SetPlayerData(-1);
+            CUnlockFlags::m_nGameMode = CTournament::GetGameMode();
+            flags.SetCup(1, 3, 5, 1);
+            _SetupStarUnlock();
+            _SetClear();
+            _SetupVictoryUnlock(1);
+            _ExitStep(TournamentWork::GetTournamentInfo().nExitStep, 1);
+            m_UnkD9 = 1;
+            m_nSubStep = 99;
+            break;
+        }
+        case 10:
+            CMainStep::SetNextStep(3);
+            CTournament::SetState(0x12);
+            CTournament::SetCup(1);
+            TournamentWork::TournamentInfo().nDemoType = -1;
+            EvDemoVs::CopyResMode(0);
+            m_nSubStep = 99;
+            break;
+        case 71: {
+            // The user's team against team 8 on point 20, then as below.
+            m_UnkD0 = 7;
+            m_nMoveTeam0 = TournamentWork::GetTournamentInfo().GetPlayerTeam();
+            m_nMoveTeam1 = 8;
+            TournamentWork::MATCH_INFO &match = TournamentWork::MatchInfo(m_UnkD0);
+            match.nSideFlag0D = m_nMoveTeam0;
+            match.nSideFlag0E = m_nMoveTeam1;
+            if (CTournament::IsMixTournamentGame()) {
+                match.nFlags06 = (match.nFlags06 & 0xF8) | TournamentWork::GetTournamentInfo().aGameModeOrder[0];
+            }
+            TournamentWork::TEAM_INFO &team = TournamentWork::TeamInfo(m_nMoveTeam1);
+            for (long i = 0; i < 3; i++) {
+                team.aCharType[i] = -1;
+                team.aCharFlag[i] = 0;
+            }
+            team.fUnk00[0] = 0.0f;
+            team.fUnk00[1] = 0.0f;
+            team.fUnk00[2] = 0.0f;
+            team.fUnk00[3] = 0.0f;
+            team.nTurn = 0;
+            team.m_Unk21 = 0;
+            team.nFlag22 = 0;
+            team.nGameMode = -1;
+            team.aRoute[0] = 0;
+            team.aRoute[1] = 0;
+            team.aRoute[2] = 0;
+            team.aRoute[3] = 0;
+            team.nPoint = 20;
+            team.nTargetPoint = 20;
+            _Restore();
+        }
+            // fall through
+        default: {
+            // The match against the star cup's last team: its members are
+            // set here (inside the loop, as in the game).
+            long nPlayer = TournamentWork::GetTournamentInfo().GetPlayerTeam();
+            const TournamentWork::MATCH_INFO &match = TournamentWork::GetMatchInfo(m_UnkD0);
+            signed char nTeam = match.nSideFlag0D != nPlayer ? match.nSideFlag0D : match.nSideFlag0E;
+            TournamentWork::TEAM_INFO &team = TournamentWork::TeamInfo(nTeam);
+            for (long i = 0; i < 3; i++) {
+                if (team.aCharType[i] != -1) {
+                    team.aCharType[i] = -1;
+                    team.aCharFlag[i] = 0;
+                }
+                SetOpponentChar(team, nPlayer, 0, 14);
+                if (CTournament::GetTeamMax() == 3) {
+                    SetOpponentChar(team, nPlayer, 2, 17);
+                }
+                SetOpponentChar(team, nPlayer, 1, 15);
+            }
+            _SetupVsScene(1);
+            _CleanAfterErase();
+            CTournament::SetState(0x18);
+            EvDemoVs::CopyResMode(2);
+            if (CTournament::IsMixTournamentGame()) {
+                TournamentWork::TournamentInfo().nDemoType = 81;
+            } else if (GetStarCupClearMask() != 0xF) {
+                TournamentWork::TournamentInfo().nDemoType = 121;
+            } else {
+                TournamentWork::TournamentInfo().nDemoType = 80;
+            }
+            _Backup();
+            m_nSubStep = 99;
+            break;
+        }
+        }
+    }
+
     void CTournamentStep::LoopStateDemoEnd()
     {
         CTournamentMan *pMan = CTournamentMan::GetInstance();
@@ -5252,7 +5906,7 @@ namespace msw {
     {
         _SetClear();
         _SetupVictoryUnlock(0);
-        m_UnkC7 = TournamentWork::GetTournamentInfo().m_Unk1058;
+        m_UnkC7 = TournamentWork::GetTournamentInfo().nExitStep;
         long nNext = s_aNextCup[CTournament::GetCup()];
         if (nNext == -1) {
             m_nSubStep = 2;
@@ -5278,7 +5932,7 @@ namespace msw {
             break;
         case 1:
             if (!_WaitFade()) {
-                _ExitStep(TournamentWork::GetTournamentInfo().m_Unk1058, 1);
+                _ExitStep(TournamentWork::GetTournamentInfo().nExitStep, 1);
                 ChangeState(STATE_FINALIZE);
                 m_nSubStep++;
             }

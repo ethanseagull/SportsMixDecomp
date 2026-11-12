@@ -19,12 +19,8 @@ namespace bcs {
 
             // (name guessed) Sets bits of the word at 0x1CC; the ninja's
             // copies set 0x40000 when they start to vanish.
-            void OnCloneFlag(unsigned long nBit) { m_nCloneFlag |= nBit; }
-
-        private:
-            unsigned long m_Unk1C8;     // 0x1C8
-            unsigned long m_nCloneFlag; // 0x1CC (name guessed)
-            unsigned char m_Unk1D0[0x8];
+            // (CMdlCopyBase::m_nLinkFlag, at 0x1CC)
+            void OnCloneFlag(unsigned long nBit) { m_nLinkFlag |= nBit; }
     };
 }
 

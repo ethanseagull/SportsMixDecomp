@@ -1015,6 +1015,9 @@ namespace msw {
             // DOL. (name from the DOL; what height it gives is not checked)
             float GetPosY() const;
             long GetTeamNo() const { return m_nTeamNo; }
+            // (added for DodgeF game/dodge/unit_A4AE8.cpp; meaning not
+            // known) The signed byte at 0x17B.
+            long GetUnk17B() const { return m_nUnk17B; }
             // (names guessed) Added for BasketF
             // game/basket/CCockpitBasketHarapeko.cpp, which reads both bytes
             // signed: the character number (as GetChrId, which other modules
@@ -1168,6 +1171,9 @@ namespace msw {
             int IsStepCatchDunk() const;
             // Not zero when the character holds a stocked item.
             int IsHaveStockItem() const;
+            // (DOL; added for BasketF game/basket/CComDrvBasketGame.cpp) The
+            // item kind of the stocked item, negative for none.
+            long GetStockItemType() const;
 
             // Added for BossF game/boss/CChrDrvPadBoss.cpp (names guessed).
             // Inline in the module: the pad driver reads both words directly.
@@ -1515,7 +1521,10 @@ namespace msw {
             // 0x179 (name guessed): the CChrManBoss::CreateDriver_ stores the
             // entry of SetCamIdAssign_'s table here.
             signed char m_nCamNo;
-            unsigned char m_Unk17A[0x17C - 0x17A];
+            unsigned char m_Unk17A[0x17B - 0x17A];
+            // 0x17B (meaning not known): DodgeF's CComDrvDodgeGame::CanbeSp
+            // skips characters of the other team whose byte is 1.
+            signed char m_nUnk17B;
             // 0x17C (name guessed): which human player (0 to 3) controls the
             // character; the cockpits pick the "1P" to "4P" label with it
             // when IsPadCtrl() is set. Read signed.

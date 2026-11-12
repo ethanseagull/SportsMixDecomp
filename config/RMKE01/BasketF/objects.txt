@@ -92,3 +92,6 @@ Equivalent game/basket/CcSiromaMagicCircle.cpp
 Equivalent game/basket/CcDaisyFlowerGarden.cpp
 Equivalent game/basket/unit_31D0C.cpp
 Equivalent game/basket/unit_AF3BC.cpp
+Equivalent game/basket/CComDrvBasketGame.cpp
+Equivalent game/basket/CCameraBasketGame.cpp
+Equivalent game/basket/unit_B09B4.cpp

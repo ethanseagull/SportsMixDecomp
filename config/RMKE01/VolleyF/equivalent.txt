@@ -91,7 +91,6 @@ VolleyF OnPreCreateObj__Q23msw14CStageVolley10FPCQ33msw5STAGE12MDL_GEN_RULERQ23b
 VolleyF OnTurnInit__Q23msw14CStageVolley09Fv unverified 72.0 Instruction order only: the original loads the stop time and its 60.0 factor before choosing the random direction; same calls and arguments. 72%, so not near.
 VolleyF PanelSetB_SetPanelLocalTypeSub___Q23msw14CStageVolley10Flllll near 99.1 compare operand order and an equivalent branch form
 VolleyF PlayAnim__Q23msw19CCockpitVolleyCoderFli near 99.0 register allocation only (set-count loops)
-VolleyF ScoreBoard_Loop__Q23msw19CCockpitVolleyPauseFv near 98.0 register allocation only (as CCockpitBasketPause::ScoreBoard_Loop): the original reuses the table-pointer register for the third result page, ours takes one more saved register (stmw/lmw); same loads, stores, calls and branches
 VolleyF ScoreInWait__Q23msw18CCockpitVolleyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 VolleyF ScoreIn__Q23msw18CCockpitVolleyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 VolleyF ScoreOutWait__Q23msw18CCockpitVolleyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
@@ -104,7 +103,6 @@ VolleyF SetCamParam__Q23msw17CCameraVolleyGameFv near 98.4 float register alloca
 VolleyF SetChrIcon__Q23msw14CCockpitVolleyFlllPCQ23bcs5FVEC3PCv near 99.8 register allocation only (second icon pointer r10 vs r11)
 VolleyF SetCoinSpecialAnim__Q23msw14CCockpitVolleyFli near 99.8 register allocation only
 VolleyF SetCoinValue__Q23msw18CCockpitVolleyCoinFll near 98.9 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
-VolleyF SetCountNum__Q23msw25CCockpitVolleyPauseResultFl near 99.2 registers only (as CCockpitBasketPauseResult::SetCountNum): the pane accessor and the computed show flag swap r30/r31; same instructions, order and stack frame
 VolleyF SetCountPoint__Q23msw20CCockpitVolleyResultFPlPll near 99.6 register allocation only (float temporaries of the count speed swapped, saved pane pointer r17 vs r18)
 VolleyF SetCountScore__Q23msw20CCockpitVolleyResultFPlPlll near 98.4 register allocation only (float temporaries of the count speed and the saved pane pointer/limit registers swapped)
 VolleyF SetCountText__Q23msw23CCockpitVolleyLifeGaugeFll near 98.7 register allocation only (renumbered diff is empty)

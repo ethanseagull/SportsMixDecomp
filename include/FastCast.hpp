@@ -76,4 +76,23 @@ static inline void F32ToU16(register float in, unsigned short *pOut)
 #endif
 }
 
+// Float to unsigned byte through GQR2 (unsigned 8-bit, scale 0; the value
+// saturates to 0..255), as msw::CItemBomb::LoopStateThrow in the DOL does
+// with the fuse flash brightness: `psq_st f0, 0(r3), 1, qr2` then `lbz`.
+static inline void F32ToU8(register float in, unsigned char *pOut)
+{
+#ifdef __MWERKS__
+    register unsigned char ret;
+    unsigned long tmp;
+    register unsigned long *pTmp = &tmp;
+    asm {
+        psq_st in, 0(pTmp), 1, 2
+        lbz ret, 0(pTmp)
+    }
+    *pOut = ret;
+#else
+    *pOut = (unsigned char)(in < 0.0f ? 0.0f : (in > 255.0f ? 255.0f : in));
+#endif
+}
+
 #endif /* !FASTCAST_HPP_ */

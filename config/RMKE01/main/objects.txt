@@ -29,12 +29,14 @@ Matching game/msw/CMenuPadInfo.cpp
 Matching game/msw/CStageNet.cpp
 Matching game/msw/CStage01Base.cpp
 Matching game/msw/CStgDrv.cpp
+Equivalent game/bcs/EF/CManager.cpp
 Matching game/bcs/G2D/CTexMap.cpp
 Equivalent game/msw/CDropCoinMan.cpp
 Equivalent game/msw/CGimmickMan.cpp
 NonMatching game/msw/CGame.cpp
 Equivalent game/msw/CGameVib.cpp
 Matching game/msw/menu/CStateSave.cpp
+Equivalent game/msw/menu/CMessage.cpp
 Equivalent game/msw/CCockpitResult.cpp
 Matching game/msw/CCockpitResultTime.cpp
 Equivalent game/msw/CC_DATA.cpp
@@ -50,6 +52,7 @@ Equivalent game/msw/cockpit/CMissionCount.cpp
 Matching game/msw/CEvDemoRes/_CHR_INFO.cpp
 Equivalent game/msw/CItemShellCmn.cpp
 Equivalent game/msw/CItemBanana.cpp
+Equivalent game/msw/CItemBomb.cpp
 Equivalent game/msw/CItemMushroom.cpp
 Equivalent game/msw/vm/CVMCpu.cpp
 Matching game/msw/menu/CVibEff.cpp
@@ -80,6 +83,7 @@ Equivalent game/bcs/CCameraAnmCalc.cpp
 Matching game/bcs/CListNodeBase.cpp
 Equivalent game/msw/CStgGmk_Wave.cpp
 Equivalent game/msw/CStgGmk_Case.cpp
+Equivalent game/msw/CMenuPaneAccessor.cpp
 Matching game/msw/CMenuTask.cpp
 Equivalent game/msw/CChrOptMdlObj.cpp
 Equivalent game/msw/CCockpitLayoutBase.cpp

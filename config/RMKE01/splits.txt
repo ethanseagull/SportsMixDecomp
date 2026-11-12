@@ -305,10 +305,9 @@ game/msw/CItemBanana.cpp:
 	.sdata2     start:0x805C2D20 end:0x805C2D50
 
 game/msw/CItemBomb.cpp:
-	.text       start:0x8013394C end:0x80134204
-
-game/msw/CBombExplosion.cpp:
-	.text       start:0x8013443C end:0x80134978
+	.text       start:0x8013394C end:0x80134A50
+	.data       start:0x804706A8 end:0x80470830
+	.sdata2     start:0x805C2D50 end:0x805C2DB0
 
 game/msw/CItemMushroom.cpp:
 	.text       start:0x80134A50 end:0x80135978
@@ -344,7 +343,7 @@ game/msw/CMenuLinkList.cpp:
 	.text       start:0x8013F72C end:0x8013F7C8
 
 game/msw/CMenuPaneAccessor.cpp:
-	.text       start:0x8013F838 end:0x8013FD74
+	.text       start:0x8013F838 end:0x8013FDA0
 
 game/msw/CMenuTask.cpp:
 	.text       start:0x8013FDA0 end:0x80140484
@@ -521,7 +520,13 @@ game/msw/CNpcBase.cpp:
 	.text       start:0x801AED44 end:0x801B0250
 
 game/msw/menu/CMessage.cpp:
-	.text       start:0x801B0370 end:0x801B0920
+	.text       start:0x801B0324 end:0x801B0A8C
+	.ctors      start:0x8042D22C end:0x8042D230
+	.data       start:0x804815C8 end:0x804815D8
+	.bss        start:0x804D71F8 end:0x804D7398
+	.sdata      start:0x805BFDE0 end:0x805BFDE8
+	.sbss       start:0x805C0D58 end:0x805C0D60
+	.sdata2     start:0x805C46A0 end:0x805C46B0
 
 game/msw/CNpcBossPackun.cpp:
 	.text       start:0x801B267C end:0x801B4108

@@ -207,6 +207,13 @@ namespace msw {
             // (DOL, name guessed) Clears flag 4 and changes to state 7
             // (Break).
             void ChangeStateBreak();                                   // fn_8012C1CC
+            // (DOL, names guessed; added for game/msw/CItemBomb.cpp)
+            // Turns the model's Y angle by fRate of the way to fTarget
+            // (bcs::CScnObj::RotateYRate); nothing without a model.
+            void RotateYRate(float fTarget, float fRate);              // fn_80129690
+            // Plays sound `id` at pPos, at the item's position when pPos is
+            // null; returns the sound's task handle.
+            unsigned long PlaySe(long id, const bcs::FVEC3 *pPos);     // fn_8012C214
 
             // DOL. (return types guessed from CComManVolleyRR::IsExistItemBall,
             // which tests the first and third and compares the second with a

@@ -17,6 +17,9 @@ typedef float Mtx44[4][4];
 
 // (added for game/msw/CNowLoading.cpp) An orthographic projection.
 void C_MTXOrtho(Mtx44 m, float t, float b, float l, float r, float n, float f);
+// (added for DOL game/bcs/EF/CManager.cpp) A texture projection matrix for
+// a perspective camera.
+void C_MTXLightPerspective(Mtx m, float fovY, float aspect, float scaleS, float scaleT, float transS, float transT);
 
 void PSMTXCopy(const Mtx src, Mtx dst);
 void PSMTXIdentity(Mtx m);

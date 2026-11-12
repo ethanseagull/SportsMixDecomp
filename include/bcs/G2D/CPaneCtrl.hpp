@@ -30,6 +30,9 @@ namespace bcs {
                 // result.
                 // The object of the pane called pName, or null.
                 CPaneObj *GetChildPaneObj(const char *pName);
+                // (DOL 0x8003C0FC, name guessed from msw::CMenuPaneAccessor::GetPaneObj(Pane *),
+                // which tail-calls it) The child pane object holding pPane, or null.
+                CPaneObj *GetChildPaneObj(nw4r::lyt::Pane *pPane);
                 // Makes the object that drives pPane; null on failure.
                 CPaneObj *CreatePaneObj(nw4r::lyt::Pane *pPane);
                 // Hangs pPaneObj's pane under rParent's.

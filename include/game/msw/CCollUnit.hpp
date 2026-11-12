@@ -18,6 +18,8 @@ namespace msw {
             void SetCollKind(long kind);
             void SetCollType(long type);
             void SetPos(const bcs::FVEC3 &rPos);
+            // (msw::CBombExplosion::Create_)
+            void SetAtkType(unsigned long type);
             // (name guessed; the DOL's fn_80106870, a switch on the shape at
             // 0x13) Recomputes the bounding box; CBodyCollision::CalcAABBAll.
             void CalcAABB();

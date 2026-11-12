@@ -29,6 +29,8 @@ namespace nw4r {
         void *List_GetNext(const List *pList, const void *pObj);
         // The last object when pObj is null.
         void *List_GetPrev(const List *pList, const void *pObj);
+        // The object at position index (from the head), or null.
+        void *List_GetNth(const List *pList, unsigned short index);
 
         // The number of objects. Inline, with a null check that reports
         // file "list.h", line 210 (VolleyF game/volley/CcDaisyFlowerGarden.cpp

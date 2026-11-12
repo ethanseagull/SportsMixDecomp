@@ -19,11 +19,18 @@ namespace msw {
             // Out of line (fn_80107034, fn_80107118; msw::CAtkCollision
             // builds arrays of them).
             CCollAtkUnit();
+            // (fn_801070AC; arguments passed on to CCollUnit's constructor,
+            // meanings not known) msw::CBombExplosion::Create_ passes
+            // (4, 0, the model handle).
+            CCollAtkUnit(long, long, unsigned long);
             virtual ~CCollAtkUnit();
 
             // Called when the unit hits a body; pArg is what was registered.
             typedef void (*AttackHitCallback)(const CCollAtkUnit *pAtk, const CCollBodyUnit *pBody,
                                               const bcs::FVEC3 &rPos, unsigned long flag, void *pArg);
+
+            // (fn_80107184) Sets m_pAttackHitCallback and m_pAttackHitArg.
+            void SetAttackHitCallback(AttackHitCallback pFunc, void *pArg);
 
             // CCollAtkUnit derives from CCollUnit in the DOL (BasketF's
             // CChrCoreBasketKinopio::UpdateCollAtk_ calls CCollUnit::SetPos
@@ -90,6 +97,12 @@ namespace msw {
 
             long GetOwnerKind() const { return m_nOwnerKind; }
             unsigned long GetAtkKind() const { return (m_nAtkType >> 8) & 0xFF; }
+            // (name guessed; inline in msw::CBombExplosion::Create_)
+            void SetUnk9C(long n9C, long n9E)
+            {
+                m_nUnk9C = n9C;
+                m_nUnk9E = n9E;
+            }
     };
 }
 

@@ -33,11 +33,22 @@ namespace nw4r {
                 // Added for BossF game/boss/CCockpitBossCoder.cpp.
                 const Size &GetFontSize() const { return mFontSize; }
                 void SetFontSize(const Size &rSize) { mFontSize = rSize; }
+                // Added for game/msw/CMenuPaneAccessor.cpp: the number of
+                // characters in the string (name guessed).
+                unsigned short GetStringLength() const { return mTextLen; }
 
             private:
                 wchar_t *mTextBuf;         // 0xD8
                 unsigned char m_UnkDC[0xC];
                 Size mFontSize;            // 0xE8 (name from the ogws description)
+                // Added for game/msw/CMenuPaneAccessor.cpp; offsets from
+                // tools/decomp/layout.py (u16 at 0xFC and 0xFE, u8 at 0x100
+                // and 0x101), names from the ogws description.
+                unsigned char m_UnkF0[0xC];
+                unsigned short mTextBufBytes; // 0xFC
+                unsigned short mTextLen;      // 0xFE
+                unsigned char mTextPosition;  // 0x100
+                unsigned char m_Unk101[3];
         };
     }
 }

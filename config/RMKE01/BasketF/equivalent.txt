@@ -1,5 +1,12 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
+BasketF ActInterrupCommonThrowItem___Q23msw17CComDrvBasketGameFv near 97.5 97.5: stack slots/regs; ours adds a redundant entry guard before the rotated ThrowItem loop (same iterations)
+BasketF ActInterrupGimmick___Q23msw17CComDrvBasketGameFv near 99.4 registers plus stack slots of the XZ-distance helper temporaries
+BasketF ActInterrupLooseBall___Q23msw17CComDrvBasketGameFv near 99.2 registers plus stack slots of the XZ-distance helper temporaries
 BasketF ActInterrup__Q23msw19CNpcGhostBasketBaseFv near 94.9 94.9%: dead FsmqWrap(-1) compare code in two pushes, doubled cntlzw on two flag tests, load order.
+BasketF ActInterruptDefense___Q23msw17CComDrvBasketGameFv near 97.7 97.7: regs; equivalent branch layout of the nRoot==0x3E exit; m_nMyTeam loaded before CComMan::GetInstance()
+BasketF ActInterruptItemShootCheck___Q23msw17CComDrvBasketGameFv near 99.8 register numbering / scheduling only
+BasketF ActInterruptOffense___Q23msw17CComDrvBasketGameFv near 97.9 97.9: regs/stack slots; original dispatches stage 7/10 through cr1 with a redundant bne cr1; commutative fmuls operand order
+BasketF ActInterrupt__Q23msw17CComDrvBasketGameFv near 99.4 register numbering / scheduling only
 BasketF AddCoinValue__Q23msw18CCockpitBasketCoinFlll near 99.0 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 BasketF AllDispPlayerIcon___Q23msw13CChrManBasketFv near 99.4 stack slots of the FVEC3 temporaries differ only (DispPlayerIconSetCore_ inlined)
 BasketF AllReset___Q23msw13CChrManBasketFv near 96.0 register allocation/instruction order only (lis of a float constant scheduled one slot later)
@@ -207,6 +214,13 @@ BasketF SubStateArtsShotSetTrickJumpParam___Q23msw14CChrCoreBasketFPQ33msw14CChr
 BasketF SubStateArtsShotSetTrickMoveParam___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICKl near 99.5 register choice only (the squared distance and the frame clamp in swapped FPRs)
 BasketF SubStateDamageCtorBurn___Q23msw14CChrCoreBasketFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 94.9 94.9: SetCondition argument setup scheduled before the branch instead of after; same values
 BasketF SubStateDamageLoopDizzy___Q23msw14CChrCoreBasketFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 99.3 99.3: register numbering plus inline FsmqPushState reloads queue tail just stored by FsmqCutNext (same value)
+BasketF SubThkMainOffenseGoDunkAreaforLuiman___Q23msw17CComDrvBasketGameFv near 99.3 registers plus stack slots of the XZ-distance helper temporaries
+BasketF ThkMainDefenseStar___Q23msw17CComDrvBasketGameFv near 99.6 register numbering / scheduling only
+BasketF ThkMainDefense___Q23msw17CComDrvBasketGameFv near 98.6 registers plus stack slots of the XZ-distance helper temporaries
+BasketF ThkMainJumpBall___Q23msw17CComDrvBasketGameFv near 97.9 register numbering / scheduling only
+BasketF ThkMainLooseBall___Q23msw17CComDrvBasketGameFv near 99.9 register numbering / scheduling only
+BasketF ThkMainOffense___Q23msw17CComDrvBasketGameFv near 98.6 registers, stack slots of the XZ-distance helper temporaries, and the two pure getters GetBaseShootPoint/GetBaseShootPointToGimmick called in swapped order
+BasketF ThkMain__Q23msw17CComDrvBasketGameFv near 99.5 register numbering / scheduling only
 BasketF UpDateCollBody___Q23msw19CNpcGhostBasketBaseFv near 92.7 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF UpDateCross2Tap__Q23msw16CChrDrvPadBasketFv unverified 96.6 Float constants addressed per literal as in the original (pool-off stand-in in the .cpp). Left: the original has extra field loads (likely reloads ours keeps in registers) and a few instructions more; OnMsg has an empty case 9 in its compare tree, SubOffDribble an unused compare of MethdRDB's result; MethdPass a 0x10 bigger frame; not proven harmless.
 BasketF UpDateCrownDisp__Q23msw27CGameBasketHungryBossPackunFv near 98.3 register allocation only: the leading-team loop's counter, best score and team mask take other registers (and two li are scheduled differently); same logic

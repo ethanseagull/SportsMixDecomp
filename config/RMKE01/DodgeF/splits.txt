@@ -451,11 +451,15 @@ game/dodge/unit_A40EC.cpp:
 	.bss        start:0x00000C18 end:0x00000C20
 
 game/dodge/unit_A4AE8.cpp:
-	.text       start:0x000A4AE8 end:0x000A6CBC
+	.text       start:0x000A4AE8 end:0x000A5464
 	.ctors      start:0x000000AC end:0x000000B0
-	.rodata     start:0x000067D8 end:0x00006850
-	.data       start:0x00020F38 end:0x00020F90
+	.rodata     start:0x000067D8 end:0x000067F8
 	.bss        start:0x00000C20 end:0x00000C28
+
+game/dodge/unit_A5464.cpp:
+	.text       start:0x000A5464 end:0x000A6CBC
+	.rodata     start:0x000067F8 end:0x00006850
+	.data       start:0x00020F38 end:0x00020F90
 
 game/dodge/CCameraDodgeGame.cpp:
 	.text       start:0x000A6CBC end:0x000AA968

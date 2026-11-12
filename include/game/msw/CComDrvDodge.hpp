@@ -139,6 +139,81 @@ namespace msw {
             virtual void OnAlarm1(long nAlarm);
             virtual void OnAlarm2(long nAlarm);
 
+            // (added for game/dodge/unit_A4AE8.cpp) The other overrides
+            // defined there, and the think helpers ThkMain uses (return
+            // types guessed).
+            virtual int MethdRotateY(const bcs::FVEC3 &pos, long);
+            virtual int MethdRotateY(float fRot, long);
+            virtual int IsExistChrToTargetWorldForRunEx(const bcs::FVEC3 &pos);
+            virtual int MethdShoot();
+            virtual int MethdPass(const bcs::FVEC3 &pos);
+            virtual int MethdPass(CChrCore *pChr);
+            virtual int MethdPass(long nChr);
+            virtual void ActInterrupt();
+            virtual void ThkMain();
+
+            // (game/dodge/unit_A4AE8.cpp) What ThkMain does in each case:
+            // in the infield with the ball (and an enemy in the own court),
+            // when the other team or a team mate in or out has it; in the
+            // outfield with and without it. Each draws one action by the
+            // level's rates.
+            void ThkMain_InFieldOnBall();
+            void ThkMain_InFieldOnBall_EmMyCourt(long nChr);
+            void ThkMain_InFieldEmOnBall();
+            void ThkMain_InFieldMyTeamInOnBall();
+            void ThkMain_InFieldMyTeamOutOnBall();
+            void ThkMain_OutFieldOnBall();
+            void ThkMain_OutFieldOffBall();
+            // The shot's rate nRate raised when the locked target is down
+            // and close, kept within 0 to 1000.
+            long ShootChanceHosei(long nRate);
+
+            // (defined in the other files of the class; return types and
+            // meanings guessed from the names)
+            void ActCallJumpBall();
+            void ActCallRunRand();
+            void ActCallRunEsc();
+            void ActCallGetBall();
+            void ActCallGoBack();
+            void ActCallOutFieldGetBall();
+            void ActCallOutFieldOpposite(int);
+            void ActCallOutFieldHome();
+            void ActCallOutFieldRand();
+            void ActCallOutFieldGetQpanel();
+            void ActCallOutFieldGetDropCoin();
+            void ActCallOnballAttack(long nKind);
+            void ActCallChangeTarget();
+            void ActCallGetQPanel();
+            void ActCallGetDropCoin();
+            void ActCallCombination();
+            void ActCallThrowItem();
+            void ActCallPassSteal(long nKind);
+            void ActCallDodgeRoll(long nKind);
+            void ActCallDivingCatch();
+            void ActCallEscGimmick();
+            int IsSpMode() const;
+            int IsNoBorder() const;
+            int IsShoudGetQPanelorFallGShell() const;
+            int IsShoudGetDropCoin() const;
+            int ShoudMissDodgeRoll() const;
+            int ShoudDivingCatch() const;
+            int ShoudGetBall() const;
+            int ShoudItemThrowAndQPanel() const;
+            void UpdateStance();
+            void SetDefStanceMode(long nMode);
+            // The other team's character in the driver's court nearest to
+            // rPos, the one in the other zone to aim at, the outfield
+            // character opposite the ball (indices, negative for none); the
+            // free ball nearest (its index, negative for none; rPos is set).
+            long GetNearEmChrCoreInMyCourt(const bcs::FVEC3 &rPos) const;
+            long GetTargetChrInEmZone() const;
+            long GetNearBallOppositeChr(int);
+            long GetNearFreeBallPos(bcs::FVEC3 &rPos) const;
+            // Where in the court the ball holder is (0 to 3, negative for
+            // nowhere to throw from).
+            long Util_GetOnBallArea() const;
+            long Util_GetMaybeHitChrBall(CChrCore *pChr, float, float);
+
             // (game/dodge/unit_A40EC.cpp; defined in the other files of the
             // class, return types and meanings guessed from the names and
             // how the handlers use them)
@@ -175,16 +250,37 @@ namespace msw {
             static ActFunc g_ActFuncMap[];
 
         protected:
-            unsigned char m_Unk170[0x1F0 - 0x170];
-            // 0x1F0 (meaning not known): passed to GetLockPosValue.
+            unsigned char m_Unk170[0x1E8 - 0x170];
+            // 0x1E8, 0x1EC (set elsewhere; names guessed): a timer and its
+            // flag; ActInterrupt counts the timer down and, when it runs
+            // out, clears the flag and calls SetDefStanceMode(1).
+            float m_fDefStanceTime;
+            long m_bDefStanceTime;
+            // 0x1F0 (meaning not known): passed to GetLockPosValue. A random
+            // number from -1 to 1, drawn again by ActInterrupt every 30 to
+            // 60 frames (0x1F4 counts them down).
             float m_fUnk1F0;
-            unsigned char m_Unk1F4[0x204 - 0x1F4];
+            float m_fUnk1F0Time;    // 0x1F4
+            // 0x1F8 (name guessed): frames the ball has been free to catch
+            // without flying at the driver's team.
+            float m_fFreeBallTime;
+            unsigned char m_Unk1FC[0x204 - 0x1FC];
             // 0x204 (name guessed): set before a shot at the end of the
             // charge run, 1 for the follow-up actions 2 and 6.
             long m_nShootKind;
             unsigned char m_Unk208[0x20C - 0x208];
             long m_nUnk20C;         // 0x20C, cleared when the driver gets the ball
-            unsigned char m_Unk210[0x228 - 0x210];
+            unsigned char m_Unk210[0x214 - 0x210];
+            // 0x214, 0x21C (set elsewhere; meaning not known): a flag and a
+            // timer; ActInterrupt clears both when the timer runs out.
+            long m_nUnk214;
+            unsigned char m_Unk218[0x21C - 0x218];
+            float m_fUnk21C;
+            // 0x220, 0x224 (set elsewhere; names guessed): the pass steal
+            // and the dodge roll the driver is ready for (0 none, 1 or 2 a
+            // kind), handed to ActCallPassSteal/ActCallDodgeRoll.
+            long m_nPassStealKind;
+            long m_nDodgeRollKind;
             // 0x228 (meaning not known): cleared when the ball is caught;
             // OnAlarm2 sets it to 1 by lot unless it is negative.
             long m_nUnk228;
@@ -203,7 +299,10 @@ namespace msw {
             // 0x238 (meaning not known): passed to Util_GetNearMyTeamOuterChr
             // and set by ActCallOutFieldRunCatchPos.
             bcs::FVEC3 m_Unk238;
-            unsigned char m_Unk244[0x250 - 0x244];
+            // 0x244 (name guessed): set while the driver's character is
+            // the outfield character its team has assigned.
+            long m_bAssignOuter;
+            unsigned char m_Unk248[0x250 - 0x248];
             // 0x250 (name guessed): not zero when the driver escapes
             // gimmicks at all.
             long m_nEscGimmick;

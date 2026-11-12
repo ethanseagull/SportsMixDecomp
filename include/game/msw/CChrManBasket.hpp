@@ -109,6 +109,10 @@ namespace msw {
             CNpcGhostBasketBase *CreateGhost_(long nType, long nTeam);
             // Team nTeam's ghost; null when there is none.
             CNpcBase *GetGhost_(long nTeam);
+            // (added for game/basket/CComDrvBasketGame.cpp; guessed inline:
+            // the driver reads the member after CChrMan::GetInstance) The
+            // character whose special shot plays; null for none.
+            CChrCoreBasket *GetArtsChr() const { return m_pArtsChr; }
             // Starts the extra time (when the ghost takes the ball from the
             // team that is not the player's).
             void SetClockOverTime_();

@@ -83,7 +83,7 @@ namespace msw {
             virtual void SetCockpitSetCountDisp_(int bDisp);
             virtual void SetScoreDemoTeamScore_(long, long);
             virtual void SetScoreDemoTeamCoin_(long, long);
-            virtual void GetGoalDemoType_(long, long) const;
+            virtual long GetGoalDemoType_(long, long) const;
             virtual long GetGoalDemoTelop_(long, long, long, int) const;
             virtual void ScoreBookInitCountWork_();
             virtual void ScoreBookAddCountWork_(long, long, long);
@@ -92,7 +92,7 @@ namespace msw {
             virtual int MenuCallInterval_();
             virtual int MenuCallPause_();
             virtual float GetArtsEventFrameNum_();
-            virtual void ArtsEventLoop_();
+            virtual int ArtsEventLoop_();
 
             // The class's own virtual functions, 0x2A8-0x2C0.
             virtual void Initialize_();

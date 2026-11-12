@@ -520,6 +520,9 @@ namespace msw {
 
             static bool IsValidInstance();
             static CStageMan *GetInstance();
+            // (added for DOL game/msw/CGame.cpp; static, meaning guessed)
+            // Fades the stage's background back in.
+            static void FadeIn();
             // The default model factory of an MDL_GEN_RULE: the stage
             // instance's NewMdl_(pStage, n, rRegex).
             static CStageMdl *NewMdl(CStageMan *pStage, long n, bcs::CRegex &rRegex);

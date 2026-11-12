@@ -57,8 +57,28 @@ namespace msw {
             virtual void LoopStateDisappear();
             virtual void DtorStateDisappear();
 
-            // Sets or clears bit 1 of m_nFlag; clearing it also resets a
-            // field of the two objects at 0x80 and 0x84.
+        private:
+            // (DOL fn_800F0614..fn_800F06C4, names guessed) The state table
+            // holds pointers to these, not to the virtual hooks: each is a
+            // tail call of its hook, so a derived class's override runs.
+            // Inline: the DOL has them weak, after InitStep.
+            void CtorStateSleep_() { CtorStateSleep(); }
+            void LoopStateSleep_() { LoopStateSleep(); }
+            void DtorStateSleep_() { DtorStateSleep(); }
+            void CtorStateAppear_() { CtorStateAppear(); }
+            void LoopStateAppear_() { LoopStateAppear(); }
+            void DtorStateAppear_() { DtorStateAppear(); }
+            void CtorStateMain_() { CtorStateMain(); }
+            void LoopStateMain_() { LoopStateMain(); }
+            void DtorStateMain_() { DtorStateMain(); }
+            void CtorStateDisappear_() { CtorStateDisappear(); }
+            void LoopStateDisappear_() { LoopStateDisappear(); }
+            void DtorStateDisappear_() { DtorStateDisappear(); }
+
+        public:
+            // Sets or clears bit 1 of m_nFlag (Main then sets the view
+            // flag of the models per split screen); clearing it also resets
+            // the view flag of both models.
             void EnableViewCheck(int bEnable);
             // (DOL; BasketF's markers call it with 0 on stage 6) Sets the
             // fog index of the marker's model.
@@ -81,12 +101,18 @@ namespace msw {
             // 0x80, the marker's model (Initialize creates it with
             // new bcs::CMdlObj; null before that)
             bcs::CMdlObj *m_pMdl;
-            void *m_Unk84;         // 0x84, another of the same kind
+            // 0x84 (name guessed): the "1P" to "4P" label model of a
+            // human-controlled character, attached to m_pMdl (Initialize)
+            bcs::CMdlObj *m_pPlayerMdl;
             long m_nChr;           // 0x88, index for CChrMan::GetChrCore; negative for none
             long m_nType;          // 0x8C, third constructor argument (name guessed)
-            long m_Unk90;          // 0x90, fourth constructor argument
-            float m_Unk94;         // 0x94
-            float m_Unk98;         // 0x98
+            // 0x90, fourth constructor argument: the colour index (GetColor_);
+            // negative for the team's (Initialize fills it in)
+            long m_Unk90;
+            // (names guessed) How far the marker has come up, 0 to 1, and
+            // the phase of its pulsing while shown (radians).
+            float m_fDispRate;     // 0x94
+            float m_fWave;         // 0x98
             // 0x9C: nothing known writes it, but every module allocates its
             // derived markers (CChrMarkerBoss, Dodge, Hockey, Volley) with
             // 0xA0 bytes, and none of them adds members.

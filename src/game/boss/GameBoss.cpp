@@ -546,9 +546,9 @@ namespace msw {
         return CGame::GetArtsEventFrameNum_();
     }
 
-    void CGameBoss::ArtsEventLoop_()
+    int CGameBoss::ArtsEventLoop_()
     {
-        CGame::ArtsEventLoop_();
+        return CGame::ArtsEventLoop_();
     }
 
     // Starts camera move nType of the arts event; the first one also puts

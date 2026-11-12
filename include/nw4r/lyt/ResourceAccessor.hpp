@@ -1,6 +1,8 @@
 #ifndef NW4R_LYT_RESOURCEACCESSOR_HPP_
 #define NW4R_LYT_RESOURCEACCESSOR_HPP_
 
+#include "nw4r/ut/LinkList.h"
+
 namespace nw4r {
     namespace ut {
         class Font;
@@ -20,8 +22,9 @@ namespace nw4r {
                 virtual ut::Font *GetFont(const char *pName);
         };
 
-        // (added for game/msw/CNowLoading.cpp) A font registered with an
-        // ArcResourceAccessor under a name. 0x8C bytes.
+        // A font registered with a resource accessor under a name. Size 0x8C
+        // (what bcs::G2D::CLytResource allocates and game/msw/CNowLoading.cpp
+        // allocates). Members added for DOL game/bcs/G2D/CLayoutBase.cpp.
         class FontRefLink {
             public:
                 FontRefLink();
@@ -30,10 +33,18 @@ namespace nw4r {
                 // without a destructor would not.
                 ~FontRefLink() {}
                 void Set(const char *pName, ut::Font *pFont);
+                const char *GetFontName() const { return mFontName; }
+
+                ut::LinkListNode mLink; // 0x00
 
             private:
-                unsigned char m_Unk00[0x8C];
+                char mFontName[128];    // 0x08
+                ut::Font *mpFont;       // 0x88
         };
+
+        // (added for DOL game/bcs/G2D/CLayoutBase.cpp) One archive of a
+        // MultiArcResourceAccessor. Not mapped.
+        class ArcResourceLink;
 
         // What msw::CLytCtrl::NewArcResourceAccessor returns. 0xB0 bytes
         // (game/msw/CNowLoading.cpp allocates it).
@@ -55,6 +66,15 @@ namespace nw4r {
 
             private:
                 unsigned char m_Unk04[0xAC]; // 0x04
+        };
+
+        // (added for DOL game/bcs/G2D/CLayoutBase.cpp) An accessor over
+        // several archives.
+        class MultiArcResourceAccessor : public ResourceAccessor {
+            public:
+                void Detach(ArcResourceLink *pLink);
+                void RegistFont(FontRefLink *pLink);
+                void UnregistFont(FontRefLink *pLink);
         };
     }
 }

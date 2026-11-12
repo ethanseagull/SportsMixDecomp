@@ -80,6 +80,13 @@ namespace msw {
             // (DOL, static; return type guessed) Resets the characters' face
             // icons (HockeyF's CChrManHockey::AllReset_).
             static void InitFaceIcon();
+            // (added for DOL game/msw/CGame.cpp; static, return types
+            // guessed) Shows nCoin coins on team nTeam's counter; whether
+            // telop nObjId has played its start animation; shows or hides
+            // the special gauges.
+            static void SetTeamCoin(long nTeam, long nCoin);
+            static int IsEndOfStartAnim(long nObjId);
+            static void SetSPGaugeDispEnable(int bEnable);
             // CMenuTask::SendObjEventTrigger on the task; -1 without a task.
             static long SendObjEventTrigger(long nObjId, long nEvent, void *pParam);
             // (added for MenuF game/menu/CWiFiFrindVS.cpp) The task's result
@@ -135,6 +142,13 @@ namespace msw {
             static void CreatePointerObj(float fSortZ);
             static void RemovePointerObj();
             static CCockpitPointer *GetPointerObj();
+            // (added for DOL game/msw/CGameGuideMan.cpp; names and argument
+            // meanings guessed) The guide telop object nObjId (0x1001 or
+            // 0x1002) closes; the line message box (object 0x1015) shows
+            // the state nMode (0 to 3) and the text pText.
+            static void CloseGuideTelop(long nObjId, int);
+            static void SetLineMsgMode(int nMode);
+            static void SetLineMsgText(const wchar_t *pText);
             // (DOL fn_8013A688; name, argument meanings and
             // return type guessed) Asks pPointer for pad nPad's pointer
             // position and, when it is over a button of pMenu that

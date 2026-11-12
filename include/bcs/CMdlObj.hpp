@@ -100,6 +100,13 @@ namespace bcs {
             // Sets the depth test of every material. (parameter names
             // guessed from GXSetZMode)
             void MatSetZModeAll(unsigned char bCompare, _GXCompare func, unsigned char bUpdate);
+            // (fn_800575C4, name guessed after its neighbours
+            // MatSetZModeAll and MatSetDstAlphaAll) Sets the blend mode of
+            // every material (ResMatPix::GXSetBlendMode).
+            void MatSetBlendModeAll(_GXBlendMode mode, _GXBlendFactor src, _GXBlendFactor dst, _GXLogicOp op);
+            // (fn_8005773C, name guessed) Calls the virtual SetMatFogIdx(long);
+            // msw::CChrMarker::SetFogIdx goes through it.
+            void SetFogIdx(long nIdx);
             // The number of nodes of the model's resource.
             unsigned long GetResNodeNum() const;
             // (DOL; return type guessed) Recomputes the world matrices of

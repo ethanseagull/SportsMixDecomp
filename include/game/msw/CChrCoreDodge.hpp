@@ -303,8 +303,8 @@ namespace msw {
             virtual long GetAreaCode_(const bcs::FVEC3 &) const;       // 0xCB0, return type guessed
             virtual int CheckChargePower_();                           // 0xCB4, return type guessed
             virtual void UpdatePos_();                                 // 0xCB8, return type guessed
-            virtual int CheckQPanel_();                                // 0xCBC, return type guessed
-            virtual int CheckQPanel_(CBall *);                         // 0xCC0, return type guessed
+            virtual void CheckQPanel_();                               // 0xCBC (void: neither body sets r3)
+            virtual void CheckQPanel_(CBall *);                        // 0xCC0, return type guessed
             virtual long GetTeamItem_() const;                         // 0xCC4, return type guessed
             virtual void PushTeamItem_(long);                          // 0xCC8, return type guessed
             virtual int PopTeamItem_();                                // 0xCCC, return type guessed
@@ -632,7 +632,13 @@ namespace msw {
             void SubStateArtsShotMoveTargetMarker_(STATE_WORK_AIR_TRICK_CMN *pWork);
             void SubStateArtsShotCalcSetbackPos_(bcs::FVEC3 &rPos);
 
-            unsigned char m_Unk574[0x930 - 0x574];
+            unsigned char m_Unk574[0x644 - 0x574];
+            // 0x644, 0x648 (names guessed; Reset_ sets both, UpdateStamina
+            // counts them down): the frames before the stamina starts to
+            // charge, and before it starts to drain again.
+            float m_fStaminaChargeWait;
+            float m_fStaminaDrainWait;
+            unsigned char m_Unk64C[0x930 - 0x64C];
     };
 
     // Size 0x930.
@@ -1099,11 +1105,49 @@ namespace msw {
             virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK_CMN *); // 0xDA8
     };
 
-    // Size 0x930 (the party game "dodge or die").
+    // Size 0x930 (the party game "dodge or die"). The characters only
+    // dodge: no catching, passing, jumping, items or question panels while
+    // holding the ball; the stamina charges while running or crouching and
+    // drains otherwise. Overrides in vtable order
+    // (__vt__Q23msw23CChrCoreDodgeDodgeOrDie).
     class CChrCoreDodgeDodgeOrDie : public CChrCoreDodge {
         public:
             CChrCoreDodgeDodgeOrDie();
             virtual ~CChrCoreDodgeDodgeOrDie();
+            virtual void DispFunc();                                   // 0xC
+            virtual int CanbeShoot();                                  // 0x8B4
+            virtual int CanbeAerialShoot();                            // 0x8C8
+            virtual int CanbeAirTrick();                               // 0x8E8
+            virtual int CanbePass(CChrCore *);                         // 0x908
+            virtual int CanbePassIdx(long);                            // 0x914
+            virtual int CanbeAerialPass(CChrCore *);                   // 0x93C
+            virtual int CanbeAerialPassIdx(long);                      // 0x944
+            virtual int MethdDamage(unsigned long, float);             // 0x95C
+            virtual int MethdDamage(unsigned long, float, float, float, long, float, long, long); // 0x960
+            virtual int MethdDamage(unsigned long, float, float, float, long, float, long, long, long, long); // 0x964
+            virtual int CanbeBallCatch();                              // 0xA00
+            virtual int CanbePowerShot();                              // 0xAA0
+            virtual int CanbeDivingCatch();                            // 0xAB0
+            virtual long GetAreaCode_(const bcs::FVEC3 &) const;       // 0xCB0
+            virtual void CheckQPanel_();                               // 0xCBC
+            virtual void CheckQPanel_(CBall *);                        // 0xCC0
+            virtual long GetTeamItem_() const;                         // 0xCC4
+            virtual void PushTeamItem_(long);                          // 0xCC8
+            virtual int PopTeamItem_();                                // 0xCCC
+            virtual void ResetTeamItem_();                             // 0xCD0
+            virtual int QueryUseItem_(int);                            // 0xCD4
+            virtual CHR_CORE_DODGE::CC_PARAM_DODGE *NewCcParam_(long nHeap) const; // 0xCDC
+            virtual int IsNormalDodgeRoll_() const;                    // 0xCFC
+            virtual int IsNormalDivingCatch_() const;                  // 0xD28
+            virtual int CanbeJump(int);                                // 0xDE4
+            virtual int CanbeAutoJump();                               // 0xDE8
+            virtual void UpdateStamina(float);                         // 0xEF4
+            virtual int CanbeBallPick_() const;                        // 0xFC4
+            virtual CChrCore *Util_GetNearOuterChrExclusive(long, float, float) const; // 0x1030
+            virtual CChrCore *Util_GetNearInnerChrExclusive(long, float, float) const; // 0x1034
+            virtual int IsNeedNearAlert() const;                       // 0x10CC
+            virtual int IsLineOver_(int) const;                        // 0x10E4
+            virtual int IsForceReflect_();                             // 0x10EC
     };
 }
 

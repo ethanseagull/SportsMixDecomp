@@ -30,6 +30,10 @@ namespace msw {
         public:
             CGimmickMan(bcs::CTask *pParent);
             virtual ~CGimmickMan();
+            // (DOL, static; added for game/dodge/CChrCoreDodgeDodgeOrDie.cpp;
+            // return type and meanings of the ints guessed) Checks the
+            // question panels at rPos for team nTeam.
+            static long QPanelCheck(const bcs::FVEC3 &rPos, long nTeam, int, int, int, long *, CItem **);
             virtual void Main();
 
             virtual void Initialize_();

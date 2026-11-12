@@ -4,6 +4,8 @@
 #include <new>
 
 #include "nw4r/db/Warning.hpp"
+#include "nw4r/lyt/animation.h"
+#include "nw4r/lyt/Pane.hpp"
 #include "revolution/mem.h"
 
 // The name of this file is part of the binary: Layout::AllocMemory passes
@@ -17,30 +19,33 @@ namespace nw4r {
     namespace lyt {
 
         class ResourceAccessor;
-        class AnimTransform;
         class DrawInfo;
 
-        // Lives in the DOL. The static allocation helpers and (added for
-        // game/msw/CNowLoading.cpp) the virtuals it calls, in vtable order
-        // from 0x08; 0x10, 0x18, 0x20, 0x24 and 0x28 are not called yet and
-        // stand in with the names of the ogws description. The object is
-        // 0x20 bytes (root pane at 0x10), not described.
+        // Lives in the DOL. Size 0x20 (bcs::G2D::CLayoutDL's own members
+        // start there). Virtuals in vtable order from 0x08 (up to 0x2C added
+        // for DOL game/bcs/G2D/CLayoutBase.cpp, the constructor and 0x30 on
+        // for game/msw/CNowLoading.cpp).
         class Layout {
             public:
+                typedef ut::LinkList<AnimTransform, 4> AnimTransformList;
+
                 Layout();
-                virtual ~Layout();
-                virtual bool Build(const void *pLytRes, ResourceAccessor *pAccessor);
-                virtual AnimTransform *CreateAnimTransform();
-                virtual AnimTransform *CreateAnimTransform(const void *pAnmRes, ResourceAccessor *pAccessor);
-                virtual void Unk18();
-                virtual void BindAnimation(AnimTransform *pAnim);
-                virtual void UnbindAnimation(AnimTransform *pAnim);
-                virtual void UnbindAllAnimation();
-                virtual void Unk28();
-                virtual void SetAnimationEnable(AnimTransform *pAnim, bool bEnable);
-                virtual void CalculateMtx(const DrawInfo &rInfo);
-                virtual void Draw(const DrawInfo &rInfo);
-                virtual void Animate(unsigned long option);
+                virtual ~Layout();                                                  // 0x08
+                virtual bool Build(const void *pLytResBuf, ResourceAccessor *pAccessor); // 0x0C
+                virtual AnimTransform *CreateAnimTransform();                       // 0x10
+                virtual AnimTransform *CreateAnimTransform(const void *pAnimResBuf, ResourceAccessor *pAccessor); // 0x14
+                virtual AnimTransform *CreateAnimTransform(const AnimResource &rRes, ResourceAccessor *pAccessor); // 0x18
+                virtual void BindAnimation(AnimTransform *pAnimTrans);              // 0x1C
+                virtual void UnbindAnimation(AnimTransform *pAnimTrans);            // 0x20
+                virtual void UnbindAllAnimation();                                  // 0x24
+                virtual bool BindAnimationAuto(const AnimResource &rRes, ResourceAccessor *pAccessor); // 0x28
+                virtual void SetAnimationEnable(AnimTransform *pAnimTrans, bool bEnable); // 0x2C
+                virtual void CalculateMtx(const DrawInfo &rInfo);                   // 0x30
+                virtual void Draw(const DrawInfo &rInfo);                           // 0x34
+                virtual void Animate(unsigned long option);                         // 0x38
+
+                AnimTransformList &GetAnimTransformList() { return mAnimTransList; }
+                Pane *GetRootPane() const { return mpRootPane; }
 
                 static MEMAllocator *mspAllocator;
 
@@ -65,8 +70,11 @@ namespace nw4r {
                     return new (pMem) T();
                 }
 
-            private:
-                unsigned char mUnk04[0x1C]; // 0x04
+            protected:
+                AnimTransformList mAnimTransList; // 0x04
+                Pane *mpRootPane;                 // 0x10
+                void *mpGroupContainer;           // 0x14
+                Size mLayoutSize;                 // 0x18
         };
 
         // (the DOL's fn_8041E6C0, added for game/msw/CNowLoading.cpp)

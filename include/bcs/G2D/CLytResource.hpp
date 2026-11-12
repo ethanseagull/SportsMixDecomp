@@ -1,6 +1,15 @@
 #ifndef BCS_G2D_CLYTRESOURCE_HPP_
 #define BCS_G2D_CLYTRESOURCE_HPP_
 
+namespace nw4r {
+    namespace lyt {
+        class ArcResourceAccessor;
+        class ArcResourceLink;
+        class FontRefLink;
+        class MultiArcResourceAccessor;
+    }
+}
+
 namespace bcs {
     namespace G2D {
 
@@ -14,6 +23,18 @@ namespace bcs {
                 // Added for MenuF game/menu/CMenu.cpp (return type guessed;
                 // the menu passes 0 as the second argument).
                 void GetResourceFromDvdMan(const char *pPath, unsigned long);
+
+                // Added for DOL game/bcs/G2D/CLayoutBase.cpp (no symbols;
+                // names guessed). A new font link, kept in the list at 0x30;
+                // null when out of memory.
+                nw4r::lyt::FontRefLink *NewFontRefLink();
+                // Each deletes an object the instance made and drops it from
+                // its list (0x0C, 0x18, 0x24, 0x30). Static: they read the
+                // instance themselves and do nothing without one.
+                static void DeleteArcResourceAccessor(nw4r::lyt::ArcResourceAccessor *pAccessor);
+                static void DeleteArcResourceLink(nw4r::lyt::ArcResourceLink *pLink);
+                static void DeleteMultiArcResourceAccessor(nw4r::lyt::MultiArcResourceAccessor *pAccessor);
+                static void DeleteFontRefLink(nw4r::lyt::FontRefLink *pLink);
         };
     }
 }

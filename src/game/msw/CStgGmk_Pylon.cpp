@@ -133,9 +133,9 @@ namespace msw {
         CStgGmk_Pylon_Act *pAct = static_cast<CStgGmk_Pylon_Act *>(GetParent()->GetAct());
         bcs::CMdlObj *pMdl = GetMdlObj();
         if (pAct != 0 && pMdl != 0) {
-            float depth = pAct->GetParam_MdlRadius() / (0.5f * GetParam_OrgDepth());
-            height = pAct->GetParam_MdlHeight() / GetParam_OrgHeight();
-            pMdl->m_vScale.x = pAct->GetParam_MdlRadius() / (0.5f * GetParam_OrgWidth());
+            float depth = pAct->GetParam_MdlRadius() / (0.5f * GetMdlDepth());
+            height = pAct->GetParam_MdlHeight() / GetMdlHeight();
+            pMdl->m_vScale.x = pAct->GetParam_MdlRadius() / (0.5f * GetMdlWidth());
             pMdl->m_vScale.y = height;
             pMdl->m_vScale.z = depth;
             pMdl->CalcRootMtx();
@@ -144,17 +144,17 @@ namespace msw {
         CStgMdl::Main(rate);
     }
 
-    float CStgGmk_Pylon_Mdl::GetParam_OrgWidth() const
+    float CStgGmk_Pylon_Mdl::GetMdlWidth() const
     {
         return 1.0f;
     }
 
-    float CStgGmk_Pylon_Mdl::GetParam_OrgDepth() const
+    float CStgGmk_Pylon_Mdl::GetMdlDepth() const
     {
         return 1.0f;
     }
 
-    float CStgGmk_Pylon_Mdl::GetParam_OrgHeight() const
+    float CStgGmk_Pylon_Mdl::GetMdlHeight() const
     {
         return 1.0f;
     }

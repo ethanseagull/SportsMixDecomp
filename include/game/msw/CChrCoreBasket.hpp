@@ -28,7 +28,31 @@ namespace msw {
                 long m_nDashTurnDeg;           // 0x44
                 long m_nTurnFrame;             // 0x48
                 float m_fTurnDist;             // 0x4C
-                unsigned char m_Unk050[0x1E8 - 0x50];
+                unsigned char m_Unk050[0x10C - 0x50];
+                // 0x10C-0x170 (names guessed; game/basket/unit_38A7C.cpp): the
+                // dunk's jump height and run-up frames, and whether its run-up
+                // is counted in loops (0: timed); the same for the rebound
+                // dunk and the alley-oop (0x130: the loops of the alley-oop's
+                // kinds 1 and 3); then the lay-up's speed, the angle it turns
+                // off its target by (degrees), its motion speed, the frames it
+                // hangs at the top, its height and its jump frames.
+                float m_fDunkHeight;           // 0x10C
+                long m_nDunkFrame;             // 0x110
+                long m_bDunkLoop;              // 0x114
+                float m_fReboundDunkHeight;    // 0x118
+                long m_nReboundDunkFrame;      // 0x11C
+                unsigned char m_Unk120[0x12C - 0x120];
+                long m_nAlleyoopFrame;         // 0x12C
+                long m_bAlleyoopLoop;          // 0x130
+                float m_fAlleyoopHeight;       // 0x134
+                unsigned char m_Unk138[0x15C - 0x138];
+                float m_fLayUpSpeed;           // 0x15C
+                long m_nLayUpRotDeg;           // 0x160
+                float m_fLayUpMotSpeed;        // 0x164
+                long m_nLayUpHoldFrame;        // 0x168
+                float m_fLayUpHeight;          // 0x16C
+                long m_nLayUpJumpFrame;        // 0x170
+                unsigned char m_Unk174[0x1E8 - 0x174];
                 // 0x1E8: the frames Yoshi's smash cut holds its second step
                 // (CChrCoreBasketYoshi::CtorStateSmashCut).
                 long m_nSmashCutHoldFrame;
@@ -328,6 +352,52 @@ namespace msw {
             // The move of a special move's battle; 1 once it has nothing
             // left to move.
             int SubBattleMove_(BATTLEPARAM &rParam);
+
+            // Added for game/basket/unit_38A7C.cpp (the dunk, rebound dunk,
+            // alley-oop and lay-up states; names from the symbols, return
+            // types and meanings guessed). The works of the dunk states and
+            // of the lay-up (mapped there).
+            struct STATE_WORK_DUNK;
+            struct STATE_WORK_LAYUP;
+            // The icon of the combination (the pass to a partner who dunks
+            // it), one over each of the two characters; only the members
+            // the states call are declared.
+            class CCombinationIconBasket {
+                public:
+                    CCombinationIconBasket();
+                    virtual ~CCombinationIconBasket();
+                    void ClearIcon(int);
+                    void SetIcon();
+
+                private:
+                    unsigned char m_Unk04[0x20 - 0x4];
+            };
+            // Sets up the dunk (the run-up frames fFrame, its kind nType,
+            // the jump's height and the first motion nMot).
+            void SubStateDunkCtor_(STATE_WORK_DUNK *pWork, float fFrame, long nType, float fHeight, long nMot);
+            // Not zero when the driver turned the dunk into a lay-up.
+            int SubStateDunkCmnAskLayupBranch_(STATE_WORK_DUNK *pWork);
+            void SubStateDunkCmnLandInit_(STATE_WORK_DUNK *pWork);
+            void SubStateDunkCmnMove_(STATE_WORK_DUNK *pWork);
+            void SubStateDunkCmnHomingMove_(STATE_WORK_DUNK *pWork);
+            // (returns Util_DoJumpMove's result once the drop has started,
+            // 0 before)
+            int SubStateDunkCmnDunk_(STATE_WORK_DUNK *pWork);
+            void SubStateDunkCmnLand_(STATE_WORK_DUNK *pWork);
+            // Not zero while a dunk state is at its first step.
+            int IsStateDunkStepStart() const;
+            // The point the dunk aims at and the point it homes in on, by
+            // the frames gone and left.
+            void GetAirTrickTargetPos(bcs::FVEC3 &rTarget, bcs::FVEC3 &rMid, float fFrame, float fRest);
+            // The frames after the start of a state during which the
+            // driver's input does not change it.
+            long GetChangeStateDisableInput() const;
+            // The radius within which a running shot is taken.
+            float GetCourtRunShootSize() const;
+            void PlayLayUpEffect(int bRight);
+            // The success rate of a shot of kind nKind.
+            float Util_CalcShootRate(long nKind);
+            void SetStateCombinationPlay(int bPlay);
 
             // Overrides of CChrCore's virtuals, in vtable order (the slots of
             // __vt__Q23msw14CChrCoreBasket, read from BasketF, that name
@@ -672,7 +742,12 @@ namespace msw {
             float m_fPush1GapY;
             float m_fPush1GapZ;
             // Not mapped yet.
-            unsigned char m_Unk5A4[0x5E8 - 0x5A4];
+            unsigned char m_Unk5A4[0x5A8 - 0x5A4];
+            // 0x5A8, 0x5C8 (names guessed; game/basket/unit_38A7C.cpp): the
+            // combination icons; the alley-oop clears the first and shows
+            // the second.
+            CCombinationIconBasket m_CombIcon;
+            CCombinationIconBasket m_CombIconAlleyoop;
     };
 
     // (field names guessed; only what the character units read is mapped)

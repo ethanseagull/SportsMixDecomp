@@ -207,6 +207,19 @@ namespace msw {
             static void SendMsg(long nChr, CChrDrv::MSG_ID id, long, long, unsigned long, unsigned long);
 
         protected:
+            // (name guessed) Deletes the characters and clears their slots.
+            void DeleteChrCore_()
+            {
+                if (m_ppChrCore != 0) {
+                    for (long i = 0; i < m_nChrCoreNum; i++) {
+                        if (m_ppChrCore[i] != 0) {
+                            delete m_ppChrCore[i];
+                        }
+                        m_ppChrCore[i] = 0;
+                    }
+                }
+            }
+
             unsigned char m_Unk34[0x50 - 0x34]; // two nw4r::ut::List at 0x34 and 0x40, a word at 0x4C
             long m_nChrCoreNum;                 // 0x50, the number of characters (GetChrCoreNum)
             CChrCore **m_ppChrCore;             // 0x54, the characters (nChrMax entries)

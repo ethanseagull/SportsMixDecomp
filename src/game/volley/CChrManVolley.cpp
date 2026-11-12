@@ -30,14 +30,7 @@ CChrMan *CChrManVolley::CreateInstance(bcs::CTask *pParent)
 
 CChrManVolley::~CChrManVolley()
 {
-    if (m_ppChrCore != 0) {
-        for (long i = 0; i < m_nChrCoreNum; i++) {
-            if (m_ppChrCore[i] != 0) {
-                delete m_ppChrCore[i];
-            }
-            m_ppChrCore[i] = 0;
-        }
-    }
+    DeleteChrCore_();
 }
 
 void CChrManVolley::Create_()

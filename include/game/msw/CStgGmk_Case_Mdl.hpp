@@ -32,14 +32,14 @@ namespace msw {
             // (the DOL name; a debug draw like
             // msw::CStgGmk_Pinball_Mdl::DrawDebug).
             virtual void Disp(long nView);                            // 0x124
-            // (names guessed) The case's type (the actor's
+            // The model index (the actor's
             // GetParam_MdlIdx at a respawn).
-            virtual void SetType(long type) { m_nType = type; }       // 0x128
-            virtual long GetType() const { return m_nType; }          // 0x12C
+            virtual void SetMdlIdx(long idx) { m_nMdlIdx = idx; }     // 0x128
+            virtual long GetMdlIdx() const { return m_nMdlIdx; }      // 0x12C
 
         private:
             bcs::CScnObj *m_pDebugObj; // 0x12C (never set in the DOL)
-            long m_nType;              // 0x130
+            long m_nMdlIdx;            // 0x130
     };
 }
 

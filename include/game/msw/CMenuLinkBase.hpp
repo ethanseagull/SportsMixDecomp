@@ -2,6 +2,7 @@
 #define CMENULINKBASE_HPP_
 
 namespace msw {
+    class CMenuTask;
 
     // Size 0x1C. Base of every menu class made by newMenuClass<T>(long).
     // Member names are guesses. Main and SendEvent are pure; the four after
@@ -26,10 +27,19 @@ namespace msw {
 
             unsigned long m_Unk00; // 0x00, not set by the constructor
             unsigned long m_Unk04; // 0x04, not set by the constructor
-            unsigned long m_Unk08; // 0x08
+            // 0x08: CMenuTask::ModListMainLoop turns 1 into 2 and deletes
+            // the object at 2 (compared signed in the DOL).
+            long m_Unk08;
             long m_nId;            // 0x0C, the constructor argument
-            unsigned long m_Unk10; // 0x10
-            unsigned long m_Unk14; // 0x14
+            // 0x10: the task it was added to (CMenuTask::AddObj); see
+            // GetParentPtr.
+            CMenuTask *m_Unk10;
+            // 0x14: pause count (CMenuTask::SetPauseObj); Main runs only
+            // at 0 (compared signed in the DOL).
+            long m_Unk14;
+
+            // (symbol in a module; return type guessed) The task at 0x10.
+            CMenuTask *GetParentPtr() { return m_Unk10; }
 
             // vptr at 0x18
             virtual ~CMenuLinkBase() {}

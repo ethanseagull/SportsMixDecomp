@@ -136,6 +136,11 @@ namespace msw {
             void ScoreTop_In();
             void ScoreTop_Loop();
             void ScoreTop_Out();
+            // (added for game/menu/CScoreBook.cpp) The steps of the score
+            // book's record pages (SelectMenu::CScoreBook).
+            void ScoreBook_In();
+            void ScoreBook_Loop();
+            void ScoreBook_Out();
 
             // Added for MenuF game/menu/CPlayMode.cpp (return types guessed
             // where the callers drop the result).
@@ -265,6 +270,17 @@ namespace msw {
             void WifiTop_In();
             void WifiTop_Loop();
             void WifiTop_Out();
+
+            // Added for MenuF game/menu/CWiFiTopA.cpp (return types and
+            // argument names guessed). The steps of the Wi-Fi top screen
+            // shown after connecting (SelectMenu::CWiFiTopA), the help
+            // line for button nBtnKindId, and the connection's own steps:
+            // 1 once connected, -1 or -2 on failure, 0 while it goes on.
+            void WifiConnect_In();
+            void WifiConnect_Loop();
+            void WifiConnect_Out();
+            void WifiConnect_TopLineMess(long nBtnKindId);
+            long WifiConnectStep();
 
             // Added for MenuF game/menu/CPlusMinus.cpp (defined there; the
             // return types and argument names are guesses). Whether pad
@@ -706,7 +722,11 @@ namespace msw {
             // A copy of the friend's name, for the message windows.
             wchar_t m_FriendNameWork[0xC];
         private:
-            unsigned char m_Unk6F0[0x8];     // 0x6F0
+            unsigned char m_Unk6F0[0x4];     // 0x6F0
+        public:
+            // 0x6F4. (added for game/menu/CWiFiTopA.cpp; name guessed) The
+            // step of WifiConnectStep.
+            unsigned long m_nWifiConnectStep;
         public:
             // 0x6F8. (added for game/menu/CFriendCode.cpp; name guessed)
             // The Wi-Fi friend roster, taken from the connection by
@@ -729,7 +749,10 @@ namespace msw {
         public:
             CSave::PlayerData *m_pPlayerData; // 0x710, CSave::GetPlayerData(-1)
         private:
-            unsigned char m_Unk714[0x48];    // 0x714
+            // 0x714. (added for game/menu/CWiFiTopA.cpp; name guessed)
+            // What WifiConnectStep gives bcs::dwc::CDwc::SetOwnStatusAppData.
+            unsigned char m_OwnStatusAppData[0x44];
+            unsigned char m_Unk758[0x4];     // 0x758
         public:
             // Size 0x1EC. (added for game/menu/CWiFiGame.cpp; names
             // guessed) What each side of a friend match sends the other
@@ -827,7 +850,15 @@ namespace msw {
             // second message.
             unsigned char m_nFriendVSMessage;
         private:
-            unsigned char m_Unk98D[0x73];    // 0x98D
+            unsigned char m_Unk98D[0x3];     // 0x98D
+        public:
+            // 0x990. (added for game/menu/CWiFiTopA.cpp; name guessed) Set by
+            // WifiConnect_In when the player has no friend code yet: the
+            // first connection, with the new-user messages, and
+            // WifiConnectStep clears the player's public data.
+            long m_bWifiNewUser;
+        private:
+            unsigned char m_Unk994[0x6C];    // 0x994
         public:
             long m_UnkA00;                   // 0xA00
             // 0xA04, 0xA08. (names guessed; added for
@@ -858,7 +889,11 @@ namespace msw {
             // player and its own choice was dropped.
             long m_bCharSelCancel[4];
         private:
-            unsigned char m_UnkA34[0x18];    // 0xA34
+        public:
+            // 0xA34. (added for game/menu/CWiFiTopA.cpp; name guessed) The
+            // second player's name; WifiConnectStep calls
+            // WiFi_Get2PMiiName and logs in with this.
+            wchar_t m_Wifi2PName[0xC];
         public:
             // 0xA4C. (name guessed; added for game/menu/unit_6EE84.cpp)
             // Frames each entry waits after its random draw before the
@@ -870,7 +905,13 @@ namespace msw {
             // it has stopped.
             long m_bEntryCameraWait;
         private:
-            unsigned char m_UnkA60[0x8];     // 0xA60
+        public:
+            // 0xA60. (added for game/menu/CWiFiTopA.cpp; name guessed) The
+            // button the Wi-Fi top screen's cursor was on, put back when a
+            // window opened from it is closed.
+            long m_nWifiTopBtnKindId;
+        private:
+            unsigned char m_UnkA64[0x4];     // 0xA64
         public:
             // 0xA68. (added for game/menu/CCourtTab.cpp) When non-zero,
             // CCourt does not pass its events on to menu object 1.
@@ -902,6 +943,9 @@ namespace msw {
     // (added for game/menu/CPlayerSelect.cpp) The text of message nIndex
     // in message group pGroup.
     const wchar_t *GetMessageString(const char *pGroup, long nIndex);
+    // (added for game/menu/CWiFiTopA.cpp; return type guessed) The index
+    // of message pLabel in message group pGroup.
+    short GetMessageLabelIndex(const char *pGroup, const char *pLabel);
 
     // (added for game/menu/CTeam.cpp) Returns
     // CSelectMenuLayoutBase::s_DefaultOutAnimOverTime.

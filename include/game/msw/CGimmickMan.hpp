@@ -17,6 +17,7 @@ namespace msw {
     class CItem;
     class CItemMan;
     class CQPanel;
+    class CStgGmk_Karon;
 
     // The stage gimmicks' manager. A DOL class, size 0x40 (the constructor
     // calls bcs::CTask's with priority 0x13 and clears the three pointers).
@@ -88,7 +89,7 @@ namespace msw {
             virtual void ItemExParamSet_PThrowFrame_(long, float);
             virtual void ItemExParamSet_ExplodeRange_(long, float);
             virtual void StgGmkCreate_Bubble_(const bcs::FVEC3 &);
-            virtual void StgGmkCreate_Karon_(const bcs::FVEC3 &);
+            virtual CStgGmk_Karon *StgGmkCreate_Karon_(const bcs::FVEC3 &rPos); // a new karon at rPos
             virtual void EffectCoinGetCreate_(const bcs::FVEC3 &, DROP_COIN::CoinType);
             virtual void EffectCoinScoreCreate_(const bcs::FVEC3 &, const bcs::FVEC3 &, long);
             virtual long FloorHitCheck_(const bcs::FVEC3 &, long);
@@ -121,6 +122,9 @@ namespace msw {
             // (DOL, static; added for game/msw/CStgGmk_Wave.cpp) The
             // instance's CreateDriftItem_; null without an instance.
             static CItem *CreateDriftItem(long nType, const bcs::FVEC3 &rMin, const bcs::FVEC3 &rMax, float, float);
+            // (DOL fn_8012DFFC, static; added for game/msw/CStgGmk_Case.cpp)
+            // The instance's StgGmkCreate_Karon_; null without an instance.
+            static CStgGmk_Karon *StgGmkCreate_Karon(const bcs::FVEC3 &rPos);
             // DOL, static: AllReset_ on the instance.
             static void AllReset();
             // (DOL, static; added for BasketF

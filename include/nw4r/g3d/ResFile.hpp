@@ -66,6 +66,9 @@ namespace nw4r {
                 // the Has functions guessed (the caller tests a full word).
                 void *GetExternalData(const char *pName) const;
                 ResMdl GetResMdl(int index) const;
+                // (DOL GetResMdl__Q34nw4r3g3d7ResFileCFUl; msw::CChrOptTask's
+                // Create by index calls this one)
+                ResMdl GetResMdl(unsigned long index) const;
                 ResAnmClr GetResAnmClr(int index) const;
                 ResAnmTexSrt GetResAnmTexSrt(int index) const;
                 ResAnmTexPat GetResAnmTexPat(int index) const;

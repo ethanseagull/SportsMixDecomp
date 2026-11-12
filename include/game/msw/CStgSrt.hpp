@@ -160,6 +160,13 @@ namespace msw {
                 m_VelMin = min;
                 m_nFlagC8 |= 1;
             }
+            // (added for game/msw/CStgGmk_Case.cpp) The same limit on all
+            // three axes.
+            void SetVelLimit(float limit)
+            {
+                bcs::FVEC3 max(limit, limit, limit);
+                SetVelLimit(max);
+            }
             // The run of the trolley: StopAccel clears flag 4 and the
             // vectors at 0xF0 and 0xFC; SetLocalVel sets a local velocity
             // and turns it into the world velocity at 0xD8 by the

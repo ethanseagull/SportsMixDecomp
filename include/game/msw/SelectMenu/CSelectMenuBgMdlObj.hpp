@@ -22,6 +22,8 @@ namespace msw {
                 // game/menu/CBgMdl.cpp (it reads that file's node names).
                 inline void StartMove(float fFrames, long nState, unsigned char nFlag);
 
+                virtual ~CSelectMenuBgMdlObj();
+
             private:
                 float m_fMoveTime;            // 0x1C8
                 float m_fMoveTimer;           // 0x1CC

@@ -33,7 +33,6 @@ TourF SetMoveRoute__Q23msw14CTournamentManFliPUslfif near 96.6 the unit's -1.0f 
 TourF Set__Q23msw27CCockpitTournamentTelopLogoFv near 99.1 99.1%, schedule only: saved registers for the pane-link pointer, child count and parent pane in the reparenting loop are assigned differently; same instructions otherwise
 TourF Set__Q23msw31CCockpitTournamentMenuWinTrophyFv near 98.1 98.1%. Instruction for instruction the same as the original once the saved registers r24-r31 are masked: only which saved register holds which value differs (original: part r31, CLytCtrl/list r30, this r29; ours: list r31, this r30, part and CLytCtrl r26). No effect on behaviour.
 TourF SetupChrModelSub__Q23msw14CTournamentManFlli near 93.5 loop index strength-reduced instead of added each pass; same addresses
-TourF SetupGame__Q23msw14TournamentRuleFPQ23msw9CTmScriptlllli near 100.0 Only the addresses of wide string literals differ: the original string pool starts with an unreferenced L"" and L"\n" (6 bytes) that our compile emits later, so each string offset is 6 higher in the original; same strings, same code. Also the 1440.0f constant sits after the function's static tables in our .rodata (before them in the original), so its lfs offset differs; same value.
 TourF SetupInitial__Q23msw9CTmScriptFPQ23msw16CTmScriptHandler near 97.8 register allocation/instruction order only
 TourF SetupMatch__Q23msw9CTmScriptFlll near 99.9 register allocation/instruction order only
 TourF SetupSelect__Q23msw14CTournamentManFPPQ23msw10CRouteBaseUcPCUclllfff near 93.6 register choice and instruction order only
@@ -41,7 +40,6 @@ TourF TimerEvent__Q23msw27CTournamentRouteMan_Stage32FllfUli near 99.0 case 0x13
 TourF TimerEvent__Q23msw27CTournamentRouteMan_Stage33FllfUli near 98.5 register and instruction order only, mostly the inlined point-offset conversions; regs search no gain in 24 tries
 TourF UpdateFrame__Q23msw14CTournamentManFf near 97.9 registers and order in the inlined Lerp subtractions, operand order of one fmadds
 TourF UpdateFrame__Q23msw18CEvMoveActTmBigGunFRCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 98.6 the null-route early return is one beq instead of bne over an unconditional b (equivalent branch form); nested and local-variable forms tried
-TourF _BuildMissionMessage__Q23msw14TournamentRuleFRQ33msw14TournamentWork9RULE_INFOPCwi near 98.9 Only the addresses of wide string literals differ: the original string pool starts with an unreferenced L"" and L"\n" (6 bytes) that our compile emits later, so each string offset is 6 higher in the original; same strings, same code.
 TourF _CheckUnlockStage__Q23msw9CTmScriptFl near 98.4 register allocation/instruction order only
 TourF _Init__Q23msw14CTournamentManFl near 99.8 two FVEC3 temporaries and locals in swapped stack slots
 TourF _OpSysCallCreateTeamMission__Q23msw9CTmScriptFv near 89.3 local array 4 bytes higher on the stack, repeated nNum>0 test folded, registers
@@ -67,10 +65,6 @@ TourF _OpSysCallSetRouteWrite__Q23msw9CTmScriptFv near 94.5 original re-reads th
 TourF _OpSysCallSetRuleItem__Q23msw9CTmScriptFv near 99.2 register allocation/instruction order only
 TourF _OpSysCallStockRelayPoint__Q23msw9CTmScriptFv near 91.0 0xFF fill and copy loop unrolled differently; same stores in same order
 TourF _OpSysCallUnlockOpen__Q23msw9CTmScriptFv near 97.2 register allocation/instruction order only
-TourF _SetupGameBasketScript__Q23msw14TournamentRuleFRQ33msw14TournamentRule6_PARAMi near 99.9 Only the addresses of wide string literals differ: the original string pool starts with an unreferenced L"" and L"\n" (6 bytes) that our compile emits later, so each string offset is 6 higher in the original; same strings, same code.
-TourF _SetupGameDodgeScript__Q23msw14TournamentRuleFRQ33msw14TournamentRule6_PARAMi near 100.0 Only the addresses of wide string literals differ: the original string pool starts with an unreferenced L"" and L"\n" (6 bytes) that our compile emits later, so each string offset is 6 higher in the original; same strings, same code.
-TourF _SetupGameHockeyScript__Q23msw14TournamentRuleFRQ33msw14TournamentRule6_PARAMi near 99.9 Only the addresses of wide string literals differ: the original string pool starts with an unreferenced L"" and L"\n" (6 bytes) that our compile emits later, so each string offset is 6 higher in the original; same strings, same code.
-TourF _SetupGameVolleyScript__Q23msw14TournamentRuleFRQ33msw14TournamentRule6_PARAMi near 100.0 Only the addresses of wide string literals differ: the original string pool starts with an unreferenced L"" and L"\n" (6 bytes) that our compile emits later, so each string offset is 6 higher in the original; same strings, same code.
 TourF _ShipAnimNodeAp__Q23msw27CTournamentRouteMan_Stage33FUllfUlli near 98.7 register choice and the order of the int-to-float stack temporaries in the inlined point-view offset; regs search no gain
 TourF _ShipAnimNodeCamera__Q23msw27CTournamentRouteMan_Stage33FUllf near 97.3 register choice and the order of the int-to-float stack temporaries in the inlined point-view offset; regs search no gain
 TourF _ShipAnimNode__Q23msw27CTournamentRouteMan_Stage33FUllfUlli near 98.6 register choice and the order of the int-to-float stack temporaries in the inlined point-view offset; regs search no gain

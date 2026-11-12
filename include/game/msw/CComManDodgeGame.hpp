@@ -16,6 +16,10 @@ namespace msw {
             // Not zero when pChr's ball is fully charged (meaning guessed
             // from the name).
             static int IsBallChargeMax(const CChrCore *pChr);
+            // (added for game/dodge/unit_D7800.cpp; meaning of the int
+            // arguments not known) A random infield character of team nTeam,
+            // zero for none.
+            static CChrCore *GetInnerChrCoreRand(long nTeam, int, int);
     };
 }
 

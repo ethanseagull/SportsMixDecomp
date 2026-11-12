@@ -183,6 +183,9 @@ namespace msw {
             // with a result.
             void *EntryAct(long nAct);
             void ReturnAct(long nRet);
+            // (DOL; added for HockeyF game/hockey/unit_CE254.cpp) Whether
+            // action nAct is among the entered (running) actions.
+            int IsEntryAct(long nAct) const;
             void ActCallWait(float fFrame);
             long GetRootActType() const;
             float GetComLvF() const;

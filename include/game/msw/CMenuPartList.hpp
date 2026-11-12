@@ -1,6 +1,8 @@
 #ifndef CMENUPARTLIST_HPP_
 #define CMENUPARTLIST_HPP_
 
+#include "nw4r/ut/List.hpp"
+
 namespace bcs {
     struct FVEC3;
 }
@@ -38,23 +40,43 @@ namespace msw {
             // (added for game/menu/CTopMenu.cpp; return type and meaning
             // guessed, after CheckStckMoveButton) The kind id the stick
             // moves the cursor to from nBtnKindId; 0x8000 for none.
-            long StickMovementJudgmentCursor(long nPad, unsigned short nBtnKindId, unsigned long nInput);
+            unsigned short StickMovementJudgmentCursor(long nPad, unsigned short nBtnKindId, unsigned long nInput);
             // Returns 0 on the path read; the return type and the argument
             // names are guesses.
             long CheckButtonAnim(const unsigned short *pPushButtonId, unsigned long *pUnk);
             // -1 when no part has that kind id, -2 when it is disabled,
             // else the part's id.
             long SetPushButtonAnim(unsigned short nBtnKindId, long nPad);
+            // (added for DOL game/msw/CMenuPartBase.cpp) The same for a
+            // cancel: plays it on a pushed part. nPad is not used.
+            long CancelPushButtonAnim(unsigned short nBtnKindId, long nPad);
+            // The id of the part whose current kind id is nBtnKindId, or -1.
+            long GetIndexByCurrentBtnKindId(unsigned short nBtnKindId);
 
         private:
-            unsigned char m_Unk00[0xC]; // 0x00: a nw4r::ut::List of CMenuPartBase
+            // (no symbols; names guessed) The stick search behind
+            // CheckStckMoveButton (recursive, at most 16 steps) and
+            // StickMovementJudgmentCursor, and whether the cursor of pad
+            // nPad may stop on nBtnKindId.
+            long SearchStickMove_(long nPad, unsigned short nBtnKindId, unsigned long nInput,
+                                            unsigned short nStartBtnKindId, long nDepth);
+            unsigned short JudgeStickMove_(long nPad, long nBtnKindId, unsigned long nInput,
+                                           long nStartBtnKindId, long nDepth);
+            long CanStopCursor_(long nPad, long nBtnKindId);
+
+        public:
+
+        private:
+            nw4r::ut::List m_List; // 0x00: the parts, linked at their offset 0
 
         public:
             CMenuPaneAccessor *m_pPaneAccessor; // 0x0C, stored by the owner
 
         private:
-            float m_Unk10; // 0x10
-            float m_Unk14; // 0x14
+            // (names guessed) Frames before CheckButtonAnim may play the
+            // cursor sound / start a vibration again; counted down there.
+            float m_fSeWait;  // 0x10
+            float m_fVibWait; // 0x14
 
         public:
             // vptr at 0x18

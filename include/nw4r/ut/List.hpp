@@ -30,15 +30,27 @@ namespace nw4r {
         // The last object when pObj is null.
         void *List_GetPrev(const List *pList, const void *pObj);
 
-        // (added for BasketF game/basket/CcDaisyFlowerGarden.cpp) The number
-        // of objects. Inline with NW4R's pointer check: the module carries
-        // its "list.h" strings and the call to db::Panic.
-        inline unsigned short List_GetSize(const List *pList)
+        // The number of objects. Inline, with a null check that reports
+        // file "list.h", line 210 (VolleyF game/volley/CcDaisyFlowerGarden.cpp
+        // emits its two strings as @STRING@List_GetSize objects). Returned
+        // as int: the caller there compares it signed (cmpwi/bgt), which an
+        // unsigned short return folds to a test for zero.
+        inline int List_GetSize(const List *pList)
         {
-            if (!pList) {
-                db::Panic("list.h", 210, "NW4R:Pointer must not be NULL (list)");
+            if (pList == 0) {
+                nw4r::db::Panic("list.h", 210, "NW4R:Pointer must not be NULL (list)");
             }
             return pList->nNum;
+        }
+
+        inline void *List_GetFirst(const List *pList)
+        {
+            return List_GetNext(pList, 0);
+        }
+
+        inline void *List_GetLast(const List *pList)
+        {
+            return List_GetPrev(pList, 0);
         }
     }
 }

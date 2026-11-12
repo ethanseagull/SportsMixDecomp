@@ -13,12 +13,12 @@ namespace msw {
         public:
             CMenuPartButton(long nId);
             virtual ~CMenuPartButton();
-            virtual void SetButtonIn();
-            virtual void SetButtonOut();
-            virtual void SetButtonPush();
-            virtual void SetButtonPushCancel();
-            virtual void SetButtonMultiIn(long);
-            virtual void SetButtonMultiOut(long);
+            virtual long SetButtonIn();
+            virtual long SetButtonOut();
+            virtual long SetButtonPush();
+            virtual long SetButtonPushCancel();
+            virtual long SetButtonMultiIn(long);
+            virtual long SetButtonMultiOut(long);
 
             void SetCallBackAnimIn(CSelectMenuLayoutBase *pLayout);
             void SetCallBackAnimOut(CSelectMenuLayoutBase *pLayout);

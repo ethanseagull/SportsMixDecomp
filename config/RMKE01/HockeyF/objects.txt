@@ -64,7 +64,7 @@ Matching game/hockey/CStageHockey05.cpp
 Matching game/hockey/CStageHockeyCrushSkate.cpp
 Equivalent game/hockey/CStgGmk_Case_Act_Hockey.cpp
 Matching game/hockey/CQPanelHockey.cpp
-Equivalent game/hockey/CChrCoreHockeyDiddy.cpp
+Equivalent game/hockey/CChrCoreHockeyDiddy.cpp flags=noauto
 Equivalent game/hockey/CCameraHockeyCS.cpp
 Matching game/hockey/CStageHockeyCrushSkate87.cpp
 Equivalent game/hockey/CStageHockeyCrushSkate85.cpp
@@ -85,3 +85,4 @@ Equivalent game/hockey/CChrCoreHockeySlime.cpp
 Matching game/hockey/CStageHockey10.cpp
 Equivalent game/hockey/CStgGmk_Pinball_Act_Hockey.cpp
 Equivalent game/hockey/CCockpitHockeySmashVS.cpp
+Matching game/hockey/unit_CE254.cpp

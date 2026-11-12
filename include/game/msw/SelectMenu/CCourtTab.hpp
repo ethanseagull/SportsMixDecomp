@@ -4,6 +4,8 @@
 #include "game/msw/CSelectMenuLayoutBase.hpp"
 
 namespace msw {
+    class CSelectMenu;
+
     namespace SelectMenu {
 
         // Size 0x90. The cup tabs over the court select screen
@@ -41,6 +43,10 @@ namespace msw {
                 void AllStopTabAnim();
 
             private:
+                // CSelectMenu's court select steps fill and read the
+                // fields below (game/menu/CCourtSelect.cpp).
+                friend class msw::CSelectMenu;
+
                 // (no symbol) The number of enabled cups before cup nCup.
                 long GetEnabledCupIndex(long nCup) const;
 
@@ -61,7 +67,9 @@ namespace msw {
                 unsigned char m_Unk6E[2];           // 0x6E
                 int m_bLeftArrow;                   // 0x70
                 int m_bRightArrow;                  // 0x74
-                unsigned char m_Unk78[4];           // 0x78
+                // 0x78. (added for game/menu/CCourtSelect.cpp) Set by
+                // CSelectMenu::_BuildCourtSelect: the tabs of a party game.
+                int m_bParty;
                 // 0x7C. Whether the pointer is over tab n.
                 int m_bTabPointed[4];
                 // 0x8C. The cup each shown tab stands for.

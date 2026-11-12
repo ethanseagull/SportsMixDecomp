@@ -486,10 +486,9 @@ game/msw/CNpcBossPackun/CMudBomb.cpp:
 	.text       start:0x801B418C end:0x801B5A10
 
 game/msw/CMenuPartBase.cpp:
-	.text       start:0x801B5DD8 end:0x801B65EC
-
-game/msw/CMenuPartList.cpp:
-	.text       start:0x801B6630 end:0x801B7740
+	.text       start:0x801B5DD8 end:0x801B7864
+	.data       start:0x80481D10 end:0x80481D60
+	.sdata2     start:0x805C4768 end:0x805C4770
 
 game/msw/menu/CVibEff.cpp:
 	.text       start:0x801B7864 end:0x801B8374

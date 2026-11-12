@@ -1430,7 +1430,8 @@ namespace msw {
         protected:
             // 0x60 (name guessed): the task the character's helper tasks
             // hang under (BasketF's CChrCoreBasketNinja makes its copies'
-            // task with it as the parent).
+            // task with it as the parent;
+            // VolleyF's CChrCoreVolleyDaisy hangs her flower garden under it).
             bcs::CTask *m_pParentTask;
             CChrDrv *m_pDriver[2];      // 0x64 (count guessed from the index's place)
             long m_nDriver;              // 0x6C, index of the driver in use, negative for none

@@ -94,6 +94,9 @@ namespace msw {
         // (added for MenuF game/menu/CFriendList.cpp; return type guessed)
         // Not zero when the data holds a player.
         int IsValid() const;
+        // (added for MenuF game/menu/CSaveSelect.cpp) Clears the data: the
+        // player is deleted.
+        void Init();
         // (added for MenuF game/menu/CScoreBook.cpp; name from the symbol,
         // meaning guessed) The record of stage nStage in game kind
         // nGameKind, negative when it has none.
@@ -172,7 +175,11 @@ namespace msw {
         // guessed) One character's record in one sport.
         struct CharaScore {
             unsigned short m_nPlayNum;   // 0x0, not zero once played
-            unsigned char m_Unk2[0x2];   // 0x2
+                                         // (game/menu/CCharSel.cpp reads it as
+                                         // the bits of the colours open)
+            // 0x2. (added for game/menu/CCharSel.cpp; name guessed) Not zero
+            // while the character is new: the select screen marks it.
+            unsigned short m_nNew;
             long m_nScore;               // 0x4, ranked by the score book
             unsigned char m_Unk8[0x8];   // 0x8
         };

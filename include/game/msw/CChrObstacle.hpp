@@ -21,14 +21,16 @@ namespace msw {
             CChrObstacle(bcs::CTask *pParent, long, long);
             virtual ~CChrObstacle();
             // Disp, GetAttackRadius, GetAttackRange and IsAttackEnd are
-            // inline too: each module has one weak copy of them, emitted by
-            // the first file that makes the vtable of a class overriding
-            // none of them (BasketF: game/basket/CcDaisyFlowerGarden.cpp).
+            // inline too: VolleyF's game/volley/CcDaisyFlowerGarden.cpp emits
+            // the weak copies (in reverse order) and CChrCoreVolleyDonkey,
+            // later in the module, refers to them without a copy of its own.
             virtual void Disp() {}
             // Inline: each module has one weak copy (li r3, 0), emitted by
             // the first file that makes the vtable of a class that does not
             // override it (BasketF: game/basket/CChrCoreBasketSaboten.cpp).
             virtual long SendMessage(long, long, long, long) { return 0; }
+            // (meanings guessed) Both read the radius of the first attack
+            // unit.
             virtual float GetAttackRadius() const { return m_AtkColl.GetRadius(0); }
             virtual float GetAttackRange() const { return m_AtkColl.GetRadius(0); }
             virtual int IsAttackEnd() const { return 0; }
@@ -51,7 +53,8 @@ namespace msw {
             float m_fRadius;             // 0x5C
             unsigned char m_Unk60[0x88 - 0x60];
             // 0x88 (name guessed): its attack collision (GetAttackRadius
-            // reads it; BasketF's CcSiromaMagicCircle sets it up).
+            // reads it; BasketF's CcSiromaMagicCircle sets it up;
+            // VolleyF's CcDaisyFlowerGarden reads it too).
             CAtkCollision m_AtkColl;
     };
 }

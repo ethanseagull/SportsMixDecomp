@@ -21,6 +21,10 @@ namespace msw {
         // return type and meaning guessed) Checks the unlocks of party game
         // stage nStage; the party game passes 1.
         void CheckParty(long nStage, int);
+        // (added for MenuF game/menu/CSaveSelect.cpp; meaning guessed from
+        // the button sequence that calls it) Opens everything for player
+        // nPlayer.
+        void FullOpen(long nPlayer);
     }
 }
 

@@ -214,7 +214,7 @@ void msw::CCameraDodgeGame::MainCamera()
             m_nOffense = 0;
         }
     } else {
-        CChrCore *pTrick = GetAirTrickCore(this);
+        CChrCore *pTrick = ::GetAirTrickCore(this);
         if (pTrick != 0) {
             m_nOffense = 1;
             if (pTrick->GetTeamNo() != GetTeamNo()) {
@@ -231,7 +231,7 @@ void msw::CCameraDodgeGame::MainCamera()
         // Keep following the character the camera followed last frame.
         mode = -1;
         if (m_Unk228 == 11 || m_Unk228 == 12) {
-            if (m_Unk1D8 == reinterpret_cast<unsigned long>(GetAirTrickCore(this))) {
+            if (m_Unk1D8 == reinterpret_cast<unsigned long>(::GetAirTrickCore(this))) {
                 mode = GetCamMode();
             }
         } else if (m_Unk228 == 9 || m_Unk228 == 10) {
@@ -242,7 +242,7 @@ void msw::CCameraDodgeGame::MainCamera()
 
         if (mode < 0) {
             m_Unk1D8 = 0;
-            CChrCore *pCore = GetAirTrickCore(this);
+            CChrCore *pCore = ::GetAirTrickCore(this);
             if (pCore != 0) {
                 mode = IsOffense() ? 11 : 12;
                 m_Unk1D8 = reinterpret_cast<unsigned long>(pCore);
@@ -431,7 +431,7 @@ long msw::CCameraDodgeGame::GetFirstLookInfo_MultiPlay(bcs::FVEC3 &rLook, bcs::F
         bcs::FVEC3 pos(0.0f, 0.0f, 0.0f);
         CChrCore *pCore;
         if (m_Unk228 == 11 || m_Unk228 == 12) {
-            pCore = GetAirTrickCore(this);
+            pCore = ::GetAirTrickCore(this);
         } else {
             pCore = GetHoldBallChrCore(i);
         }

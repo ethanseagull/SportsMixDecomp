@@ -130,6 +130,21 @@ namespace msw {
             long GetCamMode() const { return m_Unk228; }
             int IsMyTeamCore(const CChrCore *pCore) const;
             int IsPadCore(const CChrCore *pCore) const;
+            // DOL members used by VolleyF's CCameraVolleyGame (return types
+            // and parameter names guessed). The character doing an air trick
+            // (state 39) the camera follows, or null; the first team mate of
+            // the viewing team, driven by a pad, with status bit 0x2000
+            // ("endure"), or null.
+            CChrCore *GetAirTrickCore() const;
+            CChrCore *GetEndureCore() const;
+            // Not zero when the character has a target marker; its position
+            // with x and z as in GetBallPosXZ.
+            int GetTargetMarkerPosXZ(const CChrCore *pCore, bcs::FVEC3 &rPos) const;
+            // Not zero when the ball has a target; its position.
+            int GetBallTargetPos(bcs::FVEC3 &rPos) const;
+            // The camera target of the slanted views (both sides).
+            void MakeingSlantCamTar(bcs::FVEC3 &rTarget, const bcs::FVEC3 &rPos, const bcs::FVEC3 &rBase, float,
+                                    float) const;
             const bcs::FVEC3 &GetUnk108Vec() const { return *reinterpret_cast<const bcs::FVEC3 *>(&m_Unk108); }
 
         protected:
@@ -145,8 +160,10 @@ namespace msw {
             float m_Unk10C;
             float m_Unk110;
 
-        private:
-            unsigned char m_Unk114[0x118 - 0x114];
+        protected:
+            // 0x114: flags (VolleyF's CCameraVolleyGame tests bit 0x10000 to
+            // pick the side of the ball's target; meaning not known).
+            unsigned long m_Unk114;
 
         protected:
             bcs::FVEC3 m_Unk118; // 0x118

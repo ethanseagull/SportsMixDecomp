@@ -42,7 +42,6 @@ BasketF CreateMdl___Q33msw11CC05_BASKET16CcWarioSmokeUnitFRCQ23bcs5FVEC3 near 93
 BasketF CreateObjImpl__Q23msw14CCockpitBasketFll near 94.2 94.2%: in cases 10, 19-21, 25 the original copies the new object to its result register before and after the null check, ours once after. Same calls, constants, case order.
 BasketF Create___Q23msw13CChrManBasketFv near 99.3 register allocation/instruction order only (ghost loop counter registers)
 BasketF CtorStateAirTrick__Q23msw14CChrCoreBasketFv near 95.5 instruction order and registers: the original loads m_nPlayerNo for CGame::SendMessage before the GetArtsShootType virtual call (kept in a saved register), ours after; ours extsb's straight into the argument register (one mr fewer); FsmqGetWork's r4/r5 swapped
-BasketF CtorStateAirTrick__Q23msw19CChrCoreBasketLuigiFv near 99.0 r3/r4 swapped in the inlined FsmqGetWork_; same as HockeyF Luigi
 BasketF CtorStateAppear__Q23msw16CNpcStringBasketFv near 99.4 99.4: register numbering only
 BasketF CtorStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.0 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CtorStateAttach__Q23msw16CBallBasketFruitFv near 99.4 float register choice for the tilt-centre and 0/1 axis constants; same loads, operations and stores
@@ -104,7 +103,6 @@ BasketF IsRide__Q33msw14CStageBasket1010CPanelInfoCFRCQ23bcs5FVEC3 near 94.8 94.
 BasketF JudgeJumpAttack____Q23msw16CGameGuideBasketFPCQ23msw8CChrCorePCQ23msw8CChrCore near 97.7 97.7: load order of the two state-queue words and two team bytes, float registers (schedule)
 BasketF JudgeJumpBlock___Q23msw16CGameGuideBasketFPCQ23msw8CChrCorePCQ23msw5CBall near 98.9 98.9: stack slots of the distance helper temporaries, one load order
 BasketF LoopStateAirTrick__Q23msw14CChrCoreBasketFv near 99.8 register choice only: the inlined FsmqGetWork/FsmqNext use r4/r5 swapped
-BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketLuigiFv near 99.8 r3/r4 swapped in the inlined FsmqGetWork_; same as HockeyF Luigi
 BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketMarioFv near 96.5 stack slots of the vector temporaries, register choice and load order differ; (m_nStatusFlag & 4) != 0 for flows 1 and 6 is extrwi in ours, rlwinm/cntlzw/cntlzw in the original (same 0/1 value); .rodata has one extra 4-byte const local (fLenMax) as in Mii00
 BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketMii00Fv near 96.3 96.3%: register allocation, stack slot order of the FVEC3 temporaries, operand order of one commutative fadds, and (m_nStatusFlag & 4) != 0 computed with extrwi where the original uses rlwinm/cntlzw/cntlzw (same 0/1 value); the const local fLenMax adds a 4-byte .rodata object (as in CChrCoreBasketSaboten)
 BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketMii01Fv near 96.3 96.3%: same as Mii00: register allocation, stack slot order of the FVEC3 temporaries, operand order of one commutative fadds, and (m_nStatusFlag & 4) != 0 computed with extrwi where the original uses rlwinm/cntlzw/cntlzw (same 0/1 value); the const local fLenMax adds a 4-byte .rodata object (as in CChrCoreBasketSaboten)

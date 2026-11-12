@@ -55,7 +55,7 @@ Equivalent game/basket/CCockpitBasket.cpp
 Equivalent game/basket/CChrDrvPadBasket.cpp
 Equivalent game/basket/CNpcGhostBasketBase.cpp
 Equivalent game/basket/CItemBallBasketBomb.cpp
-Equivalent game/basket/CChrCoreBasketLuigi.cpp
+Matching game/basket/CChrCoreBasketLuigi.cpp
 Equivalent game/basket/CStageBasket17.cpp
 Equivalent game/basket/CChrCoreBasketKinopio.cpp
 Equivalent game/basket/CChrCoreBasketYoshi.cpp

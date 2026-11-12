@@ -181,7 +181,7 @@ namespace msw {
             // 0x0FBC: flags kept over the tournament, 0x20 per cup; the
             // first of a cup is set once its first-time script has run.
             signed char aFirstFlag[0x80];
-            unsigned char m_Unk103C;
+            signed char nUnk103C;            // 0x103C: a team, compared with the sides of a match by TourF CTournamentStep::SetMatchMake
             // 0x103D-0x103F: teams passed to SetLeaderNoUnlock by the
             // script's UnlockOpen (kinds 5, 4 and 3). (name guessed)
             signed char aLeaderTeam[3];
@@ -215,7 +215,7 @@ namespace msw {
             // The word msw::CTournament::SetDemoType stores (DOL): the demo
             // the tournament map is showing.
             short nDemoType; // 0x1060
-            unsigned char m_Unk1062[2];
+            short nUnk1062;                  // 0x1062: set to 1 by TourF CTournamentStep::_SetupDefalutParam
             // 0x1064: the colour the map is drawn in, faded towards by
             // msw::CTournamentMan::UpdateFrame. (name guessed)
             bcs::BCS_Color mapColor;

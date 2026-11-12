@@ -152,6 +152,15 @@ namespace bcs {
         return pOut;
     }
 
+    // (name guessed) pOut = pTo - pFrom, the vector from pFrom to pTo.
+    // Added for msw::CStgSrt::SetLookAtPos, which reaches FVEC3Sub through
+    // one more inline level with the pointers in this order (as
+    // bcs::FVEC3Blend does FVEC3Lerp).
+    inline FVEC3 *FVEC3FromTo(FVEC3 *pOut, const FVEC3 *pFrom, const FVEC3 *pTo)
+    {
+        return FVEC3Sub(pOut, pTo, pFrom);
+    }
+
     // (name guessed) The length of a vector.
     inline float FVEC3Len(const FVEC3 *p)
     {

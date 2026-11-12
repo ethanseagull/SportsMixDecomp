@@ -54,6 +54,10 @@ namespace bcs {
     void BCS_VecOneZ_RotY(FVEC3 &rOut, float rotY);
     // (added for the DOL's pinball ball) The unit X vector turned by rotY.
     void BCS_VecOneX_RotY(FVEC3 &rOut, float rotY);
+    // (added for HockeyF game/hockey/CStgGmk_IceCube_Act_Hockey.cpp;
+    // meaning guessed from the name) rIn turned by rotZ about the Z axis.
+    // In the DOL.
+    void BCS_Vec_RotZ(FVEC3 &rOut, const FVEC3 &rIn, float rotZ);
 
     // (added for the DOL's pinball ball) The crossing of the lines (not
     // segments) through (x0, z0)-(x1, z1) and (x2, z2)-(x3, z3); false

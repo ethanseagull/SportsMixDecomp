@@ -313,6 +313,24 @@ namespace msw {
     extern float HOCKEY_PRM_S85_FLOOR3_CHR_FLOW_VEL;
     extern float HOCKEY_PRM_S85_FLOOR3_ROT_ANGLE;
 
+    // Stage 85 ice cube patterns 2 and 3 (added for
+    // game/hockey/CStgGmk_IceCube_Act_Hockey.cpp; not in the parameter
+    // table either).
+    extern float HOCKEY_PRM_S85_ICE2_ACC;
+    extern float HOCKEY_PRM_S85_ICE2_DEC;
+    extern float HOCKEY_PRM_S85_ICE2_INTERVAL;
+    extern float HOCKEY_PRM_S85_ICE2_LOC_RND_X;
+    extern float HOCKEY_PRM_S85_ICE2_LOC_RND_Z;
+    extern long HOCKEY_PRM_S85_ICE2_LOC_PAT_TYPE;
+    extern long HOCKEY_PRM_S85_ICE2_LOC_PAT_NO;
+    extern float HOCKEY_PRM_S85_ICE3_ACC;
+    extern float HOCKEY_PRM_S85_ICE3_DEC;
+    extern float HOCKEY_PRM_S85_ICE3_INTERVAL;
+    extern float HOCKEY_PRM_S85_ICE3_LOC_RND_X;
+    extern float HOCKEY_PRM_S85_ICE3_LOC_RND_Z;
+    extern long HOCKEY_PRM_S85_ICE3_LOC_PAT_TYPE;
+    extern long HOCKEY_PRM_S85_ICE3_LOC_PAT_NO;
+
     // Stage 86 (the fire pillars, msw::CStgGmk_FirePillar_Hockey_Act).
     extern float HOCKEY_PRM_S86_FIRE_RADIUS;
     extern float HOCKEY_PRM_S86_FIRE_RADIUS2;

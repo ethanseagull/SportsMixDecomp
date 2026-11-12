@@ -932,7 +932,7 @@ namespace msw {
             virtual void SubStateDamageCtorMame_(STATE_WORK_DAMAGE *); // 0xC88
             virtual int SubStateDamageLoopMame_(STATE_WORK_DAMAGE *);  // 0xC8C (int: CChrCoreBoss::LoopStateDamage tests it)
             virtual int SubStateParalyzeStateSet_(unsigned long, float); // 0xC90
-            virtual void SubStateParalyzeSetEffect_();                // 0xC94
+            virtual float SubStateParalyzeSetEffect_();               // 0xC94 (float: BasketF's returns 33.0f in f1)
             virtual void SubStateParalyzeEndEffect_();                 // 0xC98
 
             // Not zero when the character takes no part in the game: it has
@@ -1401,6 +1401,9 @@ namespace msw {
             // once on the ground); changes the play speed of slot nSlot to
             // fSpeed over fFrame frames.
             void Eff_StopGroup(long nGroup);
+            // (added for BasketF game/basket/unit_31D0C.cpp) Scales the effect
+            // in slot nSlot.
+            void Eff_SetScale(long nSlot, float fX, float fY, float fZ);
             int Util_DoMove(float fStep);
             void AnimChgSpeed(unsigned long nSlot, float fSpeed, float fFrame);
             void Reset();
@@ -1542,7 +1545,10 @@ namespace msw {
             // 0x190 (name guessed): a second model node for effects
             // (CChrCoreVolleyYoshi's block and spike effects attach there).
             unsigned short m_nEffNodeSub;
-            unsigned char m_Unk192[0x1A0 - 0x192];
+            // 0x192 (name guessed): a third model node for effects (BasketF's
+            // tumble damage attaches its effect 0x584 there).
+            unsigned short m_nEffNodeSub2;
+            unsigned char m_Unk194[0x1A0 - 0x194];
             // 0x1A0-0x1AC (names guessed): a change of body size; the scale
             // it starts from, the one it goes to (below 1 when shrinking),
             // how far it has got (0 when none runs) and the normal scale
@@ -1606,14 +1612,21 @@ namespace msw {
             // up to 0x570 and CChrCoreBoss's own members start at 0x574.
             // 0x234 (name guessed): the frames a change of body size lasts.
             float m_fSizeChangeTime;
-            unsigned char m_Unk238[0x23C - 0x238];
+            // 0x238 (name guessed): frames left to lie down after a damage
+            // (BasketF game/basket/unit_31D0C.cpp copies the damage's down
+            // time here and counts it down); UpdateSpState_ reads it too.
+            float m_fDownFrame;
             // 0x23C-0x244 (names guessed; added for BossF
             // game/boss/unit_18E08.cpp): a phase, its step per frame and the amplitude of the
             // weaving of a character in condition 4.
             float m_fWeavePhase;
             float m_fWeaveSpeed;
             float m_fWeaveWidth;
-            unsigned char m_Unk248[0x264 - 0x248];
+            // 0x248 (meaning not known): BasketF's
+            // CChrCoreBasket::SubStateParalyzeEndEffect_ sets it to 25 in
+            // condition 9.
+            float m_fUnk248;
+            unsigned char m_Unk24C[0x264 - 0x24C];
             // 0x264 (meaning not known): a float HockeyF's
             // CChrCoreHockeyWaluigi passes to CChrCoreHockey::Util_ShootBall_
             // for each copy of the puck it throws.

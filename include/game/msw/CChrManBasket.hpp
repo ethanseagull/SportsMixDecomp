@@ -121,6 +121,8 @@ namespace msw {
             // 1, meaning not known).
             void ResetClockOver_();
             void SetFlagAC(unsigned long nFlag) { m_nFlagAC |= nFlag; }
+            // (added for game/basket/unit_31D0C.cpp) The flag bits of m_nFlagAC.
+            unsigned long GetFlagAC() const { return m_nFlagAC; }
             // (name guessed; inline in CComManBasketGame::GetBaseShootPoint)
             // Bit 0x10 of m_nFlagAC: the game has no shot clock.
             unsigned long IsNoShotClock() const { return m_nFlagAC & 0x10; }

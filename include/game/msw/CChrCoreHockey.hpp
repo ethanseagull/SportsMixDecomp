@@ -352,7 +352,7 @@ namespace msw {
             virtual void CallbackBallCatch_(CBall *);                  // 0xC58
             virtual void CallbackAttackHit_(const CCollAtkUnit *, const CCollBodyUnit *, const bcs::FVEC3 &, unsigned long); // 0xC5C
             virtual void CallbackBallSnatched_(CBall *);               // 0xC60
-            virtual void SubStateParalyzeSetEffect_();                 // 0xC94
+            virtual float SubStateParalyzeSetEffect_();                // 0xC94
             virtual void SubStateParalyzeEndEffect_();                 // 0xC98
 
             // CChrCoreHockey's own virtuals, 0xC9C to the end of the vtable at

@@ -31,7 +31,8 @@ namespace bcs {
             static float GetStickY(long nPad);
             static int IsNunchukStyle(long nPad);
             static void StopMotor(long nPad);
-            // (added for TourF game/tour/CTournamentStep.cpp) Save and
+            // (added for TourF game/tour/CTournamentStep.cpp and
+            // game/msw/CGame.cpp) Save and
             // restore the rumble of every pad around a pause.
             static void PushMotorAll();
             static void PopMotorAll();

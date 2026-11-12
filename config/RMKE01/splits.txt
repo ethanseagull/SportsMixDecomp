@@ -154,7 +154,7 @@ game/msw/CBall.cpp:
 	.text       start:0x800C4938 end:0x800CBEA8
 
 game/msw/CBallMan.cpp:
-	.text       start:0x800CC6C0 end:0x800CD674
+	.text       start:0x800CC6C0 end:0x800CD6DC
 
 game/msw/CBallMarker.cpp:
 	.text       start:0x800CD6DC end:0x800CE904
@@ -284,7 +284,11 @@ game/msw/CItem.cpp:
 	.text       start:0x8012830C end:0x8012C1F0
 
 game/msw/CGimmickMan.cpp:
-	.text       start:0x8012CC80 end:0x8012E0AC
+	.text       start:0x8012CC80 end:0x8012E240
+	.rodata     start:0x80439D88 end:0x80439D98
+	.data       start:0x8046FEE8 end:0x8046FFE8
+	.sbss       start:0x805C0C20 end:0x805C0C28
+	.sdata2     start:0x805C2CC8 end:0x805C2CE0
 
 game/msw/CQPanelMan.cpp:
 	.text       start:0x8012E240 end:0x80130054
@@ -437,11 +441,11 @@ game/msw/CTournament.cpp:
 	.text       start:0x801768EC end:0x8017B85C
 
 game/msw/CGame.cpp:
-	.text       start:0x8017C3AC end:0x8018DD88
+	.text       start:0x8017C3AC end:0x8018DCEC
 	.ctors      start:0x8042D21C end:0x8042D220
 
 game/msw/CGameVib.cpp:
-	.text       start:0x8018DD88 end:0x8018DEF4
+	.text       start:0x8018DCEC end:0x8018DEF4
 
 game/msw/CLoadData.cpp:
 	.text       start:0x8018E808 end:0x801902CC

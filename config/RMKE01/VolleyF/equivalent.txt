@@ -48,7 +48,6 @@ VolleyF Hit__Q23msw15CStageNetVolleyFRCQ23bcs5FVEC3RCQ23bcs5FVEC3 unverified 79.
 VolleyF InitPanelAll__Q23msw14CStageVolley10Fl near 90.6 the original repeats the case 2 and case 4 bodies (18-store clear plus FeverCancel, model-parameter pick); merged here; same work
 VolleyF IsExistItemBall__Q23msw15CComManVolleyRRFPCQ23msw8CChrCoreRCQ23bcs5FVEC3 near 99.8 instruction scheduling only
 VolleyF IsTrolleyTransit__Q23msw14CStageVolley17CFv near 89.0 AABB corner copies are lfs/stfs of the same bytes where the original does lwz/stw block copies (nw4r::math::VEC3 copy shape; a POD base struct for VEC3 gives 99.1%, header change not made), plus float register choice; no behaviour change
-VolleyF IsValid__Q33bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>6HandleCFv near 96.4 register choice only, the same code and score as the CStageDodge11 copy (inline pool/list templates of the fire pillar cluster).
 VolleyF LoopStateAppear__Q23msw30CBallTargetMarkerRhythmReceiveFv near 99.7 x and z of the target position swap float registers
 VolleyF LoopStateDisappear__Q23msw30CBallTargetMarkerRhythmReceiveFv near 99.7 x and z of the target position swap float registers
 VolleyF LoopStateDisappear__Q33msw11CC15_VOLLEY19CcSiromaMagicCircleFv near 99.4 register allocation only
@@ -75,8 +74,6 @@ VolleyF MakeingCamZoom__Q23msw17CCameraVolleyBossFv near 98.9 the inlined FSqrt 
 VolleyF MovePos___Q33msw11CC09_VOLLEY22CcKinopioBoundMushroomFf near 99.6 multiply operands of one fmadds swapped (commutative)
 VolleyF OnBallCatch__Q23msw26CStgGmk_Pinball_Act_VolleyFPQ23msw13CCollBodyUnitPQ23msw5CBall near 97.7 registers, stack slot of two temporaries and equivalent branch forms (the original jumps over an empty then-block for dot > 0 and for the invincible early return); same calls, constants, loads and stores
 VolleyF OnMsgN__Q23msw16CChrDrvPadVolleyFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG near 99.5 literal pool order of 512.0f/0.2f in case 0x97; same values loaded
-VolleyF OnPostInitialize__Q23msw14CStageVolley10Fv near 99.9 CameraData local at 0x60/frame 0x180 vs 0x5C/0x170 (as CStageVolley42); stack slots only
-VolleyF OnPostInitialize__Q23msw14CStageVolley42Fv near 99.9 Stack layout only: the CameraData local sits at 0x60 instead of 0x5C (frame 0x180 vs 0x170); same calls, constants and stores.
 VolleyF OnPreCreateObj__Q23msw14CStageVolley10FPCQ33msw5STAGE12MDL_GEN_RULERQ23bcs6CRegexQ34nw4r3g3d7ResFileRQ23msw4CArnl near 99.9 stack slots of the creator, position and matrix locals differ only
 VolleyF OnTurnInit__Q23msw14CStageVolley09Fv unverified 72.0 Instruction order only: the original loads the stop time and its 60.0 factor before choosing the random direction; same calls and arguments. 72%, so not near.
 VolleyF PanelSetB_SetPanelLocalTypeSub___Q23msw14CStageVolley10Flllll near 99.1 compare operand order and an equivalent branch form

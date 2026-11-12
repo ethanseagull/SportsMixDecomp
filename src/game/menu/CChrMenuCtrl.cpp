@@ -66,6 +66,11 @@ void msw::CChrMenuObj::SetSilhouette(long nColor)
 
 void msw::CChrMenuObj::SetAlpha(float alpha)
 {
+    // (guess) Dead comparison: the original's .rodata has 0.0f ahead of
+    // 1.0f although the clamp below tests 1.0f first. Behaviour-free; see
+    // "Dead float comparison" in notes/decisions.md.
+    if (alpha == 0.0f) {
+    }
     if (m_pMdl != 0) {
         if (alpha > 1.0f) {
             alpha = 1.0f;

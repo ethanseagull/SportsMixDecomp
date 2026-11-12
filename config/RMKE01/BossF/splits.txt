@@ -55,8 +55,12 @@ game/boss/unit_1C248.cpp:
 	.data       start:0x00001258 end:0x000012F0
 
 game/boss/unit_1EA14.cpp:
-	.text       start:0x0001EA14 end:0x00025E20
-	.rodata     start:0x000007E8 end:0x00000920
+	.text       start:0x0001EA14 end:0x000246C8
+	.rodata     start:0x000007E8 end:0x000008B8
+
+game/boss/unit_246C8.cpp:
+	.text       start:0x000246C8 end:0x00025E20
+	.rodata     start:0x000008B8 end:0x00000920
 
 game/boss/CChrCore.cpp:
 	.text       start:0x00025E20 end:0x0002E720

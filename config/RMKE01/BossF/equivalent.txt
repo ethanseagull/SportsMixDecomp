@@ -22,9 +22,13 @@ BossF CtorStateItemShoot__Q23msw12CChrCoreBossFv near 99.6 register allocation a
 BossF CtorStateJumpShoot__Q23msw12CChrCoreBossFv near 98.9 Float constants per literal as in the original (pool-off stand-in, own file since the split). Left: the FsmqGetWork queue index in r4/r5 the other way round, and ours reloads the just-stored shot frame from 0xC for the 15.0 clamp where the original keeps the call result in f0 (frsp); same value, same stores.
 BossF CtorStateMotPlay__Q23msw12CChrCoreBossFv near 99.4 register allocation and instruction order only
 BossF CtorStateNeutral__Q23msw12CChrCoreBossFv near 99.6 register allocation and instruction order only
+BossF CtorStatePass__Q23msw12CChrCoreBossFv near 99.8 register numbering only (argument registers of SetMoveMotType/AnimPlay loaded in the other order)
+BossF CtorStateReceive__Q23msw12CChrCoreBossFv near 95.9 register numbering and instruction order only (autopilot regs found no better declaration order)
 BossF CtorStateRun__Q23msw12CChrCoreBossFv near 99.5 register allocation and instruction order only
 BossF CtorStateShootStance__Q23msw12CChrCoreBossFv near 99.6 register choice only: the 0xEC flag word and the effect number take swapped volatile registers; same loads, stores, calls and constants
 BossF CtorStateSideStep__Q23msw12CChrCoreBossFv near 99.8 register allocation/order only
+BossF CtorStateSliding__Q23msw12CChrCoreBossFv near 98.9 register numbering only (FsmqGetWork work pointer in r0/r2 swapped); same code as the matched DodgeF/VolleyF copies
+BossF CtorStateSpike__Q23msw12CChrCoreBossFv near 99.5 register numbering only (r4/r5 around the FsmqGetWork head/work base)
 BossF CtorStateTurn__Q23msw12CChrCoreBossFv near 99.8 register allocation and instruction order only
 BossF EffectCoinGetCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 95.4 original reloads m_pMdl before CreateAttachEffect (no store in between, same value) and schedules the 2*20 multiply later; same as the recorded Volley/Hockey/Dodge/Basket copies
 BossF EffectCoinScoreCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3RCQ23bcs5FVEC3l near 97.9 register choice only (loop counter and clamped count swap registers; one mr scheduled differently)
@@ -58,9 +62,13 @@ BossF LoopStateLoop__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFv near 99.
 BossF LoopStateMainLoop__Q23msw9CGameBossFv near 99.5 register allocation only (loop counter/character pointer of the inlined all-characters-beaten check)
 BossF LoopStateMotPlay__Q23msw12CChrCoreBossFv near 99.2 register allocation and instruction order only
 BossF LoopStateNeutral__Q23msw12CChrCoreBossFv near 96.8 register choice; the toss motion id s_TossPoseMot[0][0] (64) is folded to li 0x40 where the original computes 0*6 and loads the same table entry with lhax (GetTossPoseDir_ always returns 0): same value
+BossF LoopStatePass__Q23msw12CChrCoreBossFv near 99.6 register numbering only
+BossF LoopStateReceive__Q23msw12CChrCoreBossFv near 99.1 register numbering only (r4/r5 swapped around the FsmqGetWork head/work base, as in other chr-core loop states)
 BossF LoopStateShootStance__Q23msw12CChrCoreBossFv near 99.8 register choice only: the inlined CFsmQueue::FsmqNext computes head+1 into a new register instead of in place; same instructions otherwise
 BossF LoopStateSideStep__Q23msw12CChrCoreBossFv near 99.6 register allocation/order only
 BossF LoopStateSleep__Q23msw21CBallTargetMarkerBossFv near 99.7 x and z of the ball position swap float registers
+BossF LoopStateSliding__Q23msw12CChrCoreBossFv near 99.7 register numbering only
+BossF LoopStateSpike__Q23msw12CChrCoreBossFv near 97.4 register numbering throughout (pool base r2/r3 swap from the first instruction), the (m_nStatusFlag & 1) double normalisation (cntlzw x2) the original keeps, operand order of two max compares, paired-single sub temporaries and two stack slots of the XZ distance vectors; same calls, constants and stores
 BossF LoopStateTouchDown__Q23msw9CBallBossFv near 99.9 instruction order/register allocation only
 BossF LoopStateTurnResult__Q23msw9CGameBossFv near 99.5 register allocation only (same inlined check as LoopStateMainLoop)
 BossF LoopStateTurn__Q23msw12CChrCoreBossFv near 98.8 register allocation and instruction order only
@@ -109,11 +117,19 @@ BossF SubStateDunkCmnDunk___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss15STATE_WO
 BossF SubStateDunkCmnLand___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss15STATE_WORK_DUNK near 99.4 register allocation/instruction order only
 BossF SubStateDunkCmnMove___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss15STATE_WORK_DUNK near 97.0 stack layout (frame 0xE0 vs 0xC0, locals in other slots), register allocation and instruction order only; same instruction multiset
 BossF SubStateDunkCtor___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss15STATE_WORK_DUNKflfl near 99.3 register allocation/instruction order only
+BossF SubStateReceiveDoMoveBallDrag___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss18STATE_WORK_RECEIVE near 96.8 register numbering, load scheduling, operand order of an fcmpu equality test and one equivalent branch form (beq vs bne+b) in the early-out chain; same arithmetic
+BossF SubStateReceiveDoProcDiveReceive___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss18STATE_WORK_RECEIVE near 99.4 register numbering and the order of two independent stores (move type, step); same calls and values
 BossF SubStateReceiveDoProcDiveReceive___Q23msw17CChrCoreBossYoshiFPQ33msw12CChrCoreBoss18STATE_WORK_RECEIVE near 99.8 two float registers swapped
 BossF SubStateReceiveDoProcDiveReceive___Q23msw18CChrCoreBossSiromaFPQ33msw12CChrCoreBoss18STATE_WORK_RECEIVE near 99.7 float register numbering only (f1/f2 swapped for the angle and the factor); constants addressed as in the original since the pool-off stand-in; same loads, operations, compares and branches; declaration-order search found nothing
+BossF SubStateReceiveDoProcReceive___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss18STATE_WORK_RECEIVE near 93.4 register numbering; the original normalises (m_nStatusFlag & 1) and (& 0x10000) to 0/1 twice (clrlwi/cntlzw/srwi x2) where ours tests clrlwi. directly (same truth value; unsolved idiom, see toolchain notes); two dead compares the original keeps (IsInvincible() result, a 0x10000 test) are dropped; 10.0f sits after the case-0 literals in our .rodata (same value). Same calls, branches and stores otherwise
+BossF SubStateReceiveGetHomingTargetPosJumpToss___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss18STATE_WORK_RECEIVEPQ23msw5CBall near 98.2 register numbering and the order the low/high points' members are loaded and stored; paired-single sub temporaries named the other way; same values
+BossF SubStateReceiveGetHomingTargetPosReceive___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss18STATE_WORK_RECEIVEPQ23msw5CBallRCQ23bcs5FVEC3RCQ23bcs5FVEC3ffff near 98.4 register numbering (paired-single lerp/sub temporaries, low/high vector loads) and the 3.0f load scheduled later; same computation
+BossF SubStateReceiveGetHomingTargetPosToss___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss18STATE_WORK_RECEIVEPQ23msw5CBallRCQ23bcs5FVEC3RCQ23bcs5FVEC3ffff near 98.2 register numbering (paired-single lerp/sub temporaries, low/high vector loads) and the 3.0f load scheduled later; same computation
+BossF SubStateReceiveSetBallDragParam___Q23msw12CChrCoreBossFRQ43msw7CC_DATA9CHR_PARAM10MOVE_PARAMRQ33msw8CChrCore8DIR_MOVERCQ23bcs5FVEC3ffffi near 99.9 operand order of one commutative fmuls (len*rate vs rate*len); identical otherwise
 BossF SubStateRunNormal___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss14STATE_WORK_RUN near 98.3 register choice and order; the literals 0.5 and -pi sit in swapped pool slots (0xF0/0xF4 of the file's pool), each load reads the same value
 BossF SubStateRunReceivePose___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss14STATE_WORK_RUN near 99.4 register choice; the literal 0.5 is read from the neighbouring pool slot (0.5 and -pi swapped in the file's pool), same value
 BossF SubStateRunReceiveStance___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss14STATE_WORK_RUN near 99.4 register choice; the literal 0.5 is read from the neighbouring pool slot (0.5 and -pi swapped in the file's pool), same value
+BossF SubStateSpikeDoGetHomingTargetPos___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss16STATE_WORK_SPIKEPQ23msw5CBall near 98.4 register numbering (float constants and paired-single average temporaries) and one equivalent branch form (beq vs bne+b) in the early return; same values
 BossF TrgBlock___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
 BossF TrgDamage___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
 BossF TrgGoalIn___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise

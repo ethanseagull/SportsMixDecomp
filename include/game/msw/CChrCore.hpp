@@ -79,7 +79,10 @@ namespace msw {
             // (CChrCoreBasketMoogle stores a yaw there).
             struct DIR_MOVE {
                 float m_fRotY;
-                float m_afUnk04[3];
+                // 0x04 (name guessed; BossF game/boss/unit_1EA14.cpp): how
+                // far the move has got, along the direction (z) and across
+                // it (x), as a vector.
+                float m_afPos[3];
             };
             enum BODY_COLL_SIZE_SET_TYPE {};
             // (added for BossF game/boss/CChrCoreBossMethod.cpp) The states
@@ -898,7 +901,7 @@ namespace msw {
             virtual void ArtsOptStopEffectAll();                       // 0xC00
             virtual void ArtsOptEraseEffectAll();                      // 0xC04
             virtual void ArtsOptCreate(long, long, long, long);        // 0xC08
-            virtual void Util_DropCoin(float, long, long);             // 0xC0C
+            virtual int Util_DropCoin(float, long, long);              // 0xC0C (int: CChrCoreBoss's receive tests it)
             virtual void CheckCountWork__();                           // 0xC10
             virtual int CheckWater_(int);                              // 0xC14
             virtual void CalcMoveSpeedRate_(float, long);              // 0xC18
@@ -1028,6 +1031,9 @@ namespace msw {
             // guessed): the character's face icon texture for the cockpit;
             // null when there is none. In the DOL.
             const _GXTexObj *GetCockpitIconTexObj() const;
+            // Added for HockeyF game/hockey/CCockpitHockeyMap.cpp: the
+            // character's icon on the rink map; null when there is none. In the DOL.
+            const _GXTexObj *GetMinimapIconTexObj() const;
             // (name guessed) The pad driving the character, read signed
             // (msw::cockpit::CSPGaugeInputDisp::SetDispAnim in the DOL passes
             // it to CGame::GetPadDefaultType and CMenuPad::IsNunchakuStyle).
@@ -1371,6 +1377,15 @@ namespace msw {
             void SetDetach_();
             void Util_DoHomingMoveXZ(const bcs::FVEC3 &rPos, float fDist);
             void Util_NodePatchRotY(float fRotY);
+            // (DOL; added for BossF game/boss/unit_1EA14.cpp, meanings
+            // guessed) Moves the character to its model's trans node in XZ;
+            // the yaw from the character's facing to rPos; the outline
+            // the shot plays with; moves the character in XZ.
+            void Util_NodePatchWarpToTransNodeXZ();
+            float GetRotY_Diff_ToPosXZ(const bcs::FVEC3 &rPos) const;
+            long PlayGetOutline_(unsigned long) const;
+            void AddPosXZ(float fX, float fZ);
+            void AddPosXZ(const bcs::FVEC3 &rMove);
             void WSE_Play(long nSlot, long nSe, unsigned long, long);
             int IsAnimLoop(unsigned long nSlot) const;
 

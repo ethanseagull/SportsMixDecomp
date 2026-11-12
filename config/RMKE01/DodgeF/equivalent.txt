@@ -124,6 +124,10 @@ DodgeF Set__Q23msw17CCockpitDodgeCoinFv near 99.3 register choice only (as CCock
 DodgeF Set__Q23msw18CCockpitDodgeCoderFv near 99.5 register choice only: volatile temporaries (r5/r11, r11/r12) and the saved registers of the set-count and gauge loops differ; same calls, constants, loads, stores and branches
 DodgeF Set__Q23msw21CCockpitDodgeTelopOutFv near 99.7 register allocation only: pAccessor and the new CPaneCtrl swap r26/r27 inside the inline CreateLytObj; same calls, constants and memory accesses
 DodgeF SetupGame__Q23msw18CCockpitDodgeCoderFv near 99.5 register choice only: the loop counter, the table pointer and the pane-accessor temporary get other saved registers (as in HockeyF CCockpitHockeyCoder::ScoreOut); same calls, constants, loads, stores and branches
+DodgeF Stage12_GetPinballToHitMe__Q23msw16CComDrvDodgeGameCFf near 99.8 float registers swapped
+DodgeF Stage12_GetPinballToTarget__Q23msw16CComDrvDodgeGameCFRCQ23bcs5FVEC3f near 97.0 register/order inside the inlined normalise (as VolleyF copy)
+DodgeF Stage15_GetCaseToTarget__Q23msw16CComDrvDodgeGameCFRCQ23bcs5FVEC3f near 97.3 register/order inside the inlined normalise (as VolleyF copy)
+DodgeF Stage15_GetPosTurnAroundCase__Q23msw16CComDrvDodgeGameCFRQ23bcs5FVEC3ll near 99.5 float register for max(width, depth)
 DodgeF StartDamageDemo__Q23msw11EvDemoDodgeFv near 97.8 97.8%: the original keeps a cmpwi 1/beq to the switch end for the empty case 1 plus one dead b; equivalent branch form
 DodgeF Start__Q33msw13CStageDodge0310CWaterInfoFli near 93.4 original also computes max(WATER_NUM,0) with srawi/andc as the loop bound after the >0 guard; same iteration count; registers.
 DodgeF SubStateArtsShotFireBullet___Q23msw18CChrCoreDodgeKoopaFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 99.7 99.7%: register only (new CcFireBall pointer in r31 vs r30); same leftover as Basket/Hockey Koopa

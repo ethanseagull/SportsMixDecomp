@@ -179,6 +179,19 @@ namespace msw {
                                                    float fRange, float fRot);
             static long GetPosTurnAroundGimmick(bcs::FVEC3 &rPos, const bcs::FVEC3 &rMy, const bcs::FVEC3 &rTarget,
                                                 const bcs::FVEC3 &rGmkPos, float fRange, long nDir);
+            // (DOL; added for DodgeF game/dodge/unit_BE1FC.cpp; meanings
+            // guessed from the names and the callers) Whether rPos lies in
+            // front of a gimmick at rGmkPos moving along rGmkVel (fWidth
+            // wide, fLength long); a place away from such a gimmick (fRot:
+            // a random turn, radians); a point beside an obstacle at rGmkPos
+            // to make for on the way from rMy to rTarget (fRange: its
+            // radius; fMargin more), not zero when there is one.
+            static int IsPointInDirFaceXZ(const bcs::FVEC3 &rPos, const bcs::FVEC3 &rGmkPos,
+                                          const bcs::FVEC3 &rGmkVel, float fWidth, float fLength);
+            static bcs::FVEC3 GetEscPosFromGimmick(const bcs::FVEC3 &rMy, const bcs::FVEC3 &rGmkPos,
+                                                  const bcs::FVEC3 &rGmkVel, float fRange, float fRot);
+            static int GetViewPointPosFromOthers(bcs::FVEC3 &rOut, const bcs::FVEC3 &rMy, const bcs::FVEC3 &rTarget,
+                                                 const bcs::FVEC3 &rGmkPos, float fRange, float fMargin);
 
             static CComMan *g_pInstance;
     };

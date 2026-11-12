@@ -79,3 +79,4 @@ Equivalent game/dodge/unit_D7800.cpp
 Equivalent game/dodge/CcSiromaMagicCircle.cpp
 Equivalent game/dodge/CcNinjaCloneBody.cpp
 Equivalent game/dodge/CChrDrvPadDodge.cpp flags=noauto
+Equivalent game/dodge/unit_BE1FC.cpp

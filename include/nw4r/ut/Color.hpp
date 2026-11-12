@@ -45,6 +45,18 @@ namespace nw4r {
                 return *this;
             }
 
+            // (added for nw4r::g3d::ApplyClrAnmResult in the DOL's
+            // animation file) Takes a GX colour as one word.
+            Color &operator=(const GXColor &c)
+            {
+                *reinterpret_cast<unsigned long *>(this) = *reinterpret_cast<const unsigned long *>(&c);
+                return *this;
+            }
+
+            // (added for nw4r::g3d::ApplyClrAnmResult) The colour as an
+            // output argument of the GX getters.
+            GXColor *ToGXColorPtr() { return reinterpret_cast<GXColor *>(this); }
+
             // The colour as GX takes it (added for the DOL's
             // game/msw/CGameExDemoBase.cpp, which passes colours to
             // GXSetTevColor).

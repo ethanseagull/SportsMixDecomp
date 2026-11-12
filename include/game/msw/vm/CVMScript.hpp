@@ -101,7 +101,6 @@ namespace msw {
                 {
                     m_pData->Value(nIndex) = *reinterpret_cast<long *>(&fValue);
                 }
-                void SetStackF(long nIndex, float fValue) { m_pStack[nIndex].f = fValue; }
                 // The top word of a system call's frame: its argument count.
                 // (name guessed)
                 long GetArgNum() const { return GetStack(m_nSP - 1); }

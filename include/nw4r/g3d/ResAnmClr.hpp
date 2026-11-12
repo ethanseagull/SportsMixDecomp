@@ -2,21 +2,53 @@
 #define NW4R_G3D_RESANMCLR_HPP_
 
 #include "nw4r/db/Panic.hpp"
+#include "nw4r/g3d/ResDic.hpp"
+#include "nw4r/g3d/ResAnmTexSrt.hpp" // AnmPolicy
+#include "nw4r/g3d/ResMat.hpp"
 
 namespace nw4r {
     namespace g3d {
 
-        // Only the member read so far (msw::CEventModel::AnimResFrame, DOL).
+        // Header of a colour animation resource (msw::CEventModel::AnimResFrame,
+        // bcs::CAnmMatClr; DOL). Only the members read so far.
         struct ResAnmClrData {
-            unsigned char unk00[0x20];
+            unsigned char unk00[0x10];
+            long toClrDataDic;       // 0x10, dictionary of the animated materials
+            unsigned char unk14[0x0C];
             unsigned short numFrame; // 0x20 (name guessed)
+            unsigned short numMaterial; // 0x22
+            AnmPolicy policy;        // 0x24
         };
+
+        // The animation of one material; only the name is read.
+        struct ResAnmClrMatData {
+            long name; // 0x00, offset of the material's name from this entry
+
+            ResName GetName() const
+            {
+                return ResName(reinterpret_cast<const ResNameData *>(reinterpret_cast<const char *>(this) + name - 4));
+            }
+        };
+
         // The colour result of one material. Size 0x5C
-        // (bcs::CAnmMatClr::Create allocates them); the fields are not
-        // mapped yet.
+        // (bcs::CAnmMatClr::Create allocates them). Member names after
+        // nw4r: one bit per animated colour register in bRgbaExist, each
+        // colour with the mask of the bits it replaces.
         struct ClrAnmResult {
-            unsigned char m_Unk00[0x5C];
+            enum {
+                CLA_MAX = 11
+            };
+
+            unsigned long bRgbaExist;          // 0x00
+            unsigned long rgba[CLA_MAX];       // 0x04
+            unsigned long rgbaMask[CLA_MAX];   // 0x30
         };
+
+        // (DOL; written in the DOL's animation file, bcs::CMdlObj calls it)
+        // Puts the animated colours of pResult into a material's lighting
+        // channels and TEV colour registers, keeping the bits each mask
+        // leaves alone.
+        void ApplyClrAnmResult(ResMatChan chan, ResMatTevColor tev, const ClrAnmResult *pResult);
 
         // Handle to a colour animation resource: one pointer, null when the
         // resource was not found. Minimal declaration written for this
@@ -55,6 +87,28 @@ namespace nw4r {
                 }
 
                 int GetNumFrame() const { return ref().numFrame; }
+                int GetNumMaterial() const { return ref().numMaterial; }
+                AnmPolicy GetAnmPolicy() const { return ref().policy; }
+
+                // The dictionary of the animated materials (an offset turned
+                // into a handle, as nw4r's ofs_to_obj).
+                ResDic GetMatDic() const
+                {
+                    long ofs = ref().toClrDataDic;
+                    if (ofs != 0) {
+                        return ResDic(reinterpret_cast<unsigned char *>(m_pData) + ofs);
+                    }
+                    return ResDic(0);
+                }
+
+                // The animation of the idx-th material.
+                const ResAnmClrMatData *GetMatAnm(int idx) const
+                {
+                    return static_cast<const ResAnmClrMatData *>(GetMatDic()[idx]);
+                }
+
+                // (DOL) Evaluates the animation of material id at frame.
+                void GetAnmResult(ClrAnmResult *pResult, unsigned long id, float frame) const;
 
             private:
                 ResAnmClrData *m_pData; // 0x00

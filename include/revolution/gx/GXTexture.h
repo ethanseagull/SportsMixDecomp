@@ -41,6 +41,39 @@ typedef struct _GXTexObj {
     unsigned long data[8];
 } GXTexObj;
 
+// (added for nw4r::g3d::ApplyTexPatAnmResult in the DOL's animation file)
+// Colour-indexed texture formats, palette formats and palette slots; only
+// the types are needed so far.
+typedef enum _GXCITexFmt {
+    GX_TF_C4 = 8,
+    GX_TF_C8 = 9,
+    GX_TF_C14X2 = 10
+} GXCITexFmt;
+
+typedef enum _GXTlutFmt {
+    GX_TL_IA8,
+    GX_TL_RGB565,
+    GX_TL_RGB5A3
+} GXTlutFmt;
+
+typedef enum _GXTlut {
+    GX_TLUT0
+} GXTlut;
+
+// Size 0x0C. Its contents are only touched by GX itself.
+typedef struct _GXTlutObj {
+    unsigned long data[3];
+} GXTlutObj;
+
+void GXInitTexObjCI(GXTexObj *pObj, void *pImage, unsigned short nWidth, unsigned short nHeight, GXCITexFmt format,
+                    GXTexWrapMode wrapS, GXTexWrapMode wrapT, unsigned char bMipmap, unsigned long tlutName);
+void GXGetTexObjLODAll(const GXTexObj *pObj, GXTexFilter *pMinFilter, GXTexFilter *pMagFilter, float *pMinLod,
+                       float *pMaxLod, float *pLodBias, unsigned char *pBiasClamp, unsigned char *pEdgeLod,
+                       GXAnisotropy *pMaxAniso);
+GXTexWrapMode GXGetTexObjWrapS(const GXTexObj *pObj);
+GXTexWrapMode GXGetTexObjWrapT(const GXTexObj *pObj);
+void GXInitTlutObj(GXTlutObj *pObj, void *pLut, GXTlutFmt format, unsigned short nEntries);
+
 void GXInitTexObj(GXTexObj *pObj, void *pImage, unsigned short nWidth, unsigned short nHeight, GXTexFmt format,
                   GXTexWrapMode wrapS, GXTexWrapMode wrapT, unsigned char bMipmap);
 // Added for the DOL's game/bcs/CMdlShadow.cpp: bytes of a texture image.

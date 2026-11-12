@@ -73,6 +73,8 @@ namespace nw4r {
 
                 // Index of the entry named `pName`, -1 when there is none (DOL).
                 long GetIndex(const char *pName) const;
+                // (DOL; added for bcs::CAnmChrMotion) -1 when not found.
+                long GetIndex(ResName name) const;
 
                 // The data of the idx-th named entry; null when the
                 // dictionary is not valid.

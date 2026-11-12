@@ -3,6 +3,7 @@
 
 #include "revolution/gx/GXEnum.h"
 #include "revolution/gx/GXStruct.h"
+#include "revolution/gx/GXTexture.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,6 +29,10 @@ void GXSetTevOp(GXTevStageID id, GXTevMode mode);
 void GXSetTevSwapMode(GXTevStageID stage, GXTevSwapSel ras_sel, GXTevSwapSel tex_sel);
 void GXSetTevSwapModeTable(GXTevSwapSel table, GXTevColorChan red, GXTevColorChan green, GXTevColorChan blue,
                            GXTevColorChan alpha);
+
+// Added for MenuF game/menu/CBgDisplay.cpp.
+void GXSetAlphaCompare(GXCompare comp0, unsigned char ref0, GXAlphaOp op, GXCompare comp1, unsigned char ref1);
+void GXSetZTexture(GXZTexOp op, GXTexFmt fmt, unsigned long bias);
 
 #ifdef __cplusplus
 }

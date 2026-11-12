@@ -275,6 +275,9 @@ namespace msw {
                 _SetScale(vScale);
             }
             nw4r::g3d::ResFile GetResFile() const { return m_resFile; }
+            // (name guessed; added for TourF msw::CTournamentRouteMan) The
+            // file with the model.
+            nw4r::g3d::ResFile GetMdlFile() const { return m_mdlFile; }
 
             // (names guessed) Read directly by the modules.
             const bcs::FVEC3 &GetPos() const { return m_vPos; }
@@ -284,6 +287,11 @@ namespace msw {
             // (names guessed) Read by msw::CEventMove.
             const bcs::FVEC3 &GetScale() const { return m_vScale; }
             CEventMoveAction *GetMoveAction() const { return m_pAction; }
+            // (names guessed; added for TourF msw::CTournamentRouteMan) The
+            // matrix AttachToModel keeps, written by the route manager; the
+            // alpha fade has ended.
+            void SetAttachMtx(const bcs::FMTX34 &mtx) { m_AttachMtx = mtx; }
+            int IsFadeEnd() const { return m_fAlphaSpeed == 0.0f; }
 
             // (names guessed) Inline in the modules, which write these
             // members directly.
@@ -318,6 +326,8 @@ namespace msw {
 
             // (name guessed) The model's alpha now, 0 to 1.
             float GetAlpha() const { return m_fAlpha; }
+        public:
+            // (public for TourF msw::CTournamentRouteMan)
             long GetVoiceId(long n) const
             {
                 if (m_pVoiceTable != 0) {
@@ -325,6 +335,8 @@ namespace msw {
                 }
                 return -1;
             }
+
+        protected:
 
             // (fn_80112994, unnamed in the DOL; name guessed) The animation
             // number of motion nMot: |nMot| itself while bit 0x800 of the

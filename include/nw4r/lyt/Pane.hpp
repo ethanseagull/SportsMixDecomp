@@ -1,6 +1,7 @@
 #ifndef NW4R_LYT_PANE_HPP_
 #define NW4R_LYT_PANE_HPP_
 
+#include "nw4r/lyt/common.h"
 #include "nw4r/math/types.h"
 #include "nw4r/ut/Color.hpp"
 #include "nw4r/ut/RuntimeTypeInfo.h"
@@ -9,10 +10,14 @@ namespace nw4r {
     namespace lyt {
 
         class Material;
+        class AnimResource;
+        class AnimationLink;
 
         // Width and height of a pane.
         struct Size {
-            Size() {}
+            // Zero (added for MenuF game/menu/CBgDisplay.cpp, which emits
+            // it out of line; no earlier user default-constructs a Size).
+            Size() : width(0.0f), height(0.0f) {}
             // Added for MenuF game/menu/CBackground.cpp.
             Size(float w, float h) : width(w), height(h) {}
             // Copies member by member: the game copies a Size with two
@@ -64,14 +69,18 @@ namespace nw4r {
                 virtual void Unk4C();
                 virtual void Unk50();
                 virtual void Unk54();
-                virtual void Unk58();
+                // 0x58 to 0x64 named for MenuF game/menu/CBgDisplay.cpp (ogws
+                // names): the animation link of rAnimRes bound to this pane
+                // itself, enabling a bound animation, and the materials.
+                virtual AnimationLink *FindAnimationLinkSelf(const AnimResource &rAnimRes);
                 virtual void Unk5C();
-                virtual void Unk60();
-                virtual void Unk64();
+                virtual void SetAnimationEnable(const AnimResource &rAnimRes, bool bEnable, bool bRecursive);
+                virtual unsigned char GetMaterialNum() const;
                 // 0x68 (VolleyF game/volley/CCockpitChrIcon2DVolley.cpp: a
                 // picture pane's material). Constness guessed.
                 virtual Material *GetMaterial() const;
-                virtual void Unk6C();
+                // 0x6C (added for MenuF game/menu/CBgDisplay.cpp).
+                virtual Material *GetMaterial(unsigned long idx) const;
 
                 void SetSize(const Size &rSize) { mSize = rSize; }
                 // Added for HockeyF game/hockey/CCockpitHockeyCoin.cpp and MenuF
@@ -108,6 +117,12 @@ namespace nw4r {
                 const math::VEC3 &GetTranslate() const { return mTranslate; }
                 Pane *GetParent() const { return mpParent; }
 
+                // Added for MenuF game/menu/CBgDisplay.cpp (ogws names).
+                unsigned char GetBasePositionH() const { return detail::GetHorizontalPosition(mBasePosition); }
+                void SetBasePositionH(unsigned char val) { detail::SetHorizontalPosition(&mBasePosition, val); }
+                unsigned char GetBasePositionV() const { return detail::GetVerticalPosition(mBasePosition); }
+                void SetBasePositionV(unsigned char val) { detail::SetVerticalPosition(&mBasePosition, val); }
+
                 // Added for MenuF game/menu/CBackground.cpp (out of line in
                 // the DOL). Return type of AppendChild guessed.
                 void SetName(const char *pName);
@@ -127,7 +142,8 @@ namespace nw4r {
                 math::MTX34 mGlbMtx;         // 0x84
                 unsigned char m_UnkB4[0x4];
                 unsigned char mAlpha;        // 0xB8
-                unsigned char m_UnkB9[0x2];
+                unsigned char m_UnkB9;
+                unsigned char mBasePosition; // 0xBA (added for MenuF game/menu/CBgDisplay.cpp)
                 unsigned char mFlag;         // 0xBB, bit 0: visible
                 char mName[17];              // 0xBC
                 unsigned char m_UnkCD[0x9];  // 0xCD

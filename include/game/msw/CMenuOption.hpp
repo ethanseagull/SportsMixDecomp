@@ -48,6 +48,12 @@ namespace msw {
             long GetTextIndex(long nKind, long nOption);
 
             static CMenuOption s_Instance;
+            // (added for MenuF game/menu/CSelectMenu.cpp, which emits it;
+            // name from the symbol)
+            static CMenuOption *GetInstance() { return &s_Instance; }
+            // (added for MenuF game/menu/CSelectMenu.cpp)
+            void Initialize();
+            void Finalize();
     };
 }
 

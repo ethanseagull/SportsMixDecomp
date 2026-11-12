@@ -27,6 +27,29 @@ namespace msw {
             // start-up state only while it is below 2. (type guessed)
             static long m_PadCheckStap;
 
+            // (added for MenuF game/menu/CSelectMenu.cpp; inline, emitted
+            // there; names from the symbols, the rest guessed) Puts the
+            // pads' saved bytes (m_PadBackState, DOL .sdata) back into
+            // 0x54, switches the pad check off (0xAC) and sets the number
+            // of controllers it asks for (0x3C).
+            static void PadStateRestore()
+            {
+                if (GetInstance() != 0) {
+                    for (long i = 0; i < 4; i++) {
+                        GetInstance()->m_PadState[i] = m_PadBackState[i];
+                    }
+                }
+            }
+            static void SetPadCheckDisable(int bDisable)
+            {
+                if (GetInstance() != 0) {
+                    GetInstance()->m_UnkAC = bDisable;
+                }
+            }
+            void CheckControllerCount(long nNum) { m_Unk3C = nNum; }
+
+            static unsigned char m_PadBackState[8];
+
             unsigned char m_Unk00[0x38];
             // 0x38. (added for game/menu/CTitle.cpp) Cleared when the title
             // screen opens, set to 1 when A is pressed on it.
@@ -34,7 +57,9 @@ namespace msw {
             // 0x3C. (added for game/menu/CEntry.cpp) Set to the number of
             // players when the entry screen closes, to 1 when it goes back.
             long m_Unk3C;
-            unsigned char m_Unk40[0x6C];
+            unsigned char m_Unk40[0x14];
+            unsigned char m_PadState[4]; // 0x54 (name guessed)
+            unsigned char m_Unk58[0x54];
             long m_UnkAC; // 0xAC, set to 1 once at start-up
             unsigned char m_UnkB0[0x18];
     };

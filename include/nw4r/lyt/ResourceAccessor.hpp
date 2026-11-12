@@ -20,8 +20,29 @@ namespace nw4r {
                 virtual ut::Font *GetFont(const char *pName);
         };
 
+        // A font registered with an ArcResourceAccessor under a name. Size
+        // 0x8C, no destructor (added for MenuF game/menu/CBgDisplay.cpp;
+        // ogws names, from memory, no code copied).
+        class FontRefLink {
+            public:
+                FontRefLink();
+                // Empty; the game deletes links with a null check of its own
+                // (MenuF game/menu/CBgDisplay.cpp).
+                ~FontRefLink() {}
+
+                void Set(const char *pName, ut::Font *pFont);
+
+            private:
+                void *mLink[2];          // 0x00, list links
+                char mFontName[0x80];    // 0x08
+                ut::Font *mpFont;        // 0x88
+        };
+
         // What msw::CLytCtrl::NewArcResourceAccessor returns.
         class ArcResourceAccessor : public ResourceAccessor {
+            public:
+                // Added for MenuF game/menu/CBgDisplay.cpp (out of line in the DOL).
+                void RegistFont(FontRefLink *pLink);
         };
     }
 }

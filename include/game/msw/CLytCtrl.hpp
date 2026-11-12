@@ -9,6 +9,7 @@ namespace nw4r {
     }
     namespace lyt {
         class ArcResourceAccessor;
+        class FontRefLink;
         class ResourceAccessor;
     }
 }
@@ -44,6 +45,9 @@ namespace msw {
 
             void DeleteObject(unsigned long nHandle);
             nw4r::lyt::ArcResourceAccessor *NewArcResourceAccessor(const char *pFileName, const char *pRootFolderName);
+            // Added for MenuF game/menu/CBgDisplay.cpp (return types guessed).
+            void DeleteArcResourceAccessor(nw4r::lyt::ArcResourceAccessor *pAccessor);
+            void UnregistFont(nw4r::lyt::ArcResourceAccessor *pAccessor, nw4r::lyt::FontRefLink *pLink);
             nw4r::ut::Font *GetArchiveFont(long nFont);   // return type guessed (some font pointer or null)
             const char *GetFontResourceName(long nFont);
             // Added for BossF game/boss/CCockpitBossCoder.cpp (the spelling

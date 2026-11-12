@@ -2,6 +2,7 @@
 #define NW4R_LYT_TEXTBOX_HPP_
 
 #include "nw4r/lyt/Pane.hpp"
+#include "nw4r/ut/RuntimeTypeInfo.h"
 
 namespace nw4r {
     namespace lyt {
@@ -14,6 +15,9 @@ namespace nw4r {
         // memory, no code copied). Return types are guesses.
         class TextBox : public Pane {
             public:
+                // Added for MenuF game/menu/CBgDisplay.cpp (ut::DynamicCast).
+                static const ut::detail::RuntimeTypeInfo typeInfo;
+
                 virtual ~TextBox();
                 virtual unsigned short GetStringBufferLength() const;           // 0x70
                 virtual void AllocStringBuffer(unsigned short nLen);            // 0x74

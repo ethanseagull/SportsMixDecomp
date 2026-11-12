@@ -59,6 +59,8 @@ namespace msw {
         // names guessed) The index of the Mii with id createId, and
         // choosing a Mii by index.
         long SearchMiiIndex(RFLCreateID createId);
+        // (added for MenuF game/menu/CSelectMenu.cpp) The same for Mii data.
+        long SearchMiiIndex(RFLStoreData data);
         void SetSelectMii(long nIndex, int bUnk);
         // (added for MenuF game/menu/unit_6EE84.cpp; argument names
         // guessed) Records difficulty nLevel for game kind nGameKind.

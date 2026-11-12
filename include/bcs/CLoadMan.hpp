@@ -41,6 +41,12 @@ namespace bcs {
             // before).
             static void LoadAsync(const FILE_INPUT *pFile, long nUnk);
             static void UnLoad(const FILE_INPUT *pFile, long nUnk);
+            // (added for MenuF game/menu/CSelectMenu.cpp; return types
+            // guessed) Freeing a FILE_INPUT, and whether file pPath (id
+            // nId) has loaded or is still being read.
+            static void UnLoad(const FILE_INPUT *pFile);
+            static int IsLoaded(const char *pPath, unsigned long nId);
+            static int IsReading(const char *pPath, unsigned long nId);
             static void *GetRes(const FILE_INPUT *pFile);
             // (added for DOL game/bcs/CMiiMan.cpp; names and argument
             // meanings guessed) DOL fn_8004C0A8 builds a FILE_INPUT from its

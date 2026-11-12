@@ -21,6 +21,11 @@ namespace bcs {
     void Draw2D_SetBlendNone();
     // (fn_80071A08) A filled rectangle of colour `color`.
     void Draw2D_FillRect(short x, short y, short w, short h, BCS_Color color);
+    // Added for MenuF game/menu/CBgDisplay.cpp: draws the loaded texture on
+    // the screen rectangle (x, y, w, h) with texture coordinates (s0, t0)
+    // to (s1, t1); the two ints are not known (called with 0, 1).
+    void BCS_GX_DrawSpriteEx(short x, short y, short w, short h, BCS_Color color, float s0, float t0, float s1,
+                             float t1, int nUnk0, int nUnk1);
     // (fn_80071934, name guessed) Alpha blending:
     // GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA).
     void Draw2D_SetBlendAlpha();

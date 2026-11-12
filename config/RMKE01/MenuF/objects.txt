@@ -71,3 +71,4 @@ Equivalent game/menu/CMiiSel.cpp
 Equivalent game/menu/unit_6EE84.cpp
 Equivalent game/menu/CTopMenuChrObj.cpp
 Equivalent game/menu/CCourtSelect.cpp
+Equivalent game/menu/CBgDisplay.cpp

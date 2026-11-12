@@ -33,9 +33,32 @@ namespace bcs {
                     float m_Unk2C;       // 0x2C
                     float m_Unk30;       // 0x30
                     float m_Unk34;       // 0x34
+
+                    // (added for MenuF game/menu/CSelectMenu.cpp, which
+                    // emits it; name from the symbol) The same settings as
+                    // SetDefaultPersProjInfo below, on this object.
+                    void Reset()
+                    {
+                        float fFovy = 30.0f;
+                        m_fNear = 1.0f;
+                        m_fWidth = (long)CMainApp::g_Rmode.fbWidth;
+                        m_fHeight = (long)CMainApp::g_Rmode.efbHeight;
+                        m_fFar = 10000.0f;
+                        m_fFovy = fFovy;
+                        float fDistance = (0.5f * m_fHeight) / (float)tan(NW4R_MATH_DEG_TO_RAD(0.5f * fFovy));
+                        m_Unk18 = 0.0f;
+                        m_Unk1C = 0.0f;
+                        m_Unk24 = 0.0f;
+                        m_Unk28 = 0.0f;
+                        m_Unk2C = 0.0f;
+                        m_Unk30 = 0.0f;
+                        m_fDistance = fDistance;
+                        m_fDistance2 = fDistance;
+                    }
                 };
 
-                static PersProjInfo *GetPersProjInfo();
+                // (inline: MenuF game/menu/CSelectMenu.cpp emits it)
+                static PersProjInfo *GetPersProjInfo() { return &s_PersProjInfo; }
 
                 // (name guessed; inline, no symbol) Puts the default
                 // projection back: a 30 degree view of the whole frame

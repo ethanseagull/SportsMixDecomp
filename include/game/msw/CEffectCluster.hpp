@@ -4,6 +4,7 @@
 #include "bcs/EF/CEffect.hpp"
 #include "bcs/EF/CResource.hpp"
 #include "bcs/FVEC3.hpp"
+#include "revolution/gx/GXStruct.h"
 
 namespace bcs {
     class CMdlObj;
@@ -32,9 +33,14 @@ namespace msw {
             void SetSpeedOverride(int bOn, float fSpeed);
             // Rotation in radians.
             void SetRotateRad(const bcs::FVEC3 *pRot);
+            // (added for TourF msw::CTournamentRouteMan; parameter names
+            // guessed) The colours of the cluster's point light.
+            void SetPointLightColor(GXColor color, GXColor color2);
             // (parameter names and return types guessed) Fades the cluster
             // out over fFrame frames; the effects it holds.
             void SetFadeoutTime(float fFrame);
+            // (added for TourF msw::CTournamentRouteMan) Fades it in.
+            void SetFadeinTime(float fFrame);
             long GetEffectNum();
             bcs::EF::CEffect *GetEffect(long nIndex);
             // (DOL; added for BasketF's CChrCoreBasketNinja) The effect of

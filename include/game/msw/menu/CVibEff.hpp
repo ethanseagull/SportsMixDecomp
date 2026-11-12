@@ -23,6 +23,9 @@ namespace msw {
                 void SetEnable(int bEnable) { m_bEnable = bEnable; }
 
                 static CVibEff s_Instance;
+                // (added for MenuF game/menu/CSelectMenu.cpp, which emits it;
+                // name from the symbol)
+                static CVibEff *GetInstance() { return &s_Instance; }
 
             private:
                 int m_bEnable;           // 0x00: Initialize sets 1, Finalize 0

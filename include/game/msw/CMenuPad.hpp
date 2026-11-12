@@ -39,6 +39,12 @@ namespace msw {
 
             static CMenuPad s_Instance;
 
+            // (added for MenuF game/menu/CSelectMenu.cpp; argument meaning
+            // guessed) Restarts the count of frames without input; the
+            // first one also sets its limit (fTime frames).
+            void ResetNoInputCountTime(float fTime);
+            void ResetNoInputCountTime();
+
             // (name guessed; inline, no symbol; added for
             // game/menu/CBackIcon.cpp) The instance; CBackIcon::Main tests
             // the address it returns for null.
@@ -55,8 +61,12 @@ namespace msw {
             unsigned short m_nFlags;      // 0x144
             unsigned char m_Unk146[0x312];
             unsigned long m_nInput[4];    // 0x458, the entry count is a guess
-            unsigned char m_Unk468[0x54];
+            unsigned char m_Unk468[0x44];
         public:
+            // 0x4AC. (name guessed; added for game/menu/CSelectMenu.cpp)
+            // Per pad: set to 1 while the pointer is on a button of the
+            // menu object (CSelectMenu::InputDataToMenuObj).
+            unsigned long m_nPointerOnObj[4];
             // (name guessed; added for game/menu/CBackIcon.cpp) Per pad:
             // 1 while the pointer of a pad in pointer style is off the
             // screen, written by CBackIcon::Main.

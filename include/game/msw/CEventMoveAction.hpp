@@ -33,6 +33,8 @@ namespace msw {
             void AnimPlay(long nMot, unsigned long nFlag, float fBlend, float fFrame, float fSpeed);
 
         protected:
+            friend class CRouteMove;
+
             CEventModel *m_pModel;   // 0x04
             float m_fFrame;          // 0x08
             CRouteBase *m_pRoute;    // 0x0C: the route being run

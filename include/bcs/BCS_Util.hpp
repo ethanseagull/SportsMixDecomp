@@ -29,6 +29,10 @@ namespace bcs {
     // In the DOL. Clears size bytes at p, 32 bytes at a time.
     void BCS_CpuClear32(void *p, unsigned long size);
 
+    // (added for MenuF game/menu/CSelectMenu.cpp, which emits it; name
+    // from the symbol) Clears size bytes at p.
+    inline void CPU_CLEAR(void *p, unsigned long size) { memset(p, 0, size); }
+
     // (name guessed) Inline in msw::CStgGmk_WaterPillar's calls of the
     // actor's state queue: short blocks go to memset.
     inline void BCS_CpuClear(void *p, unsigned long size)

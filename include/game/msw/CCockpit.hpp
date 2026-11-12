@@ -65,6 +65,11 @@ namespace msw {
                                            long *, long);
             // (return type guessed) Removes the cockpit task, if there is one.
             static void Remove();
+            // (added for MenuF game/menu/CSelectMenu.cpp; static, argument
+            // meaning guessed) Makes and removes the pointer cursors at
+            // depth fSortZ.
+            static void CreatePointerObj(float fSortZ);
+            static void RemovePointerObj();
 
             // All static: each loads the task from s_TaskHandle itself.
             static long CreateObj(long nObjId, long nParam); // -1 without a task

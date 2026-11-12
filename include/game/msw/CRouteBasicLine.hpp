@@ -23,7 +23,11 @@ namespace msw {
             virtual void AnimPlay(long nAnim);
 
         private:
-            unsigned char m_Unk34[0x14]; // 0x34
+            CEventModel *m_pLine; // 0x34: the model of the line, owned (CreateWinRoute)
+            float m_fLength;      // 0x38
+            float m_fRotY;        // 0x3C
+            float m_fLineFrame;   // 0x40: frame the line's animation starts at
+            long m_nLineType;     // 0x44: argument of MakeLine (0x40: drawn backwards)
     }; // size 0x48
 }
 

@@ -24,6 +24,9 @@ void GXBegin(GXPrimitive type, GXVtxFmt fmt, unsigned short nVerts);
 // Nothing to do on the hardware; kept for the shape of the calls.
 static inline void GXEnd(void) {}
 
+// Added for MenuF game/menu/CBgDisplay.cpp.
+void GXSetCoPlanar(GXBool enable);
+
 #ifdef __cplusplus
 }
 #endif

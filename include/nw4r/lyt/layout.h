@@ -4,6 +4,8 @@
 #include <new>
 
 #include "nw4r/db/Warning.hpp"
+#include "nw4r/lyt/Pane.hpp"
+#include "nw4r/ut/LinkList.h"
 #include "revolution/mem.h"
 
 // The name of this file is part of the binary: Layout::AllocMemory passes
@@ -16,10 +18,35 @@
 namespace nw4r {
     namespace lyt {
 
-        // Lives in the DOL. Only the static allocation helpers so far; the
-        // object itself (0x20 bytes, root pane at 0x10) is not described.
+        class AnimResource;
+        class AnimTransform;
+        class DrawInfo;
+        class GroupContainer;
+        class ResourceAccessor;
+
+        // Lives in the DOL. The static allocation helpers, and (added for
+        // MenuF game/menu/CBgDisplay.cpp) the object itself: 0x20 bytes,
+        // virtuals in vtable order, root pane at 0x10, groups at 0x14.
         class Layout {
             public:
+                Layout();
+                virtual ~Layout();
+                virtual bool Build(const void *pLytResBuf, ResourceAccessor *pResAccessor);
+                virtual AnimTransform *CreateAnimTransform();
+                virtual AnimTransform *CreateAnimTransform(const void *pAnimResBuf, ResourceAccessor *pResAccessor);
+                virtual AnimTransform *CreateAnimTransform(const AnimResource &rAnimRes, ResourceAccessor *pResAccessor);
+                virtual void BindAnimation(AnimTransform *pAnimTrans);
+                virtual void UnbindAnimation(AnimTransform *pAnimTrans);
+                virtual void UnbindAllAnimation();
+                virtual bool BindAnimationAuto(const AnimResource &rAnimRes, ResourceAccessor *pResAccessor);
+                virtual void SetAnimationEnable(AnimTransform *pAnimTrans, bool bEnable);
+                virtual void CalculateMtx(const DrawInfo &rDrawInfo);
+                virtual void Draw(const DrawInfo &rDrawInfo);
+                virtual void Animate(unsigned long option);
+
+                Pane *GetRootPane() const { return mpRootPane; }
+                GroupContainer *GetGroupContainer() const { return mpGroupContainer; }
+
                 static MEMAllocator *mspAllocator;
 
                 static void *AllocMemory(unsigned long size)
@@ -42,6 +69,12 @@ namespace nw4r {
                     }
                     return new (pMem) T();
                 }
+
+            private:
+                ut::detail::LinkListImpl mAnimTransList; // 0x04
+                Pane *mpRootPane;                        // 0x10
+                GroupContainer *mpGroupContainer;        // 0x14
+                Size mLayoutSize;                        // 0x18
         };
     }
 }

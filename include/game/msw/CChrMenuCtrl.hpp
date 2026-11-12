@@ -33,6 +33,9 @@ namespace msw {
             void DeleteChrMenuObj(unsigned long handle);
 
             static CChrMenuCtrl s_Instance;
+            // (added for MenuF game/menu/CSelectMenu.cpp, which emits it;
+            // name from the symbol)
+            static CChrMenuCtrl *GetInstance() { return &s_Instance; }
 
         private:
             CChrMdlObj *CreateMdlObj(long nChr, long nSub, RFLDataSource source, long, long nLayer);

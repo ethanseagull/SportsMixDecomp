@@ -21,6 +21,9 @@ namespace msw {
                 void Stop(unsigned long nSe);
 
                 static CSndEff s_Instance;
+                // (added for MenuF game/menu/CSelectMenu.cpp, which emits it;
+                // name from the symbol)
+                static CSndEff *GetInstance() { return &s_Instance; }
 
                 // (inline, no symbol; added for MenuF
                 // game/menu/unit_6EE84.cpp)

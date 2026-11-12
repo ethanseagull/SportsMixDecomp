@@ -503,6 +503,9 @@ namespace msw {
             // cockpit's special-shot input prompt reads 1 as a nunchaku, 0 as
             // a remote alone and -1 as "ask CMenuPad".
             static long GetPadDefaultType(long nPad);
+            // (added for MenuF game/menu/CSelectMenu.cpp; static, from the
+            // symbol) Sets that byte.
+            static void SetPadDefaultType(long nPad, long nType);
 
             // Not zero when team nTeam may still take an item. (DOL)
             static int CanbeTeamItemPush(long nTeam);

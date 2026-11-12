@@ -25,10 +25,15 @@ namespace msw {
                 void MainLoop();
 
                 static CSndBGM s_Instance;
+                // (added for MenuF game/menu/CSelectMenu.cpp, which emits it;
+                // name from the symbol)
+                static CSndBGM *GetInstance() { return &s_Instance; }
 
                 // (name guessed; inline, no symbol; added for
                 // game/menu/CTitle.cpp) The sound task of the music playing.
                 unsigned long GetTaskId() const { return m_nTaskId; }
+                // Added for MenuF game/menu/CBgDisplay.cpp.
+                long GetSeq() const { return m_nSeq; }
 
             private:
                 // Values of m_nState.

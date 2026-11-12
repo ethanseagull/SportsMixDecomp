@@ -112,20 +112,28 @@ typedef enum _GXPosNrmMtx {
 } GXPosNrmMtx;
 
 typedef enum _GXTevColorArg {
+    GX_CC_CPREV = 0,
+    GX_CC_APREV = 1,
     GX_CC_C0 = 2,
     GX_CC_TEXC = 8,
     GX_CC_RASC = 10,
+    GX_CC_ONE = 12,
+    GX_CC_KONST = 14,
     GX_CC_ZERO = 15
 } GXTevColorArg;
 
 typedef enum _GXTevAlphaArg {
+    GX_CA_APREV = 0,
     GX_CA_A0 = 1,
+    GX_CA_TEXA = 4,
     GX_CA_RASA = 5,
+    GX_CA_KONST = 6,
     GX_CA_ZERO = 7
 } GXTevAlphaArg;
 
 typedef enum _GXTevOp {
-    GX_TEV_ADD
+    GX_TEV_ADD,
+    GX_TEV_SUB
 } GXTevOp;
 
 typedef enum _GXTevBias {
@@ -133,7 +141,8 @@ typedef enum _GXTevBias {
 } GXTevBias;
 
 typedef enum _GXTevScale {
-    GX_CS_SCALE_1
+    GX_CS_SCALE_1,
+    GX_CS_SCALE_2
 } GXTevScale;
 
 // Added for MenuF game/menu/CTitle.cpp (msw::THPGXRestore), with the
@@ -228,6 +237,7 @@ typedef enum _GXTexCoordID {
 typedef enum _GXTexMapID {
     GX_TEXMAP0,
     GX_TEXMAP1,
+    GX_TEXMAP2,
     GX_MAX_TEXMAP = 8,
     GX_TEXMAP_NULL = 0xFF
 } GXTexMapID;
@@ -254,5 +264,66 @@ typedef enum _GXTevColorChan {
     GX_CH_BLUE,
     GX_CH_ALPHA
 } GXTevColorChan;
+
+typedef enum _GXAlphaOp {
+    GX_AOP_AND,
+    GX_AOP_OR,
+    GX_AOP_XOR,
+    GX_AOP_XNOR
+} GXAlphaOp;
+
+// Added for MenuF game/menu/CBgDisplay.cpp (the nw4r::lyt TEV stage
+// setters name them in their mangled names). Values of the public GX API.
+typedef enum _GXTevKColorSel {
+    GX_TEV_KCSEL_1 = 0x00,
+    GX_TEV_KCSEL_K0 = 0x0C,
+    GX_TEV_KCSEL_K1 = 0x0D,
+    GX_TEV_KCSEL_K2 = 0x0E,
+    GX_TEV_KCSEL_K3 = 0x0F
+} GXTevKColorSel;
+
+typedef enum _GXTevKAlphaSel {
+    GX_TEV_KASEL_1 = 0x00,
+    GX_TEV_KASEL_K0_R = 0x10,
+    GX_TEV_KASEL_K0_A = 0x1C,
+    GX_TEV_KASEL_K1_A = 0x1D
+} GXTevKAlphaSel;
+
+typedef enum _GXIndTexStageID {
+    GX_INDTEXSTAGE0
+} GXIndTexStageID;
+
+typedef enum _GXIndTexFormat {
+    GX_ITF_8
+} GXIndTexFormat;
+
+typedef enum _GXIndTexBiasSel {
+    GX_ITB_NONE
+} GXIndTexBiasSel;
+
+typedef enum _GXIndTexMtxID {
+    GX_ITM_OFF
+} GXIndTexMtxID;
+
+typedef enum _GXIndTexWrap {
+    GX_ITW_OFF
+} GXIndTexWrap;
+
+typedef enum _GXIndTexAlphaSel {
+    GX_ITBA_OFF
+} GXIndTexAlphaSel;
+
+typedef enum _GXFogType {
+    GX_FOG_NONE
+} GXFogType;
+
+typedef enum _GXProjectionType {
+    GX_PERSPECTIVE,
+    GX_ORTHOGRAPHIC
+} GXProjectionType;
+
+typedef enum _GXZTexOp {
+    GX_ZT_DISABLE
+} GXZTexOp;
 
 #endif /* !REVOLUTION_GX_GXENUM_H_ */

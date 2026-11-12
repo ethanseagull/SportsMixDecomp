@@ -4,6 +4,13 @@
 #include "bcs/FMTX34.hpp"
 #include "bcs/FVEC3.hpp"
 
+namespace nw4r {
+    namespace g3d {
+        class ResAnmChr;
+        struct ChrAnmResult;
+    }
+}
+
 namespace msw {
 
     // A node path an event model follows (DOL class; msw::CEventModel::
@@ -46,6 +53,15 @@ namespace msw {
             // (DOL fn_801FC430, unnamed; name and parameter names guessed)
             // The rotation of rMtx once its scale rScale is taken out.
             static void _GetMtxRot(bcs::FVEC3 &rRot, const bcs::FVEC3 &rScale, const bcs::FMTX34 &rMtx);
+
+            // (DOL; added for TourF msw::CRouteDataMove, parameter names
+            // guessed) Node nId of anm at frame fFrame; the result mirrored
+            // about rCenter by nFlip (see msw::CEventMove); the rotation of a
+            // result.
+            static void _GetDataResult(nw4r::g3d::ResAnmChr anm, nw4r::g3d::ChrAnmResult &rResult, float fFrame,
+                                       long nId);
+            static void _GetFlipResult(nw4r::g3d::ChrAnmResult &rResult, const bcs::FVEC3 &rCenter, long nFlip);
+            static void _GetDataRot(bcs::FVEC3 &rRot, const nw4r::g3d::ChrAnmResult &rResult);
     };
 
     // A node path from one position and rotation to another (DOL class,

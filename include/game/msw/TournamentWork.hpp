@@ -166,7 +166,10 @@ namespace msw {
             unsigned char m_Unk0CA7[0xCAC - 0xCA7];
             PLAYER_INFO aPlayer[3];          // 0x0CAC
             wchar_t aPlayerName[3][0x20];    // 0x0D9C
-            unsigned char m_Unk0E5C[0xF7C - 0xE5C];
+            // 0x0E5C: one bit per route of the map, set once its line has
+            // been drawn (msw::CTournamentRouteMan, TourF). (name guessed)
+            unsigned char aRouteFlag[0x20];
+            unsigned char m_Unk0E7C[0xF7C - 0xE7C];
             // 0x0F7C: flags of the scripts, kept by BackupFlags (TourF
             // CTmScript); the last one says whether the user's team won.
             // (names guessed)
@@ -191,7 +194,11 @@ namespace msw {
             // 0x1056, given to msw::CEvDemoRes as the stage of the map's
             // models (msw::CTournamentMan::_Init). (name guessed)
             signed char nStage;
-            unsigned char m_Unk1057[0x105C - 0x1057];
+            unsigned char m_Unk1057[0x105B - 0x1057];
+            // 0x105B: which player markers are shown (bits 0-1) and the
+            // shadow (bit 2), set and cleared by msw::CTournamentRouteMan's
+            // timer events (TourF). (name guessed)
+            unsigned char nMarkerFlag;
             float fMarkerY;                  // 0x105C, the height of the player markers (name guessed)
             // The word msw::CTournament::SetDemoType stores (DOL): the demo
             // the tournament map is showing.

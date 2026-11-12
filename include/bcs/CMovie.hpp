@@ -3,6 +3,15 @@
 
 namespace bcs {
 
+    // The THP player's description of the video. Added for MenuF
+    // game/menu/CBgDisplay.cpp (names of the public THP player's
+    // THPVideoInfo).
+    struct THPVideoInfo {
+        unsigned long xSize;     // 0x00
+        unsigned long ySize;     // 0x04
+        unsigned long videoType; // 0x08
+    };
+
     // Lives in the DOL. Plays a THP movie. Only the members used so far;
     // return types are guesses read from how the callers test the results
     // (MenuF game/menu/CGameSelect.cpp).
@@ -38,6 +47,24 @@ namespace bcs {
             void BeginDraw();
             void Draw(long nX, long nY, long nW, long nH, float fS0, float fT0, float fS1, float fT1);
             void EndDraw();
+
+            // Added for MenuF game/menu/CBgDisplay.cpp (inline: emitted out
+            // of line there as GetTHPVideoInfo__Q23bcs6CMovieCFv).
+            const THPVideoInfo *GetTHPVideoInfo() const { return &m_VideoInfo; }
+
+        private:
+            unsigned char m_Unk00[0x88];
+
+        public:
+            // 0x88 to 0xB0 added for MenuF game/menu/CBgDisplay.cpp: the
+            // video's description and the Y, U and V planes of the frame
+            // being shown (names guessed; the file's own helpers read the
+            // planes directly).
+            THPVideoInfo m_VideoInfo;      // 0x88
+            unsigned char m_Unk94[0x10];
+            void *m_pTextureY;             // 0xA4
+            void *m_pTextureU;             // 0xA8
+            void *m_pTextureV;             // 0xAC
     };
 }
 

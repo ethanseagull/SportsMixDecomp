@@ -13,6 +13,11 @@ typedef struct Vec {
 } Vec;
 
 typedef float Mtx[3][4];
+// Added for MenuF game/menu/CBgDisplay.cpp.
+typedef float Mtx44[4][4];
+
+// m = an orthographic projection of the box (t, b, l, r, n, f).
+void C_MTXOrtho(Mtx44 m, float t, float b, float l, float r, float n, float f);
 
 void PSMTXCopy(const Mtx src, Mtx dst);
 void PSMTXIdentity(Mtx m);

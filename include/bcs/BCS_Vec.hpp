@@ -26,6 +26,9 @@ namespace bcs {
     // (argument names guessed) rOut = rIn turned by rotY (radians) about Y.
     // In the DOL.
     void BCS_Vec_RotY(FVEC3 &rOut, const FVEC3 &rIn, float rotY);
+    // (added for TourF game/tour/CTournamentRouteMan.cpp) The same about X.
+    // In the DOL.
+    void BCS_Vec_RotX(FVEC3 &rOut, const FVEC3 &rIn, float rotX);
 
     // (argument names and meaning guessed) The angle (radians) between two
     // vectors; msw::CStgGmk_WaterPillarCluster::GetZoneByPos gives it the

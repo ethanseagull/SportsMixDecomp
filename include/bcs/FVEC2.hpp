@@ -26,6 +26,14 @@ namespace bcs {
             x = v.x;
             y = v.y;
         }
+
+        // Added for MenuF game/menu/CBgDisplay.cpp (emitted out of line
+        // there as Set__Q23bcs5FVEC2Fff).
+        void Set(float fx, float fy)
+        {
+            x = fx;
+            y = fy;
+        }
     };
 }
 

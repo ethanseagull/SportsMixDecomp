@@ -30,6 +30,8 @@ namespace bcs {
                 // z; GetLocationAdjustScaleH is the vertical one.
                 void GetLocationAdjustScale(FVEC3 *pScale, int bAdjust);
                 float GetLocationAdjustScaleH(int bAdjust);
+                // Added for MenuF game/menu/CBgDisplay.cpp (8 bytes in the DOL).
+                float GetLocationAdjustScaleV(int bAdjust);
                 // (name guessed) Bit 0 of the word at 0x44, what C3DCoin
                 // passes to both.
                 int GetAdjustMode() const { return m_nFlag & 1; }

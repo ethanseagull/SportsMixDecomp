@@ -30,6 +30,8 @@ namespace nw4r {
             float rt[3][4];      // 0x1C
 
             void GetTranslate(math::VEC3 *pTrans) const;
+            // (added for TourF msw::CRouteDataMove)
+            void GetScale(math::VEC3 *pScale) const;
         };
 
         // Handle to a skeletal animation resource: one pointer, null when

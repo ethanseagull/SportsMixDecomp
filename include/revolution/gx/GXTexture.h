@@ -51,6 +51,12 @@ void GXLoadTexObj(const GXTexObj *pObj, int map);
 void GXInitTexObjLOD(GXTexObj *pObj, GXTexFilter minFilter, GXTexFilter magFilter, float fMinLod, float fMaxLod,
                      float fLodBias, unsigned char bBiasClamp, unsigned char bEdgeLod, GXAnisotropy maxAniso);
 
+// Added for MenuF game/menu/CBgDisplay.cpp.
+void *GXGetTexObjData(const GXTexObj *pObj);
+unsigned char GXGetTexObjMipMap(const GXTexObj *pObj);
+GXTexFmt GXGetTexObjFmt(const GXTexObj *pObj);
+void GXInvalidateTexAll(void);
+
 #ifdef __cplusplus
 }
 #endif

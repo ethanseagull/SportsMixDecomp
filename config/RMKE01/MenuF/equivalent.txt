@@ -137,7 +137,7 @@ MenuF Set__Q33msw10SelectMenu13CCupSelectTabFv near 99.5 register allocation onl
 MenuF Set__Q33msw10SelectMenu13CEntryExplainFv near 97.6 register choice only: the part list and this swap r31/r30 (ours r24/r31), loop registers shift with them, plus the order of one mr; same instructions otherwise
 MenuF Set__Q33msw10SelectMenu13CLevelMessageFv near 99.9 register allocation only: the message text pointer is kept in a different saved register across wcslen
 MenuF Set__Q33msw10SelectMenu13CNoFriendInfoFv near 99.9 register allocation only
-MenuF Set__Q33msw10SelectMenu13CPlayerSelectFv near 93.6 addressing form only: the original loads each .rodata object and float literal with its own lis, ours keeps the .rodata base in a saved register (one more saved register, calls scheduled around it); same loads, constants, calls and branches
+MenuF Set__Q33msw10SelectMenu13CPlayerSelectFv near 99.2 register allocation and scheduling only (pool-off stand-in applied: .rodata objects and float literals now one lis each, as in the original); same loads, constants, calls and branches
 MenuF Set__Q33msw10SelectMenu13CWiFiOtherMiiFv near 96.8 register choice and instruction order only: button loop registers, and the inlined SetPage keeps the string pool base in another register
 MenuF Set__Q33msw10SelectMenu13CWiFi_2PEntryFv near 99.7 99.7%: register choice only (pane-name pointer, GX argument)
 MenuF Set__Q33msw10SelectMenu14CPartyHelpPageFv near 99.6 register allocation only in the button loop (part pointer vs loop counter)

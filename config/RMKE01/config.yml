@@ -19,6 +19,15 @@ modules:
   name: MenuF
   force_active:
   - MenuModuleMain
+  - UnusedMdlTable__13CCharaMdl_cpp
+  - UnusedPlayerNode__13CCharaMdl_cpp
+  - UnusedPlayerTable__13CCharaMdl_cpp
+  - UnusedMatName__13CCharaMdl_cpp
+  - UnusedMotTbl__13CCharaMdl_cpp
+  - UnusedMotTblLen__13CCharaMdl_cpp
+  - UnusedFloat0__13CCharaMdl_cpp
+  - UnusedFloat1__13CCharaMdl_cpp
+  - UnusedTexId__13CCharaMdl_cpp
   symbols: config/RMKE01/MenuF/symbols.txt
   splits: config/RMKE01/MenuF/splits.txt
 - object: files/Module/Final/TourF.rel

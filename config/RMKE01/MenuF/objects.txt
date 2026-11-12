@@ -22,6 +22,7 @@ Equivalent game/menu/CEntryExplain.cpp
 Matching game/menu/CHowTo.cpp
 Equivalent game/menu/CButtonA.cpp
 Equivalent game/menu/CButtonACode.cpp
+Equivalent game/menu/CCharaMdl.cpp
 Matching game/menu/CScoreTop.cpp
 Equivalent game/menu/CGameSelect.cpp
 Equivalent game/menu/CChrSign.cpp

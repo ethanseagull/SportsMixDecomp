@@ -1,15 +1,30 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
+TourF AnimPlay__Q23msw15CRouteBasicLineFl unverified 93.0 name buffer size (frame 0xB0 vs 0x50) and one branch less in the switch on the line type
 TourF AttachEffectCamera__Q23msw14CTournamentManFllPCQ23bcs5FVEC3lUlUlUl near 98.2 register choice and instruction order only
 TourF AttachEffectModel__Q23msw14CTournamentManFlPQ23msw11CEventModelllUlPCQ23bcs5FVEC3UlUlUl near 98.3 register choice and instruction order only
+TourF CalcFrame__Q23msw14CRouteDataMoveFv near 99.5 instruction order only
+TourF CalcSpeed__Q23msw17CRoutePhysOffsetYFff unverified 80.8 only the order of the vector temporaries and register choice differ (schedule); 80.8 is under the near floor
+TourF CleanRoute__Q23msw10CRouteMoveFf near 89.2 instruction order only
 TourF CreateModel__Q23msw17CTournamentTrophyFliill near 98.8 stack slots only: nIndex and the three by-value ResFile copies are allocated in the opposite order (0x8..0x14); same code otherwise
 TourF CreateModel__Q23msw21CEvMdlCreaterTmMdlChrFRQ33msw10CEvDemoRes9_CHR_INFO near 99.1 register choice only: r29 and r30 are swapped between rInfo and nChr (later nAnim); same instructions otherwise
 TourF CreatePlayerMarker__Q23msw14CTournamentManFPCcllil near 98.2 register choice and instruction order only
+TourF CreateWinRoute__Q23msw19CTournamentRouteManFRfll near 98.5 instruction order only
+TourF GetCameraDirect__Q23msw11CRouteDokanFRQ23bcs5FVEC3Rflf near 95.6 instruction order and register choice only
 TourF GetCameraDirect__Q23msw15CRouteBigGunOutFRQ23bcs5FVEC3Rflf near 95.7 inline TournamentWork::GetPointViewPos computes the z offset before the x offset (independent int-to-float conversions), so stack temporaries, registers and instruction order differ; same loads, stores and constants
+TourF GetMoveEventId__Q23msw10CRouteMoveCFll near 95.5 register choice and operand order of the adds only
+TourF GetOffsetFrame__Q23msw10CRouteBaseFffff unverified 93.8 one more saved register and a larger frame (0x190 vs 0x160): the vector temporaries of the distance helper are laid out differently; logic follows the asm
 TourF GetPointFastRoute__Q23msw14TournamentWorkFUcUcUcPsPsPQ33msw14TournamentWork11_LINK_POINTPQ33msw14TournamentWork11_MOVE_POINTll near 87.7 registers; first store is sthux instead of add+sth (same address); 0x7fff loaded twice instead of once
+TourF GetResultPos__Q23msw14CRouteDataMoveFRQ23bcs5FVEC3fi near 95.9 instruction order and register choice only
+TourF GetResultPos__Q23msw17CRoutePhysOffsetYFRQ23bcs5FVEC3fi unverified 86.6 paired-single arc position: the original interleaves the two scalings, ours uses separate helper calls (frame and temporaries differ)
+TourF GetResult__Q23msw14CRouteDataMoveFRQ33msw10CRouteBase7_RESULTfi unverified 96.9 one load only in the original around the start/end point add
+TourF GetResult__Q23msw17CRoutePhysOffsetYFRQ33msw10CRouteBase7_RESULTfi unverified 93.6 paired-single arc position: the original interleaves the two scalings, ours uses separate helper calls (frame and temporaries differ)
+TourF GetSelectDir2d__Q23msw10CRouteBaseFPQ23msw11CEventModell unverified 90.9 stack slot of the projected positions and one extra store in ours
+TourF GetSelectDir__Q23msw16CRouteJumpPointsFfi near 99.5 instruction order only
 TourF InitMoveRouteRot__Q23msw14CTournamentManFl near 99.0 the unit's -1.0f literal sits after 1e-5 in .rodata (cause not found), so some float loads use offsets 4-8 bytes away; same values. Otherwise register and order only
 TourF InitMoveRoute__Q23msw14CTournamentManFl near 98.2 the unit's -1.0f literal sits after 1e-5 in .rodata (cause not found), so some float loads use offsets 4-8 bytes away; same values. Otherwise register and order only
 TourF Initialize__Q23msw27CTournamentRouteMan_Stage32Fv near 99.7 the two argument registers of the first _GetResAnm call are set up in the other order; regs search no gain
 TourF LeapDataSceneCamera__Q23msw14CTournamentManFlsUl near 99.2 register choice and instruction order only
+TourF MakeLine__Q23msw15CRouteBasicLineFll near 99.1 equivalent branch form of the line model's null check
 TourF MakePointData__Q23msw14TournamentWorkFPsPQ33msw14TournamentWork11_LINK_POINTll near 99.3 nLink and pLink in each other's registers
 TourF MakeRouteCost__Q23msw14TournamentWorkFPsPsPQ33msw14TournamentWork11_LINK_POINTUcUcs near 90.5 register and order; the original also spills pHead to the stack and reloads it at exit
 TourF MakeRouteSelect__Q23msw14CTournamentManFPUsUcUcUcPCUcf near 95.6 register choice and instruction order only
@@ -17,10 +32,14 @@ TourF PlaySe__Q23msw14CTournamentManFlPCQ23bcs5FVEC3lfffUl near 96.9 register ch
 TourF PlaySe__Q23msw14CTournamentManFlRCQ23bcs5FVEC3lfffUl near 96.9 register choice and instruction order only
 TourF PlayerMarkerSetPosY__Q23msw14CTournamentManFfl near 98.2 register choice and instruction order only
 TourF PushMoveRoute__Q23msw14CTournamentManFlPUsl near 99.9 register choice and instruction order only
+TourF PushRoute__Q23msw10CRouteBaseFRQ33msw10CRouteBase11_PUSH_PARAMUlff near 99.5 instruction order only
+TourF PushRoute__Q23msw10CRouteMoveFPQ23msw10CRouteBaseUlff unverified 93.4 one load only in the original in the open-route branch
+TourF PushRoute__Q23msw11CRouteDokanFRQ33msw10CRouteBase11_PUSH_PARAMUlff unverified 97.8 calls VEC3::operator+= and the ResFile copy constructor in the original, bcs::FVEC3Add and ResFile(ResFileData*) in ours; stack slots differ
 TourF PushRoute__Q23msw14CRouteBigGunInFRQ33msw10CRouteBase11_PUSH_PARAMUlff near 99.9 register numbering inside the inlined FVEC3Add paired-single block only (identical instructions and order otherwise); regs search no gain
 TourF PushRoute__Q23msw14CRouteShipMoveFRQ33msw10CRouteBase11_PUSH_PARAMUlff near 97.8 the follow-up event blocks read nNext once into a register; the original re-reads the same unchanged field for the call argument
 TourF PushRoute__Q23msw14CRouteShipRideFRQ33msw10CRouteBase11_PUSH_PARAMUlff near 98.7 nId + 0x200 computed into r0 at the store (one extra mr) and paired-single register choice; same values
 TourF PushRoute__Q23msw15CRouteBigGunOutFRQ33msw10CRouteBase11_PUSH_PARAMUlff near 99.6 register allocation only (identical after renumbering); regs search no gain
+TourF PushRoute__Q23msw16CRouteJumpPointsFRQ33msw10CRouteBase11_PUSH_PARAMUlff unverified 84.5 7436-byte route builder written for behaviour from the m2c draft: the trim and direction loops are shared helpers in ours, so frame, loop shapes and call order differ
 TourF SelectFastRouteBasic__Q23msw14TournamentWorkFUcPUsllPQ33msw14TournamentWork11_MOVE_POINTf near 98.4 register choice and instruction order only
 TourF SendEvent__Q23msw27CCockpitTournamentTelopLogoFlPv near 99.6 99.6%, schedule only: r29/r31 swapped between the text-pane index and the text pointer
 TourF SetCameraActive__Q23msw14CTournamentManFs near 99.5 one FVEC3 temporary in a different stack slot (0x18 vs 0x24)
@@ -30,18 +49,33 @@ TourF SetCameraRate__Q23msw14CTournamentManFfff near 98.9 register choice and in
 TourF SetEffectPoint__Q23msw14CTournamentManFllllUlUl near 88.7 register choice and instruction order only
 TourF SetMoveLine__Q23msw14CTournamentManFllffff near 98.8 the unit's -1.0f literal sits after 1e-5 in .rodata (cause not found), so some float loads use offsets 4-8 bytes away; same values. Otherwise register and order only
 TourF SetMoveRoute__Q23msw14CTournamentManFliPUslfif near 96.6 the unit's -1.0f literal sits after 1e-5 in .rodata (cause not found), so some float loads use offsets 4-8 bytes away; same values. Otherwise register and order only
+TourF SetNode__Q23msw14CRouteDataMoveFRCQ34nw4r3g3d7ResFilePCcl unverified 95.7 the node-count check of the animation dictionary compiles with one branch and a zero more than the original
+TourF SetRouteWrite__Q23msw19CTournamentRouteManFli near 91.0 register allocation and instruction order only; step masks are bytes as in the original
+TourF SetWinRoute__Q23msw19CTournamentRouteManFPUslii near 88.1 instruction order and register choice; ours recomputes the flag byte index (extrwi) in the clear branch, same value
 TourF Set__Q23msw27CCockpitTournamentTelopLogoFv near 99.1 99.1%, schedule only: saved registers for the pane-link pointer, child count and parent pane in the reparenting loop are assigned differently; same instructions otherwise
 TourF Set__Q23msw31CCockpitTournamentMenuWinTrophyFv near 98.1 98.1%. Instruction for instruction the same as the original once the saved registers r24-r31 are masked: only which saved register holds which value differs (original: part r31, CLytCtrl/list r30, this r29; ours: list r31, this r30, part and CLytCtrl r26). No effect on behaviour.
+TourF SetupChipModel__Q23msw19CTournamentRouteManFlllRCQ23bcs5FVEC3lllill near 91.0 instruction order and register choice of the grid position conversion
 TourF SetupChrModelSub__Q23msw14CTournamentManFlli near 93.5 loop index strength-reduced instead of added each pass; same addresses
 TourF SetupInitial__Q23msw9CTmScriptFPQ23msw16CTmScriptHandler near 97.8 register allocation/instruction order only
 TourF SetupMatch__Q23msw9CTmScriptFlll near 99.9 register allocation/instruction order only
+TourF SetupMove__Q23msw10CRouteMoveFfi unverified 90.3 two instructions more in ours in the action reset loop
+TourF SetupRoute__Q23msw19CTournamentRouteManFv unverified 89.6 one memory access and the select-direction conversion differ (clrlwi count)
+TourF SetupSelect__Q23msw10CRouteBaseFRCQ23bcs5FVEC3PQ23msw11CEventModelfffi near 93.7 stack slots of the vector temporaries and register choice only
 TourF SetupSelect__Q23msw14CTournamentManFPPQ23msw10CRouteBaseUcPCUclllfff near 93.6 register choice and instruction order only
+TourF SetupStagePoint__Q23msw19CTournamentRouteManFli near 99.0 instruction order only
 TourF TimerEvent__Q23msw27CTournamentRouteMan_Stage32FllfUli near 99.0 case 0x13 inlines TournamentWork::GetPointViewPos, which computes z before x (stack temporaries, registers, order); register numbering otherwise
 TourF TimerEvent__Q23msw27CTournamentRouteMan_Stage33FllfUli near 98.5 register and instruction order only, mostly the inlined point-offset conversions; regs search no gain in 24 tries
+TourF UpdateFrame__Q23msw10CRouteMoveFf near 86.6 one saved register fewer and the two vector-difference temporaries are copied in another order; same values
 TourF UpdateFrame__Q23msw14CTournamentManFf near 97.9 registers and order in the inlined Lerp subtractions, operand order of one fmadds
+TourF UpdateFrame__Q23msw16CEvMoveActTmJumpFRCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 99.2 equivalent branch form of the route null check
 TourF UpdateFrame__Q23msw18CEvMoveActTmBigGunFRCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 98.6 the null-route early return is one beq instead of bne over an unconditional b (equivalent branch form); nested and local-variable forms tried
+TourF UpdateFrame__Q23msw18CEvMoveActTmNormalFRCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 85.6 instruction order and register choice only
 TourF _CheckUnlockStage__Q23msw9CTmScriptFl near 98.4 register allocation/instruction order only
+TourF _DefPushCamera__Q23msw19CTournamentRouteManFPQ33msw10CRouteBase10_PUSH_INFOlfPQ23msw11CEventModel near 94.1 instruction order and register choice only
+TourF _DefTimerEvent__Q23msw19CTournamentRouteManFllfUli unverified 96.5 four loads only in the original (the dead AnimPlay check kept by the inlined _StageSet) and a 0x10 smaller frame in ours
+TourF _GetResult__Q23msw10CRouteMoveFRQ33msw10CRouteBase7_RESULTflf near 99.0 the original keeps one dead float add (a sum of the route frames never read); results identical
 TourF _Init__Q23msw14CTournamentManFl near 99.8 two FVEC3 temporaries and locals in swapped stack slots
+TourF _Init__Q23msw19CTournamentRouteManFv near 99.9 instruction order only
 TourF _OpSysCallCreateTeamMission__Q23msw9CTmScriptFv near 89.3 local array 4 bytes higher on the stack, repeated nNum>0 test folded, registers
 TourF _OpSysCallEraseTeam__Q23msw9CTmScriptFv near 98.8 register allocation/instruction order only
 TourF _OpSysCallGetLoseTeam__Q23msw9CTmScriptFv near 99.0 register allocation/instruction order only
@@ -65,7 +99,13 @@ TourF _OpSysCallSetRouteWrite__Q23msw9CTmScriptFv near 94.5 original re-reads th
 TourF _OpSysCallSetRuleItem__Q23msw9CTmScriptFv near 99.2 register allocation/instruction order only
 TourF _OpSysCallStockRelayPoint__Q23msw9CTmScriptFv near 91.0 0xFF fill and copy loop unrolled differently; same stores in same order
 TourF _OpSysCallUnlockOpen__Q23msw9CTmScriptFv near 97.2 register allocation/instruction order only
+TourF _RemoveTimer__Q23msw19CTournamentRouteManFll near 96.9 register choice only
+TourF _SetParam__Q23msw10CRouteBaseFRQ33msw10CRouteBase6_PARAMlli near 97.3 instruction order and register choice of the two inlined point-view offsets
+TourF _SetResult__Q23msw14CRouteDataMoveFRQ34nw4r3g3d12ChrAnmResultfi near 99.5 instruction order only
+TourF _SetTranslate__Q23msw15CRouteBasicJumpFRQ23bcs5FVEC3RQ23bcs5FVEC3fi near 95.8 register choice and an equivalent branch layout of the scale clamp
+TourF _SetupStagePoint__Q23msw19CTournamentRouteManFRQ33msw14TournamentWork10POINT_INFOlUlUlli unverified 93.2 two extra memory accesses in ours (flag reloads)
 TourF _ShipAnimNodeAp__Q23msw27CTournamentRouteMan_Stage33FUllfUlli near 98.7 register choice and the order of the int-to-float stack temporaries in the inlined point-view offset; regs search no gain
 TourF _ShipAnimNodeCamera__Q23msw27CTournamentRouteMan_Stage33FUllf near 97.3 register choice and the order of the int-to-float stack temporaries in the inlined point-view offset; regs search no gain
 TourF _ShipAnimNode__Q23msw27CTournamentRouteMan_Stage33FUllfUlli near 98.6 register choice and the order of the int-to-float stack temporaries in the inlined point-view offset; regs search no gain
+TourF _StageAttachChr__Q23msw19CTournamentRouteManFlUlli near 98.9 equivalent branch form of the two model null checks
 TourF __sinit_\CTournamentRouteMan_Stage31_cpp near 98.5 instruction order only: the two dead stack temporaries of the FVEC3(0,0,0) constructor arguments are stored before the copies into s_KinokoParam instead of interleaved with them; same stores, same values

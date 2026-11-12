@@ -69,13 +69,10 @@ namespace msw {
         // when another team stands there.
         float GetPointOffsetTeam(long nPoint, long nTeam);
 
-        // (inline, name from its static local) The music of cup nCup's
-        // map.
-        inline long GetTournamentBgm(long nCup)
-        {
-            static long g_sTournamentMainBgm[5] = {0x33, 0x33, 0x34, 0x35, 0x33};
-            return g_sTournamentMainBgm[nCup];
-        }
+        // GetTournamentBgm(long nCup), the music of cup nCup's map, is
+        // inline and defined in TourF game/tour/CTournamentStep.cpp, its
+        // only user: its static local sits in the middle of that file's
+        // .data (after CTournamentExit::Main's jump table).
 
         // One firework of a victory or unlock scene, 0x10 bytes; a list
         // of them ends with nType -1 (CTournamentStep::_SetupFireworks,

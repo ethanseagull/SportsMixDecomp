@@ -1401,6 +1401,12 @@ namespace msw {
             void Util_NodePatchRotY(float fRotY);
             void WSE_Play(long nSlot, long nSe, unsigned long, long);
             int IsAnimLoop(unsigned long nSlot) const;
+            // (added for BasketF game/basket/unit_38A7C.cpp; DOL, meanings
+            // guessed from the names) Stops the sound of slot nSlot (fading
+            // over fFrame frames); the yaw from the goal the team attacks
+            // towards the character.
+            void WSE_Stop(long nSlot, float fFrame);
+            float GetRotY_FromGoal() const;
 
             // Added for BossF game/boss/CChrCoreBossMethod.cpp (all in the
             // DOL; return types and parameter meanings guessed).

@@ -83,7 +83,7 @@ Matching game/msw/CMenuTask.cpp
 Equivalent game/msw/CChrOptMdlObj.cpp
 Equivalent game/msw/CCockpitLayoutBase.cpp
 Equivalent game/msw/CMenuPartBase.cpp
-Equivalent game/msw/CStgEffectSlot.cpp
+Equivalent game/msw/CStgEffectSlot.cpp flags=noauto
 Equivalent game/msw/CCockpitMenuBase.cpp
 Equivalent game/bcs/G2D/CLayoutBase.cpp
 Equivalent game/msw/CStgSeSlot.cpp
@@ -101,4 +101,7 @@ Equivalent game/msw/CStgSrt.cpp
 Equivalent game/msw/EvDemo.cpp
 Equivalent game/msw/CEvDemoMdlObj.cpp
 Equivalent game/msw/CStgAct.cpp
-NonMatching game/msw/CStgMdl.cpp
+Equivalent game/msw/CStgMdl.cpp
+Matching game/msw/CStgGmk.cpp
+Equivalent game/bcs/CRsoModule.cpp flags=noauto
+Matching game/msw/ArchiveFont.cpp

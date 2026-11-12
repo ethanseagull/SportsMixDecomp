@@ -1,7 +1,19 @@
 #ifndef MSW_CSTAGEANM_HPP_
 #define MSW_CSTAGEANM_HPP_
 
+namespace bcs {
+    class CMdlObj;
+}
+
+namespace nw4r {
+    namespace g3d {
+        class ResFile;
+    }
+}
+
 namespace msw {
+
+    class CArn;
 
     // The animations of a stage model; msw::CStgMdl keeps a pointer to one
     // at 0x14 (GetAnmObj) and forwards its animation getters to it. Nothing
@@ -25,11 +37,22 @@ namespace msw {
         public:
             // (DOL fn_8015ABF4) Made by msw::CStgMdl::Create, 0xAC bytes.
             CStageAnm();
+            // (DOL fn_8015B2F4, unnamed; name and meaning guessed) The flags
+            // CMdlObj::Create takes for entry idx of the archive, from the
+            // animations res has for it.
+            static unsigned long GetMdlCreateFlag(nw4r::g3d::ResFile res, const CArn *pArn, long idx);
             virtual ~CStageAnm();                                              // 0x08
-            virtual void VFunc0C();                                            // 0x0C
-            virtual void VFunc10();                                            // 0x10
+            // (names and return types guessed; called by the creators in
+            // game/msw/CStgMdl.cpp) Make the animations of pMdl: entry idx
+            // of an archive, or those named pName plus each suffix of
+            // ppSuffix (a null-ended table) in res.
+            virtual bool Create(bcs::CMdlObj *pMdl, nw4r::g3d::ResFile res, const CArn *pArn, long idx); // 0x0C
+            virtual bool Create(bcs::CMdlObj *pMdl, nw4r::g3d::ResFile res, const char *const *ppSuffix,
+                                const char *pName, unsigned long flag);         // 0x10
             virtual void VFunc14();                                            // 0x14
-            virtual void VFunc18();                                            // 0x18
+            // (name guessed) Takes MDL_PARAM::pAnmParam, the table of how
+            // the animations are played.
+            virtual void SetAnmParam(const void *pParam);                     // 0x18
             virtual void VFunc1C();                                            // 0x1C
             virtual void VFunc20();                                            // 0x20
             // (names guessed) Starts animation anm (what msw::CStgMdl::SetAnm

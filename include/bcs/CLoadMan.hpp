@@ -28,7 +28,14 @@ namespace bcs {
                 short m_Unk106;            // 0x106
                 short m_Unk108;            // 0x108
                 short m_nAlign;            // 0x10A (meaning guessed)
-                unsigned long m_Unk10C;    // 0x10C
+                // 0x10C: a short (bcs::CRsoModule's constructor stores 2
+                // there with sth, CLoadMan::Load takes it as a short) in a
+                // four-byte group that MenuF's CSelectMenu::InitLoad copies
+                // as one word (m_Unk10C). Names guessed.
+                union {
+                    short m_nUnk10C;
+                    unsigned long m_Unk10C;
+                };
             };
 
             static void SetRawDataBufferMem(long);
@@ -69,6 +76,12 @@ namespace bcs {
             // loaded FILE_INPUT; fn_8004D890: non-zero once all nNum files
             // from pFile on have loaded.
             static void *GetPtr(const FILE_INPUT *pFile);
+            // (added for DOL game/bcs/CRsoModule.cpp) fn_8004C110: starts
+            // loading a FILE_INPUT (Load(const char *, ...) builds one and
+            // calls it); fn_8004D300: the FILE_INPUT version of GetSize
+            // (same lookup, returns the entry's word at 0x118).
+            static void Load(const FILE_INPUT *pFile);
+            static unsigned long GetSize(const FILE_INPUT *pFile);
             static int IsLoadEnd(const FILE_INPUT *pFile, long nNum);
             static unsigned long GetSize(const char *pPath, unsigned long nId);
     };

@@ -194,6 +194,10 @@ namespace bcs {
                     nw4r::g3d::ResTexObj GetResTexObj(int nIndex);
                     // (DOL; added for VolleyF game/volley/CBallTargetMarker.cpp)
                     nw4r::g3d::ResMatTevColor GetResMatTevColor(int nIndex);
+                    // (DOL fn_8005B470, unnamed; added for game/msw/CStgMdl.cpp,
+                    // name after nw4r) The material's miscellaneous block;
+                    // bMarkDirty sets bit 0x20 of the material's word.
+                    nw4r::g3d::ResMatMisc GetResMatMisc(bool bMarkDirty);
                     // (added for DOL game/bcs/CMdlRef.cpp; name guessed) The
                     // material's GenMode block. Probably the DOL's fn_8005B428
                     // inlined with its mark-dirty flag false (that one sets

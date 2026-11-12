@@ -96,3 +96,5 @@ Matching game/volley/CC_PARAM_VOLLEY.cpp
 Equivalent game/volley/CChrTargetMarkerVolley.cpp
 Equivalent game/volley/unit_63388.cpp
 Equivalent game/volley/CStgGmk_WaterWorks_Volley_Act.cpp
+Equivalent game/volley/unit_4377C.cpp
+Equivalent game/volley/CcNinjaCloneBody.cpp

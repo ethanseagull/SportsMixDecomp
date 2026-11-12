@@ -27,6 +27,11 @@ namespace msw {
             static int IsBallOffensive(CChrCore *pChr, long nBall);
             static int IsReflectDodgeRoll(const CChrCore *pChr);
             static long GetAssignOuterChrCoreIdx(long nTeam);
+            // (added for game/dodge/unit_D8380.cpp; meanings guessed) Where
+            // the target marker of pSp's special shot is, and the marker
+            // nearest to pChr (for shots with more than one); zero for none.
+            static int GetSpTargetMarkerPos(CChrCore *pSp, bcs::FVEC3 &rPos, long);
+            static int GetSpTargetMarkerNearPos(bcs::FVEC3 &rPos, CChrCore *pSp, const CChrCore *pChr);
     };
 }
 

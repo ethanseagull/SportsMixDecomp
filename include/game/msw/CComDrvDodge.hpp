@@ -239,6 +239,18 @@ namespace msw {
             void LotDivingCatchRate();
             void LotRateSpBefore();
             void WraperActCallDefSpStart();
+            // (game/dodge/unit_D8380.cpp; meanings guessed) Escaping the
+            // other team's special shot: the action running each frame, how
+            // to escape (0 stay, 1 near the marker, 2 also off the front or
+            // back line, 3 anywhere; by lot), and where to.
+            void ActLoopSpDefEscMarker();
+            long GetSpDefEscKind(int bEarly);
+            int GetSpDefEscMarkerPos(bcs::FVEC3 &rPos, long nKind);
+            // (inline in that file, names guessed) How far the blast of
+            // the special shot reaches the driven character, and whether
+            // rPos is that close to its marker.
+            inline float GetSpHitRadius();
+            inline int IsInSpMarker(const bcs::FVEC3 &rPos);
             // The outfield character of the driver's team nearest to pos.
             long Util_GetNearMyTeamOuterChr(const bcs::FVEC3 &pos);
             inline int IsChrHoldBall() const;

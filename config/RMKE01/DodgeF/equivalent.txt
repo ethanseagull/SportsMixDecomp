@@ -54,6 +54,7 @@ DodgeF GetNearPosBall___Q23msw13CBallManDodgeFRCQ23bcs5FVEC3 near 99.1 99.1%: lo
 DodgeF GetParam_FlashColor__Q23msw13CStageDodge15CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
 DodgeF GetParam_FlashColor__Q23msw13CStageDodge16CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
 DodgeF GetPosTurnAroundGimmick__Q23msw16CComDrvDodgeGameFRQ23bcs5FVEC3 near 96.0 96.0%: equivalent branch form: the two Obstacle_GetPosTurnAroundObstacle calls (normal/special) laid out in opposite order; all else identical
+DodgeF GetSpDefEscMarkerPos__Q23msw16CComDrvDodgeGameFRQ23bcs5FVEC3l near 99.8 stack slots only: the XZ temporary of the inline normalise and the diff vector swap places (0x1c/0x28); same instructions and values
 DodgeF GetTargetPosition__Q23msw16CLockCursorDodgeFv near 99.3 original reuses the m_nTarget byte already loaded for IsTarget(), ours reloads the same field (lbz 0x15); s_CursorHeight is anonymous in the original
 DodgeF GetTeamOuterFieldBack__Q23msw13CStageDodge03CFll near 99.8 register choice / operand order only.
 DodgeF GetTeamOuterFieldBack__Q23msw13CStageDodge11CFll near 99.8 register choice only (Main_ also stores the same value to the stack before rounding instead of after).

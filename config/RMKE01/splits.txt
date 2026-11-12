@@ -94,7 +94,7 @@ game/bcs/CMdlObj/CopiedMatAccess.cpp:
 	.text       start:0x8005AC80 end:0x8005B500
 
 game/bcs/CMdlRef.cpp:
-	.text       start:0x8005F380 end:0x8005F648
+	.text       start:0x8005F380 end:0x8005F8E4
 
 game/bcs/CMdlShadow.cpp:
 	.text       start:0x8005FFA0 end:0x80060344

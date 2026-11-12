@@ -237,6 +237,9 @@ namespace bcs {
             }
             // (name guessed)
             unsigned long GetFlag() const { return m_nFlag; }
+            // (name guessed; added for DOL game/bcs/CMdlRef.cpp) The matrix
+            // GetMtx copies, in place.
+            const FMTX34 *GetMtxPtr(ScnObjMtxType type) const { return &m_Mtx[type]; }
             // (name guessed) Whether any bit of flag is set. Inline in
             // CalcSortValue (the double cntlzw of a bool result).
             bool TestFlag(unsigned long flag) const { return (m_nFlag & flag) != 0; }

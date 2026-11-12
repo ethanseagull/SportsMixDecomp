@@ -62,6 +62,40 @@ namespace nw4r {
                 void *m_pData; // 0x00
         };
 
+        // Contents of a material's GenMode block (added for DOL
+        // game/bcs/CMdlRef.cpp; only the cull mode is used).
+        struct ResGenModeData {
+            unsigned char nTexGens;  // 0x00
+            unsigned char nChans;    // 0x01
+            unsigned char nTevs;     // 0x02
+            unsigned char nInds;     // 0x03
+            _GXCullMode cullMode;    // 0x04
+        };
+
+        // Handle to a material's GenMode block. Minimal declaration written
+        // for this project; the check, its file and line are the ones in the
+        // DOL's inline copy (bcs::CMdlRef's constructor).
+        class ResGenMode {
+            public:
+                explicit ResGenMode(void *pData = 0) : m_pData(static_cast<ResGenModeData *>(pData)) {}
+
+                bool IsValid() const { return m_pData != 0; }
+
+                // GX_CULL_ALL without a block.
+                _GXCullMode GXGetCullMode() const
+                {
+                    if (!IsValid()) {
+                        db::Panic("g3d_resmat_ac.h", 223, "NW4R:Failed assertion IsValid()");
+                    }
+                    return IsValid() ? m_pData->cullMode : GX_CULL_ALL;
+                }
+                // (DOL fn_8040C620, unnamed)
+                void GXSetCullMode(_GXCullMode mode);
+
+            private:
+                ResGenModeData *m_pData; // 0x00
+        };
+
         class ResTexObj {
             public:
                 // With NW4R's alignment check (added for MenuF

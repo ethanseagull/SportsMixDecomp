@@ -15,6 +15,7 @@ Matching game/msw/CStgGmkMan.cpp
 Equivalent game/msw/CSceneCalc.cpp
 Equivalent game/msw/CCockpitChrIcon2D.cpp
 Equivalent game/bcs/dwc/CDwcFriend.cpp
+Equivalent game/bcs/CMdlRef.cpp
 Equivalent game/bcs/CMdlShadow.cpp
 Equivalent game/bcs/CMusicData.cpp
 Equivalent game/msw/CStage04Base.cpp

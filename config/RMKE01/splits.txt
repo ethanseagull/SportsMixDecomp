@@ -170,6 +170,8 @@ game/msw/CGameCamera.cpp:
 
 game/msw/CC_DATA.cpp:
 	.text       start:0x800D2C4C end:0x800D2F58
+	.rodata     start:0x80435A68 end:0x80438538
+	.data       start:0x8046C100 end:0x8046C258
 
 game/msw/CChrOptMdlObj.cpp:
 	.text       start:0x800D339C end:0x800D5070

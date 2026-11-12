@@ -23,19 +23,26 @@ namespace msw {
             // made, for character nChr in game mode nMode.
             struct ARTS_OPT_CREATE_INFO;
             static const ARTS_OPT_CREATE_INFO *GetArtsOptionMdl_CreateInfo(long nChr, long nMode);
+            // (DOL fn_800D2E68, name guessed after its neighbour; nMode is
+            // not read) The node settings for the motions of that model.
+            static const bcs::CAnmObjMotBase::NODE_EX_INFO *GetArtsOptionMdl_NodeExInfo(long nChr, long nMode);
 
             // (fields added for BasketF game/basket/CcWarioSmokeMgr.cpp;
-            // names guessed, size not known) The names of the model, of
-            // its shadow and of its reflection model in the option's
-            // resource file (null for none), the node settings for its
-            // motions, and the kind of shadow.
+            // names guessed) The names of the model, of its shadow and of
+            // its reflection model in the option's resource file (null for
+            // none), the node settings for its motions, and the kind of
+            // shadow. Size 0x20 (DOL game/msw/CC_DATA.cpp: 0x40 for the kind
+            // of shadow in every entry; 0x10, 0x18 and 0x1C are 0 or -1 and
+            // small numbers, meaning not known).
             struct ARTS_OPT_CREATE_INFO {
                 const char *m_pMdlName;      // 0x00
                 const char *m_pShadowName;   // 0x04
                 const char *m_pRefName;      // 0x08
                 const bcs::CAnmObjMotBase::NODE_EX_INFO *m_pNodeExInfo; // 0x0C
-                unsigned char m_Unk10[0x4];
+                long m_Unk10;                // 0x10
                 long m_nShadowType;          // 0x14
+                long m_Unk18;                // 0x18
+                long m_Unk1C;                // 0x1C
             };
 
             // (field names guessed) The characters' movement parameters.

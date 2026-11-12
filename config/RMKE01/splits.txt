@@ -550,7 +550,7 @@ game/msw/SAVE_DATA_PLAYER.cpp:
 	.text       start:0x801C1F50 end:0x801C39D4
 
 game/msw/CC_CMN/CMdlEffect.cpp:
-	.text       start:0x801C4CFC end:0x801C5174
+	.text       start:0x801C4CFC end:0x801C5214
 
 game/msw/CC_CMN/CGrdMdlEffect.cpp:
 	.text       start:0x801C5214 end:0x801C5398

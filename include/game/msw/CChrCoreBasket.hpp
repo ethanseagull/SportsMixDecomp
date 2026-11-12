@@ -574,10 +574,18 @@ namespace msw {
             virtual ~CChrCoreBasketDonkey();
     };
 
+    // Bowser Jr.: his special shot throws a spray of paint balls
+    // (CC11_BASKET::CcKoopaJrPaint) around the goal.
     class CChrCoreBasketKoopaJr : public CChrCoreBasket {
         public:
             CChrCoreBasketKoopaJr();
             virtual ~CChrCoreBasketKoopaJr();
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *pWork, long); // 0xCE4
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
     };
 
     // Allocated with 0x5F4 bytes.

@@ -80,3 +80,4 @@ NonMatching game/basket/CStageBasket10.cpp
 Equivalent game/basket/CCockpitBasketCoder.cpp
 Equivalent game/basket/CChrManBasket.cpp
 Equivalent game/basket/CComManBasketGame.cpp
+Equivalent game/basket/CChrCoreBasketKoopaJr.cpp

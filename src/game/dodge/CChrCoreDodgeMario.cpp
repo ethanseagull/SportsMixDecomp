@@ -3,14 +3,19 @@
 #include "bcs/BCS_Math.hpp"
 #include "game/msw/CEffectCtrl.hpp"
 
+// (guessed) The original's .rodata starts with an unread "hoos_top" (the
+// node name Luigi's vacuum uses) and 0.0f: constants of code the module link
+// stripped, while keeping its data. Named here and kept by the module's
+// force_active list in config.yml; nothing reads them. See notes/toolchain.md,
+// "Unread constants of stripped code".
+namespace CChrCoreDodgeMario_cpp {
+    extern const char UnusedString[] = "hoos_top";
+    extern const float UnusedFloat = 0.0f;
+}
+
 // 60 degrees in radians; unused here, as in the other DodgeF chr cores
 // (most likely from a header they all include).
 static const float s_Unk60Deg = bcs::DEG_TO_RAD(60.0f);
-
-// The original's .rodata for this file is an unread "hoos_top" (the node
-// name Luigi's vacuum uses), most likely from a pointer defined in a header
-// both files include and dropped by the link here. Our compiler drops it
-// entirely, so this unit is 0x10 bytes short of .rodata.
 
 // msw::CChrCoreDodgeMario: Mario in the dodgeball game. His special shot
 // only adds effects to the common one.

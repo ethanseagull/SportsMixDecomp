@@ -3,6 +3,7 @@
 
 #include "bcs/BCS_Color.hpp"
 #include "bcs/CAnmObjMotBase.hpp"
+#include "bcs/FVEC2.hpp"
 
 namespace msw {
 
@@ -45,7 +46,16 @@ namespace msw {
                 long m_Unk1C;                // 0x1C
             };
 
+            // (DOL fn_800D2C38; name and contents guessed) Picked by
+            // CHR_PARAM::m_nSubParam. All three entries are the same. Size
+            // 0x38.
+            struct CHR_SUB_PARAM {
+                bcs::FVEC2 m_Unk00[5];       // 0x00
+                float m_Unk28[4];            // 0x28
+            };
+
             // (field names guessed) The characters' movement parameters.
+            // Size 0x54.
             struct CHR_PARAM {
                 // A move to a point over a number of frames.
                 struct MOVE_PARAM {
@@ -54,7 +64,45 @@ namespace msw {
                     float m_fFrameMax;       // 0x08
                     float m_fDist;           // 0x0C
                 };
+
+                long m_Unk00;                // 0x00 (0 in every entry)
+                long m_Unk04;                // 0x04 (0 to 4)
+                long m_nName;                // 0x08 'c00'..'c18', 'm00', 'm01'
+                float m_Unk0C;               // 0x0C (16.0)
+                float m_Unk10;               // 0x10 (3.0)
+                float m_Unk14;               // 0x14
+                float m_Unk18;               // 0x18
+                float m_Unk1C;               // 0x1C (0.6)
+                float m_Unk20;               // 0x20
+                float m_Unk24;               // 0x24 (2.0)
+                long m_nSubParam;            // 0x28 index for GetChrSubParam
+                long m_nMoveSpeed;           // 0x2C index for GetMoveSpeed
+                float m_Unk30;               // 0x30 (1.0, 1.2 or 1.5)
+                float m_Unk34[4];            // 0x34 angles in radians
+                long m_Unk44[4];             // 0x44
             };
+
+            // (DOL fn_800D2B54, name guessed) The parameters of character
+            // nChr; the first entry for an unknown one.
+            static const CHR_PARAM *GetChrParam(long nChr);
+            // (DOL fn_800D2C24, name guessed; CChrCore::GetPrmMoveSpeed
+            // passes CHR_PARAM::m_nMoveSpeed) A movement speed.
+            static float GetMoveSpeed(long nIdx);
+            // (DOL fn_800D2C38, name guessed) Entry nIdx of the table above.
+            static const CHR_SUB_PARAM *GetChrSubParam(long nIdx);
+
+            // (DOL fn_800D2F98, name guessed; the argument is not read) A
+            // fixed colour, 0x28282800.
+            static bcs::BCS_Color GetChrOptColor_Default(long);
+            // (DOL fn_800D2FA8, name and meaning guessed: the values look
+            // like sound ids) Entry nIdx of character nChr's table for
+            // nKind 0, of a common table for nKind 1; -1 for none. nMode and
+            // the last argument are not read.
+            static long GetChrSeId(long nMode, long nChr, long nKind, long nIdx, long);
+            // (DOL fn_800D3008, name guessed) Entry nIdx of a table for
+            // nKind 0, of game mode nMode's table for nKind 1; -1 for none.
+            // nChr and the last argument are not read.
+            static long GetChrSeIndex(long nMode, long nChr, long nKind, long nIdx, long);
     };
 }
 

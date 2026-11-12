@@ -6,7 +6,8 @@ Matching game/msw/CDataWork.cpp
 Matching game/msw/CGameAccInput.cpp
 Matching game/msw/LayoutTask.cpp
 Matching game/msw/CCollDefUnit.cpp
-NonMatching game/msw/CNowLoading.cpp
+Equivalent game/msw/menu/Localize.cpp
+Equivalent game/msw/CNowLoading.cpp
 Equivalent game/msw/CEvNodeData.cpp
 Equivalent game/msw/EvDemoVs.cpp
 Equivalent game/bcs/CScnObj.cpp

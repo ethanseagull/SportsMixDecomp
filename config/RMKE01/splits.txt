@@ -344,8 +344,20 @@ game/msw/CMenuPadInfo.cpp:
 	.text       start:0x80142130 end:0x80142164
 	.sbss       start:0x805C0C40 end:0x805C0C48
 
+game/msw/menu/Localize.cpp:
+	.text       start:0x80142284 end:0x80142F04
+	.rodata     start:0x8043B238 end:0x8043B480
+	.data       start:0x80471670 end:0x804716E8
+	.sdata      start:0x805BFC28 end:0x805BFC98
+	.sdata2     start:0x805C3120 end:0x805C3190
+
 game/msw/CNowLoading.cpp:
-	.text       start:0x80142FB4 end:0x80142FD0
+	.text       start:0x80142F04 end:0x80143614
+	.rodata     start:0x8043B480 end:0x8043B4B0
+	.data       start:0x804716E8 end:0x80471700
+	.sdata      start:0x805BFC98 end:0x805BFCA8
+	.sbss       start:0x805C0C48 end:0x805C0C50
+	.sdata2     start:0x805C3190 end:0x805C31A8
 
 game/msw/dwc/CGameDwc.cpp:
 	.text       start:0x80143614 end:0x80145B40
@@ -702,8 +714,11 @@ game/msw/CMenuOption.cpp:
 	.text       start:0x80230A28 end:0x802319E0
 
 game/msw/menu/CMovieScnObj.cpp:
-	.text       start:0x80236454 end:0x802366DC
-	.bss        start:0x804D8BE0 end:0x804D8C00
+	.text       start:0x80235D40 end:0x80236704
+	.ctors      start:0x8042D268 end:0x8042D26C
+	.data       start:0x8048ADC0 end:0x8048AF00
+	.bss        start:0x804D8AE0 end:0x804D8C00
+	.sdata2     start:0x805C5678 end:0x805C5690
 
 game/msw/CNpcString.cpp:
 	.text       start:0x802380A4 end:0x80239480

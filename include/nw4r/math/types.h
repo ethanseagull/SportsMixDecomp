@@ -67,9 +67,25 @@ namespace nw4r {
         // HockeyF game/hockey/CCockpitHockeyCoin.cpp (a pane's global
         // matrix, copied as words).
         struct MTX34 {
-            float _00, _01, _02, _03;
-            float _10, _11, _12, _13;
-            float _20, _21, _22, _23;
+            // Named elements and the 3x4 array share the storage, as in NW4R:
+            // the union makes an assignment copy words (lwz/stw), which
+            // nw4r::lyt::DrawInfo::SetViewMtx does in game/msw/CNowLoading.cpp.
+            // Checked on the 51 units naming MTX34 or CameraData: no score changed.
+            union {
+                struct {
+                    float _00, _01, _02, _03;
+                    float _10, _11, _12, _13;
+                    float _20, _21, _22, _23;
+                };
+                float m[3][4];
+            };
+
+            // (added for game/msw/CNowLoading.cpp) Passes the matrix to the
+            // SDK's Mtx functions.
+            typedef float (*MtxPtr)[4];
+            typedef const float (*ConstMtxPtr)[4];
+            operator MtxPtr() { return reinterpret_cast<MtxPtr>(&_00); }
+            operator ConstMtxPtr() const { return reinterpret_cast<ConstMtxPtr>(&_00); }
         };
 
         // (DOL) *pOut = *pM scaled by *pS. Added for the DOL's

@@ -39,6 +39,10 @@ namespace msw {
             // (added for game/basket/unit_23654.cpp; meaning guessed from the
             // name) Turns the check of the special move's endure on or off.
             void SetCheckSpEndure_(int bCheck);
+            // (added for game/basket/unit_31D0C.cpp; meaning guessed from the
+            // name) Restarts team nTeam after one of its characters fell into
+            // the river.
+            void SetRiverFallRestart_(long nTeam);
 
             // (added for game/basket/CGameBasketHungryBossPackun.cpp) The
             // overrides of CGame's virtual functions, from the slots of

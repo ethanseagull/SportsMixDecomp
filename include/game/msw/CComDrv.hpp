@@ -135,6 +135,9 @@ namespace msw {
             // DOL. A random number below nMax. (range guessed from the name;
             // BasketF tests RandMaxI(999) < 20)
             long RandMaxI(long nMax) const;
+            // DOL. A random number from nMin to nMax (added for DodgeF
+            // game/dodge/unit_A40EC.cpp; whether nMax is included is not known).
+            long RandRangeI(long nMin, long nMax) const;
             // DOL. A random percentage to test a rate against (added for
             // HockeyF game/hockey/unit_AFCA0.cpp, which compares it with a
             // rate clamped to 0-100).

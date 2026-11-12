@@ -629,6 +629,9 @@ namespace msw {
             static void TelopCreate(long nTelop, int, long);
             static void TelopRemove(long nTelop);
             static int TelopIsEnd(long nTelop);
+            // (fn_8017F0FC, unnamed in the DOL; name guessed) IsLineMsgDispEnable_
+            // on m_pInstance; 0 without an instance.
+            static int IsLineMsgDispEnable();
             // The speed lines effect over the screen for fFrame frames, and
             // (fn_8018BED0, unnamed in the DOL) its early end.
             static void StartSaturatedLinework(float fFrame);
@@ -694,7 +697,6 @@ namespace msw {
             static void TelopEnd(long nTelop);        // fn_8017E858 (name guessed)
             static int IsTourFinalMatch();
             static CGameCamera *GetGameCamera(long nView); // fn_8017EB78 (name guessed)
-            static int IsLineMsgDispEnable();         // fn_8017F0FC (name guessed)
             static int IsVsMode();
             static int IsLocalVsMode();               // fn_80189CD8 (name guessed)
             static int IsExistGoalRing();

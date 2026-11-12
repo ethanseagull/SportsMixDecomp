@@ -124,7 +124,9 @@ game/bcs/CWorldEnv.cpp:
 	.text       start:0x8007DF9C end:0x8007EB64
 
 game/bcs/G2D/CLayoutBase.cpp:
-	.text       start:0x800A26F0 end:0x800A31B4
+	.text       start:0x800A2524 end:0x800A34B0
+	.data       start:0x80469F78 end:0x8046A000
+	.sdata2     start:0x805C2298 end:0x805C22B0
 
 game/bcs/G2D.cpp:
 	.text       start:0x800AA14C end:0x800ADA84
@@ -253,6 +255,8 @@ game/msw/CEffectCtrl.cpp:
 
 game/msw/CEffectCluster.cpp:
 	.text       start:0x801227AC end:0x80123568
+	.data       start:0x8046F70C end:0x8046F7CC
+	.sdata      start:0x805BFBB8 end:0x805BFBC0
 
 game/msw/CEffectTableList.cpp:
 	.text       start:0x8012444C end:0x801244C0
@@ -598,7 +602,9 @@ game/msw/CStgEffectSlot.cpp:
 	.sdata2     start:0x805C4E10 end:0x805C4E18
 
 game/msw/CStgSeSlot.cpp:
-	.text       start:0x801E874C end:0x801E918C
+	.text       start:0x801E86A8 end:0x801E9F40
+	.data       start:0x80485828 end:0x804858D8
+	.sdata2     start:0x805C4E18 end:0x805C4E20
 
 game/msw/CTmGameHandler.cpp:
 	.text       start:0x801E9F48 end:0x801EAD84
@@ -787,6 +793,8 @@ game/msw/CCockpitResultTime.cpp:
 
 game/msw/CGameGuideMan.cpp:
 	.text       start:0x80269E04 end:0x8026A8F4
+	.rodata     start:0x804501D0 end:0x804501E0
+	.data       start:0x8048ED18 end:0x8048EEA0
 
 game/msw/CDataWork.cpp:
 	.text       start:0x8026F110 end:0x8026F114

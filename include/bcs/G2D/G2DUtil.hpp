@@ -26,9 +26,15 @@ namespace bcs {
     struct FVEC3;
 
     namespace G2D {
+        class CLayoutDL;
         class CPaneCtrl;
         class CPaneObj;
         class CTexMap;
+
+        // (DOL fn_800AAEFC, no symbol; name guessed. Added for DOL
+        // game/bcs/G2D/CLayoutBase.cpp) Sets the z translation of
+        // pLayout's root pane to fZ.
+        void SetLayoutSortZ(CLayoutDL *pLayout, float fZ);
 
         // A new empty pane called pName; null on failure.
         nw4r::lyt::Pane *CreateNullPane(const char *pName);

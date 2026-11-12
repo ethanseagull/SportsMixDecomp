@@ -73,6 +73,7 @@ DodgeF Main__Q23msw9CTelopOutFv near 99.1 99.1%: character number and telop id i
 DodgeF Main__Q33msw13GIMMICK_DODGE14CEffectCoinGetFv near 99.0 register choice only (stack-vector address registers, paired-single temporaries)
 DodgeF Main___Q23msw13CStageDodge05Ff near 96.2 96.2%: register choice; raft loop uses index offsets in the original, advancing pointers in ours; period != 0.0f compare operands swapped; game-flag bit-0 test is clrlwi + double cntlzw in the original, one clrlwi. in ours (same as CStageBasket05::Main_). Same branches and values.
 DodgeF Main___Q23msw13CStageDodge11Ff near 99.4 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
+DodgeF MethdDamage__Q23msw23CChrCoreDodgeDodgeOrDieFUlffflfllll near 99.7 99.7%: only the registers of the queue head index and work pointer in the inlined FsmqGetWork_ are swapped
 DodgeF MethdPassCall__Q23msw15CChrDrvPadDodgeFf near 94.1 constant reached via addi+offset instead of folded @l; one load hoisted
 DodgeF MethdShootCall__Q23msw15CChrDrvPadDodgeFl near 95.0 constant reached via addi+offset instead of folded @l; one load hoisted
 DodgeF MovePos___Q210CC09_DODGE22CcKinopioBoundMushroomFf near 99.6 fmadds multiplicands swapped (register choice)
@@ -157,6 +158,7 @@ DodgeF UpdateMdl__Q23msw13CStageDodge13FUlf near 98.1 register choice and common
 DodgeF UpdatePos___Q33msw13CStageDodge0310CWaterInfoFv near 90.6 float registers and instruction order; frame and values match.
 DodgeF UpdatePressInfoSub___Q23msw15CChrDrvPadDodgeFli near 93.9 constant reached via addi+offset instead of folded @l; one load hoisted
 DodgeF UpdatePressInfo__Q23msw15CChrDrvPadDodgeFv near 86.1 addressing only: nKeyTbl and 0.3/0.8 via shared pool base under noauto vs per-constant lis/addi; same values
+DodgeF UpdateStamina__Q23msw23CChrCoreDodgeDodgeOrDieFf near 97.5 97.5%, every difference checked against the diff: (a) all 13 differing lfs loads read the same values from other offsets of the literal pool (orig 0x0/0x4/0x8/0xC/0x18 = 30/0/1/0/90, ours 0x18/0x0/0x14/0x0/0x10; original has a second 0.0f); (b) three dead stfs 0.0f to stack slots 0x1C/0x2C/0x30 before CreateAttachEffect, never read, which is why the frame is 0x90 vs 0x70 (stwu/stw lr/FPR and GPR save offsets shift with it); (c) two equivalent float branch forms (cror lt|eq;beq vs ble for fMax<=0, blt vs cror gt|eq;bne for GetStamina()>=fMax) and the arm order of the equal-valued stance switch (lfs;b;lfs layout)
 DodgeF Util_SearchArtsPassTo___Q23msw12CChrManDodgeFl near 99.1 99.1%: register allocation only (same as CChrManHockey's).
 DodgeF Util_SearchPassmeetTo___Q23msw12CChrManDodgeFlfRQ23bcs5FVEC3 near 99.2 99.2%: two stack-address registers swapped; team byte sign-extended in place.
 DodgeF __ct__Q210CC03_DODGE19CcDaisyFlowerGardenFPQ23bcs5CTaskPQ23msw8CChrCorelRCQ23bcs5FVEC3 near 99.9 stack slots of state-table temporaries

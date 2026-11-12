@@ -21,6 +21,10 @@ namespace bcs {
                 // Added for game/msw/cockpit/CMissionCount.cpp: the effect
                 // with handle hEffect, null when it is gone.
                 CEffect *GetEffect(unsigned long hEffect);
+                // (name guessed; the DOL's fn_80023B2C, added for
+                // msw::CEffectCluster::IsValid) Nonzero while the effect with
+                // handle hEffect is in one of the manager's lists.
+                int IsExist(unsigned long hEffect);
 
                 // (name guessed) The byte at 0x95; msw::CTournamentMan
                 // (TourF) clears it once the map is loaded.

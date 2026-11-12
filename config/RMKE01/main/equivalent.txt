@@ -34,7 +34,6 @@ main Create___Q43msw6CC_CMN5SLIME14CcSquadFactoryFPQ23msw8CChrCorePCf near 99.8 
 main CtorState_BREAK__Q23msw16CStgGmk_Case_ActFv near 96.7 branch layout of the null-handle select (li 0 on its own path in the original) and store order of the scale vector; same values
 main CtorState_BREAK__Q23msw17CStgGmk_Pylon_ActFv near 100.0 store order of the three equal FVEC3 components (x stored last in the original); same values
 main CtorState_BREAK__Q23msw19CStgGmk_Pinball_ActFv near 94.5 null cluster set by explicit li 0 and register reuse in original; ours saves one more register
-main CtorState_DEFAULT__Q23msw17CStgGmk_Pylon_ActFv near 99.4 registers inside the inlined CFsmQueue helpers
 main CtorState_MOVE__Q23msw16CStgGmk_Case_ActFv near 93.9 the CStgSrt flag store is scheduled after the vector stores in the original; stack slots of the two velocity limit vectors swapped
 main CtorState_MOVE__Q23msw17CStgGmk_Pylon_ActFv near 92.3 original keeps the local CGmkRef in memory (dead vptr store at sp+8, parent read back); ours in a register, so FVEC3 temporaries' stack slots shift
 main CtorState_MOVE__Q23msw19CStgGmk_Pinball_ActFv near 98.9 rlwinm. vs extrwi. for the same bit (CStgSrt::GetRotMtx), one stack slot
@@ -126,7 +125,6 @@ main OnUpdate__Q23msw23CStgGmk_WaterPillar_ActFf near 97.1 register choice and i
 main Pause__Q23bcs8CSndTaskFfi near 98.1 unsigned range test 0x40<=id<=0x63 compiled as subi+cmplwi 0x23 where the original has two cmplwi; same result, rest identical
 main RemoveChildAt__Q23bcs9CScnGroupFUl unverified 80.0 80%: GetChild inlined here, called in the original; rest identical
 main RemoveEntryAll__Q23bcs10CCameraManFv near 97.4 identical instructions; relocation named _f_bss in the original vs m_pCamera (same address 0x804BF580)
-main Respawn__Q23msw19CStgGmk_Pinball_ActFf near 99.3 register allocation/order only (diff.py: registers/schedule)
 main Roll__Q23msw19CStgGmk_Pinball_MdlFRCQ23bcs5FVEC3ff near 98.5 register allocation/order only (diff.py: registers/schedule)
 main SearchFriendMatchChallengerAll__Q33bcs3dwc14CDwcFriendListCFv near 98.7 98.7%: original retests the valid bit with clrlwi. for the second inlined IsFriendMatchChallenger, ours reuses the first result (cmpwi)
 main SendEvent__Q23msw18CCockpitModelTelopFlPv near 96.4 m_hEffect[0] read once before the switch instead of in each case; same field, no store between
@@ -148,8 +146,6 @@ main SetScript__Q33msw2vm9CVMScriptFRCQ33msw2vm9CVMScript unverified 72.8 origin
 main SetTimeValue__Q33msw7cockpit10CTimeCountFPQ23msw17CMenuPaneAccessorfilllli near 99.6 register allocation only (three saved registers permuted); declaration-order search no gain in 24 tries
 main SetVector3__Q33msw2vm9CVMScriptFiQ23bcs5FVEC3 unverified 74.2 schedule only: next float of v loaded before the previous store in the original
 main Set__Q23msw22CCockpitModelTelopHoldFv near 99.8 register numbering only
-main Sleep__Q23msw17CStgGmk_Pylon_ActFf near 99.3 registers inside the inlined CFsmQueue helpers
-main Sleep__Q23msw19CStgGmk_Pinball_ActFf near 99.3 register allocation/order only (diff.py: registers/schedule)
 main Stage02_IsOnWave__Q23msw12CStage02BaseCFRCQ23bcs5FVEC3 near 99.2 99.2%: float register choice for rWavePos.x + margin (new FPR vs reused f0)
 main Stage04_RegistCart__Q23msw12CStage04BaseFPQ23bcs7CMdlObjl near 98.9 98.9%: node index and CStgSeSlot* swap registers; register choice only
 main StartZone__Q23msw26CStgGmk_WaterPillarClusterFl near 98.7 float register choice only, in the inlined paired-single add and the delay value

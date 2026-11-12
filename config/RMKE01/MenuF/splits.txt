@@ -189,14 +189,14 @@ game/menu/CButtonACode.cpp:
 game/menu/CCharaMdl.cpp:
 	.text       start:0x0002F844 end:0x0002FB3C
 	.ctors      start:0x00000020 end:0x00000024
-	.rodata     start:0x000074E8 end:0x00007738
+	.rodata     start:0x000074E8 end:0x000076B0
 	.data       start:0x00004588 end:0x00004590
 	.bss        start:0x00001448 end:0x00001460
 
 game/menu/CCharaName.cpp:
 	.text       start:0x0002FB3C end:0x0002FCA4
 	.ctors      start:0x00000024 end:0x00000028
-	.rodata     start:0x00007738 end:0x00007748
+	.rodata     start:0x000076B0 end:0x00007748
 	.data       start:0x00004590 end:0x000045C8
 	.bss        start:0x00001460 end:0x00001468
 

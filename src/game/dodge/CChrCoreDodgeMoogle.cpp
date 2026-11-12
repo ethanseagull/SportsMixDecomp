@@ -8,12 +8,6 @@
 #include "bcs/BCS_Math.hpp"
 #include "game/msw/CGame.hpp"
 
-// The original's .rodata has a -1.0f after the 8.0f below that nothing in
-// the file reads (likely a stripped function). A dead comparison in
-// SubStateArtsShotIsEndArtsShotAfter_ emits it but makes that function keep a
-// base register for its constants, so it is left out: .rodata is 4 bytes
-// short of the original's.
-
 // 60 degrees in radians. Not used here: nearly every DodgeF file has this
 // object and the static initialiser that fills it (see CChrCoreDodgeLuigi.cpp).
 static const float s_Unk60Deg = bcs::DEG_TO_RAD(60.0f);
@@ -116,3 +110,12 @@ int msw::CChrCoreDodgeMoogle::SubStateArtsShotIsEndArtsShotAfter_(STATE_WORK_AIR
     return 0;
 }
 
+// (guessed) The original's .rodata has a -1.0f after the 8.0f above that
+// nothing in the file reads: a constant of code the module link stripped,
+// while keeping its data. Named here and kept by the module's force_active
+// list in config.yml; nothing reads it. (A dead comparison in a live
+// function emits it too, but changes that function's registers.) See
+// notes/toolchain.md, "Unread constants of stripped code".
+namespace CChrCoreDodgeMoogle_cpp {
+    extern const float UnusedFloat = -1.0f;
+}

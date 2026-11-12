@@ -55,6 +55,13 @@ namespace msw {
         const wchar_t *GetMergeString(wchar_t *pBuf, long nLen, const wchar_t *pText0, const wchar_t *pText1,
                                       const wchar_t *pSep);
 
+        // Added for VolleyF game/volley/CCockpitVolleyBoss.cpp (DOL
+        // 0x801DF710; return type and argument names guessed): the clock
+        // at fTime, with animations nAnim and nAnimAll on text panes nPane
+        // and nShadowPane. The three last arguments are -1, -1 and 0 there.
+        void SetTimeValue(CMenuPaneAccessor *pAccessor, float fTime, int nArg, int bForce, long nAnim,
+                          long nAnimAll, long nPane, long nShadowPane, long nArg0, long nArg1, long nArg2);
+
         void SetSPGaugeTelop(CMenuPaneAccessor *pAccessor, long nPane, long nPane1, long nPane2, long nPane3,
                              long nPane4, float fRate);
     }

@@ -73,6 +73,7 @@ BossF MethdTimeOver__Q23msw12CChrCoreBossFl near 98.4 after the switch ours relo
 BossF MethdTurnOver__Q23msw12CChrCoreBossFl near 99.5 r7/r8 swapped in the inlined queue push; register choice only
 BossF NormalizeCanMoveWorldPos__Q23msw11CComDrvBossCFRQ23bcs5FVEC3 near 97.5 float register allocation (radius sum, inlined FVEC3LenSq, final adds); same instructions and stack slots
 BossF OnMsgN__Q23msw14CChrDrvPadBossFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG near 99.7 float register choice only (512.0f in f2 vs f3 in case 0x97)
+BossF SendMessage___Q23msw9CGameBossFllll near 100.0 register allocation/order only (diff.py: schedule, 100.0% rounded)
 BossF SetBallPowerState__Q23msw21CCockpitBossBallPowerFll near 99.0 only the rodata offset of sPowerPane differs (0x8e8 vs 0x910): the original .rodata holds 0x28 more bytes of @LOCAL@ statics from dead-stripped inline helpers (GaugeBossLineAnim, LifeGaugeAnim, CoinBackAnim, BossLifeGaugeIn, SetSPGaugeAnim); same table, same code
 BossF SetBallPowerValueColor__Q23msw21CCockpitBossBallPowerFli near 86.7 instruction order only: the addi of the sPowerPane address is scheduled before the subf instead of after
 BossF SetBallPowerValue__Q23msw21CCockpitBossBallPowerFls unverified 82.2 instruction order only (82%, short function): the sPowerPane addi, the accessor load and li r6,0 are scheduled in a different order; same instructions otherwise

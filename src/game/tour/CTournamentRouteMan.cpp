@@ -890,8 +890,9 @@ namespace msw {
 
         _PARAM route;
         long nIndex;
-        nw4r::g3d::ResFile file(
-            static_cast<nw4r::g3d::ResFileData *>(EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_dokan", 0)));
+        // Direct initialisation: the original copy-constructs the file from
+        // the returned temporary here (weak ResFile copy constructor).
+        nw4r::g3d::ResFile file(EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_dokan", 0));
         CTournamentMan::GetInstance();
         CTournamentRouteMan *pMan = CTournamentRouteMan::GetInstance();
         CTournamentRouteMan::GET_PARAM value;
@@ -1221,7 +1222,7 @@ namespace msw {
             }
         }
 
-        void *pOffsetRes = GetOffsetRes();
+        nw4r::g3d::ResFile offsetRes = GetOffsetRes();
         long nId = GetStartRouteId();
         float fDir = param.pModel->GetRot().y;
         float fStart = param.pMove->GetRouteFrame();
@@ -1345,7 +1346,7 @@ namespace msw {
             fDir = route.fRotY;
             CRouteBasicJump *pJump = new CRouteBasicJump(route, route.fLength / fJumpFrame, 1);
             CRouteDataMove *pOffset =
-                static_cast<CRouteDataMove *>(GetOffsetRoute(nw4r::g3d::ResFile(static_cast<nw4r::g3d::ResFileData *>(pOffsetRes))));
+                static_cast<CRouteDataMove *>(GetOffsetRoute(offsetRes));
             if (pOffset != 0) {
                 pJump->m_pOffsetRoute = pOffset;
             }
@@ -1502,9 +1503,9 @@ namespace msw {
         return 0;
     }
 
-    void *CRouteJumpPoints::GetOffsetRes()
+    nw4r::g3d::ResFile CRouteJumpPoints::GetOffsetRes()
     {
-        return 0;
+        return nw4r::g3d::ResFile(0);
     }
 
     CTournamentRouteMan *CTournamentRouteMan::GetInstance()
@@ -1587,8 +1588,7 @@ namespace msw {
 
         // Where the character stands in the pipe.
         long nIndex;
-        nw4r::g3d::ResFile file(
-            static_cast<nw4r::g3d::ResFileData *>(EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_dokan", 0)));
+        nw4r::g3d::ResFile file = EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_dokan", 0);
         node.SetResAnm(file, "dokan_IN");
         long nId = node.GetAnmId("cha_scal_anim");
         if (nId != -1) {

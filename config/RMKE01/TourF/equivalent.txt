@@ -5,7 +5,7 @@ TourF AttachEffectModel__Q23msw14CTournamentManFlPQ23msw11CEventModelllUlPCQ23bc
 TourF CalcFrame__Q23msw14CRouteDataMoveFv near 99.5 instruction order only
 TourF CalcSpeed__Q23msw17CRoutePhysOffsetYFff unverified 80.8 only the order of the vector temporaries and register choice differ (schedule); 80.8 is under the near floor
 TourF CleanRoute__Q23msw10CRouteMoveFf near 89.2 instruction order only
-TourF CreateModel__Q23msw17CTournamentTrophyFliill near 98.8 stack slots only: nIndex and the three by-value ResFile copies are allocated in the opposite order (0x8..0x14); same code otherwise
+TourF CreateModel__Q23msw17CTournamentTrophyFliill near 99.9 near 99.9 stack slots only: nIndex and the by-value ResFile temporaries are allocated in the opposite order (0x8..0x10); same code otherwise
 TourF CreateModel__Q23msw21CEvMdlCreaterTmMdlChrFRQ33msw10CEvDemoRes9_CHR_INFO near 99.1 register choice only: r29 and r30 are swapped between rInfo and nChr (later nAnim); same instructions otherwise
 TourF CreatePlayerMarker__Q23msw14CTournamentManFPCcllil near 98.2 register choice and instruction order only
 TourF CreateWinRoute__Q23msw19CTournamentRouteManFRfll near 98.5 instruction order only

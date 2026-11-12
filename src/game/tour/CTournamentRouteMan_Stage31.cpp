@@ -21,7 +21,7 @@ namespace msw {
 
             virtual ~CRouteKinokoJump();
             virtual CRouteBase *GetOffsetRoute(nw4r::g3d::ResFile file);
-            virtual void *GetOffsetRes();
+            virtual nw4r::g3d::ResFile GetOffsetRes();
     };
 
     namespace {
@@ -78,7 +78,7 @@ namespace msw {
         return pRoute;
     }
 
-    void *CRouteKinokoJump::GetOffsetRes()
+    nw4r::g3d::ResFile CRouteKinokoJump::GetOffsetRes()
     {
         long nIndex;
         return EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_kinoko", 0);
@@ -149,8 +149,7 @@ namespace msw {
             }
             case 10: {
                 long nIndex;
-                nw4r::g3d::ResFile file(
-                    static_cast<nw4r::g3d::ResFileData *>(EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_roots", 0)));
+                nw4r::g3d::ResFile file = EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_roots", 0);
                 param.fRotY = 1.5707964f;
                 CRouteDataMove *pRoute = new CRouteDataMove(param, 1.0f, 40, 0);
                 pRoute->SetNode(file, "root_path01", 0L);
@@ -158,8 +157,7 @@ namespace msw {
             }
             case 11: {
                 long nIndex;
-                nw4r::g3d::ResFile file(
-                    static_cast<nw4r::g3d::ResFileData *>(EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_roots", 0)));
+                nw4r::g3d::ResFile file = EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_roots", 0);
                 param.fRotY = 1.5707964f;
                 CRouteDataMove *pRoute = new CRouteDataMove(param, 1.0f, 40, 0);
                 pRoute->SetNode(file, "root_path02", 0L);
@@ -167,8 +165,7 @@ namespace msw {
             }
             case 12: {
                 long nIndex;
-                nw4r::g3d::ResFile file(
-                    static_cast<nw4r::g3d::ResFileData *>(EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_roots", 0)));
+                nw4r::g3d::ResFile file = EvDemo::GetArcResDataMdl(nIndex, LOADDATA_OBJ, "map_roots", 0);
                 param.fRotY = 1.5707964f;
                 CRouteDataMove *pRoute = new CRouteDataMove(param, 1.0f, 40, 0);
                 pRoute->SetNode(file, "root_path03", 0L);

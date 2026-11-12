@@ -47,23 +47,12 @@
 namespace {
     float s_fAngle70 = bcs::DEG_TO_RAD(70.0f);
 
-    // (name guessed) r1 - r2 in the XZ plane, as its length.
-    inline float DistXZ(const bcs::FVEC3 &r1, const bcs::FVEC3 &r2)
-    {
-        bcs::FVEC3 diff;
-
-        bcs::FVEC3Sub(&diff, &r1, &r2);
-        return bcs::BCS_Vec_GetLenXZ(diff);
-    }
-
-    // (name guessed) r1 + r2.
-    inline bcs::FVEC3 VecAdd(const bcs::FVEC3 &r1, const bcs::FVEC3 &r2)
-    {
-        bcs::FVEC3 sum;
-
-        bcs::FVEC3Sum(sum, r1, r2);
-        return sum;
-    }
+    // In the original bcs::FVEC3 derives from nw4r::math::VEC3, and the air
+    // trick's vector sums go through VEC3's operators (called, not inlined:
+    // LoopStateAirTrick is past the inline budget). Here FVEC3 is a separate
+    // struct of the same layout, so the operands are reinterpreted at the
+    // call sites (a cast, not an inline helper, which would be one more call).
+    typedef const nw4r::math::VEC3 &VEC3_CREF;
 
 }
 
@@ -514,10 +503,14 @@ namespace msw {
                 AnimSetSpeed(3, 1.0f);
 
                 float f3Point = GetCourt3PointSize();
-                float fRate = DistXZ(GetTargetGoalPos(), GetPos()) / f3Point;
+                float fRate = bcs::BCS_Vec_GetLenXZ(reinterpret_cast<VEC3_CREF>(GetTargetGoalPos()) -
+                                                    reinterpret_cast<VEC3_CREF>(GetPos())) /
+                              f3Point;
                 fRate = fRate > 1.0f ? 1.0f : (fRate < 0.0f ? 0.0f : fRate);
                 // From 10 units at the goal down to 5 at the three-point line.
-                float fLen = 10.0f - fRate * bcs::BCS_Abs(10.0f - 5.0f);
+                // (the product is rounded before the subtraction: not fused)
+                float fDrop = fRate * bcs::BCS_Abs(10.0f - 5.0f);
+                float fLen = 10.0f - fDrop;
 
                 pWork->m_fMoveFrameNum = AnimGetFrameNum(3);
                 pWork->m_fRotY = GetRotY_ToPosXZ(GetTargetGoalPosOffZ_());
@@ -547,10 +540,9 @@ namespace msw {
                     fRot -= 6.2831855f;
                 }
                 if (bcs::BCS_Abs(fRot) > fMaxRot) {
-                    float fDist = DistXZ(goal, pWork->m_MoveVec);
-                    if (!(fRot > 0.0f)) {
-                        fMaxRot = -fMaxRot;
-                    }
+                    float fDist = bcs::BCS_Vec_GetLenXZ(reinterpret_cast<VEC3_CREF>(goal) -
+                                                        reinterpret_cast<VEC3_CREF>(pWork->m_MoveVec));
+                    fMaxRot = fRot > 0.0f ? fMaxRot : -fMaxRot;
                     bcs::FVEC3 ofs;
                     bcs::BCS_VecZ_RotY(ofs, 1.0f, bcs::ROUND_PI(fMaxRot + fGoalRot));
                     pWork->m_MoveVec.x = ofs.x * fDist + goal.x;
@@ -654,12 +646,12 @@ namespace msw {
 
                     bcs::FVEC3 ofs;
                     bcs::BCS_VecZ_RotY(ofs, 1.5f, GetRotY_FromPosXZ(GetTargetGoalPos()));
-                    pWork->m_MoveVec = VecAdd(GetTargetGoalPos(), ofs);
-                    float fLen = DistXZ(pWork->m_MoveVec, GetPos());
-                    pWork->m_fMoveLen = fLen;
+                    pWork->m_MoveVec = reinterpret_cast<VEC3_CREF>(GetTargetGoalPos()) + reinterpret_cast<VEC3_CREF>(ofs);
+                    pWork->m_fMoveLen = bcs::BCS_Vec_GetLenXZ(reinterpret_cast<VEC3_CREF>(pWork->m_MoveVec) -
+                                                              reinterpret_cast<VEC3_CREF>(GetPos()));
                     pWork->m_fMoveRate = 0.0f;
                     pWork->m_fMoveFrame = 0.0f;
-                    pWork->m_fMoveUnk18 = 73.0f * fLen / 100.0f / fFrameNum;
+                    pWork->m_fMoveUnk18 = 73.0f * pWork->m_fMoveLen / 100.0f / fFrameNum;
                     pWork->m_fRotY = GetRotY_ToGoal_NonOffset();
                     Util_SetJumpParam(fFrameNum, GetPos().y, 3.2f, 3.6f);
 
@@ -687,12 +679,12 @@ namespace msw {
 
                     bcs::FVEC3 ofs;
                     bcs::BCS_VecZ_RotY(ofs, 1.5f, GetRotY_FromPosXZ(GetTargetGoalPos()));
-                    pWork->m_MoveVec = VecAdd(GetTargetGoalPos(), ofs);
-                    float fLen = DistXZ(pWork->m_MoveVec, GetPos());
-                    pWork->m_fMoveLen = fLen;
+                    pWork->m_MoveVec = reinterpret_cast<VEC3_CREF>(GetTargetGoalPos()) + reinterpret_cast<VEC3_CREF>(ofs);
+                    pWork->m_fMoveLen = bcs::BCS_Vec_GetLenXZ(reinterpret_cast<VEC3_CREF>(pWork->m_MoveVec) -
+                                                              reinterpret_cast<VEC3_CREF>(GetPos()));
                     pWork->m_fMoveRate = 0.0f;
                     pWork->m_fMoveFrame = 0.0f;
-                    pWork->m_fMoveUnk18 = fLen / fFrameNum;
+                    pWork->m_fMoveUnk18 = pWork->m_fMoveLen / fFrameNum;
                     pWork->m_fRotY = GetRotY_ToGoal_NonOffset();
                     Util_SetJumpParam(fFrameNum, GetPos().y, 3.55f, 5.6f);
 
@@ -734,9 +726,7 @@ namespace msw {
                 float fFrame = AnimGetFrame(3);
                 float fStep = fFrame - pWork->m_fMoveRate;
                 pWork->m_fMoveRate = fFrame;
-                bcs::FVEC3 move;
-                bcs::FVEC3Scale(&move, &pWork->m_MoveVec, fStep);
-                AddPos(move);
+                AddPos(reinterpret_cast<VEC3_CREF>(pWork->m_MoveVec) * fStep);
                 if (Util_DoJumpMove(fStep) || IsAnimEnd(3)) {
                     AnimPlay(3, GetAirTrickMotID((AIR_TIRCK_FLOW)0xF, IsHaveLeft()), 0, 0.0f, 0.0f);
                     AnimSetSpeed(3, 1.0f);

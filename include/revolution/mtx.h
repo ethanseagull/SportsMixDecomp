@@ -13,6 +13,10 @@ typedef struct Vec {
 } Vec;
 
 typedef float Mtx[3][4];
+typedef float Mtx44[4][4];
+
+// (added for game/msw/CNowLoading.cpp) An orthographic projection.
+void C_MTXOrtho(Mtx44 m, float t, float b, float l, float r, float n, float f);
 
 void PSMTXCopy(const Mtx src, Mtx dst);
 void PSMTXIdentity(Mtx m);
@@ -43,6 +47,8 @@ typedef struct Quaternion {
 // pq = p * q.
 void PSQUATMultiply(const Quaternion *p, const Quaternion *q, Quaternion *pq);
 void PSQUATNormalize(const Quaternion *pSrc, Quaternion *pDst);
+// m = the rotation of q (added for BasketF game/basket/CcWarioSmokeMgr.cpp).
+void PSMTXQuat(Mtx m, const Quaternion *q);
 
 #ifdef __cplusplus
 }

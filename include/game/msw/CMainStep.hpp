@@ -76,6 +76,11 @@ namespace msw {
             static void SetNextStep(long step);
             static void ChangeStep(long step);
 
+            // (DOL fn_800C45B8; name guessed; added for
+            // game/msw/CCockpitMenuBase.cpp) The state of the instance's
+            // state machine (2: the menus), or 0 without an instance.
+            static long GetStep();
+
             static CMainStep *g_pInstance;
 
         protected:

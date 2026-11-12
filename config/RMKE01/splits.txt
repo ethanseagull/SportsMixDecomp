@@ -72,7 +72,8 @@ game/bcs/CScnObj.cpp:
 	.text       start:0x80041888 end:0x80044B00
 
 game/bcs/CGDLObj.cpp:
-	.text       start:0x80044B00 end:0x80044BD4
+	.text       start:0x80044B00 end:0x80044DD8
+	.data       start:0x80466BB8 end:0x80466CC8
 
 game/bcs/CHBMenu.cpp:
 	.text       start:0x80045AAC end:0x80046D40
@@ -216,7 +217,9 @@ game/msw/CComDrv.cpp:
 	.text       start:0x80109A0C end:0x8010CE1C
 
 game/msw/CEventDemoBase.cpp:
-	.text       start:0x8011141C end:0x8011158C
+	.text       start:0x8011141C end:0x801116E4
+	.data       start:0x8046EFC0 end:0x8046F010
+	.sbss       start:0x805C0BF0 end:0x805C0BF8
 
 game/msw/CEventModel.cpp:
 	.text       start:0x80111CCC end:0x80116308
@@ -341,8 +344,20 @@ game/msw/CMenuPadInfo.cpp:
 	.text       start:0x80142130 end:0x80142164
 	.sbss       start:0x805C0C40 end:0x805C0C48
 
+game/msw/menu/Localize.cpp:
+	.text       start:0x80142284 end:0x80142F04
+	.rodata     start:0x8043B238 end:0x8043B480
+	.data       start:0x80471670 end:0x804716E8
+	.sdata      start:0x805BFC28 end:0x805BFC98
+	.sdata2     start:0x805C3120 end:0x805C3190
+
 game/msw/CNowLoading.cpp:
-	.text       start:0x80142FB4 end:0x80142FD0
+	.text       start:0x80142F04 end:0x80143614
+	.rodata     start:0x8043B480 end:0x8043B4B0
+	.data       start:0x804716E8 end:0x80471700
+	.sdata      start:0x805BFC98 end:0x805BFCA8
+	.sbss       start:0x805C0C48 end:0x805C0C50
+	.sdata2     start:0x805C3190 end:0x805C31A8
 
 game/msw/dwc/CGameDwc.cpp:
 	.text       start:0x80143614 end:0x80145B40
@@ -502,12 +517,11 @@ game/msw/CNpcGhost.cpp:
 	.text       start:0x801B8374 end:0x801B9EE8
 
 game/msw/CCockpitLayoutBase.cpp:
-	.text       start:0x801BA114 end:0x801BA944
-	.data       start:0x804821DC end:0x80482238
+	.text       start:0x801BA114 end:0x801BAB24
+	.ctors      start:0x8042D234 end:0x8042D238
+	.data       start:0x804821D0 end:0x80482238
+	.bss        start:0x804D7410 end:0x804D7430
 	.sdata2     start:0x805C4790 end:0x805C4798
-
-game/msw/CCockpitPartMove.cpp:
-	.text       start:0x801BA9EC end:0x801BAA6C
 
 game/msw/cockpit/CMissionCount.cpp:
 	.text       start:0x801BBF24 end:0x801BD93C
@@ -580,7 +594,9 @@ game/msw/CStgGmk_Pinball.cpp:
 	.sdata2     start:0x805C4D80 end:0x805C4E10
 
 game/msw/CStgEffectSlot.cpp:
-	.text       start:0x801E78D0 end:0x801E82B8
+	.text       start:0x801E782C end:0x801E86A8
+	.data       start:0x804857B8 end:0x80485828
+	.sdata2     start:0x805C4E10 end:0x805C4E18
 
 game/msw/CStgSeSlot.cpp:
 	.text       start:0x801E874C end:0x801E918C
@@ -698,8 +714,11 @@ game/msw/CMenuOption.cpp:
 	.text       start:0x80230A28 end:0x802319E0
 
 game/msw/menu/CMovieScnObj.cpp:
-	.text       start:0x80236454 end:0x802366DC
-	.bss        start:0x804D8BE0 end:0x804D8C00
+	.text       start:0x80235D40 end:0x80236704
+	.ctors      start:0x8042D268 end:0x8042D26C
+	.data       start:0x8048ADC0 end:0x8048AF00
+	.bss        start:0x804D8AE0 end:0x804D8C00
+	.sdata2     start:0x805C5678 end:0x805C5690
 
 game/msw/CNpcString.cpp:
 	.text       start:0x802380A4 end:0x80239480

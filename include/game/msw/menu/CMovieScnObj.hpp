@@ -25,11 +25,6 @@ namespace msw {
                 void SetDrawFlag(int bDraw);
 
             private:
-                // Declared so the class is not abstract here (CGDLObj leaves
-                // it pure); taken to be one of the unnamed DOL functions
-                // after the setters.
-                virtual void UpdateFrame(float);
-
                 float m_fDrawX;          // 0x128
                 float m_fDrawY;          // 0x12C
                 float m_fDrawW;          // 0x130

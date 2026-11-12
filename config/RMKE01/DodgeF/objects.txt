@@ -46,6 +46,8 @@ Equivalent game/dodge/CChrCoreDodgeKuroma.cpp
 Matching game/dodge/CChrCoreDodgeSaboten.cpp
 Equivalent game/dodge/CChrCoreDodgeSlime.cpp
 Matching game/dodge/CChrCoreDodgeWaluigi.cpp
+Equivalent game/dodge/CcWarioSmokeBomb.cpp
+Matching game/dodge/CChrCoreDodgeYoshi.cpp
 Matching game/dodge/CChrCoreDodgeMii00.cpp
 Matching game/dodge/CChrCoreDodgeMii01.cpp
 Equivalent game/dodge/CEffectCoinGet.cpp
@@ -64,6 +66,7 @@ Matching game/dodge/CChrCoreDodgeMoogle.cpp
 Matching game/dodge/CChrCoreDodgeDonkey.cpp
 Matching game/dodge/CChrCoreDodgeDiddy.cpp
 Equivalent game/dodge/CCameraDodgeBD.cpp
+Equivalent game/dodge/unit_BB47C.cpp
 Matching game/dodge/CComDrvDodgeGameOffRun.cpp
 Equivalent game/dodge/CStgGmk_Pinball_Act_Dodge.cpp
 Equivalent game/dodge/CStgGmk_Pylon_Act_Dodge.cpp

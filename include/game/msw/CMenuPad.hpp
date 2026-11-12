@@ -39,6 +39,11 @@ namespace msw {
 
             static CMenuPad s_Instance;
 
+            // (DOL fn_80141CD4; name guessed; added for
+            // game/msw/CCockpitMenuBase.cpp) s_Instance, or while bit 0 of
+            // its flags at 0x144 is set another CMenuPad (lbl_804D4788).
+            static CMenuPad *GetInputInstance();
+
             // (name guessed; inline, no symbol; added for
             // game/menu/CBackIcon.cpp) The instance; CBackIcon::Main tests
             // the address it returns for null.

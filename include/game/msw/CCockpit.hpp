@@ -16,6 +16,8 @@ namespace nw4r {
 }
 
 namespace msw {
+    class CCockpitLayoutBase;
+    class CCockpitPointer;
     class CCockpitResult;
     class CCockpitResultPartyVS;
     class CCockpitResultPartyTeam;
@@ -123,6 +125,25 @@ namespace msw {
             // CCockpitTelopMiniPos) at world position rPos as seen by camera
             // nCamNo.
             static long CreateTelopMiniPos(long nObjId, unsigned char nCamNo, const bcs::FVEC3 &rPos);
+
+            // (added for DOL game/msw/CCockpitMenuBase.cpp; static, return
+            // types guessed) Set both result words of the task to nResult.
+            static void ClearResult(long nResult);
+            // The pointer (cursor) display, object 0x1016: created with a
+            // sort z, removed, and found (DOL fn_8013A928, name
+            // guessed; null without a task or the object).
+            static void CreatePointerObj(float fSortZ);
+            static void RemovePointerObj();
+            static CCockpitPointer *GetPointerObj();
+            // (DOL fn_8013A688; name, argument meanings and
+            // return type guessed) Asks pPointer for pad nPad's pointer
+            // position and, when it is over a button of pMenu that
+            // OnCursorCheck accepts, marks the pad's pointer as in use.
+            // Returns 1 then, else 0.
+            static int PointerCursorCheck(long nPad, CCockpitLayoutBase *pMenu, CCockpitPointer *pPointer);
+            // (name guessed; inline, no symbol) Makes the word at 0x70 the
+            // result (CCockpitMenuBase's buttons, when one is decided).
+            void CommitResult() { m_Result = m_Unk70; }
 
             // Id of the cockpit task, set by the constructor; 0 when there
             // is none.

@@ -6,7 +6,8 @@ Matching game/msw/CDataWork.cpp
 Matching game/msw/CGameAccInput.cpp
 Matching game/msw/LayoutTask.cpp
 Matching game/msw/CCollDefUnit.cpp
-NonMatching game/msw/CNowLoading.cpp
+Equivalent game/msw/menu/Localize.cpp
+Equivalent game/msw/CNowLoading.cpp
 Equivalent game/msw/CEvNodeData.cpp
 Equivalent game/msw/EvDemoVs.cpp
 Equivalent game/bcs/CScnObj.cpp
@@ -35,12 +36,11 @@ Matching game/msw/CEffectTableList.cpp
 NonMatching game/msw/CArrowSignalBase.cpp
 Equivalent game/msw/CStgGmk_WaterPillar.cpp
 NonMatching game/msw/CStage17Base/CTurnTable.cpp
-Matching game/msw/CCockpitPartMove.cpp
 Matching game/msw/CMenuLinkList.cpp
 Matching game/msw/CStgGmkAct.cpp
 Matching game/bcs/CWifiPadBase.cpp
 NonMatching game/msw/CGameSnd.cpp
-NonMatching game/bcs/CGDLObj.cpp
+Matching game/bcs/CGDLObj.cpp
 Equivalent game/msw/cockpit/CMissionCount.cpp
 Matching game/msw/CEvDemoRes/_CHR_INFO.cpp
 Equivalent game/msw/CItemShellCmn.cpp
@@ -48,7 +48,7 @@ Equivalent game/msw/CItemBanana.cpp
 Equivalent game/msw/CItemMushroom.cpp
 Matching game/msw/vm/CVMCpu.cpp
 Matching game/msw/menu/CVibEff.cpp
-NonMatching game/msw/CEventDemoBase.cpp
+Matching game/msw/CEventDemoBase.cpp
 Equivalent game/msw/CStgGmk_Pylon.cpp
 Equivalent game/msw/CItemBall.cpp
 NonMatching game/msw/CEffectTable.cpp
@@ -82,3 +82,5 @@ Matching game/msw/CMenuTask.cpp
 Equivalent game/msw/CChrOptMdlObj.cpp
 Equivalent game/msw/CCockpitLayoutBase.cpp
 Equivalent game/msw/CMenuPartBase.cpp
+Equivalent game/msw/CStgEffectSlot.cpp flags=noauto
+Equivalent game/msw/CCockpitMenuBase.cpp

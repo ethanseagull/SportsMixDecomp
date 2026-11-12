@@ -16,10 +16,32 @@
 namespace nw4r {
     namespace lyt {
 
-        // Lives in the DOL. Only the static allocation helpers so far; the
-        // object itself (0x20 bytes, root pane at 0x10) is not described.
+        class ResourceAccessor;
+        class AnimTransform;
+        class DrawInfo;
+
+        // Lives in the DOL. The static allocation helpers and (added for
+        // game/msw/CNowLoading.cpp) the virtuals it calls, in vtable order
+        // from 0x08; 0x10, 0x18, 0x20, 0x24 and 0x28 are not called yet and
+        // stand in with the names of the ogws description. The object is
+        // 0x20 bytes (root pane at 0x10), not described.
         class Layout {
             public:
+                Layout();
+                virtual ~Layout();
+                virtual bool Build(const void *pLytRes, ResourceAccessor *pAccessor);
+                virtual AnimTransform *CreateAnimTransform();
+                virtual AnimTransform *CreateAnimTransform(const void *pAnmRes, ResourceAccessor *pAccessor);
+                virtual void Unk18();
+                virtual void BindAnimation(AnimTransform *pAnim);
+                virtual void UnbindAnimation(AnimTransform *pAnim);
+                virtual void UnbindAllAnimation();
+                virtual void Unk28();
+                virtual void SetAnimationEnable(AnimTransform *pAnim, bool bEnable);
+                virtual void CalculateMtx(const DrawInfo &rInfo);
+                virtual void Draw(const DrawInfo &rInfo);
+                virtual void Animate(unsigned long option);
+
                 static MEMAllocator *mspAllocator;
 
                 static void *AllocMemory(unsigned long size)
@@ -42,7 +64,15 @@ namespace nw4r {
                     }
                     return new (pMem) T();
                 }
+
+            private:
+                unsigned char mUnk04[0x1C]; // 0x04
         };
+
+        // (the DOL's fn_8041E6C0, added for game/msw/CNowLoading.cpp)
+        // Registers the library version and sets up the quantization
+        // registers it uses.
+        void LytInit();
     }
 }
 

@@ -98,3 +98,8 @@ Equivalent game/volley/unit_63388.cpp
 Equivalent game/volley/CStgGmk_WaterWorks_Volley_Act.cpp
 Equivalent game/volley/unit_4377C.cpp
 Equivalent game/volley/CcNinjaCloneBody.cpp
+NonMatching game/volley/CChrCoreVolley.cpp
+NonMatching game/volley/unit_380D8.cpp
+NonMatching game/volley/unit_9FDD0.cpp
+NonMatching game/volley/CComDrvVolleyGame.cpp
+Matching game/volley/unit_AA504.cpp

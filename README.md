@@ -1,15 +1,7 @@
-MSM-decomp
-[![Build Status]][actions] [![Code Progress]][progress] [![Data Progress]][progress]
-=============
+SportsMixDecomp
+===============
 
-[Build Status]: https://github.com/EltyDev/MSM-decomp/actions/workflows/build.yml/badge.svg
-[actions]: https://github.com/EltyDev/MSM-decomp/actions/workflows/build.yml
-
-[Code Progress]: https://decomp.dev/eltydev/msm-decomp.svg?mode=shield&measure=code&label=Code
-[Data Progress]: https://decomp.dev/eltydev/msm-decomp.svg?mode=shield&measure=data&label=Data
-[progress]: https://decomp.dev/eltydev/msm-decomp
-
-A work-in-progress decompilation of Mario Sports Mix.
+A work-in-progress decompilation of Mario Sports Mix (Wii), aimed at readable, working C/C++ source.
 
 This repository does **not** contain any game assets or assembly whatsoever. An existing copy of the game is required.
 

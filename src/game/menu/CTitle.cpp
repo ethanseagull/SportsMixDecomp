@@ -23,6 +23,16 @@
 #include "revolution/gx/GXPixel.h"
 #include "revolution/gx/GXTev.h"
 
+namespace CTitle_cpp {
+// uncalled stand-in / pool-off stand-in: the original addresses every float constant of this
+// file with its own lis, which this compiler does when the first .rodata object of the file is
+// weak (a function-local const). The module link strips this function and its constant.
+void UnusedPoolOff()
+{
+    const long k = 0;
+}
+}
+
 // The names in this namespace are guesses; the objects have no symbols.
 namespace {
 

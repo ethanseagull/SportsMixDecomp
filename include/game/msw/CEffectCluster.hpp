@@ -35,6 +35,9 @@ namespace msw {
             // (parameter names and return types guessed) Fades the cluster
             // out over fFrame frames; the effects it holds.
             void SetFadeoutTime(float fFrame);
+            // (DOL; added for game/msw/CStgEffectSlot.cpp) Fades the cluster
+            // in over fFrame frames.
+            void SetFadeinTime(float fFrame);
             long GetEffectNum();
             bcs::EF::CEffect *GetEffect(long nIndex);
             // (DOL; added for BasketF's CChrCoreBasketNinja) The effect of

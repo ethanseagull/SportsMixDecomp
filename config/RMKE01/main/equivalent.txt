@@ -57,6 +57,8 @@ main DrawDebug__Q23msw19CStgGmk_Pinball_MdlFl near 99.9 register allocation/orde
 main DrawOutline___Q23bcs7CMiiManFPUslll near 88.2 88.2%: original recomputes the row start with mullw each outer iteration, ours strength-reduces to a w*4 step; one more saved register shifts numbering; arithmetic identical
 main Draw__Q23msw18CGameExDemoMaskObjFv near 96.6 screen width/height read with lha where the original has lhz+extsh (same value); otherwise register choice and scheduling of the -1 colour and the write-gather vertex stores
 main DropCoinPickup__Q23msw12CDropCoinManFRCQ23bcs5FVEC3ffPFPCQ23msw9CDropCoinPv_vPv near 97.5 register choice; (flag & 0x4306) == 0 tested via cntlzw bool in the original, direct masked branch in ours (equivalent)
+main Eff_CreateAttachFadeIn__Q23msw14CStgEffectSlotFlfllUlPCQ23bcs5FVEC3iiiUl near 94.1 ours keeps constant 0 in a saved GPR (one more saved, savegpr_22 vs 23) where the original reloads li 0 per use; same calls, values and accesses
+main Eff_CreateAttach__Q23msw14CStgEffectSlotFlllPCcPCQ23bcs5FVEC3iiiUl near 99.4 schedule: register holding the ResNode pointer across the Panic check; same instructions
 main FindWave__Q23msw19CStgGmk_WaveClusterCFRQ23bcs5FVEC3RQ23bcs5FVEC3f near 99.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main Force___Q43msw6CC_CMN5LUIGI14CcOvacuumForceFf near 99.2 float callee-saved register allocation only
 main GetAttachName__Q23msw18CEffectAttachTableCFl near 91.8 prologue order only: the original saves r31 before loading m_ppName, ours after; same instructions otherwise, registers renumbered
@@ -169,6 +171,7 @@ main UpdateMdlMtx__Q23msw19CStgGmk_Trolley_ActFv near 97.9 the first inlined CSt
 main UpdateParam__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main UpdateWavePos__Q23msw16CStgGmk_Wave_ActFf near 99.3 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main UpdateWaveTimer__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
+main Update__Q33msw14CStgEffectSlot8CEffSlotFf near 92.6 same zero-constant register effect as Eff_CreateAttachFadeIn; original re-reads m_fCreateDelay/m_fEndDelay after the compare and loads the fade-in after FindList, ours reuses the value (no store in between, so same values); same calls and branches
 main WallHitCheckSub__Q23msw19CStgGmk_Pinball_ActCFPQ23bcs5FVEC3PQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3fRCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 88.8 end-point loops indexed (lwzx/lfsx) in original vs pointer walk; regs/schedule; immediates are stack offsets
 main WallHitCheck__Q23msw19CStgGmk_Pinball_ActFPQ23bcs5FVEC3PQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 97.4 one extra compare on side>=0 before the shared goal call, float regs in bounds check
 main WriteBack__Q33bcs3dwc14CDwcFriendListFPC18DWCstAccFriendDataUxllPCvl unverified 75.0 75%: SetStorageData inlined here, called with bl in the original; original also normalises the first IsValid() to bool (two cntlzw/srwi) - same behaviour, inlining decision only

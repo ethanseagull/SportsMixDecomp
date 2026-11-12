@@ -24,11 +24,18 @@ namespace msw {
     // is inline (most users override it). Parameter names and return types
     // are guesses.
     class CStgEffectSlot {
+        public:
+            // One slot, 0x4C bytes with its vptr at 0x48; defined in
+            // game/msw/CStgEffectSlot.cpp.
+            class CEffSlot;
+
         private:
-            void *m_pSlot;   // 0x00, Eff_GetSlotNum() slots, made by Eff_Init (type not mapped)
-            long m_nSlotNum; // 0x04
+            CEffSlot *m_pSlot; // 0x00, Eff_GetSlotNum() slots, made by Eff_Init
+            long m_nSlotNum;   // 0x04
 
         public:
+            // Not inline: msw::CStgAct's constructor calls the DOL's copy.
+            CStgEffectSlot();
             virtual ~CStgEffectSlot();
             virtual void Eff_Init();
             // The model the effects attach to.

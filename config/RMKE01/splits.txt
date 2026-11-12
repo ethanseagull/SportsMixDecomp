@@ -580,7 +580,9 @@ game/msw/CStgGmk_Pinball.cpp:
 	.sdata2     start:0x805C4D80 end:0x805C4E10
 
 game/msw/CStgEffectSlot.cpp:
-	.text       start:0x801E78D0 end:0x801E82B8
+	.text       start:0x801E782C end:0x801E86A8
+	.data       start:0x804857B8 end:0x80485828
+	.sdata2     start:0x805C4E10 end:0x805C4E18
 
 game/msw/CStgSeSlot.cpp:
 	.text       start:0x801E874C end:0x801E918C

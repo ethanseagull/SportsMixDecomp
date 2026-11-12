@@ -1,0 +1,24 @@
+name: progress
+on:
+  push:
+    branches: [rmke01-setup]
+  pull_request:          # comments how each pull request changes progress
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write        # lets decmp.dev verify this run belongs to your repo
+      pull-requests: write   # lets it comment on pull requests
+    steps:
+      - uses: actions/checkout@v5
+
+      # The game files cannot be on CI, so the report is not built here: it is the
+      # objdiff report of the last verified local build, committed by
+      # tools/decomp/publish_report.py (names, sizes and match percentages only).
+      - uses: decmp/upload-action@v1
+        with:
+          report: progress/RMKE01/report.json
+          version: RMKE01
+          # name, platform and banner are managed on decmp.dev

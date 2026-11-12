@@ -223,6 +223,7 @@ main StartSlowEffect__Q23msw5CGameFffff near 96.8 register choice and one spille
 main StartSlowEffect___Q23msw5CGameFffff near 99.1 register choice; same calls and stores
 main StartZone__Q23msw26CStgGmk_WaterPillarClusterFl near 98.7 float register choice only, in the inlined paired-single add and the delay value
 main Start__Q23msw15CGameScoredViewFl near 99.7 register choice only: pointer registers of the two inlined paired-single vector adds
+main Start__Q23msw8CGameVibFllll unverified 84.3 84.3%: same calls, loads, constants and branches; the original keeps the pattern table base and the nPattern*0x24 offset in two saved registers (ours folds them into one) and has a 0x10-larger frame; only register/stack layout found, but under the 85% floor
 main StepIn__Q23msw16CCockpitMenuBaseFv near 99.0 r5/r7 swapped in the unrolled default-button loop; same instructions otherwise
 main StopAllCameraQuake__Q23msw5CGameFv near 98.1 instruction order only
 main TrgArtsEvent___Q23msw5CGameFl near 96.0 the returned colour temporary sits 4 bytes lower on the stack; instruction order

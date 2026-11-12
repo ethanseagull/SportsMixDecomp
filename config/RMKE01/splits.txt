@@ -445,7 +445,10 @@ game/msw/CGame.cpp:
 	.ctors      start:0x8042D21C end:0x8042D220
 
 game/msw/CGameVib.cpp:
-	.text       start:0x8018DCEC end:0x8018DEF4
+	.text       start:0x8018DCEC end:0x8018E068
+	.data       start:0x80476850 end:0x80476DB8
+	.sbss       start:0x805C0CF8 end:0x805C0D00
+	.sdata2     start:0x805C3618 end:0x805C3620
 
 game/msw/CLoadData.cpp:
 	.text       start:0x8018E808 end:0x801902CC

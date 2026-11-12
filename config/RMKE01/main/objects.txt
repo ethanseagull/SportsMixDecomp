@@ -31,6 +31,7 @@ Matching game/bcs/G2D/CTexMap.cpp
 Equivalent game/msw/CDropCoinMan.cpp
 Equivalent game/msw/CGimmickMan.cpp
 NonMatching game/msw/CGame.cpp
+Equivalent game/msw/CGameVib.cpp
 Matching game/msw/menu/CStateSave.cpp
 Matching game/msw/CCockpitResultTime.cpp
 Matching game/msw/CEffectTableList.cpp

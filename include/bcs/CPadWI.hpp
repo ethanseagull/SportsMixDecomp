@@ -31,6 +31,12 @@ namespace bcs {
             static float GetStickY(long nPad);
             static int IsNunchukStyle(long nPad);
             static void StopMotor(long nPad);
+            // (added for DOL game/msw/CGameVib.cpp; names and return types
+            // guessed) fn_80070EEC plays nNum (strength, time) float pairs
+            // on remote nPad for nFrame frames; fn_80070F0C rumbles for
+            // fFrame.
+            static int StartMotor(const float *pData, long nNum, long nFrame, long nPad);
+            static int StartMotor(float fFrame, long nPad);
             // (added for TourF game/tour/CTournamentStep.cpp and
             // game/msw/CGame.cpp) Save and
             // restore the rumble of every pad around a pause.

@@ -186,13 +186,14 @@ game/msw/CChrMan.cpp:
 	.text       start:0x800EBBA4 end:0x800EF44C
 
 game/msw/CChrMarker.cpp:
-	.text       start:0x800EFFDC end:0x800F1408
-
-game/msw/CArrowSignalBase.cpp:
-	.text       start:0x800F1410 end:0x800F14A0
-
-game/msw/CChr1on1MarkerBase.cpp:
-	.text       start:0x800F16DC end:0x800F260C
+	.text       start:0x800EFFDC end:0x800F29D8
+	.ctors      start:0x8042D1EC end:0x8042D1F0
+	.rodata     start:0x80438CF8 end:0x80439028
+	.data       start:0x8046E3C0 end:0x8046E8B0
+	.bss        start:0x804D3330 end:0x804D3340
+	.sdata      start:0x805BFB40 end:0x805BFB50
+	.sbss       start:0x805C0BD8 end:0x805C0BE0
+	.sdata2     start:0x805C2748 end:0x805C2788
 
 game/msw/CChrMdlObj.cpp:
 	.text       start:0x800F29D8 end:0x800F5B9C
@@ -436,10 +437,8 @@ game/msw/CTournament.cpp:
 	.text       start:0x801768EC end:0x8017B85C
 
 game/msw/CGame.cpp:
-	.text       start:0x8017C3AC end:0x80187D70
-
-game/msw/CGameSpeedCtrl.cpp:
-	.text       start:0x8018952C end:0x8018957C
+	.text       start:0x8017C3AC end:0x8018DD88
+	.ctors      start:0x8042D21C end:0x8042D220
 
 game/msw/CGameVib.cpp:
 	.text       start:0x8018DD88 end:0x8018DEF4
@@ -699,10 +698,9 @@ game/msw/CStgGmk_Trolley.cpp:
 	.sdata2     start:0x805C5278 end:0x805C52E0
 
 game/msw/CStage17Base.cpp:
-	.text       start:0x80226894 end:0x80228618
-
-game/msw/CStage17Base/CTurnTable.cpp:
-	.text       start:0x80228674 end:0x8022870C
+	.text       start:0x80226894 end:0x80228FD8
+	.data       start:0x80489C80 end:0x80489E40
+	.sdata2     start:0x805C52E0 end:0x805C5338
 
 game/msw/menu/CDispTaskList.cpp:
 	.text       start:0x802294CC end:0x802299B4

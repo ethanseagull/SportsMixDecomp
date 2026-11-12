@@ -3,6 +3,12 @@
 
 #include "bcs/CWorldEnv.hpp"
 
+namespace nw4r {
+    namespace g3d {
+        class ResFile;
+    }
+}
+
 namespace bcs {
 
     class CScnObj;
@@ -26,6 +32,9 @@ namespace bcs {
             static void ReqPushViewSplitType(CWorldEnv::ViewSplitType type,
                                              void (*pCallback)(CWorldEnv::ViewSplitType));
             static void ReqPopViewSplitType(void (*pCallback)(CWorldEnv::ViewSplitType));
+            // (added for DOL game/msw/CGame.cpp; meanings guessed) A wipe of
+            // the screen with model pName of rFile, over fFrame frames.
+            static void StartCrossFade(nw4r::g3d::ResFile rFile, const char *pName, float fFrame, int);
             static void ResetDepthOfFieldParam();
             // (fn_80077448, unnamed in the DOL; name and parameter meanings
             // guessed) Switches the full-screen blur on or off: its colour,

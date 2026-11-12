@@ -20,6 +20,26 @@ namespace msw {
             // over `time` frames. Same arguments as above.
             void RestoreSpeed(float time, int nUnk68, long nUnk60);
 
+            // (fn_801891AC; added for game/msw/CGame.cpp)
+            CGameSpeedCtrl(bcs::CTask *pParent);
+
+            // (name guessed) The slow motion of CGame::StartSlowEffect_:
+            // from fSpeed to fTo over fTime frames; the meaning of the last
+            // two values is not known.
+            void StartSlow(float fSpeed, float fTo, float fTime, float f54, float f58)
+            {
+                m_fSpeed = fSpeed;
+                m_fTo = fTo;
+                m_fUnk54 = f54;
+                m_fUnk58 = f58;
+                m_fTime = fTime;
+                m_fElapsed = 0.0f;
+                m_nUnk60 = 0;
+                m_nUnk5C = 1;
+                m_nUnk64 = 0;
+                m_nUnk68 = 1;
+            }
+
         private:
             unsigned char m_Unk34[0xC]; // 0x34, a nw4r::ut::List of the children
             float m_fSpeed;             // 0x40 the speed in force
@@ -27,7 +47,8 @@ namespace msw {
             float m_fTo;                // 0x48
             float m_fElapsed;           // 0x4C
             float m_fTime;              // 0x50
-            unsigned char m_Unk54[8];   // 0x54
+            float m_fUnk54;             // 0x54
+            float m_fUnk58;             // 0x58
             int m_nUnk5C;               // 0x5C
             long m_nUnk60;              // 0x60
             int m_nUnk64;               // 0x64

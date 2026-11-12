@@ -285,7 +285,7 @@ namespace msw {
             virtual void CallbackAttackHit_(const CCollAtkUnit *, const CCollBodyUnit *, const bcs::FVEC3 &, unsigned long); // 0xC5C
             virtual void CallbackBallSnatched_(CBall *);               // 0xC60
             virtual int CallbackDefReflectHit_(const CCollDefUnit *, const CBall *, bcs::FVEC3 &, bcs::FVEC3 &); // 0xC64
-            virtual void SubStateParalyzeSetEffect_();                 // 0xC94
+            virtual float SubStateParalyzeSetEffect_();                // 0xC94
             virtual void SubStateParalyzeEndEffect_();                 // 0xC98
 
 
@@ -631,6 +631,15 @@ namespace msw {
             void LoopStateArtsShot_();
             void SubStateArtsShotMoveTargetMarker_(STATE_WORK_AIR_TRICK_CMN *pWork);
             void SubStateArtsShotCalcSetbackPos_(bcs::FVEC3 &rPos);
+            // (added for game/dodge/unit_3AAC8.cpp; names from the symbols)
+            // The damage state's handling of each kind of damage.
+            void SubStateDamageCtorMDmg_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopMDmg_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorLDmg_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopLDmg_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorDizzy_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopDizzy_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopTumble_(STATE_WORK_DAMAGE *pWork);
 
             unsigned char m_Unk574[0x644 - 0x574];
             // 0x644, 0x648 (names guessed; Reset_ sets both, UpdateStamina
@@ -638,7 +647,12 @@ namespace msw {
             // charge, and before it starts to drain again.
             float m_fStaminaChargeWait;
             float m_fStaminaDrainWait;
-            unsigned char m_Unk64C[0x930 - 0x64C];
+            unsigned char m_Unk64C[0x688 - 0x64C];
+            // 0x688 (name guessed; game/dodge/unit_3AAC8.cpp): set while a
+            // damage in the party game (game type 2) with no life left
+            // blows the character away; Reset_ clears it.
+            int m_bDmgBlowOff;
+            unsigned char m_Unk68C[0x930 - 0x68C];
     };
 
     // Size 0x930.

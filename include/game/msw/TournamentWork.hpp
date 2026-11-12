@@ -167,7 +167,12 @@ namespace msw {
             signed char aTeamChrChangeCtrlType[2];
             signed char aTeamAutoSpikeJumpType[2];
             signed char nUnkCA6;             // 0x0CA6, copied to CGame::GameWork 0x1C
-            unsigned char m_Unk0CA7[0xCAC - 0xCA7];
+            // 0x0CA7: the variant of the story demo TourF's
+            // CTournamentStep::LoopStateMoveEnd starts (the turn mode
+            // counted from its first, plus 10 with every all-star
+            // character unlocked). (name guessed)
+            signed char nDemoVariant;
+            unsigned char m_Unk0CA8[0xCAC - 0xCA8];
             PLAYER_INFO aPlayer[3];          // 0x0CAC
             wchar_t aPlayerName[3][0x20];    // 0x0D9C
             // 0x0E5C: one bit per route of the map, set once its line has
@@ -181,7 +186,7 @@ namespace msw {
             // 0x0FBC: flags kept over the tournament, 0x20 per cup; the
             // first of a cup is set once its first-time script has run.
             signed char aFirstFlag[0x80];
-            unsigned char m_Unk103C;
+            signed char nUnk103C;            // 0x103C: a team, compared with the sides of a match by TourF CTournamentStep::SetMatchMake
             // 0x103D-0x103F: teams passed to SetLeaderNoUnlock by the
             // script's UnlockOpen (kinds 5, 4 and 3). (name guessed)
             signed char aLeaderTeam[3];
@@ -215,7 +220,7 @@ namespace msw {
             // The word msw::CTournament::SetDemoType stores (DOL): the demo
             // the tournament map is showing.
             short nDemoType; // 0x1060
-            unsigned char m_Unk1062[2];
+            short nUnk1062;                  // 0x1062: set to 1 by TourF CTournamentStep::_SetupDefalutParam
             // 0x1064: the colour the map is drawn in, faded towards by
             // msw::CTournamentMan::UpdateFrame. (name guessed)
             bcs::BCS_Color mapColor;

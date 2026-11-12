@@ -98,6 +98,15 @@ namespace msw {
             // Not zero when pChr (holding the ball) is in reach of a cut
             // (steal) by this character. (meaning guessed from the name)
             int CutHitCheck(const CChrCore *pChr) const;
+            // (added for game/basket/CComDrvBasketGame.cpp; meanings guessed
+            // from the names) Not zero when a dunk from here may miss; how
+            // far the dash has gone (0 to 1).
+            int CanbeDunkMissDist() const;
+            float GetDashActRate() const;
+            // (added for game/basket/unit_AF3BC.cpp; return types guessed)
+            // Whether the character's just shot curves, and by how much.
+            int IsJustShootTypeCurve() const;
+            float GetJustShootCurveValue() const;
 
             // Added for game/basket/CChrDrvPadBasket.cpp (BasketF, all in
             // this module; return types guessed). Not zero when the
@@ -120,6 +129,21 @@ namespace msw {
             // smash cut sets kind 0 when he lands.
             enum SET_EFFECT_TYPE_BASKET {};
             void Util_SetEffect_(SET_EFFECT_TYPE_BASKET type);
+
+            // (added for game/basket/unit_31D0C.cpp; names from the symbols)
+            // The damage state's handling of each kind of damage, and
+            // (meaning guessed from the name) whether the character can fall
+            // into the river of the river court.
+            void SubStateDamageCtorMDmg_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopMDmg_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorLDmg_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopLDmg_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorDizzy_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopDizzy_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorBurn_(STATE_WORK_DAMAGE *pWork);
+            void SubStateDamageCtorTumble_(STATE_WORK_DAMAGE *pWork);
+            int SubStateDamageLoopTumble_(STATE_WORK_DAMAGE *pWork);
+            void SetRiverFallEnable(int bEnable);
 
             // (added for game/basket/CChrCoreBasketWaluigi.cpp) Sets
             // pWork->m_fShotFrame from the current motion's shot trigger.
@@ -475,7 +499,7 @@ namespace msw {
             virtual void CallbackBallSnatched_(CBall *);               // 0xC60
             virtual int CallbackDefReflectHit_(const CCollDefUnit *, const CBall *, const bcs::FVEC3 &); // 0xC6C
             virtual void CallbackMotTrg_SeFoot_(long, long);           // 0xC70
-            virtual void SubStateParalyzeSetEffect_();                 // 0xC94
+            virtual float SubStateParalyzeSetEffect_();                // 0xC94
             virtual void SubStateParalyzeEndEffect_();                 // 0xC98
 
             // CChrCoreBasket's own virtuals, 0xC9C to 0xD4C (return types

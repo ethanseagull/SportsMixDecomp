@@ -71,6 +71,9 @@ namespace msw {
             // The battle result kept in the tournament's data. Neither takes
             // an object. (return type of the second guessed: whether the
             // stored value is 1)
+            // (added for TourF CTournamentStep; static like the two below,
+            // return type guessed) Whether the match's mission was cleared.
+            static int _IsMissionClear();
             static void _SetBattleWin(long nResult);
             static int _IsBattleWin();
 

@@ -55,6 +55,50 @@ namespace msw {
             // the score character nChr has lost; the party game passes
             // the damage taken and -1.
             virtual void AddChrLostScore_(long nChr, long nScore, long);  // 0x2D8
+            // (added for game/dodge/unit_3AAC8.cpp, which calls TrgOut_ when
+            // a character falls out; names and arguments from the vtable's
+            // symbols, return types guessed)
+            virtual void AddChrGetScore_(long, long);                    // 0x2DC
+            virtual long GetChrLostLife_(long) const;                    // 0x2E0
+            virtual long GetChrGetLife_(long) const;                     // 0x2E4
+            virtual long GetChrMaxLife_(long) const;                     // 0x2E8
+            virtual long GetChrMaxLife__(long) const;                    // 0x2EC
+            virtual long GetChrRebirthLife_(long) const;                 // 0x2F0
+            virtual void AddChrLostLife_(long, long, long);              // 0x2F4
+            virtual void AddChrGetLife_(long, long, long);               // 0x2F8
+            virtual int IsChrInner_(long) const;                         // 0x2FC
+            virtual void UpdateArrangeCode_();                           // 0x300
+            virtual float GetTeamRestLifeRate(long) const;               // 0x304
+            virtual float GetTeamPeriodRestLifeRate(long, long) const;   // 0x308
+            virtual void SetTeamPeriodRestLifeRate(long, long, float);   // 0x30C
+            virtual float GetMaxShotTimeRaw_() const;                    // 0x310
+            virtual int IsNowArtsShootMode_() const;                     // 0x314
+            virtual int IsDodgeArtsCatchModeByTeam_(long) const;         // 0x318
+            virtual long GetMinOuterNum_() const;                        // 0x31C
+            virtual long GetInitialOuterNum_() const;                    // 0x320
+            virtual void PushAppSpeed_(float);                           // 0x324
+            virtual void PopAppSpeed_();                                 // 0x328
+            virtual int IsChrExclusive_(long) const;                     // 0x32C
+            virtual void SetLifeCoderAll_() const;                       // 0x330
+            virtual void SetLifeCoder_(long, long, long) const;          // 0x334
+            virtual void AddLifeCoder_(long, long, long, long, long, long); // 0x338
+            virtual void UpdateJudgeLifeCoderAll_();                     // 0x33C
+            virtual float DoDGetChrLockonFrame_(long) const;             // 0x340
+            virtual void DoDSetChrLockonFrame_(long, float);             // 0x344
+            virtual void LineMsgInit_();                                 // 0x348
+            virtual void LineMsgReset_();                                // 0x34C
+            virtual void LineMsgIncAttackNum_(long);                     // 0x350
+            virtual void LineMsgUpdate_();                               // 0x354
+            virtual void InitBasicGuide();                               // 0x358
+            virtual void ResetBasicGuide();                              // 0x35C
+            virtual int IsDispBasicGuide_() const;                       // 0x360
+            virtual int IsEnableBasicGuide() const;                      // 0x364
+            virtual void UpdateBasicGuide(float);                        // 0x368
+            virtual void UpdateBasicGuide_JumpBall();                    // 0x36C
+            virtual void UpdateBasicGuide_Uncatchable();                 // 0x370
+            // A character of team nTeam is out (the falling into the river
+            // passes -1, the other team, 0, 1, its place and its number).
+            virtual void TrgOut_(long, long nTeam, long, long, float, const bcs::FVEC3 &rPos, long nChr); // 0x374
 
         private:
             unsigned char m_Unk150[0x420 - sizeof(CGame)];

@@ -90,3 +90,6 @@ Equivalent game/basket/CChrCoreBasketDonkey.cpp
 Equivalent game/basket/CChrCoreBasketNinja.cpp
 Equivalent game/basket/CcSiromaMagicCircle.cpp
 Equivalent game/basket/CcDaisyFlowerGarden.cpp
+Equivalent game/basket/unit_31D0C.cpp
+Equivalent game/basket/unit_AF3BC.cpp
+Equivalent game/basket/CComDrvBasketGame.cpp

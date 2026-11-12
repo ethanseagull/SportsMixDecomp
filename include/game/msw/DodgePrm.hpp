@@ -158,6 +158,13 @@ namespace msw {
     extern float DODGE_PRM_S12_BALL_SIDE_RATE;
     extern long DODGE_PRM_S12_BALL_NUM;
     extern float DODGE_PRM_S12_BALL_DOWN_TIME;
+    // (added for game/dodge/unit_3AAC8.cpp, the dizzy state of a character
+    // the pinball hits)
+    extern float DODGE_PRM_S12_BALL_DIZZY_TIME;
+    extern float DODGE_PRM_S12_BALL_DIZZY_SPEED;
+    extern long DODGE_PRM_S12_BALL_STAMINA_DMG;
+    extern float DODGE_PRM_S12_BALL_HIT_BACK_TIME;
+    extern float DODGE_PRM_S12_BALL_HIT_BACK_DIST;
 
     // Stage 15, the ship stage with the rolling cases (CStageDodge15::GetPrmTbl
     // and CStgGmk_Case_Act_Dodge). Times are in seconds, angles in degrees;

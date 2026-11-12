@@ -109,6 +109,10 @@ namespace msw {
             CNpcGhostBasketBase *CreateGhost_(long nType, long nTeam);
             // Team nTeam's ghost; null when there is none.
             CNpcBase *GetGhost_(long nTeam);
+            // (added for game/basket/CComDrvBasketGame.cpp; guessed inline:
+            // the driver reads the member after CChrMan::GetInstance) The
+            // character whose special shot plays; null for none.
+            CChrCoreBasket *GetArtsChr() const { return m_pArtsChr; }
             // Starts the extra time (when the ghost takes the ball from the
             // team that is not the player's).
             void SetClockOverTime_();
@@ -121,6 +125,8 @@ namespace msw {
             // 1, meaning not known).
             void ResetClockOver_();
             void SetFlagAC(unsigned long nFlag) { m_nFlagAC |= nFlag; }
+            // (added for game/basket/unit_31D0C.cpp) The flag bits of m_nFlagAC.
+            unsigned long GetFlagAC() const { return m_nFlagAC; }
             // (name guessed; inline in CComManBasketGame::GetBaseShootPoint)
             // Bit 0x10 of m_nFlagAC: the game has no shot clock.
             unsigned long IsNoShotClock() const { return m_nFlagAC & 0x10; }

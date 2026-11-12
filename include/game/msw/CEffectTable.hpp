@@ -157,6 +157,9 @@ namespace msw {
             // Appends pTable and sets its first index after the previous
             // table's range. -1 for a null table, -2 when full.
             long Add(CTableBase *pTable);
+            // (fn_8012453C) The table whose index range holds idx; null if
+            // none does.
+            CTableBase *Find(long idx) const;
 
         private:
             CTableBase *m_apTable[4]; // 0x00

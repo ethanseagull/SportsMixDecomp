@@ -30,6 +30,10 @@ namespace bcs {
     // In the DOL (added for MenuF game/menu/CWiFiGame.cpp). Seeds the
     // generator.
     void BCS_SRand(unsigned long nSeed);
+
+    // (inline: TourF game/tour/CTournamentStep.cpp has a weak copy, a
+    // tail call) BCS_RandMax for an integer.
+    inline long BCS_RandMaxI(long max) { return BCS_RandMax(max); }
 }
 
 #endif /* !BCS_BCS_RAND_HPP_ */

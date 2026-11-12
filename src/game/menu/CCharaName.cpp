@@ -43,6 +43,17 @@ namespace {
     bcs::BCS_Color s_Color;
 }
 
+// uncalled stand-in: the original's .rodata has the unsigned int-to-float
+// constant (0x4330000000000000) ahead of SetRewriteTextureData's 1.0f, so
+// code stripped from this file converted an unsigned value to float first.
+// The module link strips this function; it only creates the constant here.
+namespace CCharaName_cpp {
+    float UnusedToFloat(unsigned long nValue)
+    {
+        return nValue;
+    }
+}
+
 namespace msw {
     namespace SelectMenu {
 

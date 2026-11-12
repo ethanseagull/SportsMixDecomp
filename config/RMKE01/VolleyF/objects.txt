@@ -55,6 +55,7 @@ Matching game/volley/CChrCoreVolleyMii00.cpp
 Matching game/volley/CChrCoreVolleyMii01.cpp
 Equivalent game/volley/CChrCoreVolleyPeach.cpp
 Equivalent game/volley/CChrCoreVolleyKoopa.cpp
+Equivalent game/volley/CChrCoreVolleyKoopaJr.cpp
 Equivalent game/volley/CChrCoreVolleyDonkey.cpp
 Equivalent game/volley/CChrCoreVolleySaboten.cpp
 Equivalent game/volley/CChrCoreVolleyDiddy.cpp
@@ -88,3 +89,4 @@ Equivalent game/volley/unit_C0918.cpp
 Equivalent game/volley/CcDaisyFlowerGarden.cpp
 Equivalent game/volley/CCockpitVolleyBoss.cpp
 Equivalent game/volley/CGameVolleyVsBoss.cpp
+Equivalent game/volley/CChrCoreVolleyWaluigi.cpp

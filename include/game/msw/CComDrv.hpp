@@ -87,7 +87,8 @@ namespace msw {
             virtual void OnConnect(_CHR_MSG *pMsg);
             virtual void OnDisconnect(_CHR_MSG *pMsg);
             virtual long OnInit(_CHR_MSG *pMsg);
-            virtual void OnDamage(_CHR_MSG *pMsg);
+            // Returns a long (HockeyF's CComDrvHockeyGame::OnDamage returns 0).
+            virtual long OnDamage(_CHR_MSG *pMsg);
             // Returns the answer to the message (BasketF's CComDrvBasketHB
             // returns this function's result for the messages it does not
             // answer itself).
@@ -194,9 +195,19 @@ namespace msw {
             float GetComLvF() const;
             float GetComBaseLvF() const;
             int IsExistPadDrv() const;
+            // (DOL; added for HockeyF game/hockey/unit_AE7E8.cpp) The number
+            // of pad-driven characters (meaning guessed from the name).
+            long GetExistPadDrvNum() const;
             CChrCore *GetLastSpChrCore() const;
             long GetMyStockItemType() const;
             float RandRangeF(float fMin, float fMax) const;
+            // (DOL; added for BasketF game/basket/CComDrvBasketGame.cpp,
+            // meanings guessed) The other team's characters as bits (for
+            // CComMan's nChrBits arguments); whether a character of
+            // nChrBits stands between the driver and rPos (fWidth wide,
+            // fLen long).
+            unsigned long GetEmTeamEnableBit() const;
+            int IsExistChrToTarget(const bcs::FVEC3 &rPos, float fWidth, float fLen, unsigned long nChrBits) const;
             long LotProbability(const long *pRate, long nNum) const;
             float GetEmCourtLeft() const;
             float GetEmCourtRight() const;
@@ -216,6 +227,10 @@ namespace msw {
             // guessed) rPos (in the court's frame) as a world position in
             // rOut, and how far the character is from it; fArg is passed on.
             float GetWorldTargetDis(bcs::FVEC3 &rOut, const bcs::FVEC3 &rPos, float fArg) const;
+            // (DOL; added for DodgeF game/dodge/unit_A4AE8.cpp, meaning
+            // guessed) Whether the character faces rPos (world), within
+            // the angle given in degrees.
+            int IsDirTarget(const bcs::FVEC3 &rPos, long nDeg) const;
 
             // DOL. The common actions, one per frame while running; derived
             // drivers list them in their action tables (g_ActFuncMap).
@@ -238,7 +253,10 @@ namespace msw {
             unsigned long m_nFlag;
             unsigned char m_Unk08[0x54 - 0x08];
             float m_fUnk54;   // 0x54
-            unsigned char m_Unk58[0x64 - 0x58];
+            // 0x58 (meaning not known): DodgeF's CComDrvDodgeGame lowers
+            // its outfield run rates once it is above 120 and 180.
+            float m_fUnk58;
+            unsigned char m_Unk5C[0x64 - 0x5C];
             // 0x64 (name guessed): the driven character's team. HockeyF
             // passes it to CComManHockey::GetKeeperCore, VolleyF compares it
             // with GameWork::GetUserTeam.
@@ -254,7 +272,11 @@ namespace msw {
             // 0x7C (name guessed): the character's position in the world;
             // DodgeF's gimmick escapes measure from it.
             bcs::FVEC3 m_MyWorldPos;
-            unsigned char m_Unk88[0x94 - 0x88];
+            unsigned char m_Unk88[0x8C - 0x88];
+            // 0x8C (name guessed): BasketF's CComDrvBasketGame passes it to
+            // CChrManBasket::GetBossPackun_ (the boss Packun of its side).
+            long m_nUnk8C;
+            unsigned char m_Unk90[0x94 - 0x90];
             // 0x94, 0x98 (names guessed): passed to CComMan's
             // GetStageCourtCenterX/Z and to CComOSG::Init by the volley
             // driver; a court number and the grid's kind.
@@ -279,7 +301,16 @@ namespace msw {
             // 0x114 (name guessed): where that ball is (BossF's CComDrvBoss
             // runs to it).
             bcs::FVEC3 m_BallPos;
-            unsigned char m_Unk120[0x160 - 0x120];
+            // 0x120 (name guessed): the same ball's position in the world
+            // (DodgeF's CComDrvDodgeGame measures from it to m_MyWorldPos).
+            bcs::FVEC3 m_BallWorldPos;
+            unsigned char m_Unk12C[0x130 - 0x12C];
+            // 0x130, 0x154 (names guessed): the goals the driver attacks and
+            // guards, in the court's frame (BasketF's CComDrvBasketGame
+            // measures its shots and its defence from them).
+            bcs::FVEC3 m_TargetGoalPos;
+            unsigned char m_Unk13C[0x154 - 0x13C];
+            bcs::FVEC3 m_GuardGoalPos;
             // 0x160 to 0x16C (names guessed): the obstacle a gimmick
             // driver is turning round (VolleyF CComDrvVolleyRR::
             // GetPosTurnAroundGimmick). Kind: -1 none, 1 a character, 2 an

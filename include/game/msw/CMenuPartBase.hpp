@@ -68,13 +68,16 @@ namespace msw {
 
             // vptr at 0x44
             CMenuPartBase(long nId);
-            virtual ~CMenuPartBase();
+            // Inline and empty: MenuF's ~CMenuPartButton inlines it, and the
+            // DOL emits it as a weak copy.
+            virtual ~CMenuPartBase() {}
             // The Set* functions return 0, SetButtonPush the part's id (-1
             // when it has no pane); CMenuPartButton passes the result on.
             virtual void Main();
             // Named by the RSO import of MenuF's CMenuPartButton vtable.
-            // Empty; defined last in CMenuPartBase.cpp.
-            virtual void Disp();
+            // Inline and empty: MenuF's CSelectMenuLayoutBase.cpp emits a
+            // weak copy at the head of its weak tail.
+            virtual void Disp() {}
             virtual long SetButtonIn();
             virtual long SetButtonOut();
             virtual long SetButtonPush();

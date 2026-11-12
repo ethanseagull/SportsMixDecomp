@@ -261,16 +261,10 @@ game/msw/CEffectCluster.cpp:
 	.data       start:0x8046F70C end:0x8046F7CC
 	.sdata      start:0x805BFBB8 end:0x805BFBC0
 
-game/msw/CEffectTableList.cpp:
-	.text       start:0x8012444C end:0x801244C0
-	.data       start:0x8046F8C8 end:0x8046F8D8
-
 game/msw/CEffectTable.cpp:
-	.text       start:0x80124604 end:0x801247E0
-
-game/msw/CEffectAttachTable.cpp:
-	.text       start:0x801248FC end:0x80124C20
+	.text       start:0x8012444C end:0x80124C20
 	.rodata     start:0x80439C38 end:0x80439C40
+	.data       start:0x8046F890 end:0x8046F8D8
 	.bss        start:0x804D40F8 end:0x804D41F8
 
 game/msw/CDropCoinMan.cpp:

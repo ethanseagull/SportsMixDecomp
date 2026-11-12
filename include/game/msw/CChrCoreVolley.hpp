@@ -215,7 +215,7 @@ namespace msw {
             virtual void CallbackMotTrg_BodyVisible_(long, long);      // 0xC7C
             virtual void SubStateDamageCtorMame_(STATE_WORK_DAMAGE *); // 0xC88
             virtual int SubStateDamageLoopMame_(STATE_WORK_DAMAGE *);  // 0xC8C (int: CChrCoreBoss::LoopStateDamage tests it)
-            virtual void SubStateParalyzeSetEffect_();                 // 0xC94
+            virtual float SubStateParalyzeSetEffect_();                // 0xC94
             virtual void SubStateParalyzeEndEffect_();                 // 0xC98
 
             // CChrCoreVolley's own virtuals, 0xC9C to the end of the vtable at
@@ -337,6 +337,10 @@ namespace msw {
             // at; sets the work's shot frame from the trick motion.
             void Util_GetTargetCourtRect_(bcs::FVEC4 &rRect);
             void SubStateAirTrickDoGetBallShotTrg_(STATE_WORK_AIR_TRICK *pWork);
+            // (added for game/volley/CChrCoreVolleyWaluigi.cpp; DOL, meaning
+            // guessed) Moves the target marker to rPos, kept on court
+            // nCourt (rPos is clipped in place).
+            void SetTargetMarkerPosClip__(long nCourt, bcs::FVEC3 &rPos);
 
         protected:
             // Not mapped yet; size 0x964.
@@ -352,7 +356,12 @@ namespace msw {
             // 0x838, 0x868 (names guessed): the target marker's position,
             // and a value CChrCoreVolleySiroma sets with the marker.
             bcs::FVEC3 m_TargetMarkerPos;
-            unsigned char m_Unk844[0x868 - 0x844];
+            unsigned char m_Unk844[0x850 - 0x844];
+            // 0x850 (name guessed; CChrCoreVolleyWaluigi passes it to
+            // SetTargetMarkerPosClip__ with the marker's position): the
+            // court the target marker is kept on.
+            long m_nTargetMarkerCourt;
+            unsigned char m_Unk854[0x868 - 0x854];
             float m_fTargetMarkerUnk868;
             unsigned char m_Unk86C[0x888 - 0x86C];
             // 0x888, 0x88C (names guessed): cleared when a block is hit
@@ -417,7 +426,12 @@ namespace msw {
         unsigned char m_Unk00[0x4];
         unsigned long m_nFlag;       // 0x04
         float m_fRotY;               // 0x08, negative for none
-        unsigned char m_Unk0C[0x38 - 0xC];
+        // 0x0C, 0x1C, 0x2C: the move a hit block knocks the character back
+        // with (CChrCoreVolleyKoopaJr::SubStateBlockJumpBlockHit_).
+        CC_DATA::CHR_PARAM::MOVE_PARAM m_MoveParam; // 0x0C
+        CChrCore::DIR_MOVE m_DirMove; // 0x1C
+        float m_fDirMoveUnk2C;       // 0x2C, cleared with the move
+        unsigned char m_Unk30[0x38 - 0x30];
         float m_fCollSize;           // 0x38, passed to UpdateCollDefSetParam_ (name guessed)
         float m_fActStartFrame;      // 0x3C
         float m_fActTrgFrame;        // 0x40, negative once done
@@ -535,13 +549,48 @@ namespace msw {
             virtual ~CChrCoreVolleyWario();
     };
 
+    // Waluigi: his air trick splits the ball in four (three copies,
+    // CC06_VOLLEY::CBallVolleyWaluigi, and the ball itself hang from the
+    // hands of his option model) and he spikes them one after the other
+    // (game/volley/CChrCoreVolleyWaluigi.cpp).
     class CChrCoreVolleyWaluigi : public CChrCoreVolley {
         public:
+            enum { SPLIT_BALL_NUM = 3 };
+
             CChrCoreVolleyWaluigi();
             virtual ~CChrCoreVolleyWaluigi();
+            virtual void Reset_();                                     // 0x384
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void SubStateSpikeDoSmashSpikeEffect_(STATE_WORK_SPIKE *); // 0xCEC
+            virtual float SubStateAirTrickGetTrickMotFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD04
+            virtual float SubStateAirTrickGetTrickRotFrame_(STATE_WORK_AIR_TRICK *); // 0xD0C
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual void SubStateAirTrickStartBallAdsorb_(STATE_WORK_AIR_TRICK *, CBall *); // 0xD24
+            virtual float SubStateAirTrickGetBallAdsorbFrame_(STATE_WORK_AIR_TRICK *); // 0xD28
+            virtual void SubStateAirTrickTrgBallAdsorbEnd_(STATE_WORK_AIR_TRICK *); // 0xD30
+            virtual void SubStateAirTrickPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xD38
+            virtual void SubStateAirTrickStartArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD40
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+            virtual int SubStateAirTrickIsEndArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD48
+            virtual void SubStateAirTrickPlayLandMotion_(STATE_WORK_AIR_TRICK *); // 0xD5C
+
+            // Makes the three copies and hangs them and the ball from the
+            // option model's hands.
+            void SubStateAirTrickCreateSplitBall_();
 
         protected:
-            unsigned char m_Unk964[0x994 - 0x964]; // allocated with 0x994 bytes
+            // (inline helpers, names guessed) Copy nIdx, or null when it is
+            // gone; deletes the copies left and forgets them; spikes copy
+            // nIdx at the work's target and moves the target marker.
+            CBall *GetSplitBall_(long nIdx);
+            void DeleteSplitBall_();
+            void ShootSplitBall_(STATE_WORK_AIR_TRICK *pWork, long nIdx);
+
+            unsigned char m_Unk964[0x988 - 0x964]; // allocated with 0x994 bytes
+            // 0x988 (name guessed): the task ids of the copies, 0 for none.
+            unsigned long m_ahSplitBall[SPLIT_BALL_NUM];
     };
 
     // Donkey Kong's air trick jumps up and pounds the ground, which shakes
@@ -662,6 +711,24 @@ namespace msw {
         public:
             CChrCoreVolleyKoopaJr();
             virtual ~CChrCoreVolleyKoopaJr();
+            virtual CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *NewCcParam_(long nHeap) const; // 0xC9C
+            virtual void SubStateBlockJumpCollSet_(STATE_WORK_BLOCK_JUMP *); // 0xCAC
+            virtual int SubStateBlockIsNormalType_() const { return 0; } // 0xCB0
+            virtual int SubStateBlockIsNoFlickType_() const { return 1; } // 0xCB8
+            virtual void SubStateBlockJumpActStart_(STATE_WORK_BLOCK_JUMP *); // 0xCCC
+            virtual int SubStateBlockJumpIsActEnd_(STATE_WORK_BLOCK_JUMP *); // 0xCD0
+            virtual int SubStateBlockJumpActEnd_(STATE_WORK_BLOCK_JUMP *);  // 0xCD4
+            virtual void SubStateBlockJumpBlockHit_(const CCollDefUnit *); // 0xCE0
+            virtual void SubStateSpikeDoSmashSpikeEffect_(STATE_WORK_SPIKE *); // 0xCEC
+            virtual void SubStateAirTrickSetTrickMoveParam_(STATE_WORK_AIR_TRICK *, long); // 0xD00
+            virtual float SubStateAirTrickGetTrickRotFrame_(STATE_WORK_AIR_TRICK *); // 0xD0C
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+            virtual void SubStateAirTrickPlayLandMotion_(STATE_WORK_AIR_TRICK *); // 0xD5C
+
+            // Throws the paint balls of the air trick into the other court.
+            void SubStateAirTrickFirePaintBomb_();
     };
 
     class CChrCoreVolleyMoogle : public CChrCoreVolley {

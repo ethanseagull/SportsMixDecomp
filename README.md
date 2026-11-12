@@ -19,21 +19,6 @@ Supported versions:
 - `RMKE01`: Rev 0 (USA), the default and the version all current work targets
 - `RMKP01`: Rev 0 (EU), an older configuration for `main.dol` only
 
-What is decompiled
-==================
-
-The game is `main.dol` plus nine code modules, loaded as RSO files: `SystemF`, `MenuF`, `TourF`, `BasketF`, `VolleyF`, `DodgeF`, `HockeyF`, `BossF` and `DebugF`. decomp-toolkit cannot read RSO, so `tools/rso2rel.py` converts each module to REL; the build relinks the RELs and checks them against the converted originals (code, data and relocations). Packing them back into RSO is not done yet.
-
-Game code (the `msw::` and `bcs::` classes) comes first. Nintendo's SDK, NW4R and the C runtime in `main.dol` come last.
-
-Each function ends up in one of three states:
-
-- **matched**: objdiff reports it 100% identical to the original.
-- **near**: 85% or more, and every remaining difference is one that cannot change behaviour (register choice, instruction order, stack slots). These are listed in `config/RMKE01/<Module>/equivalent.txt` with the reason.
-- **unverified**: written and compiling, but further off; listed the same way and waiting on a behaviour test.
-
-A source file (unit) is `Matching` in its module's `objects.txt` when it rebuilds byte for byte and passes the hash check, and `Equivalent` when all its functions are matched or near. The **Linked** badge counts `Matching` units only.
-
 Dependencies
 ============
 

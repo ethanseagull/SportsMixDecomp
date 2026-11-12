@@ -2083,7 +2083,7 @@ DtorState__Q23bcs65CStateTemplate<Q23bcs41CFsm<Q33msw11CC14_BASKET14CcNinjaFacto
 CtorState__Q23bcs51CStateTemplate<Q33msw11CC14_BASKET14CcNinjaFactory>Fv = .text:0x0006BF08; // type:function size:0x48 scope:global
 LoopState__Q23bcs51CStateTemplate<Q33msw11CC14_BASKET14CcNinjaFactory>Fv = .text:0x0006BF50; // type:function size:0x48 scope:global
 DtorState__Q23bcs51CStateTemplate<Q33msw11CC14_BASKET14CcNinjaFactory>Fv = .text:0x0006BF98; // type:function size:0x48 scope:global
-fn_4_6BFE0 = .text:0x0006BFE0; // type:function size:0x14
+__sinit_\CChrCoreBasketNinja_cpp = .text:0x0006BFE0; // type:function size:0x14 scope:local
 @52@__dt__Q33msw11CC14_BASKET14CcNinjaFactoryFv = .text:0x0006BFF4; // type:function size:0x8 scope:global
 __ct__Q23msw19CChrCoreBasketPeachFv = .text:0x0006BFFC; // type:function size:0x3C scope:global
 __dt__Q23msw19CChrCoreBasketPeachFv = .text:0x0006C038; // type:function size:0x58 scope:global

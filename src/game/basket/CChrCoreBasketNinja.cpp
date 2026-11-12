@@ -47,13 +47,6 @@
 namespace {
     float s_fAngle70 = bcs::DEG_TO_RAD(70.0f);
 
-    // (name guessed) From fFrom to fTo by fRate (0 to 1).
-    inline float LerpF(float fFrom, float fTo, float fRate)
-    {
-        float fOfs = fRate * bcs::BCS_Abs(fFrom - fTo);
-        return fFrom - fOfs;
-    }
-
     // (name guessed) r1 - r2 in the XZ plane, as its length.
     inline float DistXZ(const bcs::FVEC3 &r1, const bcs::FVEC3 &r2)
     {
@@ -72,12 +65,6 @@ namespace {
         return sum;
     }
 
-    // (name guessed) The length of rVec in the XZ plane.
-    inline float LenXZ(const bcs::FVEC3 &rVec)
-    {
-        bcs::FVEC3 xz(rVec.x, 0.0f, rVec.z);
-        return bcs::FVEC3Len(&xz);
-    }
 }
 
 namespace msw {
@@ -136,15 +123,9 @@ namespace msw {
                 }
 
                 // Starts the effect of slot nSlot on the copy, unless it
-                // vanishes.
-                void CreateEffect(long nSlot)
-                {
-                    if (IsDisappear() != 1) {
-                        StopEffect(nSlot);
-                        const long EFF_ID[EFF_NUM] = {0xA6, 0xA7, 0xA9, 0xA8, 0x22, 0xAB, -1};
-                        m_hEff[nSlot] = CEffectCtrl::CreateAttachEffectAuto(EFF_ID[nSlot], m_pMdl[0], 3);
-                    }
-                }
+                // vanishes. (Defined below, before Create: its table's place
+                // in .rodata follows the definition.)
+                inline void CreateEffect(long nSlot);
 
                 // Starts the light on the copy's ball, nFrame frames into it.
                 void CreateLightEffect(unsigned long nFrame)
@@ -207,6 +188,7 @@ namespace msw {
                 virtual ~CcNinjaFactory();
                 virtual void Main();
 
+                void InitState_();
                 void CtorStateSP_1_A();
                 void LoopStateSP_1_A();
                 void DtorStateSP_1_A();
@@ -534,7 +516,8 @@ namespace msw {
                 float f3Point = GetCourt3PointSize();
                 float fRate = DistXZ(GetTargetGoalPos(), GetPos()) / f3Point;
                 fRate = fRate > 1.0f ? 1.0f : (fRate < 0.0f ? 0.0f : fRate);
-                float fLen = LerpF(10.0f, 5.0f, fRate);
+                // From 10 units at the goal down to 5 at the three-point line.
+                float fLen = 10.0f - fRate * bcs::BCS_Abs(10.0f - 5.0f);
 
                 pWork->m_fMoveFrameNum = AnimGetFrameNum(3);
                 pWork->m_fRotY = GetRotY_ToPosXZ(GetTargetGoalPosOffZ_());
@@ -981,6 +964,15 @@ namespace msw {
             Release();
         }
 
+        inline void CcNinjaClone::CreateEffect(long nSlot)
+        {
+            if (IsDisappear() != 1) {
+                StopEffect(nSlot);
+                const long EFF_ID[EFF_NUM] = {0xA6, 0xA7, 0xA9, 0xA8, 0x22, 0xAB, -1};
+                m_hEff[nSlot] = CEffectCtrl::CreateAttachEffectAuto(EFF_ID[nSlot], m_pMdl[0], 3);
+            }
+        }
+
         void CcNinjaClone::Create(CChrCore *pChr, const CCollBodyUnit *pBody, CBall *pBall)
         {
             m_pChr = pChr;
@@ -1170,6 +1162,21 @@ namespace msw {
             , m_fFrame(0.0f)
             , m_Unk8C(0.0f, 0.0f, 0.0f)
         {
+            InitState_();
+            ChangeState(STATE_SP_1_A);
+
+            for (long i = 0; i < CLONE_NUM; i++) {
+                m_nClonePos[i] = 1;
+                m_Clone[i].Create(m_pChr, pBody, pBall);
+            }
+        }
+
+        // (name guessed) The state table. The original has this as a
+        // function of its own, inlined into the constructor and then
+        // dropped by the link: .data holds two copies of the pointers to
+        // members, one per body that contains the SetState calls.
+        void CcNinjaFactory::InitState_()
+        {
             InitFsm(this, STATE_NUM);
             SetState(STATE_SP_1_A, &CcNinjaFactory::CtorStateSP_1_A, &CcNinjaFactory::LoopStateSP_1_A,
                      &CcNinjaFactory::DtorStateSP_1_A);
@@ -1179,12 +1186,6 @@ namespace msw {
                      &CcNinjaFactory::DtorStateSP_2_A);
             SetState(STATE_DISAPPEAR, &CcNinjaFactory::CtorStateDisappear, &CcNinjaFactory::LoopStateDisappear,
                      &CcNinjaFactory::DtorStateDisappear);
-            ChangeState(STATE_SP_1_A);
-
-            for (long i = 0; i < CLONE_NUM; i++) {
-                m_nClonePos[i] = 1;
-                m_Clone[i].Create(m_pChr, pBody, pBall);
-            }
         }
 
         CcNinjaFactory::~CcNinjaFactory()

@@ -39,6 +39,9 @@ namespace msw {
             // nId of the unlock list.
             void PushChar(long nId, long nUnk1, long nUnk2, long nType, long nColor, long nGameMode);
             void PushCup(long nId, long nCup, long nUnk, long nGameMode);
+            // (added for TourF game/tour/CTournamentStep.cpp; return type
+            // guessed) Opens cup nCup of level nLevel in sport nGameMode.
+            void SetCup(long nCup, long nLevel, long nGameMode, int b);
             void PushEtc(long nId, long nEtc, long nGameMode);
 
         private:

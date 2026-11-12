@@ -161,7 +161,11 @@ namespace msw {
             ITEM_PARAM aItemParam[32];       // 0x0BA0
             unsigned char m_Unk0CA0;
             signed char nUnkCA1;             // 0x0CA1, passed to CGame::EnableRuleOptionFlag(0x100, ...)
-            unsigned char m_Unk0CA2[4];
+            // 0x0CA2, 0x0CA4: per team of a match, CGame's
+            // GetTeamChrChangeCtrlType and GetTeamAutoSpikeJumpType, kept
+            // by msw::CTournamentStep's constructor (TourF). (names guessed)
+            signed char aTeamChrChangeCtrlType[2];
+            signed char aTeamAutoSpikeJumpType[2];
             signed char nUnkCA6;             // 0x0CA6, copied to CGame::GameWork 0x1C
             unsigned char m_Unk0CA7[0xCAC - 0xCA7];
             PLAYER_INFO aPlayer[3];          // 0x0CAC
@@ -194,7 +198,15 @@ namespace msw {
             // 0x1056, given to msw::CEvDemoRes as the stage of the map's
             // models (msw::CTournamentMan::_Init). (name guessed)
             signed char nStage;
-            unsigned char m_Unk1057[0x105B - 0x1057];
+            // 0x1057: the map's music, -1 for none (TournamentWork::
+            // BgmPlay, TourF). (name guessed)
+            signed char nBgm;
+            unsigned char m_Unk1058;
+            // 0x1059: the state the map step goes to after the event
+            // scripts run (msw::CTournamentStep::_ChangeStateEvent, TourF).
+            // (name guessed)
+            signed char nEventNextState;
+            signed char nUnk105A;            // 0x105A
             // 0x105B: which player markers are shown (bits 0-1) and the
             // shadow (bit 2), set and cleared by msw::CTournamentRouteMan's
             // timer events (TourF). (name guessed)
@@ -218,6 +230,10 @@ namespace msw {
             // matches come; CTmScript::SetupMatch takes the first and turns
             // the list. (name guessed)
             signed char aGameModeOrder[4];
+
+            // (inline; TourF game/tour/CTournamentStep.cpp has a weak copy)
+            // The user's team.
+            long GetPlayerTeam() const { return 0; }
         };
 
         // One point of the tournament map, 0x14 bytes. (names guessed)
@@ -317,10 +333,16 @@ namespace msw {
         // has used in sport nGameMode, and the character member nNo of team
         // nTeam plays. Used by TourF CTmScript.
         unsigned long long GetUsedChar(long nGameMode, int nUnk);
-        long GetSettingChar(long nTeam, long nNo);
+        unsigned long long GetSettingChar(long nGameMode, long nLevel);
         // Makes the leader of team nTeam a character that is not unlocked.
         // (meaning and names guessed)
         void SetLeaderNoUnlock(long nTeam, long nChar, unsigned long nFlag);
+        // (added for TourF game/tour/CTournamentStep.cpp, which defines
+        // these; names guessed) Gives the members of team nTeam that have
+        // none a random character of sport nGameMode; gives the first
+        // nTeamNum teams a random leader.
+        void RandomSelectSubChar(long nTeam, long nGameMode, long nNoSecret, int b);
+        void RandomSelectLeaderChar(long nTeamNum, int b);
 
         // Both return the address of the same object. (reference or pointer
         // is a guess; so is the const of the first)
@@ -335,6 +357,24 @@ namespace msw {
 
         // (return type guessed) Starts the tournament map's music.
         void BgmPlay();
+
+        // (added for TourF game/tour/CTournamentStep.cpp; names from the
+        // symbols) Keep and bring back a copy of the tournament's data;
+        // write the tournament to the save data.
+        void Backup();
+        void Restore();
+        void TournamentSave();
+
+        // The team that lost match nMatch. (inline: TourF game/tour/
+        // CTournamentStep.cpp has a weak copy)
+        inline signed char GetLoseTeam(long nMatch)
+        {
+            const MATCH_INFO &match = GetMatchInfo(nMatch);
+            if (match.nSideFlag0D != match.nWinTeam) {
+                return match.nSideFlag0D;
+            }
+            return match.nSideFlag0E;
+        }
 
         // Map point nPoint and route nRoute; a negative index gives the
         // first. TourF has weak out-of-line copies of GetRouteInfo.

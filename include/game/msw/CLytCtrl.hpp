@@ -71,6 +71,11 @@ namespace msw {
                 }
                 return pManager->GetObject(nHandle);
             }
+
+            // (added for TourF game/tour/CTournamentStep.cpp; static)
+            // Stop and restart the layouts' animations for a pause.
+            static void SetPauseStop();
+            static void ClearPauseStop();
     };
 }
 

@@ -16,34 +16,44 @@ namespace msw {
     // here. Parameter names guessed.
     class CTmScriptHandler : public bcs::CTask {
         public:
-            virtual ~CTmScriptHandler();
-            virtual void Main();
-            virtual void Disp();
+            // Inline: TourF game/tour/CTournamentStep.cpp, the only file
+            // that makes one, emits the vtable and these bodies (the
+            // virtuals at the end of its .text, in reverse order).
+            CTmScriptHandler(bcs::CTask *pParent) : bcs::CTask(pParent, -1) {}
+            virtual ~CTmScriptHandler() {}
+            virtual void Main() {}
+            virtual void Disp() {}
 
             // Puts map object nObj at vPos, turned by fRotY radians.
-            virtual void MapObjSet(long nObj, const bcs::FVEC3 &vPos, float fRotY, const char *pName, int nFlag);
+            virtual void MapObjSet(long nObj, const bcs::FVEC3 &vPos, float fRotY, const char *pName, int nFlag) {}
             // Route nRoute was shown or hidden; bChanged says whether its
             // visibility bit changed.
-            virtual void RouteWrite(long nRoute, int bChanged);
-            virtual void ChipWrite(long nPoint, unsigned long nUnk1, unsigned long nUnk2, long nUnk3, int nUnk4);
-            virtual void SendRouteEvent(long nRoute, long nEvent, float fStart, unsigned long nUnk, float fEnd);
+            virtual void RouteWrite(long nRoute, int bChanged) {}
+            virtual void ChipWrite(long nPoint, unsigned long nUnk1, unsigned long nUnk2, long nUnk3, int nUnk4) {}
+            virtual void SendRouteEvent(long nRoute, long nEvent, float fStart, unsigned long nUnk, float fEnd) {}
             // The script's route list (CTmScript 0x68), nNum entries.
-            virtual void SetRoutePoints(long nPoint, const unsigned char *pRoute, long nNum);
+            virtual void SetRoutePoints(long nPoint, const unsigned char *pRoute, long nNum) {}
             virtual void RouteSelectSetup(unsigned char nPoint, const unsigned char *pRoute, long nUnk1, long nUnk2,
-                                          long nUnk3);
+                                          long nUnk3)
+            {
+            }
             // Not zero once the player has chosen; rSelect receives the
             // choice.
-            virtual int RouteSelect(long &rSelect);
-            virtual void TeamCreate(long nTeam, long nUnk, float fUnk1, float fUnk2);
-            virtual void TeamErase(long nTeam, long nUnk);
-            virtual void TeamPos(long nTeam, long nPoint, long nUnk);
-            virtual void MoveTarget(long nTeam, long nPoint, const unsigned char *pRoute);
-            virtual void MoveResult(long nTeam, int nResult, float fUnk);
-            virtual void PointCamera(long nPoint, long nCamera, float fUnk1, float fUnk2);
-            virtual void FadeIn(float fSpeed, int nUnk);
-            virtual int IsFadeInReq() const;
-            virtual void SetMatchMake(long nMatch, long nTeam0, long nTeam1);
-            virtual void VsMatchPause(long nMatch, long nTeam0, long nTeam1);
+            virtual int RouteSelect(long &rSelect)
+            {
+                rSelect = -1;
+                return 1;
+            }
+            virtual void TeamCreate(long nTeam, long nUnk, float fUnk1, float fUnk2) {}
+            virtual void TeamErase(long nTeam, long nUnk) {}
+            virtual void TeamPos(long nTeam, long nPoint, long nUnk) {}
+            virtual void MoveTarget(long nTeam, long nPoint, const unsigned char *pRoute) {}
+            virtual void MoveResult(long nTeam, int nResult, float fUnk) {}
+            virtual void PointCamera(long nPoint, long nCamera, float fUnk1, float fUnk2) {}
+            virtual void FadeIn(float fSpeed, int nUnk) {}
+            virtual int IsFadeInReq() const { return 0; }
+            virtual void SetMatchMake(long nMatch, long nTeam0, long nTeam1) {}
+            virtual void VsMatchPause(long nMatch, long nTeam0, long nTeam1) {}
 
             // (name guessed) While it is not zero the map camera is busy,
             // and CTmScript's PointCamera waits.

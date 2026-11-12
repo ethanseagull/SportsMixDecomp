@@ -35,6 +35,10 @@ namespace msw {
     // file. Member names, and parameter names where the symbols give none,
     // are guessed.
     class CTournamentMan : public bcs::CTask {
+            // (added for TourF game/tour/CTournamentStep.cpp, which reads
+            // m_pInstance, m_ulMoveStop and the route arrows directly)
+            friend class CTournamentStep;
+
         public:
             // How many of each kind of slot the manager keeps.
             enum {
@@ -130,7 +134,8 @@ namespace msw {
 
             // The route graph (see TournamentWork::MakePointData).
             void MakePointData(long nLink);
-            void MakeRouteSelect(unsigned short *pRoute, unsigned char nStart, unsigned char nGoal,
+            // Returns the number of routes written to pRoute.
+            long MakeRouteSelect(unsigned short *pRoute, unsigned char nStart, unsigned char nGoal,
                                  unsigned char nMask, const unsigned char *pVia, float fRand);
 
             // Map effects, kept in the slots nFirst..nLast: a free slot, and
@@ -191,6 +196,9 @@ namespace msw {
             CEventModel *GetObjModel(long nIndex) const { return m_apObjModel[nIndex]; }
             // (name guessed) Map character nIndex, 0 when there is none.
             CEventModel *GetChrModel(long nIndex) const { return m_apChrModel[nIndex]; }
+            // The same under the name the original gives it (TourF
+            // game/tour/CTournamentStep.cpp has a weak copy, GetChr__...CFl).
+            CEventModel *GetChr(long nIndex) const { return m_apChrModel[nIndex]; }
 
         private:
             CTournamentMan(bcs::CTask *pParent);

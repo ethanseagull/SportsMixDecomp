@@ -22,6 +22,10 @@ namespace msw {
     // _OpSysCall* members below, bound by name hash in UpdateBind. Size
     // 0x11C. Member names guessed unless they are in a symbol.
     class CTmScript : public vm::CVMCpu {
+            // (added for TourF game/tour/CTournamentStep.cpp, which runs
+            // scripts by name through _Setup)
+            friend class CTournamentStep;
+
         public:
             // A system call: returns the VM state (0 to go on).
             typedef long (CTmScript::*SYSCALL)();

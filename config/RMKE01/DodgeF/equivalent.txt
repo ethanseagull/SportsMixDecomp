@@ -169,6 +169,7 @@ DodgeF SubStateArtsShotSetTrickJumpParam___Q23msw13CChrCoreDodgeFPQ33msw13CChrCo
 DodgeF SubStateArtsShotSetTrickMoveParam___Q23msw13CChrCoreDodgeFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 99.7 register choice only: f30/f31 swapped between the squared distance and the frame count
 DodgeF SubStateDamageCtorMDmg___Q23msw13CChrCoreDodgeFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 99.4 99.4: load order m_fCamRotY vs pi, one redundant frsp on an already-single value
 DodgeF SubStateDamageLoopDizzy___Q23msw13CChrCoreDodgeFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 99.3 99.3: inline FsmqPushState tail/head read order and one redundant tail reload; regs
+DodgeF SubStateDamageLoopLDmg___Q23msw13CChrCoreDodgeFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 100.0 stack slots of two FVEC3 temporaries swapped (0x8 vs 0x14); objdiff scores 100
 DodgeF TrgConstruct___Q23msw18CItemBallBombDodgeFv near 98.4 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF UpdateCourtCenter___Q23msw13CStageDodge03Ff near 96.4 register choice / operand order only.
 DodgeF UpdateMdl__Q23msw13CStageDodge13FUlf near 98.1 register choice and common-subexpression reuse only (as CStageBasket13::UpdateMdl): in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls

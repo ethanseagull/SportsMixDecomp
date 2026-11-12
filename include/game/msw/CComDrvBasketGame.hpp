@@ -84,6 +84,44 @@ namespace msw {
             // action and pick the next one, and their parts.
             virtual void ActInterrupt();
             virtual void ThkMain();
+
+            // (added for game/basket/unit_B09B4.cpp; return types guessed)
+            // The overrides of CComDrv's and CComDrvBasket's action slots.
+            virtual int MethdPass(const bcs::FVEC3 &rPos);
+            virtual int MethdPass(CChrCore *pChr);
+            virtual int MethdAirTrick();
+            virtual int MethdTrickMove();
+            virtual int CanbeJumpBlock();
+            // Runs to rPos (local coordinates); turns aside to a dropped
+            // coin or a J-street panel on the way when the driver wants
+            // one. Not zero when the driver has arrived.
+            int MethdBKRunTest(bcs::FVEC3 &rPos, float fDist, float fDpm, int bKeepRunning);
+            int MethdBKRun2(bcs::FVEC3 &rPos, float fDist, float fDpm, int bKeepRunning, int bTurnAround);
+            int MethdPassBK(float fRot, int nArg);
+            int MethdPassSign();
+            int MethdReboundDunk();
+            int MethdAlleyoop();
+            // Trick move to the right (bRight set) or the left.
+            int MethdSpinMove(int bRight);
+            int CanbeItemThrow();
+            int CanbeCombination() const;
+            // (added for game/basket/unit_B09B4.cpp, defined elsewhere;
+            // return types guessed) The radius the driver searches "?"
+            // panels in; turns rPos aside around what stands in the way
+            // (not zero when it did).
+            float GetSearchHatenaPanelArea() const;
+            int GetPosTurnAround(bcs::FVEC3 &rPos);
+            // (inline: no symbol of its own; MethdDash has it inlined)
+            int CanbeDash() const
+            {
+                if (m_pChr->IsMoveAssist()) {
+                    return 0;
+                }
+                if (m_pChr->IsHoldBall()) {
+                    return m_pChr->CanbeDash();
+                }
+                return 0;
+            }
             void ActInterrupLooseBall_();
             void ActInterruptOffense_();
             void ActInterruptItemShootCheck_();
@@ -141,7 +179,7 @@ namespace msw {
             // cruise ship stage (-1, 0 or 1).
             long GetDCruise3PointAreaState() const;
             void GetHomePos(bcs::FVEC3 &rPos);
-            void MethdDash();
+            int MethdDash();
             int MethdCombination();
             int MethdPassRequest();
             // More start actions.
@@ -216,7 +254,12 @@ namespace msw {
             float m_fUnk1D4;  // 0x1D4, a timer counted down to 0
             float m_fUnk1D8;  // 0x1D8, the timer of the boss Packun jump shot
             float m_fUnk1DC;  // 0x1DC, the timer of flag 0x40
-            unsigned char m_Unk1E0[0x1FC - 0x1E0];
+            unsigned char m_Unk1E0[0x1E8 - 0x1E0];
+            // 0x1E8 (meaning not known): with 0 MethdBKRun2 measures the
+            // arrival from m_MyPos to the asked position, else from the
+            // character to the corrected one.
+            long m_nUnk1E8;
+            unsigned char m_Unk1EC[0x1FC - 0x1EC];
             float m_fUnk1FC;  // 0x1FC, a timer (message 0x26)
             unsigned char m_Unk200[0x688 - 0x200];
     };

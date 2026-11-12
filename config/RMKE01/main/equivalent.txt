@@ -40,6 +40,7 @@ main Cleanup__Q23msw10CEventDemoFi near 96.2 register choice only: m_Work addres
 main ClearChrIconImpl__Q23msw17CCockpitChrIcon2DFlil near 98.9 98.9%: r23-r26 assigned in a different order; register-only
 main ClearChrIcon__Q23msw17CCockpitChrIcon2DFlil near 99.1 99.1%: register choice only
 main CreateBuryCoin__Q23msw12CDropCoinManFRCQ23bcs5FVEC3RCQ23bcs5FVEC3l near 99.1 float register choice and load order only
+main CreateDriftItem___Q23msw11CGimmickManFlRCQ23bcs5FVEC3RCQ23bcs5FVEC3ff near 99.7 the two fmadds take the random value and the width in swapped operand order (same product); source order of the factors does not change it, declaration-order search found nothing
 main CreateMdl___Q23msw18CEffectCoinGetBaseFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinTypei unverified 98.2 ResFile stored to the stack before the alignment-assert branch in the original, after it in ours (one extra mr)
 main CreateMdl___Q23msw9CDropCoinFv near 99.9 shadow/reflection model name pointers in swapped registers; declaration-order search no gain
 main CreateModel__Q23msw13CEvDemoMdlChrFRCQ33msw13CEvDemoMdlChr6_SETUPl near 98.2 load order of the two ResFile copies and the stack slot of the ResFile argument temporary only

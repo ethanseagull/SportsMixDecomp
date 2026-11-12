@@ -284,7 +284,11 @@ game/msw/CItem.cpp:
 	.text       start:0x8012830C end:0x8012C1F0
 
 game/msw/CGimmickMan.cpp:
-	.text       start:0x8012CC80 end:0x8012E0AC
+	.text       start:0x8012CC80 end:0x8012E240
+	.rodata     start:0x80439D88 end:0x80439D98
+	.data       start:0x8046FEE8 end:0x8046FFE8
+	.sbss       start:0x805C0C20 end:0x805C0C28
+	.sdata2     start:0x805C2CC8 end:0x805C2CE0
 
 game/msw/CQPanelMan.cpp:
 	.text       start:0x8012E240 end:0x80130054

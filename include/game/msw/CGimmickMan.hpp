@@ -17,6 +17,7 @@ namespace msw {
     class CItem;
     class CItemMan;
     class CQPanel;
+    class CStgGmk_Bubble;
     class CStgGmk_Karon;
 
     // The stage gimmicks' manager. A DOL class, size 0x40 (the constructor
@@ -26,7 +27,10 @@ namespace msw {
     // The virtual functions are in the order of the slots of
     // __vt__Q23msw15CGimmickManBoss (BossF). Return types not seen in a body
     // are guesses.
-    class CGimmickMan : public bcs::CUnivTask {
+    //
+    // The base is bcs::CUnivTaskEx: the DOL destructor tests `this` three
+    // times before calling bcs::CTask's.
+    class CGimmickMan : public bcs::CUnivTaskEx {
         public:
             CGimmickMan(bcs::CTask *pParent);
             virtual ~CGimmickMan();
@@ -40,7 +44,9 @@ namespace msw {
             virtual void SetUp_();
             virtual void AllReset_();
             virtual void QPanelAllReset_();
-            virtual long SendMessage_(long, long, long, long);
+            // Passes the message on to the three managers (returns nothing:
+            // the DOL body leaves the last call's result in r3 by chance).
+            virtual void SendMessage_(long, long, long, long);
             virtual CQPanel *QPanelGetFirst_();
             virtual CQPanel *QPanelGetNext_(CQPanel *);
             virtual CQPanel *QPanelGetNear_(const bcs::FVEC3 &);
@@ -58,8 +64,9 @@ namespace msw {
                                          void *);
             virtual CDropCoin *DropCoinGetFirst_();
             virtual CDropCoin *DropCoinGetNext_(CDropCoin *);
-            virtual CDropCoin *CreateStarPiece_(DROP_COIN::CoinType, long, const bcs::FVEC3 &, const bcs::FVEC3 &,
-                                                long);
+            // (returns nothing: the DOL body ends in a tail call after a
+            // beqlr)
+            virtual void CreateStarPiece_(DROP_COIN::CoinType, long, const bcs::FVEC3 &, const bcs::FVEC3 &, long);
             virtual long GetStarPieceNum_() const;
             virtual void DeleteAllStarPiece_();
             virtual void SetCoinRefelctVelReduce_(float, float);
@@ -92,7 +99,7 @@ namespace msw {
             virtual void ItemExParamSet_PThrowHeight_(long, float);
             virtual void ItemExParamSet_PThrowFrame_(long, float);
             virtual void ItemExParamSet_ExplodeRange_(long, float);
-            virtual void StgGmkCreate_Bubble_(const bcs::FVEC3 &);
+            virtual CStgGmk_Bubble *StgGmkCreate_Bubble_(const bcs::FVEC3 &rPos); // a new bubble at rPos (stage 11 only)
             virtual CStgGmk_Karon *StgGmkCreate_Karon_(const bcs::FVEC3 &rPos); // a new karon at rPos
             virtual void EffectCoinGetCreate_(const bcs::FVEC3 &, DROP_COIN::CoinType);
             virtual void EffectCoinScoreCreate_(const bcs::FVEC3 &, const bcs::FVEC3 &, long);
@@ -140,11 +147,68 @@ namespace msw {
             // QPanelAllReset_ on the instance (guessed from the name).
             static void QPanelAllReset();
 
+            // (DOL, static; added for main game/msw/CGimmickMan.cpp) The
+            // remaining wrappers: each calls the virtual function of the same
+            // name with a trailing underscore on the instance and returns
+            // zero (QPanelChoicePopupItem: -1) without one. The ones whose
+            // symbol the DOL does not export are named after the virtual
+            // they call.
+            static int IsActive();
+            static void SendMessage(long, long, long, long);
+            static CQPanel *QPanelGetFirst();
+            static CQPanel *QPanelGetNext(CQPanel *pPanel);
+            static CQPanel *QPanelGetNear(const bcs::FVEC3 &rPos);
+            // Passes rPos, nTeam, the first two ints, the fourth int and the
+            // two out pointers on: rPos2 and the third int are not used.
+            static long QPanelCheck(const bcs::FVEC3 &rPos, const bcs::FVEC3 &rPos2, long nTeam, int, int, int, int,
+                                    long *, CItem **);
+            static long FloorHitCheck(const bcs::FVEC3 &rPos, long);
+            static void QPanelSetItemPopRate(const CQPanelMan::ITEM_POP_SET_ARG *pArg, long);
+            static long QPanelGetSubstituteItem(long);
+            static CDropCoin *CreateCoinSimple();
+            static long CreateDropCoin(const bcs::FVEC3 &rPos, long nNum);
+            static void DropCoinPickup(const bcs::FVEC3 &rPos, float fRadius, float fHeight,
+                                       void (*pFunc)(const CDropCoin *, void *), void *pArg);
+            static CDropCoin *DropCoinGetFirst();
+            static CDropCoin *DropCoinGetNext(CDropCoin *pCoin);
+            static void EffectCoinScoreCreate(const bcs::FVEC3 &, const bcs::FVEC3 &, long);
+            static void CreateStarPiece(DROP_COIN::CoinType type, long, const bcs::FVEC3 &rPos,
+                                        const bcs::FVEC3 &rVel, long);
+            static long GetStarPieceNum();
+            static void DeleteAllStarPiece();
+            static void SetStarPieceRefelctVelReduce(float fY, float fXZ);
+            static void SetCoinRefelctVelReduce(float fY, float fXZ);
+            static CItem *CreateStockItem(long nType, CChrCore *pChr);
+            static CItem *CreateThrowItem(long nType, const bcs::FVEC3 &rPos);
+            // Does nothing without a body.
+            static void ItemPickup(CCollBodyUnit *pBody, void (*pFunc)(const CItem *, void *), void *pArg);
+            static void *ItemGetIconTexObj(long, int);
+            static long ThrowItemGetNum();
+            static CItem *ThrowItemGetFirst();
+            static CItem *ThrowItemGetNext(CItem *pItem);
+            static void ItemExParamInitialize();
+            static void ItemExParamSet_Life(long nType, float);
+            static void ItemExParamSet_DispScale(long nType, float);
+            static void ItemExParamSet_ThrowSpeed(long nType, float);
+            static void ItemExParamSet_TurnSpeed(long nType, float);
+            static void ItemExParamSet_EffectFrame(long nType, float);
+            static void ItemExParamSet_DropCoinRate(long nType, float);
+            static void ItemExParamSet_DropCoinMin(long nType, long);
+            static void ItemExParamSet_DropCoinMax(long nType, long);
+            static void ItemExParamSet_ReboundNum(long nType, long);
+            static void ItemExParamSet_PThrowDist(long nType, float);
+            static void ItemExParamSet_PThrowHeight(long nType, float);
+            static void ItemExParamSet_PThrowFrame(long nType, float);
+            static void ItemExParamSet_ExplodeRange(long nType, float);
+            static CStgGmk_Bubble *StgGmkCreate_Bubble(const bcs::FVEC3 &rPos);
+
         protected:
             // The instance is a plain static pointer in the DOL (no task
             // handle). (return type of SetInstance_ guessed)
             static void SetInstance_(CGimmickMan *pInstance);
             static CGimmickMan *GetInstance_();
+
+            static CGimmickMan *m_pInstance;
 
             CDropCoinMan *m_pDropCoinMan; // 0x34
             CQPanelMan *m_pQPanelMan;     // 0x38

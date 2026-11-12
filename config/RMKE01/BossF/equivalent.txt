@@ -37,7 +37,6 @@ BossF LoopStateSideStep__Q23msw12CChrCoreBossFv near 98.9 register allocation/or
 BossF LoopStateSleep__Q23msw21CBallTargetMarkerBossFv near 99.7 x and z of the ball position swap float registers
 BossF MainCamera_Normal__Q23msw11CCameraBossFv near 85.6 stack layout, the original turns the 0x20/0x1 bit tests into bools (equivalent branches), one swapped commutative multiply operand; same calls, arguments and constants
 BossF MainCamera__Q23msw11CCameraBossFv near 97.8 stack slots and one temporary copy the original keeps; same calls, constants and accesses
-BossF MainOffBall___Q23msw14CChrDrvPadBossFPQ33msw7CChrDrv8_CHR_MSG near 100.0 float register choice only (stick power f2 vs f0); objdiff shows 100%
 BossF MainOnBall___Q23msw14CChrDrvPadBossFPQ33msw7CChrDrv8_CHR_MSG near 99.9 float register choice only (camera yaw in f0 vs f1)
 BossF Main__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
 BossF Main__Q33msw12GIMMICK_BOSS14CEffectCoinGetFv near 99.0 register choice only (stack-vector address registers, paired-single temporaries); same as the Dodge/Volley/Hockey/Basket copies

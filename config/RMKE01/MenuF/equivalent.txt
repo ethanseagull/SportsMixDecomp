@@ -91,7 +91,6 @@ MenuF SetGuestMiiPage__Q33msw10SelectMenu7CMiiSelFv near 99.1 99.1%: register ch
 MenuF SetLineAnim__Q33msw10SelectMenu11CBackgroundFl near 100.0 one float literal loaded from .rodata 0x580 instead of 0x57C: same constant, shifted by the reversed static order in SetLineTextString
 MenuF SetLineTextString__Q33msw10SelectMenu11CBackgroundFPCw near 99.3 pane and typeInfo swap r25/r26 in the inlined DynamicCast; .rodata offsets of the same statics differ because the original stores the function's statics in reverse order
 MenuF SetMiiPage__Q33msw10SelectMenu7CMiiSelFv near 98.0 98.0%: register choice and schedule of loop pointers; stack layout matches
-MenuF SetMovieVisible__Q33msw10SelectMenu6CTitleFl near 94.3 inline nw4r::lyt::Pane::SetVisible combines the flag byte halves in the other order (mask then insert); same result
 MenuF SetPageNode__Q33msw10SelectMenu9CRuleInfoFPvl near 89.9 register allocation only: the original keeps 5 callee-saved registers (_savegpr_27, string pool base rematerialised in the matched branch), ours 4 saved with stw and the pool base kept in a register; the extra instructions are only moves and saves, calls, constants and memory accesses are the same
 MenuF SetPosChara__Q33msw10SelectMenu6CBgChrFl near 98.2 register choice only; regs search no gain
 MenuF SetRuleText__Q33msw10SelectMenu11CCharaLevelFl near 99.9 operand order of one commutative add

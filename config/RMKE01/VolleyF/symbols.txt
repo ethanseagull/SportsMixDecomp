@@ -2590,7 +2590,7 @@ DtorState__Q23bcs60CStateTemplate<Q23bcs36CFsm<Q23msw22CChrTargetMarkerVolley>>F
 CtorState__Q23bcs46CStateTemplate<Q23msw22CChrTargetMarkerVolley>Fv = .text:0x0007BA24; // type:function size:0x48 scope:global
 LoopState__Q23bcs46CStateTemplate<Q23msw22CChrTargetMarkerVolley>Fv = .text:0x0007BA6C; // type:function size:0x48 scope:global
 DtorState__Q23bcs46CStateTemplate<Q23msw22CChrTargetMarkerVolley>Fv = .text:0x0007BAB4; // type:function size:0x48 scope:global
-fn_5_7BAFC = .text:0x0007BAFC; // type:function size:0x14
+__sinit_\CChrTargetMarkerVolley_cpp = .text:0x0007BAFC; // type:function size:0x14 scope:local
 @52@__dt__Q23msw22CChrTargetMarkerVolleyFv = .text:0x0007BB10; // type:function size:0x8 scope:global
 CreateInstance__Q23msw14CCollManVolleyFPQ23bcs5CTask = .text:0x0007BB18; // type:function size:0xC8 scope:global
 __dt__Q23msw14CCollManVolleyFv = .text:0x0007BBE0; // type:function size:0x58 scope:global

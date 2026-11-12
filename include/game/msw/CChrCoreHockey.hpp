@@ -429,10 +429,26 @@ namespace msw {
             // motion, fFrame frames into it (meaning guessed).
             void SubStateArtsShotDoGetBallShotTrg_(STATE_WORK_AIR_TRICK *pWork, float fFrame);
 
+            // (in HockeyF; added for game/hockey/unit_E8AB8.cpp, meanings
+            // guessed) Reset the skating state, and its acceleration timer.
+            void SkateWorkInit_();
+            void SkateWorkClearAccXZTimer_();
+            // Shoots the attached puck with shot kind nType.
+            void Util_ShootBall(long nType, float, float fRotY, float, int);
+            // (inline, name guessed) The turn and the move of the trick for
+            // one frame (SubStateArtsShotDoJumpMove_).
+            void SubStateArtsShotDoTrickMove_(STATE_WORK_AIR_TRICK *pWork);
+
         protected:
             // Not mapped yet. The size, 0x76C, is what CreateObj_ allocates
             // for most characters.
-            unsigned char m_Unk574[0x634 - 0x574];
+            unsigned char m_Unk574[0x5A4 - 0x574];
+            // 0x5A4, 0x5B4 (names guessed): two skating values; the air
+            // trick sets -1/30 and 0.
+            float m_fSkateUnk5A4;
+            unsigned char m_Unk5A8[0x5B4 - 0x5A8];
+            float m_fSkateUnk5B4;
+            unsigned char m_Unk5B8[0x634 - 0x5B8];
             // 0x634 (name guessed): the point the special shot's extra
             // pucks are aimed at (CChrCoreHockeyWaluigi reads x and z).
             bcs::FVEC3 m_ArtsTargetPos;
@@ -443,9 +459,16 @@ namespace msw {
     struct CChrCoreHockey::STATE_WORK_AIR_TRICK {
         unsigned long m_nFlag;       // 0x00, bit 0 set while Luigi's vacuum pulls
         float m_fRotY;               // 0x04, the yaw the trick turns to
-        unsigned char m_Unk08[0x4];
-        float m_fUnk0C;              // 0x0C, Luigi clears it when his target is lost
-        unsigned char m_Unk10[0x1C - 0x10];
+        // 0x08 (name guessed): the step of the state (LoopStateAirTrick);
+        // the arts event's ArtsProc sets 200 when it is over.
+        long m_nStep;
+        // 0x0C: the frames left to wait for the shot (from the parameters'
+        // 0x1E0); Luigi clears it when his target is lost.
+        float m_fUnk0C;
+        // 0x10 (name guessed): where the trick moves the character to
+        // (SubStateArtsShotCalcSetbackPos_), then the point the hit back
+        // moves him away from.
+        bcs::FVEC3 m_TargetPos;
         // 0x1C-0x40 (names guessed; added for game/hockey/CChrCoreHockeySlime.cpp):
         // the move during the trick (SubStateArtsShotSetTrickMoveParam_).
         float m_fMoveFrame;          // 0x1C
@@ -456,17 +479,25 @@ namespace msw {
         // for none (SubStateArtsShotSetTrickJumpParam_).
         long m_nJumpType;
         long m_nTrickStep;           // 0x54
-        unsigned char m_Unk58[0x5C - 0x58];
+        // 0x58 (name guessed): frames the move waits before it starts
+        // (SubStateArtsShotGetSetbackWaitFrame_).
+        float m_fSetbackWait;
         // 0x5C (name guessed): Diddy Kong stores the frame count of his
         // trick motion here.
         float m_fTrickMotFrameNum;
-        unsigned char m_Unk60[0x68 - 0x60];
+        // 0x60 (name guessed): the speed the trick motion plays at.
+        float m_fAnimSpeed;
+        // 0x64 (name guessed): 1 once the loop motion has been played.
+        long m_nLoopPlayed;
         float m_fShotFrame;          // 0x68, the frame of the motion the ball leaves at
         // 0x6C: the yaw the shot aims at; negative for straight at the goal
         // (Luigi's target marker sets it).
         float m_fTargetRotY;
         long m_nShotStep;            // 0x70, Waluigi's step through his throws
         float m_fShotTimer;          // 0x74, Waluigi's frames since the last throw
+        // 0x78 (meaning not known): ArtsParamInit copies the parameters'
+        // 0xC8 here.
+        float m_fArtsUnk78;
     };
 
     class CChrCoreHockeyMario : public CChrCoreHockey {

@@ -34,7 +34,9 @@ namespace msw {
             virtual void EndArtsEventDemo();
             virtual bool IsNormalCamMode() const { return true; }
             virtual bool CanbeMain() const;
-            virtual bool IsOffense() const;
+            // Returns a word: its callers compare it with cmpwi and turn it
+            // into a mode with neg/or/srawi.
+            virtual int IsOffense() const;
             virtual float GetFrameRateF() const
             {
                 if (m_UnkFC & 0x80) {
@@ -114,6 +116,17 @@ namespace msw {
                                        float) const;
             // The floats at 0x108 to 0x110 as one vector (HockeyF passes their
             // address to the slant helpers above).
+            // DOL members used by DodgeF's CCameraDodgeGame (return types and
+            // parameter names guessed). The character doing an air trick, or
+            // null; whether a character is on the camera's team, and whether
+            // a pad (not the computer) drives it.
+            CChrCore *GetAirTrickCoreAll() const;
+            // (name guessed) The camera mode set by SetCamMode (m_Unk228) as
+            // a signed number: DodgeF's CCameraDodgeGame compares it with
+            // cmpwi where the member gives cmplwi.
+            long GetCamMode() const { return m_Unk228; }
+            int IsMyTeamCore(const CChrCore *pCore) const;
+            int IsPadCore(const CChrCore *pCore) const;
             const bcs::FVEC3 &GetUnk108Vec() const { return *reinterpret_cast<const bcs::FVEC3 *>(&m_Unk108); }
 
         protected:
@@ -148,8 +161,12 @@ namespace msw {
             float m_Unk1C4;
             long m_Unk1C8;
 
-        private:
-            unsigned char m_Unk1CC[0x1D8 - 0x1CC];
+        protected:
+            // 0x1CC to 0x1D4: DodgeF's CCameraDodgeGame zoom (MakeingCamZoom:
+            // the zoom's three spline heights; meanings guessed).
+            float m_Unk1CC;
+            float m_Unk1D0;
+            float m_Unk1D4;
 
         protected:
             unsigned long m_Unk1D8;
@@ -187,7 +204,12 @@ namespace msw {
             // 0x250 bytes and this the first member of each derived class.
             // Kept here so the size stays 0x254 until that is checked with
             // a full build.
-            float m_Unk250;
+            // DodgeF's CCameraDodgeGame clears it as a word (stw), so it is
+            // an integer there.
+            union {
+                float m_Unk250;
+                long m_nUnk250;
+            };
     };
 }
 

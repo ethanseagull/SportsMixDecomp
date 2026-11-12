@@ -35,7 +35,6 @@ Matching game/msw/CEffectTableList.cpp
 NonMatching game/msw/CArrowSignalBase.cpp
 Equivalent game/msw/CStgGmk_WaterPillar.cpp
 NonMatching game/msw/CStage17Base/CTurnTable.cpp
-Matching game/msw/CCockpitPartMove.cpp
 Matching game/msw/CMenuLinkList.cpp
 Matching game/msw/CStgGmkAct.cpp
 Matching game/bcs/CWifiPadBase.cpp

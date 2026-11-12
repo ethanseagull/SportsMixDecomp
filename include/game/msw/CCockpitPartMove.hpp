@@ -5,7 +5,8 @@
 
 namespace msw {
 
-    // A queue of cockpit part moves. Lives in the DOL as one static
+    // A queue of cockpit part moves. Defined in game/msw/CCockpitLayoutBase.cpp
+    // (one file in the original). Lives in the DOL as one static
     // instance (s_Instance, 0x10 bytes: the list, then the vptr at 0x0C;
     // the static initialiser stores only the vptr and registers the
     // destructor). Push allocates an entry and appends it; Pop copies the
@@ -20,6 +21,11 @@ namespace msw {
                 long m_nArg1;          // 0x10
             };
 
+            // (names guessed, after menu::CVibEff's) msw::CCockpit calls
+            // Initialize when it starts and Finalize, which frees every
+            // entry, when it ends.
+            void Initialize();
+            void Finalize();
             // 0 on success, -1 when no entry could be allocated.
             long Push(long nPart, long nArg0, long nArg1);
             // 0 and the first entry in rInfo, -1 when the queue is empty.

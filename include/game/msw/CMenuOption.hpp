@@ -39,6 +39,13 @@ namespace msw {
             void BackupTemporary();
             void RestoreTemporary();
             void FreeTemporary();
+            // (added for MenuF game/menu/CSaveSelect.cpp; static: the game
+            // passes no instance) Gives player nPlayer the default options.
+            static void SetDefaultData(long nPlayer);
+            // (added for MenuF game/menu/CCourtSelect.cpp; name from the
+            // symbol, meaning guessed) Which text (0 to 15) option nOption
+            // of kind nKind shows on the background display.
+            long GetTextIndex(long nKind, long nOption);
 
             static CMenuOption s_Instance;
     };

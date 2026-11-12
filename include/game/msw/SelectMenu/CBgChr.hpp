@@ -106,6 +106,9 @@ namespace msw {
                 void SetTableAnimSpeed(float fSpeed);
                 float GetTableAnimSpeed();
                 void SetCharaSpeed(float fSpeed);
+                // (added for MenuF game/menu/CSaveSelect.cpp; name as in
+                // CCourtChr) Shows the mixed sports.
+                void SetMixModeFlag(int bMixMode) { m_bMixMode = bMixMode; }
 
             protected:
                 // Inline helpers (no out-of-line copies in the module).

@@ -264,7 +264,7 @@ game/menu/unit_4BB48.cpp:
 	.rodata     start:0x00008DE8 end:0x00008EC0
 	.data       start:0x00005770 end:0x000057F0
 
-game/menu/unit_4E890.cpp:
+game/menu/CCourtSelect.cpp:
 	.text       start:0x0004E890 end:0x00052A4C
 	.rodata     start:0x00008EC0 end:0x00009EB8
 	.data       start:0x000057F0 end:0x00005D20

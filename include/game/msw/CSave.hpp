@@ -33,6 +33,9 @@ namespace msw {
             // (added for MenuF game/menu/CTournamentLoad.cpp; return type
             // guessed) The number of the player in use.
             static long GetUsePlayerID();
+            // (added for MenuF game/menu/CSaveSelect.cpp) Makes player
+            // nPlayer the one in use.
+            static void SetUsePlayerID(long nPlayer);
     };
 }
 

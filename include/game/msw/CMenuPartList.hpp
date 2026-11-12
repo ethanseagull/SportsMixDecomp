@@ -45,6 +45,11 @@ namespace msw {
             // -1 when no part has that kind id, -2 when it is disabled,
             // else the part's id.
             long SetPushButtonAnim(unsigned short nBtnKindId, long nPad);
+            // (added for MenuF game/menu/CCharSel.cpp; return types guessed)
+            // The id of the part with kind id nBtnKindId, negative for
+            // none; stops the push animation of that button.
+            long GetIndexByCurrentBtnKindId(unsigned short nBtnKindId);
+            void CancelPushButtonAnim(unsigned short nBtnKindId, long nPad);
 
         private:
             unsigned char m_Unk00[0xC]; // 0x00: a nw4r::ut::List of CMenuPartBase

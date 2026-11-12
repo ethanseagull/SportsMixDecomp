@@ -26,6 +26,14 @@
 #include "bcs/CMainApp.hpp"
 #include "bcs/CMiiMan.hpp"
 #include "bcs/CTaskMan.hpp"
+#include "bcs/CFsm.hpp"
+#include "bcs/CPad.hpp"
+#include "game/msw/menu/CSndEff.hpp"
+#include "game/msw/menu/CVibEff.hpp"
+#include "game/msw/CEffectCtrl.hpp"
+#include "game/msw/CNowLoading.hpp"
+#include "game/msw/CNameMesg.hpp"
+#include "game/msw/CGameAccInput.hpp"
 #include "bcs/CWorldEnv.hpp"
 #include "bcs/CRenderMan.hpp"
 #include "bcs/CSnd.hpp"
@@ -63,6 +71,10 @@ extern "C" {
     void fn_800B1E04();
     int fn_800B1E10();
     void fn_80012778(bcs::CCamera *pCamera, long nQuake); // stops a camera quake
+    void fn_801A37C4();
+    void fn_8026BB40(void *p, int bDelete);   // destroys the object at CGame 0x134
+    void fn_80250CAC();
+    void fn_80236790();
 }
 
 namespace msw {
@@ -86,6 +98,10 @@ namespace msw {
     // members used so far, names guessed).
     class CGamePauseTask : public bcs::CTask {
         public:
+            virtual ~CGamePauseTask();
+            virtual void Main(); // fn_801882F4, not written yet
+            virtual void Disp();
+
             int m_bEnable; // 0x34, pausing is allowed
             long m_nUnk38; // 0x38
     };
@@ -94,12 +110,20 @@ namespace msw {
     // name guessed): the parent of the tasks that run during an arts event.
     class CGameTaskGroup : public bcs::CTask {
         public:
-            nw4r::ut::List m_List; // 0x34
+            virtual ~CGameTaskGroup();
+            virtual void Main(); // fn_8018966C, not written yet
+            virtual void Disp() {}
+
+            nw4r::ut::List m_List; // 0x34, the CGameSpeedCtrl tasks (linked at their 0x38)
     };
 
     // The hit stop (0x44 bytes, vtable lbl_80476498; names guessed).
     class CGameStopTask : public bcs::CTask {
         public:
+            virtual ~CGameStopTask();
+            virtual void Main(); // fn_80188FC0, not written yet
+            virtual void Disp();
+
             long m_nState;  // 0x34, 1 while a stop runs
             float m_fFrame; // 0x38
             float m_fStop;  // 0x3C
@@ -107,11 +131,12 @@ namespace msw {
     };
 
     // A team's item roulette (defined before CGame in this file, not written
-    // yet; only the state word is used here, name guessed).
-    class CItemRoulette : public bcs::CTask {
+    // yet; only what CGame uses, names guessed). Its state machine is the
+    // second base (0x34; the state number at 0x44 is CFsm's).
+    class CItemRoulette : public bcs::CTask, public bcs::CFsm<CItemRoulette> {
+            friend class CGame;
         public:
-            unsigned char m_Unk34[0x44 - 0x34];
-            long m_nState; // 0x44
+            long m_nUnk7C; // 0x7C, the cockpit's item icon id (-1: none)
     };
 
     CGame::GameWork CGame::g_GameWork;
@@ -157,6 +182,64 @@ namespace msw {
             }
             return 1;
         }
+    }
+
+    // ---- the constructor (0x8017C3AC) not written yet; the weak
+    // destructors of CStateTemplate<CFsmQueue<CGame> >, CFsmQueue<CGame> and
+    // CStateTemplate<CGame> follow it in the original ----
+
+    CGame::~CGame()
+    {
+        Finalize();
+        m_pInstance = 0;
+    }
+
+    // Ends everything the game started: its tasks, cameras, effects,
+    // cockpit messages, sounds and resources, and resets the background
+    // fade, the pause bits and the nunchuk stick.
+    void CGame::Finalize()
+    {
+        if (m_pTempParent) {
+            m_pTempParent->Delete();
+            m_pTempParent = 0;
+        }
+        for (int i = 0; i < 4; i++) {
+            if (m_apItemRoulette[i]) {
+                m_apItemRoulette[i]->Delete();
+            }
+            m_apItemRoulette[i] = 0;
+        }
+        fn_801A37C4();
+        for (int i = 0; i < 4; i++) {
+            m_apCamera[i] = 0;
+        }
+        CGameCamera::Finalize();
+        bcs::CCameraMan::RemoveEntryAll();
+        menu::CSndEff::s_Instance.Finalize();
+        menu::CVibEff::s_Instance.Finalize();
+        CEffectCtrl::Dispose();
+        CEffectCtrl::DetachResource();
+        CEffectCtrl::Close();
+        CNowLoading::SetDisp(0);
+        CNameMesg::Remove();
+        if (m_pUnk134) {
+            fn_8026BB40(m_pUnk134, 1); // its deleting destructor
+        }
+        m_pUnk134 = 0;
+        fn_80250CAC();
+        fn_80236790();
+        CGameAccInput::Finalize();
+        CGameBGM::SetBgmState(CGameBGM::STATE_CUT);
+        // TODO: the original passes a fade time of 0.0f here (f1 is loaded
+        // before the call): CGameSnd::StopAllSound and bcs::CSnd::StopAllSound
+        // take a float, but their headers (and symbols) still say no
+        // argument.
+        CGameSnd::StopAllSound();
+        RsrcUnLoad_();
+        ResetBgFadeColor();
+        g_uPauseBit = 0;
+        g_nEventChrIdx = -1;
+        bcs::CPad::SetNunchukStickClamp(0x47, 0xF, 0);
     }
 
     // 0x8017CAEC..: the resource hooks.
@@ -980,6 +1063,10 @@ namespace msw {
         }
     }
 
+    // (no name, no caller) An empty function between ChangeGoalIdx_ and
+    // ChangeCameraBaseDir_; probably a hook whose body is compiled out.
+    extern "C" void fn_8017F490() {}
+
     void CGame::ChangeCameraBaseDir_()
     {
         SetViewTeam(0, 1 - GetViewTargetTeam(0));
@@ -1013,7 +1100,46 @@ namespace msw {
         }
     }
 
-    // ---- 0x8017F6E8..0x80180B38: the state machine's set-up (not written yet) ----
+    // The state table: 30 states, a queue of 16 with 0x20 bytes of work
+    // each. The virtual states go through their non-virtual wrappers.
+    void CGame::InitState()
+    {
+        FsmqInit(this, 30, 16, 0x20);
+        FsmqSetState(0, &CGame::CtorStateGameLoad, &CGame::LoopStateGameLoad, &CGame::DtorStateGameLoad);
+        FsmqSetState(1, &CGame::CtorStateGameInit_, &CGame::LoopStateGameInit_, &CGame::DtorStateGameInit_);
+        FsmqSetState(21, &CGame::CtorStateGameStart, &CGame::LoopStateGameStart, &CGame::DtorStateGameStart);
+        FsmqSetState(2, &CGame::CtorStateEntranceDemo, &CGame::LoopStateEntranceDemo,
+                     &CGame::DtorStateEntranceDemo);
+        FsmqSetState(3, &CGame::CtorStateGameSetup_, &CGame::LoopStateGameSetup_, &CGame::DtorStateGameSetup_);
+        FsmqSetState(4, &CGame::CtorStateWaitStartBase, &CGame::LoopStateWaitStartBase,
+                     &CGame::DtorStateWaitStartBase);
+        FsmqSetState(5, &CGame::CtorStateMainLoopBase, &CGame::LoopStateMainLoopBase,
+                     &CGame::DtorStateMainLoopBase);
+        FsmqSetState(6, &CGame::CtorStateGoalEvent_, &CGame::LoopStateGoalEvent_, &CGame::DtorStateGoalEvent_);
+        FsmqSetState(7, &CGame::CtorStateTurnResult_, &CGame::LoopStateTurnResult_, &CGame::DtorStateTurnResult_);
+        FsmqSetState(8, &CGame::CtorStateTimeUp_, &CGame::LoopStateTimeUp_, &CGame::DtorStateTimeUp_);
+        FsmqSetState(9, &CGame::CtorStateChgCourt_, &CGame::LoopStateChgCourt_, &CGame::DtorStateChgCourt_);
+        FsmqSetState(10, &CGame::CtorStateTurnOver_, &CGame::LoopStateTurnOver_, &CGame::DtorStateTurnOver_);
+        FsmqSetState(11, &CGame::CtorStateChgOffense_, &CGame::LoopStateChgOffense_, &CGame::DtorStateChgOffense_);
+        FsmqSetState(12, &CGame::CtorStateGameSet_, &CGame::LoopStateGameSet_, &CGame::DtorStateGameSet_);
+        FsmqSetState(13, &CGame::CtorStateGameResult_, &CGame::LoopStateGameResult_, &CGame::DtorStateGameResult_);
+        FsmqSetState(14, &CGame::CtorStateResultMenu_, &CGame::LoopStateResultMenu_, &CGame::DtorStateResultMenu_);
+        FsmqSetState(15, &CGame::CtorStateEndMenu_, &CGame::LoopStateEndMenu_, &CGame::DtorStateEndMenu_);
+        FsmqSetState(16, &CGame::CtorStateRestart_, &CGame::LoopStateRestart_, &CGame::DtorStateRestart_);
+        FsmqSetState(17, &CGame::CtorStateChgField_, &CGame::LoopStateChgField_, &CGame::DtorStateChgField_);
+        FsmqSetState(18, &CGame::CtorStateGameExit_, &CGame::LoopStateGameExit_, &CGame::DtorStateGameExit_);
+        FsmqSetState(19, &CGame::CtorStateEventDemo_, &CGame::LoopStateEventDemo_, &CGame::DtorStateEventDemo_);
+        FsmqSetState(20, &CGame::CtorStateExceptDemo_, &CGame::LoopStateExceptDemo_, &CGame::DtorStateExceptDemo_);
+        FsmqSetState(22, &CGame::CtorStateGameCreate, &CGame::LoopStateGameCreate, &CGame::DtorStateGameCreate);
+        FsmqSetState(23, &CGame::CtorStateBgmStart, &CGame::LoopStateBgmStart, &CGame::DtorStateBgmStart);
+        FsmqSetState(24, &CGame::CtorStateOnlineSync0, &CGame::LoopStateOnlineSync0, &CGame::DtorStateOnlineSync0);
+        FsmqSetState(25, &CGame::CtorStateOnlineSync1, &CGame::LoopStateOnlineSync1, &CGame::DtorStateOnlineSync1);
+        FsmqSetState(26, &CGame::CtorStateOnlineSync2, &CGame::LoopStateOnlineSync2, &CGame::DtorStateOnlineSync2);
+        FsmqSetState(27, &CGame::CtorStateNoop, &CGame::LoopStateNoop, &CGame::DtorStateNoop);
+        FsmqSetState(28, &CGame::CtorStateSave, &CGame::LoopStateSave, &CGame::DtorStateSave);
+        FsmqSetState(29, &CGame::CtorStateMessage, &CGame::LoopStateMessage, &CGame::DtorStateMessage);
+        FsmqChangeState(0);
+    }
 
     // Counts the state's frames down; not zero once they have run out.
     int CGame::StateWorkDecStateCount_()
@@ -1528,7 +1654,55 @@ namespace msw {
         return 0;
     }
 
-    // ---- 0x80188280..0x80189544 not written yet ----
+    // Lifts the game pause when the pause controller goes.
+    CGamePauseTask::~CGamePauseTask()
+    {
+        bcs::CMainApp::SetPause(1, 0);
+    }
+
+    // ---- CGamePauseTask::Main and its helpers (0x801882F4..0x80188F48) not written yet ----
+
+    void CGamePauseTask::Disp() {}
+
+    // Lifts the hit stop's pause when the task goes.
+    CGameStopTask::~CGameStopTask()
+    {
+        bcs::CMainApp::SetPause(4, 0);
+    }
+
+    // ---- CGameStopTask::Main (0x80188FC0) not written yet ----
+
+    void CGameStopTask::Disp() {}
+
+    CGameSpeedCtrl::CGameSpeedCtrl(bcs::CTask *pParent)
+        : bcs::CTask(pParent, -1),
+          m_pGroup(pParent),
+          m_fSpeed(1.0f),
+          m_fFrom(1.0f),
+          m_fTo(1.0f),
+          m_fElapsed(0.0f),
+          m_fTime(0.0f),
+          m_fUnk54(0.0f),
+          m_fUnk58(0.0f),
+          m_nUnk5C(0),
+          m_nUnk60(1),
+          m_nUnk68(1)
+    {
+        m_Link.pPrev = 0;
+        m_Link.pNext = 0;
+        if (pParent) {
+            nw4r::ut::List_Append(&static_cast<CGameTaskGroup *>(pParent)->m_List, this);
+        }
+    }
+
+    CGameSpeedCtrl::~CGameSpeedCtrl()
+    {
+        if (m_pGroup) {
+            nw4r::ut::List_Remove(&static_cast<CGameTaskGroup *>(m_pGroup)->m_List, this);
+        }
+    }
+
+    // ---- 0x801892D0 (the speed control's step) not written yet ----
 
     void CGameSpeedCtrl::StartSpeedAnim(float from, float to, float time, int nUnk68, long nUnk60)
     {
@@ -1564,7 +1738,15 @@ namespace msw {
         m_nUnk68 = nUnk68;
     }
 
-    // ---- 0x801895E4..0x80189C90 not written yet ----
+    // Ends the arts event's tasks and gives the game its normal speed back.
+    CGameTaskGroup::~CGameTaskGroup()
+    {
+        DeleteAllChild();
+        nw4r::ut::List_Init(&m_List, 0x38);
+        bcs::CMainApp::SetUnivSpeed(CGame::g_GameWork.m_fGameSpeed);
+    }
+
+    // ---- CGameTaskGroup::Main (0x8018966C) and GameWork::SetDefault (0x80189798) not written yet ----
 
 
     void CGame::SetMyTeamIdx(long nTeam)
@@ -2615,6 +2797,31 @@ namespace msw {
         fn_8013A7A8(0x1005, bDisp);
     }
 
+    // ---- SetCockpitItemIconDisp_, PushTeamItem_ (0x8018B648..0x8018B860) not written yet ----
+
+    // Takes team nTeam's item back: a roulette that is waiting drops its
+    // icon, one that is spinning is stopped (state 2). Nothing while rule
+    // option bit 2 is set.
+    void CGame::PopTeamItem_(long nTeam)
+    {
+        if ((g_GameWork.m_nUnk40 >> 2) & 1) {
+            return;
+        }
+        CItemRoulette *pRoulette = m_apItemRoulette[nTeam];
+        if (pRoulette) {
+            switch (pRoulette->m_nState) {
+                case 0:
+                    pRoulette->m_nUnk7C = -1;
+                    break;
+                case 1:
+                    pRoulette->ChangeState(2);
+                    break;
+            }
+        }
+    }
+
+    // ---- TeamItemStartRoulette_ (0x8018B8C8) not written yet ----
+
     int CGame::IsTeamItemRouletteRole_(long nTeam)
     {
         CItemRoulette *pRoulette = m_apItemRoulette[nTeam];
@@ -2884,6 +3091,14 @@ namespace msw {
     long CGame::GetTeamResult(long nTeam)
     {
         return g_GameWork.m_anTeamResult[nTeam];
+    }
+
+    // (no name; between GetTeamResult and SetCharAssignPlayerNo) Gives its
+    // argument back: CChrMan::GetAssignPadNo_ and the menus map a player to
+    // a pad number with it, which is the same number in this build.
+    extern "C" long fn_8018C298(long n)
+    {
+        return n;
     }
 
     void CGame::SetCharAssignPlayerNo(long nChr, long nPlayer)

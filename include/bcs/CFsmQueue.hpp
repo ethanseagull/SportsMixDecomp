@@ -275,6 +275,15 @@ namespace bcs {
             // change out in the same frame.
             void FsmqRetry() { m_nFlag |= 2; }
 
+            // (name from the weak copy in BasketF's
+            // game/basket/CChrCoreBasketNinja.cpp) FsmqNext, then FsmqRetry:
+            // the next state is entered in the same frame.
+            void FsmqDoChain()
+            {
+                FsmqNext();
+                FsmqRetry();
+            }
+
         protected:
             // (name guessed) Makes a table of nStateNum states run on pOwner
             // and a queue of nQueueSize entries with nWorkSize bytes of work

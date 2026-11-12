@@ -32,7 +32,8 @@ namespace msw {
             // BossF CChrDrvPadBoss 99.9 -> 93.2, HockeyF CChrDrvPadHockey
             // 95.4 -> 88.2 and VolleyF CChrDrvPadVolley 99.8 -> 93.7: those
             // originals keep the float pool, the basketball driver's does
-            // not. What turns the pool off there is not known.)
+            // not. 2026-11-11: the stand-in now lives in
+            // CChrDrvPadBasket.cpp; see notes/toolchain.md "Float literal pool".)
             virtual long GetDrvType() const { return 1; } // 0x10
             virtual long GetPadType() const { return m_nPadType; }         // 0x14
             // The answer to message id (what the character asks the pad).

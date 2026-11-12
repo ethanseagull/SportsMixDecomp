@@ -41,6 +41,9 @@ namespace bcs {
         unsigned char m_Unk05;
         short m_nParam0;        // 0x06
         short m_nParam1;        // 0x08
+        // 0x0A-0x0F: not known. The size, 0x10, is from BasketF's
+        // CChrCoreBasketNinja, which clears a whole trigger on the stack.
+        unsigned char m_Unk0A[0x10 - 0xA];
     };
 }
 

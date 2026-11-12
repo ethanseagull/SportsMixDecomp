@@ -36,15 +36,20 @@ namespace msw {
             virtual void Remove() = 0;
             virtual void SetVisible(int bVisible);
 
-            virtual void CancelMenuImpl();
-            virtual void HitCheck(bcs::FVEC3 &);
-            virtual void OnCursorCheck(long, unsigned short);
-            virtual void StickMoveCheck(long, unsigned short);
-            virtual void IsButtonKindOfStickMode(unsigned short);
+            // Return types read from the DOL bodies (game/msw/CCockpitLayoutBase.cpp).
+            virtual long CancelMenuImpl(); // sets m_nState to 4, returns 0
+            // The kind id of the button under rPos, or 0.
+            virtual unsigned short HitCheck(bcs::FVEC3 &rPos);
+            // Whether a button has kind id nBtnKindId (always 1 in cursor mode).
+            virtual int OnCursorCheck(long nPad, unsigned short nBtnKindId);
+            // The kind id the stick moves pad nPad's cursor to.
+            virtual long StickMoveCheck(long nPad, unsigned short nBtnKindId);
+            virtual int IsButtonKindOfStickMode(unsigned short nBtnKindId);
             // Returns -1 when the page cannot close yet, else 0 (the DOL
             // body; overrides such as CCockpitHockeyResult's return 0).
             virtual long CancelMenu();
-            virtual void PushButton(long);
+            // The pushed kind id, or 0 when no button took it.
+            virtual long PushButton(long nPad);
             // The next four are inline: each module that derives a class
             // emits them. They return 0.
             virtual int SetCursorAnim(long, unsigned short) { return 0; }
@@ -63,6 +68,10 @@ namespace msw {
             void SetTextBoxFromMessage(bcs::G2D::CLayoutBase *pLayout);
             // Deletes m_pPaneAccessor, if any (return type guessed).
             void DeletePaneAccessor();
+            // (DOL fn_801BA4B8 / fn_801BA510; no symbols, names guessed)
+            // Deletes m_pMenuPartList, if any; runs its StateCheck, if any.
+            void DeleteMenuPartList();
+            void MenuPartListStateCheck();
 
         private:
             // (added for game/msw/CCockpitButtonInfo.cpp) Its

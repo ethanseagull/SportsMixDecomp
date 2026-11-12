@@ -26,9 +26,9 @@ namespace msw {
             virtual void Main();
             virtual long SendEvent(long nEvent, void *pParam);
             virtual void Remove();
-            virtual void StickMoveCheck(long, unsigned short);
+            virtual long StickMoveCheck(long, unsigned short);
             virtual long CancelMenu(); // returns 0 (the original sets r3)
-            virtual void PushButton(long);
+            virtual long PushButton(long);
 
             // Inline: the modules emit it.
             virtual void SetMessageText(long, const wchar_t *) {}

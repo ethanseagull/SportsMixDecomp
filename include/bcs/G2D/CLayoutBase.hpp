@@ -64,6 +64,9 @@ namespace bcs {
                 // (added for VolleyF game/volley/CCockpitVolleyTelopServe.cpp)
                 // Length of animation nAnim in frames.
                 float GetAnimFrameSize(long nAnim);
+                // (DOL fn_800A31BC, no symbol; name guessed) Nonzero when
+                // animation nAnim exists and its resource has the loop flag.
+                int IsAnimLoop(long nAnim);
 
                 // (name guessed; inline, no symbol) How many animations
                 // BuildAnim made. GetAnimFrameMax checks its index against it.

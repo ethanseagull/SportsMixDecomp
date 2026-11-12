@@ -10,6 +10,7 @@ namespace msw {
 
     class CBall;
     class CChrCore;
+    class CChrObstacle;
     class CNpcBase;
 
     // Owner of the characters on the court. A DOL class and a task: its
@@ -122,6 +123,11 @@ namespace msw {
             // The number of characters: the word at 0x50 of the instance,
             // zero when there is none. Static, like GetChrCore.
             static long GetChrCoreNum();
+            // (DOL, static; added for BasketF CChrCoreBasketSiroma) The
+            // number of obstacles in the list, and the one after pPrev (the
+            // first for null).
+            static long ObstacleGetNum();
+            static CChrObstacle *ObstacleSearch(CChrObstacle *pPrev);
             // Shows or hides the markers over the characters. Static.
             static void SetChrMarkerDisp(int bDisp);
             // DOL. The instance, or null.

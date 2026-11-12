@@ -27,6 +27,9 @@ namespace bcs {
             virtual void UpdateFrame(float);
 
             void AppendChild(CScnObj *pObj);
+            // (name guessed) The number of children; VolleyF's
+            // CcDaisyFlowerGarden waits for it to reach 0.
+            unsigned long GetCount() const { return m_nCount; }
             // fn_80043174 (name guessed). Takes the last child out of the
             // group and returns it, or null if there is none.
             CScnObj *RemoveLastChild();

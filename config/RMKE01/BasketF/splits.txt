@@ -169,14 +169,14 @@ game/basket/CChrCoreBasketLuigi.cpp:
 	.bss        start:0x00000180 end:0x00000188
 
 game/basket/CChrCoreBasketMario.cpp:
-	.text       start:0x00056F2C end:0x000581FC
+	.text       start:0x00056F2C end:0x0005812C
 	.ctors      start:0x0000005C end:0x00000060
 	.rodata     start:0x000015C0 end:0x00001628
 	.data       start:0x000096F8 end:0x0000A498
 	.bss        start:0x00000188 end:0x00000190
 
 game/basket/unit_581FC.cpp:
-	.text       start:0x000581FC end:0x00065AF0
+	.text       start:0x0005812C end:0x00065AF0
 	.rodata     start:0x00001628 end:0x00001710
 	.data       start:0x0000A498 end:0x0000AE00
 

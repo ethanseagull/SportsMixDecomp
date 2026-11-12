@@ -426,6 +426,8 @@ namespace msw {
             // (name guessed)
             const bcs::FVEC3 &GetPos() const { return m_Pos; }
             const bcs::FVEC3 &GetTargetPos() const { return m_vTargetPos; }
+            // (name guessed) See m_PosD4.
+            const bcs::FVEC3 &GetPosD4() const { return m_PosD4; }
             // (name guessed)
             const bcs::FVEC3 &GetOffsetPos() const { return m_OffsetPos; }
             // (name guessed)
@@ -482,6 +484,11 @@ namespace msw {
             // the ball whatever its height)
             int IsFlag2() const { return m_nFlag & 0x2; }
             int IsFlag100000() const { return m_nFlag & 0x100000; }
+            // (names guessed; added for BasketF's CChrCoreBasketNinja, which
+            // sets and clears bit 4 directly while the ninja hides) Sets or
+            // clears bits of m_nFlag.
+            void OnFlag(unsigned long nBit) { m_nFlag |= nBit; }
+            void OffFlag(unsigned long nBit) { m_nFlag &= ~nBit; }
             // (names guessed) msw::CItemBall attaches its model to the
             // ball's; msw::CItemBallShellWreck sends the wreck off along the
             // velocity.
@@ -534,7 +541,12 @@ namespace msw {
             // 0xB8 (name guessed): a third scene object of the ball;
             // MenuF's msw::CTopMenuBall colours it with m_pMdlObj.
             bcs::CMdlObj *m_pSubObj2;
-            unsigned char m_UnkBC[0x24];   // 0xBC
+            unsigned char m_UnkBC[0x18];   // 0xBC
+            // 0xD4 (name not known; added for BossF game/boss/unit_18E08.cpp):
+            // a point of the ball's flight; the boss characters face it in
+            // their receive poses and draw the ball's line from it to
+            // m_vTargetPos.
+            bcs::FVEC3 m_PosD4;
             // 0xE0 (name guessed): where the ball will come down / is heading;
             // VolleyF's CBallTargetMarker puts its marker there, DodgeF's item
             // balls set it (CItemBallBaseDodge::SetTargetPos).

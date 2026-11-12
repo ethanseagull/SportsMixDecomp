@@ -49,5 +49,8 @@ Matching game/boss/CChrCoreBossKoopaJr.cpp
 Equivalent game/boss/CChrCoreBossKuroma.cpp
 Equivalent game/boss/CCockpitBoss.cpp
 Equivalent game/boss/unit_636D4.cpp
+Equivalent game/boss/unit_63EA4.cpp
 Equivalent game/boss/CStickObj.cpp
 Equivalent game/boss/unit_5FF80.cpp
+Equivalent game/boss/unit_18E08.cpp
+Equivalent game/boss/unit_1C248.cpp

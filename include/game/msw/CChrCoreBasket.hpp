@@ -99,6 +99,12 @@ namespace msw {
             void ArtsEff_CreateAttach(ARTS_EFF_SLOT slot, long nEff, unsigned long nNode, unsigned long);
             void ArtsEff_Stop(ARTS_EFF_SLOT slot);
             void ArtsEff_StopAll();
+            // (added for game/basket/CChrCoreBasketNinja.cpp) Removes the
+            // effect in slot slot at once.
+            void ArtsEff_Erase(ARTS_EFF_SLOT slot);
+            // (name from the weak copy in BasketF) The frames one update
+            // advances, times the motion speed factor.
+            float GetWholeFrameRate() const { return m_fTimeScale * m_fFrameStep; }
             void ArtsEff_PlayAttackSign();
             void PlaySeSPStart();
             // The radius of the three-point line.
@@ -120,6 +126,10 @@ namespace msw {
             // of blockers run after every step of the air trick.
             float GetRotY_ToGoal_NonOffset() const;
             void SubStateAirTrickCmnBlockerCheck_(STATE_WORK_AIR_TRICK *pWork);
+            // (added for game/basket/CChrCoreBasketDonkey.cpp; meaning
+            // guessed from the name) The point the air trick aims across the
+            // goal from (Donkey Kong's jump keeps to the side of it).
+            void GetAirTrickTargetAxis_(bcs::FVEC3 &rAxis) const;
             // Added for game/basket/CChrCoreBasketMoogle.cpp (names from the
             // module's imports; parameter meanings guessed). The body
             // collision's push settings, and the shot of the ball with sound
@@ -503,10 +513,15 @@ namespace msw {
         float m_fMoveLen;              // 0x20
         float m_fMoveRate;             // 0x24
         float m_fRotY;                 // 0x28, the yaw the trick turns to
-        unsigned char m_Unk2C[0x30 - 0x2C];
+        // 0x2C (name guessed): Donkey Kong's trick clears it when the dunk
+        // starts.
+        float m_fUnk2C;
         // 0x30: the cactus's speed per frame, or the point the move ends at.
         bcs::FVEC3 m_MoveVec;
-        unsigned char m_Unk3C[0x40 - 0x3C];
+        // 0x3C (name guessed): the character of the other team that
+        // answers the trick with a block; SubStateAirTrickCmnBlockerCheck_
+        // drops it when it is no longer blocking (status bit 0x2000).
+        CChrCoreBasket *m_pBlocker;
         long m_nStep;                  // 0x40, the step of the trick (state numbers 0 to 0x12)
         unsigned char m_Unk44[0x48 - 0x44];
         float m_fJumpUnk;              // 0x48, passed on to CChrCore::m_fJumpUnk224
@@ -558,10 +573,19 @@ namespace msw {
     // The characters without members or overrides of their own known yet
     // (added for game/basket/CChrManBasket.cpp, which allocates them with
     // the sizes given; only the constructors are declared).
+    // Mario: his special shot is a dunk of its own (a hop back, a jump in
+    // three steps onto the ring).
     class CChrCoreBasketMario : public CChrCoreBasket {
         public:
             CChrCoreBasketMario();
             virtual ~CChrCoreBasketMario();
+            virtual int IsAirTrickDunkMode() const;                    // 0x88
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void LoopStateAirTrick();                          // 0x588
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush); // 0xC54
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
     };
 
     class CChrCoreBasketDaisy : public CChrCoreBasket {
@@ -576,10 +600,22 @@ namespace msw {
             virtual ~CChrCoreBasketWario();
     };
 
+    // Donkey Kong: his special shot pounds the ground on landing from a
+    // first jump, which shakes the camera and sends out a shock wave
+    // (CC07_BASKET::CcDonkeyQuake), then dunks.
     class CChrCoreBasketDonkey : public CChrCoreBasket {
         public:
             CChrCoreBasketDonkey();
             virtual ~CChrCoreBasketDonkey();
+            virtual int IsAirTrickDunkMode() const;                    // 0x88
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void LoopStateAirTrick();                          // 0x588
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush); // 0xC54
+            virtual void CallbackMotTrg_AtkOn_(long, long);            // 0xC80
+            virtual void CallbackMotTrg_AtkOff_(long, long);           // 0xC84
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
     };
 
     // Bowser Jr.: his special shot throws a spray of paint balls
@@ -596,24 +632,94 @@ namespace msw {
             virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
     };
 
-    // Allocated with 0x5F4 bytes.
+    // The ninja: his special shot splits him into three (two copies,
+    // CC14_BASKET::CcNinjaClone, held by a CC14_BASKET::CcNinjaFactory task)
+    // in the air before the goal; the player may swap places with a copy
+    // before the three come down. Allocated with 0x5F4 bytes.
     class CChrCoreBasketNinja : public CChrCoreBasket {
         public:
             CChrCoreBasketNinja();
             virtual ~CChrCoreBasketNinja();
+            virtual void GetSpRootPos(bcs::FVEC3 &rPos) const;         // 0x2C
+            virtual int MoveTargetMarkerPos(float fRotY);              // 0x5C
+            virtual int IsAirTrickDunkMode() const;                    // 0x88
+            virtual void CtorStateDamage();                            // 0x3F8
+            virtual void DtorStateTrickMove();                         // 0x520
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void LoopStateAirTrick();                          // 0x588
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void CtorStateDribbleMiss();                       // 0x644
+            virtual void CallbackMotTrg_(const bcs::CAnmObjMotBase::MOT_TRG *pTrg); // 0xC44
+            virtual void CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush); // 0xC54
+            virtual void CallbackMotTrg_BodyVisible_(long bVisible, long); // 0xC7C
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+
+            // Where copy nClone stands; null without the copies or once
+            // that copy has vanished.
+            const bcs::FVEC3 *GetClonePos(long nClone) const;
 
         protected:
-            unsigned char m_Unk5E8[0x5F4 - 0x5E8];
+            void CreateClone_();
+            void DestroyClone_();
+            void ChangeStateClone_(long nState);
+            bcs::FVEC3 *GetArtsBasePos_();
+            void SetArtsBasePos_(const bcs::FVEC3 &rPos);
+            void WholeUpDatePosition_();
+            void WholeUpDatePosition_(const bcs::FVEC3 &rPos);
+            void StopSpSe_(float fFrames);
+
+            // (inline helpers, names guessed) Whether a body-visible
+            // trigger with parameter bHide hides the shown body, or shows
+            // the hidden one (bit 0x10000000 of the status flags).
+            int IsBodyHideTrg_(long bHide) const
+            {
+                int b = 0;
+                if (bHide != 0 && !(m_nStatusFlag & 0x10000000)) {
+                    b = 1;
+                }
+                return b;
+            }
+            int IsBodyShowTrg_(long bHide) const
+            {
+                int b = 0;
+                if (bHide == 0 && (m_nStatusFlag & 0x10000000)) {
+                    b = 1;
+                }
+                return b;
+            }
+
+            // (names guessed)
+            // 0x5E8: where the player sent the ninja during the trick (1
+            // ahead, 2 and 4 the sides, 3 back; 0 not chosen).
+            long m_nSpMove;
+            unsigned long m_hFactory;  // 0x5EC, task id of the copies, 0 for none
+            unsigned long m_hSpSe;     // 0x5F0, the sound of the trick
     };
 
-    // Allocated with 0x5EC bytes.
+    // The White Mage: her special shot draws a magic circle
+    // (CC15_BASKET::CcSiromaMagicCircle) on the target marker, which fires
+    // a pillar of light at the shot. Allocated with 0x5EC bytes.
     class CChrCoreBasketSiroma : public CChrCoreBasket {
         public:
             CChrCoreBasketSiroma();
             virtual ~CChrCoreBasketSiroma();
+            virtual int GetTargetMarkerPos(bcs::FVEC3 &rPos);         // 0x58
+            virtual int MoveTargetMarkerPos(float fRotY);              // 0x5C
+            virtual void Reset_();                                     // 0x384
+            virtual void LoopStateAirTrick();                          // 0x588
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
+            virtual int SubStateArtsShotIsEndArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xD00
 
         protected:
-            unsigned char m_Unk5E8[0x5EC - 0x5E8];
+            // (inline helper, name guessed) Deletes the magic circle, if any.
+            void ReleaseMagic_();
+
+            unsigned long m_hMagic;    // 0x5E8, task id of the magic circle, 0 for none
     };
 
     class CChrCoreBasketMii00 : public CChrCoreBasket {

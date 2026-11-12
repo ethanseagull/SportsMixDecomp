@@ -1,4 +1,5 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
+DodgeF ActLoopSpOffMoveMarker__Q23msw16CComDrvDodgeGameFv near 97.9 register choice only inside the inlined paired-single FVEC3Add (sum register shares the first operand's register in the original, the second's in ours) and the instruction order around it; same loads, stores and calls
 DodgeF AddCoinValue__Q23msw17CCockpitDodgeCoinFlll near 98.8 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 DodgeF CalcPos___Q210CC09_DODGE22CcKinopioBoundMushroomFv near 99.4 register choice in the paired-single vector add and angle wrap loops (VolleyF copy same)
 DodgeF CallbackBodyDamage___Q23msw21CItemDodgeBombDD_BaseFPQ23msw13CCollBodyUnitPCQ23msw12CCollAtkUnitRCQ23bcs5FVEC3 near 99.0 99.0%: float register choice and scheduling only.
@@ -16,9 +17,10 @@ DodgeF CoinOut__Q23msw17CCockpitDodgeCoinFv near 99.0 register choice only: loop
 DodgeF CoinOut__Q23msw18CCockpitDodgeCoderFv near 98.6 register choice only: the loop counter, the table pointer and the pane-accessor temporary get other saved registers (as in HockeyF CCockpitHockeyCoder::ScoreOut); same calls, constants, loads, stores and branches
 DodgeF CreateBallIcon__Q23msw17CRadarIcon2DDodgeFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc near 99.9 register choice only; file-static pane-name table is anonymous in the original, named s_PaneName here
 DodgeF CreateCharaIcon__Q23msw17CRadarIcon2DDodgeFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc near 99.9 register choice only; file-static pane-name table is anonymous in the original, named s_PaneName here
+DodgeF CreateMdl___Q210CC14_DODGE16CcNinjaCloneBodyFv near 99.8 register numbering / order of independent loads only
 DodgeF CreateMiniTelop__Q23msw13CCockpitDodgeFllPQ23bcs5FVEC3 near 98.9 98.9%: float registers given to bcs::FVEC3Add's paired-single block; same loads, ps_add, stores.
 DodgeF CursorInit__Q23msw16CLockCursorDodgeFv near 97.1 same calls, constants and strings; original indexes s_CursorPaneName[nPlayer] with an offset counter (+0x30) where ours keeps a running pointer: two instructions and stack slots
-DodgeF DetectMapHit___Q23msw13CCollManDodgeFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 87.4 87.4%: branches, calls, constants, offsets and stack layout match; ours addresses the float constants through a kept .rodata base register (r31) instead of lis per load, which costs one more saved register (_savegpr_19 vs _20) and shifts registers/scheduling after it
+DodgeF DetectMapHit___Q23msw13CCollManDodgeFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 97.8 Branches, calls, constants, offsets and stack layout match; float constants are addressed per literal as in the original (pool-off stand-in). Only instruction scheduling and register order differ.
 DodgeF Disp__Q23msw16CLockCursorDodgeFv near 98.2 same bit written: original's Pane::SetVisible clears bit 0 then inserts the bool (rlwinm+rlwimi), our one-line header form does it in one step; a two-statement SetVisible in nw4r/lyt/Pane.hpp gives 98.9 (regs only), not applied (shared header)
 DodgeF DoNormalShootPhysMove__Q23msw18CItemBallStarDodgeFRQ23bcs5FVEC3RQ23bcs5FVEC3ff near 99.2 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF EffectCoinGetCreate___Q23msw16CGimmickManDodgeFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 95.4 original reloads m_pMdl before CreateAttachEffect (no store in between, same value); multiply scheduled differently
@@ -32,6 +34,8 @@ DodgeF GaugeOutWait__Q23msw18CCockpitDodgeCoderFv near 99.1 register choice only
 DodgeF GaugeOutWait__Q23msw22CCockpitDodgeBallPowerFv near 98.6 register choice only: the loop counter, the table pointer and the pane-accessor temporary get other saved registers (as in HockeyF CCockpitHockeyCoder::ScoreOut); same calls, constants, loads, stores and branches
 DodgeF GaugeOut__Q23msw18CCockpitDodgeCoderFv near 99.1 register choice only: the loop counter, the table pointer and the pane-accessor temporary get other saved registers (as in HockeyF CCockpitHockeyCoder::ScoreOut); same calls, constants, loads, stores and branches
 DodgeF GaugeOut__Q23msw22CCockpitDodgeBallPowerFv near 98.6 register choice only: the loop counter, the table pointer and the pane-accessor temporary get other saved registers (as in HockeyF CCockpitHockeyCoder::ScoreOut); same calls, constants, loads, stores and branches
+DodgeF GetDatSpTargetMarker__Q23msw16CComDrvDodgeGameFPfi near 99.1 stack frame 0x10 smaller (0x60 vs 0x70); every instruction otherwise identical
+DodgeF GetDodgeArtsTargetMarkerPos__Q23msw18CChrCoreDodgeNinjaFRQ23bcs5FVEC3l near 98.6 0x934+(n-1)*4 folded to 0x930+n*4 (same address); registers
 DodgeF GetExplosionParam__Q23msw14CItemDodgeBombFRfRfRfRlRlRUl near 99.7 99.7%: the two registers of the team-number compare are swapped.
 DodgeF GetFarPosBall___Q23msw13CBallManDodgeFRCQ23bcs5FVEC3 near 99.1 99.1%: loop counter and best-ball pointer swap saved registers r29/r30; instructions and order otherwise identical (register allocation only)
 DodgeF GetFirstLookInfo_MultiPlay__Q23msw14CCameraDodgeBDFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 98.7 98.7%: stack slots allocated in reverse, callee-saved float register numbering, load order of two ball heights in one compare; frame, calls, constants, branches, accesses identical
@@ -46,8 +50,14 @@ DodgeF GetTeamOuterFieldBack__Q23msw13CStageDodge03CFll near 99.8 register choic
 DodgeF GetTeamOuterFieldBack__Q23msw13CStageDodge11CFll near 99.8 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
 DodgeF ItemBall_GetEscPosFromBall__Q23msw16CComDrvDodgeGameCFRQ23bcs5FVEC3l near 98.7 98.7%: float register choice/order around the range sum only
 DodgeF LoopStateAirTrick__Q23msw18CChrCoreDodgeLuigiFv near 99.6 r3/r4 swapped in the inlined FsmqGetWork_ (queue head vs work pointer); same as HockeyF Luigi
+DodgeF LoopStateAppear__Q210CC14_DODGE16CcNinjaCloneBodyFv near 98.3 register numbering / order of independent loads only
+DodgeF LoopStateDisappear__Q210CC15_DODGE19CcSiromaMagicCircleFv near 99.9 order of three constant loads
+DodgeF LoopStateFire__Q210CC15_DODGE19CcSiromaMagicCircleFv near 99.9 order of three constant loads
+DodgeF LoopStateLoop__Q210CC14_DODGE16CcNinjaCloneBodyFv near 97.1 register numbering / order of independent loads only
 DodgeF LoopStateThrow__Q23msw21CItemDodgeBombDD_BaseFv near 95.8 95.8%: original converts the flash grey level with a quantized psq_st (u8, clamps); ours uses a plain (unsigned char) cast, same value for the in-range 55..255 it computes; frame 0x30 vs 0x20, colour bytes stored in another order, two extra frsp on single values, two constants loaded in the other order.
 DodgeF MainCamera_Normal__Q23msw14CCameraDodgeBDFv near 98.3 98.3%: schedule only (m_Unk274 loaded later, float register numbering)
+DodgeF MainDefense___Q23msw15CChrDrvPadDodgeFPQ33msw7CChrDrv8_CHR_MSG near 98.4 original makes extra unused IsPadTypeAnalogStick_() const-getter calls and a repeated identical compare; constant addressing; registers (reviewer confirmed)
+DodgeF Main__Q210CC14_DODGE16CcNinjaCloneBodyFv near 99.9 register numbering / order of independent loads only
 DodgeF Main__Q210CC17_DODGE18CcKuromaLockonUnitFv near 96.4 scheduling: m_hEffect loaded before CEffectCtrl::GetInstance() in the original (HockeyF/VolleyF copies same)
 DodgeF Main__Q23msw16CLockCursorDodgeFv near 99.9 register allocation/order only
 DodgeF Main__Q23msw17CCockpitDodgeCoinFv near 98.8 register choice only (as CCockpitHockeyCoin::Main): loop counters and pointer temporaries in different saved registers
@@ -56,6 +66,8 @@ DodgeF Main__Q23msw9CTelopOutFv near 99.1 99.1%: character number and telop id i
 DodgeF Main__Q33msw13GIMMICK_DODGE14CEffectCoinGetFv near 99.0 register choice only (stack-vector address registers, paired-single temporaries)
 DodgeF Main___Q23msw13CStageDodge05Ff near 96.2 96.2%: register choice; raft loop uses index offsets in the original, advancing pointers in ours; period != 0.0f compare operands swapped; game-flag bit-0 test is clrlwi + double cntlzw in the original, one clrlwi. in ours (same as CStageBasket05::Main_). Same branches and values.
 DodgeF Main___Q23msw13CStageDodge11Ff near 99.4 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
+DodgeF MethdPassCall__Q23msw15CChrDrvPadDodgeFf near 94.1 constant reached via addi+offset instead of folded @l; one load hoisted
+DodgeF MethdShootCall__Q23msw15CChrDrvPadDodgeFl near 95.0 constant reached via addi+offset instead of folded @l; one load hoisted
 DodgeF MovePos___Q210CC09_DODGE22CcKinopioBoundMushroomFf near 99.6 fmadds multiplicands swapped (register choice)
 DodgeF OnCalcSum__Q23msw13CStageDodge03CFv near 98.3 register choice / operand order only.
 DodgeF OnCalcSum__Q23msw13CStageDodge07CFv near 97.7 97.7%: ours adds one redundant empty-list check (cmpwi/beq) before jumping to the loop's own test; same result.
@@ -67,6 +79,7 @@ DodgeF OnCtorNormalShoot__Q23msw20CItemBallRShellDodgeFv near 99.4 register numb
 DodgeF OnDamage__Q23msw25CStgGmk_Pinball_Act_DodgeFPQ23msw13CCollBodyUnitPQ23msw5CBall near 98.1 98.1%: float/pointer register numbering, 'ble body; b skip' vs 'bgt skip' (same for NaN), and the inline CStgSrt::SetVel's bit-1 flag test as rlwinm. vs extrwi. (same bit; the shared inline uses &2, which VolleyF and the Pylon want); constants, calls, accesses, stack identical
 DodgeF OnGimmickCancel__Q23msw13CStageDodge05Fv near 99.1 99.1%: float register allocation only.
 DodgeF OnGimmickReset__Q23msw13CStageDodge05Fv near 99.2 99.2%: float register allocation only.
+DodgeF OnMsg__Q23msw15CChrDrvPadDodgeFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG near 98.9 constants via pool base+addi (noauto); fadds operand order; m_pChr kept in register vs reloaded
 DodgeF OnPostAppendNode__Q23msw13CStageDodge11FPCQ33msw5STAGE12MDL_GEN_RULERQ23bcs6CRegexPQ23msw17CStageMdlListNodeRQ34nw4r3g3d7ResFileRQ23msw4CArnl near 100.0 constant offsets only: three .rodata loads 4 bytes apart from the original (section layout of the unit's .rodata), same constants and code
 DodgeF OnPostAppendNode__Q23msw13CStageDodge12FPCQ33msw5STAGE12MDL_GEN_RULERQ23bcs6CRegexPQ23msw17CStageMdlListNodeRQ34nw4r3g3d7ResFileRQ23msw4CArnl near 99.8 99.8%: the two case-local sscanf result variables have their stack slots (0x8/0xC) swapped. No behaviour change.
 DodgeF OnTurnInit__Q23msw13CStageDodge09Fv unverified 50.4 50.4% on 35 instructions: schedule only (original loads EV_TIME, the 60.0f constant and the base vptr before the RandRange ternary); same calls, args and slots. Two models, autopilot and an inline-argument form tried.
@@ -117,13 +130,21 @@ DodgeF SubStateArtsShotFireBullet___Q23msw18CChrCoreDodgeKoopaFPQ33msw13CChrCore
 DodgeF SubStateArtsShotFireBullet___Q23msw18CChrCoreDodgePeachFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 87.4 87.4%: original computes the bomb counts at run time (li 7; srawi / li 6; cmpwi), ours folds them to the same constants; hence one more saved reg and 0xF0 vs 0xE0 frame, stack slots, registers. Same as Basket/Hockey/Volley Peach
 DodgeF SubStateArtsShotFireBullet___Q23msw18CChrCoreDodgeSlimeFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 99.1 float register allocation only (fRadius/fRot/loop constants in other FPRs, loop counters swapped); same instructions, constants, calls and stack slots
 DodgeF SubStateArtsShotFireBullet___Q23msw20CChrCoreDodgeKinopioFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 97.9 register choice and order of the float loads/stores setting up the court rectangle and start position (VolleyF CreateBoundMushroom_ same)
+DodgeF SubStateArtsShotFireBullet___Q23msw20CChrCoreDodgeKoopaJrFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 93.3 register choice and stack slot layout (frame 0x210 vs 0x1f0; court rect floats and the XZ copy of the court centre at other slots, the original spilling the copy to scattered dead slots with frsp on y only); same constants, calls, branches and memory reads (as BasketF's sibling, 93.3%)
+DodgeF SubStateArtsShotIsReadyArtsShot___Q23msw18CChrCoreDodgeNinjaFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN near 98.4 register numbering / order of independent loads only
 DodgeF SubStateArtsShotPlayTrickMotion___Q23msw19CChrCoreDodgeKuromaFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN near 99.1 register allocation only (VolleyF copy same)
+DodgeF SubStateArtsShotPlayTrickMotion___Q23msw19CChrCoreDodgeSiromaFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN near 98.8 registers in inlined normalize; circle position stores x,y,z vs x,z,y
 DodgeF TrgConstruct___Q23msw18CItemBallBombDodgeFv near 98.4 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF UpdateCourtCenter___Q23msw13CStageDodge03Ff near 96.4 register choice / operand order only.
 DodgeF UpdateMdl__Q23msw13CStageDodge13FUlf near 98.1 register choice and common-subexpression reuse only (as CStageBasket13::UpdateMdl): in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls
 DodgeF UpdatePos___Q33msw13CStageDodge0310CWaterInfoFv near 90.6 float registers and instruction order; frame and values match.
+DodgeF UpdatePressInfoSub___Q23msw15CChrDrvPadDodgeFli near 93.9 constant reached via addi+offset instead of folded @l; one load hoisted
+DodgeF UpdatePressInfo__Q23msw15CChrDrvPadDodgeFv near 86.1 addressing only: nKeyTbl and 0.3/0.8 via shared pool base under noauto vs per-constant lis/addi; same values
 DodgeF Util_SearchArtsPassTo___Q23msw12CChrManDodgeFl near 99.1 99.1%: register allocation only (same as CChrManHockey's).
 DodgeF Util_SearchPassmeetTo___Q23msw12CChrManDodgeFlfRQ23bcs5FVEC3 near 99.2 99.2%: two stack-address registers swapped; team byte sign-extended in place.
+DodgeF __ct__Q210CC14_DODGE16CcNinjaCloneBodyFPQ23bcs5CTaskPQ23msw18CChrCoreDodgeNinjalff near 99.9 stack slots of ptmf temporaries
+DodgeF __ct__Q210CC15_DODGE19CcSiromaMagicCircleFPQ23bcs5CTaskPQ23msw8CChrCoreRCQ23bcs5FVEC3 near 99.8 stack slots of inlined ptmf temporaries
+DodgeF __ct__Q210CC15_DODGE22CcSiromaMagicCircleObjFPQ23bcs5CTaskPQ23bcs9CScnGrouplQ34nw4r3g3d7ResFile near 95.1 one redundant dead stw 0 to m_File (ResFile default ctor) before the copy; registers
 DodgeF __ct__Q23msw13CStageDodge11FPQ23bcs5CTask near 99.9 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
 DodgeF __dt__Q23bcs106CPool<Q33msw7STAGE1113CStgRndAnmObj,Q23bcs42CPoolNode<Q33msw7STAGE1113CStgRndAnmObj,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
 DodgeF __dt__Q23bcs41CFixedPool<Ul,32,Q23bcs15CPoolNode<Ul,0>>Fv near 98.8 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants

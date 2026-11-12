@@ -186,12 +186,6 @@ namespace msw {
                     virtual bool IsPlaySe() const;                                       // 0xEC
                     // The telop shown when the panel is scored.
                     virtual CTelopDispBase *NewTelopDisp(bcs::CTask *pParent) const; // 0xF0
-                    // 0xF4: null in the DOL's vtable and in BasketF's
-                    // CStageBasket10::CPanelInfo, which is made with new, so it
-                    // cannot have been pure. Declared and never defined (the
-                    // original's linkers left the slot null; ours needs a
-                    // definition to link). Name and type not known.
-                    virtual void UnkF4();
             };
 
             // (purpose guessed) A telop shown over a goal when a bonus

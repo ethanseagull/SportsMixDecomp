@@ -43,8 +43,14 @@ namespace msw {
             // (names guessed; inline, no symbol; added for
             // game/msw/CCokcpitMenuDataList.cpp) The halfword at 0x0A of
             // pad nPad's entry, which GetPadStates gathers.
+            // (added for DOL game/msw/CMenuPartBase.cpp; name guessed)
+            unsigned char GetPlayerNo(long nPad) const { return m_aPad[nPad].m_nPlayerNo; }
+
             unsigned short GetPadState(long nPad) const { return m_aPad[nPad].m_nState; }
             void SetPadState(long nPad, unsigned short nState) { m_aPad[nPad].m_nState = nState; }
+            // (name guessed; inline, no symbol; added for
+            // game/msw/CCockpitLayoutBase.cpp) The byte at 0x49.
+            unsigned char GetCursorMode() const { return m_nCursorMode; }
 
             static CMenuPadInfo s_Instance;
 
@@ -101,7 +107,11 @@ namespace msw {
             unsigned char m_Unk00[4];    // 0x00
             PAD m_aPad[4];               // 0x04
             long m_nPadLeader;           // 0x44 (name guessed)
-            unsigned char m_Unk48[8];    // 0x48
+            unsigned char m_Unk48;       // 0x48
+            // 0x49: 1 while the menus are driven by the pointer
+            // (CCockpitLayoutBase::OnCursorCheck); meaning guessed.
+            unsigned char m_nCursorMode;
+            unsigned char m_Unk4A[6];    // 0x4A
     };
 }
 

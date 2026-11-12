@@ -62,7 +62,7 @@ Equivalent game/bcs/CSndTask.cpp
 Equivalent game/msw/menu/CMovieScnObj.cpp
 Equivalent game/msw/CC_CMN/SLIME/CcSquadFactory.cpp
 Matching game/msw/CoinRes.cpp
-NonMatching game/bcs/CAnmMotion.cpp
+Equivalent game/bcs/CAnmMotion.cpp
 Equivalent game/msw/CGameExDemoBase.cpp
 Equivalent game/msw/CStage10Base/CTelopDispBase.cpp
 Matching game/msw/CCokcpitMenuDataList.cpp

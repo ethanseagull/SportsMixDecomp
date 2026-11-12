@@ -20,6 +20,8 @@ namespace msw {
             void SetPos(const bcs::FVEC3 &rPos);
             // (name guessed; VolleyF's CStgGmk_Pinball_Act_Volley)
             const bcs::FVEC3 &GetPos() const { return m_Pos; }
+            // (name guessed; BasketF's CcSiromaMagicCircle) The other end.
+            const bcs::FVEC3 &GetPos2() const { return m_Pos2; }
 
             // (names guessed) Inline in msw::CStgGmk_WaterPillar_Act.
             void SetShape(unsigned long shape) { m_nShape = shape; }
@@ -77,7 +79,8 @@ namespace msw {
             unsigned long m_nMyNoHitFlag; // 0x20
             unsigned char m_Unk24[8];
             bcs::FVEC3 m_Pos;            // 0x2C (name guessed)
-            unsigned char m_Unk38[0x18];
+            bcs::FVEC3 m_Pos2;           // 0x38 (name guessed): the other end of a capsule (CAtkCollision::SetPos2)
+            unsigned char m_Unk44[0xC];
             bcs::FVEC3 m_PrevPos;        // 0x50 (name guessed; CCollUnit::SetPos)
             bcs::FVEC3 m_Size;           // 0x5C
             unsigned char m_Unk68[0x18];

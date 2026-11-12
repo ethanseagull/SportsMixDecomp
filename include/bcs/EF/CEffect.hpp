@@ -45,9 +45,17 @@ namespace bcs {
                     }
                 }
 
+                // (name from the weak copy in BasketF's
+                // CChrCoreBasketNinja.cpp) The frames the effect has played.
+                float GetCurrentFrame() { return m_fFrame - m_fStartFrame; }
+
             private:
                 unsigned char m_Unk00[0xA4];
                 unsigned long m_nFlags; // 0xA4 (bits used by SetAttachStatus too)
+                unsigned char m_UnkA8[0x128 - 0xA8];
+                // (names guessed) GetCurrentFrame returns the difference.
+                float m_fFrame;         // 0x128
+                float m_fStartFrame;    // 0x12C
         };
     }
 }

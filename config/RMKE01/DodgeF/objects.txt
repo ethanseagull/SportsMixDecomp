@@ -76,3 +76,6 @@ Matching game/dodge/CCockpitDodgeLayoutBase.cpp
 Equivalent game/dodge/CCockpitDodgeTelopInOutChange.cpp
 Equivalent game/dodge/CChrCoreDodgeKoopaJr.cpp
 Equivalent game/dodge/unit_D7800.cpp
+Equivalent game/dodge/CcSiromaMagicCircle.cpp
+Equivalent game/dodge/CcNinjaCloneBody.cpp
+Equivalent game/dodge/CChrDrvPadDodge.cpp flags=noauto

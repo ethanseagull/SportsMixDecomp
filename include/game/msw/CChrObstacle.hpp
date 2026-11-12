@@ -3,6 +3,7 @@
 
 #include "bcs/CUnivTask.hpp"
 #include "bcs/FVEC3.hpp"
+#include "game/msw/CAtkCollision.hpp"
 
 namespace msw {
 
@@ -31,6 +32,9 @@ namespace msw {
             // (added for BossF game/boss/CComDrvBoss.cpp, name guessed) The
             // kind of obstacle; the Behemoth's meteors are 0x12.
             long GetObstacleType() const { return m_nObstacleType; }
+            // (added for BasketF CChrCoreBasketSiroma::GetTargetMarkerPos,
+            // name guessed) Where the obstacle is.
+            const bcs::FVEC3 &GetPos() const { return m_Pos; }
 
         protected:
             unsigned char m_Unk34[0x3C - 0x34];
@@ -41,7 +45,10 @@ namespace msw {
             float m_fRotY;               // 0x54
             unsigned char m_Unk58[0x4];
             float m_fRadius;             // 0x5C
-            unsigned char m_Unk60[0x94 - 0x60];
+            unsigned char m_Unk60[0x88 - 0x60];
+            // 0x88 (name guessed): its attack collision (GetAttackRadius
+            // reads it; BasketF's CcSiromaMagicCircle sets it up).
+            CAtkCollision m_AtkColl;
     };
 }
 

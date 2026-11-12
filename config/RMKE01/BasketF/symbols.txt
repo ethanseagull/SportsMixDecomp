@@ -2150,7 +2150,7 @@ DtorState__Q23bcs70CStateTemplate<Q23bcs46CFsm<Q33msw11CC15_BASKET19CcSiromaMagi
 CtorState__Q23bcs56CStateTemplate<Q33msw11CC15_BASKET19CcSiromaMagicCircle>Fv = .text:0x0006F838; // type:function size:0x48 scope:global
 LoopState__Q23bcs56CStateTemplate<Q33msw11CC15_BASKET19CcSiromaMagicCircle>Fv = .text:0x0006F880; // type:function size:0x48 scope:global
 DtorState__Q23bcs56CStateTemplate<Q33msw11CC15_BASKET19CcSiromaMagicCircle>Fv = .text:0x0006F8C8; // type:function size:0x48 scope:global
-fn_4_6F910 = .text:0x0006F910; // type:function size:0x14
+__sinit_\CcSiromaMagicCircle_cpp = .text:0x0006F910; // type:function size:0x14 scope:local
 @148@__dt__Q33msw11CC15_BASKET19CcSiromaMagicCircleFv = .text:0x0006F924; // type:function size:0x8 scope:global
 GetArtsEffectUnit__Q23msw19CChrCoreBasketSlimeFl = .text:0x0006F92C; // type:function size:0x1F8 scope:global
 __arraydtor$2023 = .text:0x0006FB24; // type:function size:0x1C scope:local

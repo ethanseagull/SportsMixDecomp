@@ -32,6 +32,9 @@ namespace msw {
             void SetFadeoutTime(float fFrame);
             long GetEffectNum();
             bcs::EF::CEffect *GetEffect(long nIndex);
+            // (DOL; added for BasketF's CChrCoreBasketNinja) The effect of
+            // that name, null when the cluster has none.
+            bcs::EF::CEffect *FindEffect(const char *pName);
             // (DOL; added for BossF game/boss/CChrCoreBossKinopio.cpp) The
             // models of the cluster; an entry may be null.
             long GetMdlObjNum();

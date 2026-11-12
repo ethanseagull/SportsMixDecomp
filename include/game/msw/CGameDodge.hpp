@@ -29,6 +29,9 @@ namespace msw {
             // which ignores the result; return type guessed) The life a
             // character of team nTeam starts with.
             static long GetChrMaxLife(long nTeam);
+            // (static, DodgeF; added for game/dodge/CChrDrvPadDodge.cpp)
+            // Hands the pad of character nFrom to character nTo.
+            static void ChrChange(long nTo, long nFrom);
 
             // The dodgeball game's own virtual functions from slot 0x2A8 (after
             // CGame's), in the order of __vt__Q23msw10CGameDodge; only as far

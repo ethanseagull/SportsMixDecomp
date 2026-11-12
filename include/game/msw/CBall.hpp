@@ -482,6 +482,11 @@ namespace msw {
             // the ball whatever its height)
             int IsFlag2() const { return m_nFlag & 0x2; }
             int IsFlag100000() const { return m_nFlag & 0x100000; }
+            // (names guessed; added for BasketF's CChrCoreBasketNinja, which
+            // sets and clears bit 4 directly while the ninja hides) Sets or
+            // clears bits of m_nFlag.
+            void OnFlag(unsigned long nBit) { m_nFlag |= nBit; }
+            void OffFlag(unsigned long nBit) { m_nFlag &= ~nBit; }
             // (names guessed) msw::CItemBall attaches its model to the
             // ball's; msw::CItemBallShellWreck sends the wreck off along the
             // velocity.

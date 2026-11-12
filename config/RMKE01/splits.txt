@@ -467,7 +467,8 @@ game/msw/CCockpitPause.cpp:
 	.text       start:0x80198108 end:0x8019A004
 
 game/msw/CCockpitResult.cpp:
-	.text       start:0x8019AECC end:0x8019B19C
+	.text       start:0x8019AECC end:0x8019B244
+	.rodata     start:0x8043DC60 end:0x8043DC90
 
 game/msw/menu.cpp:
 	.text       start:0x8019B2C4 end:0x8019BBF4

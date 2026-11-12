@@ -20,6 +20,15 @@ namespace msw {
             // nKind is 1 or 0 (a comparison result in the caller).
             CCockpitResultTime(long nKind);
             virtual ~CCockpitResultTime();
+
+            // (name guessed; added for DOL game/msw/CCockpitResult.cpp) When
+            // item n of a list appears: m_fUnk00 + n * m_fUnk04 frames, as
+            // BasketF's CCockpitBasketResult computes it for its scores.
+            float GetDispTime(long n) const
+            {
+                float fDelay = m_fUnk04 * n;
+                return m_fUnk00 + fDelay;
+            }
     };
 }
 

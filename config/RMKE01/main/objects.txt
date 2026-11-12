@@ -34,6 +34,7 @@ Equivalent game/msw/CGimmickMan.cpp
 NonMatching game/msw/CGame.cpp
 Equivalent game/msw/CGameVib.cpp
 Matching game/msw/menu/CStateSave.cpp
+Equivalent game/msw/CCockpitResult.cpp
 Matching game/msw/CCockpitResultTime.cpp
 Matching game/msw/CEffectTableList.cpp
 Equivalent game/msw/CChrMarker.cpp

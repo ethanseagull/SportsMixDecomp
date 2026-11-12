@@ -101,6 +101,10 @@ namespace msw {
             void SetDisable(long index);
             void SetCatchEnable(long index);
             void ResetTargetFlag(long index, unsigned long flag);
+            // (DOL; added for BossF game/boss/CBallBoss.cpp, meanings guessed
+            // from the names)
+            void AddTargetFlag(long index, unsigned long flag);
+            void SetTmpNoHitFlag(long index, unsigned long flag);
             void SetBallCatchCallback(long index, BallCatchCallback pFunc, void *pArg);
             void SetYRot(long index, float fRotY);
             float GetRadius(long index) const;

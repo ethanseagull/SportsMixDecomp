@@ -822,6 +822,12 @@ inline void msw::CBall::SetReboundDisable()
 {
 }
 
+// (added for BossF game/boss/CBallBoss.cpp, whose original carries the
+// weak copy; MenuF's CTopMenuBall overrides it)
+inline void msw::CBall::TrgBound(unsigned long)
+{
+}
+
 inline void msw::CBall::TrgGoalIn(long, long, long, long, long)
 {
 }

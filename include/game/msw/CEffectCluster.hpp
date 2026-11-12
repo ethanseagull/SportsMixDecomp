@@ -66,6 +66,9 @@ namespace msw {
             // CallEffectFunc. msw::CStgGmk_WaterPillar_Act::OnUpdate fades
             // its effects with it.
             void SetAlpha(float fAlpha);
+            // (DOL; added for BossF game/boss/CBallBoss.cpp) Lets the
+            // cluster's effects run again after a pause.
+            void ClearPauseFlag();
 
             // (name guessed) Calls pFunc with nArg on each effect of the
             // cluster that still exists. Inline in the DOL's

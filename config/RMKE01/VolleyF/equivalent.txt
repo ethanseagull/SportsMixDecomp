@@ -26,6 +26,7 @@ VolleyF Create___Q23msw22CChrTargetMarkerVolleyFv near 99.7 original has one ext
 VolleyF Create___Q23msw30CBallTargetMarkerRhythmReceiveFi near 99.0 name-table offsets shifted by 8 (.data starts with ResMat::ref's __FUNCTION__ in ours) and register choice
 VolleyF CtorStateAppear__Q33msw11CC03_VOLLEY19CcDaisyFlowerGardenFv near 99.2 register allocation only (2.0 - frame rate and the zero store)
 VolleyF CtorStateDisappear__Q33msw11CC15_VOLLEY19CcSiromaMagicCircleFv near 89.4 Copies the {effect, sort type} rodata struct to a stack slot (bigger frame, lwz/stw then lha) instead of reading it in place; loop and calls identical, register numbering shifts
+VolleyF CtorStateRebirth__Q23msw14CChrCoreVolleyFv near 99.4 register allocation/order only
 VolleyF DetectMapHit___Q23msw14CCollManVolleyFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 91.0 schedule only: the original loads the 0.0f constant earlier and computes extrwi after the first store, so registers renumber; same instructions, constants, calls and branches
 VolleyF DetectMapHit___Q33msw28@unnamed@CCollManVolley_cpp@19CCollManVolleyPartyFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 90.9 schedule only: same reordering as CCollManVolley::DetectMapHit_ (0.0f load, extrwi) plus the two fabs in the other order; same operations and calls
 VolleyF DrawEdgeOne___Q23msw14CStageVolley10Flll unverified 79.3 debug edge drawing (DrawEdge_ has no caller): register allocation, scheduling, stack slots and loop induction form (index vs pointer) differ; constants and calls the same
@@ -65,8 +66,10 @@ VolleyF LoopStateAppear__Q33msw11CC14_VOLLEY16CcNinjaCloneBallFv near 90.6 regis
 VolleyF LoopStateAppear__Q33msw11CC14_VOLLEY16CcNinjaCloneBodyFv near 97.2 the m_pMdl load for SetRotXYZ is scheduled after the three angle loads instead of after the first (same as DodgeF's LoopStateLoop)
 VolleyF LoopStateArtsLoop__Q33msw11CC14_VOLLEY16CcNinjaCloneBallFv near 90.6 register numbering only: the two stack vectors' base registers and the paired-single registers of the inline FVEC3Lerp/FVEC3Add are swapped, one ps_sub/psq_st pair ordered differently; same loads, stores and arithmetic
 VolleyF LoopStateArtsLoop__Q33msw11CC14_VOLLEY16CcNinjaCloneBodyFv near 97.2 the m_pMdl load for SetRotXYZ is scheduled after the three angle loads instead of after the first (same as DodgeF's LoopStateLoop)
+VolleyF LoopStateDamage__Q23msw14CChrCoreVolleyFv near 100.0 operands of one fnmsubs multiply in the other order (commutative); same code otherwise (as Basket/Boss/Dodge LoopStateDamage)
 VolleyF LoopStateDisappear__Q23msw30CBallTargetMarkerRhythmReceiveFv near 99.7 x and z of the target position swap float registers
 VolleyF LoopStateDisappear__Q33msw11CC15_VOLLEY19CcSiromaMagicCircleFv near 99.4 register allocation only
+VolleyF LoopStateFall__Q23msw14CChrCoreVolleyFv near 99.0 stack slots of the jump-step and splash vectors exchanged, plus register numbering; same code otherwise
 VolleyF LoopStateImpact__Q33msw11CC14_VOLLEY16CcNinjaCloneBallFv near 90.6 register numbering only: the two stack vectors' base registers and the paired-single registers of the inline FVEC3Lerp/FVEC3Add are swapped, one ps_sub/psq_st pair ordered differently; same loads, stores and arithmetic
 VolleyF LoopStateImpact__Q33msw11CC14_VOLLEY16CcNinjaCloneBodyFv near 97.2 the m_pMdl load for SetRotXYZ is scheduled after the three angle loads instead of after the first (same as DodgeF's LoopStateLoop)
 VolleyF LoopStateLoop__Q33msw11CC14_VOLLEY16CcNinjaCloneBallFv near 90.6 register numbering only: the two stack vectors' base registers and the paired-single registers of the inline FVEC3Lerp/FVEC3Add are swapped, one ps_sub/psq_st pair ordered differently; same loads, stores and arithmetic
@@ -178,6 +181,8 @@ VolleyF SubStateBlockJumpIsActEnd___Q23msw20CChrCoreVolleyKuromaFPQ33msw14CChrCo
 VolleyF SubStateBlockJumpIsActEnd___Q23msw20CChrCoreVolleySiromaFPQ33msw14CChrCoreVolley21STATE_WORK_BLOCK_JUMP near 89.2 register allocation and one stack slot; the ball delete-flag test is cntlzw/srwi (bool) in the original vs rlwinm. in ours, same branch (known unsolved idiom, see Kuroma notes)
 VolleyF SubStateBlockJumpIsActEnd___Q23msw21CChrCoreVolleyKinopioFPQ33msw14CChrCoreVolley21STATE_WORK_BLOCK_JUMP near 99.9 instruction scheduling only
 VolleyF SubStateBlockJumpIsActEnd___Q23msw21CChrCoreVolleyKoopaJrFPQ33msw14CChrCoreVolley21STATE_WORK_BLOCK_JUMP near 99.5 register choice inside inlined paired-single FVEC3Add only
+VolleyF SubStateDamageCtorLDmg___Q23msw14CChrCoreVolleyFPQ33msw8CChrCore17STATE_WORK_DAMAGEff near 99.8 register allocation/order only
+VolleyF SubStateDamageLoopDizzy___Q23msw14CChrCoreVolleyFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 99.8 register allocation/order only
 VolleyF SubStateReceiveDoProcDiveReceive___Q23msw19CChrCoreVolleyYoshiFPQ33msw14CChrCoreVolley18STATE_WORK_RECEIVE near 99.8 f2/f3 swapped in the angle wrap (same as the boss sibling)
 VolleyF SubStateReceiveDoProcDiveReceive___Q23msw20CChrCoreVolleySiromaFPQ33msw14CChrCoreVolley18STATE_WORK_RECEIVE near 99.7 register allocation only (angle wrap loop)
 VolleyF SubStateSpikeDoCombAutoSwingCheck___Q23msw14CChrCoreVolleyFPQ33msw14CChrCoreVolley16STATE_WORK_SPIKE near 98.8 register choice inside the paired-single FVEC3Add/FVEC3Sub helpers only

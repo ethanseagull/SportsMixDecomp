@@ -54,6 +54,10 @@ namespace msw {
                     float m_fFrameMax;       // 0x08
                     float m_fDist;           // 0x0C
                 };
+                // (added for BasketF game/basket/unit_2E514.cpp; contents not
+                // mapped) The parameters of a jump, as
+                // CChrCore::Util_SetJumpParam takes them.
+                struct JUMP_PARAM;
             };
     };
 }

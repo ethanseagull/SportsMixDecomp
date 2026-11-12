@@ -65,6 +65,18 @@ namespace msw {
         };
     }
 
+    namespace CHR_CORE_BASKET {
+        // (added for game/basket/unit_2E514.cpp; names guessed) What
+        // CChrCoreBasket::GetJumpBlockParam_ fills in (two words and two
+        // floats; the jump catch divides the height by m_fHeight).
+        struct JUMP_BLOCK_PARAM {
+            long m_nUnk00;     // 0x00
+            long m_nUnk04;     // 0x04
+            float m_fHeight;   // 0x08
+            float m_fUnk0C;    // 0x0C
+        };
+    }
+
     class CBall;
 
     // The basketball character core (BasketF).
@@ -144,6 +156,22 @@ namespace msw {
             void SubStateDamageCtorTumble_(STATE_WORK_DAMAGE *pWork);
             int SubStateDamageLoopTumble_(STATE_WORK_DAMAGE *pWork);
             void SetRiverFallEnable(int bEnable);
+
+            // (added for game/basket/unit_2E514.cpp; names from the
+            // symbols, return types and meanings guessed) The work of the
+            // pass catch state (mapped in that unit); its check whether the
+            // pass is over (0 while the passer still throws), and
+            // CheckPassCatchEnd_, which ends the catch early.
+            struct STATE_WORK_PASS_CATCH;
+            int SubStatePassCatchEnd(STATE_WORK_PASS_CATCH *pWork);
+            int CheckPassCatchEnd_();
+            // (values not known) Kinds of move speed.
+            enum MOVE_SPEED_KIND {};
+            float GetMoveSpeedKind(MOVE_SPEED_KIND kind) const;
+            void Util_PushBackCatch(int);
+            void GetJumpBlockParam_(long nKind, CHR_CORE_BASKET::JUMP_BLOCK_PARAM &rParam) const;
+            // The motion playing in slot nSlot.
+            long AnimGetMotIDEx(unsigned long nSlot);
 
             // (added for game/basket/CChrCoreBasketWaluigi.cpp) Sets
             // pWork->m_fShotFrame from the current motion's shot trigger.

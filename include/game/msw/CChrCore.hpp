@@ -1288,6 +1288,9 @@ namespace msw {
             int Util_DoJumpMoveEX(int nMode);
             // Sets a jump of fFrame frames from height fFrom.
             void Util_SetJumpParam(float fFrame, float fFrom, float, float);
+            // (added for BasketF game/basket/unit_2E514.cpp; DOL) A jump
+            // from a parameter block, fScale not known.
+            void Util_SetJumpParam(const CC_DATA::CHR_PARAM::JUMP_PARAM &rParam, float fScale);
             void Util_SetDirMoveParam(DIR_MOVE &rMove, float);
             int Eff_IsAlive(long nSlot) const;
             // Stops the effect in slot nSlot at once.

@@ -699,14 +699,16 @@ void msw::CSelectMenu::Court_Loop()
     }
 
     switch (m_nStep) {
-    case STEP_CAMERA:
-        if (CCameraMenuBG::s_Instance.IsEndAnim()) {
-            CCameraMenuBG::s_Instance.PushBack(0x25, GetCameraSpeed(0x25), 0.0f);
+    case STEP_CAMERA: {
+        CCameraMenuBG &rCamera = CCameraMenuBG::s_Instance;
+        if (rCamera.IsEndAnim()) {
+            rCamera.PushBack(0x25, GetCameraSpeed(0x25), 0.0f);
             SendObjEventTrigger(OBJ_COURT_CHR, 0x36, (void *)0xA);
             SendObjEventTrigger(OBJ_BG_CHR, 0x36, (void *)0xA);
             m_nStep = STEP_SELECT;
         }
         break;
+    }
     case STEP_SELECT:
         Court_NormalSelect(nMode);
         break;
@@ -852,8 +854,8 @@ int msw::CSelectMenu::Court_CheckTabChange(long nMode, int bParty)
     static const long objId = OBJ_COURT;
     static const long padNo0 = 0;
 
-    long nBtnKindId = m_nCurrentBtnKindId[padNo0][nMode];
     long nPad = CMenuPadInfo::s_Instance.GetPadLeader();
+    long nBtnKindId = m_nCurrentBtnKindId[padNo0][nMode];
     SelectMenu::CCourt *pCourt = (SelectMenu::CCourt *)FindObj(objId);
     SelectMenu::CCourtTab *pTab = (SelectMenu::CCourtTab *)FindObj(OBJ_COURT_TAB);
     if (pCourt == 0 || pCourt->m_Unk30 != CSelectMenuLayoutBase::STATE_ACTIVE || pTab == 0) {
@@ -1039,7 +1041,7 @@ void msw::CSelectMenu::WifiCourt_In()
     if (nStage == 0xFF) {
         m_nStage = 0;
     }
-    if (m_nStageSub == 0xFF) {
+    if ((long)m_nStageSub == 0xFF) {
         m_nStageSub = 0;
     }
     SendObjEventTrigger(OBJ_BG_DISPLAY, 0x4D, 0);
@@ -1083,9 +1085,10 @@ void msw::CSelectMenu::WifiCourt_Loop()
     }
 
     switch (m_nStep) {
-    case STEP_CAMERA:
-        if (CCameraMenuBG::s_Instance.IsEndAnim()) {
-            CCameraMenuBG::s_Instance.PushBack(0x24, GetCameraSpeed(0x24), 0.0f);
+    case STEP_CAMERA: {
+        CCameraMenuBG &rCamera = CCameraMenuBG::s_Instance;
+        if (rCamera.IsEndAnim()) {
+            rCamera.PushBack(0x24, GetCameraSpeed(0x24), 0.0f);
             if (m_nPlayMode == 4 || m_nPlayMode == 6) {
                 SendObjEventTrigger(OBJ_COURT_CHR, 0x36, (void *)0xF);
                 SendObjEventTrigger(OBJ_BG_CHR, 0x36, (void *)0xF);
@@ -1096,6 +1099,7 @@ void msw::CSelectMenu::WifiCourt_Loop()
             m_nStep = STEP_SELECT;
         }
         break;
+    }
     case STEP_SELECT:
         WifiCourt_NormalSelect(nMode);
         break;
@@ -1339,14 +1343,16 @@ void msw::CSelectMenu::PartyCourt_Loop()
     }
 
     switch (m_nStep) {
-    case STEP_CAMERA:
-        if (CCameraMenuBG::s_Instance.IsEndAnim()) {
-            CCameraMenuBG::s_Instance.Play(0x25, 1.0f, 0.0f);
+    case STEP_CAMERA: {
+        CCameraMenuBG &rCamera = CCameraMenuBG::s_Instance;
+        if (rCamera.IsEndAnim()) {
+            rCamera.Play(0x25, 1.0f, 0.0f);
             SendObjEventTrigger(OBJ_COURT_CHR, 0x36, (void *)0xA);
             SendObjEventTrigger(OBJ_BG_CHR, 0x36, (void *)0xA);
             m_nStep = STEP_SELECT;
         }
         break;
+    }
     case STEP_SELECT:
         PartyCourt_NormalSelect(nMode);
         break;
@@ -1403,6 +1409,9 @@ void msw::CSelectMenu::PartyCourt_Out()
 
 void msw::CSelectMenu::PartyCourt_NormalSelect(long nMode)
 {
+    // Not read: the original has this constant here too (next mode 0x31,
+    // perhaps of stripped code).
+    static const long nextState = 0x31;
     static const long objId = OBJ_COURT;
     static const long padNo0 = 0;
 
@@ -1640,7 +1649,7 @@ void msw::CSelectMenu::Court_OkButtonInit()
 
     switch ((long)m_Unk9B) {
     case 4:
-        if (m_nStage != 0xFF) {
+        if ((long)m_nStage != 0xFF) {
             _SetCourtDisplay(m_nStage, m_nStageSub);
         }
         break;
@@ -1775,11 +1784,14 @@ void msw::CSelectMenu::Court_RandomSelect(long &rStage, long &rStageSub)
         unsigned char nCupMask = 0;
         rStage = bcs::BCS_RandRange(0L, 3L);
         rStageSub = bcs::BCS_RandRange(0L, 2L);
-        if (_GetCupCount(m_nGameKind, &nCupMask) == 0) {
+        long nTabType = _GetCupCount(m_nGameKind, &nCupMask);
+        if (nTabType == 0) {
             // One cup: its first stage when it has a single one.
             rStage = _BeginBit(nCupMask);
-            if (_GetCupStageNum(m_nGameKind, rStage) == 0) {
-                rStageSub = _BeginBit(_GetStageBit(m_nGameKind, rStage));
+            long nStageNum = _GetCupStageNum(m_nGameKind, rStage);
+            if (nStageNum == 0) {
+                unsigned char nStageBits = _GetStageBit(m_nGameKind, rStage);
+                rStageSub = _BeginBit(nStageBits);
                 continue;
             }
             if ((1 << rStageSub) & _GetStageBit(m_nGameKind, rStage)) {

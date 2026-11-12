@@ -69,4 +69,4 @@ Equivalent game/menu/CRuleSel.cpp
 Equivalent game/menu/CMiiSel.cpp
 Equivalent game/menu/unit_6EE84.cpp
 Equivalent game/menu/CTopMenuChrObj.cpp
-NonMatching game/menu/CCourtSelect.cpp
+Equivalent game/menu/CCourtSelect.cpp

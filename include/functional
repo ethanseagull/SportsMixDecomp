@@ -1,0 +1,592 @@
+#ifndef FUNCTIONAL_
+#define FUNCTIONAL_
+
+// The part of the C++ library's TR1 <functional> the game uses:
+// std::tr1::function, std::tr1::bind of a member function with bound
+// object pointer and placeholders, and the tuple bind stores its
+// arguments in. Written for this project. The class and template names
+// are fixed by the mangled names of the instances in MenuF
+// (game/menu/CSelectMenuLayoutBase.cpp, CMenuPartButton's callbacks):
+//   std::tr1::function<void (long)>::is_empty(...)
+//   std::tr1::detail::function_imp<void (*)(long), F, 0, 0>
+//   std::tr1::detail::bound_func<void, mem_fn_1<void, T, long>, tuple<T *, ph<1>, nat...>>
+//   std::tr1::tuple<T0, ..., T9> (ten slots, unused ones are nat)
+//   std::tr1::placeholders::detail::ph<N>
+// Everything else (member names, how the pieces are put together) is
+// ours, shaped after the code the game's instances compile to; see
+// notes/toolchain.md, "std::tr1::function".
+
+#include <new>
+#include <stdio.h>
+#include <stdlib.h>
+
+namespace std {
+    namespace tr1 {
+
+        // "Not a type": fills the unused slots of a tuple.
+        struct nat {
+        };
+
+        namespace placeholders {
+            namespace detail {
+                template <int N>
+                struct ph {
+                };
+            }
+
+#ifdef __MWERKS__
+            // Defined by the library; copies of them read nothing, so no
+            // reference to them reaches the object file.
+            extern const detail::ph<1> _1;
+            extern const detail::ph<2> _2;
+#else
+            static const detail::ph<1> _1 = detail::ph<1>();
+            static const detail::ph<2> _2 = detail::ph<2>();
+#endif
+        }
+
+        template <class T0 = nat, class T1 = nat, class T2 = nat, class T3 = nat, class T4 = nat,
+                  class T5 = nat, class T6 = nat, class T7 = nat, class T8 = nat, class T9 = nat>
+        class tuple;
+
+        template <class T0>
+        class tuple<T0, nat, nat, nat, nat, nat, nat, nat, nat, nat> {
+            public:
+                explicit tuple(T0 a0)
+                    : m_0(a0)
+                {
+                }
+
+                T0 m_0;
+        };
+
+        template <class T0, class T1>
+        class tuple<T0, T1, nat, nat, nat, nat, nat, nat, nat, nat> {
+            public:
+                tuple(T0 a0, T1 a1)
+                    : m_0(a0)
+                    , m_1(a1)
+                {
+                }
+
+                T0 m_0;
+                T1 m_1;
+        };
+
+        template <class T0, class T1, class T2>
+        class tuple<T0, T1, T2, nat, nat, nat, nat, nat, nat, nat> {
+            public:
+                tuple(T0 a0, T1 a1, T2 a2)
+                    : m_0(a0)
+                    , m_1(a1)
+                    , m_2(a2)
+                {
+                }
+
+                T0 m_0;
+                T1 m_1;
+                T2 m_2;
+        };
+
+        namespace detail {
+
+            // A pointer to a member function taking one / two arguments,
+            // callable as f(p, a1[, a2]).
+            template <class R, class T, class A1>
+            class mem_fn_1 {
+                public:
+                    typedef R (T::*pmf_type)(A1);
+
+                    explicit mem_fn_1(pmf_type pmf)
+                        : m_pmf(pmf)
+                    {
+                    }
+
+                    R operator()(T *p, A1 a1) const
+                    {
+                        return (p->*m_pmf)(a1);
+                    }
+
+                private:
+                    pmf_type m_pmf;
+            };
+
+            template <class R, class T, class A1, class A2>
+            class mem_fn_2 {
+                public:
+                    typedef R (T::*pmf_type)(A1, A2);
+
+                    explicit mem_fn_2(pmf_type pmf)
+                        : m_pmf(pmf)
+                    {
+                    }
+
+                    R operator()(T *p, A1 a1, A2 a2) const
+                    {
+                        return (p->*m_pmf)(a1, a2);
+                    }
+
+                private:
+                    pmf_type m_pmf;
+            };
+
+            // Picks a bound argument: a stored value is passed as is, a
+            // placeholder ph<N> takes the call's N-th argument.
+            template <class B, class Args>
+            inline B &select_arg(B &b, const Args &)
+            {
+                return b;
+            }
+
+            template <class A0>
+            inline A0 select_arg(placeholders::detail::ph<1> &, const tuple<A0> &args)
+            {
+                return args.m_0;
+            }
+
+            template <class A0, class A1>
+            inline A0 select_arg(placeholders::detail::ph<1> &, const tuple<A0, A1> &args)
+            {
+                return args.m_0;
+            }
+
+            template <class A0, class A1>
+            inline A1 select_arg(placeholders::detail::ph<2> &, const tuple<A0, A1> &args)
+            {
+                return args.m_1;
+            }
+
+            // What bind returns: the function object and its bound
+            // arguments.
+            template <class R, class F, class L>
+            class bound_func;
+
+            template <class R, class F, class B0, class B1>
+            class bound_func<R, F, tuple<B0, B1> > {
+                public:
+                    bound_func(const F &f, const tuple<B0, B1> &l)
+                        : m_f(f)
+                        , m_l(l)
+                    {
+                    }
+
+                    // Calls f with the bound arguments, the placeholders
+                    // replaced by the call's arguments a1...
+                    template <class A1>
+                    R operator()(A1 &a1)
+                    {
+                        tuple<A1 &> args(a1);
+                        return call(args);
+                    }
+
+                    // Takes the call's arguments by value, as the game's
+                    // instances show (the two-argument call keeps a copy of
+                    // the reference tuple on the stack).
+                    template <class Args>
+                    R call(Args args)
+                    {
+                        return m_f(select_arg(m_l.m_0, args), select_arg(m_l.m_1, args));
+                    }
+
+                private:
+                    F m_f;
+                    tuple<B0, B1> m_l;
+            };
+
+            template <class R, class F, class B0, class B1, class B2>
+            class bound_func<R, F, tuple<B0, B1, B2> > {
+                public:
+                    bound_func(const F &f, const tuple<B0, B1, B2> &l)
+                        : m_f(f)
+                        , m_l(l)
+                    {
+                    }
+
+                    template <class A1, class A2>
+                    R operator()(A1 &a1, A2 &a2)
+                    {
+                        tuple<A1 &, A2 &> args(a1, a2);
+                        return call(args);
+                    }
+
+                    template <class Args>
+                    R call(Args args)
+                    {
+                        return m_f(select_arg(m_l.m_0, args), select_arg(m_l.m_1, args),
+                                   select_arg(m_l.m_2, args));
+                    }
+
+                private:
+                    F m_f;
+                    tuple<B0, B1, B2> m_l;
+            };
+
+            // The type-erased callable behind a function<R (A1...)>; Sig is
+            // the matching function pointer type.
+            template <class Sig>
+            class function_base;
+
+            template <class R, class A1>
+            class function_base<R (*)(A1)> {
+                public:
+                    virtual ~function_base() {}
+                    virtual function_base *clone() const = 0;
+                    virtual function_base *clone(void *p) const = 0;
+                    virtual R operator()(A1 a1) = 0;
+            };
+
+            template <class R, class A1, class A2>
+            class function_base<R (*)(A1, A2)> {
+                public:
+                    virtual ~function_base() {}
+                    virtual function_base *clone() const = 0;
+                    virtual function_base *clone(void *p) const = 0;
+                    virtual R operator()(A1 a1, A2 a2) = 0;
+            };
+
+            // F wrapped for a function<Sig>. The two flags are part of the
+            // library's name for the class (both 0 in every instance the
+            // game has: not stored in the function's buffer, not a plain
+            // function pointer); nothing here depends on them.
+            template <class Sig, class F, bool bInPlace, bool bPointer>
+            class function_imp;
+
+            template <class R, class A1, class F, bool bInPlace, bool bPointer>
+            class function_imp<R (*)(A1), F, bInPlace, bPointer> : public function_base<R (*)(A1)> {
+                public:
+                    typedef function_base<R (*)(A1)> base;
+
+                    explicit function_imp(F f)
+                        : m_f(f)
+                    {
+                    }
+
+                    virtual base *clone() const
+                    {
+                        return new function_imp(*this);
+                    }
+
+                    virtual base *clone(void *p) const
+                    {
+                        return new (p) function_imp(*this);
+                    }
+
+                    virtual R operator()(A1 a1)
+                    {
+                        return m_f(a1);
+                    }
+
+                private:
+                    F m_f;
+            };
+
+            template <class R, class A1, class A2, class F, bool bInPlace, bool bPointer>
+            class function_imp<R (*)(A1, A2), F, bInPlace, bPointer> : public function_base<R (*)(A1, A2)> {
+                public:
+                    typedef function_base<R (*)(A1, A2)> base;
+
+                    explicit function_imp(F f)
+                        : m_f(f)
+                    {
+                    }
+
+                    virtual base *clone() const
+                    {
+                        return new function_imp(*this);
+                    }
+
+                    virtual base *clone(void *p) const
+                    {
+                        return new (p) function_imp(*this);
+                    }
+
+                    virtual R operator()(A1 a1, A2 a2)
+                    {
+                        return m_f(a1, a2);
+                    }
+
+                private:
+                    F m_f;
+            };
+        }
+
+        namespace detail {
+            // Prints pMessage to stderr and stops: the library's error
+            // report when exceptions are off. Taking the message as a
+            // parameter matches the game's order (message address before
+            // stderr's).
+            inline void report_error(const char *pMessage)
+            {
+                fprintf(stderr, pMessage);
+                abort();
+            }
+        }
+
+        // bind(&T::f, p, _1[, _2]): calls p->f with the call's arguments.
+        template <class R, class T, class A1, class B1, class B2>
+        inline detail::bound_func<R, detail::mem_fn_1<R, T, A1>, tuple<B1, B2> >
+        bind(R (T::*pmf)(A1), B1 b1, B2 b2)
+        {
+            return detail::bound_func<R, detail::mem_fn_1<R, T, A1>, tuple<B1, B2> >(
+                detail::mem_fn_1<R, T, A1>(pmf), tuple<B1, B2>(b1, b2));
+        }
+
+        template <class R, class T, class A1, class A2, class B1, class B2, class B3>
+        inline detail::bound_func<R, detail::mem_fn_2<R, T, A1, A2>, tuple<B1, B2, B3> >
+        bind(R (T::*pmf)(A1, A2), B1 b1, B2 b2, B3 b3)
+        {
+            return detail::bound_func<R, detail::mem_fn_2<R, T, A1, A2>, tuple<B1, B2, B3> >(
+                detail::mem_fn_2<R, T, A1, A2>(pmf), tuple<B1, B2, B3>(b1, b2, b3));
+        }
+
+        template <class Sig>
+        class function;
+
+        // A copyable holder of any callable with the signature R (A1).
+        // m_pImp points at the wrapped callable: on the heap, or in m_Buf
+        // when it fits there.
+        template <class R, class A1>
+        class function<R (A1)> {
+            private:
+                typedef R (*sig_type)(A1);
+                typedef detail::function_base<sig_type> imp_base;
+
+                struct bool_holder {
+                    int m_bTrue;
+                };
+                typedef int bool_holder::*bool_type;
+
+            public:
+                function()
+                    : m_pImp(0)
+                {
+                }
+
+                // Wraps f; every callable goes on the heap here (the
+                // game's are all larger than the buffer).
+                template <class F>
+                function(F f)
+                    : m_pImp(0)
+                {
+                    if (!is_empty(f)) {
+                        m_pImp = new detail::function_imp<sig_type, F, false, false>(f);
+                    }
+                }
+
+                function(const function &f)
+                    : m_pImp(0)
+                {
+                    if (f.m_pImp == (const imp_base *)f.m_Buf) {
+                        m_pImp = f.m_pImp->clone(m_Buf);
+                    } else if (f.m_pImp != 0) {
+                        m_pImp = f.m_pImp->clone();
+                    }
+                }
+
+                function &operator=(const function &f)
+                {
+                    function(f).swap(*this);
+                    return *this;
+                }
+
+                ~function()
+                {
+                    clear();
+                }
+
+                template <class F>
+                function &operator=(F f)
+                {
+                    function(f).swap(*this);
+                    return *this;
+                }
+
+                // Exchanges the contents; a callable kept in a buffer
+                // moves with it, so its pointer is moved to the other
+                // buffer.
+                void swap(function &f)
+                {
+                    imp_base *pImp = f.m_pImp;
+                    f.m_pImp = m_pImp;
+                    m_pImp = pImp;
+                    long nBuf0 = f.m_Buf[0];
+                    f.m_Buf[0] = m_Buf[0];
+                    m_Buf[0] = nBuf0;
+                    long nBuf1 = f.m_Buf[1];
+                    f.m_Buf[1] = m_Buf[1];
+                    m_Buf[1] = nBuf1;
+                    if (m_pImp == (imp_base *)f.m_Buf) {
+                        m_pImp = (imp_base *)m_Buf;
+                    }
+                    if (f.m_pImp == (imp_base *)m_Buf) {
+                        f.m_pImp = (imp_base *)f.m_Buf;
+                    }
+                }
+
+                // True when there is something to call. The library's
+                // "unspecified bool type": a pointer to a data member, so
+                // the test compiles to a 0/1 value that is then compared.
+                operator bool_type() const
+                {
+                    return m_pImp != 0 ? &bool_holder::m_bTrue : 0;
+                }
+
+                // Calls the held callable; calling an empty function is
+                // an error (bad_function_call; with exceptions off it is
+                // reported and the program stops). Defined after the class.
+                R operator()(A1 a1) const;
+
+            private:
+                // Whether f holds nothing to call (a null function pointer);
+                // any other callable is not empty.
+                static bool is_empty(...)
+                {
+                    return false;
+                }
+
+                void clear()
+                {
+                    if (m_pImp == (imp_base *)m_Buf) {
+                        m_pImp->~imp_base();
+                    } else if (m_pImp != 0) {
+                        delete m_pImp;
+                    }
+                }
+
+                imp_base *m_pImp;
+                long m_Buf[2];
+        };
+
+        template <class R, class A1, class A2>
+        class function<R (A1, A2)> {
+            private:
+                typedef R (*sig_type)(A1, A2);
+                typedef detail::function_base<sig_type> imp_base;
+
+                struct bool_holder {
+                    int m_bTrue;
+                };
+                typedef int bool_holder::*bool_type;
+
+            public:
+                function()
+                    : m_pImp(0)
+                {
+                }
+
+                // Wraps f; every callable goes on the heap here (the
+                // game's are all larger than the buffer).
+                template <class F>
+                function(F f)
+                    : m_pImp(0)
+                {
+                    if (!is_empty(f)) {
+                        m_pImp = new detail::function_imp<sig_type, F, false, false>(f);
+                    }
+                }
+
+                function(const function &f)
+                    : m_pImp(0)
+                {
+                    if (f.m_pImp == (const imp_base *)f.m_Buf) {
+                        m_pImp = f.m_pImp->clone(m_Buf);
+                    } else if (f.m_pImp != 0) {
+                        m_pImp = f.m_pImp->clone();
+                    }
+                }
+
+                function &operator=(const function &f)
+                {
+                    function(f).swap(*this);
+                    return *this;
+                }
+
+                ~function()
+                {
+                    clear();
+                }
+
+                template <class F>
+                function &operator=(F f)
+                {
+                    function(f).swap(*this);
+                    return *this;
+                }
+
+                // Exchanges the contents; a callable kept in a buffer
+                // moves with it, so its pointer is moved to the other
+                // buffer.
+                void swap(function &f)
+                {
+                    imp_base *pImp = f.m_pImp;
+                    f.m_pImp = m_pImp;
+                    m_pImp = pImp;
+                    long nBuf0 = f.m_Buf[0];
+                    f.m_Buf[0] = m_Buf[0];
+                    m_Buf[0] = nBuf0;
+                    long nBuf1 = f.m_Buf[1];
+                    f.m_Buf[1] = m_Buf[1];
+                    m_Buf[1] = nBuf1;
+                    if (m_pImp == (imp_base *)f.m_Buf) {
+                        m_pImp = (imp_base *)m_Buf;
+                    }
+                    if (f.m_pImp == (imp_base *)m_Buf) {
+                        f.m_pImp = (imp_base *)f.m_Buf;
+                    }
+                }
+
+                // True when there is something to call. The library's
+                // "unspecified bool type": a pointer to a data member, so
+                // the test compiles to a 0/1 value that is then compared.
+                operator bool_type() const
+                {
+                    return m_pImp != 0 ? &bool_holder::m_bTrue : 0;
+                }
+
+                R operator()(A1 a1, A2 a2) const;
+
+            private:
+                static bool is_empty(...)
+                {
+                    return false;
+                }
+
+                void clear()
+                {
+                    if (m_pImp == (imp_base *)m_Buf) {
+                        m_pImp->~imp_base();
+                    } else if (m_pImp != 0) {
+                        delete m_pImp;
+                    }
+                }
+
+                imp_base *m_pImp;
+                long m_Buf[2];
+        };
+
+        // Not declared inline: the game's message string sits in the
+        // file's own string pool (MenuF .rodata 0x3488, shared by both
+        // instances), where the compiler puts literals of non-inline
+        // functions; an inline one gets a weak @STRING@ object per
+        // function in .data. Still inlined into every caller.
+        template <class R, class A1>
+        R function<R (A1)>::operator()(A1 a1) const
+        {
+            if (m_pImp == 0) {
+                detail::report_error("bad_function_call");
+            }
+            return (*m_pImp)(a1);
+        }
+
+        template <class R, class A1, class A2>
+        R function<R (A1, A2)>::operator()(A1 a1, A2 a2) const
+        {
+            if (m_pImp == 0) {
+                detail::report_error("bad_function_call");
+            }
+            return (*m_pImp)(a1, a2);
+        }
+    }
+}
+
+#endif /* !FUNCTIONAL_ */

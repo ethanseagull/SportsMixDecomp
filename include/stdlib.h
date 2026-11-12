@@ -10,6 +10,7 @@ extern "C" {
 
 double atof(const char *s);
 int atoi(const char *s);
+void abort(void);
 
 #ifdef __cplusplus
 }

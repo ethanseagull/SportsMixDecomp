@@ -25,11 +25,8 @@ namespace msw {
             long m_nMax;                // N
             long m_nNum;                // handles in use (CSelectMenuLayoutBase::CreateLytObj appends)
 
-            // vptr after the data
-            virtual ~CMenuLytObj()
-            {
-                DeleteLytObj();
-            }
+            // vptr after the data. Defined after the class.
+            virtual ~CMenuLytObj();
 
             // The object behind handle nIndex, or null. Inline in the game.
             T *GetLytObj(int nIndex = 0)
@@ -56,6 +53,18 @@ namespace msw {
                 }
             }
     };
+
+    // Defined outside the class and not declared inline (it is still
+    // inlined into derived destructors): with an in-class body, every
+    // derived constructor and destructor makes the compiler emit the weak
+    // copy right after itself, where the game has it among the template
+    // instances at the end of the file (MenuF CSelectMenuLayoutBase.cpp,
+    // DodgeF CCockpitDodgeTelopInOutChange.cpp).
+    template <class T, int N>
+    CMenuLytObj<T, N>::~CMenuLytObj()
+    {
+        DeleteLytObj();
+    }
 }
 
 #endif /* !CMENULYTOBJ_HPP_ */

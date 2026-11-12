@@ -5,7 +5,6 @@
 Matching game/menu/module.cpp
 Matching game/menu/CFade.cpp
 Matching game/menu/CMenuMdlTableSet.cpp pch=MenuF_g3d
-Matching game/menu/CInfoTabChange.cpp
 Matching game/menu/CEffectCtrlMenu.cpp
 Matching game/menu/CDepthOfFieldValue.cpp
 Matching game/menu/CButton0.cpp

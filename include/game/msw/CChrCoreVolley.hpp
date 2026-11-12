@@ -337,6 +337,10 @@ namespace msw {
             // at; sets the work's shot frame from the trick motion.
             void Util_GetTargetCourtRect_(bcs::FVEC4 &rRect);
             void SubStateAirTrickDoGetBallShotTrg_(STATE_WORK_AIR_TRICK *pWork);
+            // (added for game/volley/CChrCoreVolleyWaluigi.cpp; DOL, meaning
+            // guessed) Moves the target marker to rPos, kept on court
+            // nCourt (rPos is clipped in place).
+            void SetTargetMarkerPosClip__(long nCourt, bcs::FVEC3 &rPos);
 
         protected:
             // Not mapped yet; size 0x964.
@@ -352,7 +356,12 @@ namespace msw {
             // 0x838, 0x868 (names guessed): the target marker's position,
             // and a value CChrCoreVolleySiroma sets with the marker.
             bcs::FVEC3 m_TargetMarkerPos;
-            unsigned char m_Unk844[0x868 - 0x844];
+            unsigned char m_Unk844[0x850 - 0x844];
+            // 0x850 (name guessed; CChrCoreVolleyWaluigi passes it to
+            // SetTargetMarkerPosClip__ with the marker's position): the
+            // court the target marker is kept on.
+            long m_nTargetMarkerCourt;
+            unsigned char m_Unk854[0x868 - 0x854];
             float m_fTargetMarkerUnk868;
             unsigned char m_Unk86C[0x888 - 0x86C];
             // 0x888, 0x88C (names guessed): cleared when a block is hit
@@ -535,13 +544,48 @@ namespace msw {
             virtual ~CChrCoreVolleyWario();
     };
 
+    // Waluigi: his air trick splits the ball in four (three copies,
+    // CC06_VOLLEY::CBallVolleyWaluigi, and the ball itself hang from the
+    // hands of his option model) and he spikes them one after the other
+    // (game/volley/CChrCoreVolleyWaluigi.cpp).
     class CChrCoreVolleyWaluigi : public CChrCoreVolley {
         public:
+            enum { SPLIT_BALL_NUM = 3 };
+
             CChrCoreVolleyWaluigi();
             virtual ~CChrCoreVolleyWaluigi();
+            virtual void Reset_();                                     // 0x384
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void SubStateSpikeDoSmashSpikeEffect_(STATE_WORK_SPIKE *); // 0xCEC
+            virtual float SubStateAirTrickGetTrickMotFrame_(STATE_WORK_AIR_TRICK *, long); // 0xD04
+            virtual float SubStateAirTrickGetTrickRotFrame_(STATE_WORK_AIR_TRICK *); // 0xD0C
+            virtual void SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xD10
+            virtual int SubStateAirTrickIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD1C
+            virtual void SubStateAirTrickStartBallAdsorb_(STATE_WORK_AIR_TRICK *, CBall *); // 0xD24
+            virtual float SubStateAirTrickGetBallAdsorbFrame_(STATE_WORK_AIR_TRICK *); // 0xD28
+            virtual void SubStateAirTrickTrgBallAdsorbEnd_(STATE_WORK_AIR_TRICK *); // 0xD30
+            virtual void SubStateAirTrickPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xD38
+            virtual void SubStateAirTrickStartArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD40
+            virtual void SubStateAirTrickPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xD44
+            virtual int SubStateAirTrickIsEndArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD48
+            virtual void SubStateAirTrickPlayLandMotion_(STATE_WORK_AIR_TRICK *); // 0xD5C
+
+            // Makes the three copies and hangs them and the ball from the
+            // option model's hands.
+            void SubStateAirTrickCreateSplitBall_();
 
         protected:
-            unsigned char m_Unk964[0x994 - 0x964]; // allocated with 0x994 bytes
+            // (inline helpers, names guessed) Copy nIdx, or null when it is
+            // gone; deletes the copies left and forgets them; spikes copy
+            // nIdx at the work's target and moves the target marker.
+            CBall *GetSplitBall_(long nIdx);
+            void DeleteSplitBall_();
+            void ShootSplitBall_(STATE_WORK_AIR_TRICK *pWork, long nIdx);
+
+            unsigned char m_Unk964[0x988 - 0x964]; // allocated with 0x994 bytes
+            // 0x988 (name guessed): the task ids of the copies, 0 for none.
+            unsigned long m_ahSplitBall[SPLIT_BALL_NUM];
     };
 
     // Donkey Kong's air trick jumps up and pounds the ground, which shakes

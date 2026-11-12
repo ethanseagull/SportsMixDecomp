@@ -39,7 +39,7 @@ Equivalent game/dodge/CCockpitDodge.cpp
 Equivalent game/dodge/CStageDodge11.cpp flags=noauto
 Equivalent game/dodge/CStageDodge03.cpp
 Equivalent game/dodge/CChrCoreDodgeLuigi.cpp
-Equivalent game/dodge/CChrCoreDodgeMario.cpp
+Matching game/dodge/CChrCoreDodgeMario.cpp
 Matching game/dodge/CStageDodge17.cpp
 Equivalent game/dodge/CChrCoreDodgeKinopio.cpp
 Equivalent game/dodge/CChrCoreDodgeKuroma.cpp
@@ -60,7 +60,7 @@ Equivalent game/dodge/CChrCoreDodgePeach.cpp
 Matching game/dodge/CStageDodgeDOD56.cpp
 Matching game/dodge/CStageDodgeDOD57.cpp
 Equivalent game/dodge/CHaikyuManDD.cpp
-Equivalent game/dodge/CChrCoreDodgeMoogle.cpp
+Matching game/dodge/CChrCoreDodgeMoogle.cpp
 Matching game/dodge/CChrCoreDodgeDonkey.cpp
 Matching game/dodge/CChrCoreDodgeDiddy.cpp
 Equivalent game/dodge/CCameraDodgeBD.cpp

@@ -47,6 +47,9 @@ modules:
   name: DodgeF
   force_active:
   - DodgeModuleMain
+  - UnusedString__22CChrCoreDodgeMario_cpp
+  - UnusedFloat__22CChrCoreDodgeMario_cpp
+  - UnusedFloat__23CChrCoreDodgeMoogle_cpp
   symbols: config/RMKE01/DodgeF/symbols.txt
   splits: config/RMKE01/DodgeF/splits.txt
 - object: files/Module/Final/HockeyF.rel

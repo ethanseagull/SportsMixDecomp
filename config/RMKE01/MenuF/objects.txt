@@ -23,6 +23,7 @@ Matching game/menu/CHowTo.cpp
 Equivalent game/menu/CButtonA.cpp
 Equivalent game/menu/CButtonACode.cpp
 Equivalent game/menu/CCharaMdl.cpp
+Equivalent game/menu/CScoreBook.cpp
 Matching game/menu/CScoreTop.cpp
 Equivalent game/menu/CGameSelect.cpp
 Equivalent game/menu/CChrSign.cpp
@@ -58,6 +59,7 @@ Equivalent game/menu/CRuleInfo.cpp
 Equivalent game/menu/CTrofy.cpp
 Equivalent game/menu/CTopMenu.cpp
 Equivalent game/menu/CPartyInfo.cpp
+Equivalent game/menu/CWiFiTopA.cpp
 Equivalent game/menu/CCupSelectTab.cpp
 Equivalent game/menu/unit_4BB48.cpp
 Equivalent game/menu/CTournamentLoad.cpp

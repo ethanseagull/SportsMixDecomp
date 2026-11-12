@@ -4,7 +4,7 @@
 #include <new>
 
 #include "nw4r/db/Warning.hpp"
-#include "nw4r/lyt/Animation.hpp"
+#include "nw4r/lyt/animation.h"
 #include "nw4r/lyt/Pane.hpp"
 #include "revolution/mem.h"
 
@@ -19,15 +19,17 @@ namespace nw4r {
     namespace lyt {
 
         class ResourceAccessor;
+        class DrawInfo;
 
         // Lives in the DOL. Size 0x20 (bcs::G2D::CLayoutDL's own members
-        // start there). The virtuals up to 0x2C are the ones
-        // bcs::G2D::CLayoutBase calls, in vtable order (added for DOL
-        // game/bcs/G2D/CLayoutBase.cpp); the later slots are not declared.
+        // start there). Virtuals in vtable order from 0x08 (up to 0x2C added
+        // for DOL game/bcs/G2D/CLayoutBase.cpp, the constructor and 0x30 on
+        // for game/msw/CNowLoading.cpp).
         class Layout {
             public:
                 typedef ut::LinkList<AnimTransform, 4> AnimTransformList;
 
+                Layout();
                 virtual ~Layout();                                                  // 0x08
                 virtual bool Build(const void *pLytResBuf, ResourceAccessor *pAccessor); // 0x0C
                 virtual AnimTransform *CreateAnimTransform();                       // 0x10
@@ -38,6 +40,9 @@ namespace nw4r {
                 virtual void UnbindAllAnimation();                                  // 0x24
                 virtual bool BindAnimationAuto(const AnimResource &rRes, ResourceAccessor *pAccessor); // 0x28
                 virtual void SetAnimationEnable(AnimTransform *pAnimTrans, bool bEnable); // 0x2C
+                virtual void CalculateMtx(const DrawInfo &rInfo);                   // 0x30
+                virtual void Draw(const DrawInfo &rInfo);                           // 0x34
+                virtual void Animate(unsigned long option);                         // 0x38
 
                 AnimTransformList &GetAnimTransformList() { return mAnimTransList; }
                 Pane *GetRootPane() const { return mpRootPane; }
@@ -71,6 +76,11 @@ namespace nw4r {
                 void *mpGroupContainer;           // 0x14
                 Size mLayoutSize;                 // 0x18
         };
+
+        // (the DOL's fn_8041E6C0, added for game/msw/CNowLoading.cpp)
+        // Registers the library version and sets up the quantization
+        // registers it uses.
+        void LytInit();
     }
 }
 

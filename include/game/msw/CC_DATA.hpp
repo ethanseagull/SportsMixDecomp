@@ -24,6 +24,20 @@ namespace msw {
             struct ARTS_OPT_CREATE_INFO;
             static const ARTS_OPT_CREATE_INFO *GetArtsOptionMdl_CreateInfo(long nChr, long nMode);
 
+            // (fields added for BasketF game/basket/CcWarioSmokeMgr.cpp;
+            // names guessed, size not known) The names of the model, of
+            // its shadow and of its reflection model in the option's
+            // resource file (null for none), the node settings for its
+            // motions, and the kind of shadow.
+            struct ARTS_OPT_CREATE_INFO {
+                const char *m_pMdlName;      // 0x00
+                const char *m_pShadowName;   // 0x04
+                const char *m_pRefName;      // 0x08
+                const bcs::CAnmObjMotBase::NODE_EX_INFO *m_pNodeExInfo; // 0x0C
+                unsigned char m_Unk10[0x4];
+                long m_nShadowType;          // 0x14
+            };
+
             // (field names guessed) The characters' movement parameters.
             struct CHR_PARAM {
                 // A move to a point over a number of frames.

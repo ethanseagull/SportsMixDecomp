@@ -1,6 +1,7 @@
 #ifndef MSW_CCHROBSTACLE_HPP_
 #define MSW_CCHROBSTACLE_HPP_
 
+#include "bcs/BCS_Math.hpp"
 #include "bcs/CUnivTask.hpp"
 #include "bcs/FVEC3.hpp"
 #include "game/msw/CAtkCollision.hpp"
@@ -51,7 +52,13 @@ namespace msw {
             float m_fRotY;               // 0x54
             unsigned char m_Unk58[0x4];
             float m_fRadius;             // 0x5C
-            unsigned char m_Unk60[0x88 - 0x60];
+            unsigned char m_Unk60[0x68 - 0x60];
+            // 0x68-0x87 (names guessed, mapped for BasketF's
+            // CC05_BASKET::CcWarioSmokeBomb): the orientation of a thrown
+            // obstacle, its speed per frame and the gravity on it.
+            bcs::QUATERNION m_Quat;      // 0x68
+            bcs::FVEC3 m_Velocity;       // 0x78
+            float m_fGravity;            // 0x84
             // 0x88 (name guessed): its attack collision (GetAttackRadius
             // reads it; BasketF's CcSiromaMagicCircle sets it up;
             // VolleyF's CcDaisyFlowerGarden reads it too).

@@ -1,12 +1,13 @@
-#ifndef NW4R_LYT_ANIMATION_HPP_
-#define NW4R_LYT_ANIMATION_HPP_
+#ifndef NW4R_LYT_ANIMATION_H_
+#define NW4R_LYT_ANIMATION_H_
 
 #include "nw4r/ut/LinkList.h"
 
-// Layout animations of the DOL's NW4R library. Only what
-// bcs::G2D::CLayoutBase uses; offsets are what its code reads. Names follow
-// the public ogws decompilation's description of nw4r::lyt (from memory, no
-// code copied).
+// Layout animations of the DOL's NW4R library: what game/msw/CNowLoading.cpp
+// (the frame at 0x10 and the non-virtual frame count) and DOL
+// game/bcs/G2D/CLayoutBase.cpp use; offsets are what their code reads. Names
+// follow the public ogws decompilation's description of nw4r::lyt (no code
+// copied).
 
 namespace nw4r {
     namespace lyt {
@@ -58,4 +59,4 @@ namespace nw4r {
     }
 }
 
-#endif /* !NW4R_LYT_ANIMATION_HPP_ */
+#endif /* !NW4R_LYT_ANIMATION_H_ */

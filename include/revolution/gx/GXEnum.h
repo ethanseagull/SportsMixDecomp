@@ -3,6 +3,11 @@
 
 // Only what is used so far: the enumeration named in
 // msw::CEventModel::SetMatTevColor's mangled name.
+typedef enum _GXProjectionType {
+    GX_PERSPECTIVE,
+    GX_ORTHOGRAPHIC
+} GXProjectionType;
+
 typedef enum _GXTevRegID {
     GX_TEVPREV,
     GX_TEVREG0,

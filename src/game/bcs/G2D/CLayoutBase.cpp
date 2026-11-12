@@ -8,7 +8,7 @@
 #include "bcs/G2D/CLytResource.hpp"
 #include "bcs/G2D/CPaneCtrl.hpp"
 #include "bcs/G2D/G2DUtil.hpp"
-#include "nw4r/lyt/Animation.hpp"
+#include "nw4r/lyt/animation.h"
 #include "nw4r/lyt/ResourceAccessor.hpp"
 #include "nw4r/lyt/layout.h"
 

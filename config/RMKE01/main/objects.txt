@@ -78,3 +78,4 @@ Equivalent game/bcs/CCameraAnmCalc.cpp
 Matching game/bcs/CListNodeBase.cpp
 Equivalent game/msw/CStgGmk_Wave.cpp
 Equivalent game/msw/CStgGmk_Case.cpp
+Matching game/msw/CMenuTask.cpp

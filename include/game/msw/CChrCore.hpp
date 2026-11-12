@@ -1230,6 +1230,11 @@ namespace msw {
             const bcs::FVEC3 &GetRot();
             // Turns towards fRotY by fRate of the difference.
             void RotateYRate_(float fRotY, float fRate);
+            // (added for game/basket/unit_2FD1C.cpp; meanings guessed) Turns
+            // towards fRotY by at most fStep; turns attack collision nIndex
+            // on or off.
+            void RotateYTo_(float fRotY, float fStep);
+            void CollAtkSetEnable_(long nIndex, int bEnable);
             int IsAnimEnd(unsigned long nSlot) const;
             void SetMoveMotType(long nType);
             void PlayVoice(long nVoice, unsigned long);
@@ -1316,6 +1321,9 @@ namespace msw {
             // (added for game/boss/CStickObj.cpp; meaning guessed) Turns the
             // effect in slot nSlot to the yaw fRotY.
             void Eff_SetRotateY(long nSlot, float fRotY);
+            // (added for game/basket/unit_2FD1C.cpp; meaning guessed) Moves
+            // the effect in slot nSlot by rOfs from its node.
+            void Eff_SetTrans(long nSlot, const bcs::FVEC3 &rOfs);
             // (added for game/boss/CStickObj.cpp; meaning guessed) Turns
             // towards pos by fRate of the way.
             void RotateYToPosRate_(const bcs::FVEC3 &pos, float fRate);

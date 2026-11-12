@@ -177,6 +177,8 @@ namespace msw {
             // The same member: the ninja's special shot sets 0.17 before
             // it shoots.
             void SetArtsShootSpeed(float fSpeed) { m_fArtsShotUnk384 = fSpeed; }
+            // (name guessed; added for game/basket/unit_9AFD4.cpp)
+            long GetPassTargetNo() const { return m_nPassTargetNo; }
             // (name guessed) Clears bits of m_nBasketFlag.
             void OffBasketFlag(unsigned long nBit) { m_nBasketFlag &= ~nBit; }
 
@@ -188,7 +190,11 @@ namespace msw {
             unsigned char m_Unk33C[0x344 - 0x33C];
             long m_nShotChrIdx;         // 0x344
             long m_nPassChrIdx;         // 0x348
-            unsigned char m_Unk34C[0x354 - 0x34C];
+            // 0x34C (name guessed): the player number of the character a
+            // pass goes to (BasketF's computer driver compares it with
+            // CChrCore::GetPlayerNo).
+            long m_nPassTargetNo;
+            unsigned char m_Unk350[0x354 - 0x350];
             long m_nShotArea;           // 0x354
             long m_nShotTeamIdx;        // 0x358 (passed to CGame::GetTargetGoalIdx)
             long m_nTargetGoalIdx;      // 0x35C

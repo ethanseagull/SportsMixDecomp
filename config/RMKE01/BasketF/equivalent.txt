@@ -46,6 +46,7 @@ BasketF CtorStateAlleyoop__Q23msw14CChrCoreBasketFv near 99.8 register choice / 
 BasketF CtorStateAppear__Q23msw16CNpcStringBasketFv near 99.4 99.4: register numbering only
 BasketF CtorStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.0 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CtorStateAttach__Q23msw16CBallBasketFruitFv near 99.4 float register choice for the tilt-centre and 0/1 axis constants; same loads, operations and stores
+BasketF CtorStateBlockCut__Q23msw14CChrCoreBasketFv near 98.0 98.0: instruction schedule only (autopilot regs no gain)
 BasketF CtorStateCatch__Q23msw14CChrCoreBasketFv near 99.5 register choice only: FsmqGetWork's queue head and work base swap r3/r4
 BasketF CtorStateCatch__Q23msw19CNpcGhostBasketBaseFv near 99.1 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CtorStateDamage__Q23msw14CChrCoreBasketFv near 99.8 99.8: register numbering only (regs search no gain)
@@ -61,6 +62,8 @@ BasketF CtorStateNeutral__Q23msw14CChrCoreBasketFv near 99.7 99.7: stores to m_U
 BasketF CtorStatePassCatch__Q23msw14CChrCoreBasketFv near 99.4 register choice only: FsmqGetWork's queue head and work base swap r3/r4
 BasketF CtorStatePursuit__Q23msw19CNpcGhostBasketBaseFv near 98.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CtorStateReboundDunk__Q23msw14CChrCoreBasketFv near 99.9 register choice / instruction order only (inlined Fsmq head/tail loads)
+BasketF CtorStateSideStep__Q23msw14CChrCoreBasketFv near 99.1 99.1: instruction schedule only
+BasketF CtorStateSmashCut__Q23msw14CChrCoreBasketFv near 95.1 95.1: IsAnmFlipPlay ternary tested with cmpwi where original uses mr. (same test), plus register/order in frame-count arithmetic
 BasketF CtorStateSmashCut__Q23msw19CChrCoreBasketSlimeFv near 95.5 95.5%: second float of the const param struct read through a copy of the base register; same values/stores
 BasketF CtorStateSmashCut__Q23msw19CChrCoreBasketYoshiFv near 99.5 instruction order and registers only
 BasketF DetectMapHit___Q23msw14CCollManBasketFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 98.4 98.4%, schedule only: the 0.0f load at entry is scheduled later and the two-court gap calculation assigns float registers differently; constants, calls, memory accesses and branch targets identical
@@ -149,6 +152,7 @@ BasketF LoopStateRun__Q23msw14CChrCoreBasketFv near 99.6 99.6: original's inline
 BasketF LoopStateSizeChange__Q23msw14CChrCoreBasketFv near 99.8 99.8: FsmqGetWork tail/head load order
 BasketF LoopStateSleep__Q23msw19CNpcGhostBasketBaseFv near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateSliding__Q23msw14CChrCoreBasketFv near 99.9 99.9: register choice, operand order inside fnmsubs/fmadds
+BasketF LoopStateSmashCut__Q23msw14CChrCoreBasketFv near 93.2 93.2: IsAnmFlipPlay ternary cmpwi vs mr. (twice, same test) and argument setup order
 BasketF LoopStateSmashCut__Q23msw19CChrCoreBasketSlimeFv near 99.7 99.7%: r3/r4 choice for the work pointer only
 BasketF LoopStateSmashCut__Q23msw19CChrCoreBasketYoshiFv near 85.9 control flow, calls, constants and fields match; ours keeps one .rodata base register where the original reloads lis/@l per constant (toolchain.md literal pooling), and cmpwi vs mr. on IsAnmFlipPlay
 BasketF LoopStateSmashCut__Q23msw20CChrCoreBasketKuromaFv near 94.5 stack slots of vector temporaries, register choice, fmadds operand order, one extra fmr in the original
@@ -259,6 +263,8 @@ BasketF SubStateDunkCtor___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE
 BasketF SubStateNeedBlockWork___Q23msw14CChrCoreBasketFif near 99.9 99.9: register choice only
 BasketF SubStateRunBlockWorkMove___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket14STATE_WORK_RUN near 98.5 98.5: one duplicated beq on the same compare, FsmqPushState head/tail load order, flag stored as li 0/ori 1 vs li 1 (same value)
 BasketF SubStateRunNormal___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket14STATE_WORK_RUN near 99.8 99.8: register choice only
+BasketF SubStateSmashCutStraight___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket20STATE_WORK_SMASH_CUT near 94.1 94.1: IsAnmFlipPlay ternary cmpwi vs mr. (3x, same test), register choice/order
+BasketF SubStateSmashCut___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket20STATE_WORK_SMASH_CUT near 94.1 94.1: IsAnmFlipPlay ternary cmpwi vs mr. (4x, same test), float register choice/order, two extra mr copies
 BasketF SubThkMainOffenseGoDunkAreaforLuiman___Q23msw17CComDrvBasketGameFv near 99.3 registers plus stack slots of the XZ-distance helper temporaries
 BasketF ThkMainDefenseStar___Q23msw17CComDrvBasketGameFv near 99.6 register numbering / scheduling only
 BasketF ThkMainDefense___Q23msw17CComDrvBasketGameFv near 98.6 registers plus stack slots of the XZ-distance helper temporaries

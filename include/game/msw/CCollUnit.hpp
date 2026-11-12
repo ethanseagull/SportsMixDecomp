@@ -17,6 +17,9 @@ namespace msw {
 
             void SetCollKind(long kind);
             void SetCollType(long type);
+            // (added for game/basket/unit_2FD1C.cpp) The kind of attack (as
+            // CCollAtkUnit's word at 0x84; the smash cut sets 0x20000).
+            void SetAtkType(unsigned long type);
             void SetPos(const bcs::FVEC3 &rPos);
             // (name guessed; the DOL's fn_80106870, a switch on the shape at
             // 0x13) Recomputes the bounding box; CBodyCollision::CalcAABBAll.

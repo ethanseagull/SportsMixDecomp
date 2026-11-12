@@ -162,6 +162,10 @@ namespace msw {
             // (DOL; added for VolleyF game/volley/CComDrvVolleyRR.cpp) Turn
             // to face the front.
             void ActCallLookFront();
+            // (DOL; added for BasketF game/basket/unit_9AFD4.cpp) Turn to
+            // the ball; a random number below fMax.
+            void ActCallLookBall();
+            float RandMaxF(float fMax) const;
             // (DOL) A random number between fMin and fMax (RandRangeF below
             // is the other generator; which is which is not known).
             float RandRange(float fMin, float fMax) const;
@@ -313,7 +317,11 @@ namespace msw {
             // guards, in the court's frame (BasketF's CComDrvBasketGame
             // measures its shots and its defence from them).
             bcs::FVEC3 m_TargetGoalPos;
-            unsigned char m_Unk13C[0x154 - 0x13C];
+            unsigned char m_Unk13C[0x148 - 0x13C];
+            // 0x148 (meaning not known; added for BasketF
+            // game/basket/unit_9AFD4.cpp): CComDrvBasketGame::ActLoopGoSmash
+            // runs from it most of the way to the ball holder.
+            bcs::FVEC3 m_Pos148;
             bcs::FVEC3 m_GuardGoalPos;
             // 0x160 to 0x16C (names guessed): the obstacle a gimmick
             // driver is turning round (VolleyF CComDrvVolleyRR::

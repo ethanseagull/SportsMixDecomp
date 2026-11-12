@@ -21,6 +21,15 @@ namespace bcs {
     void Draw2D_SetBlendNone();
     // (fn_80071A08) A filled rectangle of colour `color`.
     void Draw2D_FillRect(short x, short y, short w, short h, BCS_Color color);
+    // (fn_80071BB8, name guessed; added for the strap screen in
+    // game/bcs/CTask.cpp) Draw2D_FillRect with alpha blending, setting up
+    // its own projection.
+    void Draw2D_FillRectAlpha(short x, short y, short w, short h, BCS_Color color);
+    // (fn_80071DA0, name guessed; added for the strap screen) The loaded
+    // texture on the rectangle (x, y, w, h), texture coordinates (s0, t0)
+    // to (s1, t1); the two ints are not known (called with 0, 0).
+    void Draw2D_DrawTexRect(short x, short y, short w, short h, BCS_Color color, float s0, float t0, float s1,
+                            float t1, int nUnk0, int nUnk1);
     // Added for MenuF game/menu/CBgDisplay.cpp: draws the loaded texture on
     // the screen rectangle (x, y, w, h) with texture coordinates (s0, t0)
     // to (s1, t1); the two ints are not known (called with 0, 1).

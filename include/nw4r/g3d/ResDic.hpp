@@ -18,6 +18,18 @@ namespace nw4r {
             public:
                 explicit ResName(const ResNameData *pData = 0) : m_pData(pData) {}
 
+                // (added for DOL game/msw/CStgMdl.cpp) The check, its file
+                // and line are the ones in its inline copies.
+                const ResNameData &ref() const
+                {
+                    if (m_pData == 0) {
+                        db::Panic("g3d_rescommon_ac.h", 143, "NW4R:Pointer must not be NULL (mpData)");
+                    }
+                    return *m_pData;
+                }
+                unsigned long GetLength() const { return ref().len; }
+                const char *GetName() const { return ref().str; }
+
             private:
                 const ResNameData *m_pData; // 0x00
         };
@@ -73,6 +85,8 @@ namespace nw4r {
 
                 // Index of the entry named `pName`, -1 when there is none (DOL).
                 long GetIndex(const char *pName) const;
+                // (DOL; added for bcs::CAnmChrMotion) -1 when not found.
+                long GetIndex(ResName name) const;
 
                 // The data of the idx-th named entry; null when the
                 // dictionary is not valid.

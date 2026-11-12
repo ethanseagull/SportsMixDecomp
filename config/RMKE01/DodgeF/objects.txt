@@ -21,10 +21,10 @@ Matching game/dodge/unit_77468.cpp
 Matching game/dodge/CStageDodge01.cpp
 Matching game/dodge/CStageFactoryDodge.cpp
 Equivalent game/dodge/CEventDemoDodge.cpp
-Equivalent game/dodge/CCockpitDodgePause.cpp
+Matching game/dodge/CCockpitDodgePause.cpp
 Equivalent game/dodge/CStageDodge13.cpp
 Equivalent game/dodge/CCockpitDodgeCoin.cpp
-Equivalent game/dodge/CCockpitDodgePauseResult.cpp
+Matching game/dodge/CCockpitDodgePauseResult.cpp
 Matching game/dodge/CItemDodgeRShell.cpp
 Matching game/dodge/CStageDodge04.cpp
 Equivalent game/dodge/CStageDodge07.cpp

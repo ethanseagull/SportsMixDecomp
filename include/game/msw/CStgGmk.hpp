@@ -19,18 +19,13 @@ namespace msw {
             CStgGmk(bcs::CTask *pParent, unsigned long arg);
             virtual ~CStgGmk();
 
-            // Inline: BasketF's game/basket/CGoalObjBasket.cpp and HockeyF's
-            // game/hockey/CGoalObjHockey.cpp have weak copies (their goals
-            // keep these two of CStgGmk). Defined below the class.
-            virtual CStgAct *NewAct(long heap);
-            virtual CStgDrv *NewDrv(long heap);
-
-            // Overrides of msw::CStgObj's hooks; CStgObj::OnCalcSum is not
-            // overridden here.
-            virtual void OnPreCreate() {}
-            virtual void OnPostCreate();
-            virtual void OnSceneEntry() {}
-            virtual void OnSceneLeave() {}
+            // The overrides of msw::CStgObj's virtuals (NewAct to OnSceneLeave)
+            // are declared between GetClusterIndex and OnEntranceDemoStart:
+            // that does not move a vtable slot, but the weak inline copies
+            // come out in reverse declaration order, and every module has
+            // ...OnEntranceDemoStart, OnPreCreate, GetClusterIndex... and
+            // ...OnSceneLeave, OnSceneEntry, OnPreCreate, NewDrv, NewAct,
+            // GetClusterIndex... (BasketF/DodgeF/VolleyF/HockeyF symbols).
             virtual void SetType(int type) { m_nType = type; }
             virtual int GetType() const { return m_nType; }
             virtual void SetCluster(CStgGmkClusterImpl *pCluster, long idx)
@@ -40,6 +35,26 @@ namespace msw {
             }
             virtual CStgGmkClusterImpl *GetCluster() const { return m_pCluster; }
             virtual long GetClusterIndex() const { return m_nClusterIdx; }
+
+            // Inline: BasketF's game/basket/CGoalObjBasket.cpp and HockeyF's
+            // game/hockey/CGoalObjHockey.cpp have weak copies (their goals
+            // keep these two of CStgGmk). Defined below the class.
+            virtual CStgAct *NewAct(long heap);
+            virtual CStgDrv *NewDrv(long heap);
+            // A plain model, as CStgObj's. Inline: the vtables of CStgGmk
+            // and msw::CStageNet both name the weak copy that
+            // game/msw/CStageNet.cpp emits (DOL 0x8016AD10).
+            virtual CStgMdl *NewMdl(long heap, unsigned long idx);
+
+            // Overrides of msw::CStgObj's hooks; CStgObj::OnCalcSum is not
+            // overridden here.
+            virtual void OnPreCreate() {}
+            // Empty inline: CStgGmk's vtable names a 4-byte weak copy
+            // (DOL 0x8014B4E4).
+            virtual void OnPostCreate() {}
+            virtual void OnSceneEntry() {}
+            virtual void OnSceneLeave() {}
+
             virtual void OnEntranceDemoStart() {}
             virtual void OnGameInit() {}
             virtual void OnGameStart() {}
@@ -78,6 +93,7 @@ namespace msw {
     // A plain gimmick actor and driver.
     inline CStgAct *CStgGmk::NewAct(long heap) { return new (heap) CStgGmkAct(this); }
     inline CStgDrv *CStgGmk::NewDrv(long heap) { return new (heap) CStgDrv(this); }
+    inline CStgMdl *CStgGmk::NewMdl(long heap, unsigned long idx) { return new (heap) CStgMdl(this); }
 }
 
 #endif /* !MSW_CSTGGMK_HPP_ */

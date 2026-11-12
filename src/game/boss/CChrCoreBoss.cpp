@@ -462,9 +462,9 @@ void msw::CChrCoreBoss::SetConditionEffect_(long nCondition, unsigned long nType
     }
 }
 
-void msw::CChrCoreBoss::CalcMoveSpeedRate_(float fSpeed, long)
+float msw::CChrCoreBoss::CalcMoveSpeedRate_(float fSpeed, long)
 {
-    CalcContiditionMoveSpeed_(fSpeed);
+    return CalcContiditionMoveSpeed_(fSpeed);
 }
 
 float msw::CChrCoreBoss::CalcContiditionMoveSpeed_(float fSpeed) const

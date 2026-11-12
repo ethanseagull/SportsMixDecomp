@@ -114,7 +114,6 @@ DodgeF PopDamageLife__Q23msw15CEventDemoDodgeFi near 99.5 99.5%: character numbe
 DodgeF PreStart__Q33msw13CStageDodge0310CWaterInfoFlfi near 93.9 original also computes max(WATER_NUM,0) with srawi/andc as the loop bound after the >0 guard; same iteration count; registers.
 DodgeF ResetDamageDemo__Q23msw11EvDemoDodgeFv near 99.1 99.1%: register choice only (identical after renumbering)
 DodgeF Run__Q23msw12CHaikyuManDDFfPv near 97.8 97.8%: reloads m_pData/m_nIndex at the loop top where the original reuses the values its loop test loaded (no write in between), one lfs order
-DodgeF ScoreBoard_Loop__Q23msw18CCockpitDodgePauseFv near 98.0 register allocation only (as CCockpitBasketPause::ScoreBoard_Loop): the original reuses the table-pointer register for the third result page, ours takes one more saved register (stmw/lmw); same loads, stores, calls and branches
 DodgeF ScoreInWait__Q23msw17CCockpitDodgeCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 DodgeF ScoreIn__Q23msw17CCockpitDodgeCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 DodgeF ScoreOutWait__Q23msw17CCockpitDodgeCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
@@ -131,7 +130,6 @@ DodgeF SetCoinValue__Q23msw17CCockpitDodgeCoinFll near 98.9 register allocation 
 DodgeF SetCountEffect__Q23msw18CCockpitDodgeCoderFi near 98.7 register choice only: the task kind and the effect id swap two saved registers; same calls, constants, loads, stores and branches
 DodgeF SetCountInWait__Q23msw18CCockpitDodgeCoderFv near 99.2 register choice only: the loop counter, the table pointer and the pane-accessor temporary get other saved registers (as in HockeyF CCockpitHockeyCoder::ScoreOut); same calls, constants, loads, stores and branches
 DodgeF SetCountIn__Q23msw18CCockpitDodgeCoderFv near 99.2 register choice only: the loop counter, the table pointer and the pane-accessor temporary get other saved registers (as in HockeyF CCockpitHockeyCoder::ScoreOut); same calls, constants, loads, stores and branches
-DodgeF SetCountNum__Q23msw24CCockpitDodgePauseResultFl near 99.2 registers only (as CCockpitBasketPauseResult::SetCountNum): the pane accessor and the computed show flag swap r30/r31; same instructions, order and stack frame
 DodgeF SetCountOutWait__Q23msw18CCockpitDodgeCoderFv near 99.2 register choice only: the loop counter, the table pointer and the pane-accessor temporary get other saved registers (as in HockeyF CCockpitHockeyCoder::ScoreOut); same calls, constants, loads, stores and branches
 DodgeF SetCountOut__Q23msw18CCockpitDodgeCoderFv near 99.2 register choice only: the loop counter, the table pointer and the pane-accessor temporary get other saved registers (as in HockeyF CCockpitHockeyCoder::ScoreOut); same calls, constants, loads, stores and branches
 DodgeF SetCountPoint__Q23msw19CCockpitDodgeResultFPlPll near 99.6 register choice only: pane object in r17 vs r18 and the float operands of m_fUnk00 + m_fUnk04*i in swapped registers; same instructions otherwise
@@ -144,7 +142,6 @@ DodgeF SetPeriodValue__Q23msw18CCockpitDodgeCoderFl near 97.8 register choice on
 DodgeF SetPushVel__Q23msw23CStgGmk_Pylon_Act_DodgeFRCQ23bcs5FVEC3 near 99.6 99.6%: two addi for stack vectors swapped
 DodgeF SetSPGauge__Q23msw18CCockpitDodgeCoderFlf near 99.0 register choice only: scratch registers of the int-to-float conversion and the gauge address differ; same instructions and constants
 DodgeF SetSetCountDisp__Q23msw18CCockpitDodgeCoderFi near 99.6 register choice only: the set index temporaries swap r5/r7; same calls, constants, loads, stores and branches
-DodgeF SetTextNext__Q23msw19CCockpitDodgeResultFll near 99.2 r30/r31 swapped (pane accessor vs show flag), as CCockpitBasketResult::SetTextNext
 DodgeF SetVelocity__Q23msw18CItemBallBombDodgeFv near 99.3 register numbering/instruction order only (paired-single normalize/length helpers or integer arg registers); no constant, call, access or branch differs
 DodgeF Set__Q23msw16CLockCursorDodgeFv near 99.9 register allocation/order only
 DodgeF Set__Q23msw17CCockpitDodgeCoinFv near 99.3 register choice only (as CCockpitHockeyCoin::Set)
@@ -193,7 +190,6 @@ DodgeF __ct__Q23msw16CCameraDodgeGameFl near 99.5 99.5: register numbering only
 DodgeF __dt__Q23bcs106CPool<Q33msw7STAGE1113CStgRndAnmObj,Q23bcs42CPoolNode<Q33msw7STAGE1113CStgRndAnmObj,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
 DodgeF __dt__Q23bcs41CFixedPool<Ul,32,Q23bcs15CPoolNode<Ul,0>>Fv near 98.8 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
 DodgeF __dt__Q23bcs52CPool<Ul,Q23bcs15CPoolNode<Ul,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
-DodgeF __dt__Q23msw12CChrManDodgeFv near 99.1 99.1%: loop registers r29/r30 swapped.
 DodgeF __dt__Q23msw13CStageDodge11Fv near 99.0 register choice only (Main_ also stores the same value to the stack before rounding instead of after).
 DodgeF __dt__Q33msw7STAGE1120CBgFirePillarClusterFv near 98.1 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
 DodgeF __sinit_\CChrCoreDodgeSlime_cpp near 99.4 register allocation only (the colour words and the array base pointer in other GPRs); same stores, values and offsets

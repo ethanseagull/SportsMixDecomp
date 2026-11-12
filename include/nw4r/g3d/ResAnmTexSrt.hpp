@@ -3,6 +3,7 @@
 
 #include "nw4r/db/Panic.hpp"
 #include "nw4r/g3d/ResDic.hpp"
+#include "nw4r/g3d/ResMat.hpp"
 
 namespace nw4r {
     namespace g3d {
@@ -96,6 +97,10 @@ namespace nw4r {
             private:
                 ResAnmTexSrtData *m_pData; // 0x00
         };
+
+        // (NW4R, in the DOL) Puts the animated texture matrices of pResult
+        // into a material (added for bcs::ApplyTexSrtAnmResult).
+        void ApplyTexSrtAnmResult(ResTexSrt srt, ResMatIndMtxAndScale ind, const TexSrtAnmResult *pResult);
     }
 }
 

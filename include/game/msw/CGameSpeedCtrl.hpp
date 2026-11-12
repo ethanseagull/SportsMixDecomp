@@ -2,13 +2,15 @@
 #define MSW_CGAMESPEEDCTRL_HPP_
 
 #include "bcs/CTask.hpp"
+#include "nw4r/ut/List.hpp"
 
 namespace msw {
 
     // Changes the speed of the whole game over time (slow motion). Lives in
-    // the DOL; its destructor is fn_801895E4, which resets bcs::CMainApp's
-    // universal speed to GameWork's value at 0x34. Only the members used so
-    // far. A task of 0x6C bytes (guessed from the last member).
+    // the DOL (game/msw/CGame.cpp). It sits in the list of its parent, the
+    // arts event task group of CGame (whose destructor, fn_801895E4, resets
+    // bcs::CMainApp's universal speed to GameWork's value at 0x34). Only the
+    // members used so far. A task of 0x6C bytes (CGame allocates 0x6C).
     class CGameSpeedCtrl : public bcs::CTask {
         public:
             // Moves the speed from `from` to `to` over `time` frames; a time
@@ -22,6 +24,17 @@ namespace msw {
 
             // (fn_801891AC; added for game/msw/CGame.cpp)
             CGameSpeedCtrl(bcs::CTask *pParent);
+            // (fn_80189250) Leaves the parent's list.
+            virtual ~CGameSpeedCtrl();
+            // (fn_8018D940, weak) The work is done by the parent, which
+            // steps each of its speed controls.
+            virtual void Main() {}
+            // (fn_801892D0, name guessed) One step of fRate frames, run by
+            // the parent group; the task deletes itself at the end when
+            // 0x68 is set.
+            void Step(float fRate);
+            // The speed in force (the group takes the slowest).
+            float GetSpeed() const { return m_fSpeed; }
 
             // (name guessed) The slow motion of CGame::StartSlowEffect_:
             // from fSpeed to fTo over fTime frames; the meaning of the last
@@ -41,7 +54,8 @@ namespace msw {
             }
 
         private:
-            unsigned char m_Unk34[0xC]; // 0x34, a nw4r::ut::List of the children
+            bcs::CTask *m_pGroup;       // 0x34, the parent task group (holds a list of these)
+            nw4r::ut::Link m_Link;      // 0x38, the link in that list
             float m_fSpeed;             // 0x40 the speed in force
             float m_fFrom;              // 0x44
             float m_fTo;                // 0x48

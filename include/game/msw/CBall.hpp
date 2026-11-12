@@ -40,7 +40,19 @@ namespace msw {
             struct SERVE_SHOT_ARG;
             struct SPIKE_SHOT_ARG;
             struct PASS_SHOT_ARG;
-            struct ENDURE_PRM;
+            // (added for VolleyF game/volley/unit_63388.cpp; field names
+            // and meanings guessed) What a special shot asks of the
+            // character receiving it (CBall::GetVolleyEndureParam);
+            // CChrCoreVolley::SetReceiveEndureWork_ copies it into the
+            // receive state's work.
+            // CBallVolley::GetVolleyEndureParam copies all 0x24 bytes.
+            struct ENDURE_PRM {
+                float m_fUnk00;
+                float m_fUnk04;
+                float m_fUnk08;
+                float m_afUnk0C[3];
+                long m_anUnk18[3];
+            };
         }
         namespace BOSS {
             struct SPIKE_SHOT_ARG;
@@ -456,6 +468,11 @@ namespace msw {
             // DOL. The ball's offset from the hand of the character holding
             // it (VolleyF's CChrCoreVolleyLuigi lifts it while it comes in).
             void SetAttachPos(const bcs::FVEC3 &rOfs, int);
+            // (DOL; added for BasketF game/basket/CBallManBasketHungryBossPackun.cpp,
+            // meanings guessed from the names) Adds rOfs to the attach
+            // offset; sets the spin of the ball (radians per frame).
+            void AddAttachPos(const bcs::FVEC3 &rOfs);
+            void SetRotSpeed(float fSpeed);
             // (DOL; added for DodgeF CChrCoreDodgeWaluigi, return types
             // guessed) Puts the ball at rPos at once; attaches it to node
             // nNode of pMdl; frees it again.
@@ -556,6 +573,9 @@ namespace msw {
             void CalcYVG(float fStartY, float fTopY, float fEndY, float fFrame, float &rVel, float &rGravity) const;
             void SE_Stop(long nSlot, float fFade);
             int IsItemEffect() const;
+            // (DOL; added for BasketF game/basket/unit_65AF0.cpp) Not zero
+            // while the ball carries an item.
+            int IsItemBall() const;
             void LinkItemEffect_(unsigned long nId);
             void ClearOffsetPos();
 

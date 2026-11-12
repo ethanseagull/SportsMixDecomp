@@ -50,7 +50,7 @@ Matching game/msw/CEvDemoRes/_CHR_INFO.cpp
 Equivalent game/msw/CItemShellCmn.cpp
 Equivalent game/msw/CItemBanana.cpp
 Equivalent game/msw/CItemMushroom.cpp
-Matching game/msw/vm/CVMCpu.cpp
+Equivalent game/msw/vm/CVMCpu.cpp
 Matching game/msw/menu/CVibEff.cpp
 Matching game/msw/CEventDemoBase.cpp
 Equivalent game/msw/CStgGmk_Pylon.cpp
@@ -61,8 +61,7 @@ Equivalent game/bcs/CSndTask.cpp
 Equivalent game/msw/menu/CMovieScnObj.cpp
 Equivalent game/msw/CC_CMN/SLIME/CcSquadFactory.cpp
 Matching game/msw/CoinRes.cpp
-NonMatching game/bcs/CAnmTexSrt.cpp
-NonMatching game/bcs/CAnmTexPat.cpp
+NonMatching game/bcs/CAnmMotion.cpp
 Equivalent game/msw/CGameExDemoBase.cpp
 Equivalent game/msw/CStage10Base/CTelopDispBase.cpp
 Matching game/msw/CCokcpitMenuDataList.cpp
@@ -71,12 +70,10 @@ Equivalent game/msw/CCockpitButtonInfo.cpp
 Equivalent game/msw/CStgGmk_Pinball.cpp
 Equivalent game/msw/CC_CMN/LUIGI/CcOvacuumForce.cpp
 Equivalent game/msw/CCockpitModelTelop.cpp
-Equivalent game/msw/vm/CVMScript.cpp
 Equivalent game/msw/CEventModel.cpp
 Equivalent game/msw/CEvDemoMdlChr.cpp
 Equivalent game/msw/CEventDemo.cpp
 Equivalent game/msw/CDefCollision.cpp
-Equivalent game/bcs/CAnmMatClr.cpp
 Equivalent game/bcs/CCameraMan.cpp
 Equivalent game/bcs/CCameraAnmCalc.cpp
 Matching game/bcs/CListNodeBase.cpp
@@ -89,7 +86,7 @@ Equivalent game/msw/CMenuPartBase.cpp
 Equivalent game/msw/CStgEffectSlot.cpp flags=noauto
 Equivalent game/msw/CCockpitMenuBase.cpp
 Equivalent game/bcs/G2D/CLayoutBase.cpp
-Equivalent game/msw/CStgSeSlot.cpp flags=noauto
+Equivalent game/msw/CStgSeSlot.cpp
 Equivalent game/msw/CGameGuideMan.cpp
 Equivalent game/msw/CEffectCluster.cpp
 Equivalent game/msw/CAtkCollision.cpp
@@ -98,3 +95,13 @@ Equivalent game/msw/CBodyCollision.cpp
 Equivalent game/bcs/G2D/CLineStripDL.cpp
 Equivalent game/msw/CC_CMN/CMdlEffect.cpp
 Equivalent game/msw/CCockpitMarkerIcon2D.cpp
+NonMatching game/bcs/CTask.cpp
+Matching game/msw/CStgObj.cpp
+Equivalent game/msw/CStgSrt.cpp
+Equivalent game/msw/EvDemo.cpp
+Equivalent game/msw/CEvDemoMdlObj.cpp
+Equivalent game/msw/CStgAct.cpp
+Equivalent game/msw/CStgMdl.cpp
+Matching game/msw/CStgGmk.cpp
+Equivalent game/bcs/CRsoModule.cpp flags=noauto
+Matching game/msw/ArchiveFont.cpp

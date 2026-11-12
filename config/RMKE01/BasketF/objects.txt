@@ -46,7 +46,7 @@ Equivalent game/basket/CStageBasket06.cpp
 Equivalent game/basket/CStageBasket05.cpp
 Matching game/basket/CStageBasket07.cpp
 Matching game/basket/CStageBasket02.cpp
-Equivalent game/basket/CStgGmk_WaterWorks_Basket.cpp
+Matching game/basket/CStgGmk_WaterWorks_Basket.cpp
 Equivalent game/basket/CStageBasket16.cpp
 Matching game/basket/CStageBasket03.cpp
 Matching game/basket/CStageBasket09.cpp
@@ -55,7 +55,7 @@ Equivalent game/basket/CCockpitBasket.cpp
 Equivalent game/basket/CChrDrvPadBasket.cpp
 Equivalent game/basket/CNpcGhostBasketBase.cpp
 Equivalent game/basket/CItemBallBasketBomb.cpp
-Equivalent game/basket/CChrCoreBasketLuigi.cpp
+Matching game/basket/CChrCoreBasketLuigi.cpp
 Equivalent game/basket/CStageBasket17.cpp
 Equivalent game/basket/CChrCoreBasketKinopio.cpp
 Equivalent game/basket/CChrCoreBasketYoshi.cpp
@@ -96,3 +96,11 @@ Equivalent game/basket/CComDrvBasketGame.cpp
 Equivalent game/basket/CCameraBasketGame.cpp
 Equivalent game/basket/unit_B09B4.cpp
 Equivalent game/basket/unit_2E514.cpp
+Equivalent game/basket/unit_25D70.cpp
+Equivalent game/basket/unit_4EF78.cpp
+Matching game/basket/unit_65AF0.cpp
+Matching game/basket/unit_65B7C.cpp
+Matching game/basket/unit_65C5C.cpp
+Equivalent game/basket/CGameGuideBasket.cpp
+Equivalent game/basket/CBallManBasketHungryBossPackun.cpp
+Equivalent game/basket/unit_38A7C.cpp

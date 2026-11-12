@@ -4,6 +4,7 @@
 #include "nw4r/g3d/ResDic.hpp"
 #include "nw4r/g3d/ResMat.hpp"
 #include "nw4r/g3d/ResNode.hpp"
+#include "nw4r/g3d/ResVtx.hpp"
 
 namespace nw4r {
     namespace g3d {
@@ -62,13 +63,28 @@ namespace nw4r {
                 ResMat GetResMat(ResName name) const;
                 // (DOL; added for VolleyF game/volley/CBallTargetMarker.cpp)
                 ResMat GetResMat(int index) const;
+                // (DOL; added for game/msw/CStgMdl.cpp)
+                ResMat GetResMat(unsigned long index) const;
                 // (DOL) The node of that name; an invalid handle if there is
                 // none.
                 ResNode GetResNode(const char *pName) const;
+                // (DOL; added for bcs::CAnmMotion) By index, and the number
+                // of nodes.
+                ResNode GetResNode(unsigned long idx) const;
+                // (DOL; added for game/msw/CStgMdl.cpp)
+                ResNode GetResNode(int idx) const;
+                unsigned long GetResNodeNumEntries() const;
                 // (DOL) The number of materials.
                 unsigned long GetResMatNumEntries() const;
                 // (DOL) The file the model is in.
                 ResFile GetParent();
+                // (DOL; added for bcs::CAnmShp) The vertex arrays of that
+                // name, invalid handles if there are none, and the number of
+                // position arrays.
+                ResVtxPos GetResVtxPos(ResName name) const;
+                ResVtxNrm GetResVtxNrm(ResName name) const;
+                ResVtxClr GetResVtxClr(ResName name) const;
+                unsigned long GetResVtxPosNumEntries() const;
 
             private:
                 ResMdlData *m_pData; // 0x00

@@ -66,6 +66,13 @@ namespace msw {
             // (contents not known) The work of the damage state, passed to the
             // SubStateDamage* virtuals.
             struct STATE_WORK_DAMAGE;
+            // (added for BasketF game/basket/unit_25D70.cpp; contents not
+            // known past the first word, which the neutral and run states
+            // clear) The work of the defence collision that
+            // CChrCoreBasket::SetCollDefParam_ sets up.
+            struct DEF_COLL {
+                long m_nStep;
+            };
             // Kinds of effect for Util_SetEffect / Util_AttachEffect (values not known).
             enum SET_EFFECT_TYPE {};
             enum ATTACH_EFFECT_TYPE {};
@@ -917,10 +924,12 @@ namespace msw {
             virtual void ArtsOptStopEffectAll();                       // 0xC00
             virtual void ArtsOptEraseEffectAll();                      // 0xC04
             virtual void ArtsOptCreate(long, long, long, long);        // 0xC08
-            virtual int Util_DropCoin(float, long, long);              // 0xC0C (int: CChrCoreBoss's receive tests it)
+            // (returns not zero when coins were dropped: VolleyF's
+            // CChrCoreVolley::MethdDamage and CChrCoreBoss's receive test it)
+            virtual int Util_DropCoin(float, long, long);              // 0xC0C
             virtual void CheckCountWork__();                           // 0xC10
             virtual int CheckWater_(int);                              // 0xC14
-            virtual void CalcMoveSpeedRate_(float, long);              // 0xC18
+            virtual float CalcMoveSpeedRate_(float, long);             // 0xC18, returns f1 (BasketF unit_25D70)
             virtual void Util_SetEffect(SET_EFFECT_TYPE);              // 0xC1C
             virtual void Util_AttachEffect(ATTACH_EFFECT_TYPE, long);  // 0xC20
             virtual void Util_DetachEffectAll();                       // 0xC24
@@ -994,6 +1003,10 @@ namespace msw {
             // DOL (added for HockeyF game/hockey/CChrCoreHockeyLuigi.cpp). The
             // yaw towards the goal the character's team attacks.
             float GetRotY_ToGoal() const;
+            // DOL (added for BasketF game/basket/CGameGuideBasket.cpp). The
+            // yaw towards the goal the character's team defends (meaning
+            // guessed from the name).
+            float GetRotY_ToGuardGoal() const;
 
             // (names guessed) Inline in the original; the module reads the
             // members directly (CChrMarkerBoss::AppearCheck loads the byte
@@ -1196,6 +1209,9 @@ namespace msw {
             // (DOL; added for BasketF game/basket/CComDrvBasketGame.cpp) The
             // item kind of the stocked item, negative for none.
             long GetStockItemType() const;
+            // (DOL; added for BasketF game/basket/unit_65B7C.cpp) Drops the
+            // stocked item.
+            void DeleteStockItem();
 
             // Added for BossF game/boss/CChrDrvPadBoss.cpp (names guessed).
             // Inline in the module: the pad driver reads both words directly.
@@ -1266,7 +1282,9 @@ namespace msw {
             // go; the position as a pointer; a sound that follows pPos.
             unsigned long Eff_CreateSimple(long nSlot, long nEff, const bcs::FVEC3 &pos, float fRotY, unsigned long,
                                            unsigned long, unsigned long);
-            void Util_SetJumpParam(float fFrame, float fFrom, float);
+            // (return type from VolleyF game/volley/unit_63388.cpp's
+            // MethdJump, which tests it for a positive value)
+            float Util_SetJumpParam(float fFrame, float fFrom, float);
             void DetachBall();
             const bcs::FVEC3 *GetPosPtr();
             void SE_PlayMove(long nSlot, long nSe, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
@@ -1331,6 +1349,16 @@ namespace msw {
             void SetPos(const bcs::FVEC3 &rPos);
             // (added for BasketF CChrCoreBasketKuroma) Moves the character by rMove.
             void AddPos(const bcs::FVEC3 &rMove);
+            // (added for BasketF game/basket/unit_25D70.cpp) The same in
+            // the XZ plane only.
+            void AddPosXZ(const bcs::FVEC3 &rMove);
+            // (added for BasketF game/basket/unit_25D70.cpp; DOL, return
+            // types guessed) Stops the motion in slot nSlot;
+            // the motion type of the held item; one step of the jump set
+            // by Util_SetJumpParam (1 once landed).
+            void AnimStop(unsigned long nSlot);
+            long GetAttachItemMotType() const;
+            int Util_DoJump(float fStep, int);
             // (BasketF CChrCoreBasketKuroma reads the result: not zero once
             // the jump has ended, meaning guessed.)
             int Util_DoJumpMove(float fStep);
@@ -1401,9 +1429,14 @@ namespace msw {
             float GetRotY_Diff_ToPosXZ(const bcs::FVEC3 &rPos) const;
             long PlayGetOutline_(unsigned long) const;
             void AddPosXZ(float fX, float fZ);
-            void AddPosXZ(const bcs::FVEC3 &rMove);
             void WSE_Play(long nSlot, long nSe, unsigned long, long);
             int IsAnimLoop(unsigned long nSlot) const;
+            // (added for BasketF game/basket/unit_38A7C.cpp; DOL, meanings
+            // guessed from the names) Stops the sound of slot nSlot (fading
+            // over fFrame frames); the yaw from the goal the team attacks
+            // towards the character.
+            void WSE_Stop(long nSlot, float fFrame);
+            float GetRotY_FromGoal() const;
 
             // Added for BossF game/boss/CChrCoreBossMethod.cpp (all in the
             // DOL; return types and parameter meanings guessed).
@@ -1510,7 +1543,6 @@ namespace msw {
             void UpdateDisp_();
             // Copies the root node's translation to the model (posing).
             void Util_NodePatchTransCopy();
-            void AnimStop(unsigned long nSlot);
             // Forgets the item held in the hand.
             void DeleteAttachItem();
             void UpdateBodyHitCont_();
@@ -1700,7 +1732,9 @@ namespace msw {
             // 0x22C (name guessed): the step of the jump move
             // (Util_DoJumpMoveEX); 2 and up once the character has landed.
             signed char m_nJumpStep;
-            unsigned char m_Unk22D[0x22E - 0x22D];
+            // 0x22D (name guessed): cleared with m_nJumpStep when a jump
+            // starts.
+            signed char m_nJumpSubStep;
             // 0x22E (name guessed): not zero when a hit of damage type 7
             // turns the character into a bean (CChrCoreBoss::MethdDamage).
             signed char m_bCanMame;

@@ -340,7 +340,7 @@ namespace msw {
                      &CStgGmk_Trolley_Act::DtorState_RESPAWN);
         FsmqSetState(STATE_INACTIVE, &CStgGmk_Trolley_Act::CtorState_INACTIVE,
                      &CStgGmk_Trolley_Act::LoopState_INACTIVE, &CStgGmk_Trolley_Act::DtorState_INACTIVE);
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         pSrt->ResetVelocity(GetParam_Gravity());
         m_pRailMdl = new CRailMdl(pParent);
         for (long i = 0; i < HEIGHT_TYPE_TBL_NUM; i++) {
@@ -375,7 +375,7 @@ namespace msw {
     // below 0.05.
     void CStgGmk_Trolley_Act::OnUpdate(float rate)
     {
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         CStageMan::GetInstance();
         bcs::FVEC3 prevPos = pSrt->GetPos();
         if (m_fInvincibleTime > 0.0f) {
@@ -816,7 +816,7 @@ namespace msw {
     void CStgGmk_Trolley_Act::DoSpawn()
     {
         RebuildMdl();
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         CStgGmk_Trolley *pParent = static_cast<CStgGmk_Trolley *>(GetParent());
         CStgMdl *pMdl = GetMdl(0);
         pSrt->SetGravity(GetParam_Gravity());
@@ -995,7 +995,7 @@ namespace msw {
     // The train starts at its top speed, along its direction.
     void CStgGmk_Trolley_Act::CtorState_MOVE()
     {
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         pSrt->StopAccel();
         pSrt->ClearFlagC8(3);
         pSrt->SetLocalVel(bcs::FVEC3(0.0f, 0.0f, GetParam_VelLimit()));
@@ -1010,7 +1010,7 @@ namespace msw {
     void CStgGmk_Trolley_Act::LoopState_MOVE()
     {
         GetFrameRateF();
-        CStgSrt *pSrt = GetSrt();
+        CStgSrtMove *pSrt = GetSrt();
         bcs::FVEC3 vel = pSrt->GetVel();
         float speed = PSVECMag(reinterpret_cast<const Vec *>(&vel));
         if (pSrt->GetPos().y <= 0.05f && speed > 0.7f) {

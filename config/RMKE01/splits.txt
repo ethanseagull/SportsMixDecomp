@@ -14,19 +14,11 @@ Sections:
 	.sbss2      type:bss align:4
 
 game/bcs/CAnmMotion.cpp:
-	.text       start:0x80008824 end:0x80009B54
-
-game/bcs/CAnmBlendMotion.cpp:
-	.text       start:0x8000A5B4 end:0x8000D044
-
-game/bcs/CAnmTexSrt.cpp:
-	.text       start:0x8000D1EC end:0x8000DCE8
-
-game/bcs/CAnmTexPat.cpp:
-	.text       start:0x8000DCE8 end:0x8000E830
-
-game/bcs/CAnmMatClr.cpp:
-	.text       start:0x8000F670 end:0x8000F7D4
+	.text       start:0x80006F20 end:0x8001114C
+	.rodata     start:0x8042D340 end:0x8042D360
+	.data       start:0x80463D00 end:0x80464640
+	.sdata      start:0x805BF840 end:0x805BF8A4
+	.sdata2     start:0x805C1A00 end:0x805C1A20
 
 game/bcs/CCameraMan.cpp:
 	.text       start:0x80011720 end:0x80011818
@@ -112,13 +104,21 @@ game/bcs/CRenderMan.cpp:
 	.text       start:0x80073DAC end:0x8007852C
 
 game/bcs/CRsoModule.cpp:
-	.text       start:0x80078814 end:0x80078928
+	.text       start:0x80078680 end:0x800789D4
+	.rodata     start:0x804342F8 end:0x80434310
+	.data       start:0x80468AA0 end:0x80468BC0
+	.sbss       start:0x805C0A28 end:0x805C0A2C
 
 game/bcs/CSndTask.cpp:
 	.text       start:0x8007A560 end:0x8007A818
 
 game/bcs/CTask.cpp:
-	.text       start:0x8007B2FC end:0x8007B5B0
+	.text       start:0x8007A94C end:0x8007B774
+	.rodata     start:0x80434328 end:0x80434340
+	.data       start:0x80468C18 end:0x80468C48
+	.bss        start:0x804CFF10 end:0x804D0210
+	.sbss       start:0x805C0A68 end:0x805C0A78
+	.sdata2     start:0x805C2000 end:0x805C2018
 
 game/bcs/CWorldEnv.cpp:
 	.text       start:0x8007DF9C end:0x8007EB64
@@ -254,7 +254,11 @@ game/msw/CEventDemo.cpp:
 	.sdata2     start:0x805C2A70 end:0x805C2A78
 
 game/msw/EvDemo.cpp:
-	.text       start:0x8011D564 end:0x8011D800
+	.text       start:0x8011AF54 end:0x8011D808
+	.rodata     start:0x80439860 end:0x804399C0
+	.data       start:0x8046F510 end:0x8046F6E8
+	.sbss       start:0x805C0C08 end:0x805C0C10
+	.sdata2     start:0x805C2A80 end:0x805C2AC8
 
 game/msw/CEffectCtrl.cpp:
 	.text       start:0x8011D850 end:0x80122334
@@ -407,14 +411,17 @@ game/msw/CStageScroll.cpp:
 	.text       start:0x8016B778 end:0x8016C17C
 
 game/msw/CStgAct.cpp:
-	.text       start:0x8016F538 end:0x8016FE58
+	.text       start:0x8016F538 end:0x8016FF0C
+	.data       start:0x80474A30 end:0x80474BC0
+	.sdata2     start:0x805C34F8 end:0x805C3500
 
 game/msw/CStgDrv.cpp:
 	.text       start:0x8016FF0C end:0x8016FF68
 	.data       start:0x80474BC0 end:0x80474BE8
 
 game/msw/CStgGmk.cpp:
-	.text       start:0x8016FF7C end:0x80170054
+	.text       start:0x8016FF7C end:0x80170108
+	.data       start:0x80474BE8 end:0x80474CB8
 
 game/msw/CStgGmkAct.cpp:
 	.text       start:0x80170108 end:0x80170174
@@ -425,13 +432,22 @@ game/msw/CStgGmkMan.cpp:
 	.sbss       start:0x805C0CB0 end:0x805C0CB8
 
 game/msw/CStgMdl.cpp:
-	.text       start:0x80170CCC end:0x80171F04
+	.text       start:0x80170BC8 end:0x801730A8
+	.ctors      start:0x8042D214 end:0x8042D218
+	.rodata     start:0x8043CD70 end:0x8043CD7C
+	.data       start:0x80474E70 end:0x80475110
+	.sdata      start:0x805BFD10 end:0x805BFD2C
+	.sbss       start:0x805C0CB8 end:0x805C0CD8
+	.sdata2     start:0x805C3500 end:0x805C3520
 
 game/msw/CStgObj.cpp:
-	.text       start:0x80174014 end:0x801744F0
+	.text       start:0x80173E5C end:0x80174694
+	.data       start:0x804753C0 end:0x80475448
 
 game/msw/CStgSrt.cpp:
-	.text       start:0x80174760 end:0x80174D3C
+	.text       start:0x80174694 end:0x80175B78
+	.data       start:0x80475448 end:0x80475488
+	.sdata2     start:0x805C3540 end:0x805C3560
 
 game/msw/TournamentWork.cpp:
 	.text       start:0x80176058 end:0x801768E0
@@ -440,7 +456,7 @@ game/msw/CTournament.cpp:
 	.text       start:0x801768EC end:0x8017B85C
 
 game/msw/CGame.cpp:
-	.text       start:0x8017C3AC end:0x8018DCEC
+	.text       start:0x8017B920 end:0x8018DCEC
 	.ctors      start:0x8042D21C end:0x8042D220
 
 game/msw/CGameVib.cpp:
@@ -642,15 +658,10 @@ game/msw/CCockpitMenuBase.cpp:
 game/msw/CCockpitMenuBaseButtonA.cpp:
 	.text       start:0x801EEB28 end:0x801EF30C
 
-game/msw/vm/CVMData.cpp:
-	.text       start:0x801F702C end:0x801F75E4
-
 game/msw/vm/CVMCpu.cpp:
-	.text       start:0x801FADC4 end:0x801FAEFC
-
-game/msw/vm/CVMScript.cpp:
-	.text       start:0x801FAF78 end:0x801FB608
-	.data       start:0x80487028 end:0x80487048
+	.text       start:0x801F702C end:0x801FB608
+	.data       start:0x80486BD8 end:0x80487060
+	.sdata2     start:0x805C4FC0 end:0x805C4FC8
 
 game/msw/CEventNodeBase.cpp:
 	.text       start:0x801FC05C end:0x801FC65C
@@ -666,7 +677,11 @@ game/msw/CEvDemoRes.cpp:
 	.text       start:0x801FEF0C end:0x801FFE78
 
 game/msw/ArchiveFont.cpp:
-	.text       start:0x802113AC end:0x802114F4
+	.text       start:0x802113AC end:0x802115A4
+	.ctors      start:0x8042D254 end:0x8042D258
+	.rodata     start:0x80444AE8 end:0x80444B50
+	.bss        start:0x804D7A00 end:0x804D7A10
+	.sdata2     start:0x805C50A0 end:0x805C50A8
 
 game/msw/CStgGmk_Wave.cpp:
 	.text       start:0x802115A4 end:0x80215608
@@ -699,7 +714,9 @@ game/msw/EvDemoVs.cpp:
 	.text       start:0x8021FEDC end:0x802201D0
 
 game/msw/CEvDemoMdlObj.cpp:
-	.text       start:0x80221708 end:0x80221974
+	.text       start:0x80220CA0 end:0x802219F0
+	.data       start:0x80489260 end:0x80489318
+	.sdata2     start:0x805C5268 end:0x805C5278
 
 game/msw/CStgGmk_Trolley.cpp:
 	.text       start:0x802219F0 end:0x80226894

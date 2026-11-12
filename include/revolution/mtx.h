@@ -49,6 +49,11 @@ typedef struct Quaternion {
 // pq = p * q.
 void PSQUATMultiply(const Quaternion *p, const Quaternion *q, Quaternion *pq);
 void PSQUATNormalize(const Quaternion *pSrc, Quaternion *pDst);
+// dst = the transpose of src (added for the DOL's game/msw/CStgSrt.cpp).
+void PSMTXTranspose(const Mtx src, Mtx dst);
+// m = the rotation about *axis by rad radians (added for the DOL's
+// msw::CStgSrt::AddRotY).
+void PSMTXRotAxisRad(Mtx m, const Vec *axis, float rad);
 // m = the rotation of q (added for BasketF game/basket/CcWarioSmokeMgr.cpp).
 void PSMTXQuat(Mtx m, const Quaternion *q);
 

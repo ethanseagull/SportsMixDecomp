@@ -17,7 +17,42 @@ namespace msw {
         // INCOMPLETE: only what the character units read; names guessed.
         class CC_PARAM_BASKET2 {
             public:
-                unsigned char m_Unk000[0x1E8];
+                unsigned char m_Unk000[0x3C];
+                // 0x3C-0x4C (names guessed; game/basket/unit_25D70.cpp): the
+                // frames of the dash's after effect, the frame from which a
+                // turn of the stick by more than m_nDashTurnDeg degrees
+                // turns the dash round, the frames of a turn with the ball
+                // and its move.
+                long m_nDashEffFrame;          // 0x3C
+                long m_nDashTurnFrame;         // 0x40
+                long m_nDashTurnDeg;           // 0x44
+                long m_nTurnFrame;             // 0x48
+                float m_fTurnDist;             // 0x4C
+                unsigned char m_Unk050[0x10C - 0x50];
+                // 0x10C-0x170 (names guessed; game/basket/unit_38A7C.cpp): the
+                // dunk's jump height and run-up frames, and whether its run-up
+                // is counted in loops (0: timed); the same for the rebound
+                // dunk and the alley-oop (0x130: the loops of the alley-oop's
+                // kinds 1 and 3); then the lay-up's speed, the angle it turns
+                // off its target by (degrees), its motion speed, the frames it
+                // hangs at the top, its height and its jump frames.
+                float m_fDunkHeight;           // 0x10C
+                long m_nDunkFrame;             // 0x110
+                long m_bDunkLoop;              // 0x114
+                float m_fReboundDunkHeight;    // 0x118
+                long m_nReboundDunkFrame;      // 0x11C
+                unsigned char m_Unk120[0x12C - 0x120];
+                long m_nAlleyoopFrame;         // 0x12C
+                long m_bAlleyoopLoop;          // 0x130
+                float m_fAlleyoopHeight;       // 0x134
+                unsigned char m_Unk138[0x15C - 0x138];
+                float m_fLayUpSpeed;           // 0x15C
+                long m_nLayUpRotDeg;           // 0x160
+                float m_fLayUpMotSpeed;        // 0x164
+                long m_nLayUpHoldFrame;        // 0x168
+                float m_fLayUpHeight;          // 0x16C
+                long m_nLayUpJumpFrame;        // 0x170
+                unsigned char m_Unk174[0x1E8 - 0x174];
                 // 0x1E8: the frames Yoshi's smash cut holds its second step
                 // (CChrCoreBasketYoshi::CtorStateSmashCut).
                 long m_nSmashCutHoldFrame;
@@ -115,6 +150,11 @@ namespace msw {
             // far the dash has gone (0 to 1).
             int CanbeDunkMissDist() const;
             float GetDashActRate() const;
+            // (added for game/basket/CGameGuideBasket.cpp; meanings guessed
+            // from the names) How far into its dunk the character is, in
+            // percent; the frame of the jump block's jump.
+            long GetDunkActionRate() const;
+            float GetJumpBlockJumpFrame() const;
             // (added for game/basket/unit_AF3BC.cpp; return types guessed)
             // Whether the character's just shot curves, and by how much.
             int IsJustShootTypeCurve() const;
@@ -243,6 +283,9 @@ namespace msw {
             // (added for game/basket/CChrCoreBasketSlime.cpp; parameter
             // meanings guessed) Leaves an after-image of the character.
             void CreateIllusion(float fAlpha, float fRate);
+            // (added for game/basket/unit_65C5C.cpp; return type guessed)
+            // Not virtual (absent from the vtable); always 0 in BasketF.
+            int MethdUseItemStar(long);
             // (added for game/basket/CChrManBasket.cpp; return types and
             // meanings guessed from the names) The motion frames at which a
             // just shot starts and ends, for a near, middle and far shot.
@@ -258,6 +301,103 @@ namespace msw {
             // Hides the combination icon; plays the combination's sound.
             void DispOffCombinationIcon();
             void PlayCombinationSe();
+
+            // Added for game/basket/unit_25D70.cpp (the basic states; names
+            // from the symbols, return types and meanings guessed). The
+            // works of the neutral, run and dash states, the score of a
+            // target, and the parameters of the battle move (mapped there).
+            struct STATE_WORK_NEUTRAL;
+            struct STATE_WORK_RUN;
+            struct STATE_WORK_DASH;
+            struct SCORE_PARAM;
+            struct BATTLEPARAM;
+            // The motion of the item shot for an item of motion type nType.
+            long GetMotID_ItemShoot(long nType, int);
+            // Starts the fall from the court when the character stands
+            // where it falls; not zero then.
+            int MethdFall_();
+            // The yaw the block work looks in.
+            float CalcBWLookDir_() const;
+            // Sets up the defence collision of a state (nType).
+            void SetCollDefParam_(CChrCore::DEF_COLL *pDef, long nType);
+            // Not zero when the character is to stand in the block work
+            // against the ball holder (and starts the one on one with him).
+            int SubStateNeedBlockWork_(int bNow, float fFrame);
+            int SubStateRunNormal_(STATE_WORK_RUN *pWork);
+            void SubStateRunBlockWorkMove_(STATE_WORK_RUN *pWork);
+            // The second body push collision: back to no gap, or moved by
+            // fRate towards the yaw fRotY.
+            void CalcPush1Zero();
+            void CalcPush1GapValue(float fRate, float fRotY);
+            // The motion speed of the star condition.
+            float GetConditionStarMotSpeed() const;
+            // Which of eight directions (0 forward, round by 45 degrees) a
+            // move at fRot from the look direction is.
+            long GetDir8ToBlockWork(float fRot);
+            // Not zero when rPos is inside the block work's oval; rSide gets
+            // the side.
+            int HitCheckOval_(const bcs::FVEC3 &rPos, int &rSide);
+            void UpDate1on1ActMinFrame();
+            // The character an item shot aims at (null for none).
+            CChrCoreBasket *GetTargetItemShootCore(SCORE_PARAM &rParam);
+            // Throws the stocked item along rDir.
+            void ThrowItem_(const bcs::FVEC3 &rDir, unsigned long nFlag, int);
+            // Pushes the character back at the end of a battle with the
+            // ball holder.
+            void Util_PushBackOnBallerBattleEnd_(int, int, float);
+            // The frame the dribble motion nMot starts at.
+            float GetDribbleStartFrame(long nMot);
+            // The move of the dash; returns the yaw of the dash.
+            float SubStateDashMove_(STATE_WORK_DASH &rWork);
+            // The move of a special move's battle; 1 once it has nothing
+            // left to move.
+            int SubBattleMove_(BATTLEPARAM &rParam);
+
+            // Added for game/basket/unit_38A7C.cpp (the dunk, rebound dunk,
+            // alley-oop and lay-up states; names from the symbols, return
+            // types and meanings guessed). The works of the dunk states and
+            // of the lay-up (mapped there).
+            struct STATE_WORK_DUNK;
+            struct STATE_WORK_LAYUP;
+            // The icon of the combination (the pass to a partner who dunks
+            // it), one over each of the two characters; only the members
+            // the states call are declared.
+            class CCombinationIconBasket {
+                public:
+                    CCombinationIconBasket();
+                    virtual ~CCombinationIconBasket();
+                    void ClearIcon(int);
+                    void SetIcon();
+
+                private:
+                    unsigned char m_Unk04[0x20 - 0x4];
+            };
+            // Sets up the dunk (the run-up frames fFrame, its kind nType,
+            // the jump's height and the first motion nMot).
+            void SubStateDunkCtor_(STATE_WORK_DUNK *pWork, float fFrame, long nType, float fHeight, long nMot);
+            // Not zero when the driver turned the dunk into a lay-up.
+            int SubStateDunkCmnAskLayupBranch_(STATE_WORK_DUNK *pWork);
+            void SubStateDunkCmnLandInit_(STATE_WORK_DUNK *pWork);
+            void SubStateDunkCmnMove_(STATE_WORK_DUNK *pWork);
+            void SubStateDunkCmnHomingMove_(STATE_WORK_DUNK *pWork);
+            // (returns Util_DoJumpMove's result once the drop has started,
+            // 0 before)
+            int SubStateDunkCmnDunk_(STATE_WORK_DUNK *pWork);
+            void SubStateDunkCmnLand_(STATE_WORK_DUNK *pWork);
+            // Not zero while a dunk state is at its first step.
+            int IsStateDunkStepStart() const;
+            // The point the dunk aims at and the point it homes in on, by
+            // the frames gone and left.
+            void GetAirTrickTargetPos(bcs::FVEC3 &rTarget, bcs::FVEC3 &rMid, float fFrame, float fRest);
+            // The frames after the start of a state during which the
+            // driver's input does not change it.
+            long GetChangeStateDisableInput() const;
+            // The radius within which a running shot is taken.
+            float GetCourtRunShootSize() const;
+            void PlayLayUpEffect(int bRight);
+            // The success rate of a shot of kind nKind.
+            float Util_CalcShootRate(long nKind);
+            void SetStateCombinationPlay(int bPlay);
 
             // Overrides of CChrCore's virtuals, in vtable order (the slots of
             // __vt__Q23msw14CChrCoreBasket, read from BasketF, that name
@@ -585,10 +725,29 @@ namespace msw {
 
             // 0x57C (name guessed): flag bits; with 0x800 set a catch can be
             // followed by an aerial pass (CChrDrvPadBasket::MethdPass).
-            unsigned char m_Unk574[0x57C - 0x574];
+            unsigned char m_Unk574[0x578 - 0x574];
+            // 0x578 (name guessed; game/basket/unit_25D70.cpp): frames the
+            // block work goes on after its start (20 when it starts).
+            float m_fBlockWorkWait;
             unsigned long m_nBasketFlag;
+            unsigned char m_Unk580[0x584 - 0x580];
+            // 0x584 (name guessed; game/basket/unit_25D70.cpp): frames of
+            // the dash's after effect (flag 0x80000 of m_nBasketFlag).
+            float m_fDashEffFrame;
+            unsigned char m_Unk588[0x598 - 0x588];
+            // 0x598-0x5A0 (name guessed; game/basket/unit_25D70.cpp): the
+            // gap of the second body push collision (CalcPush1GapValue);
+            // the run state clears it.
+            float m_fPush1GapX;
+            float m_fPush1GapY;
+            float m_fPush1GapZ;
             // Not mapped yet.
-            unsigned char m_Unk580[0x5E8 - 0x580];
+            unsigned char m_Unk5A4[0x5A8 - 0x5A4];
+            // 0x5A8, 0x5C8 (names guessed; game/basket/unit_38A7C.cpp): the
+            // combination icons; the alley-oop clears the first and shows
+            // the second.
+            CCombinationIconBasket m_CombIcon;
+            CCombinationIconBasket m_CombIconAlleyoop;
     };
 
     // (field names guessed; only what the character units read is mapped)

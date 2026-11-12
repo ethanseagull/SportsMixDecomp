@@ -19,10 +19,10 @@ Matching game/volley/CStgGmk_Wave_Volley.cpp
 Matching game/volley/CEventDemoVolley.cpp
 Matching game/volley/CStageFactoryVolley.cpp
 Matching game/volley/CCameraVolley.cpp
-Equivalent game/volley/CCockpitVolleyPause.cpp
+Matching game/volley/CCockpitVolleyPause.cpp
 Equivalent game/volley/CStageVolley13.cpp
 Equivalent game/volley/CCockpitVolleyCoin.cpp
-Equivalent game/volley/CCockpitVolleyPauseResult.cpp
+Matching game/volley/CCockpitVolleyPauseResult.cpp
 Matching game/volley/CComDrvVolley.cpp
 Matching game/volley/CStageVolley01.cpp
 Equivalent game/volley/CCockpitChrIcon2DVolley.cpp
@@ -94,3 +94,7 @@ Equivalent game/volley/CChrCoreVolleyWario.cpp
 Equivalent game/volley/CCameraVolleyGame.cpp
 Matching game/volley/CC_PARAM_VOLLEY.cpp
 Equivalent game/volley/CChrTargetMarkerVolley.cpp
+Equivalent game/volley/unit_63388.cpp
+Equivalent game/volley/CStgGmk_WaterWorks_Volley_Act.cpp
+Equivalent game/volley/unit_4377C.cpp
+Equivalent game/volley/CcNinjaCloneBody.cpp

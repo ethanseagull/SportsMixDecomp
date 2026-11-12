@@ -26,6 +26,10 @@ namespace bcs {
 
             // Tells the parent to drop this object. Returns the old parent.
             CG3dObj *DetachFromParent();
+            // (name guessed; added for game/msw/CStgMdl.cpp, whose
+            // SceneEntry registers only objects without a parent) The
+            // object this one is attached to.
+            CG3dObj *GetParent() const { return m_pParent; }
 
         protected:
             // (name guessed) Inline: bcs::CGDLObj::ObjProc stores the parent

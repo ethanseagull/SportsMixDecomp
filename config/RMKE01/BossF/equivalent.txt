@@ -162,6 +162,5 @@ BossF __ct__Q23msw21CBallTargetMarkerBossFPQ23bcs5CTaskUli near 99.8 stack slots
 BossF __ct__Q33msw12GIMMICK_BOSS16CEffectCoinScoreFPQ23bcs5CTaskRCQ23bcs5FVEC3fl near 99.4 float register choice, one m_pMdl load scheduled differently (no store in between); same as the Basket/Hockey copies
 BossF __ct__Q33msw13CHR_CORE_BOSS9CStickObjFPQ23bcs5CTaskQ34nw4r3g3d6ResMdlPQ23bcs7CMdlObjll near 99.9 stack slots only: the four SetState pointer-to-member temporaries are copied to different stack offsets; same values, stores and calls
 BossF __ct__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFPQ23bcs5CTaskRCQ23bcs5FVEC3l near 99.9 stack slots of the pointer-to-member temporaries of SetState differ; same values stored to the state table
-BossF __dt__Q23msw11CChrManBossFv near 99.1 loop counter and byte offset swap registers (r29/r30); same instructions otherwise
 BossF __dt__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFv near 99.0 register allocation only (one register of the inlined CFsm destructor)
 BossF __sinit_\CChrCoreBoss_cpp near 100.0 literal pool offsets only: the file's float pool lacks the literals of the functions not written yet, so constants sit at other offsets (same values)

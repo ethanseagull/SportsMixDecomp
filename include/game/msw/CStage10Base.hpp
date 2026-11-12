@@ -94,7 +94,7 @@ namespace msw {
                     // calls its SetMtx and Commit through the vptr at 0x128).
                     CStgMdl *m_pMdl;               // 0x18
                     float m_fRadius;               // 0x1C
-                    CStgSrt m_Srt;                 // 0x20
+                    CStgSrtMove m_Srt;             // 0x20
                     bcs::FVEC3 m_InitPos;          // 0x164
                     float m_fMoveWidth;            // 0x170
                     long m_nState;                 // 0x174, 2 locked, 3 scored, 6 terminated
@@ -161,8 +161,8 @@ namespace msw {
                     // show).
                     virtual int IsActiveScorePanel() const;                              // 0x90
                     virtual int IsActiveBonusPanel() const;                              // 0x94
-                    virtual CStgSrt &GetSrt() { return m_Srt; }                          // 0x98
-                    virtual const CStgSrt &GetSrt() const { return m_Srt; }              // 0x9C
+                    virtual CStgSrtMove &GetSrt() { return m_Srt; }                      // 0x98
+                    virtual const CStgSrtMove &GetSrt() const { return m_Srt; }          // 0x9C
                     virtual CStgMdl *GetMdl() { return m_pMdl; }                         // 0xA0
                     virtual const CStgMdl *GetMdl() const { return m_pMdl; }             // 0xA4
                     virtual const CStage10Base *GetParent() const { return m_pParent; }  // 0xA8

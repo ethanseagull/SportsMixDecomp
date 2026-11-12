@@ -206,6 +206,10 @@ namespace msw {
             int Obstacle_IsSpObstacleHandle(unsigned long nObstacle) const;
             long Obstacle_GetPosTurnAroundObstacle(bcs::FVEC3 &rPos, unsigned long nObstacle, long nDir, int) const;
             int RunCorrect_GetViewPointPosFromChr(bcs::FVEC3 &rPos) const;
+            // (DOL; added for VolleyF game/volley/unit_C0918.cpp; meaning
+            // guessed) rPos (in the court's frame) as a world position in
+            // rOut, and how far the character is from it; fArg is passed on.
+            float GetWorldTargetDis(bcs::FVEC3 &rOut, const bcs::FVEC3 &rPos, float fArg) const;
 
             // DOL. The common actions, one per frame while running; derived
             // drivers list them in their action tables (g_ActFuncMap).

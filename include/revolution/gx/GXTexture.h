@@ -11,6 +11,7 @@ extern "C" {
 // Texture formats (only those used so far).
 typedef enum _GXTexFmt {
     GX_TF_I8 = 1,
+    GX_TF_RGB565 = 4,
     GX_TF_RGB5A3 = 5
 } GXTexFmt;
 
@@ -41,6 +42,9 @@ void GXInitTexObj(GXTexObj *pObj, void *pImage, unsigned short nWidth, unsigned 
 // Added for the DOL's game/bcs/CMdlShadow.cpp: bytes of a texture image.
 unsigned long GXGetTexBufferSize(unsigned short nWidth, unsigned short nHeight, unsigned long format,
                                  unsigned char bMipmap, unsigned char nMaxLod);
+// Added for MenuF game/menu/CCharaName.cpp: the size of a texture object.
+unsigned short GXGetTexObjWidth(const GXTexObj *pObj);
+unsigned short GXGetTexObjHeight(const GXTexObj *pObj);
 // Added for the DOL's game/msw/CGameExDemoBase.cpp.
 void GXLoadTexObj(const GXTexObj *pObj, int map);
 

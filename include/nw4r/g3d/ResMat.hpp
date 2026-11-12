@@ -5,6 +5,8 @@
 #include "revolution/gx/GXEnum.h"
 #include "revolution/gx/GXStruct.h"
 
+struct _GXTexObj;
+
 namespace nw4r {
     namespace g3d {
 
@@ -65,6 +67,10 @@ namespace nw4r {
                 explicit ResTexObj(void *pData = 0) : m_pData(pData) {}
 
                 bool IsValid() const { return m_pData != 0; }
+
+                // DOL. The texture object bound to slot mapId (added for MenuF
+                // game/menu/CCharaName.cpp; not const in the mangled name).
+                _GXTexObj *GetTexObj(_GXTexMapID mapId);
 
             private:
                 void *m_pData; // 0x00

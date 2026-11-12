@@ -20,6 +20,8 @@ static int fragmentID = -2;
 // The table of contents pointer (r2, the small data 2 base) the exception
 // tables are relative to. The original reads the register directly
 // (`mr r4, r2` inside __init_cpp_exceptions); C has no way to name it.
+// Other compilers get null: a port has no TOC register and registers its
+// exception tables its own way, so the value is only a placeholder there.
 static inline char *GetR2(void)
 {
 #ifdef __MWERKS__

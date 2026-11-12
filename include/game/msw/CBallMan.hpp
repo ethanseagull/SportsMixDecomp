@@ -93,6 +93,10 @@ namespace msw {
             // (fn_800CD520, unnamed in the DOL) IsExistStarBall_ on the
             // instance, zero without one.
             static int IsExistStarBall();
+            // (DOL; added for BasketF's CChrCoreBasketNinja, return type
+            // guessed) GetStageBallColor_ on the instance into rColor;
+            // zero when the stage's balls keep their own colour.
+            static int GetStageBallColor(bcs::BCS_Color &rColor);
             // AllReset_ and AllSleep_ on the instance (DOL; the DOL's
             // CGameScoredView calls them before its camera starts).
             static void AllReset();

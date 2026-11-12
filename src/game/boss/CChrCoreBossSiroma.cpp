@@ -5,6 +5,16 @@
 
 #include <math.h>
 
+namespace CChrCoreBossSiroma_cpp {
+// uncalled stand-in / pool-off stand-in: the original addresses every float constant of this
+// file with its own lis, which this compiler does when the first .rodata object of the file is
+// weak (a function-local const). The module link strips this function and its constant.
+void UnusedPoolOff()
+{
+    const long k = 0;
+}
+}
+
 namespace {
 
     // (guessed helpers) An angle brought into (-pi, pi], and degrees to

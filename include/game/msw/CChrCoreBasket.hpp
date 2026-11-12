@@ -99,6 +99,12 @@ namespace msw {
             void ArtsEff_CreateAttach(ARTS_EFF_SLOT slot, long nEff, unsigned long nNode, unsigned long);
             void ArtsEff_Stop(ARTS_EFF_SLOT slot);
             void ArtsEff_StopAll();
+            // (added for game/basket/CChrCoreBasketNinja.cpp) Removes the
+            // effect in slot slot at once.
+            void ArtsEff_Erase(ARTS_EFF_SLOT slot);
+            // (name from the weak copy in BasketF) The frames one update
+            // advances, times the motion speed factor.
+            float GetWholeFrameRate() const { return m_fTimeScale * m_fFrameStep; }
             void ArtsEff_PlayAttackSign();
             void PlaySeSPStart();
             // The radius of the three-point line.
@@ -626,24 +632,94 @@ namespace msw {
             virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
     };
 
-    // Allocated with 0x5F4 bytes.
+    // The ninja: his special shot splits him into three (two copies,
+    // CC14_BASKET::CcNinjaClone, held by a CC14_BASKET::CcNinjaFactory task)
+    // in the air before the goal; the player may swap places with a copy
+    // before the three come down. Allocated with 0x5F4 bytes.
     class CChrCoreBasketNinja : public CChrCoreBasket {
         public:
             CChrCoreBasketNinja();
             virtual ~CChrCoreBasketNinja();
+            virtual void GetSpRootPos(bcs::FVEC3 &rPos) const;         // 0x2C
+            virtual int MoveTargetMarkerPos(float fRotY);              // 0x5C
+            virtual int IsAirTrickDunkMode() const;                    // 0x88
+            virtual void CtorStateDamage();                            // 0x3F8
+            virtual void DtorStateTrickMove();                         // 0x520
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void LoopStateAirTrick();                          // 0x588
+            virtual void DtorStateAirTrick();                          // 0x58C
+            virtual void CtorStateDribbleMiss();                       // 0x644
+            virtual void CallbackMotTrg_(const bcs::CAnmObjMotBase::MOT_TRG *pTrg); // 0xC44
+            virtual void CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush); // 0xC54
+            virtual void CallbackMotTrg_BodyVisible_(long bVisible, long); // 0xC7C
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+
+            // Where copy nClone stands; null without the copies or once
+            // that copy has vanished.
+            const bcs::FVEC3 *GetClonePos(long nClone) const;
 
         protected:
-            unsigned char m_Unk5E8[0x5F4 - 0x5E8];
+            void CreateClone_();
+            void DestroyClone_();
+            void ChangeStateClone_(long nState);
+            bcs::FVEC3 *GetArtsBasePos_();
+            void SetArtsBasePos_(const bcs::FVEC3 &rPos);
+            void WholeUpDatePosition_();
+            void WholeUpDatePosition_(const bcs::FVEC3 &rPos);
+            void StopSpSe_(float fFrames);
+
+            // (inline helpers, names guessed) Whether a body-visible
+            // trigger with parameter bHide hides the shown body, or shows
+            // the hidden one (bit 0x10000000 of the status flags).
+            int IsBodyHideTrg_(long bHide) const
+            {
+                int b = 0;
+                if (bHide != 0 && !(m_nStatusFlag & 0x10000000)) {
+                    b = 1;
+                }
+                return b;
+            }
+            int IsBodyShowTrg_(long bHide) const
+            {
+                int b = 0;
+                if (bHide == 0 && (m_nStatusFlag & 0x10000000)) {
+                    b = 1;
+                }
+                return b;
+            }
+
+            // (names guessed)
+            // 0x5E8: where the player sent the ninja during the trick (1
+            // ahead, 2 and 4 the sides, 3 back; 0 not chosen).
+            long m_nSpMove;
+            unsigned long m_hFactory;  // 0x5EC, task id of the copies, 0 for none
+            unsigned long m_hSpSe;     // 0x5F0, the sound of the trick
     };
 
-    // Allocated with 0x5EC bytes.
+    // The White Mage: her special shot draws a magic circle
+    // (CC15_BASKET::CcSiromaMagicCircle) on the target marker, which fires
+    // a pillar of light at the shot. Allocated with 0x5EC bytes.
     class CChrCoreBasketSiroma : public CChrCoreBasket {
         public:
             CChrCoreBasketSiroma();
             virtual ~CChrCoreBasketSiroma();
+            virtual int GetTargetMarkerPos(bcs::FVEC3 &rPos);         // 0x58
+            virtual int MoveTargetMarkerPos(float fRotY);              // 0x5C
+            virtual void Reset_();                                     // 0x384
+            virtual void LoopStateAirTrick();                          // 0x588
+            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
+            virtual int SubStateArtsShotIsEndArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xD00
 
         protected:
-            unsigned char m_Unk5E8[0x5EC - 0x5E8];
+            // (inline helper, name guessed) Deletes the magic circle, if any.
+            void ReleaseMagic_();
+
+            unsigned long m_hMagic;    // 0x5E8, task id of the magic circle, 0 for none
     };
 
     class CChrCoreBasketMii00 : public CChrCoreBasket {

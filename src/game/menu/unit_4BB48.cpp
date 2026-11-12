@@ -17,6 +17,16 @@
 #include "string.h"
 #include "wchar.h"
 
+namespace unit_4BB48_cpp {
+// uncalled stand-in / pool-off stand-in: the original addresses every float constant of this
+// file with its own lis, which this compiler does when the first .rodata object of the file is
+// weak (a function-local const). The module link strips this function and its constant.
+void UnusedPoolOff()
+{
+    const long k = 0;
+}
+}
+
 // The Wi-Fi match-making screens: a match with anybody (WifiWait_*) and the
 // set-up of a friend match (FriendVSWait_*). The game's file name is
 // SelectMenuWiFiWait.cpp (the hash name of WifiWait's data). Both sides

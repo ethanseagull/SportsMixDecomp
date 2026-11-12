@@ -270,7 +270,11 @@ game/boss/unit_5FF80.cpp:
 	.bss        start:0x00000288 end:0x00000290
 
 game/boss/unit_636D4.cpp:
-	.text       start:0x000636D4 end:0x0006435C
+	.text       start:0x000636D4 end:0x00063EA4
 	.ctors      start:0x00000014 end:0x00000018
-	.rodata     start:0x000033D8 end:0x00003448
+	.rodata     start:0x000033D8 end:0x00003418
 	.bss        start:0x00000290 end:0x00000294
+
+game/boss/unit_63EA4.cpp:
+	.text       start:0x00063EA4 end:0x0006435C
+	.rodata     start:0x00003418 end:0x00003448

@@ -1129,6 +1129,10 @@ namespace msw {
             // Frame, motion id and play of animation slot nSlot (the
             // fighting code uses slot 3).
             float AnimGetFrame(unsigned long nSlot) const;
+            // (DOL; added for DodgeF game/dodge/CcNinjaCloneBody.cpp, names
+            // guessed) The frame of trigger nTrg in motion nMotId, below 0
+            // when it has none (see bcs::CAnmMotion::SearchTrgFrame).
+            float AnimSearchTrgFrame(long nMotId, unsigned long nTrg, float) const;
             long AnimGetMotID(unsigned long nSlot, long) const;
             void AnimPlay(unsigned long nSlot, long nMotId, int, float, float);
             // (names guessed) Inline in the modules.
@@ -1396,12 +1400,40 @@ namespace msw {
             unsigned long GetBallHandle() const { return m_hBall; }
             void OnFlagF4(unsigned long nBit) { m_nFlagF4 |= nBit; }
 
+            // Added for BasketF game/basket/CChrCoreBasketNinja.cpp (names
+            // from the weak copies in BasketF; meanings guessed). Bits of
+            // m_nStatusFlag: bit 0 is set while the character holds the
+            // ball, bit 2 when it holds it in the left hand (the air trick
+            // motions take it as their "alt" argument).
+            int IsHaveBall() const { return m_nStatusFlag & 1; }
+            int IsHaveLeft() const { return (m_nStatusFlag >> 2) & 1; }
+            int GetFlag(unsigned long nBit) const { return (m_nStatusFlag & nBit) != 0; }
+            void ResetFlag(unsigned long nBit) { m_nStatusFlag &= ~nBit; }
+            // (name guessed) See m_pParentTask.
+            bcs::CTask *GetParentTask() const { return m_pParentTask; }
+            // Virtual node nNode of the model (0x180 is node 0).
+            unsigned short GetVNode(long nNode) const { return (&m_nEffNodeSpike)[nNode]; }
+            // (DOL; return types guessed) The goal the team defends, as a
+            // point; the handle of the effect in slot nSlot;
+            // body collision unit nIndex; a sound that follows pPos, and
+            // stopping one by its handle (over fFrames).
+            const bcs::FVEC3 &GetGuardGoalPos() const;
+            unsigned long Eff_GetHandle(long nSlot) const;
+            const CCollBodyUnit *CollBodyGetColl_(long nIndex);
+            unsigned long PlayMoveSe(long nSe, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
+            void StopSe(unsigned long hSe, float fFrames);
+            // (DOL) The motion trigger callback the model calls with the
+            // character as pUser; it passes the trigger on to
+            // CallbackMotTrg_.
+            static void CallbackMotTrg(const bcs::CAnmObjMotBase::MOT_TRG *pTrg, void *pUser);
+
         protected:
-            // 0x60 (name guessed): the parent of the tasks the character
-            // makes (VolleyF's CChrCoreVolleyDaisy hangs her flower garden
-            // under it).
-            bcs::CTask *m_pTaskParent;
-            CChrDrv *m_pDriver[2];       // 0x64 (count guessed from the index's place)
+            // 0x60 (name guessed): the task the character's helper tasks
+            // hang under (BasketF's CChrCoreBasketNinja makes its copies'
+            // task with it as the parent;
+            // VolleyF's CChrCoreVolleyDaisy hangs her flower garden under it).
+            bcs::CTask *m_pParentTask;
+            CChrDrv *m_pDriver[2];      // 0x64 (count guessed from the index's place)
             long m_nDriver;              // 0x6C, index of the driver in use, negative for none
         public:
             // (public: BasketF's game/basket/CChrDrvPadBasket.cpp reads 0x70

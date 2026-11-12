@@ -30,7 +30,11 @@ namespace msw {
             // CStgGmk_Pinball_Act_Volley::OnBallCatch and DodgeF's
             // msw::CStgGmk_Pinball_Act_Dodge::OnDamage read it.
             bcs::FVEC3 m_Pos;
-            unsigned char m_Unk38[0xA0 - 0x38];
+            unsigned char m_Unk38[0x5C - 0x38];
+            // 0x5C (name guessed, after CCollUnit::m_Size): the unit's size;
+            // BasketF's CcNinjaClone gives its own unit the owner's.
+            bcs::FVEC3 m_Size;
+            unsigned char m_Unk68[0xA0 - 0x68];
             // 0xA0 (meaning unknown): the DOL's msw::CStgGmk_Pylon_Act::OnBodyPush
             // does not move the pylon, nor slows the push, for a unit where
             // it is 5.

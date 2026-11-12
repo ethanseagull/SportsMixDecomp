@@ -198,7 +198,7 @@ void msw::CChrCoreVolleyDaisy::SubStateAirTrickPlayTrickMotion_(STATE_WORK_AIR_T
     pos.x = 0.5f * (rect.x + rect.y);
     pos.y = 0.0f;
     pos.z = 0.5f * (rect.z + rect.w);
-    new (0x100) CC03_VOLLEY::CcDaisyFlowerGarden(m_pTaskParent, this, GetTargetCourtIdx(), pos);
+    new (0x100) CC03_VOLLEY::CcDaisyFlowerGarden(m_pParentTask, this, GetTargetCourtIdx(), pos);
 }
 
 void msw::CChrCoreVolleyDaisy::SubStateAirTrickPlayLoopMotion_(STATE_WORK_AIR_TRICK *pWork)

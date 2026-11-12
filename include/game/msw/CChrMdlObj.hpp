@@ -59,6 +59,13 @@ namespace msw {
             // The size of a Mii's head.
             void SetMiiHeadScale(float fScale);
 
+            // (DOL; added for DodgeF game/dodge/CcNinjaCloneBody.cpp; argument
+            // meanings and return types guessed) Builds the in-game model of
+            // character nChr for player nPlayer; whether the camera's near
+            // plane clips the model.
+            void CreateGameObj(nw4r::g3d::ResFile file, long nChr, long nPlayer, long);
+            void EnableCameraNearClip(int bEnable);
+
             // The trigger callback of the model's motion; pUser is the model.
             static void CallbackMotTrg(const bcs::CAnmObjMotBase::MOT_TRG *pTrg, void *pUser);
 

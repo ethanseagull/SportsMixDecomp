@@ -1,7 +1,7 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
 MenuF CalcView___Q23msw8CBBoxObjFlPCQ23bcs6FMTX34 near 99.3 register numbering inside the paired-single FVEC3Add pair; same instructions
 MenuF ChangePict__Q33msw10SelectMenu9CRuleInfoFv near 98.1 register choice and instruction order only (accessor/texture registers swapped around the inline GetPane)
-MenuF ChangeTab__Q33msw10SelectMenu11CPlayerInfoFl unverified 77.7 range check written as cmpwi 0/blt + cmpwi 5/bge in the original, one cmplwi 4/bgt in ours, and ours keeps the .rodata base (table and the 1.0f/0.0f literals) in a saved register where the original uses one lis each; same table, constants and call. Tried: static local table (93.7%, but adds a @LOCAL@ object the original lacks), ||, nested ifs, ternary
+MenuF ChangeTab__Q33msw10SelectMenu11CPlayerInfoFl near 93.7 range check only: the original tests the signed index with cmpwi 0/blt + cmpwi 5/bge, ours with one unsigned cmplwi 4/bgt, which accepts exactly the same values 0..4; table, constants and call identical, float literals addressed as in the original since the pool-off stand-in. Tried earlier: ||, nested ifs, ternary
 MenuF CharSel_CancelLastDecideChara__Q23msw11CSelectMenuFv near 96.9 register allocation only: the loop counter, the hoisted zero and the pointer copies are numbered in another order; same instructions
 MenuF CharSel_In__Q23msw11CSelectMenuFv near 98.5 registers and stack slots only: the two RFLCreateID temporaries of the inlined _WiFiMiiSetUp swap slots (0x18/0x20) and the first loop's array pointer and btn-kind pointer get each other's register; same instructions, constants and calls
 MenuF CharSel_LevelOkBtn__Q23msw11CSelectMenuFv near 99.8 register allocation only: nMode and the leader pad swap r31/r30; same instructions and relocations
@@ -125,7 +125,7 @@ MenuF Set__Q33msw10SelectMenu11CFriendCodeFv near 99.0 register allocation only
 MenuF Set__Q33msw10SelectMenu11CFriendInfoFv near 97.9 register allocation only
 MenuF Set__Q33msw10SelectMenu11CFriendListFv near 98.4 register allocation only: the SetUpButton result is truncated into a different register for the switch and the 0x10..0x12 range test; same values and branches
 MenuF Set__Q33msw10SelectMenu11CGameSelectFv near 97.1 addressing form only in the inlined InitPaneAnim icon loop: original adds base + i*0x14 each pass, ours steps a pointer; same loads, compares, constants and calls
-MenuF Set__Q33msw10SelectMenu11CPlayerInfoFv near 94.4 addressing form only: the original loads each .rodata object and float literal with its own lis, ours keeps the .rodata base in a saved register (one more saved register, frame 0x30 vs 0x20); same loads, constants, calls and branches
+MenuF Set__Q33msw10SelectMenu11CPlayerInfoFv near 99.2 register allocation and scheduling only (pool-off stand-in applied: .rodata objects and float literals now one lis each, as in the original); same loads, constants, calls and branches
 MenuF Set__Q33msw10SelectMenu12CButton1CodeFv near 99.8 register choice only: r27 and r30 are swapped between the CSelectMenu pointer and the new CMenuPartList; same instructions otherwise
 MenuF Set__Q33msw10SelectMenu12CButtonACodeFv near 98.8 register choice only: r23/r24 swapped between the CSelectMenu/CPaneCtrl pointers and the file-name/font-name temporaries; same instructions otherwise (as CButton1::Set)
 MenuF Set__Q33msw10SelectMenu12CCharaStatusFv near 98.6 register allocation only; regs search no gain

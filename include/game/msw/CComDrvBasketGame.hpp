@@ -5,6 +5,8 @@
 
 namespace msw {
 
+    struct MEMBER_INFO;
+
     // INCOMPLETE: the computer driver of the normal basketball game
     // (BasketF; game/basket/CComDrvBasketGame.cpp and other units). Only
     // what the written units use is declared; the size, 0x688, is what
@@ -76,31 +78,143 @@ namespace msw {
             void ActCallAssistPlay();
             void ActCallScriptI(const char *pName, long nArg);
 
+            // (added for game/basket/CComDrvBasketGame.cpp; return types
+            // and meanings guessed from the names and how ActInterrupt and
+            // ThkMain use them) The overrides that break off the running
+            // action and pick the next one, and their parts.
+            virtual void ActInterrupt();
+            virtual void ThkMain();
+            void ActInterrupLooseBall_();
+            void ActInterruptOffense_();
+            void ActInterruptItemShootCheck_();
+            void ActInterruptDefense_();
+            void ActInterrupSp_();
+            // Not zero when they started an action (or one is running that
+            // must not be broken off).
+            int ActInterrupStateStar_();
+            int ActInterrupGimmick_();
+            int ActInterrupCommonThrowItem_();
+            int ActInterrupAlleyoopforLuiMan_();
+            void ThkMainJumpBall_();
+            void ThkMainLooseBall_();
+            void ThkMainOffense_();
+            void ThkMainOffenseStar_();
+            void ThkMainDefense_();
+            void ThkMainDefenseStar_();
+            void ThkMainSp_();
+            int SubThkMainOffenseGoDunkAreaforLuiman_();
+            // Tests and draws.
+            int IsCombination() const;
+            int IsAllComTeam() const;
+            int JudgeItemThrow(bcs::FVEC3 &rPos);
+            int JudgeShootCourseFree() const;
+            int JudgeBombShootEsp();
+            int JudgeReboundOrReboundDunk();
+            int JudgeSmashCut();
+            int JudgeCut();
+            int JudgeMissCut();
+            int JudgeShootBlock();
+            int JudgeAlleyoopPassBlock();
+            int JudgeDunkBlock();
+            int JudgeAlleyoopBlock();
+            int JudgeJumpUpper();
+            int JudgeJumpCut();
+            int JudgeCombinationPlay() const;
+            int CanbeActCallJumpShoot();
+            int CanbeJumpShoot();
+            int CanbeActCallItemShoot();
+            int CanbeActGetGShell() const;
+            int CanbeActGetHatenaPanel() const;
+            int CanbeAlleyoop() const;
+            int CanbeAirTrick();
+            int LotRateCancelPass();
+            int LotRateCancelLayUp();
+            int IsActCallDefenseExt();
+            // -1 when no direction of a shot with the curve fCurve is free.
+            long CheckItemShootDir(float fCurve, float fRange0, float fRange1) const;
+            // The rate of the "?" panels of the stage (1 for most).
+            float GetHatenaPanelStageRate_() const;
+            // The holders of team nTeam with their scores; the number of them.
+            long CalcHoldBallScore(long nTeam, MEMBER_INFO &rInfo);
+            long GetBaseShootPointToGimmick() const;
+            // Where the driver stands against the three-point area on the
+            // cruise ship stage (-1, 0 or 1).
+            long GetDCruise3PointAreaState() const;
+            void GetHomePos(bcs::FVEC3 &rPos);
+            void MethdDash();
+            int MethdCombination();
+            int MethdPassRequest();
+            // More start actions.
+            void ActCallItemThrow(const bcs::FVEC3 &rPos);
+            void ActCallItemShoot(long nArg);
+            void ActCallItemEscape();
+            void ActCallGetBall();
+            void ActCallDunk();
+            void ActCallJumpShoot();
+            void ActCallJump();
+            void ActCallPass();
+            void ActCallCancelPass(const CChrCore *pChr);
+            void ActCallShootCancelPass(const CChrCore *pChr);
+            void ActCallCancelLayUp();
+            void ActCallBlockade();
+            void ActCallSpinMove();
+            void ActCallGoOffense();
+            void ActCallGoOffense2();
+            void ActCallGoDefense();
+            void ActCallGoDefense2();
+            void ActCallGoDefense3();
+            void ActCallGoDefOnBaller();
+            void ActCallGoDefPassCourse();
+            void ActCallDefGhost();
+            void ActCallGetGShell();
+            void ActCallGetHatenaPanel();
+            void ActCallGoEspBubble(unsigned long nObstacle);
+            void ActCallGoEscape(unsigned long nItem);
+            void ActCallGoRunRand();
+            void ActCallGoHome();
+            void ActCallGoBall();
+            void ActCallGoEnemy();
+            void ActCallGoDunkArea();
+            void ActCallAlleyoop();
+            void ActCallJumpBall();
+            void ActCallCombination();
+            void ActCallPassGhost();
+            void ActCallAirTrick();
+            void ActCallBallKeep();
+
             static ActFunc g_ActFuncMap[];
 
         protected:
-            unsigned char m_Unk170[0x17C - 0x170];
+            // 0x170 (name guessed): the character the driver marks on
+            // defence; null for none.
+            CChrCore *m_pMarkChr;
+            unsigned char m_Unk174[0x17C - 0x174];
             // 0x17C (name guessed): flag bits. 0x20 and 0x40 toggle on
             // timers (m_fUnk1CC, m_fUnk1DC), 0x400 is drawn while holding
             // the ball, 0x800 is set by message 0x18.
             unsigned long m_nFlag17C;
-            unsigned char m_Unk180[0x188 - 0x180];
+            unsigned char m_Unk180[0x184 - 0x180];
+            long m_nUnk184;   // 0x184, cleared with m_nUnk188 by ActInterrupt
             long m_nUnk188;   // 0x188
-            unsigned char m_Unk18C[0x190 - 0x18C];
+            float m_fUnk18C;  // 0x18C, counts up every ActInterrupt
             float m_fUnk190;  // 0x190, a timer counted down to 0
-            unsigned char m_Unk194[0x1A0 - 0x194];
+            float m_fUnk194;  // 0x194, the timer of the dunk draw
+            unsigned char m_Unk198[0x1A0 - 0x198];
             float m_fUnk1A0;  // 0x1A0, frames the ball has been held
-            unsigned char m_Unk1A4[0x1B0 - 0x1A4];
+            float m_fUnk1A4;  // 0x1A4, the timer of the alley-oop draw
+            float m_fUnk1A8;  // 0x1A8, the timer of the item shot draw
+            unsigned char m_Unk1AC[0x1B0 - 0x1AC];
             float m_fUnk1B0;  // 0x1B0
-            unsigned char m_Unk1B4[0x1BC - 0x1B4];
+            float m_fUnk1B4;  // 0x1B4, the timer of the thrown item check
+            unsigned char m_Unk1B8[0x1BC - 0x1B8];
             float m_fUnk1BC;  // 0x1BC, a timer counted down to 0
-            unsigned char m_Unk1C0[0x1C4 - 0x1C0];
+            float m_fUnk1C0;  // 0x1C0, the timer of the star state's panel draw
             float m_fUnk1C4;  // 0x1C4, counts down; at 0 restarts at 30
             float m_fUnk1C8;  // 0x1C8, set to -1 when m_fUnk1C4 runs out
             float m_fUnk1CC;  // 0x1CC, the timer of flag 0x20
             unsigned char m_Unk1D0[0x1D4 - 0x1D0];
             float m_fUnk1D4;  // 0x1D4, a timer counted down to 0
-            unsigned char m_Unk1D8[0x1DC - 0x1D8];
+            float m_fUnk1D8;  // 0x1D8, the timer of the boss Packun jump shot
             float m_fUnk1DC;  // 0x1DC, the timer of flag 0x40
             unsigned char m_Unk1E0[0x1FC - 0x1E0];
             float m_fUnk1FC;  // 0x1FC, a timer (message 0x26)

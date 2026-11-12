@@ -96,7 +96,7 @@ namespace msw {
             virtual void FadeIn(float fSpeed, int nUnk);
             virtual int IsFadeInReq() const { return m_bFadeInReq; }
             virtual void SetMatchMake(long nMatch, long nTeam0, long nTeam1);
-            virtual void VsMatchPause(long nMatch, long nTeam0, long nTeam1);
+            virtual void VsMatchPause(long nTeam0, long nTeam1, long nMatch);
 
             virtual void ChangeStateProc();
 
@@ -249,7 +249,7 @@ namespace msw {
             void CtorStateBossCallEnd();
             void LoopStateBossCallEnd();
             void DtorStateBossCallEnd();
-            float _SetupVsScene(int b);
+            void _SetupVsScene(int bSkipDemo);
 
             // The state the timers belong to now: the current state and the
             // team whose turn it is.

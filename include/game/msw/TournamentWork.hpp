@@ -167,7 +167,12 @@ namespace msw {
             signed char aTeamChrChangeCtrlType[2];
             signed char aTeamAutoSpikeJumpType[2];
             signed char nUnkCA6;             // 0x0CA6, copied to CGame::GameWork 0x1C
-            unsigned char m_Unk0CA7[0xCAC - 0xCA7];
+            // 0x0CA7: the variant of the story demo TourF's
+            // CTournamentStep::LoopStateMoveEnd starts (the turn mode
+            // counted from its first, plus 10 with every all-star
+            // character unlocked). (name guessed)
+            signed char nDemoVariant;
+            unsigned char m_Unk0CA8[0xCAC - 0xCA8];
             PLAYER_INFO aPlayer[3];          // 0x0CAC
             wchar_t aPlayerName[3][0x20];    // 0x0D9C
             // 0x0E5C: one bit per route of the map, set once its line has

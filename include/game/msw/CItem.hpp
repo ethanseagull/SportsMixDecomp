@@ -218,6 +218,8 @@ namespace msw {
             // (name guessed) Inline in the original; the modules read the
             // member directly.
             const bcs::FVEC3 &GetPos() const { return m_vPos; }
+            // (added for BasketF game/basket/CComDrvBasketGame.cpp)
+            const bcs::FVEC3 &GetVelocity() const { return m_vVelocity; }
             // (name guessed) Inline in the original: the DOL items reload
             // m_nFlag after testing a bit through it.
             bool IsFlag(unsigned long flag) const { return (m_nFlag & flag) != 0; }

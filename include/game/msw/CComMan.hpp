@@ -12,6 +12,7 @@ namespace msw {
 
     class CChrObstacle;
     class CDropCoin;
+    class CComDrv;
 
     // The computer players' manager. A DOL class; each game module derives
     // its own (CComManVolleyGame, CComManBasketGame, CComManHockey, ...) and
@@ -43,6 +44,10 @@ namespace msw {
             static float GetDatF(long nId, float fLevel);
             // (DOL) Number of the pad-driven characters of team nTeam.
             static long GetExistPadDrvNum(long nTeam);
+            // (DOL; added for HockeyF game/hockey/unit_AE7E8.cpp) The ball
+            // holder (null / negative for none); callers pass -1.
+            static CChrCore *GetHoldBallChrCore(long);
+            static long GetHoldBallChrIdx(long);
             // (DOL) Index of the ball in play; negative for none.
             static long GetActiveBallIdx();
 
@@ -120,6 +125,9 @@ namespace msw {
                                                unsigned long nIgnoreBits, int);
             static CChrCore *GetChrCoreRand(long nTeam);
             static bcs::FVEC3 GetChrPos(long nChr);
+            // (DOL; added for DodgeF game/dodge/unit_A4AE8.cpp) Character
+            // number nChr's position in the world.
+            static bcs::FVEC3 GetChrWorldPos(long nChr);
             // (DOL; added for DodgeF game/dodge/unit_D7800.cpp) The position
             // of character nChr on the ground (y taken to be 0; meaning guessed
             // from the name).
@@ -135,6 +143,13 @@ namespace msw {
             // closes (0: the back line, 1: the front line); walks of the "?"
             // panels.
             static CComMan *GetInstance();
+            // (DOL; added for DodgeF game/dodge/unit_A4AE8.cpp) The distance
+            // between characters nChr0 and nChr1 in the XZ plane.
+            static float GetChrDisXZ(long nChr0, long nChr1);
+            // (DOL; added for BasketF game/basket/CComDrvBasketGame.cpp,
+            // meaning guessed) pChr's computer driver (null when a computer
+            // does not drive it). GetHoldBallChrCore is declared above.
+            static CComDrv *GetComDrv(CChrCore *pChr);
             static int IsEnableViewColl();
             static float GetViewCollPosZ();
             static long GetViewCollTargetDir();

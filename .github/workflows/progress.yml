@@ -17,8 +17,14 @@ jobs:
       # The game files cannot be on CI, so the report is not built here: it is the
       # objdiff report of the last verified local build, committed by
       # tools/decomp/publish_report.py (names, sizes and match percentages only).
-      - uses: decmp/upload-action@v1
-        with:
-          report: progress/RMKE01/report.json
-          version: RMKE01
-          # name, platform and banner are managed on decmp.dev
+      # decmp's script form (decmp/upload-action@v1's action.yml failed to parse on
+      # 2026-11-12); the download is pinned by its sha256 from decmp.dev/add.
+      - name: Upload to decmp.dev
+        run: |
+          curl -fsSL https://api.decmp.dev/action/v1.1.0.mjs -o decmp.mjs
+          echo "10fb0039a067b4ffe67510959356a691efa6efbb0aae16450c04f8c64da0a5f8  decmp.mjs" | sha256sum -c
+          node decmp.mjs
+        env:
+          DECMP_REPORT: progress/RMKE01/report.json
+          DECMP_VERSION: RMKE01
+          GITHUB_TOKEN: ${{ github.token }}   # comments on pull requests

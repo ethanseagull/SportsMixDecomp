@@ -206,7 +206,10 @@ namespace msw {
             // 0x1057: the map's music, -1 for none (TournamentWork::
             // BgmPlay, TourF). (name guessed)
             signed char nBgm;
-            unsigned char m_Unk1058;
+            // 0x1058: the main step the map goes to when the tournament
+            // ends (2: the menu; TourF CTournamentStep's _ExitStep and
+            // CtorStateDemoEnd read it signed). (name guessed)
+            signed char nExitStep;
             // 0x1059: the state the map step goes to after the event
             // scripts run (msw::CTournamentStep::_ChangeStateEvent, TourF).
             // (name guessed)

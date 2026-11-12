@@ -56,6 +56,13 @@ namespace msw {
             // Looks the task up in the task manager by s_TaskHandle; null
             // when there is none.
             static CCockpit *GetTask();
+            // (DOL, static; added for BossF game/boss/GameBoss.cpp; argument
+            // meanings guessed) The numbers of the result screen: periods
+            // to show, the current period, then six arrays of period
+            // values (the boss game passes each team's score per period and
+            // which team won each), and a last word (-1).
+            static void SetResultParameter(long nPeriodNum, long nPeriod, long *, long *, long *, long *, long *,
+                                           long *, long);
             // (return type guessed) Removes the cockpit task, if there is one.
             static void Remove();
 

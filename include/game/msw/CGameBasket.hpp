@@ -74,11 +74,11 @@ namespace msw {
             virtual void LoopStateGameResult();
             virtual void DtorStateGameResult();
             virtual void CalcAddSkillPoint_();
-            virtual void SetGameResultNext_();
+            virtual int SetGameResultNext_();
             virtual void AddTeamCoin_(long, long);
             virtual void TrgBasketGoalIn_(long, long, long, long, float, const bcs::FVEC3 &, long);
-            virtual void GetMaxCoin_() const;
-            virtual void GetFirstGoalIdxMode_();
+            virtual long GetMaxCoin_() const;
+            virtual long GetFirstGoalIdxMode_();
             virtual void SetCockpitArtsGaugeRatio_(long, float, float);
             virtual void SetCockpitArtsGaugeSpAnim_(long, int);
             virtual void SetDispRadarIcon_(int);
@@ -89,14 +89,14 @@ namespace msw {
             virtual void SetCockpitScoreDisp_(int);
             virtual void SetCockpitPeriodDisp_(int);
             virtual void GetGoalDemoType_(long, long) const;
-            virtual void GetGoalDemoTelop_(long, long, long, int) const;
+            virtual long GetGoalDemoTelop_(long, long, long, int) const;
             virtual void StartGoalTelop_();
-            virtual void GetExceptionalCameraType_();
+            virtual long GetExceptionalCameraType_();
             virtual void ScoreBookInitCountWork_();
             virtual void ScoreBookAddCountWork_(long, long, long);
             virtual void ScoreBookApplyCountWork_();
-            virtual void MenuCallInterval_();
-            virtual void MenuCallPause_();
+            virtual int MenuCallInterval_();
+            virtual int MenuCallPause_();
             virtual void CockpitCheckArrowState_();
             virtual void CameraReset_();
 

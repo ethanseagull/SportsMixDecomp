@@ -132,6 +132,9 @@ namespace msw {
             // QPanelSetViewBaseRot_ on the instance (guessed from the names).
             static void SetUp();
             static void QPanelSetViewBaseRot(float fRot);
+            // (DOL, static; added for BossF game/boss/GameBoss.cpp)
+            // QPanelAllReset_ on the instance (guessed from the name).
+            static void QPanelAllReset();
 
         protected:
             // The instance is a plain static pointer in the DOL (no task

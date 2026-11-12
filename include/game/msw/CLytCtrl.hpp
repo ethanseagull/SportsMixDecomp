@@ -31,6 +31,12 @@ namespace msw {
             static CLytCtrl *GetInstance();
             // (return type guessed)
             static CLytCtrl *CreateInstance(bcs::CTask *pParent);
+            // (added for BossF game/boss/GameBoss.cpp, whose Finalize_ calls
+            // the three without an object: static) Frees the layouts, lets
+            // go of their resources and closes the archives.
+            static void Dispose();
+            static void DetachResource();
+            static void Close();
             // Static: its body reads nothing through r3. Bit 0 of the
             // layout manager's word at 0x44, or 0 without a manager (return
             // type guessed; the caller in CCameraMenuBG.cpp turns it into 0 or 1).

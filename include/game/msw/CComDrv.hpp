@@ -129,6 +129,10 @@ namespace msw {
             CBall *GetActiveBall() const;
             float GetMyCourtLeft() const;
             float GetMyCourtRight() const;
+            // (DOL; added for DodgeF game/dodge/unit_D8380.cpp) The front
+            // and back edges of the character's court.
+            float GetMyCourtFront() const;
+            float GetMyCourtBack() const;
             void RunCorrect_RenewEscPos(bcs::FVEC3 &rPos, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rDir, float fLen) const;
             // DOL. A world position brought into the court's own frame
             // (passes the long on as Local2World does).

@@ -14,7 +14,6 @@ HockeyF CreateBallIcon__Q23msw18CRadarIcon2DHockeyFPQ33msw12CRadarIcon2D14ICON_P
 HockeyF CreateBallMarker__Q23msw17CCockpitHockeyMapFPQ34nw4r3lyt4PanePQ33bcs3G2D9CPaneCtrl near 98.8 register allocation only: the original keeps the rot pane and its name in separate saved registers (one more saved GPR, frame 0x50 vs 0x40); same calls, loads and branches
 HockeyF CreateCharaIcon__Q23msw18CRadarIcon2DHockeyFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc near 99.9 register choice for one saved handle; pane-name table addressed through our named static instead of the original's anonymous label
 HockeyF CreateGoalIcon__Q23msw22CRadarIcon2DHockeyGoalFPQ33msw22CRadarIcon2DHockeyGoal14ICON_PARAMETERlPCcPCcPCcPCc near 99.9 register choice for one saved handle; static tables addressed through named statics instead of anonymous labels
-HockeyF CreateGoal__Q23msw14CStageHockey07Fv near 99.3 99.3%: boss position vector (X, 0.0f, Z) loaded in a different order into the same stack vector; same values
 HockeyF CreatePlayerMarker__Q23msw17CCockpitHockeyMapFlPQ34nw4r3lyt4PanePQ33bcs3G2D9CPaneCtrl near 99.5 register allocation only (saved GPR numbering in the pane setup)
 HockeyF CtorStateAirTrick__Q23msw21CChrCoreHockeyWaluigiFv near 99.8 same instructions after register renumbering (diff.py: match); objdiff's 0.2% is a relocation detail
 HockeyF CtorState_OPEN__Q23msw28CStgGmk_Container_Act_HockeyFv near 94.5 register reuse only (ours CSEs constant 0 into a saved register)
@@ -79,7 +78,6 @@ HockeyF OnReflectHit__Q23msw23CStgGmk_Case_Act_HockeyFPCQ23msw12CCollDefUnitPCQ2
 HockeyF OnReflectHit__Q23msw26CStgGmk_Pinball_Act_HockeyFPCQ23msw12CCollDefUnitPCQ23msw5CBallRQ23bcs5FVEC3RQ23bcs5FVEC3 near 97.7 register numbering; reflect test ble+b vs bgt (same condition); the result 0xA01 is built li 1 + ori 0xA00 in the original and li 0xA01 in ours (same value)
 HockeyF OnReflectHit__Q23msw26CStgGmk_Trolley_Act_HockeyFPCQ23msw12CCollDefUnitPCQ23msw5CBallRQ23bcs5FVEC3RQ23bcs5FVEC3 near 97.4 register numbering inside the paired-single vector helpers, and the return value 0x401 built as li 1 / ori 0x400 in the original but as one li in ours (same value); same calls, loads, stores and branches
 HockeyF OnReflectHit__Q23msw28CStgGmk_Container_Act_HockeyFPCQ23msw12CCollDefUnitPCQ23msw5CBallRQ23bcs5FVEC3RQ23bcs5FVEC3 near 93.5 original keeps constant result byte 1 in a saved register (frame 0x40 vs 0x30); ours folds the constant; rest register numbering, same operations
-HockeyF OnSoundEvent__Q23msw14CStageHockey07Fl near 100.0 the original .rodata pool holds an unread pi/180 before 180/420/-1, so its loads are 4 bytes further in; same values (dead reference to emit it costs an int-to-float conversion, 92.9%)
 HockeyF PlayAnim__Q23msw21CCockpitHockeySmashVSFli near 98.5 register allocation and instruction order only (same calls, constants, fields)
 HockeyF Reset___Q23msw21CChrCoreHockeyWaluigiFv near 99.8 same instructions after register renumbering (diff.py: match); objdiff's 0.2% is a relocation detail
 HockeyF ScoreInWait__Q23msw18CCockpitHockeyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28

@@ -163,12 +163,25 @@ void msw::CStageHockey07::CreateGoal()
 {
     CStageManHockey::CreateGoal();
 
-    bcs::FVEC3 pos(HOCKEY_PRM_S07_PACKUN_LOCATE_X, 0.0f, HOCKEY_PRM_S07_PACKUN_LOCATE_Z);
+    bcs::FVEC3 pos(0.0f, 0.0f, 0.0f); pos.x = HOCKEY_PRM_S07_PACKUN_LOCATE_X; pos.z = HOCKEY_PRM_S07_PACKUN_LOCATE_Z;
     m_pPackun = CChrManHockey::GetInstance()->CreateBossPackun_(pos, 0);
+}
+
+namespace {
+    // Stand-in for an unknown user of pi/180, which the original keeps in
+    // .rodata between CreateGoal's 0.0f and OnSoundEvent's constants but
+    // nothing reads (likely stripped code). See notes/decisions.md,
+    // "Unreferenced data kept by dead references".
+    inline void UnusedReferences(float f)
+    {
+        if (f == 0.017453292f) {
+        }
+    }
 }
 
 float msw::CStageHockey07::GetGoalX1Length(long) const
 {
+    UnusedReferences(HOCKEY_PRM_S07_GOAL_X1_LENGTH);
     return HOCKEY_PRM_S07_GOAL_X1_LENGTH;
 }
 

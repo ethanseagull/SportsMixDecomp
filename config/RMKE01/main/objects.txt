@@ -110,3 +110,5 @@ Equivalent game/msw/CStgMdl.cpp
 Matching game/msw/CStgGmk.cpp
 Equivalent game/bcs/CRsoModule.cpp flags=noauto
 Matching game/msw/ArchiveFont.cpp
+Equivalent game/msw/CEventNodeBase.cpp
+Equivalent game/msw/CSignBoard.cpp

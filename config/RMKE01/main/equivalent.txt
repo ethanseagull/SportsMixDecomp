@@ -296,6 +296,7 @@ main SearchStickMove___Q23msw13CMenuPartListFlUsUlUsl near 87.9 the original re-
 main SearchTrgFrame__Q23bcs10CAnmMotionCFlUlf near 95.0 register choice and instruction order only
 main SearchTrgFrame__Q23bcs15CAnmBlendMotionCFlUlf near 95.0 register choice and instruction order only
 main SeekTrg__Q23bcs13CAnmChrMotionFv near 98.5 register choice and instruction order only
+main SendEvent__Q23msw10CSignBoardFlPv near 99.2 [schedule] 99.2%: register numbering around the inlined GetLytObj and the event 0x2715 loop; autopilot regs no gain
 main SendEvent__Q23msw18CCockpitModelTelopFlPv near 96.4 m_hEffect[0] read once before the switch instead of in each case; same field, no store between
 main SendEvent__Q23msw22CCockpitModelTelopHoldFlPv near 93.9 state!=4&&state!=5 as one range check vs two compares (same truth set); m_hEffect[0] load after GetInstance; register numbering
 main SendMessage___Q23msw5CGameFllll unverified 84.1 switch compare tree vs our linear chain and other branch form; not proven equal by tool
@@ -342,6 +343,7 @@ main SetTourCockpitFilePath__Q23msw4menuFPQ33bcs8CLoadMan10FILE_INPUTll near 90.
 main SetTurnStartTelopType___Q23msw5CGameFlf near 98.1 the clamp at 0 compares in the other operand order (same result, NaN kept either way)
 main SetUp__Q23msw7CStgSrtFfff near 96.8 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
 main SetVector3__Q33msw2vm9CVMScriptFiQ23bcs5FVEC3 unverified 74.2 schedule only: next float of v loaded before the previous store in the original
+main Set__Q23msw10CSignBoardFv near 99.8 [schedule] 99.8%: register numbering around the CreateAttachEffect/FindList/SetDelayTime block; autopilot regs no gain
 main Set__Q23msw20CCockpitMarkerIcon2DFv near 99.2 register numbering only (the pane accessor pointer lands in another register)
 main Set__Q23msw22CCockpitModelTelopHoldFv near 99.8 register numbering only
 main Setup__Q33msw2vm7CVMDataFv near 95.0 register allocation; version range tests carry an extra clrlwi 24 in the original, same result for any byte
@@ -392,6 +394,7 @@ main WriteBack__Q33bcs3dwc14CDwcFriendListFPC18DWCstAccFriendDataUxllPCvl unveri
 main _AnimPlayRes__Q23msw11CEventModelFPQ23bcs7CMdlObjRCQ34nw4r3g3d7ResFilePCcUlff near 99.6 register choice and the stack slot of one ResMdl temporary only
 main _CalcFloor__Q23msw10CSceneCalcFRQ23bcs5FVEC3RQ23bcs5FVEC3 near 97.8 97.8%: float register numbers in the FVEC3Add paired-single blocks only
 main _CalcRotOffset__Q23bcs14CCameraAnmCalcFRQ23bcs10CCameraAnmRQ23bcs5FVEC3RQ23bcs5FVEC3Rf near 98.3 f0/f1 operand choice inside the shared FVEC3Add paired-single helper only
+main _GetFlipResult__Q23msw14CEventNodeBaseFRQ34nw4r3g3d12ChrAnmResultRCQ23bcs5FVEC3l unverified 73.0 73.0%: ours keeps the three matrix-row addresses (result+0x1C/0x2C/0x3C) in saved r27-r29 across PSVECCrossProduct/PSVECNormalize (0x20 frame, _savegpr_27); original recomputes each with addi from r30. Reviewer found the same loads, stores, calls, constants and branches, but it is below the 85% floor
 main _GetResAnimNo__Q23msw11CEventModelCFl near 96.8 register choice/order in the inlined abs() only
 main _NextMotionName__Q23msw11CEventModelFsf near 94.7 an extra extsh of the short nStep parameter (a no-op on a value passed as short) and register choice
 main _NextMotion__Q23msw11CEventModelFsf near 93.6 an extra extsh of the short nStep parameter (a no-op on a value passed as short) and register choice

@@ -505,7 +505,8 @@ game/msw/CCockpitMarkerIcon2D.cpp:
 	.data       start:0x80481158 end:0x804811B4
 
 game/msw/CSignBoard.cpp:
-	.text       start:0x801A2800 end:0x801A2F70
+	.text       start:0x801A2800 end:0x801A3184
+	.rodata     start:0x8043EA48 end:0x804401B0
 
 game/msw/CComMan.cpp:
 	.text       start:0x801A380C end:0x801AC8E8
@@ -669,7 +670,7 @@ game/msw/vm/CVMCpu.cpp:
 	.sdata2     start:0x805C4FC0 end:0x805C4FC8
 
 game/msw/CEventNodeBase.cpp:
-	.text       start:0x801FC05C end:0x801FC65C
+	.text       start:0x801FC05C end:0x801FC90C
 
 game/msw/CEvNodeData.cpp:
 	.text       start:0x801FD384 end:0x801FD678

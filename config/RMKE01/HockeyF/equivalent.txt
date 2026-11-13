@@ -3,7 +3,6 @@ HockeyF AddCoinValue__Q23msw18CCockpitHockeyCoinFlll near 99.0 register allocati
 HockeyF AllSetState___Q33msw14CHR_MAN_HOCKEY15CChrManHockeyCSFlll near 99.5 register allocation only
 HockeyF AnimPlay__Q33msw11CC16_HOCKEY20CcSquadFactoryHockeyFlif near 99.7 register allocation/order only
 HockeyF ArrowSignalCheck__Q23msw16CChrMarkerHockeyFv near 99.2 register choice / instruction order only (team byte sign extension scheduled differently)
-HockeyF ArtsParamInit__Q23msw14CChrCoreHockeyFv near 99.3 register choice only (queue head/work base r4/r5 swapped in inline FsmqGetWork)
 HockeyF AttachPlayerNo__Q23msw21CCockpitHockeyVSCountFll near 98.4 instruction order only: the second player number and the zero vector are stored to the stack in another order
 HockeyF AutoMoveTargetMarkerPos__Q23msw19CChrCoreHockeyLuigiFv near 99.7 register choice only (inlined FsmqGetWork_ head/work pointer, some float registers)
 HockeyF Bubble_CalcCreatePos__Q23msw14CStageHockey11Fv unverified 79.0 branches, calls, constants and stores follow the original; the remaining difference is addressing: the original reaches fPaRadius and the 0.0f literal through one kept rodata base register (r31, so it saves r27-r31 with _savegpr_27), ours marks fPaRadius weak and loads each constant with lis/@l; under 85% so left unverified
@@ -18,7 +17,6 @@ HockeyF CreateGoalIcon__Q23msw22CRadarIcon2DHockeyGoalFPQ33msw22CRadarIcon2DHock
 HockeyF CreateGoal__Q23msw14CStageHockey07Fv near 99.3 99.3%: boss position vector (X, 0.0f, Z) loaded in a different order into the same stack vector; same values
 HockeyF CreateMdl___Q33msw11CC05_HOCKEY16CcWarioSmokeUnitFRCQ23bcs5FVEC3 near 93.3 stack slots only: original writes three unused zero floats to stack temps; store scheduling; same as the Basket/Volley/Dodge copies
 HockeyF CreatePlayerMarker__Q23msw17CCockpitHockeyMapFlPQ34nw4r3lyt4PanePQ33bcs3G2D9CPaneCtrl near 99.5 register allocation only (saved GPR numbering in the pane setup)
-HockeyF CtorStateAirTrick__Q23msw14CChrCoreHockeyFv near 99.8 register choice only (queue head/work base r4/r5 swapped in inline FsmqGetWork)
 HockeyF CtorStateAirTrick__Q23msw21CChrCoreHockeyWaluigiFv near 99.8 same instructions after register renumbering (diff.py: match); objdiff's 0.2% is a relocation detail
 HockeyF CtorState_OPEN__Q23msw28CStgGmk_Container_Act_HockeyFv near 94.5 register reuse only (ours CSEs constant 0 into a saved register)
 HockeyF DefenseShouldGetCharaCoreIndex__Q23msw17CComManHockeyGameFPCQ23msw8CChrCore near 96.7 96.7%: register allocation and instruction order of the three array cursors only.
@@ -50,9 +48,6 @@ HockeyF InitParameters__Q23msw21CCockpitHockeyVSCountFv unverified 47.7 our comp
 HockeyF InitSetCountPane__Q23msw21CCockpitHockeyVSCountFll near 91.1 instruction order and register choice only: the two strength-reduced loop pointers are set up and stepped in the other order
 HockeyF Initialize__Q23msw22CRadarIcon2DHockeyGoalFv near 91.1 stack slots of the three int-to-float conversion temporaries (frame 0x80 vs 0x70, one slot reused in the original), their scheduling and register numbering; same calls, constants and stores
 HockeyF KickSplashEffect__26CStgGmk_IceCube_Act_HockeyFv near 95.9 register choice (pool base r31 vs pSrt/effect pointer swapped, one fmr target) and the order of three stack stores of the line endpoints only
-HockeyF LoopStateAirTrick__Q23msw14CChrCoreHockeyFv near 99.8 register choice only (queue head/work base r4/r5 swapped in inline FsmqGetWork)
-HockeyF LoopStateAirTrick__Q23msw19CChrCoreHockeyLuigiFv near 99.8 register choice only (r3/r4 in inlined FsmqGetWork_)
-HockeyF LoopStateAirTrick___Q23msw14CChrCoreHockeyFv near 99.6 register choice only (queue head/work base r4/r5 swapped in inline FsmqGetWork)
 HockeyF LoopState_OPEN__Q23msw28CStgGmk_Container_Act_HockeyFv near 99.8 schedule and float register numbering only
 HockeyF MainCamera_Normal__Q23msw15CCameraHockeyCSFv near 98.3 schedule and float register choice around the CalcCurveBlend calls, as BasketF CCameraBasketHB::MainCamera_Normal (98.5% near); calls, constants and memory accesses identical
 HockeyF MainCamera__Q23msw17CCameraHockeyGameFv near 95.9 register choice only (f30/f31 swapped for the front/look rates, f0/f2 for 0.0 and the back sum), target.x/target.z stores scheduled in the other order, and the local jump tables named differently; same calls, fields and constants

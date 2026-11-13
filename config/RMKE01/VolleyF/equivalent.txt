@@ -167,7 +167,6 @@ VolleyF SubStateAirTrickPlayTrickMotion___Q23msw20CChrCoreVolleyKuromaFPQ33msw14
 VolleyF SubStateAirTrickReadyArtsShot___Q23msw14CChrCoreVolleyFPQ33msw14CChrCoreVolley20STATE_WORK_AIR_TRICK near 98.1 instruction order only: fmr of the fourth Util_SetJumpParam argument and the fsubs of the third are swapped
 VolleyF SubStateAirTrickSetTrickMoveParam___Q23msw19CChrCoreVolleyNinjaFPQ33msw14CChrCoreVolley20STATE_WORK_AIR_TRICKl near 98.0 register choice for the arrangement's x and the fmuls 3*x scheduled two loads later; same values stored
 VolleyF SubStateAirTrickSetTrickMoveParam___Q23msw21CChrCoreVolleyKinopioFPQ33msw14CChrCoreVolley20STATE_WORK_AIR_TRICKl near 99.8 instruction scheduling only
-VolleyF SubStateArtsShotFireBullet___Q23msw19CChrCoreVolleyDiddyFPQ33msw14CChrCoreVolley20STATE_WORK_AIR_TRICKl near 99.9 operand order of one commutative fadds (rot y + constant) only; 99.9%
 VolleyF SubStateBlockJumpBlockHit___Q23msw20CChrCoreVolleySiromaFPCQ23msw12CCollDefUnit near 98.8 register allocation only (paired-single FVEC3Add temporaries, kind compare)
 VolleyF SubStateBlockJumpBlockHit___Q23msw21CChrCoreVolleyKinopioFPCQ23msw12CCollDefUnit near 98.9 register choice and paired-single operand order in FVEC3Add; one equality test cmpwi vs cmplwi (same result for ==)
 VolleyF SubStateBlockJumpBlockHit___Q23msw21CChrCoreVolleyKoopaJrFPCQ23msw12CCollDefUnit near 99.5 register choice and order of two li argument loads only

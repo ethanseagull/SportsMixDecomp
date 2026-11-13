@@ -163,7 +163,10 @@ void msw::CStageHockey07::CreateGoal()
 {
     CStageManHockey::CreateGoal();
 
-    bcs::FVEC3 pos(0.0f, 0.0f, 0.0f); pos.x = HOCKEY_PRM_S07_PACKUN_LOCATE_X; pos.z = HOCKEY_PRM_S07_PACKUN_LOCATE_Z;
+    // Zeroed first, then placed: the original loads the 0.0f first.
+    bcs::FVEC3 pos(0.0f, 0.0f, 0.0f);
+    pos.x = HOCKEY_PRM_S07_PACKUN_LOCATE_X;
+    pos.z = HOCKEY_PRM_S07_PACKUN_LOCATE_Z;
     m_pPackun = CChrManHockey::GetInstance()->CreateBossPackun_(pos, 0);
 }
 

@@ -94,3 +94,5 @@ Equivalent game/hockey/unit_E8AB8.cpp
 Equivalent game/hockey/CRadarIcon2DHockeyGoal.cpp
 Equivalent game/hockey/CCockpitHockeyMap.cpp
 Equivalent game/hockey/CcWarioSmokeMgr.cpp
+Equivalent game/hockey/CcDaisyFlowerGarden.cpp
+Equivalent game/hockey/CStgGmk_Pylon_Act_Hockey.cpp

@@ -120,14 +120,6 @@ void msw::CStageDodge09::ConveyorUpdate(float frame)
     }
 }
 
-bool msw::CStageDodge09::IsConveyorParallel() const
-{
-    if (m_nGuardTeam >= 0) {
-        return false;
-    }
-    return Conveyor_GetRelate() == CV_RELATE_1;
-}
-
 void msw::CStageDodge09::SendMessage(long msg, long arg1, long arg2, long arg3)
 {
     CStageManDodge::SendMessage(msg, arg1, arg2, arg3);
@@ -158,9 +150,9 @@ void msw::CStageDodge09::SendMessage(long msg, long arg1, long arg2, long arg3)
                     }
                 } else {
                     Conveyor_StopAll();
-                    Conveyor_DelayStartAll(accTime,
-                                           bcs::BCS_RandRange(0L, 1L) != 0 ? CConveyor::FLOW_DIR_1 : CConveyor::FLOW_DIR_2,
-                                           -1, -1.0f);
+                    long rnd = bcs::BCS_RandRange(0L, 1L);
+                    Conveyor_DelayStartAll(accTime, rnd != 0 ? CConveyor::FLOW_DIR_1 : CConveyor::FLOW_DIR_2, -1,
+                                           -1.0f);
                 }
             }
             break;
@@ -170,16 +162,6 @@ void msw::CStageDodge09::SendMessage(long msg, long arg1, long arg2, long arg3)
             }
             break;
     }
-}
-
-long msw::CStageDodge09::GetQPanelEnabled_() const
-{
-    long flags = 0xF00;
-
-    if (IsConveyorParallel()) {
-        flags |= 0xF;
-    }
-    return flags & CStageManDodge::GetQPanelEnabled_();
 }
 
 const msw::STAGE::MDL_GEN_RULE *msw::CStageDodge09::GetMdlGenRule_() const
@@ -238,8 +220,16 @@ void msw::CStageDodge09::OnPeriodInit()
 void msw::CStageDodge09::OnTurnInit()
 {
     Conveyor_ResetAll();
-    CConveyor::FLOW_DIR dir = bcs::BCS_RandRange(0L, 1L) != 0 ? CConveyor::FLOW_DIR_1 : CConveyor::FLOW_DIR_2;
-    Conveyor_DelayStartAll(60.0f * DODGE_PRM_S09_EV_TIME, dir, -1, -1.0f);
+    long rnd = bcs::BCS_RandRange(0L, 1L);
+    Conveyor_DelayStartAll(60.0f * DODGE_PRM_S09_EV_TIME, rnd != 0 ? CConveyor::FLOW_DIR_1 : CConveyor::FLOW_DIR_2, -1,
+                           -1.0f);
+}
+
+// Inline, defined here: the original emits it after OnGimmickReset, ahead of
+// the weak CConveyor::SetForceStop (function order checked by the DodgeF hash).
+inline long msw::CStageDodge09::GetConveyorNum() const
+{
+    return 2;
 }
 
 void msw::CStageDodge09::OnGimmickReset()
@@ -344,6 +334,15 @@ float msw::CStageDodge09::GetFloorFlowRate(const bcs::FVEC3 &rPos, FLOW_TYPE typ
     return rate;
 }
 
+// Defined after GetFloorFlowRate: that is its place in the original's code.
+bool msw::CStageDodge09::IsConveyorParallel() const
+{
+    if (m_nGuardTeam >= 0) {
+        return false;
+    }
+    return Conveyor_GetRelate() == CV_RELATE_1;
+}
+
 void msw::CStageDodge09::OnSoundEvent(long event)
 {
     switch (event) {
@@ -367,6 +366,18 @@ void msw::CStageDodge09::OnSoundEvent(long event)
             SE_Play(SE_SLOT_EVENT, SE_EVENT, 0.0f, 0);
             break;
     }
+}
+
+// Inline (emitted with the inherited virtuals at the end of the file, as
+// in the original).
+inline long msw::CStageDodge09::GetQPanelEnabled_() const
+{
+    long flags = 0xF00;
+
+    if (IsConveyorParallel()) {
+        flags |= 0xF;
+    }
+    return flags & CStageManDodge::GetQPanelEnabled_();
 }
 
 // The belt runs faster while its speed level is raised.
@@ -399,11 +410,6 @@ float msw::CStageDodge09::CConveyorState::GetParam_MdlAnmDir() const
         return -1.0f;
     }
     return 1.0f;
-}
-
-long msw::CStageDodge09::GetConveyorNum() const
-{
-    return 2;
 }
 
 msw::CStage09Base::CConveyor *msw::CStageDodge09::NewConveyor() const

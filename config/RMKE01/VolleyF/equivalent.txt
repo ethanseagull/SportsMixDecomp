@@ -48,7 +48,6 @@ VolleyF GetPanelPos___Q23msw14CStageVolley10CFl near 90.9 instruction order and 
 VolleyF GetParam_FlashColor__Q23msw14CStageVolley06CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2 bytes); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
 VolleyF GetParam_FlashColor__Q23msw14CStageVolley15CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2 bytes); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
 VolleyF GetParam_FlashColor__Q23msw14CStageVolley16CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2 bytes); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
-VolleyF GetParam_ShotAngle__Q23msw17CPinballManVolleyCFv near 98.3 load order of the two factors only (the original loads the parameter first); same product
 VolleyF GetPosTurnAroundGimmick__Q23msw17CComDrvVolleyGameFRQ23bcs5FVEC3 near 95.1 the two Obstacle_GetPosTurnAroundObstacle calls of the first-turn obstacle branch are laid out in the other order (equivalent branch form) (95.1%)
 VolleyF GetShoudGetDropCoin__Q23msw15CComDrvVolleyRRCFv near 96.7 register choice, loop-pointer init order and float pool offsets shifted by 4 (unit pool layout); same values, same logic
 VolleyF GetValidPtr__Q23msw15CComManVolleyRRFl near 97.0 last test: original branches past li r3,0 to mr r3,r31 (bne); ours lays the two returns out the other way (beq). Same results on both paths; 4 source forms tried
@@ -109,7 +108,6 @@ VolleyF MovePos___Q33msw11CC09_VOLLEY22CcKinopioBoundMushroomFf near 99.6 multip
 VolleyF OnBallCatch__Q23msw26CStgGmk_Pinball_Act_VolleyFPQ23msw13CCollBodyUnitPQ23msw5CBall near 97.7 registers, stack slot of two temporaries and equivalent branch forms (the original jumps over an empty then-block for dot > 0 and for the invincible early return); same calls, constants, loads and stores
 VolleyF OnMsgN__Q23msw16CChrDrvPadVolleyFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG near 99.5 literal pool order of 512.0f/0.2f in case 0x97; same values loaded
 VolleyF OnPreCreateObj__Q23msw14CStageVolley10FPCQ33msw5STAGE12MDL_GEN_RULERQ23bcs6CRegexQ34nw4r3g3d7ResFileRQ23msw4CArnl near 99.9 stack slots of the creator, position and matrix locals differ only
-VolleyF OnTurnInit__Q23msw14CStageVolley09Fv unverified 72.0 Instruction order only: the original loads the stop time and its 60.0 factor before choosing the random direction; same calls and arguments. 72%, so not near.
 VolleyF OnUpdate__Q23msw29CStgGmk_WaterWorks_Volley_ActFf near 99.9 operands of one commutative fmuls (height * 0.5) in the other order; same code otherwise
 VolleyF PanelSetB_SetPanelLocalTypeSub___Q23msw14CStageVolley10Flllll near 99.1 compare operand order and an equivalent branch form
 VolleyF PlayAnim__Q23msw19CCockpitVolleyCoderFli near 99.0 register allocation only (set-count loops)
@@ -119,7 +117,6 @@ VolleyF ScoreOutWait__Q23msw18CCockpitVolleyCoinFv near 99.0 register choice onl
 VolleyF ScoreOut__Q23msw18CCockpitVolleyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 VolleyF SearchPersonalBall__Q23msw15CComManVolleyRRFPCQ23msw8CChrCorei near 99.8 cmpw operand order / register choice only
 VolleyF SendEvent__Q23msw24CCockpitVolleyTelopServeFlPv near 99.9 99.9%, registers only: the layout pointer of the inlined GetLytObj sits in another saved register in two cases; same calls, constants and branches (autopilot regs applied)
-VolleyF SendMessage__Q23msw14CStageVolley09Fllll near 93.2 Instruction order only in the stop-and-restart branch: the random direction (3 or 4) is chosen before the vtable load in the original; same calls and arguments.
 VolleyF SendMessage__Q23msw14CStageVolley11Fllll near 99.0 99.0%: register allocation only (autopilot regs: no gain in 24 tries).
 VolleyF SetCamParam__Q23msw17CCameraVolleyGameFv near 98.4 float register allocation only (same stores, same constants)
 VolleyF SetChrIcon__Q23msw14CCockpitVolleyFlllPCQ23bcs5FVEC3PCv near 99.8 register allocation only (second icon pointer r10 vs r11)
@@ -169,7 +166,6 @@ VolleyF SubStateAirTrickPlayTrickMotion___Q23msw20CChrCoreVolleyKuromaFPQ33msw14
 VolleyF SubStateAirTrickReadyArtsShot___Q23msw14CChrCoreVolleyFPQ33msw14CChrCoreVolley20STATE_WORK_AIR_TRICK near 98.1 instruction order only: fmr of the fourth Util_SetJumpParam argument and the fsubs of the third are swapped
 VolleyF SubStateAirTrickSetTrickMoveParam___Q23msw19CChrCoreVolleyNinjaFPQ33msw14CChrCoreVolley20STATE_WORK_AIR_TRICKl near 98.0 register choice for the arrangement's x and the fmuls 3*x scheduled two loads later; same values stored
 VolleyF SubStateAirTrickSetTrickMoveParam___Q23msw21CChrCoreVolleyKinopioFPQ33msw14CChrCoreVolley20STATE_WORK_AIR_TRICKl near 99.8 instruction scheduling only
-VolleyF SubStateArtsShotFireBullet___Q23msw19CChrCoreVolleyDiddyFPQ33msw14CChrCoreVolley20STATE_WORK_AIR_TRICKl near 99.9 operand order of one commutative fadds (rot y + constant) only; 99.9%
 VolleyF SubStateBlockJumpBlockHit___Q23msw20CChrCoreVolleySiromaFPCQ23msw12CCollDefUnit near 98.8 register allocation only (paired-single FVEC3Add temporaries, kind compare)
 VolleyF SubStateBlockJumpBlockHit___Q23msw21CChrCoreVolleyKinopioFPCQ23msw12CCollDefUnit near 98.9 register choice and paired-single operand order in FVEC3Add; one equality test cmpwi vs cmplwi (same result for ==)
 VolleyF SubStateBlockJumpBlockHit___Q23msw21CChrCoreVolleyKoopaJrFPCQ23msw12CCollDefUnit near 99.5 register choice and order of two li argument loads only

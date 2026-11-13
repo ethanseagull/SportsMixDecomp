@@ -38,7 +38,7 @@ Equivalent game/volley/CCockpitVolleyCoder.cpp
 Equivalent game/volley/CChrCoreVolleySiroma.cpp
 Matching game/volley/CStageVolley02.cpp
 Equivalent game/volley/CStageVolley06.cpp
-Equivalent game/volley/CStageVolley09.cpp
+Matching game/volley/CStageVolley09.cpp
 Equivalent game/volley/CStageVolley15.cpp
 Matching game/volley/CStageVolley12.cpp
 Equivalent game/volley/CStageVolley16.cpp
@@ -58,7 +58,7 @@ Equivalent game/volley/CChrCoreVolleyKoopa.cpp
 Equivalent game/volley/CChrCoreVolleyKoopaJr.cpp
 Equivalent game/volley/CChrCoreVolleyDonkey.cpp
 Equivalent game/volley/CChrCoreVolleySaboten.cpp
-Equivalent game/volley/CChrCoreVolleyDiddy.cpp
+Matching game/volley/CChrCoreVolleyDiddy.cpp
 Matching game/volley/CComManVolleyGame.cpp
 Equivalent game/volley/CStgGmk_Trolley_Act_Volley.cpp
 Equivalent game/volley/CStgGmk_Pinball_Act_Volley.cpp

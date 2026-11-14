@@ -29,12 +29,12 @@ Matching game/dodge/CItemDodgeRShell.cpp
 Matching game/dodge/CStageDodge04.cpp
 Equivalent game/dodge/CStageDodge07.cpp
 Equivalent game/dodge/CStageDodge05.cpp
-Equivalent game/dodge/CStageDodge12.cpp
+Matching game/dodge/CStageDodge12.cpp
 Matching game/dodge/CStageDodge02.cpp
 Equivalent game/dodge/CStageDodge16.cpp
 Equivalent game/dodge/CStageDodge15.cpp
 Equivalent game/dodge/CChrManDodge.cpp
-Equivalent game/dodge/CStageDodge09.cpp
+Matching game/dodge/CStageDodge09.cpp
 Equivalent game/dodge/CCockpitDodge.cpp
 Equivalent game/dodge/CStageDodge11.cpp flags=noauto
 Equivalent game/dodge/CStageDodge03.cpp

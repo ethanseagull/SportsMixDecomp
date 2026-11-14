@@ -1,6 +1,8 @@
 #ifndef CMENUPAD_HPP_
 #define CMENUPAD_HPP_
 
+#include "bcs/FVEC2.hpp"
+
 namespace msw {
 
     // Size 0x4E0 (the size of s_Instance). Lives in the DOL. Only the member
@@ -24,6 +26,14 @@ namespace msw {
                 return m_nInput[nPad];
             }
 
+            // (name guessed; inline, no symbol; added for
+            // game/msw/CMenuPad.cpp) 1 when any of the input bits nMask of
+            // pad nPad is set.
+            int IsInput(long nPad, unsigned long nMask) const
+            {
+                return (GetInput(nPad) & nMask) != 0;
+            }
+
             // Not zero when pad nPad has a nunchaku. In the DOL.
             int IsNunchakuStyle(long nPad);
             // (added for MenuF game/menu/CEntry.cpp; return type guessed)
@@ -38,6 +48,13 @@ namespace msw {
             void ChangeInputPointerModeForce(long nPad);
 
             static CMenuPad s_Instance;
+
+            // (DOL fn_801413B8 and fn_801416EC; names guessed; called once
+            // a frame by fn_80140484) Records the pointer positions and
+            // switches each pad between pointer and stick mode; counts down
+            // the frames without input.
+            void UpdateInputMode();
+            void UpdateNoInputCount();
 
             // (added for MenuF game/menu/CSelectMenu.cpp; argument meaning
             // guessed) Restarts the count of frames without input; the
@@ -63,9 +80,45 @@ namespace msw {
             unsigned char m_Unk00[0x14]; // 0x00
             Pad m_Pad[4];                // 0x14
             unsigned short m_nFlags;      // 0x144
-            unsigned char m_Unk146[0x312];
+            unsigned char m_Unk146[0xF2];
+            // (added for game/msw/CMenuPad.cpp; names guessed) Per pad,
+            // 0x88 bytes: the last 16 pointer positions (newest first), a
+            // countdown in frames that holds the input mode, and the mode
+            // (0: pointer, 1: stick).
+            struct PointerState {
+                bcs::FVEC2 m_History[16]; // 0x00
+                float m_fModeTime;        // 0x80
+                unsigned char m_nMode;    // 0x84
+
+                // (name guessed; inline, no symbol) Moves the history one
+                // place back and puts pos in front.
+                void PushHistory(const bcs::FVEC2 &pos)
+                {
+                    for (int i = 15; i > 0; i--) {
+                        m_History[i] = m_History[i - 1];
+                    }
+                    // Dead store kept for the match: the original writes a zeroed
+                    // temporary first. A port can drop it.
+                    m_History[0] = bcs::FVEC2(0.0f, 0.0f);
+                    m_History[0] = pos;
+                }
+            };
+            PointerState m_Pointer[4];    // 0x238
             unsigned long m_nInput[4];    // 0x458, the entry count is a guess
-            unsigned char m_Unk468[0x44];
+            // (added for game/msw/CMenuPad.cpp; names guessed) Per pad: the
+            // remote channel at +4 (what bcs::CPadWI is given).
+            struct PadChan {
+                long m_Unk00;
+                long m_nChan;             // 0x04
+            };
+            PadChan m_Chan[4];            // 0x468
+            // (added for game/msw/CMenuPad.cpp; meaning unknown) Per pad;
+            // above 0.1 it counts as input for the no-input count.
+            float m_fUnk488[4];           // 0x488
+            // Per pad: frames left before the pad counts as idle, and the
+            // value they restart from.
+            float m_fNoInputTime[4];      // 0x498
+            float m_fNoInputLimit;        // 0x4A8
         public:
             // 0x4AC. (name guessed; added for game/menu/CSelectMenu.cpp)
             // Per pad: set to 1 while the pointer is on a button of the

@@ -65,7 +65,7 @@ inline msw::GIMMICK_DODGE::CEffectCoinGet::CEffectCoinGet(bcs::CTask *pParent, c
     m_fRotSpeed = s_CoinGetRotSpeedStart;
     float fFrame = 20.0f;
     bcs::BCS_Phys_CalcYVG(Twice(fFrame), rPos.y, rPos.y, m_fTopY, m_Vel.y, m_fGravity);
-    if (m_pMdl != 0) {
+    if (GetMdl() != 0) {
         m_hEffect = CEffectCtrl::CreateAttachEffect(0x4E6, m_pMdl, 0, 0, 0, 0, 0, 3, 0, 0, 0);
     }
 }

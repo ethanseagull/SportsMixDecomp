@@ -98,12 +98,17 @@ namespace bcs {
             // (name guessed; inline in BasketF's
             // CChrManBasket::StartScoreView_) The number of the state queued
             // after the head; zero when there is none.
-            long FsmqGetNextState() const
+            long FsmqGetNextState()
             {
                 if (FsmqIsEmpty()) {
                     return 0;
                 }
-                long idx = FsmqWrap(m_nQueueHead + 1, m_nQueueSize);
+                long idx = m_nQueueHead + 1;
+                if (idx >= m_nQueueSize) {
+                    idx %= m_nQueueSize;
+                } else if (idx < 0) {
+                    idx += m_nQueueSize;
+                }
                 if (idx == m_nQueueTail) {
                     return 0;
                 }
@@ -286,7 +291,12 @@ namespace bcs {
             void FsmqNext()
             {
                 if (!FsmqIsEmpty()) {
-                    long head = FsmqWrap(m_nQueueHead + 1, m_nQueueSize);
+                    long head = m_nQueueHead + 1;
+                    if (head >= m_nQueueSize) {
+                        head %= m_nQueueSize;
+                    } else if (head < 0) {
+                        head += m_nQueueSize;
+                    }
                     m_nQueueHead = head;
                     if (head == m_nQueueTail) {
                         if (m_pStateTable) {

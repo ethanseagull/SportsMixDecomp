@@ -17,9 +17,10 @@ namespace msw {
 
             void SetCollKind(long kind);
             void SetCollType(long type);
-            // (DOL; added for BossF game/boss/CChrCoreBoss.cpp) The kind of
-            // attack of an attack unit (0x84).
-            void SetAtkType(unsigned long nType);
+            // (DOL) The kind of attack of an attack unit (CCollAtkUnit's word
+            // at 0x84; the smash cut sets 0x20000; also msw::CBombExplosion::Create_
+            // and BossF game/boss/CChrCoreBoss.cpp).
+            void SetAtkType(unsigned long type);
             void SetPos(const bcs::FVEC3 &rPos);
             // (name guessed; the DOL's fn_80106870, a switch on the shape at
             // 0x13) Recomputes the bounding box; CBodyCollision::CalcAABBAll.

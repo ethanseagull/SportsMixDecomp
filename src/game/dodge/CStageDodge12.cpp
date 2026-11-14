@@ -133,17 +133,23 @@ void msw::CStageDodge12::OnPostAppendNode(const STAGE::MDL_GEN_RULE *pRule, bcs:
     switch (pRule->m_nId) {
         case MDL_BUMPER: {
             long no;
-            if (sscanf(rArn.GetName(n) + rRegex.GetSubMatchPos(1), "%d", &no) > 0 && no >= 1 &&
-                no <= BUMPER_NUM) {
-                m_apBumper[no - 1] = pNode;
+            if (sscanf(rArn.GetName(n) + rRegex.GetSubMatchPos(1), "%d", &no) > 0) {
+                // The names count from 1.
+                no--;
+                if (no >= 0 && no < BUMPER_NUM) {
+                    m_apBumper[no] = pNode;
+                }
             }
             break;
         }
         case MDL_EXIT: {
             long no;
-            if (sscanf(rArn.GetName(n) + rRegex.GetSubMatchPos(1), "%d", &no) > 0 && no >= 1 &&
-                no <= EXIT_NUM) {
-                m_apExit[no - 1] = pNode;
+            if (sscanf(rArn.GetName(n) + rRegex.GetSubMatchPos(1), "%d", &no) > 0) {
+                // The names count from 1.
+                no--;
+                if (no >= 0 && no < EXIT_NUM) {
+                    m_apExit[no] = pNode;
+                }
             }
             break;
         }

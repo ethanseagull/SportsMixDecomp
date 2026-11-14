@@ -27,6 +27,11 @@ namespace msw {
             // type guessed)
             void CreateMdl_(const bcs::FVEC3 &rPos, DROP_COIN::CoinType type, int);
 
+            // (name guessed) The coin model. Being const, it makes the
+            // modules' constructors read m_pMdl again for CreateAttachEffect
+            // after the null check, as the original does.
+            bcs::CMdlObj *GetMdl() const { return m_pMdl; }
+
             bcs::CMdlObj *m_pMdl;   // 0x34
             bcs::FVEC3 m_Vel;       // 0x38, per frame
             float m_fGravity;       // 0x44, added to m_Vel.y per frame

@@ -3,6 +3,7 @@
 
 #include "bcs/BCS_Color.hpp"
 #include "bcs/FVEC3.hpp"
+#include "nw4r/math/types.h"
 
 namespace nw4r {
     namespace g3d {
@@ -24,12 +25,18 @@ namespace bcs {
                 VIEW_SPLIT_1
             };
 
-            // (name guessed) The camera data of a view. Only the eye
-            // position is mapped (msw::CStgGmk_WaterPillar_Act::OnUpdate in
-            // the DOL fades the pillar's effects by the distance to it).
+            // (name guessed) The camera data of a view; the offsets match
+            // nw4r::g3d::CameraData. msw::CStgGmk_WaterPillar_Act::OnUpdate
+            // in the DOL fades the pillar's effects by the distance to the
+            // eye; bcs::EF::CManager reads the matrices and the projection.
             struct CameraData {
-                unsigned char m_Unk00[0x74];
+                nw4r::math::MTX34 m_ViewMtx;   // 0x00 (name guessed)
+                float m_ProjMtx[4][4];         // 0x30, passed to GXSetProjection (name guessed)
+                unsigned char m_Unk70[0x74 - 0x70];
                 FVEC3 m_Eye; // 0x74 (name guessed)
+                unsigned char m_Unk80[0xAC - 0x80];
+                float m_fFovy;                 // 0xAC (name guessed)
+                float m_fAspect;               // 0xB0 (name guessed)
             };
             static CameraData *GetViewCameraData(long view);
 

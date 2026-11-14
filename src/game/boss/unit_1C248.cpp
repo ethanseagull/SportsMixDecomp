@@ -188,7 +188,8 @@ void msw::CChrCoreBoss::LoopStateDamage()
             if (m_fHP < 15.0f) {
                 m_fHP = 15.0f;
             }
-            m_fHP = m_fHPMax > m_fHP ? m_fHP : m_fHPMax;
+            float fHP = m_fHP;
+            m_fHP = m_fHPMax > fHP ? fHP : m_fHPMax;
         }
     }
 

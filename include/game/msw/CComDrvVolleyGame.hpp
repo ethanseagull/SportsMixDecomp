@@ -57,10 +57,10 @@ namespace msw {
             unsigned long GetMyTeamPadDrvCanTouchEnableBit() const;
             void UpdateAPosition();
             void UpdateHomePos();
-            int GetHomePos(bcs::FVEC3 &rPos, int) const;
+            void GetHomePos(bcs::FVEC3 &rPos, int) const;
             int IsExistPadChrHomePosIdx(long nIdx) const;
-            int GetDefHomePos(bcs::FVEC3 &rPos) const;
-            int GetSymmetryPos(bcs::FVEC3 &rPos) const;
+            void GetDefHomePos(bcs::FVEC3 &rPos) const;
+            void GetSymmetryPos(bcs::FVEC3 &rPos) const;
             int IsExistCurveSpikeEmChrCore() const;
             CChrCore *GetEmTargetMarkerChrCore() const;
             int GetEmTargetMarkerPos(bcs::FVEC3 &rPos) const;
@@ -68,24 +68,24 @@ namespace msw {
             int GetOpenSpaceInEmCourt(bcs::FVEC3 &rPos, const bcs::FVEC3 *pFrom, int) const;
             int GetOpenSpaceInMyCourt(bcs::FVEC3 &rPos, const bcs::FVEC3 *pFrom, int) const;
             int IsOpenSpaceForSpike(const bcs::FVEC3 &rPos, float) const;
-            long LotRateTouch(long);
-            long LotRateDefense(long);
-            long LotDefPosKind(long);
+            void LotRateTouch(long);
+            void LotRateDefense(long);
+            void LotDefPosKind(long);
             void LotDefPosHosei();
-            long LotRateBlock(long) const;
-            long LotRateOffense();
-            long LotRateReceiveFinished();
-            long LotRateTwoAttack();
-            long LotRateQuickSpike();
-            long LotRateSpikeBefore();
+            int LotRateBlock(long) const;
+            void LotRateOffense();
+            void LotRateReceiveFinished();
+            void LotRateTwoAttack();
+            void LotRateQuickSpike();
+            void LotRateSpikeBefore();
             int LotRateGetQPanelGood() const;
             int LotRateGetQPanelBad() const;
             int LotRateGetDropCoinGood() const;
             int LotRateGetDropCoinBad() const;
             int LotRateItemThrowTimingGood() const;
             int LotRateItemThrowTimingBad() const;
-            long LotRateSpBefore();
-            int GetServePos(bcs::FVEC3 &rPos) const;
+            void LotRateSpBefore();
+            void GetServePos(bcs::FVEC3 &rPos) const;
             int GetServeTargetMarkerPos(bcs::FVEC3 &rPos) const;
             int GetSpikeTargetMarkerPos(bcs::FVEC3 &rPos) const;
             // Where to move a special shot's target marker (nKind from
@@ -101,9 +101,9 @@ namespace msw {
             int ShoudBlockReady() const;
             int GetBlockReadyPos(bcs::FVEC3 &rPos) const;
             int ShoudReceiveGo() const;
-            int GetTossReadyPos(bcs::FVEC3 &rPos) const;
+            void GetTossReadyPos(bcs::FVEC3 &rPos) const;
             int ShoudTossGo() const;
-            int GetSpikeReadyPos(bcs::FVEC3 &rPos) const;
+            void GetSpikeReadyPos(bcs::FVEC3 &rPos) const;
             int ShoudSpikeGo() const;
             int IsShoudGetQPanel() const;
             float GetNearQPanelDis() const;
@@ -125,7 +125,7 @@ namespace msw {
             int GetItemShootTarget(bcs::FVEC3 &rPos) const;
             int IsBanSpike() const;
             int IsSpikeCurveOutAtTargetMarker() const;
-            float GetSpikeCurveInnerValueAtTargetMarker() const;
+            long GetSpikeCurveInnerValueAtTargetMarker() const;
 
             // The actions (g_ActFuncMap): ActCall* starts one, ActLoop* runs
             // it every frame.
@@ -207,21 +207,99 @@ namespace msw {
             int GetSafePosFromGimmick(bcs::FVEC3 &rPos) const;
             int GetPosTurnAroundGimmick(bcs::FVEC3 &rPos);
 
+        public:
+            // An action: a member called each frame while it runs.
+            typedef void (CComDrvVolleyGame::*ActFunc)();
+            // The actions after CComDrv's ten (g_ActFuncMap). (names from
+            // the ActLoop functions)
+            enum {
+                ACT_RECEIVE_GO = 10,
+                ACT_RECEIVE_SUDDEN,
+                ACT_DIVE_RECEIVE,
+                ACT_TOSS_READY,
+                ACT_TOSS_GO,
+                ACT_SPIKE_READY,
+                ACT_SPIKE_GO,
+                ACT_SPIKE_JUMP,
+                ACT_BLOCK_READY,
+                ACT_BLOCK_GO,
+                ACT_SERVE,
+                ACT_SERVE_WAIT,
+                ACT_GO_HOME,
+                ACT_DEF_HOME,
+                ACT_SYMMETRY,
+                ACT_GO_AWAY,
+                ACT_TARGET_MARKER_GO,
+                ACT_GET_QPANEL,
+                ACT_GET_DROP_COIN,
+                ACT_ITEM_SHOOT,
+                ACT_INTER_THROW_ITEM,
+                ACT_ESC_GIMMICK,
+                ACT_SP_OFF_MOVE_MARKER,
+                ACT_SP_DAISY_DEF,
+                ACT_SP_KOOPA_OFF,
+                ACT_SP_KOOPA_DEF,
+                ACT_SP_NINJA_DEF,
+                ACT_NUM
+            };
+
+            static ActFunc g_ActFuncMap[ACT_NUM];
+
         protected:
-            unsigned char m_Unk170[0x1D0 - 0x170];
+            // 0x170 (names guessed from UpdateHomePos/GetHomePos): the four
+            // home positions of the court (in the court's frame), front left,
+            // front right, back left, back right.
+            bcs::FVEC3 m_aHomePos[4];
+            // 0x1A0-0x1A8 (UpdateAPosition): which of the team's two
+            // characters plays in front (m_nFrontChrIdx) and behind
+            // (m_nBackChrIdx), and the driver's place: 0 in front, 2 behind,
+            // 1 neither (a third character).
+            long m_nAPos;
+            long m_nFrontChrIdx;
+            long m_nBackChrIdx;
+            // 0x1AC-0x1B1 (meanings guessed, see ClearAll and the Lot*
+            // functions).
+            signed char m_nUnk1AC;
+            signed char m_nUnk1AD;
+            // 0x1AE: the spike's curve side the driver prefers (message 0x91).
+            signed char m_nSpikeCurve;
+            signed char m_nUnk1AF;
+            signed char m_nUnk1B0;
+            // 0x1B1, 0x1B4: the defence leaves its place early; the frames
+            // still to wait (counted up to zero, message 0x23).
+            signed char m_bEarlyDef;
+            float m_fEarlyDefTime;
+            signed char m_nDefPosKind;   // 0x1B8 (LotDefPosKind)
+            signed char m_nUnk1B9;
+            // 0x1BC, 0x1C0: added to the home position (LotDefPosHosei).
+            float m_fHomeOfsX;
+            float m_fHomeOfsZ;
+            float m_fUnk1C4;
+            float m_fUnk1C8;
+            // 0x1CC (message 0x87): the driver goes for the next touch at once.
+            signed char m_bTouchGo;
+            signed char m_nUnk1CD;
+            signed char m_nUnk1CE;
+            signed char m_nUnk1CF;
             // 0x1D0 and 0x1D9-0x1DD (names guessed): per-level switches,
             // read signed. 0x1D0 lets the driver spike on the second touch,
             // 0x1D9/0x1DA make it run from an item (0x1D9 for a bomb),
             // 0x1DB from an obstacle, 0x1DC picks the side to go round a
             // special-shot obstacle; MethdSpike sets 0x1DD to -1.
             signed char m_bTwoAttack;
-            unsigned char m_Unk1D1[0x1D9 - 0x1D1];
+            // 0x1D4: the team's touches in this rally (messages 0x85, 0x87).
+            long m_nTouchCount;
+            signed char m_nUnk1D8;       // 0x1D8, -1 for none
             signed char m_bEscBomb;      // 0x1D9
             signed char m_bEscItem;      // 0x1DA
             signed char m_bEscObstacle;  // 0x1DB
             signed char m_bSpObstacleSide; // 0x1DC
             signed char m_nUnk1DD;       // 0x1DD
-            unsigned char m_Unk1DE[0x1F8 - 0x1DE];
+            bcs::FVEC3 m_Unk1E0;         // 0x1E0
+            // 0x1EC: set while the other team's special shot is answered.
+            long m_bSpBefore;
+            signed char m_nUnk1F0;       // 0x1F0
+            float m_fUnk1F4;             // 0x1F4
             // 0x1F8 (name guessed): not zero on a stage with gimmicks to run
             // from.
             long m_bGimmick;

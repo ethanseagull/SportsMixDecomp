@@ -11,6 +11,9 @@ double ceil(double x);
 double floor(double x);
 double fmod(double x, double y);
 double tan(double x);
+// (added for DOL game/msw/CEventNodeBase.cpp; the DOL's copy is the unnamed
+// fn_802AE8FC, a branch to the real routine)
+double asin(double x);
 
 #ifdef __cplusplus
 }

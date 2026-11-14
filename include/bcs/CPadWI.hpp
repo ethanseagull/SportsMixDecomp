@@ -13,6 +13,12 @@ namespace bcs {
             // position remote nPad points at to *pPos; non-zero when it
             // points at the screen. Static: callers pass the vector first.
             static int GetScreenPosDPD_F(FVEC2 *pPos, long nPad);
+            // (DOL fn_80070B74, name guessed; added for
+            // game/msw/CMenuPad.cpp) The same through KPADGetProjectionPos.
+            static int GetScreenPos_F(FVEC2 *pPos, long nPad);
+            // (DOL fn_800709D8, name guessed from msw::CMenuPad::IsConnect,
+            // which wraps it) Non-zero while remote nPad is connected.
+            static int IsConnect(long nPad);
             // (added for MenuF game/menu/CSaveSelect.cpp; return types
             // guessed) The buttons remote nPad holds down, and whether
             // buttons nButton are held down / were just pressed on it.

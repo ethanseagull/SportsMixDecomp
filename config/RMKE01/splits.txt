@@ -305,10 +305,9 @@ game/msw/CItemBanana.cpp:
 	.sdata2     start:0x805C2D20 end:0x805C2D50
 
 game/msw/CItemBomb.cpp:
-	.text       start:0x8013394C end:0x80134204
-
-game/msw/CBombExplosion.cpp:
-	.text       start:0x8013443C end:0x80134978
+	.text       start:0x8013394C end:0x80134A50
+	.data       start:0x804706A8 end:0x80470830
+	.sdata2     start:0x805C2D50 end:0x805C2DB0
 
 game/msw/CItemMushroom.cpp:
 	.text       start:0x80134A50 end:0x80135978
@@ -344,14 +343,14 @@ game/msw/CMenuLinkList.cpp:
 	.text       start:0x8013F72C end:0x8013F7C8
 
 game/msw/CMenuPaneAccessor.cpp:
-	.text       start:0x8013F838 end:0x8013FD74
+	.text       start:0x8013F838 end:0x8013FDA0
 
 game/msw/CMenuTask.cpp:
 	.text       start:0x8013FDA0 end:0x80140484
 	.data       start:0x80471600 end:0x80471618
 
 game/msw/CMenuPad.cpp:
-	.text       start:0x801413A0 end:0x80141830
+	.text       start:0x801413A0 end:0x80141848
 
 game/msw/CMenuPadInfo.cpp:
 	.text       start:0x80142130 end:0x80142164
@@ -506,7 +505,8 @@ game/msw/CCockpitMarkerIcon2D.cpp:
 	.data       start:0x80481158 end:0x804811B4
 
 game/msw/CSignBoard.cpp:
-	.text       start:0x801A2800 end:0x801A2F70
+	.text       start:0x801A2800 end:0x801A3184
+	.rodata     start:0x8043EA48 end:0x804401B0
 
 game/msw/CComMan.cpp:
 	.text       start:0x801A380C end:0x801AC8E8
@@ -521,7 +521,13 @@ game/msw/CNpcBase.cpp:
 	.text       start:0x801AED44 end:0x801B0250
 
 game/msw/menu/CMessage.cpp:
-	.text       start:0x801B0370 end:0x801B0920
+	.text       start:0x801B0324 end:0x801B0A8C
+	.ctors      start:0x8042D22C end:0x8042D230
+	.data       start:0x804815C8 end:0x804815D8
+	.bss        start:0x804D71F8 end:0x804D7398
+	.sdata      start:0x805BFDE0 end:0x805BFDE8
+	.sbss       start:0x805C0D58 end:0x805C0D60
+	.sdata2     start:0x805C46A0 end:0x805C46B0
 
 game/msw/CNpcBossPackun.cpp:
 	.text       start:0x801B267C end:0x801B4108
@@ -664,7 +670,7 @@ game/msw/vm/CVMCpu.cpp:
 	.sdata2     start:0x805C4FC0 end:0x805C4FC8
 
 game/msw/CEventNodeBase.cpp:
-	.text       start:0x801FC05C end:0x801FC65C
+	.text       start:0x801FC05C end:0x801FC90C
 
 game/msw/CEvNodeData.cpp:
 	.text       start:0x801FD384 end:0x801FD678

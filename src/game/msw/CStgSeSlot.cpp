@@ -56,16 +56,42 @@ namespace msw {
         m_fIntervalRand = 0.0f;
     }
 
+    inline bool CStgSeSlot::CSESlot::IsRepeat() const
+    {
+        if (m_nFlag & FLAG_REPEAT) {
+            return true;
+        }
+        return false;
+    }
+
     // Picks the time until a repeating sound plays again.
     inline void CStgSeSlot::CSESlot::SetNextDelay()
     {
-        if (!(m_nFlag & FLAG_REPEAT)) {
+        if (!IsRepeat()) {
             m_fDelay = -1.0f;
         } else if (m_fIntervalRand > 0.0f) {
             m_fDelay = bcs::BCS_OrgRandRange(m_fInterval, m_fInterval + m_fIntervalRand);
         } else {
             m_fDelay = m_fInterval;
         }
+    }
+
+    // Inline predicates: the original reloads the delay after each test,
+    // which a plain comparison in Update does not reproduce.
+    inline bool CStgSeSlot::CSESlot::IsDelayWait() const
+    {
+        if (m_fDelay > 0.0f) {
+            return true;
+        }
+        return false;
+    }
+
+    inline bool CStgSeSlot::CSESlot::IsStopWait() const
+    {
+        if (m_fStopDelay > 0.0f) {
+            return true;
+        }
+        return false;
     }
 
     inline void CStgSeSlot::CSESlot::UpdateDelay(float rate)
@@ -384,16 +410,16 @@ namespace msw {
     void CStgSeSlot::CSESlot::Update(float rate)
     {
         if (!IsAlive()) {
-            if (m_fDelay > 0.0f) {
+            if (IsDelayWait()) {
                 UpdateDelay(rate);
             }
-        } else if (m_fDelay > 0.0f) {
+        } else if (IsDelayWait()) {
             UpdateDelay(rate);
         } else {
             if (m_pFunc != 0) {
                 m_pFunc->GetPos(&m_Pos);
             }
-            if (m_fStopDelay > 0.0f) {
+            if (IsStopWait()) {
                 m_fStopDelay -= rate;
                 if (m_fStopDelay <= 0.0f) {
                     m_fStopDelay = -1.0f;

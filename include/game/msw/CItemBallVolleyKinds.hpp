@@ -75,8 +75,9 @@ namespace msw {
             CItemBallVolleyBomb(CBall *pBall);
             virtual ~CItemBallVolleyBomb();
 
-            // Not virtual (no slot in the vtable) and not const.
-            float GetExplosionCollSize();
+            // Not virtual (no slot in the vtable); static: VolleyF's
+            // CComDrvVolleyGame::GetTossReadyPos calls it without an object.
+            static float GetExplosionCollSize();
 
             virtual void GetVolleySpikeParam(BALL::VOLLEY::SPIKE_SHOT_ARG &rArg) const;
             virtual unsigned long GetVolleyReceiveReaction(long, unsigned long reaction) const;

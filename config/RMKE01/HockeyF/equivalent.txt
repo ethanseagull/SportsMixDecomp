@@ -1,7 +1,6 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
 HockeyF AddCoinValue__Q23msw18CCockpitHockeyCoinFlll near 99.0 register allocation only: the original gives the two GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 HockeyF AllSetState___Q33msw14CHR_MAN_HOCKEY15CChrManHockeyCSFlll near 99.5 register allocation only
-HockeyF AnimPlay__Q33msw11CC16_HOCKEY20CcSquadFactoryHockeyFlif near 99.7 register allocation/order only
 HockeyF ArrowSignalCheck__Q23msw16CChrMarkerHockeyFv near 99.2 register choice / instruction order only (team byte sign extension scheduled differently)
 HockeyF AttachPlayerNo__Q23msw21CCockpitHockeyVSCountFll near 98.4 instruction order only: the second player number and the zero vector are stored to the stack in another order
 HockeyF AutoMoveTargetMarkerPos__Q23msw19CChrCoreHockeyLuigiFv near 99.7 register choice only (inlined FsmqGetWork_ head/work pointer, some float registers)

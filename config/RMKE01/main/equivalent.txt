@@ -330,6 +330,7 @@ main SetMtx__Q23msw19CStgGmk_Pinball_MdlFRCQ23bcs6FMTX34 near 98.2 register choi
 main SetPadAssignSemiAuto__Q23msw5CGameFv unverified 49.3 store scheduling and case layout differ; each case's eight values checked against the asm by simulation
 main SetParamSemiAuto__Q23msw5CGameFv unverified 79.1 switch tables differ, and the original has a dead duplicate-character loop ours omits; GameWorkReset_ made static (original called it from this static with no object)
 main SetPeriodResult___Q23msw5CGameFv unverified 52.3 52.3%: register allocation (stmw vs single saves) and address forms of the two arrays; same calls
+main SetPlayerIcon__Q23msw23CCockpitResultPartyTeamFll near 88.3 [real, reviewed] reviewer confirmed: label boolean (bPadCtrl !=0 / ==0) computed before GetPaneName into a saved register (2 extra mr), register numbering otherwise; same calls, constants, accesses, branches
 main SetPointLightColor__Q23msw14CEffectClusterF8_GXColor8_GXColor near 89.8 schedule only: second colour word loaded after the member-pointer lwzu/copy instead of before; same stores and calls
 main SetResultButton__Q23msw14CCockpitResultFll near 98.5 98.5%: float register numbering in the delay computation; callee is the unnamed task constructor fn_8023D858
 main SetRotY__Q23msw7CStgSrtFf near 99.0 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
@@ -346,6 +347,7 @@ main SetVector3__Q33msw2vm9CVMScriptFiQ23bcs5FVEC3 unverified 74.2 schedule only
 main Set__Q23msw10CSignBoardFv near 99.8 [schedule] 99.8%: register numbering around the CreateAttachEffect/FindList/SetDelayTime block; autopilot regs no gain
 main Set__Q23msw20CCockpitMarkerIcon2DFv near 99.2 register numbering only (the pane accessor pointer lands in another register)
 main Set__Q23msw22CCockpitModelTelopHoldFv near 99.8 register numbering only
+main Set__Q23msw23CCockpitResultPartyTeamFv near 99.1 [schedule] register allocation only: the inlined text-box max-value helper swaps the registers holding m_pPaneAccessor and the text box length
 main Setup__Q33msw2vm7CVMDataFv near 95.0 register allocation; version range tests carry an extra clrlwi 24 in the original, same result for any byte
 main Stage02_IsOnWave__Q23msw12CStage02BaseCFRCQ23bcs5FVEC3 near 99.2 99.2%: float register choice for rWavePos.x + margin (new FPR vs reused f0)
 main Stage04_RegistCart__Q23msw12CStage04BaseFPQ23bcs7CMdlObjl near 98.9 98.9%: node index and CStgSeSlot* swap registers; register choice only

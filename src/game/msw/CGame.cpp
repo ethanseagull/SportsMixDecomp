@@ -630,7 +630,7 @@ namespace msw {
         }
     }
 
-    CGame::CGame(bcs::CTask *pParent, GAME_MODE mode) : bcs::CTask(pParent, -1)
+    CGame::CGame(bcs::CTask *pParent, GAME_MODE mode) : bcs::CUnivTask(pParent, -1)
     {
         AddUnk08(-0x63);
         m_nNextState = 5;

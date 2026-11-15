@@ -14,6 +14,7 @@ namespace nw4r {
         class DrawInfo;
         class AnimResource;
         class AnimationLink;
+        class AnimTransform;
 
         // Width and height of a pane.
         struct Size {
@@ -49,11 +50,16 @@ namespace nw4r {
                 // far; the other slots are placeholders named by offset.
                 virtual ~Pane();
                 virtual const ut::detail::RuntimeTypeInfo *GetRuntimeTypeInfo() const;
-                virtual void Unk10();
-                virtual void Unk14();
+                // 0x10, 0x14, 0x1C, 0x20, 0x40, 0x50 and 0x5C are named from the
+                // original vtables of bcs::G2D::CLineStripDL and CScissorDL (DOL),
+                // which point at these Pane functions (2026-11-15; they were
+                // UnkXX placeholders, so our vtables named functions that do
+                // not exist). Return types follow ogws; they are not mangled.
+                virtual void CalculateMtx(const DrawInfo &rInfo);
+                virtual void Draw(const DrawInfo &rInfo);
                 virtual void Unk18();
-                virtual void Unk1C();
-                virtual void Unk20();
+                virtual void Animate(unsigned long nOption);
+                virtual void AnimateSelf(unsigned long nOption);
                 // 0x24, 0x28 (added for BossF game/boss/CCockpitBossCoder.cpp):
                 // the colour of corner nIdx (0 to 3).
                 virtual ut::Color GetVtxColor(unsigned long nIdx) const;
@@ -65,17 +71,17 @@ namespace nw4r {
                 // 0x3C (added for DodgeF game/dodge/CCockpitDodgeTelopInOutChange.cpp):
                 // the pane named pName below this one, or null.
                 virtual Pane *FindPaneByName(const char *pName, bool bRecursive);
-                virtual void Unk40();
+                virtual Material *FindMaterialByName(const char *pName, bool bRecursive);
                 virtual void Unk44();
                 virtual void Unk48();
                 virtual void Unk4C();
-                virtual void Unk50();
+                virtual void UnbindAnimationSelf(AnimTransform *pAnimTrans);
                 virtual void Unk54();
                 // 0x58 to 0x64 named for MenuF game/menu/CBgDisplay.cpp (ogws
                 // names): the animation link of rAnimRes bound to this pane
                 // itself, enabling a bound animation, and the materials.
                 virtual AnimationLink *FindAnimationLinkSelf(const AnimResource &rAnimRes);
-                virtual void Unk5C();
+                virtual void SetAnimationEnable(AnimTransform *pAnimTrans, bool bEnable, bool bRecursive);
                 virtual void SetAnimationEnable(const AnimResource &rAnimRes, bool bEnable, bool bRecursive);
                 virtual unsigned char GetMaterialNum() const;
                 // 0x68 (VolleyF game/volley/CCockpitChrIcon2DVolley.cpp: a

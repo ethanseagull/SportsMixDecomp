@@ -104,3 +104,5 @@ Matching game/basket/unit_65C5C.cpp
 Equivalent game/basket/CGameGuideBasket.cpp
 Equivalent game/basket/CBallManBasketHungryBossPackun.cpp
 Equivalent game/basket/unit_38A7C.cpp
+Equivalent game/basket/unit_2FD1C.cpp
+NonMatching game/basket/unit_9AFD4.cpp

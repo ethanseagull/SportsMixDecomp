@@ -15,7 +15,9 @@ namespace msw {
             public:
                 CC_PARAM_BOSS();
 
-                unsigned long m_Unk00; // 0x0
+                // 0x0 (signed: CChrCoreBoss::Util_SpikeBall_ compares it
+                // with cmpwi; 1 the super spike curves, 2 ...)
+                long m_Unk00;
                 unsigned long m_Unk04; // 0x4
                 unsigned long m_Unk08; // 0x8
                 float m_Unk0C; // 0xC

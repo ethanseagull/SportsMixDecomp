@@ -159,6 +159,7 @@ namespace msw {
     extern float HOCKEY_PRM_S04_PYLON_PUSH_RESIST;
     extern float HOCKEY_PRM_S04_PYLON_ACC;
     extern float HOCKEY_PRM_S04_PYLON_DEC;
+    extern float HOCKEY_PRM_S04_PYLON_INTERVAL; // seconds
     extern long HOCKEY_PRM_S04_PYLON_LOC_PAT_TYPE;
     extern long HOCKEY_PRM_S04_PYLON_LOC_PAT_NO;
 

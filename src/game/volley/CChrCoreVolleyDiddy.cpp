@@ -166,7 +166,7 @@ void msw::CChrCoreVolleyDiddy::SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK 
 
     bcs::FVEC3 pos(GetPos());
     bcs::FVEC3 rot(GetRot());
-    float fRotY = WrapRad(GetRotY() + -1.2217305f); // -70 degrees
+    float fRotY = WrapRad(GetRotY() + bcs::DEG_TO_RAD(-70.0f));
     rot.y = WrapRad(rot.y + 3.1415927f);
 
     bcs::CMdlObj *pMdl = GetArtsOptMdl();

@@ -17,6 +17,10 @@ namespace msw {
 
             void SetCollKind(long kind);
             void SetCollType(long type);
+            // (DOL) The kind of attack of an attack unit (CCollAtkUnit's word
+            // at 0x84; the smash cut sets 0x20000; also msw::CBombExplosion::Create_
+            // and BossF game/boss/CChrCoreBoss.cpp).
+            void SetAtkType(unsigned long type);
             void SetPos(const bcs::FVEC3 &rPos);
             // (name guessed; the DOL's fn_80106870, a switch on the shape at
             // 0x13) Recomputes the bounding box; CBodyCollision::CalcAABBAll.
@@ -61,6 +65,18 @@ namespace msw {
             }
             // (names guessed) Inline in BasketF's CChrCoreBasketYoshi:
             // both set to the bit of the owner's player number.
+            // (names guessed; inline in BossF's CChrCoreBoss::UpdateCollAtk_)
+            // A capsule from rPos to rPos2; the strength an attack unit
+            // knocks a character away with (as CCollAtkUnit::m_fVanishPower).
+            void SetCapsule(const bcs::FVEC3 &rPos, const bcs::FVEC3 &rPos2)
+            {
+                SetPos(rPos);
+                m_Pos2 = rPos2;
+            }
+            void SetVanishPower(float fPower) { m_fVanishPower = fPower; }
+            // (name guessed; inline in BossF's CChrCoreBoss::UpdateCollBody_)
+            // The other end of a capsule.
+            void SetPos2(const bcs::FVEC3 &rPos2) { m_Pos2 = rPos2; }
             void SetNoHitFlag(unsigned long flag) { m_nNoHitFlag = flag; }
             void SetMyNoHitFlag(unsigned long flag) { m_nMyNoHitFlag = flag; }
 
@@ -91,7 +107,9 @@ namespace msw {
             bcs::FVEC3 m_Size;           // 0x5C
             unsigned char m_Unk68[0x18];
             float m_fRotY;               // 0x80 (SetRotY)
-            unsigned char m_Unk84[0x1C];
+            unsigned long m_nAtkType;    // 0x84 (SetAtkType; see CCollAtkUnit)
+            float m_fVanishPower;        // 0x88 (see CCollAtkUnit)
+            unsigned char m_Unk8C[0x14];
             // The constructor (fn_801066C8) initialises nothing past 0x9E, so
             // CCollUnit is 0xA0 bytes and this word belongs to the derived
             // units (msw::CCollDefUnit's reflect flags); kept here for the

@@ -10,6 +10,7 @@
 // line below instead, in the same order, so that game/volley/CStageVolley12.cpp
 // (which includes their headers) does not change.
 #include "game/msw/CPinballManVolley.hpp"
+#include "bcs/BCS_Math.hpp"
 #include "bcs/BCS_Vec.hpp"
 #include "bcs/New.hpp"
 #include "game/msw/CBall.hpp"
@@ -247,7 +248,7 @@ float msw::CPinballManVolley::GetParam_Interval() const
 // The angle is in degrees.
 float msw::CPinballManVolley::GetParam_ShotAngle() const
 {
-    return 0.017453292f * VOLLEY_PRM_S12_BALL_ANGLE;
+    return bcs::DEG_TO_RAD(VOLLEY_PRM_S12_BALL_ANGLE);
 }
 
 long msw::CPinballManVolley::GetParam_ShotSideRate() const

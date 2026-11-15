@@ -17,10 +17,13 @@ namespace msw {
     // results; argument meanings are not known.
     //
     // INCOMPLETE: only the members module code uses are named.
-    class CBombExplosion : public bcs::CUnivTask {
+    class CBombExplosion : public bcs::CUnivTaskEx {
         public:
-            CBombExplosion(bcs::CTask *pParent, const bcs::FVEC3 &rPos, unsigned long, float fRadius, float, float,
-                           long, long, unsigned long);
+            // fDownFrame, fUnk98, nUnk9C, nUnk9E and nNoHitFlag are handed to
+            // the attack unit by Create_ (CCollAtkUnit's fields of those
+            // offsets); hMdl is passed to Create_ (names guessed).
+            CBombExplosion(bcs::CTask *pParent, const bcs::FVEC3 &rPos, unsigned long hMdl, float fDownFrame,
+                           float fRadius, float fUnk98, long nUnk9C, long nUnk9E, unsigned long nNoHitFlag);
             virtual ~CBombExplosion();
             virtual void Main();
 
@@ -34,14 +37,40 @@ namespace msw {
             virtual void Create_(const bcs::FVEC3 &rPos, unsigned long);
 
         protected:
+            // The states of Main (names guessed).
+            enum {
+                STATE_CREATE = 0, // creates the attack unit
+                STATE_GROW = 1,   // the blast grows to its full size
+                STATE_HOLD = 2,   // full size until m_fUnk70 runs out
+                STATE_END = 99
+            };
+
             CCollAtkUnit *m_pAtkUnit; // 0x34, created by Create_
-            unsigned char m_Unk38[0x50 - 0x38];
+            float m_fTimer;           // 0x38, (name guessed) frames since the blast was created
+            bcs::FVEC3 m_Pos;         // 0x3C, where the blast is
+            unsigned long m_hMdl;     // 0x48, (name guessed) passed to Create_
+            long m_nState;            // 0x4C, STATE_*
             float m_fRadius;          // 0x50, (name guessed) the size of the blast
-            unsigned char m_Unk54[0x68 - 0x54];
-            float m_fUnk68;           // 0x68, (meaning unknown) DodgeF's CreateEffect_ sets 25, 15 or 35
-            unsigned char m_Unk6C[4];
-            float m_fUnk70;           // 0x70, (meaning unknown) DodgeF's CreateEffect_ sets 6, 4 or 10
-            unsigned char m_Unk74[0x7C - 0x74];
+            float m_fDownFrame;       // 0x54, (names guessed) the attack unit's fields of these offsets
+            float m_fUnk98;           // 0x58
+            long m_nUnk9C;            // 0x5C
+            long m_nUnk9E;            // 0x60
+            unsigned long m_nNoHitFlag; // 0x64, or'ed with GetNoHitFlag()
+            // 0x68, the attack unit's power (SetAttackPower; CCollAtkUnit
+            // 0x88). DodgeF's CreateEffect_ sets 25, 15 or 35.
+            float m_fUnk68;
+            float m_fGrowTime;        // 0x6C, (name guessed) frames to grow to full size
+            // 0x70, (name guessed: the frames the blast stays at full size)
+            // DodgeF's CreateEffect_ sets 6, 4 or 10.
+            float m_fUnk70;
+
+        public:
+            // 0x74, 0x78 (names guessed): a character index (-1: none) told
+            // about every character the blast hits, and whether the first
+            // hit of another character is still to be reported. Public: the
+            // file's attack-hit callback (not a member) reads them.
+            long m_nOwnerChr;
+            long m_bReportHit;
     };
 }
 

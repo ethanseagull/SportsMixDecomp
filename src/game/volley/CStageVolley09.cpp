@@ -144,10 +144,17 @@ void msw::CStageVolley09::OnSceneEntry()
 void msw::CStageVolley09::OnTurnInit()
 {
     Conveyor_ResetAll();
+    long rnd = bcs::BCS_RandRange(0L, 1L);
     Conveyor_DelayStartAll(60.0f * VOLLEY_PRM_S09_CV_STOP_TIME,
-                           bcs::BCS_RandRange(0L, 1L) != 0 ? CConveyor::FLOW_DIR_4 : CConveyor::FLOW_DIR_3, -1,
-                           -1.0f);
+                           rnd != 0 ? CConveyor::FLOW_DIR_4 : CConveyor::FLOW_DIR_3, -1, -1.0f);
     SE_Stop(SE_SLOT_CONVEYOR, 0.0f);
+}
+
+// Inline, defined here: the original emits it after OnGimmickReset, ahead of
+// the weak CConveyor::SetForceStop (function order checked by the VolleyF hash).
+inline long msw::CStageVolley09::GetConveyorNum() const
+{
+    return 2;
 }
 
 // The belt of the goal m_nStopTeam attacks is held still.
@@ -167,11 +174,6 @@ void msw::CStageVolley09::OnGimmickReset()
             }
         }
     }
-}
-
-long msw::CStageVolley09::GetConveyorNum() const
-{
-    return 2;
 }
 
 void msw::CStageVolley09::OnGimmickStart()
@@ -286,10 +288,8 @@ void msw::CStageVolley09::SendMessage(long msg, long arg1, long arg2, long arg3)
                     // Stopped, then restarted the other way or this one
                     // after the acceleration time.
                     Conveyor_Stop(no);
-                    Conveyor_DelayStart(accTime, no,
-                                        bcs::BCS_RandRange(0L, 1L) != 0 ? CConveyor::FLOW_DIR_4
-                                                                        : CConveyor::FLOW_DIR_3,
-                                        0, -1.0f);
+                    long rnd = bcs::BCS_RandRange(0L, 1L);
+                    Conveyor_DelayStart(accTime, no, rnd != 0 ? CConveyor::FLOW_DIR_4 : CConveyor::FLOW_DIR_3, 0, -1.0f);
                 }
             }
             break;

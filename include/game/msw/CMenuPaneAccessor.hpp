@@ -33,10 +33,10 @@ namespace msw {
             long PlayAnimation(long nPane, long nAnim, float fSpeed, float fFrame, int bRecursive, int bReset);
             // 1 when the pane is not found.
             int IsAnimEnd(long nPane, long nAnim);
-            // (added for game/menu/CCourtTab.cpp; return type and the name
-            // of the int guessed, after PlayAnimation) Stops animation
-            // nAnim of pane nPane.
-            void StopAnimation(long nPane, long nAnim, int bRecursive);
+            // (added for game/menu/CCourtTab.cpp; the name of the int
+            // guessed, after PlayAnimation) Stops animation nAnim of pane
+            // nPane. -1 when the pane is not found, else 0.
+            long StopAnimation(long nPane, long nAnim, int bRecursive);
 
             // Does not check the index.
             const char *GetPaneName(long nPane);
@@ -48,12 +48,14 @@ namespace msw {
             bcs::G2D::CPaneObj *GetPaneObj(nw4r::lyt::Pane *pPane);
             // Added for TourF game/tour/CCockpitTournamentTelopLogo.cpp.
             // Puts nLen characters of pText into text box pane nPane.
-            // Return type guessed.
-            void SetTextBoxString(long nPane, const wchar_t *pText, unsigned short nLen);
+            // -1 when pText is null, -2 when the pane is not found, -3 when
+            // it is not a text box, 0 when it already shows that text, else
+            // 1.
+            long SetTextBoxString(long nPane, const wchar_t *pText, unsigned short nLen);
             // Added for BasketF game/basket/CCockpitBasketPauseResult.cpp:
             // the same with a number (what nArg selects is not known; the
-            // caller passes 0). Return type guessed.
-            void SetTextBoxString(long nPane, unsigned long nValue, unsigned long nArg);
+            // caller passes 0). Returns what the string overload does.
+            long SetTextBoxString(long nPane, unsigned long nValue, unsigned long nArg);
             // Added for MenuF game/menu/CEntryExplain.cpp. Shows or hides
             // the pane named pName; nothing when it is not found.
             void SetDisp(const char *pName, int bDisp);

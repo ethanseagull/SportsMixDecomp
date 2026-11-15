@@ -134,6 +134,11 @@ namespace msw {
             static bcs::FVEC3 GetChrPosXZ(long nChr);
             static float GetStageCourtCenterX(long nCourt);
             static float GetStageCourtCenterZ(long nCourt);
+            // (added for BasketF game/basket/unit_9AFD4.cpp) The left and
+            // right edges of court nCourt; where pBall is.
+            static float GetStageCourtLeft(long nCourt);
+            static float GetStageCourtRight(long nCourt);
+            static bcs::FVEC3 GetBallPos(const CBall *pBall);
             static long GetNearBestPos2on3(const bcs::FVEC3 *pMy, const bcs::FVEC3 *pTarget, long nIdx);
 
             // (DOL; added for BasketF game/basket/CComManBasketGame.cpp;

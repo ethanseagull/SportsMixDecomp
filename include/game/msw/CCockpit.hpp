@@ -85,6 +85,9 @@ namespace msw {
             // telop nObjId has played its start animation; shows or hides
             // the special gauges.
             static void SetTeamCoin(long nTeam, long nCoin);
+            // (DOL, static; added for VolleyF game/volley/CGameVolley.cpp;
+            // argument names guessed) The colour of team nTeam's score.
+            static void SetTeamScoreColor(long nTeam, int nColor);
             static int IsEndOfStartAnim(long nObjId);
             static void SetSPGaugeDispEnable(int bEnable);
             // CMenuTask::SendObjEventTrigger on the task; -1 without a task.

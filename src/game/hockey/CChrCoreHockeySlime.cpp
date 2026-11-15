@@ -399,20 +399,18 @@ void msw::CChrCoreHockeySlime::SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK 
 // effect in effect slot nEffSlot.
 void msw::CC16_HOCKEY::CcSquadFactoryHockey::AnimPlay(long nEffSlot, int bLoop, float fSpeed)
 {
-    const SQUAD_ANIM *pAnim = s_SquadAnim;
     for (long i = 0; i < SQUAD_NUM; i++) {
         if (m_aTaskId[i] != 0) {
             CChrOptTask *pTask = static_cast<CChrOptTask *>(bcs::CTaskMan::GetTask(m_aTaskId[i]));
             if (pTask != 0 && !pTask->IsDelete()) {
-                if (pAnim->nMot >= 0) {
-                    pTask->AnimPlay(pAnim->nMot, bLoop, fSpeed, 0.0f);
+                if (s_SquadAnim[i].nMot >= 0) {
+                    pTask->AnimPlay(s_SquadAnim[i].nMot, bLoop, fSpeed, 0.0f);
                 }
-                if (pAnim->nEff >= 0) {
-                    pTask->Eff_CreateAttachAuto(nEffSlot, pAnim->nEff, 3);
+                if (s_SquadAnim[i].nEff >= 0) {
+                    pTask->Eff_CreateAttachAuto(nEffSlot, s_SquadAnim[i].nEff, 3);
                 }
             }
         }
-        pAnim++;
     }
 }
 

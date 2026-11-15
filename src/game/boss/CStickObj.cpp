@@ -15,19 +15,8 @@
 
 using msw::CHR_CORE_BOSS::CStickObj;
 
-// The shoot stance's work in the state queue.
-struct msw::CChrCoreBoss::STATE_WORK_SHOOT_STANCE {
-    // 0x00: 0 raise the stick, 1 hold, 2 hold (looping motion), 3 shot,
-    // 4 put down, 5 over
-    long m_nStep;
-    unsigned char m_Unk04[0x4];
-    long m_nShot;      // 0x08: 2 once the driver asks for the shot
-    unsigned char m_Unk0C[0x4];
-    int m_bNoHit;      // 0x10: no hit window when set (never set here)
-    int m_bHit;        // 0x14: set while the motion is in the hit window
-    float m_fHitRate;  // 0x18: 0 to 1 across the hit window
-    int m_bCanCancel;  // 0x1C: the stance may be left from now on
-};
+// The shoot stance's work in the state queue (STATE_WORK_SHOOT_STANCE) is
+// in CChrCoreBoss.hpp: CChrCoreBoss::CallbackAttackHit_ reads it too.
 
 namespace {
     // The shoot stance's state number in the character's state queue.

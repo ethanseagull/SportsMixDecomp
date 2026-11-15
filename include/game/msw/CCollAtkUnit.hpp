@@ -97,6 +97,12 @@ namespace msw {
 
             long GetOwnerKind() const { return m_nOwnerKind; }
             unsigned long GetAtkKind() const { return (m_nAtkType >> 8) & 0xFF; }
+            // The low byte of 0x84 (meaning not known; HockeyF's pylon
+            // reacts to 6). (name guessed)
+            unsigned long GetAtkType() const { return (unsigned char)m_nAtkType; }
+            // The three floats at 0x2C as a vector (HockeyF's pylon reads it
+            // as one). (name guessed)
+            const bcs::FVEC3 &GetPos() const { return *reinterpret_cast<const bcs::FVEC3 *>(&m_fPosX); }
             // (name guessed; inline in msw::CBombExplosion::Create_)
             void SetUnk9C(long n9C, long n9E)
             {

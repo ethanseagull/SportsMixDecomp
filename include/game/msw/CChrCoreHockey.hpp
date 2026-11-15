@@ -565,7 +565,13 @@ namespace msw {
         public:
             CChrCoreHockeyDaisy();
             virtual ~CChrCoreHockeyDaisy();
+            virtual void Reset_();                                     // 0x384
             virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xCD8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xD0C
+            virtual void SubStateArtsShotPlayLandMotion_(STATE_WORK_AIR_TRICK *); // 0xD24
     };
 
     class CChrCoreHockeyYoshi : public CChrCoreHockey {
@@ -583,7 +589,12 @@ namespace msw {
         public:
             CChrCoreHockeyWario();
             virtual ~CChrCoreHockeyWario();
+            virtual void Reset_();                                     // 0x384
             virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCC8
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xD0C
     };
 
     // Waluigi: his special shot splits the puck in four (game/hockey/

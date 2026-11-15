@@ -62,6 +62,8 @@ namespace msw {
             virtual void CalcAddSkillPoint_();
             virtual int SetGameResultNext_();
             virtual void AddTeamCoin_(long nTeam, long nCoin);
+            virtual void TrgVolleyGoalIn_(long nChr, long nTeam, long nShootType, long nScore, long nCoin, long nPoint,
+                                          const bcs::FVEC3 &rPos, unsigned long nFlag);
             virtual long GetMaxCoin_() const;
             virtual int IsVolleyScored_() const;
             virtual int IsVolleyServeClockOver_() const;
@@ -106,8 +108,31 @@ namespace msw {
         protected:
             // (VolleyF member functions; meanings guessed from the names)
             void InitWork_();
+            void InitServeClock_();
+            void SetCockpitTeamScoreNum_();
+            void SetCockpitServeClockCount_(long nColor, long nCount);
+            void SetDispMatchPoint_();
+            void EnableDispMatchPoint_(long nTeam);
+            void DisableDispMatchPoint_();
+            void SetDispScoreCountResult_();
+            void SetDispSetCountResult_(int bGameSet);
+            long GetGetSetPoint_(long nPeriodNum, long nTeam);
+            void InitSetCountTelop_();
+            void UpdateSetCountTelop_();
             void CheckDispRemoconShake_();
+            void EnableDispRemoconShake_(long nTeam);
             void DisableDispRemoconShake_();
+            int IsNeedDispDeuce_();
+            void SetDispDeuce_();
+            int IsNeedHalfFPS_();
+            void CreateMiniTelop_(long nObjId, long nChr);
+            void RemoveMiniTelop_(long nObjId);
+            void UpdateShotClock_();
+            void UpdateScoreAndCoin_();
+            int IsNeedExceptDemo_();
+            void ForceGameExit_(long nState);
+            void ChangeServeChar_();
+            void SetFirstState_();
 
             // 0x150, 0x154 (meanings guessed): the serving team and the team
             // that scored last; GameSetUp_ sets both to the user's team,
@@ -115,18 +140,43 @@ namespace msw {
             long m_nServeTeam;
             long m_nScoredTeam;
             // 0x158: the serve order of the four places (0, 1, 2, 3 at the
-            // start; name guessed).
+            // start; name guessed). CGameVolley keeps each team's serving
+            // character (player number) here, -1 before its first serve.
             long m_anServeOrder[4];
-            unsigned char m_Unk168[0x1E8 - 0x168];
+            long m_nMatchPointTeam;     // 0x168, the team at match point, -1 for none (SetDispMatchPoint_)
+            long m_anUnk16C[4];         // 0x16C (meaning not known; cleared with the serve order)
+            // 0x17C: per team and set, the set was given to the team (a
+            // forced end; TrgVolleyGoalIn_ sets it with flag 0x40).
+            long m_aabSetWin[2][5];
+            long m_aanUnk1A4[2][5];     // 0x1A4 (meaning not known; cleared by GameInit_)
+            // 0x1CC: each team's score as the score count last showed it.
+            long m_anDispScore[4];
+            long m_nRunTeam;            // 0x1DC, the team that scored the last points in a row
+            long m_nRunCount;           // 0x1E0, how many
+            // 0x1E4 (name guessed): while set, SetCockpitPartMove_ moves
+            // nothing.
+            int m_bPartMoveLock;
             long m_nUnk1E8;     // 0x1E8 (meaning not known; cleared by GameSetUp_)
             int m_bScored;      // 0x1EC: the rally has ended in a point (IsVolleyScored_)
-            unsigned char m_Unk1F0[0x1F4 - 0x1F0];
-            long m_nUnk1F4;     // 0x1F4 (meaning not known; -1 from GameSetUp_)
-            unsigned char m_Unk1F8[0x208 - 0x1F8];
+            int m_bLineMsgDisp; // 0x1F0 (IsLineMsgDispEnable_)
+            long m_nUnk1F4;     // 0x1F4 (meaning not known; -1 from GameSetUp_): the telop of a point
+            long m_nPointTelop; // 0x1F8, a second telop of the point (27, 28), -1 for none
+            int m_bDeuce;       // 0x1FC: the set has gone to deuce
+            int m_bDeuceNext;   // 0x200: the next set starts at deuce
+            float m_fScoreDispWait; // 0x204, frames before the score board moves out
             int m_bPartMove;    // 0x208: the cockpit parts have been moved out
-            unsigned char m_Unk20C[0x21C - 0x20C];
+            int m_bServeClock;      // 0x20C: the serve clock runs
+            int m_bServeClockDisp;  // 0x210: the serve clock is shown
+            float m_fServeClock;    // 0x214, frames left to serve
+            long m_nServeClockCount; // 0x218, the second shown, -1 for none
             long m_nUnk21C;     // 0x21C (meaning not known; cleared by GameInit_)
-            unsigned char m_Unk220[0x25C - 0x220];
+            unsigned long m_hExDemo; // 0x220, the task id of the except demo
+            long m_nExceptTelop;     // 0x224, the telop the except demo shows, -1 for none
+            bcs::FVEC3 m_GoalPos;    // 0x228, where the last point fell
+            // 0x234: the score book's counters: serve, spike, feint, block
+            // and spike save, each made and missed (ScoreBookAddCountWork_
+            // messages 13-22).
+            long m_anVolleyScoreBook[10];
     };
 
     // The volleyball party game. Size 0x2BC.

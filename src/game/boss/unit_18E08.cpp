@@ -168,12 +168,8 @@ static int GetCrossPosCircleXZ(bcs::FVEC3 from, bcs::FVEC3 to, bcs::FVEC3 center
     return 1;
 }
 
-// The neutral state's work (names guessed).
-struct msw::CChrCoreBoss::STATE_WORK_NEUTRAL {
-    long m_nStep;  // 0x00
-    long m_nType;  // 0x04: the pose type (SubStateGetNeutralPoseType_), -1 at the start
-    long m_nPose;  // 0x08: the receive or toss pose
-};
+// (The neutral state's work, STATE_WORK_NEUTRAL, is in CChrCoreBoss.hpp:
+// game/boss/CChrCoreBoss.cpp reads it too.)
 
 // The run state's work (names guessed).
 struct msw::CChrCoreBoss::STATE_WORK_RUN {
@@ -976,8 +972,7 @@ void msw::CChrCoreBoss::CtorStateMotPlay()
     }
     if (!(pWork->m_nFlag & 2)) {
         if (m_nStatusFlag & 3) {
-            FsmqNext();
-            FsmqRetry();
+            FsmqDoChain();
             return;
         }
     } else {

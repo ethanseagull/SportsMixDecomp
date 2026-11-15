@@ -110,9 +110,9 @@ namespace msw {
             int IsShoudGetFallGShell() const;
             float GetNearFallGShellDis() const;
             int IsShoudGetDropCoin() const;
-            int GetShoudGetDropCoin() const;
+            unsigned long GetShoudGetDropCoin() const;
             float GetNearDropCoinDis() const;
-            int GetItemShootPos(bcs::FVEC3 &rPos) const;
+            void GetItemShootPos(bcs::FVEC3 &rPos) const;
             int IsHitSpikeShot(long, float, float, float) const;
             int IsOutBallJudge() const;
             int Util_GetOpenSpace(bcs::FVEC3 &rPos, const bcs::FVEC3 *pPos, long, long, const bcs::FVEC3 *, int) const;
@@ -122,7 +122,7 @@ namespace msw {
             long GetNearChrBaseWithCondition(const bcs::FVEC3 &rPos, unsigned long, float) const;
             long GetNearChrBaseWithConditionNo2(const bcs::FVEC3 &rPos, unsigned long, float) const;
             int IsExistChrTargetWithCondition(const bcs::FVEC3 &rPos, float, unsigned long) const;
-            int GetItemShootTarget(bcs::FVEC3 &rPos) const;
+            void GetItemShootTarget(bcs::FVEC3 &rPos) const;
             int IsBanSpike() const;
             int IsSpikeCurveOutAtTargetMarker() const;
             long GetSpikeCurveInnerValueAtTargetMarker() const;

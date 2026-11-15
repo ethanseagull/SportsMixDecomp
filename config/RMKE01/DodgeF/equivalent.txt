@@ -142,7 +142,6 @@ DodgeF Stage15_GetCaseToTarget__Q23msw16CComDrvDodgeGameCFRCQ23bcs5FVEC3f near 9
 DodgeF Stage15_GetPosTurnAroundCase__Q23msw16CComDrvDodgeGameCFRQ23bcs5FVEC3ll near 99.5 float register for max(width, depth)
 DodgeF StartDamageDemo__Q23msw11EvDemoDodgeFv near 97.8 97.8%: the original keeps a cmpwi 1/beq to the switch end for the empty case 1 plus one dead b; equivalent branch form
 DodgeF Start__Q33msw13CStageDodge0310CWaterInfoFli near 93.4 original also computes max(WATER_NUM,0) with srawi/andc as the loop bound after the >0 guard; same iteration count; registers.
-DodgeF SubStateArtsShotCalcRotParam___Q23msw13CChrCoreDodgeFRQ33msw8CChrCore9ROT_LERP1ff near 99.5 register choice only: f0/f1 swapped around the final divide
 DodgeF SubStateArtsShotFireBullet___Q23msw18CChrCoreDodgeKoopaFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 99.7 99.7%: register only (new CcFireBall pointer in r31 vs r30); same leftover as Basket/Hockey Koopa
 DodgeF SubStateArtsShotFireBullet___Q23msw18CChrCoreDodgePeachFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 87.4 87.4%: original computes the bomb counts at run time (li 7; srawi / li 6; cmpwi), ours folds them to the same constants; hence one more saved reg and 0xF0 vs 0xE0 frame, stack slots, registers. Same as Basket/Hockey/Volley Peach
 DodgeF SubStateArtsShotFireBullet___Q23msw18CChrCoreDodgeSlimeFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 99.1 float register allocation only (fRadius/fRot/loop constants in other FPRs, loop counters swapped); same instructions, constants, calls and stack slots
@@ -155,7 +154,6 @@ DodgeF SubStateArtsShotPlayTrickMotion___Q23msw19CChrCoreDodgeKuromaFPQ33msw13CC
 DodgeF SubStateArtsShotPlayTrickMotion___Q23msw19CChrCoreDodgeSiromaFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN near 98.8 registers in inlined normalize; circle position stores x,y,z vs x,z,y
 DodgeF SubStateArtsShotReadyArtsShot___Q23msw13CChrCoreDodgeFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMN near 97.9 instruction order only: one fmr and one fsubs before Util_SetJumpParam exchanged
 DodgeF SubStateArtsShotSetTrickJumpParam___Q23msw13CChrCoreDodgeFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 95.7 register choice and order only: f30/f31 swapped between the top height and the frame count; same call arguments and stores
-DodgeF SubStateArtsShotSetTrickMoveParam___Q23msw13CChrCoreDodgeFPQ33msw13CChrCoreDodge24STATE_WORK_AIR_TRICK_CMNl near 99.7 register choice only: f30/f31 swapped between the squared distance and the frame count
 DodgeF SubStateDamageCtorMDmg___Q23msw13CChrCoreDodgeFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 99.4 99.4: load order m_fCamRotY vs pi, one redundant frsp on an already-single value
 DodgeF SubStateDamageLoopDizzy___Q23msw13CChrCoreDodgeFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 99.3 99.3: inline FsmqPushState tail/head read order and one redundant tail reload; regs
 DodgeF SubStateDamageLoopLDmg___Q23msw13CChrCoreDodgeFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 100.0 stack slots of two FVEC3 temporaries swapped (0x8 vs 0x14); objdiff scores 100

@@ -234,6 +234,8 @@ def parse_data(text):
             continue
         d, _, arg = s.partition(" ")
         arg = arg.strip()
+        if not arg.startswith('"'):
+            arg = arg.split(" #", 1)[0].strip()  # dtk comments, e.g. ".4byte 0xFFFFFFFF # NaN"
         try:
             if d in (".4byte", ".2byte", ".byte"):
                 width = {".4byte": 4, ".2byte": 2, ".byte": 1}[d]
@@ -328,10 +330,39 @@ def _common(reads_a, reads_b):
 UNNAMED_TARGET = re.compile(r"^(?:fn_[0-9A-Fa-f]{6,8}|_unresolved)$")
 
 
+_CODE = None
+
+
+def _code_hashes():
+    """{function name: set of code hashes} from the function index, so two names
+    for the same code compare equal: the DOL linker folds identical functions,
+    and the original's vtable then names the one copy it kept (CStgMdl's
+    IsSceneEntry slot names nw4r WsdPlayer::GetVoiceOutCount, both li r3, 0; blr)."""
+    global _CODE
+    if _CODE is None:
+        _CODE = {}
+        p = ROOT / "build" / "decomp" / "index_RMKE01.json"
+        if p.exists():
+            for f in json.loads(p.read_text(encoding="utf-8")):
+                # the index hash masks symbol names, so only functions that refer to
+                # none (no call, branch or address) are known to be the same bytes
+                if not set(f["ops"].split()) & {"bl", "b", "lis", "bctrl"}:
+                    _CODE.setdefault(f["name"], set()).add(f["hash"])
+    return _CODE
+
+
 def _same_ptr(ta, tb):
+    """ta: pointer target in the original, tb: in ours (masked names)."""
     if ta == tb:
         return True
-    return ta is not None and tb is not None and bool(UNNAMED_TARGET.match(ta) or UNNAMED_TARGET.match(tb))
+    if ta is None or tb is None:
+        return False
+    if UNNAMED_TARGET.match(ta) or UNNAMED_TARGET.match(tb):
+        return True
+    if ta == "ANON" and not tb.startswith("ANON"):
+        return True  # the original has no name for this data (lbl_*), ours gave it one
+    code = _code_hashes()
+    return bool(code.get(ta, set()) & code.get(tb, set()))
 
 
 def same_value(va, vb):

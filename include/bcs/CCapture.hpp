@@ -16,8 +16,15 @@ namespace bcs {
             // (name guessed)
             const GXTexObj *GetTexObj() const { return &m_TexObj; }
 
+            // (names guessed; VolleyF's CGameVolley except demo) Bit 0 of
+            // the word at 0x8: set while the capture is held (meaning
+            // guessed).
+            void OnFlag(unsigned long nBit) { m_nFlag |= nBit; }
+            void OffFlag(unsigned long nBit) { m_nFlag &= ~nBit; }
+
         private:
-            unsigned char m_Unk00[0xC];
+            unsigned char m_Unk00[0x8];
+            unsigned long m_nFlag; // 0x08
             GXTexObj m_TexObj; // 0x0C
     };
 }

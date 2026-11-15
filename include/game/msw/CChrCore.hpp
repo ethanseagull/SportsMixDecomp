@@ -1455,6 +1455,10 @@ namespace msw {
             // the shot plays with; moves the character in XZ.
             void Util_NodePatchWarpToTransNodeXZ();
             float GetRotY_Diff_ToPosXZ(const bcs::FVEC3 &rPos) const;
+            // (DOL; added for DodgeF game/dodge/unit_3F694.cpp) The same
+            // towards character pChr; sets motion slot nSlot to frame fFrame.
+            float GetRotY_Diff_ToChrXZ(const CChrCore *pChr) const;
+            void AnimSetFrame(unsigned long nSlot, float fFrame);
             long PlayGetOutline_(unsigned long) const;
             void AddPosXZ(float fX, float fZ);
             void WSE_Play(long nSlot, long nSe, unsigned long, long);
@@ -1490,7 +1494,8 @@ namespace msw {
             // root node's offset; gets the stocked item ready to throw;
             // the yaw to throw it at; throws it.
             void MoveRunXZ_(float fRotY, float fSpeed, float fRate);
-            long Util_ChangeRot4(float fRot);
+            // Static: the original never passes this (no mr r3 before any call).
+            static long Util_ChangeRot4(float fRot);
             void Util_ExchgToWaistPos();
             void Util_NodePatchZeroTrans();
             void PrepareShotStockItem(float fFrame);

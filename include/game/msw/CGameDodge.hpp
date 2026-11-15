@@ -32,6 +32,10 @@ namespace msw {
             // (static, DodgeF; added for game/dodge/CChrDrvPadDodge.cpp)
             // Hands the pad of character nFrom to character nTo.
             static void ChrChange(long nTo, long nFrom);
+            // (static, DodgeF; added for game/dodge/unit_3F694.cpp, meaning
+            // guessed) Whether the stage keeps the characters out of the
+            // other team's zone (the jump shot compares it with 1).
+            static int IsEnemyZoneLimited();
 
             // The dodgeball game's own virtual functions from slot 0x2A8 (after
             // CGame's), in the order of __vt__Q23msw10CGameDodge; only as far

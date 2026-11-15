@@ -2636,8 +2636,8 @@ void msw::CChrCoreBoss::CalcRotParam_(ROT_LERP1 &rLerp, float fRotY, float fFram
     if (fDiff > 3.1415927f) {
         fDiff -= 6.2831855f;
     }
-    rLerp.m_afUnk[3] = 0.0f;
     rLerp.m_afUnk[1] = fDiff / rLerp.m_afUnk[2];
+    rLerp.m_afUnk[3] = 0.0f;
 }
 
 // Where the ball can be caught (see m_nBallCatchMode).

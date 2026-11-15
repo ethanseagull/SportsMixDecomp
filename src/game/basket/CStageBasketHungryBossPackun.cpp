@@ -49,7 +49,7 @@ const msw::STAGE::MDL_GEN_RULE *msw::CStageBasketHungryBossPackun::GetMdlGenRule
 {
     // The end entry chains to the table of CStageManBasket.
     static STAGE::MDL_GEN_RULE tbl[] = {
-        { "^stage([0-9]+)_bg$", 10 },
+        { "^stage([0-9]+)_bg$", 10, 0, 0, CStageMan::NewMdl },
         { 0, reinterpret_cast<long>(CStageManBasket::GetMdlGenRule_()) },
     };
 

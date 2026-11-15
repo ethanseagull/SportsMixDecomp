@@ -972,8 +972,7 @@ void msw::CChrCoreBoss::CtorStateMotPlay()
     }
     if (!(pWork->m_nFlag & 2)) {
         if (m_nStatusFlag & 3) {
-            FsmqNext();
-            FsmqRetry();
+            FsmqDoChain();
             return;
         }
     } else {

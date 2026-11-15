@@ -20,7 +20,6 @@ BossF CreateMiniTelop__Q23msw12CCockpitBossFllPQ23bcs5FVEC3 near 99.0 register c
 BossF CtorStateAppear__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFv near 99.9 register allocation only
 BossF CtorStateDunk___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss15STATE_WORK_DUNK near 91.2 register allocation/instruction order only (same instruction multiset; argument set-up for SubStateDunkCtor_ scheduled differently)
 BossF CtorStateJumpShoot__Q23msw12CChrCoreBossFv near 98.9 Float constants per literal as in the original (pool-off stand-in, own file since the split). Left: the FsmqGetWork queue index in r4/r5 the other way round, and ours reloads the just-stored shot frame from 0xC for the 15.0 clamp where the original keeps the call result in f0 (frsp); same value, same stores.
-BossF CtorStateMotPlay__Q23msw12CChrCoreBossFv near 99.4 register allocation and instruction order only
 BossF CtorStateReceive__Q23msw12CChrCoreBossFv near 95.9 register numbering and instruction order only (autopilot regs found no better declaration order)
 BossF DropBall___Q23msw12CChrCoreBossFf near 99.9 literal pool offsets only: the file's float pool lacks the literals of the functions not written yet, so constants sit at other offsets (same values)
 BossF EffectCoinGetCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 96.9 the inlined CEffectCoinGet ctor's 2*20 multiply (Twice) is scheduled after the m_fRotSpeed store in ours, before it in the original; the rotation-speed static is anonymous in the original; same values, calls and stores

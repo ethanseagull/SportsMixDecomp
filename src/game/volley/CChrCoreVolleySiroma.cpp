@@ -52,16 +52,9 @@ namespace {
         short nEffect;
         short nZSortType;
     };
-    const EFFECT_INFO s_DisappearEffect = {0x609, -1};
+    // One entry, looped over as DodgeF's circle does.
+    const EFFECT_INFO s_DisappearEffect[1] = {{0x609, -1}};
 
-    // (guessed) The original reads s_DisappearEffect from .rodata in
-    // CtorStateDisappear; ours folds the two values, which would drop the
-    // table. This dead reference keeps it in place. See notes/decisions.md,
-    // "Unreferenced data kept by dead references".
-    inline void UnusedReferences()
-    {
-        (void)&s_DisappearEffect;
-    }
 
     // (guessed helpers) An angle brought into [0, 2 pi), the same into
     // (-pi, pi], and degrees to radians.
@@ -238,7 +231,7 @@ namespace msw {
                 float m_fWait;               // 0xA4
                 bcs::CScnGroup *m_pGroup;    // 0xA8
                 CcSiromaMagicCircleObj *m_apObj[2]; // 0xAC
-                unsigned long m_hEffect;     // 0xB4
+                unsigned long m_ahEffect[1]; // 0xB4
         };
     }
 }
@@ -830,7 +823,7 @@ namespace msw {
             m_Pos = rPos;
             m_apObj[0] = 0;
             m_apObj[1] = 0;
-            m_hEffect = 0;
+            m_ahEffect[0] = 0;
 
             InitFsm(this, STATE_NUM);
             SetState(STATE_SLEEP, &CcSiromaMagicCircle::CtorStateSleep, &CcSiromaMagicCircle::LoopStateSleep,
@@ -853,9 +846,11 @@ namespace msw {
 
         CcSiromaMagicCircle::~CcSiromaMagicCircle()
         {
-            if (m_hEffect) {
-                CEffectCtrl::EraseAttachEffect(m_hEffect);
-                m_hEffect = 0;
+            for (long i = 0; i < 1; i++) {
+                if (m_ahEffect[i]) {
+                    CEffectCtrl::EraseAttachEffect(m_ahEffect[i]);
+                    m_ahEffect[i] = 0;
+                }
             }
             DeleteScnObj(m_pGroup);
         }
@@ -1017,27 +1012,27 @@ namespace msw {
             m_Pos = m_TargetPos;
             CGameSnd::Play(0x47F, m_Pos, 1, -1, 0.0f, 1.0f, 0.0f);
 
-            if (m_hEffect) {
-                CEffectCtrl::StopAttachEffect(m_hEffect);
-                m_hEffect = 0;
-            }
-
-            const EFFECT_INFO info = s_DisappearEffect;
-            const EFFECT_INFO *pInfo = &info;
-            long nZSortType = pInfo->nZSortType;
-            if (pInfo->nEffect >= 0) {
-                m_hEffect = CEffectCtrl::CreateAttachEffect(pInfo->nEffect, 0, 0, 0, 1, 0, 0, 3, 0, 0, 0);
-                if (m_hEffect) {
-                    CEffectCluster *pCluster = CEffectCtrl::GetObject(m_hEffect);
-                    if (pCluster) {
-                        pCluster->SetTranslate(&m_Pos);
-                        if (nZSortType >= 0) {
-                            long nNum = pCluster->GetMdlObjNum();
-                            for (long i = 0; i < nNum; i++) {
-                                bcs::CMdlObj *pMdl = pCluster->GetMdlObj(i);
-                                if (pMdl) {
-                                    pMdl->OnFlag(0x50000);
-                                    pMdl->SetBBoxZSortCalcType(nZSortType);
+            for (long i = 0; i < 1; i++) {
+                if (m_ahEffect[i]) {
+                    CEffectCtrl::StopAttachEffect(m_ahEffect[i]);
+                    m_ahEffect[i] = 0;
+                }
+                const EFFECT_INFO *pInfo = &s_DisappearEffect[i];
+                long nZSortType = pInfo->nZSortType;
+                if (pInfo->nEffect >= 0) {
+                    m_ahEffect[i] = CEffectCtrl::CreateAttachEffect(pInfo->nEffect, 0, 0, 0, 1, 0, 0, 3, 0, 0, 0);
+                    if (m_ahEffect[i]) {
+                        CEffectCluster *pCluster = CEffectCtrl::GetObject(m_ahEffect[i]);
+                        if (pCluster) {
+                            pCluster->SetTranslate(&m_Pos);
+                            if (nZSortType >= 0) {
+                                long nNum = pCluster->GetMdlObjNum();
+                                for (long j = 0; j < nNum; j++) {
+                                    bcs::CMdlObj *pMdl = pCluster->GetMdlObj(j);
+                                    if (pMdl) {
+                                        pMdl->OnFlag(0x50000);
+                                        pMdl->SetBBoxZSortCalcType(nZSortType);
+                                    }
                                 }
                             }
                         }
@@ -1083,8 +1078,10 @@ namespace msw {
                     break;
                 default: {
                     int bEnd = 1;
-                    if (m_hEffect && CEffectCtrl::GetObject(m_hEffect)) {
-                        bEnd = 0;
+                    for (long i = 0; i < 1; i++) {
+                        if (m_ahEffect[i] && CEffectCtrl::GetObject(m_ahEffect[i])) {
+                            bEnd = 0;
+                        }
                     }
                     if (bEnd) {
                         Delete();

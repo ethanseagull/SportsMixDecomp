@@ -17,6 +17,7 @@
 #include "game/msw/CComManVolley.hpp"
 #include "game/msw/CComManVolleyGame.hpp"
 #include "game/msw/CComOSG.hpp"
+#include "game/msw/CDropCoin.hpp"
 #include "game/msw/CGame.hpp"
 #include "game/msw/CItemBallVolleyKinds.hpp"
 #include "game/msw/CStageVolley05.hpp"
@@ -44,6 +45,18 @@ namespace {
         bcs::BCS_Vec_Normalize(rOut, bcs::FVEC3(rIn.x, 0.0f, rIn.z));
     }
 
+    // (guessed helper) rVec made fLen long in the XZ plane, its y kept.
+    // The original normalises the direction again here, after the caller
+    // already did.
+    inline void SetLenXZ(bcs::FVEC3 &rVec, float fLen)
+    {
+        float fY = rVec.y;
+        NormalizeXZ(rVec, rVec);
+        rVec.x *= fLen;
+        rVec.y = fY;
+        rVec.z *= fLen;
+    }
+
     // (guessed helper) Whether a character of nPadBits stands closer than
     // fDist to rPos (world), counting its handicap distance.
     inline int IsExistPadChrNear(const msw::CComDrv *pDrv, unsigned long nPadBits, const bcs::FVEC3 &rPos,
@@ -53,7 +66,9 @@ namespace {
             msw::CChrCore *pChr = msw::CChrMan::GetChrCore(i);
             if (pChr != 0 && !pChr->IsDisable() && msw::CComMan::IsEnableBit(nPadBits, i)) {
                 bcs::FVEC3 pos = msw::CComMan::GetChrWorldPos(pChr);
-                if (pDrv->GetDisXZ(rPos, pos) + msw::CComManVolleyGame::GetConditionHandicapDis(pChr) < fDist) {
+                float fDis = pDrv->GetDisXZ(rPos, pos);
+                fDis += msw::CComManVolleyGame::GetConditionHandicapDis(pChr);
+                if (fDis < fDist) {
                     return 1;
                 }
             }
@@ -70,7 +85,10 @@ namespace {
         float fZ0 = pStage->GetTeamCourtOffsetZ(0);
         float fX1 = pStage->GetTeamCourtOffsetX(1);
         float fZ1 = pStage->GetTeamCourtOffsetZ(1);
-        return fabsf(fX0 - fX1) >= 6.0f || fabsf(fZ0 - fZ1) >= 3.0f;
+        if (fabsf(fX0 - fX1) >= 6.0f) {
+            return 1;
+        }
+        return fabsf(fZ0 - fZ1) >= 3.0f;
     }
 
     // (guessed helper) Whether rPos (world) is in the other team's court.
@@ -522,7 +540,7 @@ void CComDrvVolleyGame::GetHomePos(bcs::FVEC3 &rPos, int bOfs) const
 
         // The front character's home (0 left, 1 right).
         if (CComMan::IsPadChr(m_nFrontChrIdx)) {
-            if (frontPos.x >= fCenterX) {
+            if (fCenterX <= frontPos.x) {
                 nFront = 1;
             } else {
                 nFront = 0;
@@ -544,7 +562,7 @@ void CComDrvVolleyGame::GetHomePos(bcs::FVEC3 &rPos, int bOfs) const
 
         // The back character's home (2 left, 3 right).
         if (CComMan::IsPadChr(m_nBackChrIdx)) {
-            if (backPos.x >= fCenterX) {
+            if (fCenterX <= backPos.x) {
                 nBack = 3;
             } else {
                 nBack = 2;
@@ -598,34 +616,30 @@ void CComDrvVolleyGame::GetHomePos(bcs::FVEC3 &rPos, int bOfs) const
             }
         }
     } else {
-        switch (m_nAPos) {
-            case 0:
-                if (backPos.x < frontPos.x) {
+        if (m_nAPos == 0) {
+            if (backPos.x < frontPos.x) {
+                nIdx = 1;
+            } else {
+                nIdx = 0;
+            }
+        } else if (m_nAPos == 2) {
+            if (frontPos.x < backPos.x) {
+                nIdx = 3;
+            } else {
+                nIdx = 2;
+            }
+        } else if (m_nAPos == 1) {
+            if (frontPos.x < backPos.x) {
+                if (m_MyPos.x >= fCenterX) {
                     nIdx = 1;
-                } else {
-                    nIdx = 0;
-                }
-                break;
-            case 2:
-                if (frontPos.x < backPos.x) {
-                    nIdx = 3;
                 } else {
                     nIdx = 2;
                 }
-                break;
-            case 1:
-                if (frontPos.x < backPos.x) {
-                    if (m_MyPos.x >= fCenterX) {
-                        nIdx = 1;
-                    } else {
-                        nIdx = 2;
-                    }
-                } else if (m_MyPos.x >= fCenterX) {
-                    nIdx = 3;
-                } else {
-                    nIdx = 0;
-                }
-                break;
+            } else if (m_MyPos.x >= fCenterX) {
+                nIdx = 3;
+            } else {
+                nIdx = 0;
+            }
         }
     }
 
@@ -657,27 +671,22 @@ int CComDrvVolleyGame::IsExistPadChrHomePosIdx(long nIdx) const
         CChrCore *pChr = CChrMan::GetChrCore(i);
         if (pChr != 0 && !pChr->IsDisable() && m_nMyTeam == pChr->GetTeamNo() && pChr->IsPadCtrl()) {
             bcs::FVEC3 pos = CComMan::GetChrPos(pChr);
-            switch (nIdx) {
-                case 0:
-                    if (pos.x <= fCenterX && fabsf(pos.z - fBorder) <= fHalf) {
-                        return 1;
-                    }
-                    break;
-                case 1:
-                    if (pos.x >= fCenterX && fabsf(pos.z - fBorder) <= fHalf) {
-                        return 1;
-                    }
-                    break;
-                case 2:
-                    if (pos.x <= fCenterX && fabsf(pos.z - fBorder) >= fHalf) {
-                        return 1;
-                    }
-                    break;
-                default:
-                    if (pos.x >= fCenterX && fabsf(pos.z - fBorder) >= fHalf) {
-                        return 1;
-                    }
-                    break;
+            if (nIdx == 0) {
+                if (pos.x <= fCenterX && fabsf(pos.z - fBorder) <= fHalf) {
+                    return 1;
+                }
+            } else if (nIdx == 1) {
+                if (pos.x >= fCenterX && fabsf(pos.z - fBorder) <= fHalf) {
+                    return 1;
+                }
+            } else if (nIdx == 2) {
+                if (pos.x <= fCenterX && fabsf(pos.z - fBorder) >= fHalf) {
+                    return 1;
+                }
+            } else {
+                if (pos.x >= fCenterX && fabsf(pos.z - fBorder) >= fHalf) {
+                    return 1;
+                }
             }
         }
     }
@@ -732,10 +741,11 @@ void CComDrvVolleyGame::GetSymmetryPos(bcs::FVEC3 &rPos) const
     bcs::FVEC3 target;
     if (GetBallTargetPos(target)) {
         GetHomePos(rPos, 0);
-        rPos.x = target.x;
+        float fTargetX = target.x;
+        rPos.x = fTargetX;
         float fMarginX = 0.65f;
         float fMarginZ = 0.65f;
-        rPos.x = target.x + m_fUnk1C4;
+        rPos.x = fTargetX + m_fUnk1C4;
         rPos.z += m_fUnk1C8;
         if (IsExistCurveSpikeEmChrCore()) {
             long nRate = CComMan::GetDatI(0x146, GetComLvF());
@@ -809,6 +819,7 @@ int CComDrvVolleyGame::IsExistCurveSpikeEmChrCore() const
 CChrCore *CComDrvVolleyGame::GetEmTargetMarkerChrCore() const
 {
     SortBase::SORT aSort[32];
+    bcs::FVEC3 marker;
     bcs::FVEC3 ballPos = m_BallWorldPos;
     long nNum = 0;
     bcs::FVEC3 target;
@@ -819,7 +830,6 @@ CChrCore *CComDrvVolleyGame::GetEmTargetMarkerChrCore() const
     for (long i = 0; i < CChrMan::GetChrCoreNum(); i++) {
         CChrCore *pChr = CChrMan::GetChrCore(i);
         if (pChr != 0 && !pChr->IsDisable() && m_nMyTeam != pChr->GetTeamNo()) {
-            bcs::FVEC3 marker;
             if (pChr->GetTargetMarkerPos(marker)) {
                 marker = CComMan::GetChrWorldPos(pChr);
                 float fDis = CComMan::GetDisXZ(marker, ballPos);
@@ -852,8 +862,8 @@ int CComDrvVolleyGame::GetEmTargetMarkerPos(bcs::FVEC3 &rPos) const
 }
 
 // Which character of the driver's team should follow the ball to rPos: the
-// nearest one that may touch it and is free (bAny 0: not blocking; else
-// with no action at all).
+// nearest one that may touch it and is free (with team mates, not one in
+// its spike; bAny 0: not blocking; else with no action at all).
 long CComDrvVolleyGame::GetShoudFollowTargetChrIdx(const bcs::FVEC3 &rPos, int bAny) const
 {
     long nBall = GetActiveBallIdx();
@@ -865,16 +875,18 @@ long CComDrvVolleyGame::GetShoudFollowTargetChrIdx(const bcs::FVEC3 &rPos, int b
         CChrCore *pChr = CChrMan::GetChrCore(i);
         if (pChr != 0 && !pChr->IsDisable() && m_nMyTeam == pChr->GetTeamNo() &&
             CComManVolley::CanbeTouch(pChr, nBall) && !pChr->IsVolleyCombinationMode()) {
-            if (m_nMateNum < 2 || pChr->GetState() == CChrCore::STATE_SPIKE) {
-                long nAct = CComMan::GetRootActType(pChr);
-                if (bAny == 0) {
-                    if (nAct != ACT_BLOCK_READY && nAct != ACT_BLOCK_GO) {
-                        CComMan::SetEnableBit(nBits, i);
-                    }
-                } else if (nAct == -1) {
-                    CComMan::SetEnableBit(nBits, i);
-                }
+            if (m_nMateNum >= 2 && pChr->GetState() == CChrCore::STATE_SPIKE) {
+                continue;
             }
+            long nAct = CComMan::GetRootActType(pChr);
+            if (bAny == 0) {
+                if (nAct == ACT_BLOCK_READY || nAct == ACT_BLOCK_GO) {
+                    continue;
+                }
+            } else if (nAct != -1) {
+                continue;
+            }
+            CComMan::SetEnableBit(nBits, i);
         }
     }
     float fRate = 0.0f;
@@ -987,7 +999,11 @@ void CComDrvVolleyGame::LotDefPosKind(long nTouch)
         nRate2 = 0;
         nRate3 = 0;
     }
-    long anRate[4] = {nRate0, nRate1, nRate2, nRate3};
+    long anRate[8];
+    anRate[0] = nRate0;
+    anRate[1] = nRate1;
+    anRate[2] = nRate2;
+    anRate[3] = nRate3;
     m_nDefPosKind = LotProbability(anRate, 4);
     m_nUnk1B9 = 0;
     if (LotRate() < CComMan::GetDatI(0x14E, GetComLvF())) {
@@ -1050,7 +1066,7 @@ int CComDrvVolleyGame::LotRateBlock(long nTouch) const
 // curve to, m_nUnk1AF, and m_nUnk1B0.
 void CComDrvVolleyGame::LotRateOffense()
 {
-    long anRate[3];
+    long anRate[8];
     anRate[0] = CComMan::GetDatI(0x1DE, GetComLvF());
     anRate[1] = CComMan::GetDatI(0x1E6, GetComLvF());
     anRate[2] = CComMan::GetDatI(0x1EE, GetComLvF());
@@ -1079,8 +1095,11 @@ void CComDrvVolleyGame::LotRateOffense()
 // driver's mirrored position (kept at 0x1E0, mirrored back).
 void CComDrvVolleyGame::LotRateReceiveFinished()
 {
-    bcs::FVEC3 from(m_MyPos.x, m_MyPos.y, -m_MyPos.z);
     bcs::FVEC3 pos;
+    bcs::FVEC3 from;
+    from.x = m_MyPos.x;
+    from.y = m_MyPos.y;
+    from.z = -m_MyPos.z;
     if (GetOpenSpaceInEmCourt(pos, &from, 0)) {
         m_Unk1E0 = bcs::FVEC3(pos.x, pos.y, -pos.z);
     }
@@ -1090,7 +1109,10 @@ void CComDrvVolleyGame::LotRateReceiveFinished()
 // place across the net from the driver is open.
 void CComDrvVolleyGame::LotRateTwoAttack()
 {
-    bcs::FVEC3 mirror(m_MyPos.x, m_MyPos.y, -m_MyPos.z);
+    bcs::FVEC3 mirror;
+    mirror.x = m_MyPos.x;
+    mirror.y = m_MyPos.y;
+    mirror.z = -m_MyPos.z;
     bcs::FVEC3 pos = Local2World(mirror, -1);
     float fRange = CComMan::GetDatF(0x216, GetComLvF());
     long nRate;
@@ -1108,7 +1130,10 @@ void CComDrvVolleyGame::LotRateTwoAttack()
 // Whether to play a quick spike (0x1CF), the same way.
 void CComDrvVolleyGame::LotRateQuickSpike()
 {
-    bcs::FVEC3 mirror(m_MyPos.x, m_MyPos.y, -m_MyPos.z);
+    bcs::FVEC3 mirror;
+    mirror.x = m_MyPos.x;
+    mirror.y = m_MyPos.y;
+    mirror.z = -m_MyPos.z;
     bcs::FVEC3 pos = Local2World(mirror, -1);
     float fRange = CComMan::GetDatF(0x216, GetComLvF());
     long nRate;
@@ -1196,7 +1221,7 @@ void CComDrvVolleyGame::LotRateSpikeBefore()
             m_nUnk1DD = 3;
             return;
         }
-        long anRate[4];
+        long anRate[8];
         anRate[0] = CComMan::GetDatI(0x246, GetComLvF());
         anRate[1] = CComMan::GetDatI(0x24E, GetComLvF());
         anRate[2] = CComMan::GetDatI(0x256, GetComLvF());
@@ -1276,7 +1301,7 @@ void CComDrvVolleyGame::LotRateSpBefore()
     if (nMyType == 4 || nMyType == 12) {
         m_nUnk1F0 = 1;
     } else {
-        long anRate[2];
+        long anRate[16];
         anRate[0] = CComMan::GetDatI(0x2B6, GetComLvF());
         anRate[1] = CComMan::GetDatI(0x2BE, GetComLvF());
         m_nUnk1F0 = LotProbability(anRate, 2);
@@ -1379,24 +1404,28 @@ int CComDrvVolleyGame::GetMoveTargetMarkerPos(bcs::FVEC3 &rPos, long nKind) cons
             }
             break;
         }
-        case 3:
+        case 3: {
+            float fMax = 4.0f;
             if (m_nCourtIdx != 0) {
-                float fOfs = RandRangeF(0.0f, 4.0f);
+                float fOfs = RandRangeF(0.0f, fMax);
                 rPos.z = GetEmCourtBack() - fOfs;
             } else {
-                float fOfs = RandRangeF(0.0f, 4.0f);
+                float fOfs = RandRangeF(0.0f, fMax);
                 rPos.z = GetEmCourtFront() + fOfs;
             }
             break;
-        case 4:
+        }
+        case 4: {
+            float fMax = 3.0f;
             if (m_nCourtIdx != 0) {
-                float fOfs = RandRangeF(0.0f, 3.0f);
+                float fOfs = RandRangeF(0.0f, fMax);
                 rPos.z = GetEmCourtFront() + fOfs;
             } else {
-                float fOfs = RandRangeF(0.0f, 3.0f);
+                float fOfs = RandRangeF(0.0f, fMax);
                 rPos.z = GetEmCourtBack() - fOfs;
             }
             break;
+        }
         case 5: {
             float fRadius = 3.5f;
             float fSin = nw4r::math::SinRad(fRot);
@@ -1465,7 +1494,7 @@ int CComDrvVolleyGame::ShoudTargetMarkerGo() const
         return 0;
     }
 
-    if (IsExistPadChrNear(this, GetMyTeamPadDrvCanTouchEnableBit(), Local2World(marker, -1), 3.0f)) {
+    if (IsExistChrTargetWithCondition(marker, 3.0f, GetMyTeamPadDrvCanTouchEnableBit())) {
         return 0;
     }
 
@@ -1549,6 +1578,8 @@ int CComDrvVolleyGame::ShoudReceiveSuddenGo() const
         return 0;
     }
     switch (GetRootActType()) {
+        default:
+            return 0;
         case ACT_TOSS_READY:
         case ACT_SPIKE_READY:
         case ACT_SPIKE_GO:
@@ -1568,7 +1599,8 @@ int CComDrvVolleyGame::ShoudReceiveSuddenGo() const
             bcs::FVEC3 down;
             CComManVolley::GetTouchDownPos(m_pBall, down);
             unsigned long nBits = GetMyTeamCanTouchEnableBit();
-            if (GetNearChrBaseWithCondition(down, nBits, 0.0f) != m_nMyChrIdx) {
+            long nMyIdx = m_nMyChrIdx;
+            if (GetNearChrBaseWithCondition(down, nBits, 0.0f) != nMyIdx) {
                 return 0;
             }
             long nNext = GetNearChrBaseWithConditionNo2(down, nBits, 0.0f);
@@ -1578,13 +1610,12 @@ int CComDrvVolleyGame::ShoudReceiveSuddenGo() const
             bcs::FVEC3 nextPos = CComMan::GetChrPosXZ(nNext);
             float fMyDis = GetDisXZ(down, m_MyPos);
             float fNextDis = GetDisXZ(down, nextPos);
-            if (fNextDis > 3.0f && fNextDis - fMyDis > 1.0f) {
+            float fLead = fNextDis - fMyDis;
+            if (fNextDis > 3.0f && fLead > 1.0f) {
                 return 1;
             }
             return 0;
         }
-        default:
-            return 0;
     }
 }
 
@@ -1621,6 +1652,8 @@ int CComDrvVolleyGame::ShoudDiveReceiveGo()
         return 0;
     }
     switch (GetRootActType()) {
+        default:
+            return 0;
         case ACT_RECEIVE_GO:
         case ACT_RECEIVE_SUDDEN:
         case ACT_TOSS_READY:
@@ -1646,7 +1679,9 @@ int CComDrvVolleyGame::ShoudDiveReceiveGo()
             }
             bcs::FVEC3 down;
             CComManVolley::GetTouchDownPos(m_pBall, down);
-            if (GetNearChrBaseWithCondition(down, GetMyTeamCanTouchEnableBit(), 0.0f) != m_nMyChrIdx) {
+            unsigned long nBits = GetMyTeamCanTouchEnableBit();
+            long nMyIdx = m_nMyChrIdx;
+            if (GetNearChrBaseWithCondition(down, nBits, 0.0f) != nMyIdx) {
                 return 0;
             }
             GetDisXZ(down, m_MyPos);
@@ -1656,7 +1691,8 @@ int CComDrvVolleyGame::ShoudDiveReceiveGo()
                     bDive = 1;
                 } else {
                     if (m_nUnk1D8 < 0) {
-                        if (LotRate() < CComMan::GetDatI(0xFE, GetComLvF())) {
+                        long nRate = CComMan::GetDatI(0xFE, GetComLvF());
+                        if (LotRate() < nRate) {
                             m_nUnk1D8 = 1;
                         } else {
                             m_nUnk1D8 = 0;
@@ -1669,8 +1705,6 @@ int CComDrvVolleyGame::ShoudDiveReceiveGo()
             }
             return bDive;
         }
-        default:
-            return 0;
     }
 }
 
@@ -1821,7 +1855,7 @@ int CComDrvVolleyGame::ShoudReceiveGo() const
     if (nChr != m_nMyChrIdx) {
         return 0;
     }
-    if (IsExistPadChrNear(this, GetMyTeamPadDrvCanTouchEnableBit(), Local2World(target, -1), 2.0f)) {
+    if (IsExistChrTargetWithCondition(target, 2.0f, GetMyTeamPadDrvCanTouchEnableBit())) {
         return 0;
     }
     return 1;
@@ -1838,10 +1872,13 @@ void CComDrvVolleyGame::GetTossReadyPos(bcs::FVEC3 &rPos) const
             float fRange = CItemBallVolleyBomb::GetExplosionCollSize();
             fRange = 0.6f + (fRange + m_pChr->GetCollSize_BodyDamage());
             if (GetDisXZ(rPos, target) < fRange) {
+                // (y is not needed: only the XZ direction is taken)
                 bcs::FVEC3 dir;
-                NormalizeXZ(dir, bcs::FVEC3(rPos.x - target.x, 0.0f, rPos.z - target.z));
-                dir.x *= fRange;
-                dir.z *= fRange;
+                bcs::FVEC3 diff;
+                diff.x = rPos.x - target.x;
+                diff.z = rPos.z - target.z;
+                NormalizeXZ(dir, diff);
+                SetLenXZ(dir, fRange);
                 rPos.x = target.x + dir.x;
                 rPos.y = 0.0f;
                 rPos.z = target.z + dir.z;
@@ -1884,7 +1921,10 @@ int CComDrvVolleyGame::ShoudTossGo() const
 // after the first touch, or somewhere near the net.
 void CComDrvVolleyGame::GetSpikeReadyPos(bcs::FVEC3 &rPos) const
 {
-    long anRate[3] = {20, 20, 50};
+    long anRate[8];
+    anRate[0] = 20;
+    anRate[1] = 20;
+    anRate[2] = 50;
     long nKind = LotProbability(anRate, 3);
     if (nKind == 0) {
         GetHomePos(rPos, 1);
@@ -1933,6 +1973,464 @@ int CComDrvVolleyGame::ShoudSpikeGo() const
         return 1;
     }
     return 0;
+}
+
+// Whether to go for a "?" panel: without a stocked item, in good condition,
+// when no other computer character of the team is after one and there is
+// one in the driver's court.
+int CComDrvVolleyGame::IsShoudGetQPanel() const
+{
+    if (GetMyStockItemType() >= 0) {
+        return 0;
+    }
+    if (CComMan::IsBadCondition(m_pChr)) {
+        return 0;
+    }
+    if (CComMan::IsExistComRootActChr(m_nMyTeam, ACT_GET_QPANEL)) {
+        return 0;
+    }
+    return CComMan::QPanel_GetNearInCourt(m_MyPos, m_nUnk98, 7) != 0;
+}
+
+// The XZ distance to the nearest "?" panel in the driver's court.
+float CComDrvVolleyGame::GetNearQPanelDis() const
+{
+    return CComMan::QPanel_GetNearDisXZ(m_MyPos, m_nUnk98, 7);
+}
+
+// Whether to go for a falling green shell (the same conditions as for a
+// "?" panel).
+int CComDrvVolleyGame::IsShoudGetFallGShell() const
+{
+    if (GetMyStockItemType() >= 0) {
+        return 0;
+    }
+    if (CComMan::IsBadCondition(m_pChr)) {
+        return 0;
+    }
+    if (CComMan::IsExistComRootActChr(m_nMyTeam, ACT_GET_QPANEL)) {
+        return 0;
+    }
+    return CComMan::FallGShell_GetNearInCourt(m_MyPos, m_nUnk98) != 0;
+}
+
+// The XZ distance to the nearest falling green shell in the driver's court.
+float CComDrvVolleyGame::GetNearFallGShellDis() const
+{
+    return CComMan::FallGShell_GetNearDisXZ(m_MyPos, m_nUnk98);
+}
+
+// Whether to go for a coin on the ground.
+int CComDrvVolleyGame::IsShoudGetDropCoin() const
+{
+    if (CComMan::IsBadCondition(m_pChr)) {
+        return 0;
+    }
+    return GetShoudGetDropCoin() != 0;
+}
+
+// The nearest coin on the ground, closer than 7, that the driver is the
+// nearest of its team to; 0 for none.
+unsigned long CComDrvVolleyGame::GetShoudGetDropCoin() const
+{
+    SortBase::SORT aSort[32];
+    SortBase::SORT *pSort = aSort;
+    long nNum = 0;
+    for (CDropCoin *pCoin = CComMan::DropCoin_GetFirst(); pCoin != 0; pCoin = CComMan::DropCoin_GetNext(pCoin)) {
+        if (!pCoin->CanbePickup()) {
+            continue;
+        }
+        bcs::FVEC3 pos = pCoin->GetPos();
+        if (pos.y > 1.0f) {
+            continue;
+        }
+        if (CComMan::DropCoin_GetNearChr(pCoin, GetMyTeamEnableBit()) != m_nMyChrIdx) {
+            continue;
+        }
+        float fDist = GetDisXZ(pos, m_MyWorldPos);
+        if (fDist < 7.0f) {
+            pSort->m_nId = pCoin->GetId();
+            nNum++;
+            pSort->m_fParam = fDist;
+            pSort++;
+            if (nNum >= 32) {
+                break;
+            }
+        }
+    }
+    if (nNum <= 0) {
+        return 0;
+    }
+    if (nNum != 1) {
+        bcs::BCS_ShakerSort(aSort, nNum, SortBase::SortCmpParamF);
+    }
+    return aSort[0].m_nId;
+}
+
+// The XZ distance to the coin GetShoudGetDropCoin picks; -1 for none.
+float CComDrvVolleyGame::GetNearDropCoinDis() const
+{
+    unsigned long nCoin = GetShoudGetDropCoin();
+    if (nCoin != 0) {
+        bcs::FVEC3 pos = CComMan::DropCoin_GetWorldPos(nCoin);
+        return GetDisXZ(m_MyWorldPos, pos);
+    }
+    return -1.0f;
+}
+
+// Where to stand to throw the stocked item: near the home position, a
+// little inwards, 2 to 3 back from the net.
+void CComDrvVolleyGame::GetItemShootPos(bcs::FVEC3 &rPos) const
+{
+    GetHomePos(rPos, 1);
+    rPos.x *= RandRange(0.8f, 0.9f);
+    float fOfs;
+    if (rPos.x >= 0.0f) {
+        fOfs = -RandRange(1.0f, 3.0f);
+    } else {
+        fOfs = RandRange(1.0f, 3.0f);
+    }
+    rPos.x += fOfs;
+    float fBorder = CComMan::GetCourtBorderZ(m_MyPos);
+    rPos.z = fBorder + RandRange(2.0f, 3.0f);
+}
+
+// Whether the spike (shot nShot) would hit the ball now: the ball is closer
+// than fDist in the XZ plane, between fMin and fMax above the shot's
+// position, and both are higher than 1.5.
+int CComDrvVolleyGame::IsHitSpikeShot(long nShot, float fDist, float fMin, float fMax) const
+{
+    bcs::FVEC3 shot;
+    float fUnused;
+    if (!m_pChr->GetVolleyBallShotCollPos(nShot, shot, fUnused)) {
+        return 0;
+    }
+    bcs::FVEC3 ball;
+    m_pBall->GetPosAfterFrame(ball, 0.0f);
+    bcs::FVEC3 ballXZ(ball.x, 0.0f, ball.z);
+    bcs::FVEC3 shotXZ(shot.x, 0.0f, shot.z);
+    float fDis = bcs::FVEC3Dist(&ballXZ, &shotXZ);
+    int bRet = 0;
+    float fHeight = ball.y - shot.y;
+    if (CanbeMyTouch() && fDis < fDist && fHeight > fMin && fHeight < fMax && ball.y > 1.5f && shot.y > 1.5f) {
+        bRet = 1;
+    }
+    return bRet;
+}
+
+// Whether to let the ball drop: it comes down within 60 frames outside the
+// driver's court (with a margin chosen by m_nUnk1AF).
+int CComDrvVolleyGame::IsOutBallJudge() const
+{
+    CBall *pBall = GetActiveBall();
+    if (pBall == 0) {
+        return 0;
+    }
+    if (pBall->GetTouchNum() != 0) {
+        return 0;
+    }
+    if (pBall->GetTouchDownFrame(0.3f) > 60.0f) {
+        return 0;
+    }
+    float fMargin = 0.0f;
+    switch (m_nUnk1AF) {
+        case 0:
+            fMargin = 0.5f;
+            break;
+        case 1:
+            fMargin = 1.0f;
+            break;
+        case 2:
+            fMargin = 1.5f;
+            break;
+    }
+    long nCourt = m_nUnk98;
+    return !pBall->IsVolleyTargetPosInnerCourt(nCourt, fMargin);
+}
+
+// An open place in court nKind's grid (4 by 4), away from the nNum
+// positions of pPos; nearest to pNear when given. With bStage10 the good
+// place of stage 10's panels may be taken instead.
+int CComDrvVolleyGame::Util_GetOpenSpace(bcs::FVEC3 &rPos, const bcs::FVEC3 *pPos, long nNum, long nKind,
+                                         const bcs::FVEC3 *pNear, int bStage10) const
+{
+    CComOSG grid;
+    grid.Init(4, 4, nKind);
+    for (long i = 0; i < nNum; i++) {
+        bcs::FVEC3 pos = *pPos;
+        grid.FillCircum(pos, 1, -1);
+        grid.FillOne(pos, 2, -1);
+        pPos++;
+    }
+    if (bStage10 && Stage10_GetGoodPos(rPos, grid, 0, pNear)) {
+        long nRate = CComMan::GetDatI(0x2AE, GetComLvF());
+        if (LotRate() < nRate) {
+            return 1;
+        }
+    }
+    long nX;
+    long nY;
+    int bFound;
+    if (pNear == 0) {
+        bFound = grid.SearchValue(nX, nY, 0, 1);
+    } else {
+        bFound = grid.SearchValueNearPos(nX, nY, 0, *pNear);
+    }
+    if (!bFound) {
+        return 0;
+    }
+    grid.GetPos(rPos, nX, nY, 1);
+    return 1;
+}
+
+// The same in a 10 by 10 grid with only its four corners open.
+int CComDrvVolleyGame::Util_GetCornerOpenSpace(bcs::FVEC3 &rPos, const bcs::FVEC3 *pPos, long nNum, long nKind,
+                                               const bcs::FVEC3 *pNear) const
+{
+    CComOSG grid;
+    grid.Init(10, 10, nKind);
+    long nWidth = grid.GetWidth();
+    long nHeight = grid.GetHeight();
+    for (long y = 0; y < nHeight; y++) {
+        for (long x = 0; x < nWidth; x++) {
+            if ((x == 0 && y == 0) || (x == 0 && y == nHeight - 1) || (x == nWidth - 1 && y == 0) ||
+                (x == nWidth - 1 && y == nHeight - 1)) {
+                continue;
+            }
+            grid.SetValue(x, y, 1, -1);
+        }
+    }
+    for (long i = 0; i < nNum; i++) {
+        grid.FillOne(*pPos, 2, -1);
+        pPos++;
+    }
+    long nX;
+    long nY;
+    int bFound;
+    if (pNear == 0) {
+        bFound = grid.SearchValue(nX, nY, 0, 1);
+    } else {
+        bFound = grid.SearchValueNearPos(nX, nY, 0, *pNear);
+    }
+    if (!bFound) {
+        return 0;
+    }
+    grid.GetPos(rPos, nX, nY, 1);
+    return 1;
+}
+
+// Whether to go for the target marker while the other team's special shot
+// is answered: never against characters 3, 5, 10 and 14, else once its
+// air trick has run m_fUnk1F4 frames.
+int CComDrvVolleyGame::IsShoudTargetMarkerGoSp() const
+{
+    if (!m_bSpBefore) {
+        return 1;
+    }
+    CChrCore *pSp = GetLastSpChrCore();
+    if (pSp == 0) {
+        return 1;
+    }
+    switch (pSp->GetChrTypeID()) {
+        case 0:
+        case 1:
+        case 2:
+        case 4:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 11:
+        case 12:
+        case 13:
+        case 15:
+        case 16:
+        case 17: {
+            CChrCore *pLast = GetLastSpChrCore();
+            float fFrame = pLast == 0 ? 0.0f : pLast->GetAirTrickStatePassFrame();
+            if (fFrame >= m_fUnk1F4) {
+                return 1;
+            }
+            return 0;
+        }
+        case 3:
+        case 5:
+        case 10:
+        case 14:
+            return 0;
+    }
+    return 1;
+}
+
+// The player number of the character of nBits nearest to rPos (in the
+// court's frame), counting its handicap distance and fPadDis more for a
+// human; -1 for none.
+long CComDrvVolleyGame::GetNearChrBaseWithCondition(const bcs::FVEC3 &rPos, unsigned long nBits, float fPadDis) const
+{
+    bcs::FVEC3 world = Local2World(rPos, -1);
+    long nRet = -1;
+    float fMin = 9999.0f;
+    for (long i = 0; i < CChrMan::GetChrCoreNum(); i++) {
+        CChrCore *pChr = CChrMan::GetChrCore(i);
+        if (pChr != 0 && !pChr->IsDisable() && CComMan::IsEnableBit(nBits, i)) {
+            bcs::FVEC3 pos = CComMan::GetChrWorldPos(pChr);
+            float fDis = GetDisXZ(world, pos);
+            fDis += CComManVolleyGame::GetConditionHandicapDis(pChr);
+            if (pChr->IsPadCtrl()) {
+                fDis += fPadDis;
+            }
+            if (fDis < fMin) {
+                fMin = fDis;
+                nRet = pChr->GetPlayerNo();
+            }
+        }
+    }
+    return nRet;
+}
+
+// The same, the second nearest (its index); -1 for fewer than two.
+long CComDrvVolleyGame::GetNearChrBaseWithConditionNo2(const bcs::FVEC3 &rPos, unsigned long nBits,
+                                                        float fPadDis) const
+{
+    bcs::FVEC3 world = Local2World(rPos, -1);
+    SortBase::SORT aSort[32];
+    SortBase::SORT *pSort = aSort;
+    long nNum = 0;
+    for (long i = 0; i < CChrMan::GetChrCoreNum(); i++) {
+        CChrCore *pChr = CChrMan::GetChrCore(i);
+        if (pChr != 0 && !pChr->IsDisable() && CComMan::IsEnableBit(nBits, i)) {
+            bcs::FVEC3 pos = CComMan::GetChrWorldPos(pChr);
+            float fDis = GetDisXZ(world, pos);
+            fDis += CComManVolleyGame::GetConditionHandicapDis(pChr);
+            if (pChr->IsPadCtrl()) {
+                fDis += fPadDis;
+            }
+            pSort->m_nId = i;
+            nNum++;
+            pSort->m_fParam = fDis;
+            pSort++;
+        }
+    }
+    if (nNum < 2) {
+        return -1;
+    }
+    bcs::BCS_ShakerSort(aSort, nNum, SortBase::SortCmpParamF);
+    return aSort[1].m_nId;
+}
+
+}
+
+namespace CComDrvVolleyGame_cpp {
+    // uncalled stand-in: the original's literal pool has 12.5, -pi/10 and
+    // pi/10 here, between the constants of GetNearChrBaseWithCondition and
+    // GetItemShootTarget, and no function of the file reads them (a function
+    // the module link stripped, it seems). Nothing calls this one either;
+    // it only creates the three constants at this point of the pool.
+    float UnusedLimitRot(float fDist, float fRot)
+    {
+        if (fDist > 12.5f) {
+            return 0.0f;
+        }
+        if (fRot < -0.31415927f) {
+            return -0.31415927f;
+        }
+        if (fRot > 0.31415927f) {
+            return 0.31415927f;
+        }
+        return fRot;
+    }
+}
+
+namespace msw {
+
+// Whether a character of nBits stands closer than fDist to rPos (in the
+// court's frame), counting its handicap distance.
+int CComDrvVolleyGame::IsExistChrTargetWithCondition(const bcs::FVEC3 &rPos, float fDist, unsigned long nBits) const
+{
+    return IsExistPadChrNear(this, nBits, Local2World(rPos, -1), fDist);
+}
+
+// Where to throw the stocked item: straight ahead, to the other side, or
+// at a random character of the other team (rates by level), 10 into its
+// court.
+void CComDrvVolleyGame::GetItemShootTarget(bcs::FVEC3 &rPos) const
+{
+    long anRate[8];
+    anRate[0] = CComMan::GetDatI(0x66, GetComLvF());
+    anRate[1] = CComMan::GetDatI(0x6E, GetComLvF());
+    anRate[2] = CComMan::GetDatI(0x76, GetComLvF());
+    long nKind = LotProbability(anRate, 3);
+    rPos.x = 0.0f;
+    rPos.y = 0.0f;
+    rPos.z = 0.0f;
+    rPos.x = m_MyPos.x;
+    rPos.z = m_MyPos.z;
+    if (m_nUnk98 == 0) {
+        rPos.z -= 10.0f;
+    } else {
+        rPos.z += 10.0f;
+    }
+    if (nKind == 1) {
+        if (m_MyPos.x > 0.0f) {
+            rPos.x -= 10.0f;
+        } else {
+            rPos.x += 10.0f;
+        }
+    } else if (nKind == 2) {
+        CChrCore *pChr = CComMan::GetChrCoreRand(m_nEmTeam);
+        if (pChr != 0) {
+            bcs::FVEC3 pos = CComMan::GetChrPosXZ(pChr);
+            rPos = pos;
+        }
+    }
+    rPos.x += RandRangeF(-1.0f, 1.0f);
+    rPos.z += RandRangeF(-1.0f, 1.0f);
+}
+
+// Whether spiking is banned: with a human in the team under mission rule
+// 0x3C.
+int CComDrvVolleyGame::IsBanSpike() const
+{
+    if (IsExistPadDrv() && CTournament::IsMissionRuleEnable(0x3C, m_nMyTeam)) {
+        return 1;
+    }
+    return 0;
+}
+
+// Whether a curving spike at the target marker would leave the other
+// team's court sideways.
+int CComDrvVolleyGame::IsSpikeCurveOutAtTargetMarker() const
+{
+    bcs::FVEC3 marker;
+    if (!GetTargetMarkerPos(marker)) {
+        return 0;
+    }
+    float fRange = 2.0f;
+    if (m_pChr->IsVolleySuperSpikeCurveType()) {
+        fRange = 0.3f + m_pChr->GetVolleySuperSpikeCurveMaxDist();
+    }
+    float fMin = marker.x - fRange;
+    float fMax = marker.x + fRange;
+    float fLeft = GetEmCourtLeft();
+    float fRight = GetEmCourtRight();
+    if (fMin < fLeft || fRight < fMax) {
+        return 1;
+    }
+    return 0;
+}
+
+// The side to curve the spike to keep it in: -1 when the target marker is
+// right of the other court's centre, else 1 (0 without a marker).
+long CComDrvVolleyGame::GetSpikeCurveInnerValueAtTargetMarker() const
+{
+    bcs::FVEC3 marker;
+    if (!GetTargetMarkerPos(marker)) {
+        return 0;
+    }
+    if (marker.x > GetEmCourtCenterX()) {
+        return -1;
+    }
+    return 1;
 }
 
 }

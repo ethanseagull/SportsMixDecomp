@@ -211,6 +211,9 @@ namespace msw {
             // nChrBits stands between the driver and rPos (fWidth wide,
             // fLen long).
             unsigned long GetEmTeamEnableBit() const;
+            // (added for VolleyF's CComDrvVolleyGame) The driver's team's
+            // characters as bits.
+            unsigned long GetMyTeamEnableBit() const;
             int IsExistChrToTarget(const bcs::FVEC3 &rPos, float fWidth, float fLen, unsigned long nChrBits) const;
             long LotProbability(const long *pRate, long nNum) const;
             float GetEmCourtLeft() const;

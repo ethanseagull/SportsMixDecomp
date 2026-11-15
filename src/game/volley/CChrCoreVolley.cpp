@@ -151,9 +151,17 @@ static float GetNearestPosOnSegXZ(bcs::FVEC3 pos, bcs::FVEC3 from, bcs::FVEC3 to
     float fRate = fDot / fLenSq;
     float fX = seg.x * fRate;
     float fZ = seg.z * fRate;
-    rOut.x = fX + from.x;
-    rOut.z = fZ + from.z;
+    fX += from.x;
+    fZ += from.z;
+    rOut.x = fX;
+    rOut.z = fZ;
     return fRate;
+}
+
+// (guessed helper) rVec flattened to the XZ plane and scaled to length 1.
+static inline void NormalizeXZ(bcs::FVEC3 &rVec)
+{
+    bcs::BCS_Vec_Normalize(rVec, bcs::FVEC3(rVec.x, 0.0f, rVec.z));
 }
 
 // (fn_5_333F0 in the split, a local function; name guessed) Where the line
@@ -168,14 +176,13 @@ static int GetCrossPosCircleXZ(bcs::FVEC3 from, bcs::FVEC3 to, bcs::FVEC3 center
     if (dir.x * dir.x + dir.z * dir.z <= 0.0000010000001f) {
         dir.Set(0.0f, 0.0f, 1.0f);
     } else {
-        bcs::FVEC3 xz(dir.x, 0.0f, dir.z);
-        bcs::BCS_Vec_Normalize(dir, xz);
+        NormalizeXZ(dir);
     }
 
     bcs::FVEC3 toFrom;
     toFrom = SubVec(from, center);
-    float fC = DotXZ(toFrom, toFrom) - fRadius * fRadius;
     float fB = toFrom.x * dir.x + toFrom.z * dir.z;
+    float fC = DotXZ(toFrom, toFrom) - fRadius * fRadius;
     if (fC > 0.0f && fB > 0.0f) {
         return 0;
     }
@@ -469,6 +476,7 @@ void msw::CChrCoreVolley::DtorStateRun()
 
 void msw::CChrCoreVolley::SubStateRunNormal_(STATE_WORK_RUN *pWork)
 {
+    const CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *pParam;
     int bWalk = 0;
 
     if (pWork->m_bRun == 0 && m_nComLevel != 4) {
@@ -481,7 +489,7 @@ void msw::CChrCoreVolley::SubStateRunNormal_(STATE_WORK_RUN *pWork)
     float fMin = 0.0f;
     pWork->m_fFrame += m_fFrameStep;
     if (pWork->m_bAccel != 0 || m_nComLevel == 4) {
-        const CHR_CORE_VOLLEY::CC_PARAM_VOLLEY *pParam = GetCcParam_();
+        pParam = GetCcParam_();
         float fRate = pParam->m_Unk10 < 1.0f ? 1.0f : 1.0f / pParam->m_Unk10;
         float fAccel = m_fTimeScale * (m_fFrameStep * (fSpeedMax * fRate));
         pWork->m_fSpeed += fAccel;
@@ -533,7 +541,7 @@ void msw::CChrCoreVolley::SubStateRunNormal_(STATE_WORK_RUN *pWork)
             float fAbs = fabsf(fTurn);
             if (fAbs > DegToRad(GetCcParam_()->m_Unk1C) && !(m_nStatusFlag & 1)) {
                 FsmqCutNext();
-                STATE_WORK_TURN *pTurn = static_cast<STATE_WORK_TURN *>(FsmqPushState(STATE_TURN));
+                STATE_WORK_TURN *pTurn = static_cast<STATE_WORK_TURN *>(FsmqPushWork(STATE_TURN));
                 pTurn->m_fSpeedRate = pWork->m_fSpeed;
                 pTurn->m_fMoveRotY = pWork->m_fMoveRotY;
                 pTurn->m_fRotY = pWork->m_fRotY;
@@ -621,6 +629,7 @@ void msw::CChrCoreVolley::SubStateRunReceivePose_(STATE_WORK_RUN *pWork)
         return;
     }
 
+    float fAccel;
     float fRot = GetReceiveBaseDir_();
     long nDir = Util_ChangeRot4(WrapRad(fRot - pWork->m_fRotY));
     if (nDir == 2) {
@@ -646,7 +655,7 @@ void msw::CChrCoreVolley::SubStateRunReceivePose_(STATE_WORK_RUN *pWork)
     pWork->m_nDir = nDir;
     pWork->m_nMot = nMot;
 
-    float fAccel = m_fFrameStep * (m_fTimeScale * (0.1f * fSpeedMax));
+    fAccel = m_fFrameStep * (m_fTimeScale * (0.1f * fSpeedMax));
     pWork->m_fSpeed += fAccel;
     pWork->m_fSpeed = Clamp(pWork->m_fSpeed, 0.0f, fSpeedMax);
     float fSpeedRate = pWork->m_fSpeed;
@@ -1279,14 +1288,16 @@ void msw::CChrCoreVolley::SubStateBlockJumpLandStart_(STATE_WORK_BLOCK_JUMP *pWo
 // set by the driver), over the parameters' time.
 void msw::CChrCoreVolley::SubStateBlockJumpColSlide_(STATE_WORK_BLOCK_JUMP *pWork)
 {
+    float fRate;
     float fSlideMax = GetCcParam_()->m_Unk7C;
     float fTime = GetCcParam_()->m_Unk80;
     if (fSlideMax <= 0.0f || fTime <= 0.0f) {
         pWork->m_fSlideRotY = -1.0f;
+        return;
     }
 
     long nDir = 0;
-    float fRate = 1.0f / fTime;
+    fRate = 1.0f / fTime;
     if (pWork->m_fSlideRotY >= 0.0f) {
         bcs::FVEC3 dir;
         bcs::FVEC3 front;

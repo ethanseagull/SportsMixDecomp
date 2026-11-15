@@ -512,6 +512,11 @@ namespace msw {
             // the ball whatever its height)
             int IsFlag2() const { return m_nFlag & 0x2; }
             int IsFlag100000() const { return m_nFlag & 0x100000; }
+            // (names guessed; added for BossF game/boss/CChrCoreBoss.cpp) The
+            // bit of player nPlayer in m_nChrBit178, and setting it in
+            // m_Unk17C (the ball no longer hits him).
+            int IsChrBit178(long nPlayer) const { return m_nChrBit178 & (1 << nPlayer); }
+            void SetNoHitChr(long nPlayer) { m_Unk17C |= 1 << nPlayer; }
             // (names guessed; added for BasketF's CChrCoreBasketNinja, which
             // sets and clears bit 4 directly while the ninja hides) Sets or
             // clears bits of m_nFlag.
@@ -639,8 +644,14 @@ namespace msw {
             // 0x168 (name guessed): the ball's scale; BossF's CBallBoss grows
             // it with the coin power and multiplies its radii by it.
             float m_fScale;
-            unsigned char m_Unk16C[0x10];  // 0x16C
-            long m_Unk17C;                 // 0x17C (meaning not known)
+            unsigned char m_Unk16C[0xC];   // 0x16C
+            // 0x178 (meaning not known; added for BossF
+            // game/boss/CChrCoreBoss.cpp): one bit per player; a character
+            // whose bit is set does not take the ball in (CallbackBallCatch3_).
+            unsigned long m_nChrBit178;
+            // 0x17C (meaning guessed): one bit per player the ball may not
+            // hit (BossF's CBallBoss sets the shooter's).
+            long m_Unk17C;
             unsigned char m_Unk180[0xC];   // 0x180
             // 0x18C (meaning not known): BossF's CBallBoss copies its attach
             // lift here.

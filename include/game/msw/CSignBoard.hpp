@@ -6,9 +6,10 @@
 
 namespace msw {
 
-    // Size 0x70. A board shown on the screen. Lives in the DOL; only the
-    // constructor is declared so far (argument names guessed; nType picks
-    // the board). The members past CCockpitLayoutBase are not mapped.
+    // Size 0x70. A board shown on the screen: one layout of a fixed table
+    // (in, loop and out animations, some with an effect). Lives in the DOL
+    // (game/msw/CSignBoard.cpp); argument names guessed, nType picks the
+    // board.
     // CCockpitFrameOutBase is at 0x60: DodgeF's CSignBoardDodge has a
     // destructor thunk @96@, and CCockpitDodge::CreateObjImpl sets the word
     // at 0x60 to 1 on some boards (added for DodgeF
@@ -24,8 +25,8 @@ namespace msw {
             virtual int Set();
             virtual void Remove();
 
-        private:
-            unsigned char m_Unk6C[0x70 - 0x6C];
+        protected:
+            long m_nType; // 0x6C, index into the board table
     };
 }
 

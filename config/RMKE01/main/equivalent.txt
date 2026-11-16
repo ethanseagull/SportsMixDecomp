@@ -98,7 +98,7 @@ main DoParabolaThrow__Q23msw9CDropCoinFRCQ23bcs5FVEC3ff near 99.2 float register
 main DoPopItem__Q23msw16CStgGmk_Wave_ActFv near 99.3 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main DrawDebug__Q23msw19CStgGmk_Pinball_MdlFl near 99.9 register allocation/order only (diff.py: registers/schedule)
 main DrawLayout__Q23msw11CNowLoadingFv near 94.8 register choice and order only: GetInstance result and aspect flag swap saved registers r28/r29, stores around the DrawInfo setup reordered; calls, constants and offsets identical
-main DrawOutline___Q23bcs7CMiiManFPUslll near 88.2 88.2%: original recomputes the row start with mullw each outer iteration, ours strength-reduces to a w*4 step; one more saved register shifts numbering; arithmetic identical
+main DrawOutline___Q23bcs7CMiiManFPUslll near 88.2 [real, reviewed] reviewer confirmed: row start by mullw vs a w*4 step gives the same addresses; registers, one more stmw slot, commutative add order
 main Draw__Q23msw18CGameExDemoMaskObjFv near 96.6 [real, reviewed] reviewer confirmed: lhz plus extsh equals lha; register choice and constant load order; fmuls operands swapped
 main DropCoinPickup__Q23msw12CDropCoinManFRCQ23bcs5FVEC3ffPFPCQ23msw9CDropCoinPv_vPv near 97.5 [real, reviewed] reviewer confirmed: cntlzw/srwi./beq vs bne on the same masked integer, same path for every value; float register numbering
 main Eff_CreateAttachFadeIn__Q23msw14CStgEffectSlotFlfllUlPCQ23bcs5FVEC3iiiUl near 94.1 ours keeps constant 0 in a saved GPR (one more saved, savegpr_22 vs 23) where the original reloads li 0 per use; same calls, values and accesses

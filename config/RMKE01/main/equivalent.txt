@@ -285,9 +285,9 @@ main Pop__Q23msw16CCockpitPartMoveFRQ33msw16CCockpitPartMove12PartMoveInfo near 
 main PushTeamItem___Q23msw5CGameFll near 95.0 switch compiled as a linear compare chain where the original builds a compare tree, and inline CFsmQueue operations expanding with other branch/register shape; same cases and calls
 main RemoveChildAt__Q23bcs9CScnGroupFUl unverified 80.0 80%: GetChild inlined here, called in the original; rest identical
 main RemoveEntryAll__Q23bcs10CCameraManFv near 97.4 [real, reviewed] reviewer confirmed: identical code; relocation symbol _f_bss vs m_pCamera at the same address
-main RemoveGuideTelop___Q23msw13CGameGuideManFv near 97.9 inlined CGameGuideTelop::Remove: original re-reads m_nTelopId (0x3C) right after comparing it, no store in between, ours reuses the value; otherwise identical
+main RemoveGuideTelop___Q23msw13CGameGuideManFv near 97.9 [real, reviewed] reviewer confirmed: original re-reads 0x3c right after the compare with no call or store between
 main RepeatPlay__Q33msw10CStgSeSlot7CSESlotFflRCQ23bcs5FVEC3fflUllfff near 99.7 registers only: n|8 value and the mode constant 1 swapped
-main Reset___Q23msw13CGameGuideManFv near 98.5 inlined CGameGuideTelop::Remove: original re-reads m_nTelopId (0x3C) right after comparing it, no store in between, ours reuses the value; otherwise identical
+main Reset___Q23msw13CGameGuideManFv near 98.5 [real, reviewed] reviewer confirmed: same redundant reload of 0x3c only
 main RestoreSpeed__Q23msw14CGameSpeedCtrlFfil near 99.9 order of two float stores
 main Roll__Q23msw19CStgGmk_Pinball_MdlFRCQ23bcs5FVEC3ff near 98.5 register allocation/order only (diff.py: registers/schedule)
 main ScoreBookApplyCountWork___Q23msw5CGameFv near 85.9 switch compiled as a linear compare chain where the original builds a compare tree, and inline CFsmQueue operations expanding with other branch/register shape; same cases and calls

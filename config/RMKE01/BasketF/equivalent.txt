@@ -40,7 +40,7 @@ BasketF CreateDriver___Q23msw29CChrManBasketHungryBossPackunFv near 99.4 registe
 BasketF CreateDummyBall___Q23msw14CBallManBasketFv near 98.8 register choice only: the saved pointer and saved ball number swap registers (mr operands); GetUseEnableIndex_ kept out of line by named temporaries that emit no code (auto-inline limit)
 BasketF CreateMdl___Q33msw11CC05_BASKET16CcWarioSmokeUnitFRCQ23bcs5FVEC3 near 93.3 stack slots only: the original also writes three dead zero floats to stack temporaries (frame 0x70 vs 0x50); same stores to the object and models, schedule of the scale/height stores
 BasketF CreateObjImpl__Q23msw14CCockpitBasketFll near 94.2 94.2%: in cases 10, 19-21, 25 the original copies the new object to its result register before and after the null check, ours once after. Same calls, constants, case order.
-BasketF Create___Q23msw13CChrManBasketFv near 99.3 register allocation/instruction order only (ghost loop counter registers)
+BasketF Create___Q23msw13CChrManBasketFv near 99.3 [real, reviewed] reviewer: Only loop counter registers and jumptable symbol name (ANON); no other difference.
 BasketF CtorStateAirTrick__Q23msw14CChrCoreBasketFv near 95.5 instruction order and registers: the original loads m_nPlayerNo for CGame::SendMessage before the GetArtsShootType virtual call (kept in a saved register), ours after; ours extsb's straight into the argument register (one mr fewer); FsmqGetWork's r4/r5 swapped
 BasketF CtorStateAlleyoop__Q23msw14CChrCoreBasketFv near 99.8 register choice / instruction order only (inlined Fsmq head/tail loads)
 BasketF CtorStateAppear__Q23msw16CNpcStringBasketFv near 99.4 99.4: register numbering only
@@ -62,19 +62,19 @@ BasketF DtorStateDunk__Q23msw14CChrCoreBasketFv near 99.7 register choice / inst
 BasketF EffectCoinGetCreate___Q23msw17CGimmickManBasketFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 96.9 the inlined CEffectCoinGet ctor's 2*20 multiply (Twice) is scheduled after the m_fRotSpeed store in ours, before it in the original; the rotation-speed static is anonymous in the original; same values, calls and stores
 BasketF GameResult_In__Q23msw14CCockpitBasketFv near 99.0 99.0%: register choice only.
 BasketF GetAppendPos___Q23msw30CBallManBasketHungryBossPackunCFRlRQ23bcs5FVEC3 near 89.1 89.1: two stack FVEC3s swap slots, ours reloads global BASKET_PRM_COMMON_APPEND_AREA_X_NUM once more before the z loop (same value), rest scheduling
-BasketF GetArtsCurveValue___Q23msw13CChrManBasketCFl near 99.8 lfs offsets into .rodata differ only: the original's .rodata has 8 more bytes (fDist static and a 5.0 of the stripped Util_SearchAerialPassmeetTo_) before these constants
+BasketF GetArtsCurveValue___Q23msw13CChrManBasketCFl near 99.8 [real, reviewed] reviewer: Only stack-offset of two lfs loads (0x84/0x88 vs 0x7c/0x80); no data-value difference reported.
 BasketF GetArtsEffectUnit__Q23msw19CChrCoreBasketSlimeFl near 90.9 90.9%: same colour values/stores into static SLIME_COL_SET; array base addressing (stwu @l vs addi) and one more saved register, as Yoshi GetEffectUnit
 BasketF GetBgCollRadiusXZ__Q23msw16CBallBasketFruitCFv near 99.3 float register choice for 0.23f and the scale array
 BasketF GetBgCollRadius__Q23msw16CBallBasketFruitCFv near 99.3 float register choice for 0.23f and the scale array
-BasketF GetDir4ToBattle___Q23msw13CChrManBasketCFf near 99.8 lfs offsets into .rodata differ only: the original's .rodata has 8 more bytes (fDist static and a 5.0 of the stripped Util_SearchAerialPassmeetTo_) before these constants
+BasketF GetDir4ToBattle___Q23msw13CChrManBasketCFf near 99.8 [real, reviewed] reviewer: Constant pool offsets shifted by 8 consistently; diff.py data check finds identical values.
 BasketF GetEffectUnit__Q23msw19CChrCoreBasketYoshiFl near 89.7 same values/order into the static YOSHI_COL_SET array; only the array base addressing (stwu @l vs separate addi) and one more saved register differ
 BasketF GetFirstLookInfo_MultiPlay__Q23msw15CCameraBasketHBFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 99.7 99.7%, registers only: in the character loop the z*scale product and pos.x swap float registers
 BasketF GetFirstLookInfo_MultiPlay__Q23msw17CCameraBasketGameFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 98.8 98.8: one store scheduled one slot later, clamp fmuls commutative operand order (as HockeyF)
 BasketF GetFirstLookInfo_SinglePlay__Q23msw17CCameraBasketGameFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 99.5 99.5: register numbering only
 BasketF GetFloorFlow__Q23msw30CStageBasketHungryBossPackun72CFRQ23bcs5FVEC3RCQ23bcs5FVEC3Q33msw9CStageMan9FLOW_TYPE near 99.6 load order of the direction constant and m_fMove before the fmuls
-BasketF GetJustShotTimingMax___Q23msw13CChrManBasketCFPCQ23msw14CChrCoreBasket near 98.1 stack slots of the vector temporaries differ; the distance table (0, 5.5, 11) sits before the 5.5 literal in our .rodata instead of after it; same values
+BasketF GetJustShotTimingMax___Q23msw13CChrManBasketCFPCQ23msw14CChrCoreBasket near 98.1 [real, reviewed] reviewer: Stack slots and .rodata offsets (table 0x84 vs 0x90, 5.5, lfd) differ; diff.py data check reports no value difference.
 BasketF GetJustShotTimingMax___Q23msw14CBallManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3PCQ23msw5CBall near 96.5 stack slots, registers, and the queue head and tail loaded in the other order; same calls and constants
-BasketF GetJustShotTimingMin___Q23msw13CChrManBasketCFPCQ23msw14CChrCoreBasket near 98.1 stack slots of the vector temporaries differ; the distance table (0, 5.5, 11) sits before the 5.5 literal in our .rodata instead of after it; same values
+BasketF GetJustShotTimingMin___Q23msw13CChrManBasketCFPCQ23msw14CChrCoreBasket near 98.1 [real, reviewed] reviewer: Same as Max: stack slots and pool offsets only, values equal per diff.py data check.
 BasketF GetJustShotTimingMin___Q23msw14CBallManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3PCQ23msw5CBall near 96.5 stack slots, registers, and the queue head and tail loaded in the other order; same calls and constants
 BasketF GetMemBer__Q23msw17CComManBasketGameFlPPCQ23msw8CChrCorellPCQ23msw8CChrCore near 99.5 register allocation only
 BasketF GetMemberNoBadCondition__Q23msw17CComManBasketGameFlPPCQ23msw8CChrCorellPCQ23msw8CChrCore near 99.6 register allocation only
@@ -88,10 +88,10 @@ BasketF GetParam_FlashColor__Q23msw14CStageBasket06CFv unverified 63.3 Same valu
 BasketF GetParam_FlashColor__Q23msw14CStageBasket15CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
 BasketF GetParam_FlashColor__Q23msw14CStageBasket16CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
 BasketF GetParam_TTOffset__Q23msw14CStageBasket17CFv near 99.2 register choice inside the inlined FVEC3LenSq zero check of BCS_Vec_Normalize
-BasketF GetRotY_Pos1ToPos2XZ__Q23msw13CChrManBasketFRCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 100.0 constant offset only: the original .rodata has 8 more bytes (static fDist and 5.0 of the stripped Util_SearchAerialPassmeetTo_), so one sdata2 load is 0x68 vs 0x60; same constant
+BasketF GetRotY_Pos1ToPos2XZ__Q23msw13CChrManBasketFRCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 100.0 [real, reviewed] reviewer: Single sdata2 load 0x68 vs 0x60; diff.py reports no data value difference.
 BasketF GetShotParam___Q23msw21CItemBallBasketGShellCFRQ33msw11BALL_BASKET10SHOT_PARAM near 99.8 99.8%: fmadds operand order only.
 BasketF HitCheckTrain__Q23msw17CComManBasketGameFRQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 99.7 original reloads lo.z from its stack slot inside the z swap, ours reuses the register holding the same value
-BasketF InRectAndRad___Q23msw13CChrManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3fff near 99.9 lfs offsets into .rodata differ only: the original's .rodata has 8 more bytes (fDist static and a 5.0 of the stripped Util_SearchAerialPassmeetTo_) before these constants
+BasketF InRectAndRad___Q23msw13CChrManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3fff near 99.9 [real, reviewed] reviewer: Stack slot swap of two temporaries and 0x68 vs 0x60 pool offset holding the same value.
 BasketF IsRide__Q33msw14CStageBasket1010CPanelInfoCFRCQ23bcs5FVEC3 near 94.8 94.8%: stack vector stores in a different order
 BasketF JudgeJumpAttack____Q23msw16CGameGuideBasketFPCQ23msw8CChrCorePCQ23msw8CChrCore near 97.7 97.7: load order of the two state-queue words and two team bytes, float registers (schedule)
 BasketF JudgeJumpBlock___Q23msw16CGameGuideBasketFPCQ23msw8CChrCorePCQ23msw5CBall near 98.9 98.9: stack slots of the distance helper temporaries, one load order
@@ -205,7 +205,7 @@ BasketF Set__Q23msw22CCockpitBasketHarapekoFv near 93.0 s_PaneName address forme
 BasketF SetupGame__Q23msw19CCockpitBasketCoderFv near 97.3 register allocation only (loop counters and table pointers); SetVisible(bool) bit insert compiled as srwi+rlwimi instead of rlwinm+rlwimi (same flag byte result); as HockeyF
 BasketF ShotArtsBall___Q23msw21CChrCoreBasketWaluigiFl near 99.6 float register choice for the 1/60 multiply operands and one byte load into r0 vs r9
 BasketF StartGuideTelop__Q23msw16CGameGuideBasketFlPCQ23msw8CChrCore near 99.9 99.9: only .rodata offsets of its float constants (original has 20 unread bytes -3.0,3.0,0,0,0 after pi/2)
-BasketF StartScoreView___Q23msw13CChrManBasketFl near 95.1 register allocation/instruction order only; the inline FsmqGetNextState/FsmqNext reload the queue head/tail from memory in the original where ours reuses registers (no store in between), and the clamps keep the bound in another register
+BasketF StartScoreView___Q23msw13CChrManBasketFl near 95.1 [real, reviewed] reviewer: Only registers/scheduling, one reload of stack slot 0x18 just stored, extra fmr copies; no data differences.
 BasketF SubBSplineMove___Q23msw14CChrCoreBasketFffRffffRCQ23bcs5FVEC3 near 98.9 98.9: stack slots and store order of the spline control-point vectors
 BasketF SubBattleMove___Q23msw14CChrCoreBasketFRQ33msw14CChrCoreBasket11BATTLEPARAM near 98.0 98.0: stack slots and store order of the spline control-point vectors
 BasketF SubDefNormal___Q23msw16CChrDrvPadBasketFv unverified 93.2 Float constants addressed per literal as in the original (pool-off stand-in in the .cpp). Left: the original has extra field loads (likely reloads ours keeps in registers) and a few instructions more; OnMsg has an empty case 9 in its compare tree, SubOffDribble an unused compare of MethdRDB's result; MethdPass a 0x10 bigger frame; not proven harmless.
@@ -257,7 +257,7 @@ BasketF UpdateCollAtk___Q23msw21CChrCoreBasketKinopioFv near 97.3 work pointer r
 BasketF UpdateMdl__Q23msw14CStageBasket13FUlf near 98.1 register choice and common-subexpression reuse only: in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls
 BasketF Util_SearchPassTo___Q23msw13CChrManBasketFPPQ23msw8CChrCorePPQ23msw8CNpcBaselfRQ23bcs5FVEC3 near 98.2 register allocation/instruction order only
 BasketF Util_SearchPassTo___Q23msw13CChrManBasketFlf near 99.3 register allocation/instruction order only
-BasketF Util_SearchPassmeetTo___Q23msw13CChrManBasketFlfRQ23bcs5FVEC3 near 98.6 register allocation/instruction order only; the state-queue tail is loaded before the head in the inline GetState, and stack/vector temporaries numbered differently
+BasketF Util_SearchPassmeetTo___Q23msw13CChrManBasketFlfRQ23bcs5FVEC3 near 98.6 [real, reviewed] reviewer: Registers, head/tail load order, cmplwi vs cmpwi on 0/1 value, reload vs fmr of same stack float.
 BasketF Util_SendPassRequest___Q23msw13CChrManBasketFlPCQ23msw8CChrCore near 87.3 register allocation/instruction order only (team/player numbers in other saved registers; autopilot found nothing)
 BasketF WholeUpDatePosition___Q23msw19CChrCoreBasketNinjaFRCQ23bcs5FVEC3 near 91.4 loop index form, one fewer saved GPR, temp stack slots, pool offsets; values identical (reviewer confirmed)
 BasketF WholeUpDatePosition___Q23msw19CChrCoreBasketNinjaFv near 91.2 loop index form, one fewer saved GPR, temp stack slots, pool offsets; values identical (reviewer confirmed)

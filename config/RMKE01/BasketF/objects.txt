@@ -111,4 +111,4 @@ NonMatching game/basket/unit_2BBEC.cpp
 NonMatching game/basket/unit_34430.cpp
 Equivalent game/basket/CGameBasket.cpp
 Equivalent game/basket/unit_581FC.cpp
-NonMatching game/basket/CBallBasket.cpp
+Equivalent game/basket/CBallBasket.cpp

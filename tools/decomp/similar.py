@@ -12,6 +12,7 @@ import argparse
 import difflib
 import json
 from pathlib import Path
+import decomp_common as dc  # noqa: E402  (tools/decomp/decomp_common.py)
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 
@@ -25,8 +26,7 @@ def main():
     ap.add_argument("--limit", type=int, default=10)
     args = ap.parse_args()
 
-    index_path = ROOT / "build" / "decomp" / f"index_{args.version}.json"
-    index = json.loads(index_path.read_text(encoding="utf-8"))
+    index = dc.load_index(args.version)
     targets = [f for f in index
                if f["name"] == args.function and (not args.module or f["module"] == args.module)]
     if not targets:
@@ -36,9 +36,8 @@ def main():
     print(f"{target['name']}  [{target['module']}/{target['unit']}]  {target['size']} bytes")
 
     matched = set()
-    report_path = ROOT / "build" / args.version / "report.json"
-    if report_path.exists():
-        for unit in json.loads(report_path.read_text(encoding="utf-8"))["units"]:
+    if dc.report_path(args.version).exists():
+        for unit in dc.load_report(args.version)["units"]:
             module = unit["name"].partition("/")[0]
             for fn in unit.get("functions", []):
                 if fn.get("fuzzy_match_percent", 0) >= 100.0:

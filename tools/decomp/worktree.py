@@ -164,6 +164,8 @@ def cmd_new(name, build):
         subprocess.call([py, "configure.py"], cwd=wt, stdout=subprocess.DEVNULL)
         rc = subprocess.call([py, "tools/decomp/build.py"], cwd=wt, stdout=subprocess.DEVNULL)
         print("full build:", "passed" if rc == 0 else "FAILED (look before starting a session there)")
+        # similar.py, draft.py and the copy hints need it; the tools also rebuild it on demand
+        subprocess.call([py, "tools/decomp/index.py"], cwd=wt, stdout=subprocess.DEVNULL)
     print(f"start the session in {wt}")
 
 
@@ -225,6 +227,9 @@ def cmd_land():
     except FileExistsError:
         sys.exit(f"another session is landing ({lock.read_text(errors='replace').strip()}); "
                  "wait a minute and run land again (delete the lock file only if no land is running)")
+    # Shared headers also changed on another unlanded branch are where merges
+    # conflict (CChrCore.hpp and CGame.hpp: 29 and 17 two-sided merges by 11-14).
+    cmd_overlap(quiet_if_none=True)
     try:
         hide_linked_placeholders(wt)
         before = run("git", "rev-parse", "HEAD", cwd=wt, quiet=True).stdout.strip()

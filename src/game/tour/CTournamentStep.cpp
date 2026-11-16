@@ -360,7 +360,7 @@ namespace msw {
             m_nStep = 12;
             break;
         default:
-            if (m_nResult < 1001) {
+            if (m_nResult < -1) {
                 m_nStep = 8;
             } else {
                 m_nStep = 12;
@@ -819,13 +819,15 @@ namespace msw {
             _AddTimerRel(-0x68, 10.0f + fFrame, 0, nTeam);
             CTournamentRouteMan *pRouteMan = CTournamentRouteMan::GetInstance();
             pRouteMan->_AddTimer(0x3F4, 0x3F4, pRouteMan->m_fTimer + fFrame, nTeam, 0.0f, nTeam);
+        } else {
+            long nEffect = nTeam + 0x15;
+            pMan->EraseEffect(nEffect, nEffect + 1);
+            TournamentWork::TEAM_INFO &team = TournamentWork::TeamInfo(nTeam);
+            if (team.nPoint != 0xFF) {
+                team.nFlag22 &= ~2;
+            }
+            pModel->SetDisp(0);
         }
-        pMan->EraseEffect(nTeam + 0x15, nTeam + 0x16);
-        TournamentWork::TEAM_INFO &team = TournamentWork::TeamInfo(nTeam);
-        if (team.nPoint != 0xFF) {
-            team.nFlag22 &= ~2;
-        }
-        pModel->SetDisp(0);
     }
 
     void CTournamentStep::TeamPos(long nTeam, long nPoint, long nUnk)
@@ -3229,24 +3231,26 @@ namespace msw {
     {
         CTournamentMan *pMan = CTournamentMan::GetInstance();
         switch (nEvent) {
-        case 1: {
-            const TournamentWork::TOURNAMENT_INFO &info = TournamentWork::GetTournamentInfo();
-            if (!bReset && m_nTimerTeam == info.aTurnTeam[info.nTurnIndex]) {
-                pMan->PlaySe(0xE21, static_cast<const bcs::FVEC3 *>(0), 9, 0.0f, 1.0f, 0.0f, 1);
+        case 1:
+            if (!bReset) {
+                const TournamentWork::TOURNAMENT_INFO &info = TournamentWork::GetTournamentInfo();
+                if (m_nTimerTeam == info.aTurnTeam[info.nTurnIndex]) {
+                    pMan->PlaySe(0xE21, static_cast<const bcs::FVEC3 *>(0), 9, 0.0f, 1.0f, 0.0f, 1);
+                }
             }
             break;
-        }
-        case 0: {
+        case 0:
             // The two teams of match nParam stop and face each other.
-            const TournamentWork::MATCH_INFO &match = TournamentWork::GetMatchInfo(nParam);
-            pMan->CleanMoveRoute(match.nSideFlag0D, 1);
-            pMan->CleanMoveRoute(match.nSideFlag0E, 1);
-            TournamentData::SetBattlePause(pMan->GetChr(match.nSideFlag0D), GetTeamMatchDir(nParam, match.nSideFlag0D),
-                                           0.0f);
-            TournamentData::SetBattlePause(pMan->GetChr(match.nSideFlag0E), GetTeamMatchDir(nParam, match.nSideFlag0E),
-                                           0.0f);
+            if (!bReset) {
+                const TournamentWork::MATCH_INFO &match = TournamentWork::GetMatchInfo(nParam);
+                pMan->CleanMoveRoute(match.nSideFlag0D, 1);
+                pMan->CleanMoveRoute(match.nSideFlag0E, 1);
+                TournamentData::SetBattlePause(pMan->GetChr(match.nSideFlag0D),
+                                               GetTeamMatchDir(nParam, match.nSideFlag0D), 0.0f);
+                TournamentData::SetBattlePause(pMan->GetChr(match.nSideFlag0E),
+                                               GetTeamMatchDir(nParam, match.nSideFlag0E), 0.0f);
+            }
             break;
-        }
         default:
             if (bReset) {
                 _TimeEventResetDefaultProc(nEvent, nParam, ulParam);
@@ -3441,17 +3445,21 @@ namespace msw {
                 pMan->SetCameraRate(-0.0001f, 0.9765625f, 0.0007f);
             }
             break;
-        case 1: {
-            // The two teams of match nParam stop and face each other.
-            const TournamentWork::MATCH_INFO &match = TournamentWork::GetMatchInfo(nParam);
-            pMan->CleanMoveRoute(match.nSideFlag0D, 1);
-            pMan->CleanMoveRoute(match.nSideFlag0E, 1);
-            TournamentData::SetBattlePause(pMan->GetChr(match.nSideFlag0D), GetTeamMatchDir(nParam, match.nSideFlag0D),
-                                           0.0f);
-            TournamentData::SetBattlePause(pMan->GetChr(match.nSideFlag0E), GetTeamMatchDir(nParam, match.nSideFlag0E),
-                                           0.0f);
+        case 1:
+            // The two teams of match nParam stop; outside a star cup demo
+            // they face each other.
+            if (!bReset) {
+                const TournamentWork::MATCH_INFO &match = TournamentWork::GetMatchInfo(nParam);
+                pMan->CleanMoveRoute(match.nSideFlag0D, 1);
+                pMan->CleanMoveRoute(match.nSideFlag0E, 1);
+                if (!m_UnkC6) {
+                    TournamentData::SetBattlePause(pMan->GetChr(match.nSideFlag0D),
+                                                   GetTeamMatchDir(nParam, match.nSideFlag0D), 0.0f);
+                    TournamentData::SetBattlePause(pMan->GetChr(match.nSideFlag0E),
+                                                   GetTeamMatchDir(nParam, match.nSideFlag0E), 0.0f);
+                }
+            }
             break;
-        }
         default:
             if (bReset) {
                 _TimeEventResetDefaultProc(nEvent, nParam, ulParam);

@@ -98,7 +98,7 @@ const msw::STAGE::MDL_GEN_RULE *msw::CStageBasket06::GetMdlGenRule_() const
 {
     // The end entry chains to the table of CStageManBasket.
     static STAGE::MDL_GEN_RULE tbl[] = {
-        { "^s[0-9]+_light.._.*", 0xB, 0, 0, 0 },
+        { "^s[0-9]+_light.._.*", 0xB, 0, 0, CStageMan::NewMdl },
         { 0, reinterpret_cast<long>(CStageManBasket::GetMdlGenRule_()) },
     };
 

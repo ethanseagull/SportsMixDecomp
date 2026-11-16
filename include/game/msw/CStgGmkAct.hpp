@@ -12,7 +12,9 @@ namespace msw {
     // DOL class of this name has functions; the layout is what
     // CStgGmkAct::Init and DeleteBallCollProxy show: a vptr at 0x04 with the
     // destructor in the first slot and a function taking the actor in the
-    // second (name guessed).
+    // second (name guessed). CStgGmkAct's collision callbacks pass the
+    // events to slots 0x18..0x28 (names guessed after the actor functions
+    // they stand in for); slots 0x10 and 0x14 are not called anywhere seen.
     class CStgGmkActBallCollProxy {
         private:
             unsigned long m_Unk00; // 0x00
@@ -20,6 +22,16 @@ namespace msw {
         public:
             virtual ~CStgGmkActBallCollProxy();
             virtual void SetOwner(CStgGmkAct *pAct);
+            virtual void Unknown10();
+            virtual void Unknown14();
+            virtual void OnAttackHit(const CCollAtkUnit *pAtk, const CCollBodyUnit *pBody, const bcs::FVEC3 &rPos,
+                                     unsigned long flag);
+            virtual void OnBodyPush(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush);
+            virtual unsigned long OnBodyDamage(CCollBodyUnit *pBody, const CCollAtkUnit *pAtk,
+                                               const bcs::FVEC3 &rPos);
+            virtual void OnBallCatch(CCollBodyUnit *pBody, CBall *pBall);
+            virtual unsigned long OnReflectHit(const CCollDefUnit *pDef, const CBall *pBall, bcs::FVEC3 &rPos,
+                                               bcs::FVEC3 &rVel);
     };
 
     // The actor of a stage gimmick: a CStgAct that can also be hit by the
@@ -42,7 +54,12 @@ namespace msw {
             // Inline (msw::CStgGmk_WaterPillar_Act's constructor and
             // destructor in the DOL build this part inline).
             CStgGmkAct(CStgObj *pParent) : CStgAct(pParent), m_pBallCollProxy(0) {}
-            virtual ~CStgGmkAct();
+            // Inline: the DOL's weak copy (0x8014B558) and the modules'
+            // actor destructors, which build this body in place. With it
+            // inline, OnBallCatch is the key function and CStgGmkAct.cpp
+            // emits the vtable, as the original's .data shows
+            // (0x80474CB8, right after CStgGmk.cpp's).
+            virtual ~CStgGmkAct() { DeleteBallCollProxy(m_pBallCollProxy); }
 
             // Drops the old ball proxy and makes a new one.
             virtual void Init()
@@ -93,7 +110,8 @@ namespace msw {
             // where a body is involved), otherwise to the actor's own
             // OnAttackHit, OnBodyPush, OnBodyDamage or OnBallCatch. In the
             // DOL they follow RegistReflectHitCallback without exported
-            // names (fn_80170188, fn_80170200, fn_80170260, fn_801702D4);
+            // names (fn_80170188, fn_80170200, fn_80170260, fn_801702D4,
+            // fn_80170328);
             // whether they are static members or file-local is not known,
             // and their names are guesses.
             static void AttackHitCallback_(const CCollAtkUnit *pAtk, const CCollBodyUnit *pBody,
@@ -103,6 +121,8 @@ namespace msw {
             static unsigned long BodyDamageCallback_(CCollBodyUnit *pBody, const CCollAtkUnit *pAtk,
                                                      const bcs::FVEC3 &rPos, void *pArg);
             static void BallCatchCallback_(CCollBodyUnit *pBody, CBall *pBall, void *pArg);
+            static unsigned long ReflectHitCallback_(const CCollDefUnit *pDef, const CBall *pBall, bcs::FVEC3 &rPos,
+                                                     bcs::FVEC3 &rVel, void *pArg);
 
             CStgGmkActBallCollProxy *m_pBallCollProxy; // 0x170
     };

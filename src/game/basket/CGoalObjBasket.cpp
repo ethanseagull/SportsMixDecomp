@@ -27,19 +27,21 @@ namespace {
     typedef msw::CGoalObjBasket::COLL_TABLE COLL_TABLE;
 
     // The stand collision of each stage: the position of each unit relative
-    // to the board, and its size. Stages not listed have none.
+    // to the board, and its size. Stages not listed have none. The stage
+    // numbers are the original's .data; objdiff does not compare them (they
+    // were 1 3 4 7 8 13 14 15 21 24 here until datacheck.py caught it).
     COLL_TABLE sCollTable[] = {
         { 1,  { { 1, bcs::FVEC3(0.0f, -1.15f, -0.75f), bcs::FVEC3(1.55f, 1.85f, 0.8f) }, { 0 } } },
-        { 3,  { { 1, bcs::FVEC3(0.0f, -1.5f, -0.65f), bcs::FVEC3(1.5f, 2.5f, 0.45f) }, { 0 } } },
-        { 4,  { { 1, bcs::FVEC3(0.0f, -1.1f, -0.55f), bcs::FVEC3(1.4f, 2.45f, 0.5f) }, { 0 } } },
-        { 7,  { { 1, bcs::FVEC3(0.0f, -1.0f, -0.45f), bcs::FVEC3(1.1f, 2.6f, 0.5f) }, { 0 } } },
-        { 8,  { { 1, bcs::FVEC3(0.0f, -1.9f, -2.25f), bcs::FVEC3(0.5f, 2.6f, 0.5f) }, { 0 } } },
-        { 13, { { 1, bcs::FVEC3(0.0f, -0.9f, -0.5f), bcs::FVEC3(1.7f, 2.0f, 0.55f) }, { 0 } } },
-        { 14, { { 1, bcs::FVEC3(0.0f, -0.95f, -0.5f), bcs::FVEC3(1.45f, 1.6f, 0.5f) }, { 0 } } },
-        { 15, { { 1, bcs::FVEC3(0.0f, -1.15f, -0.95f), bcs::FVEC3(3.3f, 1.5f, 1.0f) },
+        { 2,  { { 1, bcs::FVEC3(0.0f, -1.5f, -0.65f), bcs::FVEC3(1.5f, 2.5f, 0.45f) }, { 0 } } },
+        { 3,  { { 1, bcs::FVEC3(0.0f, -1.1f, -0.55f), bcs::FVEC3(1.4f, 2.45f, 0.5f) }, { 0 } } },
+        { 5,  { { 1, bcs::FVEC3(0.0f, -1.0f, -0.45f), bcs::FVEC3(1.1f, 2.6f, 0.5f) }, { 0 } } },
+        { 6,  { { 1, bcs::FVEC3(0.0f, -1.9f, -2.25f), bcs::FVEC3(0.5f, 2.6f, 0.5f) }, { 0 } } },
+        { 9,  { { 1, bcs::FVEC3(0.0f, -0.9f, -0.5f), bcs::FVEC3(1.7f, 2.0f, 0.55f) }, { 0 } } },
+        { 10, { { 1, bcs::FVEC3(0.0f, -0.95f, -0.5f), bcs::FVEC3(1.45f, 1.6f, 0.5f) }, { 0 } } },
+        { 11, { { 1, bcs::FVEC3(0.0f, -1.15f, -0.95f), bcs::FVEC3(3.3f, 1.5f, 1.0f) },
                 { 1, bcs::FVEC3(0.0f, -2.7f, -0.55f), bcs::FVEC3(1.65f, 4.75f, 0.5f) } } },
-        { 21, { { 1, bcs::FVEC3(0.0f, -0.7f, -0.6f), bcs::FVEC3(1.65f, 1.7f, 0.5f) }, { 0 } } },
-        { 24, { { 1, bcs::FVEC3(0.0f, -0.95f, -0.55f), bcs::FVEC3(1.0f, 1.3f, 0.5f) }, { 0 } } },
+        { 15, { { 1, bcs::FVEC3(0.0f, -0.7f, -0.6f), bcs::FVEC3(1.65f, 1.7f, 0.5f) }, { 0 } } },
+        { 17, { { 1, bcs::FVEC3(0.0f, -0.95f, -0.55f), bcs::FVEC3(1.0f, 1.3f, 0.5f) }, { 0 } } },
         { -1 },
     };
 }

@@ -423,7 +423,8 @@ game/msw/CStgGmk.cpp:
 	.data       start:0x80474BE8 end:0x80474CB8
 
 game/msw/CStgGmkAct.cpp:
-	.text       start:0x80170108 end:0x80170174
+	.text       start:0x80170108 end:0x801703A4
+	.data       start:0x80474CB8 end:0x80474E50
 
 game/msw/CStgGmkMan.cpp:
 	.text       start:0x801703A4 end:0x80170BC8
@@ -763,7 +764,11 @@ game/msw/CNpcString.cpp:
 	.text       start:0x802380A4 end:0x80239480
 
 game/msw/CCockpitResultPartyTeam.cpp:
-	.text       start:0x8023BC3C end:0x8023C2B8
+	.text       start:0x8023B1F4 end:0x8023C340
+	.rodata     start:0x80449B48 end:0x80449D28
+	.data       start:0x8048BA40 end:0x8048BB58
+	.sdata      start:0x805BFF40 end:0x805BFF48
+	.sdata2     start:0x805C57D0 end:0x805C5870
 
 game/msw/CCockpitResultPartyVS.cpp:
 	.text       start:0x8023CD30 end:0x8023D6C4

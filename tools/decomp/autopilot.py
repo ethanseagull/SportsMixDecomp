@@ -164,7 +164,10 @@ def demangled(module, unit, fn):
     text = path.read_text(encoding="utf-8", errors="replace")
     lines = text.splitlines()
     for i, line in enumerate(lines):
-        if line.startswith(".fn ") and line[4:].split(",")[0].strip().strip('"') == fn:
+        rest = line[4:].strip() if line.startswith(".fn ") else ""
+        # quoted names can hold commas (templates: "f<int, int>"), as in diff.parse
+        name = rest[1:rest.index('"', 1)] if rest.startswith('"') else rest.split(",")[0].strip()
+        if rest and name == fn:
             for back in range(i - 1, max(i - 4, 0), -1):
                 if lines[back].startswith("# ") and "(" in lines[back]:
                     return lines[back][2:].strip()

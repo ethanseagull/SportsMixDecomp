@@ -84,6 +84,9 @@ def main():
     dest = ROOT / "build" / "decomp"
     dest.mkdir(parents=True, exist_ok=True)
     (dest / f"index_{args.version}.json").write_text(json.dumps(funcs), encoding="utf-8")
+    # which split it was built from: decomp_common.load_index rebuilds it when this differs
+    import decomp_common  # noqa: E402
+    (dest / f"index_{args.version}.split").write_text(decomp_common._split_digest(args.version))
 
     groups = defaultdict(list)
     for f in funcs:

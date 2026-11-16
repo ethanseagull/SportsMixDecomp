@@ -12,5 +12,11 @@
 # decomp-toolkit writes files with LF
 config/**/*.txt  text eol=lf
 
+# Accepted near/unverified records: one line per function, appended by every
+# session. Union-merge them (both sides' lines kept); equivalent.py collapses a
+# function listed twice to its best record. Not for objects.txt or symbols.txt,
+# where two lines for one unit or symbol would be wrong.
+config/**/equivalent.txt  merge=union
+
 # objdiff report for decmp.dev: keep byte-exact
 progress/**/*.json -text

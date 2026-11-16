@@ -109,7 +109,9 @@ namespace msw {
             }
             break;
         default:
-            m_fUnk1AC += bcs::DEG_TO_RAD(0.1f) * GetFrameRateF();
+            // 0.1 degree, written out: the original's constant (0x3AE4C389) is one
+            // bit above what DEG_TO_RAD(0.1f) folds to (0x3AE4C388)
+            m_fUnk1AC += 0.0017453293f * GetFrameRateF();
             m_fUnk1AC = Clamp(m_fUnk1AC, 0.0f, bcs::DEG_TO_RAD(3.0f));
             break;
         }

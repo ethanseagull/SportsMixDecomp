@@ -731,8 +731,9 @@ namespace msw {
             m_pLine->SetPosition(m_vStart);
             if (nFrom & 0x40) {
                 m_pLine->SetRotation(bcs::FVEC3(0.0f, 3.1415927f, 0.0f));
+            } else {
+                m_pLine->SetRotation(bcs::FVEC3(0.0f, 0.0f, 0.0f));
             }
-            m_pLine->SetRotation(bcs::FVEC3(0.0f, 0.0f, 0.0f));
         }
     }
 

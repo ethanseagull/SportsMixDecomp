@@ -487,7 +487,14 @@ game/msw/CCockpitResult.cpp:
 	.rodata     start:0x8043DC60 end:0x8043DC90
 
 game/msw/menu.cpp:
-	.text       start:0x8019B2C4 end:0x8019BBF4
+	.text       start:0x8019B2C4 end:0x8019BC7C
+	.ctors      start:0x8042D224 end:0x8042D228
+	.rodata     start:0x8043DCD8 end:0x8043DCF0
+	.data       start:0x80480760 end:0x804807E8
+	.bss        start:0x804D7168 end:0x804D7180
+	.sdata      start:0x805BFD88 end:0x805BFD90
+	.sbss       start:0x805C0D10 end:0x805C0D20
+	.sdata2     start:0x805C4108 end:0x805C4130
 
 game/msw/CTrophyObj.cpp:
 	.text       start:0x8019BEF0 end:0x8019CAE0

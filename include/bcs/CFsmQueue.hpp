@@ -354,6 +354,30 @@ namespace bcs {
                 FsmqClear();
             }
 
+            // (name guessed; added for BossF game/boss/CNpcBehemothFiga.cpp,
+            // msw::CNpcBehemothBoss::InitFsm_) FsmqInit with the work memory
+            // made only when nWorkSize is positive, rounded up to a multiple
+            // of 4 bytes.
+            void FsmqInitAlign(T *pOwner, long nStateNum, long nQueueSize, long nWorkSize)
+            {
+                m_pOwner = pOwner;
+                m_pStateTable = new (0x100) State[nStateNum];
+                m_nStateNum = nStateNum;
+                m_nFlag = 0;
+                m_nQueueHead = 0;
+                m_nQueueTail = 0;
+                m_pStateQueue = new (0x100) long[nQueueSize];
+                m_nQueueSize = nQueueSize;
+                BCS_CpuClear(m_pStateQueue, nQueueSize * sizeof(long));
+                if (nWorkSize > 0) {
+                    nWorkSize = (nWorkSize + 3) & ~3;
+                    m_pWorkQueue = new (0x100) char[nQueueSize * nWorkSize];
+                    m_nWorkSize = nWorkSize;
+                    BCS_CpuClear(m_pWorkQueue, nQueueSize * nWorkSize);
+                }
+                FsmqClear();
+            }
+
             // (name guessed) Sets the three hooks of state nState.
             void FsmqSetState(long nState, StateFunc pCtor, StateFunc pLoop, StateFunc pDtor)
             {

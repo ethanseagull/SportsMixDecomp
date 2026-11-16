@@ -192,16 +192,16 @@ BasketF SetCoinValue__Q23msw18CCockpitBasketCoinFll near 98.9 register allocatio
 BasketF SetCountScore__Q23msw20CCockpitBasketResultFPlPlll near 99.6 99.6%: float register choice around m_fUnk00 + m_fUnk04*i only
 BasketF SetDispBallFruit4__Q23msw22CCockpitBasketHarapekoFi near 99.5 register choice and instruction order only
 BasketF SetFaceIcon__Q23msw19CCockpitBasketCoderFPQ33bcs3G2D9CPaneCtrlllPCQ23msw8CChrCore near 98.1 register allocation only (loop counter and table pointer swap registers); SetVisible(bool) bit insert compiled as srwi+rlwimi instead of rlwinm+rlwimi (same flag byte result); as HockeyF
-BasketF SetFaceIcon__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 97.6 register choice, one pointer increment scheduled elsewhere, single-bit set as clear-then-insert vs shift-then-insert (same value)
+BasketF SetFaceIcon__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 98.1 [real, reviewed] reviewer: Only register allocation (savegpr_16 vs 17); no other difference.
 BasketF SetSPGauge__Q23msw19CCockpitBasketCoderFlf near 99.0 register allocation only around the int-to-float conversion; same instructions; as HockeyF
 BasketF SetScoreValue__Q23msw19CCockpitBasketCoderFll near 99.4 register allocation only
 BasketF SetScore__Q23msw22CCockpitBasketHarapekoFllii near 97.8 register choice and instruction order only
-BasketF SetTeamFaceIcon__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 97.4 register choice; second table pointer as base+0x48 vs direct address (same address); single-bit set as clear-then-insert vs shift-then-insert
+BasketF SetTeamFaceIcon__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 97.8 [real, reviewed] reviewer: Orig addi base+0xcb0 vs ours base+0xc68 then +0x48 in the branch: same address 0xcb0; rest registers.
 BasketF SetTelop3DScoreCount__Q23msw14CCockpitBasketFllllllllil near 97.5 97.5%: only the order of the stores into the parameter struct differs.
 BasketF SetUpDisappear__Q33msw11CC14_BASKET12CcNinjaCloneFv near 98.3 .rodata pool and table offsets shifted; values identical
 BasketF Set__Q23msw18CCockpitBasketCoinFv near 99.3 register choice only (as CCockpitHockeyCoin::Set)
 BasketF Set__Q23msw19CCockpitBasketCoderFv near 99.6 register allocation only (loop counter and table pointer swap registers); same instructions and memory accesses; as HockeyF
-BasketF Set__Q23msw22CCockpitBasketHarapekoFv near 93.0 s_PaneName address formed as s_LayoutRes base + 0x60 in a saved register instead of its own load (same address), one more saved register; same calls
+BasketF Set__Q23msw22CCockpitBasketHarapekoFv near 93.0 [real, reviewed] reviewer: Registers/savegpr count, separate s_LayoutRes/s_PaneName symbols vs one rodata base (no data flag), same calls and order.
 BasketF SetupGame__Q23msw19CCockpitBasketCoderFv near 97.3 register allocation only (loop counters and table pointers); SetVisible(bool) bit insert compiled as srwi+rlwimi instead of rlwinm+rlwimi (same flag byte result); as HockeyF
 BasketF ShotArtsBall___Q23msw21CChrCoreBasketWaluigiFl near 99.6 float register choice for the 1/60 multiply operands and one byte load into r0 vs r9
 BasketF StartGuideTelop__Q23msw16CGameGuideBasketFlPCQ23msw8CChrCore near 99.9 99.9: only .rodata offsets of its float constants (original has 20 unread bytes -3.0,3.0,0,0,0 after pi/2)

@@ -120,7 +120,7 @@ BasketF LoopStateGetLooseBall__Q23msw19CNpcGhostBasketBaseFv near 99.1 [real, re
 BasketF LoopStateIdle__Q23msw19CNpcGhostBasketBaseFv near 99.3 register allocation only (diff.py: registers); was 100% before the 2026-11-11 merge of main's CChrCore/CNpcBase header changes
 BasketF LoopStateItemShoot__Q23msw14CChrCoreBasketFv near 96.2 [real, reviewed] reviewer: frame 0x10 larger, vector temporaries in other stack slots, register renumbering, mr. vs cmpwi; same calls and offsets
 BasketF LoopStateJumpCatch__Q23msw14CChrCoreBasketFv near 90.6 [real, reviewed] reviewer: Register renumbering, schedule, base reg kept, cmpwi vs mr. on same value; same calls, offsets, constants.
-BasketF LoopStateLayUp__Q23msw14CChrCoreBasketFv near 97.8 97.8: cntlzw 0/1 conversion of & 4 (same truth), stack slots, registers
+BasketF LoopStateLayUp__Q23msw14CChrCoreBasketFv near 97.8 [real, reviewed] reviewer: register renaming, stack slots, fadds operand order, cntlzw bool vs rlwinm. of &4; same constants/calls
 BasketF LoopStateLoop__Q33msw11CC15_BASKET19CcSiromaMagicCircleFv near 99.2 register numbering / order of independent loads only
 BasketF LoopStateMove__Q23msw16CNpcStringBasketFv near 99.9 99.9: register numbering in the 0.0f == y compare
 BasketF LoopStateNeutral__Q23msw14CChrCoreBasketFv near 99.9 99.9: register choice only
@@ -228,11 +228,11 @@ BasketF SubStateArtsShotSetTrickJumpParam___Q23msw14CChrCoreBasketFPQ33msw14CChr
 BasketF SubStateDamageCtorBurn___Q23msw14CChrCoreBasketFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 94.9 94.9: SetCondition argument setup scheduled before the branch instead of after; same values
 BasketF SubStateDamageLoopDizzy___Q23msw14CChrCoreBasketFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 99.3 [real, reviewed] reviewer: Ours reloads the same field 0x1c with no intervening store (one extra lwz); register numbering only.
 BasketF SubStateDashMove___Q23msw14CChrCoreBasketFRQ33msw14CChrCoreBasket15STATE_WORK_DASH near 99.5 99.5: load order of the two operands of one fadds
-BasketF SubStateDunkCmnAskLayupBranch___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNK near 99.9 99.9: one equivalent branch form
+BasketF SubStateDunkCmnAskLayupBranch___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNK near 99.9 [real, reviewed] reviewer: same masks 0xA00/0x2400; only beq vs bne block layout inverted
 BasketF SubStateDunkCmnDunk___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNK near 95.0 95.0: register choice and instruction order (schedule)
-BasketF SubStateDunkCmnHomingMove___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNK near 97.7 97.7: unused FVEC3 copy in other stack slots (frame 0x20 bigger), 0.1/0.08 else-if blocks laid out reversed, commutative fadds operands swapped
+BasketF SubStateDunkCmnHomingMove___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNK near 97.7 [real, reviewed] reviewer: frame size/slots, reversed layout of same 0x90/0xb8 constant branches, commutative fadds
 BasketF SubStateDunkCmnLand___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNK near 99.7 99.7: register choice / instruction order only
-BasketF SubStateDunkCmnMove___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNK near 96.2 96.2: vector temporaries' stack slots, lhz vs lha+clrlwi 16 (same value), original cntlzw 0/1 conversion of m_nStatusFlag & 1 before the test (same truth), registers
+BasketF SubStateDunkCmnMove___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNK near 96.2 [real, reviewed] reviewer: stack slots, regs, lhz vs lha+clrlwi 16 same value, cntlzw bool vs clrlwi. same truth
 BasketF SubStateDunkCtor___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNKflfl near 99.1 99.1: register choice, operand order of nStart + nLoop + nJump
 BasketF SubStateNeedBlockWork___Q23msw14CChrCoreBasketFif near 99.9 99.9: register choice only
 BasketF SubStateRunBlockWorkMove___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket14STATE_WORK_RUN near 98.5 [real, reviewed] reviewer: duplicated beq to same target, fmuls operand order, 0x1c reload, li 0/ori 1 vs li 1; same value

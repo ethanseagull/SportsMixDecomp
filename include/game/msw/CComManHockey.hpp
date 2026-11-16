@@ -65,6 +65,10 @@ namespace msw {
             static int IsExistEnemyAngle(const CChrCore *pChr, const CChrCore *pTarget, long nDeg);
             static int IsExistToAngleLR(const CChrCore *pChr, const CChrCore *pTarget, long nDeg);
             static long IsExistTargetLR(const CChrCore *pChr, const CChrCore *pTarget, bcs::FVEC3 pos, long nDeg);
+            // (added for HockeyF game/hockey/unit_E0310.cpp) A random number
+            // from f1 to f2; IsExistTargetCore for a position.
+            static float GetRandValueF(float f1, float f2);
+            static int IsExistTargetPos(const CChrCore *pChr, bcs::FVEC3 pos, float, float);
     };
 }
 

@@ -101,3 +101,4 @@ Equivalent game/hockey/CcSiromaMagicCircle.cpp
 Equivalent game/hockey/unit_B0048.cpp flags=noauto
 Equivalent game/hockey/unit_EEA14.cpp
 Equivalent game/hockey/CcNinjaCloneBody.cpp
+NonMatching game/hockey/unit_E0310.cpp

@@ -58,7 +58,6 @@ TourF LoopStateNextCup__Q23msw15CTournamentStepFv unverified 96.1 button table b
 TourF LoopStateNpcCallMove__Q23msw15CTournamentStepFv unverified 91.7 the original calls GetTournamentInfo once more; frame differs
 TourF LoopStateNpcCallPlay__Q23msw15CTournamentStepFv unverified 98.2 branch form differs (ble in ours); not checked
 TourF LoopStateTurnStart__Q23msw15CTournamentStepFv near 97.1 [real, reviewed] reviewer: the same branch with its blocks swapped (blt over li 2; b vs bge with li 2 last), float pool at another offset (same values)
-TourF MakeLine__Q23msw15CRouteBasicLineFll unverified 99.1 behaviour differs: in the nFrom & 0x40 case the original skips SetRotation(0, 0, 0) (else branch), ours calls it after SetRotation(0, pi, 0)
 TourF MakePointData__Q23msw14TournamentWorkFPsPQ33msw14TournamentWork11_LINK_POINTll near 99.3 nLink and pLink in each other's registers
 TourF MakeRouteCost__Q23msw14TournamentWorkFPsPsPQ33msw14TournamentWork11_LINK_POINTUcUcs near 90.5 register and order; the original also spills pHead to the stack and reloads it at exit
 TourF MakeRouteSelect__Q23msw14CTournamentManFPUsUcUcUcPCUcf near 95.6 register choice and instruction order only

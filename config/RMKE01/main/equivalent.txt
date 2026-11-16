@@ -17,7 +17,7 @@ main ApplyLocate__Q23msw26CStgGmk_WaterPillarClusterFv near 99.5 operand order o
 main ApplyTexPatAnmResult__Q24nw4r3g3dFQ34nw4r3g3d9ResTexObjQ34nw4r3g3d10ResTlutObjPCQ34nw4r3g3d15TexPatAnmResult near 99.4 register choice and instruction order only
 main ArtsEventBegin___Q23msw5CGameFv near 97.1 register choice and the camera loop's index register (original reuses the zero stored to 0xF4)
 main ArtsEventLoop___Q23msw5CGameFv near 93.7 switch on the sync step lowered as a compare chain instead of the original's binary tree; same cases and bodies
-main AttachArchiveResource__Q33bcs3G2D11CLayoutBaseFPQ34nw4r3lyt19ArcResourceAccessor near 98.1 the original keeps a redundant beq on the same cr0 (inlined multi-archive flag check of DetachArcResourceLinkAll); dead branch, no behaviour change
+main AttachArchiveResource__Q33bcs3G2D11CLayoutBaseFPQ34nw4r3lyt19ArcResourceAccessor near 98.1 [real, reviewed] reviewer confirmed: original has a dead second beq on the same cr0
 main AttachPane__Q33msw7cockpit7C3DCoinFPQ34nw4r3lyt4Pane near 99.6 register allocation/order only after naming the C3DCoinTask calls; declaration-order search no gain
 main BgFadeUpdate___Q23msw5CGameFv near 88.2 original rounds the clamped fade level with frsp (a no-op on a single-precision value) and schedules the colour maths differently
 main Bind__Q23bcs10CAnmMatClrFQ34nw4r3g3d6ResMdl near 99.9 add operand order and register choice only
@@ -437,7 +437,7 @@ main __dt__Q23msw19CStgGmk_Pinball_ActFv unverified 81.9 original inlines ~CStgG
 main __dt__Q23msw19CStgGmk_Trolley_ActFv near 85.7 calls the DOL's weak msw::CStgGmkAct destructor (0x8014B558) instead of inlining the same body (vtable stores, DeleteBallCollProxy, ~CStgAct); an inline definition in CStgGmkAct.hpp changes HockeyF's weak function order
 main __dt__Q23msw23CStgGmk_WaterPillar_ActFv unverified 81.9 calls msw::CStgGmkAct::~CStgGmkAct where the original inlines it (DeleteBallCollProxy + CStgAct dtor); declaring that dtor inline in CStgGmkAct.hpp makes the Matching CStgGmkAct.o emit the base vtable (multiply defined at link). Same behaviour; base dtor needs a definition for a non-matching link
 main __dt__Q23msw5CGameFv near 95.1 only the inline CUnivTask destructor's second 'this' null check (cmpwi/beq/beq) before ~CTask is missing: CGame.hpp still derives CGame from bcs::CTask (TODO base); same calls and stores
-main __dt__Q33bcs3G2D11CLayoutBaseFv near 98.8 the original keeps a redundant beq on the same cr0 (inlined multi-archive flag check of DetachArcResourceLinkAll); dead branch, no behaviour change
+main __dt__Q33bcs3G2D11CLayoutBaseFv near 98.8 [real, reviewed] reviewer confirmed: same dead second beq only
 main __dt__Q43msw6CC_CMN5SLIME14CcSquadFactoryFv near 99.1 register allocation only: loop counter and offset registers r29/r30 swapped
 main __sinit_\CC_DATA_cpp near 90.4 [real, reviewed] reviewer confirmed: same constant stores to the same distinct offsets in another order and with other base registers; no data-value difference
 main __sinit_\CChrMarker_cpp near 96.1 register allocation only (same constants, same stores)

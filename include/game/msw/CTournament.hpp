@@ -26,6 +26,10 @@ namespace msw {
             static void SetDemoType(long nType);
             static int IsMissionClear();
             static int IsMixTournamentGame(); // type guessed
+            // (DOL; added for BasketF game/basket/unit_581FC.cpp, meaning
+            // guessed from the name) Not zero when the mission of the match
+            // forbids dunks (the argument is 0 there).
+            static int IsMissionDunkShootDisable(long);
             // The byte at 0x1054 of the tournament's work area.
             static long GetGameMode();
             // (added for TourF CTmScript; description guessed) The sport of
@@ -82,6 +86,12 @@ namespace msw {
             // by the mission (above 0; 4 also ends the game).
             static void ShotClockTimeOver();
             static long IsMissionShootFalseRetry(long nTeam, long nShootType);
+            // (DOL; added for BasketF game/basket/CBallBasket.cpp, meanings
+            // guessed from the names) Mission rules for team nTeam: thrown
+            // shots or lay-ups always miss; only "just" shots score.
+            static int IsMissionThrowingShootMissing(long nTeam);
+            static int IsMissionLayupShootMissing(long nTeam);
+            static int IsMissionJustShootOnly(long nTeam);
             // (added for VolleyF game/volley/CComDrvVolleyGame.cpp) Whether
             // mission rule nRule applies to team nTeam.
             static int IsMissionRuleEnable(long nRule, long nTeam);

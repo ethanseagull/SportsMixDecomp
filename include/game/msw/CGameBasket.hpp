@@ -12,6 +12,9 @@ namespace msw {
 
     // Lives in module BasketF. Size 0x274.
     class CGameBasket : public CGame {
+        // The ball starts the rebound camera (CBallBasket::ReboundDemoCheck_).
+        friend class CBallBasket;
+
         public:
             CGameBasket(bcs::CTask *pParent);
 
@@ -30,6 +33,11 @@ namespace msw {
             // The instance as this class (guessed inline: the callers read
             // CGame::m_pInstance directly).
             static CGameBasket *GetInstance() { return static_cast<CGameBasket *>(m_pInstance); }
+            // Sets game flag bits (an inline: the original reloads the flags
+            // word at each call).
+            void AddGameFlag_(unsigned long nFlag) { m_nGameFlag |= nFlag; }
+            unsigned long GetGameFlag_() const { return m_nGameFlag; }
+            unsigned long GetBasketFlag_() const { return m_nBasketFlag; }
             // The NPC type of team nTeam's ghost (CChrMan::NpcSearch finds
             // it by that).
             static long GetTeamGhostType(long nTeam);
@@ -144,6 +152,12 @@ namespace msw {
             int IsTelopEnd_(long nTelop) const;
             void PlaySnd_(long nSnd, const bcs::FVEC3 *pPos);
             void SetShotClockCount_(long nCount, long);
+            // (public: CChrCoreBasket's Canbe* members ask them; game/basket/
+            // unit_581FC.cpp) The character of team nTeam that jumps at the
+            // jump ball; not zero while the play restarts after a fall into
+            // the river.
+            long GetNowJumpBallerChrIdx_(long nTeam) const;
+            unsigned long IsRiverFallRestart_() const;
 
         protected:
             // (added for game/basket/CGameBasket.cpp; the members below are
@@ -169,7 +183,6 @@ namespace msw {
             void CheckExceptionalCamera_();
             void ClearJumpBallerInfo();
             void SetUpJumpBallerInfo();
-            long GetNowJumpBallerChrIdx_(long nTeam) const;
             long GetNowJumpBallerPadNo_(long nTeam) const;
             void DispOnGoalMarker();
             void DispUpDateGoalMaker();
@@ -180,7 +193,6 @@ namespace msw {
             int IsRingMove_(long nGoal) const;
             int IsChandelierOn_() const;
             void PlayTrGoalInQuake(const CChrCore *pChr, const CBall *pBall);
-            unsigned long IsRiverFallRestart_() const;
             void DispShakeRemoconTelop_(int bDisp);
             void CheckSpEndure();
             int IsTelopEndStartAnim_(long nTelop);

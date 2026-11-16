@@ -36,7 +36,23 @@ namespace msw {
     // namespaces and not classes is a guess, see notes/toolchain.md)
     namespace BALL {
         namespace VOLLEY {
-            struct SERVE_TOSS_ARG;
+            // (added for VolleyF game/volley/unit_3B628.cpp; field names
+            // and meanings guessed) The toss of a serve
+            // (CBall::SetVolleyServeTossMode).
+            struct SERVE_TOSS_ARG {
+                long m_nType;          // 0x00, 0 over hand, 1 under hand, 2 jump
+                long m_nPlayerNo;      // 0x04
+                long m_nTeamNo;        // 0x08
+                bcs::FVEC3 m_Pos;      // 0x0C, where the toss starts
+                float m_fTopY;         // 0x18, the height of the toss
+                float m_fCatchY;       // 0x1C, the height it is caught again at
+                float m_fUnk20;        // 0x20
+                float m_fScale;        // 0x24, the ball model's scale
+                float m_fUnk28;        // 0x28
+                float m_fUnk2C;        // 0x2C
+                bcs::CMdlObj *m_pMdl;  // 0x30, the server's model (none for the jump serve)
+                long m_nOutline;       // 0x34
+            };
             struct SERVE_SHOT_ARG;
             struct SPIKE_SHOT_ARG;
             struct PASS_SHOT_ARG;
@@ -527,6 +543,8 @@ namespace msw {
             // velocity.
             bcs::CMdlObj *GetMdlObj() const { return m_pMdlObj; }
             const bcs::FVEC3 &GetVelocity() const { return m_Velocity; }
+            // (added for VolleyF game/volley/unit_3B628.cpp) See m_nMdlNode.
+            unsigned long GetMdlNode() const { return m_nMdlNode; }
             // (names guessed; added for DodgeF game/dodge/CItemBallBombDodge.cpp)
             // Direct access for the dodgeball item behaviours, which read
             // and write these members of the ball without a call.
@@ -652,7 +670,11 @@ namespace msw {
             // 0x17C (meaning guessed): one bit per player the ball may not
             // hit (BossF's CBallBoss sets the shooter's).
             long m_Unk17C;
-            unsigned char m_Unk180[0xC];   // 0x180
+            unsigned char m_Unk180[0x4];   // 0x180
+            // 0x184 (name guessed; VolleyF game/volley/unit_3B628.cpp reads
+            // the scale of the ball model at it): the model node of the ball.
+            unsigned long m_nMdlNode;
+            unsigned char m_Unk188[0x4];   // 0x188
             // 0x18C (meaning not known): BossF's CBallBoss copies its attach
             // lift here.
             float m_f18C;

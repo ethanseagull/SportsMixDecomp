@@ -413,13 +413,13 @@ namespace msw {
             // The motion of pose nPose, part nPart (0 the start, 1 the loop,
             // 2 the end; meaning guessed) of the receive, the toss and the
             // jump toss. The toss poses have one direction only.
-            long GetReceivePoseMotID_(long nPose, long nPart);
+            short GetReceivePoseMotID_(long nPose, long nPart);
             float GetTossBaseDir_();
             long GetTossPoseDir_(float fDir);
-            long GetTossPoseMotID_(long nPose, long nPart);
+            short GetTossPoseMotID_(long nPose, long nPart);
             float GetJumpTossBaseDir_();
             long GetJumpTossPoseDir_(float fDir);
-            long GetJumpTossPoseMotID_(long nPose, long nPart);
+            short GetJumpTossPoseMotID_(long nPose, long nPart);
             // (in another unit) The run speed fSpeed as the character's
             // condition changes it.
             float CalcContiditionMoveSpeed_(float fSpeed) const;
@@ -439,6 +439,65 @@ namespace msw {
             int SubStateDamageLoopReceiveDmg_(STATE_WORK_DAMAGE *pWork);
             void SubStateDamageCtorSpikeMiss_(STATE_WORK_DAMAGE *pWork);
             int SubStateDamageLoopSpikeMiss_(STATE_WORK_DAMAGE *pWork);
+            // Added for game/volley/unit_3B628.cpp (the receive, sliding
+            // and serve states; names from the symbols, meanings guessed,
+            // as in CChrCoreBoss). One frame of a receive of each kind; not
+            // zero when it is over.
+            int SubStateReceiveDoProcReceive_(STATE_WORK_RECEIVE *pWork);
+            int SubStateReceiveDoProcToss_(STATE_WORK_RECEIVE *pWork);
+            int SubStateReceiveDoProcJumpToss_(STATE_WORK_RECEIVE *pWork);
+            // Staggers back after a receive (kind 1 or 2), for fFrame frames.
+            void SubStateReceiveStartStagger_(STATE_WORK_RECEIVE *pWork, long nType, float fFrame);
+            // Where the character goes to take pBall between the catch
+            // points rLow and rHigh (pWork->m_TargetPos) and the move there;
+            // returns the frames to wait before the receive motion
+            // (negative: frames it is late by).
+            float SubStateReceiveGetHomingTargetPosReceive_(STATE_WORK_RECEIVE *pWork, CBall *pBall,
+                                                            const bcs::FVEC3 &rLow, const bcs::FVEC3 &rHigh,
+                                                            float fHeight, float fFrameMin, float fFrameMax,
+                                                            float fDistMax);
+            // Starts enduring a special shot (the gauge, its effects and
+            // the drag of the ball).
+            void SubStateReceiveStartEndure_(STATE_WORK_RECEIVE *pWork);
+            float SubStateReceiveGetHomingTargetPosToss_(STATE_WORK_RECEIVE *pWork, CBall *pBall,
+                                                         const bcs::FVEC3 &rLow, const bcs::FVEC3 &rHigh,
+                                                         float fHeight, float fFrameMin, float fFrameMax,
+                                                         float fDistMax);
+            void SubStateReceiveGetHomingTargetPosJumpToss_(STATE_WORK_RECEIVE *pWork, CBall *pBall);
+            // A move after the ball's direction rDir (ball drag), and one
+            // frame of it.
+            void SubStateReceiveSetBallDragParam_(CC_DATA::CHR_PARAM::MOVE_PARAM &rParam, DIR_MOVE &rMove,
+                                                  const bcs::FVEC3 &rDir, float fFrame, float fRate,
+                                                  float fMin, float fMax, int bCurve);
+            void SubStateReceiveDoMoveBallDrag_(STATE_WORK_RECEIVE *pWork);
+            // Turns a toss towards where the ball will go.
+            void SubStateTossRotateOnBall_(STATE_WORK_RECEIVE *pWork);
+            // nReturn, or 1 when the ball must be sent over the net now.
+            long IsMustReturnBall_(CBall *pBall, long nReturn);
+            // (in other units) Fills the arts gauge by fRate; the player a
+            // pass goes to; drops, loses, sends on, returns over the net and
+            // serves pBall; the yaw towards the other court; not zero when
+            // the character may touch pBall now; the jump serve mode.
+            void AddArtsGauge_(float fRate, float);
+            long SearchPassToChrIdx_(long nTouch, int);
+            void Util_DropBall_(CBall *pBall, float fRotY);
+            void Util_MissBall_(CBall *pBall, float, float);
+            void Util_ReceiveBall_(CBall *pBall, long nType, long nCatch, int nArts, long nReceiveType);
+            void Util_ReturnBall_(CBall *pBall, long nType, long nReturn, long nCatch, int nArts, long nReceiveType);
+            void Util_ServeBall_(CBall *pBall, long, long);
+            float GetTargetCourtDir_();
+            int IsVolleyRightBallTouch_(const CBall *pBall) const;
+            void SetJumpServeMode_(int bJump);
+            void SetBallCatchEnableVNode_(float fRange, float, const bcs::FVEC3 &rOfs, long nNode);
+            // The serve state's work, the start of each kind of serve and
+            // the ball tossed up for it (nType 0 over hand, 1 under hand,
+            // 2 jump).
+            struct STATE_WORK_SERVE;
+            void SubStateServeStartOverHand_(STATE_WORK_SERVE *pWork);
+            void SubStateServeStartUnderHand_(STATE_WORK_SERVE *pWork);
+            void SubStateServeStartJump_(STATE_WORK_SERVE *pWork);
+            void SubStateServeStartJumpShot_(STATE_WORK_SERVE *pWork);
+            void SubStateServeBallTossUp_(long nType, const bcs::FVEC3 &rPos);
 
             // (added for game/volley/unit_4377C.cpp) The icon shown over a
             // character (0x18 bytes, from its constructor and MainFunc).
@@ -454,6 +513,13 @@ namespace msw {
                     unsigned char m_Unk04[0x18 - 0x4];
             };
 
+            // (game/volley/unit_3B628.cpp) The two points a pose takes the
+            // ball at (see m_aReceiveCatchPos).
+            struct POSE_CATCH_POS {
+                bcs::FVEC3 m_Low;
+                bcs::FVEC3 m_High;
+            };
+
         protected:
             // Not mapped yet; size 0x964.
             // 0x574 (name guessed): the character's parameters for the game
@@ -462,12 +528,35 @@ namespace msw {
             // 0x578 (name guessed): bit 0 while the character serves
             // (IsVolleyServeMode).
             unsigned long m_nServeFlag;
-            unsigned char m_Unk57C[0x640 - 0x57C];
-            // 0x640 (name guessed, as in CChrCoreBoss): the lowest height
-            // above the character a ball can be tossed at
-            // (SubStateGetNeutralPoseType_).
-            float m_fTossHeight;
-            unsigned char m_Unk644[0x720 - 0x644];
+            // 0x57C, 0x63C (game/volley/unit_3B628.cpp; as CChrCoreBoss's
+            // m_aReceiveCatchPos and m_aTossCatchPos): for each receive pose
+            // and each toss pose, the two points (POSE_CATCH_POS, from the
+            // character) the ball is taken at, early and late in the motion.
+            // 0x640 (m_fTossHeight, name guessed, as in CChrCoreBoss): the
+            // lowest height above the character a ball can be tossed at
+            // (SubStateGetNeutralPoseType_): the first toss pose's m_Low.y,
+            // under its own name in a union. unit_3B628 reads the arrays
+            // as members: through an accessor returning a reference the
+            // compiler shares the element address between m_Low and m_High.
+            union {
+                struct {
+                    POSE_CATCH_POS m_aReceiveCatchPos[8]; // 0x57C
+                    POSE_CATCH_POS m_aTossCatchPos[8];    // 0x63C
+                };
+                struct {
+                    unsigned char m_Unk57C[0x640 - 0x57C];
+                    float m_fTossHeight; // 0x640
+                };
+            };
+            // 0x6FC (name guessed; game/volley/unit_3B628.cpp): the same
+            // point for the jump toss (its y is the height above the
+            // character the ball is taken at).
+            bcs::FVEC3 m_JumpTossCatchPos;
+            // 0x708, 0x714 (names guessed; game/volley/unit_3B628.cpp): where
+            // the ball is caught again after the toss of an over hand and of
+            // an under hand serve, from the character.
+            bcs::FVEC3 m_ServeBallPosOver;
+            bcs::FVEC3 m_ServeBallPosUnder;
             // 0x720, 0x72C (names guessed, as in CChrCoreBoss; read by
             // GetVolleySpikeOffsetPos and CanbeSpike): where the ball is
             // hit in a spike, from the character, for a normal and for a
@@ -477,7 +566,12 @@ namespace msw {
             // 0x738 (name guessed; LoopStateSpike): the same for the power
             // spike (motion 0x2F).
             bcs::FVEC3 m_SpikeOfsPower;
-            unsigned char m_Unk744[0x768 - 0x744];
+            // 0x744, 0x750, 0x75C (names guessed; game/volley/unit_3B628.cpp):
+            // where the ball is hit in an over hand, an under hand and a
+            // jump serve, from the character.
+            bcs::FVEC3 m_ServeHitPosOver;
+            bcs::FVEC3 m_ServeHitPosUnder;
+            bcs::FVEC3 m_ServeHitPosJump;
             // 0x768 (name guessed): where a ball pulled in by an air trick
             // sits relative to the hand (CChrCoreVolleySiroma copies it).
             bcs::FVEC3 m_AdsorbOfs;
@@ -487,7 +581,9 @@ namespace msw {
             // 0x794 (name guessed, as in CChrCoreBoss): the height of each
             // receive pose the ball is taken at.
             float m_afReceiveHeight[8];
-            unsigned char m_Unk7B4[0x7D4 - 0x7B4];
+            // 0x7B4 (name guessed, as in CChrCoreBoss): how far from the
+            // ball's landing point the character stands in each receive pose.
+            float m_afReceiveDist[8];
             // 0x7D4 (name guessed): the same for the toss poses.
             float m_afTossRot[8];
             unsigned char m_Unk7F4[0x830 - 0x7F4];
@@ -551,13 +647,16 @@ namespace msw {
         float m_fTrgFrame;           // 0x14, a frame of the receive motion
         float m_fTargetRotY;         // 0x18, negative for none
         float m_fRotY;               // 0x1C
-        unsigned char m_Unk20[0x8];
+        // (0x20-0x34, 0x44 and 0x60-0xC8 added for game/volley/unit_3B628.cpp,
+        // names as in CChrCoreBoss::STATE_WORK_RECEIVE)
+        float m_fWaitFrame;          // 0x20, frames to wait in the pose before the receive
+        float m_fShotFrame;          // 0x24, the jump toss's motion frame the ball leaves at
         bcs::FVEC3 m_Dir;            // 0x28, the direction the ball is sent (only x and z read)
-        unsigned char m_Unk34[0x38 - 0x34];
+        float m_fDiveSpeed;          // 0x34, the dive's move per frame
         float m_fUnk38;              // 0x38 (meaning not known)
-        float m_fUnk3C;              // 0x3C (meaning not known)
+        float m_fUnk3C;              // 0x3C, frames the receive (or its endurance) lasts
         float m_fUnk40;              // 0x40, from CChrCore::m_fUnk268 (meaning not known)
-        unsigned char m_Unk44[0x48 - 0x44];
+        float m_fEndure;             // 0x44, the endurance gauge (mashing)
         // 0x48, 0x4C, 0x50 (meanings not known): from the ball's
         // BALL::VOLLEY::ENDURE_PRM (SetReceiveEndureWork_).
         float m_fEndure48;
@@ -566,9 +665,43 @@ namespace msw {
         unsigned char m_Unk54[0x58 - 0x54];
         long m_nReceiveType;         // 0x58, passed to ReceiveBall_
         long m_nFlickType;           // 0x5C, passed instead when the ball is flicked away
-        unsigned char m_Unk60[0xC8 - 0x60];
+        bcs::FVEC3 m_TargetPos;      // 0x60, where the ball is taken
+        CChrCore::ROT_LERP1 m_RotLerp; // 0x6C, the turn while moving to m_BallPos
+        float m_fLerpRotY;           // 0x7C
+        float m_fMoveFrame;          // 0x80, frames of the move below
+        CC_DATA::CHR_PARAM::MOVE_PARAM m_MoveParam; // 0x84
+        CChrCore::DIR_MOVE m_DirMove; // 0x94
+        CC_DATA::CHR_PARAM::MOVE_PARAM m_MoveParam2; // 0xA4, the move to m_BallPos
+        CChrCore::DIR_MOVE m_DirMove2; // 0xB4
+        float m_fMoveFrame2;         // 0xC4
         bcs::FVEC3 m_BallPos;        // 0xC8, where the ball is taken
         float m_afCountWork[2];      // 0xD4, see CChrCoreVolley::m_afCountWork
+    };
+
+    // (field names guessed; game/volley/unit_3B628.cpp runs the state)
+    struct CChrCoreVolley::STATE_WORK_SERVE {
+        // 0x00: 0-1 the toss of an over or under hand serve, 2-7 waiting
+        // for the hit, 8-9 the over hand hit and landing, 10-11 the same
+        // under hand, 12-16 the jump serve, 17-18 the end.
+        long m_nStep;
+        long m_nType;                // 0x04, 0 over hand, 1 under hand, 2 jump
+        long m_nShotType;            // 0x08, passed to Util_ServeBall_
+        long m_nCourse;              // 0x0C, the driver's answer to message 0x8B (-1: none)
+        CBall *m_pBall;              // 0x10, the ball served
+        // 0x14: bit 0 the ball is served, 1 the button was pressed, 0x100
+        // and 0x200 the serve guides are shown.
+        unsigned long m_nFlag;
+        CChrCore::ROT_LERP1 m_RotLerp; // 0x18, the turn to the target
+        float m_fRotY;               // 0x28, the direction of the jump serve's run up
+        float m_fWait;               // 0x2C, frames left to wait
+        float m_fTossFrame;          // 0x30, the motion frame the ball is tossed at
+        float m_fShotFrame;          // 0x34, the motion frame the ball is hit at
+        bcs::FVEC3 m_TargetPos;      // 0x38, where the jump serve's toss goes
+        bcs::FVEC3 m_JumpPos;        // 0x44, where the jump goes
+        float m_fTargetRotY;         // 0x50, the yaw to the serve's target
+        float m_fMoveFrame;          // 0x54, frames of the move below
+        CC_DATA::CHR_PARAM::MOVE_PARAM m_MoveParam; // 0x58
+        CChrCore::DIR_MOVE m_DirMove; // 0x68
     };
 
     // (field names guessed; only what the character units read is mapped)

@@ -67,8 +67,12 @@ game/volley/unit_380D8.cpp:
 	.data       start:0x00002058 end:0x000020E0
 
 game/volley/unit_3B628.cpp:
-	.text       start:0x0003B628 end:0x0004377C
-	.rodata     start:0x00001A20 end:0x00001B48
+	.text       start:0x0003B628 end:0x00041204
+	.rodata     start:0x00001A20 end:0x00001AE8
+
+game/volley/unit_41204.cpp:
+	.text       start:0x00041204 end:0x0004377C
+	.rodata     start:0x00001AE8 end:0x00001B48
 	.data       start:0x000020E0 end:0x00002130
 
 game/volley/unit_4377C.cpp:

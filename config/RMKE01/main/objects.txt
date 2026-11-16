@@ -130,3 +130,5 @@ Equivalent game/msw/CStageScroll.cpp
 Equivalent game/msw/CLytCtrl.cpp
 Matching game/msw/CMainStep.cpp
 Equivalent game/bcs/CMainApp.cpp
+Equivalent game/msw/CTrophyObj.cpp flags=noauto
+Equivalent game/msw/CNpcBombCannon.cpp

@@ -107,3 +107,4 @@ Equivalent game/volley/CGameVolley.cpp
 Equivalent game/volley/CCockpitVolleyRhythmA.cpp
 Equivalent game/volley/unit_3B628.cpp
 Equivalent game/volley/unit_41204.cpp
+Equivalent game/volley/CNpcGhostVolley.cpp

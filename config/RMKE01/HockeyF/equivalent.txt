@@ -8,7 +8,10 @@ HockeyF AutoMoveTargetMarkerPos__Q23msw19CChrCoreHockeyLuigiFv near 99.7 registe
 HockeyF AutoMoveTargetMarkerPos__Q23msw20CChrCoreHockeySiromaFv near 99.8 [schedule] register allocation/order only (as the basket sibling)
 HockeyF Bubble_CalcCreatePos__Q23msw14CStageHockey11Fv unverified 79.0 branches, calls, constants and stores follow the original; the remaining difference is addressing: the original reaches fPaRadius and the 0.0f literal through one kept rodata base register (r31, so it saves r27-r31 with _savegpr_27), ours marks fPaRadius weak and loads each constant with lis/@l; under 85% so left unverified
 HockeyF CalcPos___Q33msw11CC09_HOCKEY22CcKinopioBoundMushroomFv near 99.4 register choice/scheduling in paired-single FVEC3Add and angle wraps (as VolleyF)
+HockeyF CanMoveToTarget_BlueLine__Q23msw17CComDrvHockeyGameFQ23bcs5FVEC3l near 99.0 [stack] register allocation/order only
 HockeyF CheckStickParam__Q23msw16CChrDrvPadHockeyFv near 96.4 float register choice and one swapped independent store/load pair
+HockeyF CheckSwitchRangeForCOM__Q23msw17CComDrvHockeyGameFRQ23msw17DEFENSE_CORE_DATARl near 99.7 [schedule] register allocation/order only
+HockeyF CheckSwitchRangeForPad__Q23msw17CComDrvHockeyGameFRQ23msw17DEFENSE_CORE_DATA near 98.4 [schedule] register allocation/order only
 HockeyF ConveyorUpdate__Q23msw14CStageHockey09Ff near 99.9 99.9%: register choice only (bomb flag held in r21 vs r10); same instructions and order otherwise
 HockeyF Conveyor_OnStart__Q23msw14CStageHockey09FlQ43msw12CStage09Base9CConveyor8FLOW_DIRif near 98.8 98.8%: register choice and load order of the two EV_INTERVAL globals before BCS_RandMax; same arithmetic and calls
 HockeyF CreateBallIcon__Q23msw18CRadarIcon2DHockeyFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc near 99.9 [real, reviewed] reviewer confirmed: r14/r15 swapped consistently, same arguments, tests and stores; pane-name label name
@@ -34,6 +37,8 @@ HockeyF Disp__Q23msw19CBallMarker2DHockeyFv near 99.3 register numbering and the
 HockeyF Disp__Q33msw33@unnamed@CCockpitHockeyClash_cpp@15CLeaveCountTaskFPQ23msw17CMenuPaneAccessorl near 99.1 [schedule] register allocation/order only
 HockeyF EffectCoinGetCreate___Q23msw17CGimmickManHockeyFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 96.9 [real, reviewed] reviewer confirmed: s_CoinGetRotSpeedStart is the original's bss 0x4A0 (same Start/End pairing in the static init); fmuls scheduled before a store, register numbering
 HockeyF GameResult_In__Q23msw14CCockpitHockeyFv near 99.1 99.1%: register choice only for the period words, loop pointers and result pointers (as CCockpitBasket::GameResult_In); same calls, constants, loads and stores
+HockeyF GetCharaTypeReachDist__Q23msw17CComDrvHockeyGameFv near 99.7 [real, reviewed] reviewer confirmed: branch sense only (bne vs beq, blocks swapped); 2.0f for type 9, 1.5f otherwise on both sides; the original's layout would reorder the pool
+HockeyF GetCloneNinja__Q23msw17CComDrvHockeyGameFRQ23bcs5FVEC3RQ23bcs5FVEC3 near 98.8 [registers] register allocation/order only
 HockeyF GetExisGreenShellDist__Q23msw17CComManHockeyGameFQ23bcs5FVEC3RfRQ23bcs5FVEC3 near 99.7 99.7%: stack slots of FallGShell_GetPos's returned temporary and the first XZ vector are exchanged; same instructions.
 HockeyF GetExisQPanelDist__Q23msw17CComManHockeyGameFlQ23bcs5FVEC3RfRQ23bcs5FVEC3 near 99.7 99.7%: stack slots of QPanel_GetPos's returned temporary and the first XZ vector are exchanged; same instructions.
 HockeyF GetFirstLookInfo_MultiPlay__Q23msw15CCameraHockeyCSFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 99.6 registers only: in the character loop the z*scale product and pos.x swap float registers and the load order of pos.z/scale differs (as CCameraBasketHB); same loads, stores and branches
@@ -45,10 +50,12 @@ HockeyF GetPanelMaxNum_Stage10__Q23msw17CComManHockeyGameFllQ23bcs5FVEC3fRQ23bcs
 HockeyF GetParam_FlashColor__Q23msw14CStageHockey15CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06/15 and DodgeF 15.
 HockeyF GetParam_FlashColor__Q23msw14CStageHockey16CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06/16 and DodgeF 15/16.
 HockeyF GetParam_IsShipRotEnable__Q23msw24CStageHockeyCrushSkate85CFv near 92.2 [real, reviewed] reviewer confirmed: ours normalises the long to bool, the original returns it raw; the only caller (CStageRotBase, vtable slot 0x74) tests it with cmpwi 0/bne, so behaviour is the same
+HockeyF GetSpShootCourse__Q23msw17CComDrvHockeyGameFQ23bcs5FVEC3 near 95.9 [schedule] register allocation/order only
 HockeyF GetTargetPos_Stage86__Q23msw15CComManHockeyCSFQ23bcs5FVEC3Q23bcs5FVEC3fff near 98.9 98.9%: our frame is 0x10 larger (one more 16-byte local slot) and the locals sit at other offsets; instructions otherwise the same.
 HockeyF GetTargetPos_Stage87__Q23msw15CComManHockeyCSFQ23bcs5FVEC3Q23bcs5FVEC3ff near 94.3 [real, reviewed] reviewer confirmed: same Atan2 arguments, wrap-loop constants and three result branches; PSVECSquareDistance inputs in shifted slots; pos loads moved after the sret zero stores (r3 vs r5 cannot alias); frame 0xe0 vs 0xd0
 HockeyF GetTargetPos_StageCommon__Q23msw15CComManHockeyCSFQ23bcs5FVEC3f near 90.8 90.8%: the zero/copy stores that initialise the five local vectors come in another order; same instructions, same slots.
 HockeyF GoalFlowUpdate__Q23msw14CStageHockey15Ff near 99.7 register numbering only (identical after renumbering), 99.7%
+HockeyF HockeyKeeperPosTrim__Q23msw17CComDrvHockeyGameFRQ23bcs5FVEC3 near 99.7 [schedule] register allocation/order only
 HockeyF InitGoalIcons__Q23msw22CRadarIcon2DHockeyGoalFPQ33msw22CRadarIcon2DHockeyGoal14ICON_PARAMETER near 98.8 register order of the two name-row pointers and where their increments are scheduled
 HockeyF InitPaneAnim__Q23msw19CCockpitHockeyClashFi near 90.5 [real, reviewed] reviewer confirmed: parent pane id 8/9 chosen with a branch (evaluated twice by the inline GetPane) where the original is branchless 9 + -(bAlt != 0); same values, calls and order, rest registers
 HockeyF InitParameters__Q23msw21CCockpitHockeyVSCountFv unverified 47.7 our compiler auto-inlines AttachPlayerNo and InitSetCountPane into it (the original calls them); with #pragma auto_inline off (scratch test, not kept) the function is 100%, so the body is right
@@ -62,12 +69,8 @@ HockeyF LoopStateLoop__Q33msw11CC15_HOCKEY19CcSiromaMagicCircleFv near 99.2 [sch
 HockeyF LoopState_OPEN__Q23msw28CStgGmk_Container_Act_HockeyFv near 99.8 schedule and float register numbering only
 HockeyF MainCamera_Normal__Q23msw15CCameraHockeyCSFv near 98.3 schedule and float register choice around the CalcCurveBlend calls, as BasketF CCameraBasketHB::MainCamera_Normal (98.5% near); calls, constants and memory accesses identical
 HockeyF MainCamera__Q23msw17CCameraHockeyGameFv near 95.9 [real, reviewed] reviewer confirmed: register renaming, reordered independent loads and stores to distinct stack slots, jump-table names; same calls, offsets and constants
-HockeyF MainCrashSkate___Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG unverified 75.3 original calls UpdateCmdBuf_, ours inlines it (same effect); #pragma auto_inline off gives 100% but is not allowed under rule 3 (one function, not file-wide evidence)
-HockeyF MainDefense___Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG unverified 85.6 original calls UpdateCmdBuf_, ours inlines it (same effect); #pragma auto_inline off gives 100% but is not allowed under rule 3 (one function, not file-wide evidence)
 HockeyF MainFunc__Q23msw9CFightingFf near 99.4 [real, reviewed] reviewer confirmed: andi./bne vs andi./cntlzw/srwi./beq is the same condition with the same target (epilogue, r0 not read); temporary register choice and independent stack store order
 HockeyF MainFunc__Q33msw11CC05_HOCKEY16CcWarioSmokeBombFf near 95.8 stack slots (frame 0x80 vs 0x60) and register order only; same as the Basket/Volley/Dodge copies
-HockeyF MainOffenseOnBall___Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG unverified 93.0 original calls UpdateCmdBuf_, ours inlines it (same effect); #pragma auto_inline off gives 100% but is not allowed under rule 3 (one function, not file-wide evidence)
-HockeyF MainOffense___Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG unverified 89.0 original calls UpdateCmdBuf_, ours inlines it (same effect); #pragma auto_inline off gives 100% but is not allowed under rule 3 (one function, not file-wide evidence)
 HockeyF Main__Q23msw18CArrowSignalHockeyFv near 99.0 register choice and instruction order only (fmadds operand registers, order of the character position copy)
 HockeyF Main__Q23msw18CCockpitHockeyCoinFv near 98.8 register choice only: the loop counters and the pane-accessor temporary sit in r27/r28, the original's first loop counter in r30; same instructions otherwise
 HockeyF Main__Q23msw19CBallMarker2DHockeyFv near 97.5 [real, reviewed] reviewer confirmed: register numbering, cmpw operand order of an equality test, order of two independent loop increments, named static vs anonymous label; same offsets and widths
@@ -108,6 +111,7 @@ HockeyF ScoreOutWait__Q23msw18CCockpitHockeyCoinFv near 99.0 register choice onl
 HockeyF ScoreOutWait__Q23msw19CCockpitHockeyCoderFv near 99.0 register allocation only (loop counter and table pointer swap registers); same instructions and memory accesses
 HockeyF ScoreOut__Q23msw18CCockpitHockeyCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 HockeyF ScoreOut__Q23msw19CCockpitHockeyCoderFv near 99.0 register allocation only (loop counter and table pointer swap registers); same instructions and memory accesses
+HockeyF SearchingForTheEenemy__Q23msw17CComDrvHockeyGameFQ23bcs5FVEC3f near 99.5 [schedule] register allocation/order only
 HockeyF SendEvent__Q23msw22CRadarIcon2DHockeyGoalFlPv near 93.9 one mr scheduled before instead of after the branch
 HockeyF SendMessage__Q23msw14CStageHockey11Fllll near 99.8 instruction order only
 HockeyF SetCameraPosition__Q23msw17CCockpitHockeyMapFf near 99.9 register choice only: the two operands of one fmuls (sum and 0.5f) sit in swapped FPRs
@@ -172,7 +176,6 @@ HockeyF __ct__Q23msw24CStageHockeyCrushSkate86FPQ23bcs5CTask near 99.9 register 
 HockeyF __ct__Q33msw11CC03_HOCKEY19CcDaisyFlowerGardenFPQ23bcs5CTaskPQ23msw8CChrCorelRCQ23bcs5FVEC3 near 99.9 register allocation/order only (as BasketF/DodgeF siblings)
 HockeyF __ct__Q33msw11CC05_HOCKEY16CcWarioSmokeBombFPQ23bcs5CTaskPQ23msw8CChrCoreQ34nw4r3g3d7ResFileQ34nw4r3g3d7ResFilePCQ33msw7CC_DATA20ARTS_OPT_CREATE_INFORCQ23bcs5FVEC3RCQ23bcs10QUATERNIONRCQ23bcs5FVEC3 near 98.2 float register numbering and placement of one fmr/lfs pair only; same as the Basket/Volley/Dodge copies
 HockeyF __ct__Q33msw11CC15_HOCKEY19CcSiromaMagicCircleFPQ23bcs5CTaskPQ23msw8CChrCoreRCQ23bcs5FVEC3 near 98.4 [schedule] register allocation/order only (as the basket sibling)
-HockeyF __ct__Q33msw11CC15_HOCKEY22CcSiromaMagicCircleObjFPQ23bcs5CTaskPQ23bcs9CScnGrouplQ34nw4r3g3d7ResFile near 95.1 [real, reviewed] reviewer confirmed: ours has one extra stw 0 to m_File (0x34) from the ResFile default ctor, overwritten by the next store to the same offset; otherwise registers
 HockeyF __ct__Q33msw14GIMMICK_HOCKEY16CEffectCoinScoreFPQ23bcs5CTaskRCQ23bcs5FVEC3RCQ23bcs5FVEC3fl near 99.5 float register choice and one load scheduled differently
 HockeyF __dt__Q23bcs106CPool<Q33msw7STAGE1113CStgRndAnmObj,Q23bcs42CPoolNode<Q33msw7STAGE1113CStgRndAnmObj,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction order only (shared bcs/CPool.hpp, same as BasketF)
 HockeyF __dt__Q23bcs41CFixedPool<Ul,32,Q23bcs15CPoolNode<Ul,0>>Fv near 98.8 instruction order only (shared bcs/CPool.hpp, same as BasketF)
@@ -183,5 +186,12 @@ HockeyF __dt__Q33msw11CC15_HOCKEY19CcSiromaMagicCircleFv near 98.9 [schedule] re
 HockeyF __dt__Q33msw7STAGE1120CBgFirePillarClusterFv near 98.1 instruction order only (shared CStage11Base.hpp, same as BasketF)
 HockeyF __sinit_\CChrCoreHockeySlime_cpp unverified 84.3 register allocation and order of the colour-table stores (stmw of five registers instead of four stw); the twelve colours were decoded from the original and are the same
 HockeyF __sinit_\CShootMarker_cpp unverified 78.9 static initialiser of the two colour tables: same stores of the same constants to the same addresses, in another order and with other registers (78.9%)
+HockeyF getChargePlayerCore__Q23msw17CComDrvHockeyGameFv near 99.0 [registers] register allocation/order only
+HockeyF isComCombination__Q23msw17CComDrvHockeyGameFv near 99.7 [stack] register allocation/order only
+HockeyF isEnemyPass__Q23msw17CComDrvHockeyGameFv near 99.5 [schedule] register allocation/order only
+HockeyF isEnterMagicCircle__Q23msw17CComDrvHockeyGameFQ23bcs5FVEC3RQ23bcs5FVEC3 near 99.0 [schedule] register allocation/order only
+HockeyF isEnterSmokeScreen__Q23msw17CComDrvHockeyGameFv near 99.2 [schedule] register allocation/order only
 HockeyF isExistScorePanelNowPos__Q23msw17CComManHockeyGameFQ23bcs5FVEC3 near 99.6 99.6%: the two XZ vectors' stack slots are exchanged (and their stores ordered accordingly).
 HockeyF isExistScorePanel__Q23msw17CComManHockeyGameFllQ23bcs5FVEC3fRQ23bcs5FVEC3Rf unverified 82.2 82.2%: only the copy of the by-value FVEC3 argument differs: the original loads x, y, z and then stores them, ours interleaves loads and stores (our FVEC3 copy constructor). Order only, but under 85%.
+HockeyF isFriendNearTargetGoal__Q23msw17CComDrvHockeyGameFf near 99.6 [registers] register allocation/order only
+HockeyF isNowFighting__Q23msw17CComDrvHockeyGameFv near 94.0 [schedule] register allocation/order only

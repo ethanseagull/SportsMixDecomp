@@ -515,7 +515,11 @@ game/msw/menu.cpp:
 	.sdata2     start:0x805C4108 end:0x805C4130
 
 game/msw/CTrophyObj.cpp:
-	.text       start:0x8019BEF0 end:0x8019CAE0
+	.text       start:0x8019BC7C end:0x8019CC80
+	.rodata     start:0x8043DCF0 end:0x8043DD28
+	.data       start:0x804807E8 end:0x80480A70
+	.sdata      start:0x805BFD90 end:0x805BFD9C
+	.sdata2     start:0x805C4130 end:0x805C4198
 
 game/msw/CCockpitModelTelop.cpp:
 	.text       start:0x8019CC80 end:0x8019DC9C
@@ -827,7 +831,9 @@ game/msw/CGameExDemoBase.cpp:
 	.sdata2     start:0x805C5CD0 end:0x805C5D78
 
 game/msw/CNpcBombCannon.cpp:
-	.text       start:0x8025599C end:0x80256614
+	.text       start:0x8025599C end:0x802567D8
+	.data       start:0x8048D598 end:0x8048D778
+	.sdata2     start:0x805C5D78 end:0x805C5D98
 
 game/msw/CNameMesg.cpp:
 	.text       start:0x802567D8 end:0x80258548

@@ -371,21 +371,59 @@ int msw::CCockpitBossCoder::SetupGame()
     long i;
 
     for (i = 0; i < nPlayerNum; i++) {
-        m_pPaneAccessor->PlayAnimation(sLifePane[m_nLayout][i].nGauge, animId, 1.0f, 0.0f, 1, 1);
+        LifeGaugeAnim(i, animId, 1.0f, 0.0f);
     }
     for (i = 0; i < nPlayerNum; i++) {
         SetOutTelop(i, 0);
     }
 
     for (long nTeam = teamNo; nTeam < TEAM_NUM; nTeam++) {
-        bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(sCoinPane[nTeam].nPower);
-
-        if (pObj != 0) {
-            pObj->PlayAnimation(ANIM_COIN_DOWN, 1.0f, 0.0f, 1, 1, 1);
-            pObj->PushNextAnimation(ANIM_COIN_DOWN_WAIT, 1.0f, 0.0f, 1, 1);
-        }
+        CoinBackAnim(nTeam);
     }
     return 0;
+}
+
+// Plain members, auto-inlined into their callers; the out-of-line copies are
+// stripped at link time, but their statics stay in .rodata here, as in the original.
+void msw::CCockpitBossCoder::GaugeBossLineAnim(long nAnim)
+{
+    // static-order swap: the original emits reset before recursive.
+    static const int reset = 1;
+    static const int recursive = 0;
+
+    m_pPaneAccessor->PlayAnimation(PANE_B_hp_Null, nAnim, 1.0f, 0.0f, recursive, reset);
+}
+
+void msw::CCockpitBossCoder::LifeGaugeAnim(long nPlayer, long nAnim, float fSpeed, float fFrame)
+{
+    // static-order swap: the original emits reset before recursive.
+    static const int reset = 1;
+    static const int recursive = 1;
+
+    m_pPaneAccessor->PlayAnimation(sLifePane[m_nLayout][nPlayer].nGauge, nAnim, fSpeed, fFrame, recursive, reset);
+}
+
+void msw::CCockpitBossCoder::CoinBackAnim(long nTeam)
+{
+    // static-order swap: the original emits reset before recursive.
+    static const int reset = 1;
+    static const int recursive = 1;
+
+    bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(sCoinPane[nTeam].nPower);
+
+    if (pObj != 0) {
+        pObj->PlayAnimation(ANIM_COIN_DOWN, 1.0f, 0.0f, recursive, reset, 1);
+        pObj->PushNextAnimation(ANIM_COIN_DOWN_WAIT, 1.0f, 0.0f, recursive, reset);
+    }
+}
+
+void msw::CCockpitBossCoder::BossLifeGaugeIn()
+{
+    // static-order swap: the original emits reset before recursive.
+    static const int reset = 1;
+    static const int recursive = 0;
+
+    m_pPaneAccessor->PlayAnimation(PANE_B_hp_Null, ANIM_GAUGE_IN, 1.0f, 0.0f, recursive, reset);
 }
 
 // The life gauges and the coin gauge's power pane slide together.
@@ -427,49 +465,49 @@ int msw::CCockpitBossCoder::LifeGaugeInWait()
 
 int msw::CCockpitBossCoder::BossGaugeOut()
 {
-    m_pPaneAccessor->PlayAnimation(PANE_B_hp_Null, ANIM_GAUGE_OUT, 1.0f, 0.0f, 0, 1);
+    GaugeBossLineAnim(ANIM_GAUGE_OUT);
     return 0;
 }
 
 int msw::CCockpitBossCoder::BossGaugeIn()
 {
-    m_pPaneAccessor->PlayAnimation(PANE_B_hp_Null, ANIM_GAUGE_IN, 1.0f, 0.0f, 0, 1);
+    GaugeBossLineAnim(ANIM_GAUGE_IN);
     return 0;
 }
 
 int msw::CCockpitBossCoder::BossGaugeOutWait()
 {
-    m_pPaneAccessor->PlayAnimation(PANE_B_hp_Null, ANIM_GAUGE_OUT_WAIT, 1.0f, 0.0f, 0, 1);
+    GaugeBossLineAnim(ANIM_GAUGE_OUT_WAIT);
     return 0;
 }
 
 int msw::CCockpitBossCoder::BossGaugeInWait()
 {
-    m_pPaneAccessor->PlayAnimation(PANE_B_hp_Null, ANIM_GAUGE_IN_WAIT, 1.0f, 0.0f, 0, 1);
+    GaugeBossLineAnim(ANIM_GAUGE_IN_WAIT);
     return 0;
 }
 
 int msw::CCockpitBossCoder::CoinOut()
 {
-    m_pPaneAccessor->PlayAnimation(PANE_SP_Null, ANIM_GAUGE_OUT, 1.0f, 0.0f, 0, 1);
+    SetSPGaugeAnim(ANIM_GAUGE_OUT);
     return 0;
 }
 
 int msw::CCockpitBossCoder::CoinIn()
 {
-    m_pPaneAccessor->PlayAnimation(PANE_SP_Null, ANIM_GAUGE_IN, 1.0f, 0.0f, 0, 1);
+    SetSPGaugeAnim(ANIM_GAUGE_IN);
     return 0;
 }
 
 int msw::CCockpitBossCoder::CoinOutWait()
 {
-    m_pPaneAccessor->PlayAnimation(PANE_SP_Null, ANIM_GAUGE_OUT_WAIT, 1.0f, 0.0f, 0, 1);
+    SetSPGaugeAnim(ANIM_GAUGE_OUT_WAIT);
     return 0;
 }
 
 int msw::CCockpitBossCoder::CoinInWait()
 {
-    m_pPaneAccessor->PlayAnimation(PANE_SP_Null, ANIM_GAUGE_IN_WAIT, 1.0f, 0.0f, 0, 1);
+    SetSPGaugeAnim(ANIM_GAUGE_IN_WAIT);
     return 0;
 }
 
@@ -515,6 +553,15 @@ void msw::CCockpitBossCoder::SetLifeValue(long nPlayer, float fLife, float fLife
             pLife2->PlayAnimation(animId, speed, fFrame2, recursive, reset, 1);
         }
     }
+}
+
+void msw::CCockpitBossCoder::SetSPGaugeAnim(long nAnim)
+{
+    // static-order swap: the original emits reset before recursive.
+    static const int reset = 1;
+    static const int recursive = 0;
+
+    m_pPaneAccessor->PlayAnimation(PANE_SP_Null, nAnim, 1.0f, 0.0f, recursive, reset);
 }
 
 void msw::CCockpitBossCoder::SetLifeGaugeAnim(long nPlayer, long nState)
@@ -1104,20 +1151,25 @@ int msw::CCockpitBossBallPower::LifeGaugeInWait()
 
 int msw::CCockpitBossBallPower::SetBallPowerValue(long nTeam, short nValue)
 {
-    m_pPaneAccessor->SetTextBoxString(sPowerPane[nTeam].nText, nValue, 0);
+    const PowerPane *pPane = &sPowerPane[nTeam];
+
+    m_pPaneAccessor->SetTextBoxString(pPane->nText, nValue, 0);
     return 0;
 }
 
 int msw::CCockpitBossBallPower::SetBallPowerValueColor(long nTeam, int bColor)
 {
-    ChangeTextFont(sPowerPane[nTeam].nText, bColor);
+    const PowerPane *pPane = &sPowerPane[nTeam];
+
+    ChangeTextFont(pPane->nText, bColor);
     return 0;
 }
 
 int msw::CCockpitBossBallPower::SetBallPowerState(long nTeam, long nState)
 {
-    static const int recursive = 0;
+    // static-order swap: the original emits reset before recursive.
     static const int reset = 1;
+    static const int recursive = 0;
 
     long nAnim;
 
@@ -1132,7 +1184,9 @@ int msw::CCockpitBossBallPower::SetBallPowerState(long nTeam, long nState)
             nAnim = ANIM_POWER_NORMAL;
             break;
     }
-    m_pPaneAccessor->PlayAnimation(sPowerPane[nTeam].nText, nAnim, 1.0f, 0.0f, recursive, reset);
+    const PowerPane *pPane = &sPowerPane[nTeam];
+
+    m_pPaneAccessor->PlayAnimation(pPane->nText, nAnim, 1.0f, 0.0f, recursive, reset);
     return 0;
 }
 
@@ -1182,7 +1236,8 @@ long msw::CCockpitBossBallPower::GetTargetInfo(long nTeam, bcs::FVEC3 &rPos, nw4
         return -1;
     }
 
-    nw4r::lyt::Pane *pPane = m_pPaneAccessor->GetPane(sPowerPane[nTeam].nText);
+    const PowerPane *pPowerPane = &sPowerPane[nTeam];
+    nw4r::lyt::Pane *pPane = m_pPaneAccessor->GetPane(pPowerPane->nText);
 
     if (pPane == 0) {
         return -2;

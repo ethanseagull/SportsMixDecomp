@@ -38,6 +38,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import diff  # noqa: E402
+import decomp_common as dc  # noqa: E402  (tools/decomp/decomp_common.py)
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 PY = ["py", "-3.12"]
@@ -105,10 +106,7 @@ def count_args(demangled):
 
 
 def index():
-    p = ROOT / "build" / "decomp" / "index_RMKE01.json"
-    if not p.exists():
-        sys.exit("no function index: run py -3.12 tools/decomp/index.py")
-    return json.loads(p.read_text(encoding="utf-8"))
+    return dc.load_index()
 
 
 def lookalikes(fn, module, no_copies, limit=2):

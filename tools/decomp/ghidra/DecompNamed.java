@@ -20,8 +20,23 @@ public class DecompNamed extends GhidraScript {
         DecompInterface ifc = new DecompInterface();
         ifc.setOptions(new DecompileOptions());
         ifc.openProgram(currentProgram);
+        // "@<file>" reads the names from a UTF-8 file, one per line: template
+        // names such as f<int, int> cannot pass through analyzeHeadless.bat
+        // (cmd reads < and > as redirections) nor serve as file names, so each
+        // result is written as fn<N>.c, N counting the names from 1.
+        java.util.List<String> names = new java.util.ArrayList<>();
         for (int i = 1; i < args.length; i++) {
-            String name = args[i];
+            if (args[i].startsWith("@")) {
+                for (String l : java.nio.file.Files.readAllLines(new File(args[i].substring(1)).toPath(),
+                                                                  java.nio.charset.StandardCharsets.UTF_8)) {
+                    if (!l.trim().isEmpty()) names.add(l.trim());
+                }
+            } else {
+                names.add(args[i]);
+            }
+        }
+        for (int i = 1; i <= names.size(); i++) {
+            String name = names.get(i - 1);
             Function fn = null;
             SymbolIterator it = currentProgram.getSymbolTable().getSymbols(name);
             while (it.hasNext() && fn == null) {
@@ -43,7 +58,7 @@ public class DecompNamed extends GhidraScript {
             }
             DecompileResults r = ifc.decompileFunction(fn, 120, monitor);
             String text = r.decompileCompleted() ? r.getDecompiledFunction().getC() : ("// failed: " + r.getErrorMessage());
-            try (FileWriter w = new FileWriter(new File(out, name + ".c"))) {
+            try (FileWriter w = new FileWriter(new File(out, "fn" + i + ".c"))) {
                 w.write(text);
             }
             println("OK " + name + " -> " + fn.getName(true));

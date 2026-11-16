@@ -30,6 +30,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+import decomp_common as dc  # noqa: E402  (tools/decomp/decomp_common.py)
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 SCRIPTS = Path(__file__).resolve().parent / "ghidra"
@@ -61,7 +62,7 @@ def main():
         sys.exit(f"the GameCubeLoader extension is missing from {ghidra}\\Ghidra\\Extensions")
 
     base = ROOT / "build" / args.version
-    index = json.loads((ROOT / "build" / "decomp" / f"index_{args.version}.json").read_text(encoding="utf-8"))
+    index = dc.load_index(args.version)
     hits = [f for f in index if f["name"] == args.function and args.module in (None, f["module"])]
     if not hits:
         sys.exit(f"{args.function} not found in the index (rebuild it with tools/decomp/index.py)")
@@ -79,11 +80,14 @@ def main():
     headless = ghidra / "support" / ("analyzeHeadless.bat" if os.name == "nt" else "analyzeHeadless")
     cmd = [str(headless), str(tmp), "draft", "-import", str(obj),
            "-processor", LANGUAGE, "-cspec", "default",
-           "-scriptPath", str(SCRIPTS), "-postScript", "DecompNamed.java", str(tmp / "out"), args.function,
-           "-deleteProject"]
+           "-scriptPath", str(SCRIPTS), "-postScript", "DecompNamed.java", str(tmp / "out"),
+           "@" + str(tmp / "names.txt"), "-deleteProject"]
+    # The name goes through a file: template names (f<int, int>) are broken by
+    # cmd's parsing of analyzeHeadless.bat and are not valid file names.
+    (tmp / "names.txt").write_text(args.function + "\n", encoding="utf-8")
     try:
         res = subprocess.run(cmd, capture_output=True, text=True, env=env, timeout=600)
-        out = tmp / "out" / (args.function + ".c")
+        out = tmp / "out" / "fn1.c"
         if not out.exists():
             log = res.stdout + res.stderr
             found = [l for l in log.splitlines() if "NOT FOUND" in l or "ERROR" in l and "REL" not in l and "RSO" not in l]

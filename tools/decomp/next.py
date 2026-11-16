@@ -26,6 +26,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from copies import Copies  # noqa: E402
 import equivalent  # noqa: E402
+import decomp_common as dc  # noqa: E402  (tools/decomp/decomp_common.py)
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 BUILD = "py -3.12 tools/decomp/build.py"
@@ -90,7 +91,7 @@ def main():
     if not report_path.exists():
         print(f"NEXT: run the full build, there is no report yet\n  {BUILD}")
         return
-    report = json.loads(report_path.read_text(encoding="utf-8"))
+    report = dc.load_report(args.version)
     try:
         copies = Copies(args.version, report)
     except (OSError, ValueError):

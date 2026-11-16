@@ -32,6 +32,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+import decomp_common as dc  # noqa: E402  (tools/decomp/decomp_common.py)
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 NEAR_MIN = 85.0
@@ -49,7 +50,14 @@ def load(version="RMKE01"):
         for line in p.read_text(encoding="utf-8").splitlines():
             parts = line.split(None, 4)
             if len(parts) >= 4 and not line.startswith("#"):
-                out[(parts[0], parts[1])] = (parts[2], float(parts[3]), parts[4] if len(parts) > 4 else "")
+                key = (parts[0], parts[1])
+                new = (parts[2], float(parts[3]), parts[4] if len(parts) > 4 else "")
+                # The files merge with git's union driver (.gitattributes), so one
+                # function can appear twice after a merge: keep the higher score,
+                # and near over unverified at the same score. save() writes one line.
+                old = out.get(key)
+                if old is None or (new[1], new[0] == "near") > (old[1], old[0] == "near"):
+                    out[key] = new
     return out
 
 
@@ -69,7 +77,7 @@ def save(version, entries, modules=None):
 
 
 def scores(version):
-    report = json.loads((ROOT / "build" / version / "report.json").read_text(encoding="utf-8"))
+    report = dc.load_report(version)
     out = {}
     for unit in report["units"]:
         module = unit["name"].partition("/")[0]
@@ -81,7 +89,7 @@ def scores(version):
 
 def units_of(version):
     """{(module, function): unit name without the module prefix}"""
-    report = json.loads((ROOT / "build" / version / "report.json").read_text(encoding="utf-8"))
+    report = dc.load_report(version)
     out = {}
     for unit in report["units"]:
         module, _, name = unit["name"].partition("/")

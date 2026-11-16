@@ -42,6 +42,7 @@ import subprocess
 import sys
 from collections import Counter
 from pathlib import Path
+import decomp_common as dc  # noqa: E402  (tools/decomp/decomp_common.py)
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 INSN = re.compile(r"^/\* .*?\*/\t(\S+)(?:\s+(.*))?$")
@@ -51,7 +52,7 @@ NUM = re.compile(r"(?<![\w(])-?0x[0-9a-fA-F]+|(?<![\w(r])\b\d+\b(?!\()")
 
 
 def report_units(version):
-    report = json.loads((ROOT / "build" / version / "report.json").read_text(encoding="utf-8"))
+    report = dc.load_report(version)  # regenerated first if an object is newer
     out = {}
     for u in report["units"]:
         module, _, name = u["name"].partition("/")
@@ -341,13 +342,11 @@ def _code_hashes():
     global _CODE
     if _CODE is None:
         _CODE = {}
-        p = ROOT / "build" / "decomp" / "index_RMKE01.json"
-        if p.exists():
-            for f in json.loads(p.read_text(encoding="utf-8")):
-                # the index hash masks symbol names, so only functions that refer to
-                # none (no call, branch or address) are known to be the same bytes
-                if not set(f["ops"].split()) & {"bl", "b", "lis", "bctrl"}:
-                    _CODE.setdefault(f["name"], set()).add(f["hash"])
+        for f in dc.load_index():
+            # the index hash masks symbol names, so only functions that refer to
+            # none (no call, branch or address) are known to be the same bytes
+            if not set(f["ops"].split()) & {"bl", "b", "lis", "bctrl"}:
+                _CODE.setdefault(f["name"], set()).add(f["hash"])
     return _CODE
 
 

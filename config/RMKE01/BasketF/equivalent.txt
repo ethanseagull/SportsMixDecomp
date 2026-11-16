@@ -90,7 +90,7 @@ BasketF GetParam_FlashColor__Q23msw14CStageBasket16CFv unverified 63.3 Same valu
 BasketF GetParam_TTOffset__Q23msw14CStageBasket17CFv near 99.2 register choice inside the inlined FVEC3LenSq zero check of BCS_Vec_Normalize
 BasketF GetRotY_Pos1ToPos2XZ__Q23msw13CChrManBasketFRCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 100.0 [real, reviewed] reviewer: Single sdata2 load 0x68 vs 0x60; diff.py reports no data value difference.
 BasketF GetShotParam___Q23msw21CItemBallBasketGShellCFRQ33msw11BALL_BASKET10SHOT_PARAM near 99.8 99.8%: fmadds operand order only.
-BasketF HitCheckTrain__Q23msw17CComManBasketGameFRQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 99.7 original reloads lo.z from its stack slot inside the z swap, ours reuses the register holding the same value
+BasketF HitCheckTrain__Q23msw17CComManBasketGameFRQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 99.7 [real, reviewed] reviewer: Original reloads 0x70(r1) into a register already holding that value before storing to 0x64; redundant reload only.
 BasketF InRectAndRad___Q23msw13CChrManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3fff near 99.9 [real, reviewed] reviewer: Stack slot swap of two temporaries and 0x68 vs 0x60 pool offset holding the same value.
 BasketF IsRide__Q33msw14CStageBasket1010CPanelInfoCFRCQ23bcs5FVEC3 near 94.8 94.8%: stack vector stores in a different order
 BasketF JudgeJumpAttack____Q23msw16CGameGuideBasketFPCQ23msw8CChrCorePCQ23msw8CChrCore near 97.7 97.7: load order of the two state-queue words and two team bytes, float registers (schedule)

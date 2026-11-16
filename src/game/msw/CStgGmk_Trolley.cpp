@@ -438,10 +438,11 @@ namespace msw {
                     pMdl->SetMtx(mtx);
                 }
             }
-        }
-        CStgMdl *pMdl = GetMdl(0);
-        if (pMdl != 0) {
-            pMdl->SetMtx(GetSrt()->GetMtx());
+        } else {
+            CStgMdl *pMdl = GetMdl(0);
+            if (pMdl != 0) {
+                pMdl->SetMtx(GetSrt()->GetMtx());
+            }
         }
     }
 

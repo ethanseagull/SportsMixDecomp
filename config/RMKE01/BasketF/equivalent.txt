@@ -226,7 +226,7 @@ BasketF SubStateArtsShotPlayTrickMotion___Q23msw20CChrCoreBasketSiromaFPQ33msw14
 BasketF SubStateArtsShotReadyArtsShot___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK near 97.4 instruction order only: the fmr copies for Util_SetJumpParam's arguments and the fsubs are ordered differently
 BasketF SubStateArtsShotSetTrickJumpParam___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICKl near 95.7 register choice and fmr order only (fTop/fFrame registers swapped)
 BasketF SubStateDamageCtorBurn___Q23msw14CChrCoreBasketFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 94.9 94.9: SetCondition argument setup scheduled before the branch instead of after; same values
-BasketF SubStateDamageLoopDizzy___Q23msw14CChrCoreBasketFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 99.3 99.3: register numbering plus inline FsmqPushState reloads queue tail just stored by FsmqCutNext (same value)
+BasketF SubStateDamageLoopDizzy___Q23msw14CChrCoreBasketFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 99.3 [real, reviewed] reviewer: Ours reloads the same field 0x1c with no intervening store (one extra lwz); register numbering only.
 BasketF SubStateDashMove___Q23msw14CChrCoreBasketFRQ33msw14CChrCoreBasket15STATE_WORK_DASH near 99.5 99.5: load order of the two operands of one fadds
 BasketF SubStateDunkCmnAskLayupBranch___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNK near 99.9 99.9: one equivalent branch form
 BasketF SubStateDunkCmnDunk___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket15STATE_WORK_DUNK near 95.0 95.0: register choice and instruction order (schedule)

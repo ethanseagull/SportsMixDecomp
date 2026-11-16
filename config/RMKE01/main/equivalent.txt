@@ -274,7 +274,7 @@ main OpPushValue__Q33msw2vm6CVMCpuFv unverified 83.8 schedule/register only per 
 main OpRemoveBlock__Q33msw2vm6CVMCpuFv near 87.2 register allocation and instruction scheduling only
 main OpReturnBlock__Q33msw2vm6CVMCpuFv unverified 79.2 copy loop uses different induction variables, 6 instructions longer; same copies; two models tried
 main OpReturnValue__Q33msw2vm6CVMCpuFv near 97.8 register allocation and instruction scheduling only
-main Pause__Q23bcs8CSndTaskFfi near 98.1 unsigned range test 0x40<=id<=0x63 compiled as subi+cmplwi 0x23 where the original has two cmplwi; same result, rest identical
+main Pause__Q23bcs8CSndTaskFfi near 98.1 [real, reviewed] reviewer confirmed: subi 0x40; cmplwi 0x23 is the unsigned form of 0x40 <= id <= 0x63, same exits for every id
 main PlayAnim__Q33bcs3G2D10CLayoutObjFlff near 96.5 register allocation only: nAnim/this/transform pointer permuted across r29-r31; same calls, constants and accesses
 main PlayGameResultBGM___Q23msw5CGameFv near 90.3 team results compared unsigned (bytes, same values), party-game test as cmplwi instead of cntlzw, base register vs @l addressing, one sign extension shared
 main PlayImpl__Q23bcs10CAnmMotionFQ34nw4r3g3d9ResAnmChrUllPCQ33bcs14CAnmObjMotBase12MOT_TRG_LISTfff near 99.6 register choice and instruction order only

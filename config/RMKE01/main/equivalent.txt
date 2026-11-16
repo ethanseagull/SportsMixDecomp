@@ -85,7 +85,7 @@ main CtorState_BREAK__Q23msw16CStgGmk_Case_ActFv near 96.7 [real, reviewed] revi
 main CtorState_BREAK__Q23msw17CStgGmk_Pylon_ActFv near 100.0 store order of the three equal FVEC3 components (x stored last in the original); same values
 main CtorState_BREAK__Q23msw19CStgGmk_Pinball_ActFv near 94.5 [real, reviewed] reviewer confirmed: null cluster from a callee-saved register already 0 instead of a separate li 0; same calls and arguments
 main CtorState_MOVE__Q23msw16CStgGmk_Case_ActFv near 93.9 the CStgSrt flag store is scheduled after the vector stores in the original; stack slots of the two velocity limit vectors swapped
-main CtorState_MOVE__Q23msw17CStgGmk_Pylon_ActFv near 92.3 original keeps the local CGmkRef in memory (dead vptr store at sp+8, parent read back); ours in a register, so FVEC3 temporaries' stack slots shift
+main CtorState_MOVE__Q23msw17CStgGmk_Pylon_ActFv near 92.3 [real, reviewed] reviewer confirmed: original's dead stack store of a vtable pointer and a store/reload of m_pObj kept in a register; same calls, vtable slots, constants and stores; temporaries at other slots
 main CtorState_MOVE__Q23msw19CStgGmk_Pinball_ActFv near 98.9 [real, reviewed] reviewer confirmed: stack slots and extrwi. vs rlwinm. on the same bit only
 main DeleteJointObj__Q23bcs7CScnObjFv unverified 73.2 73.2%: inlining depth only (AppendDelayDeleteObject inlined one level deeper here); byte-identical under Wii/1.5 and 1.7
 main DemoSkipInputCheck__Q23msw5CGameFl unverified 80.3 80.3%: the pad-type switch (three identical bodies) is lowered differently; register choice
@@ -175,7 +175,7 @@ main IsPlayTypeCanChangeLeader__Q23msw5CGameFl unverified 77.4 switch compare tr
 main IsTurnTableOpen__Q23msw12CStage17BaseCFv near 99.8 fadds operands swapped in m_fRot + 10 degrees (commutative); otherwise identical
 main JudgeStickMove___Q23msw13CMenuPartListFllUlll near 92.7 [real, reviewed] reviewer confirmed: ushort-return clrlwi placed once at the top vs at each return, same truncation on every path; register numbering
 main LoadGameSnd__Q23msw8CGameSndFv near 99.1 r3/r4 swapped for the GameWork pointer and the zero stored to m_nStage; same stores, calls and branches
-main LoadLocInfoTbl__Q23msw20CStgGmk_PylonClusterFv near 97.9 addressing form: (pData+idx)[1] with +4/+8 offset vs slwi+lwzx; same value
+main LoadLocInfoTbl__Q23msw20CStgGmk_PylonClusterFv near 97.9 [real, reviewed] reviewer confirmed: lwzx with (i+1)<<2 vs add and lwz 4(base+i*4), same address and load
 main LookAt__Q23msw7CStgSrtFRCQ23bcs5FVEC3f near 98.5 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
 main LoopState5__Q23msw13CItemRouletteFv near 95.9 loop variable shares a register differently; register allocation only
 main LoopStateBreak__Q23msw11CItemBananaFv near 97.9 float register numbering and instruction order only (same code as CItemShellCmn::LoopStateBreak)

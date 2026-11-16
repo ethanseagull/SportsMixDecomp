@@ -7,8 +7,10 @@ BossF AddCoinValue__Q23msw16CCockpitBossCoinFlll near 99.0 register allocation o
 BossF CalcXZVel2__Q23msw9CBallBossCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3RQ23bcs5FVEC3RfRfffff near 97.1 registers only (one address computed earlier)
 BossF CallbackBallCatch2___Q23msw12CChrCoreBossFPQ23msw5CBall near 99.6 register numbering only (the no-hit bit word and the 1 << player shift)
 BossF CallbackBallCatch___Q23msw12CChrCoreBossFPQ23msw5CBall near 96.5 [real, reviewed] reviewer confirmed: inverted branch layout only (same condition bits), same constant, calls and offsets
+BossF CallbackBallReflect___Q23msw16CNpcBehemothBossFPQ23msw13CCollBodyUnitPQ23msw5CBall near 98.9 [schedule] register allocation/order only
 BossF CallbackBodyPush___Q23msw16CNpcBehemothBossFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 94.3 [schedule] register allocation/order only
 BossF CallbackBodyPush___Q23msw9CBallBossFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 99.5 register choice inside the paired-single length-squared helper only
+BossF CallbackMotTrg___Q23msw16CNpcBehemothBossFPCQ33bcs14CAnmObjMotBase7MOT_TRG unverified 82.1 reviewer confirmed: pool base kept in a saved register vs two lis/addi, same literals and calls; under the 85% floor
 BossF CanbeSpike__Q23msw12CChrCoreBossCFi near 99.9 f29/f30 swapped (base height vs prediction frame); register choice only
 BossF ChangeTextFont__Q23msw21CCockpitBossBallPowerFli near 97.0 register allocation only (nPane and the pane accessor temporaries swap registers); same calls, constants, loads, stores and branches
 BossF CheckCollision___Q23msw9CBallBossFv near 98.6 instruction order/register allocation only
@@ -17,11 +19,16 @@ BossF CheckSlow___Q23msw12CChrCoreBossFv near 99.4 register numbering/instructio
 BossF CollSubCheckBG___Q23msw9CBallBossFRQ23bcs5FVEC3RQ23bcs5FVEC3 near 98.7 [real, reviewed] reviewer confirmed: stack slots, registers, a 16-bit vs int 0/1 hit flag (same branches), and ours reuses the 0x94 load the original repeats with no store between
 BossF CreateBallIcon__Q23msw16CRadarIcon2DBossFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc unverified 94.1 original frame is 0x80 (ours 0x50) and it stores a .rodata float (0.0f?) to stack slots 0x0C, 0x1C, 0x20 at entry: a local object (likely a vector/size passed by reference later) that our source lacks; the rest is the same calls in a slightly different block order with renumbered registers. Find that object before calling it correct
 BossF CreateCharaIcon__Q23msw16CRadarIcon2DBossFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc unverified 94.4 original frame is 0x80 (ours 0x50) and it stores a .rodata float (0.0f?) to stack slots 0x0C, 0x1C, 0x20 at entry: a local object (likely a vector/size passed by reference later) that our source lacks; the rest is the same calls in a slightly different block order with renumbered registers. Find that object before calling it correct
+BossF CreateEffect___Q33msw8BEHEMOTH20CMeteorTouchDownMarkFv near 98.2 [real, reviewed] reviewer confirmed: m_ahEffect[i] loaded before vs after CEffectCtrl::GetInstance, which does not write it
+BossF CreateMdlObj___Q23msw16CNpcBehemothBossFv near 99.4 [real, reviewed] reviewer confirmed: one lwz scheduled earlier; tables unnamed in the original, same data
 BossF CreateMiniTelop__Q23msw12CCockpitBossFllPQ23bcs5FVEC3 near 99.0 register choice and load order inside the inlined paired-single FVEC3Add (pos + offset); same operation; DodgeF copy differs the same way
+BossF Create__Q33msw8BEHEMOTH16CNpcBehemothFigaFUlRCQ23bcs5FVEC3RCQ23bcs5FVEC3PQ23msw8CChrCorel near 98.3 [schedule] register allocation/order only
 BossF CtorStateAppear__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFv near 99.9 register allocation only
 BossF CtorStateDunk___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss15STATE_WORK_DUNK near 91.2 register allocation/instruction order only (same instruction multiset; argument set-up for SubStateDunkCtor_ scheduled differently)
 BossF CtorStateJumpShoot__Q23msw12CChrCoreBossFv near 99.3 [real, reviewed] reviewer confirmed: ours reloads the value just stored at 0xc(r30) where the original copies it with fmr (same value, no store between); 15.0f same value in the pool
 BossF CtorStateReceive__Q23msw12CChrCoreBossFv near 95.9 register numbering and instruction order only (autopilot regs found no better declaration order)
+BossF DoDamage___Q23msw16CNpcBehemothBossFUllRCQ23bcs5FVEC3 near 99.9 [schedule] register allocation/order only
+BossF DoHoming___Q33msw8BEHEMOTH16CNpcBehemothFigaFf near 95.2 [schedule] register allocation/order only
 BossF DropBall___Q23msw12CChrCoreBossFf near 99.9 literal pool offsets only: the file's float pool lacks the literals of the functions not written yet, so constants sit at other offsets (same values)
 BossF EffectCoinGetCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 96.9 the inlined CEffectCoinGet ctor's 2*20 multiply (Twice) is scheduled after the m_fRotSpeed store in ours, before it in the original; the rotation-speed static is anonymous in the original; same values, calls and stores
 BossF EffectCoinScoreCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3RCQ23bcs5FVEC3l near 97.9 register choice only (loop counter and clamped count swap registers; one mr scheduled differently)
@@ -30,8 +37,10 @@ BossF FireReceiver___Q23msw19CChrCoreBossKinopioFv near 98.1 float registers in 
 BossF FuncMove___Q23msw9CBallBossFRQ23bcs5FVEC3RQ23bcs5FVEC3ff unverified 78.5 78.5: paired-single scheduling, ps_mr copies and temp slots differ; same operations seen, not proven (sonnet tried too)
 BossF GetAirTrickTargetPos___Q23msw12CChrCoreBossCFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3f near 98.9 register allocation/instruction order only
 BossF GetBasePos___Q23msw16CNpcBehemothBossFRQ23bcs5FVEC3 near 86.9 [schedule] register allocation/order only
+BossF GetBodyCollInfo__Q23msw16CNpcBehemothBossFRQ23bcs5FVEC3RQ23bcs5FVEC3 near 92.6 [real, reviewed] reviewer confirmed: return-value load scheduled into the paired-single ops; same operations and offsets
 BossF GetBossBallShotCollPos__Q23msw12CChrCoreBossCFlRQ23bcs5FVEC3Rf near 93.1 [real, reviewed] reviewer confirmed: one saved register more (_savegpr_26 vs 27), register naming, commuted ps_add operands; same calls, loads, stores
 BossF GetCrossPosCircleXZ__FQ23bcs5FVEC3Q23bcs5FVEC3Q23bcs5FVEC3fRfRQ23bcs5FVEC3 near 99.0 stack slots of the subtraction temporaries and the XZ copy swapped, register choice; same instructions otherwise
+BossF GetDistFromBasePos___Q23msw16CNpcBehemothBossFRCQ23bcs5FVEC3 unverified 83.7 reviewer confirmed register-only (one extra saved register for &vBase) but under the 85% floor
 BossF GetDistFromCenterPos___Q23msw16CNpcBehemothBossFRCQ23bcs5FVEC3 near 99.0 [schedule] register allocation/order only
 BossF GetFirstLookInfo_MultiPlay__Q23msw11CCameraBossFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 92.6 [real, reviewed] reviewer confirmed: stack offsets, registers, stfsux indexing vs stepped pointer over the same elements, and 12 stores to stack temporaries in the original that are never read; call arguments map one to one
 BossF GetHomePos__Q23msw11CComDrvBossFRQ23bcs5FVEC3 near 99.4 inlined ShoudEscFromBoss loads the queue tail before the head; register numbering in the inlined paired-single helpers; same instructions otherwise
@@ -97,6 +106,7 @@ BossF SetBallPowerValue__Q23msw21CCockpitBossBallPowerFls unverified 82.2 instru
 BossF SetBossLifePercent__Q23msw17CCockpitBossCoderFf near 100.0 [real, reviewed] reviewer confirmed: frameMax 30.0f read from another .rodata offset (0x7a8 vs 0x780, same value); instructions identical otherwise
 BossF SetChrReflectMode__Q23msw9CBallBossFlf near 99.6 instruction order/register allocation only
 BossF SetCoinValue__Q23msw16CCockpitBossCoinFll near 98.9 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
+BossF SetEffectAlphaRate___Q33msw8BEHEMOTH20CMeteorTouchDownMarkFf near 97.1 [real, reviewed] reviewer confirmed: m_ahEffect[i] loaded before vs after CEffectCtrl::GetInstance, which does not write it; registers
 BossF SetEndEffect__Q23msw25CItemBallChangeEffectBossFv near 21.7 tail call vs framed call only: reviewer confirmed: tail call vs framed call of bcs::CTaskMan::GetTask, same 0x34 argument, result returned unchanged; nothing else differs
 BossF SetFaceIcon__Q23msw17CCockpitBossCoderFPQ33bcs3G2D9CPaneCtrl near 96.3 instruction order and registers only: the chrNo array copy and the m_nPlayerNum load are scheduled differently; same calls, constants, loads, stores and branches
 BossF SetFaceIcon__Q23msw17CCockpitBossCoderFPQ33bcs3G2D9CPaneCtrlllPCQ23msw8CChrCore near 98.9 registers, plus the star pane's visible bit (Pane::SetVisible inline) is inserted with srwi+rlwimi instead of rlwinm+rlwimi: same byte value stored; all calls, constants, loads and branches the same
@@ -114,6 +124,8 @@ BossF Set__Q23msw17CCockpitBossCoderFv near 98.9 register allocation only: the l
 BossF Set__Q23msw21CCockpitBossBallPowerFv near 99.9 register allocation only: the accessor temporary of the final SetPaneDisp gets r4 instead of r5
 BossF SetupGame__Q23msw17CCockpitBossCoderFv near 99.7 register allocation only: the SetOutTelop loop counter gets a different register; same calls, constants, loads, stores and branches
 BossF ShotFiga___Q23msw16CNpcBehemothBossFv near 99.9 [schedule] register allocation/order only
+BossF ShotMeteor___Q23msw16CNpcBehemothBossFv near 96.1 [real, reviewed] reviewer confirmed: loop entry guard (cmpwi/ble) vs jump to the bottom test; same iterations
+BossF ShotThunderga___Q23msw16CNpcBehemothBossFv near 94.9 [schedule] register allocation/order only
 BossF SubStateAirTrickSetTrickMoveParam___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss20STATE_WORK_AIR_TRICKl near 99.2 register allocation/instruction order only
 BossF SubStateDunkCmnDunk___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss15STATE_WORK_DUNK near 95.3 register allocation/instruction order only (s_DunkMot index arithmetic scheduled differently)
 BossF SubStateDunkCmnMove___Q23msw12CChrCoreBossFPQ33msw12CChrCoreBoss15STATE_WORK_DUNK near 97.0 stack layout (frame 0xE0 vs 0xC0, locals in other slots), register allocation and instruction order only; same instruction multiset
@@ -139,10 +151,13 @@ BossF TrgGoalIn___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.
 BossF TrgReceive___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
 BossF TrgShootStart___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
 BossF UpdateCockpitCount___Q23msw9CGameBossFv near 92.4 [real, reviewed] reviewer confirmed: the original's g_GameWork.m_fUnk20 compare is dead (no branch reads cr0 before the next call); rest is register numbering
+BossF UpdateCollAtk___Q23msw16CNpcBehemothBossFv near 99.9 [real, reviewed] reviewer confirmed: a temporary FVEC3 in another stack slot; jump table unnamed
 BossF UpdateCollBody___Q23msw12CChrCoreBossFv near 97.5 [real, reviewed] reviewer confirmed: ours reuses the loaded 0x18/0x1c values the original reloads (no store or call between), register allocation and commuted ps_add/fmuls operands; every store the same value
+BossF UpdateCollBody___Q23msw16CNpcBehemothBossFv unverified 90.0 hip node index read lhz vs the original's lha+clrlwi 16 (same value below 0x8000); temporaries in other stack slots; two models found no source form
 BossF UpdateCollBody___Q23msw9CBallBossFv near 99.8 register allocation/instruction order only
 BossF UpdateFunc___Q23msw12CChrCoreBossFv near 99.7 register numbering only (diff.py: same instructions and relocations after renumbering)
 BossF UpdateHomePos__Q23msw11CComDrvBossFv near 94.3 [real, reviewed] reviewer confirmed: first loop indexes with lfsx and base+offset counters in the original, steps pointers in ours, over the same tables and member arrays in the same order; hence the saved-register count and frame size; raw call registers identical
+BossF UpdateLookAt___Q23msw16CNpcBehemothBossFiRCQ23bcs5FVEC3f unverified 86.8 original keeps bWiden=0 live and compiles the dead widening branch (~24 instructions); ours folds it; two models found no source form
 BossF UpdateLook___Q23msw12CChrCoreBossFv near 99.6 register numbering only (r3/r4 around the boss position and NpcSearch arguments)
 BossF Util_DunkStart___Q23msw12CChrCoreBossFllfl near 99.0 register allocation/instruction order only
 BossF Util_MissBall___Q23msw12CChrCoreBossFPQ23msw5CBallff unverified 76.3 the original keeps a dead test of a flag it sets to 1 (li r30,1 ... cmpwi r30,0; bne) and the Eff_CreateSimple(-1, ball pos, GetRotY(), 3, 0, 0) call behind it, which never runs; our compiler folds both away (written in the source as if (!bSent)). Rest register numbering
@@ -153,6 +168,8 @@ BossF __ct__Q23msw21CBallTargetMarkerBossFPQ23bcs5CTaskUli near 99.8 stack slots
 BossF __ct__Q33msw12GIMMICK_BOSS16CEffectCoinScoreFPQ23bcs5CTaskRCQ23bcs5FVEC3fl near 99.4 float register choice, one m_pMdl load scheduled differently (no store in between); same as the Basket/Hockey copies
 BossF __ct__Q33msw13CHR_CORE_BOSS9CStickObjFPQ23bcs5CTaskQ34nw4r3g3d6ResMdlPQ23bcs7CMdlObjll near 99.9 stack slots only: the four SetState pointer-to-member temporaries are copied to different stack offsets; same values, stores and calls
 BossF __ct__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFPQ23bcs5CTaskRCQ23bcs5FVEC3l near 99.9 stack slots of the pointer-to-member temporaries of SetState differ; same values stored to the state table
+BossF __ct__Q33msw8BEHEMOTH21CNpcBehemothThundergaFPQ23bcs5CTaskRCQ23bcs5FVEC3RCQ23bcs5FVEC3l near 92.1 [real, reviewed] reviewer confirmed: the original's extra dead stores to unused stack slots; same values passed
 BossF __dt__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFv near 99.0 register allocation only (one register of the inlined CFsm destructor)
+BossF __dt__Q33msw8BEHEMOTH16CNpcBehemothFigaFv near 89.8 [real, reviewed] reviewer confirmed: zero for m_hEffect held in a saved register; same stores and calls
 BossF __dt__Q33msw8BEHEMOTH20CMeteorTouchDownMarkFv near 98.8 [registers] register allocation/order only
 BossF __sinit_\CChrCoreBoss_cpp near 100.0 [real, reviewed] reviewer confirmed: 1.2f read from another pool offset (0xdc vs 0xd0), same value; instructions identical otherwise

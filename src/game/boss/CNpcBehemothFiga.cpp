@@ -89,18 +89,6 @@ namespace msw {
         {
             return nw4r::math::FSqrt(rVec.x * rVec.x + rVec.z * rVec.z);
         }
-
-        // The effect of handle hEffect; null when there is none.
-        inline CEffectCluster *FindEffect(unsigned long hEffect)
-        {
-            CEffectCluster *pEff;
-            if (hEffect != 0) {
-                pEff = CEffectCtrl::GetInstance()->FindList(hEffect);
-            } else {
-                pEff = 0;
-            }
-            return pEff;
-        }
     }
 
     // The model nodes of CNpcBehemothBoss::VNODE_NUM (GetVNodePos).
@@ -345,10 +333,12 @@ namespace msw {
         bcs::BCS_Vec_Normalize(m_Velocity, m_Velocity);
         bcs::FVEC3Scale(&m_Velocity, &m_Velocity, 0.4166667f);
         m_hEffect = CEffectCtrl::CreateAttachEffect(0x544, 0, 0, 0, 1, 0, 0, 3, 0, 0, 0);
-        CEffectCluster *pEff = FindEffect(m_hEffect);
-        if (pEff != 0) {
-            pEff->SetTranslate(&m_Pos);
-            SetEffectRot_(pEff);
+        if (m_hEffect != 0) {
+            CEffectCluster *pEff = CEffectCtrl::GetInstance()->FindList(m_hEffect);
+            if (pEff != 0) {
+                pEff->SetTranslate(&m_Pos);
+                SetEffectRot_(pEff);
+            }
         }
         m_hSe = CGameSnd::Play(0xDFB, &m_Pos, 1, -1, 0.0f, 1.0f, 0.0f);
         m_AtkColl.Create(1, 5, 0, hOwner);
@@ -364,11 +354,15 @@ namespace msw {
     void CNpcBehemothFiga::Main()
     {
         if (m_nStep == 0) {
+            // Unused: the original's copy survives as dead stack stores.
+            bcs::FVEC3 vOldPos = m_Pos;
             int bLanded = DoHoming_(GetFrameRateF());
-            CEffectCluster *pEff = FindEffect(m_hEffect);
-            if (pEff != 0) {
-                pEff->SetTranslate(&m_Pos);
-                SetEffectRot_(pEff);
+            if (m_hEffect != 0) {
+                CEffectCluster *pEff = CEffectCtrl::GetInstance()->FindList(m_hEffect);
+                if (pEff != 0) {
+                    pEff->SetTranslate(&m_Pos);
+                    SetEffectRot_(pEff);
+                }
             }
             m_AtkColl.SetPosAll(m_Pos);
             if (bLanded) {
@@ -398,15 +392,16 @@ namespace msw {
         float fSpeed = bcs::BCS_Vec_GetLen(m_Velocity);
         if (m_pTarget != 0) {
             float fMaxRot = 0.13962634f;
+            bcs::FVEC3 vTo;
+            bcs::FVEC3 vDir;
+            bcs::FVEC3 vToDir;
             bcs::FVEC3 vTarget;
             m_pTarget->GetTransNodePos(vTarget);
             vTarget.y += 1.0f;
-            bcs::FVEC3 vTo;
             bcs::FVEC3Sub(&vTo, &vTarget, &m_Pos);
-            if (bcs::BCS_Vec_GetLen(vTo) > m_fHomingDist) {
-                bcs::FVEC3 vDir;
+            // Not nearer than m_fHomingDist (a NaN length still turns).
+            if (!(bcs::BCS_Vec_GetLen(vTo) <= m_fHomingDist)) {
                 bcs::BCS_Vec_Normalize(vDir, m_Velocity);
-                bcs::FVEC3 vToDir;
                 bcs::BCS_Vec_Normalize(vToDir, vTo);
                 float fCos = bcs::FVEC3Dot(&vDir, &vToDir);
                 if (fCos >= nw4r::math::CosFIdx(NW4R_MATH_RAD_TO_FIDX(fMaxRot))) {
@@ -421,7 +416,11 @@ namespace msw {
                     float fCosH;
                     nw4r::math::SinCosFIdx(&fSin, &fCosH, NW4R_MATH_RAD_TO_FIDX(0.5f * fMaxRot));
                     bcs::QUATERNION qRot = {vTo.x * fSin, vTo.y * fSin, vTo.z * fSin, fCosH};
-                    bcs::QUATERNION qDir = {vDir.x, vDir.y, vDir.z, 0.0f};
+                    bcs::QUATERNION qDir;
+                    qDir.x = vDir.x;
+                    qDir.y = vDir.y;
+                    qDir.z = vDir.z;
+                    qDir.w = 0.0f;
                     bcs::QUATERNION qInv = {-vTo.x * fSin, -vTo.y * fSin, -vTo.z * fSin, fCosH};
                     PSQUATMultiply((const Quaternion *)&qRot, (const Quaternion *)&qDir, (Quaternion *)&qDir);
                     PSQUATMultiply((const Quaternion *)&qDir, (const Quaternion *)&qInv, (Quaternion *)&qDir);
@@ -463,7 +462,7 @@ namespace msw {
         m_AtkColl.SetTargetFlagAll(2);
         m_AtkColl.SetRadiusAll(CComMan::GetDatF(0x20, 0L));
         m_AtkColl.SetAtkPowerAll(CComMan::GetDatF(0x23, nLv));
-        bcs::FVEC3 vPos = m_vPos;
+        bcs::FVEC3 vPos = m_vPos; // a local copy, as the original passes one
         vPos.y = 20.0f;
         m_AtkColl.SetPos(0, vPos, vPos);
         m_AtkColl.SetEnableAll();
@@ -478,7 +477,7 @@ namespace msw {
     {
         m_fWait -= GetFrameRateF();
         if (m_fWait <= 0.0f) {
-            bcs::FVEC3 vPos = m_vPos;
+            bcs::FVEC3 vPos = m_vPos; // a local copy, as the original passes one
             if (m_nCount > 1) {
                 float fRot = RoundRad(bcs::BCS_RandMax(6.2831855f));
                 bcs::BCS_VecZ_RotY(vPos, 5.0f * bcs::BCS_RandRange(0.2f, 0.4f), fRot);
@@ -488,9 +487,12 @@ namespace msw {
             if (m_nCount == m_nCountMax) {
                 CGameSnd::Play(0xDFC, m_vPos, 1, -1, 0.0f, 1.0f, 0.0f);
             }
-            CEffectCluster *pEff = FindEffect(CEffectCtrl::CreateEffect(0x549, 3, 0, 0, 0));
-            if (pEff != 0) {
-                pEff->SetTranslate(&vPos);
+            unsigned long hEffect = CEffectCtrl::CreateEffect(0x549, 3, 0, 0, 0);
+            if (hEffect != 0) {
+                CEffectCluster *pEff = CEffectCtrl::GetInstance()->FindList(hEffect);
+                if (pEff != 0) {
+                    pEff->SetTranslate(&vPos);
+                }
             }
             m_AtkColl.SetPos2(0, m_vPos);
             m_nCount--;
@@ -708,14 +710,17 @@ namespace msw {
     {
         m_ahEffect[1] = CEffectCtrl::CreateAttachEffect(0x53C, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0);
         for (long i = 0; i < EFFECT_NUM; i++) {
-            CEffectCluster *pEff = CEffectCtrl::GetInstance()->FindList(m_ahEffect[i]);
+            CEffectCluster *pEff = CEffectCtrl::GetObject(m_ahEffect[i]);
             if (pEff != 0) {
                 pEff->SetTranslate(&m_vPos);
                 pEff->SetRotateRad(&m_vRot);
             }
         }
         for (long i = 0; i < 2; i++) {
-            CEffectCluster *pEff = FindEffect(m_ahEffect[i]);
+            if (m_ahEffect[i] == 0) {
+                continue;
+            }
+            CEffectCluster *pEff = CEffectCtrl::GetObject(m_ahEffect[i]);
             if (pEff != 0) {
                 long nNum = pEff->GetMdlObjNum();
                 for (long j = 0; j < nNum; j++) {
@@ -738,7 +743,7 @@ namespace msw {
     {
         float fAlpha = fRate > 1.0f ? 1.0f : (fRate < 0.0f ? 0.0f : fRate);
         for (long i = 0; i < EFFECT_NUM; i++) {
-            CEffectCluster *pEff = CEffectCtrl::GetInstance()->FindList(m_ahEffect[i]);
+            CEffectCluster *pEff = CEffectCtrl::GetObject(m_ahEffect[i]);
             if (pEff != 0) {
                 long nNum = pEff->GetMdlObjNum();
                 for (long j = 0; j < nNum; j++) {
@@ -1199,14 +1204,15 @@ namespace msw {
         }
         bcs::FVEC3 vPos = pColl->GetPos();
         bcs::FVEC3 vSize = pColl->GetSize();
+        float fRotY = pColl->m_fRotY;
         if (vSize.x < vSize.z) {
             bcs::FVEC3 vOfs;
-            bcs::BCS_VecZ_RotY(vOfs, vSize.z - vSize.x, pColl->m_fRotY);
+            bcs::BCS_VecZ_RotY(vOfs, vSize.z - vSize.x, fRotY);
             bcs::FVEC3Add(&rTop, &vPos, &vOfs);
             bcs::FVEC3Sub(&rBottom, &vPos, &vOfs);
         } else {
             bcs::FVEC3 vOfs;
-            bcs::BCS_VecX_RotY(vOfs, vSize.x - vSize.z, pColl->m_fRotY);
+            bcs::BCS_VecX_RotY(vOfs, vSize.x - vSize.z, fRotY);
             bcs::FVEC3Add(&rTop, &vPos, &vOfs);
             bcs::FVEC3Sub(&rBottom, &vPos, &vOfs);
         }
@@ -1366,7 +1372,10 @@ namespace msw {
         if ((nState >= STATE_DAMAGE && nState <= STATE_KO) || nState == STATE_ARTS_EVENT) {
             return;
         }
-        if (!pBall->CanbeVsBossReflect() || pBall->GetShotTeamIdx() != 0) {
+        if (!pBall->CanbeVsBossReflect()) {
+            return;
+        }
+        if (pBall->GetShotTeamIdx() != 0) {
             return;
         }
         SetStopAttackTime(0.0f);
@@ -1464,16 +1473,14 @@ namespace msw {
                             pWork->m_vPos = rPos;
                             pWork->m_nKind = 2;
                         }
-                    } else if (bStick) {
-                        if (m_nSubStep == 1) {
-                            DAMAGE_WORK *pWork = static_cast<DAMAGE_WORK *>(FsmqSetState(STATE_DAMAGE));
-                            pWork->m_vPos = rPos;
-                            pWork->m_nKind = 2;
-                        }
-                    } else {
+                    } else if (bStick == 0) {
                         DAMAGE_WORK *pWork = static_cast<DAMAGE_WORK *>(FsmqSetState(STATE_DAMAGE));
                         pWork->m_vPos = rPos;
                         pWork->m_nKind = 1;
+                    } else if (m_nSubStep == 1) {
+                        DAMAGE_WORK *pWork = static_cast<DAMAGE_WORK *>(FsmqSetState(STATE_DAMAGE));
+                        pWork->m_vPos = rPos;
+                        pWork->m_nKind = 2;
                     }
                 }
             } else {
@@ -1582,9 +1589,7 @@ namespace msw {
                 break;
             default:
                 fPoint = 10.0f * (nCoin - 5) + 100.0f;
-                if (fPoint >= 999.0f) {
-                    fPoint = 999.0f;
-                }
+                fPoint = 999.0f > fPoint ? fPoint : 999.0f;
                 break;
             }
             long nPower = pBall->GetVsBossCoinPower();
@@ -1709,7 +1714,7 @@ namespace msw {
 
         FsmqExec();
 
-        bcs::FVEC3 vPos = m_vPos;
+        bcs::FVEC3 vPos = m_vPos; // a local copy, as the original passes one
         bcs::FVEC3 vNormal;
         float fTime;
         if (CCollMan::DetectMapHit(vPos, vNormal, fTime, m_vPos, m_vPos, -m_fUnk2B0, 3, 0x1000000)) {
@@ -1765,14 +1770,20 @@ namespace msw {
         bcs::FVEC3Add(&rPos, &m_vPos, &v);
     }
 
+    // The distance between rFrom and rTo in the XZ plane.
+    static inline float DistXZ(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo)
+    {
+        bcs::FVEC3 vFrom(rFrom.x, 0.0f, rFrom.z);
+        bcs::FVEC3 vTo(rTo.x, 0.0f, rTo.z);
+        return bcs::FVEC3Dist(&vFrom, &vTo);
+    }
+
     // The distance in the XZ plane from GetBasePos_ to rPos.
     float CNpcBehemothBoss::GetDistFromBasePos_(const bcs::FVEC3 &rPos)
     {
         bcs::FVEC3 vBase;
         GetBasePos_(vBase);
-        bcs::FVEC3 vFrom(vBase.x, 0.0f, vBase.z);
-        bcs::FVEC3 vTo(rPos.x, 0.0f, rPos.z);
-        return bcs::FVEC3Dist(&vFrom, &vTo);
+        return DistXZ(vBase, rPos);
     }
 
     // The distance in the XZ plane from the boss to rPos.
@@ -1789,12 +1800,8 @@ namespace msw {
     {
         if (m_pMdl != 0) {
             AnimPlay(1, 0, 0.0f, 0.0f);
-            m_pMdl->m_vTrans.x = 0.0f;
-            m_pMdl->m_vTrans.y = 0.0f;
-            m_pMdl->m_vTrans.z = 0.0f;
-            m_pMdl->m_fRotX = 0.0f;
-            m_pMdl->m_fRotY = 0.0f;
-            m_pMdl->m_fRotZ = 0.0f;
+            m_pMdl->SetTrans(0.0f, 0.0f, 0.0f);
+            m_pMdl->SetRot(0.0f, 0.0f, 0.0f);
             m_pMdl->UpdateFrame(0.0f);
             m_pMdl->CalcRootMtx();
             m_pMdl->CalcWorldMatrixAll(0);
@@ -2000,7 +2007,8 @@ namespace msw {
             if (m_Unk260 != 0) {
                 float fPower = GetDatF(0x209, GetLvI());
                 m_pAtkColl->SetEnable(3);
-                m_pAtkColl->SetPos(3, m_vPos);
+                bcs::FVEC3 vPos = m_vPos; // a local copy, as the original passes one
+                m_pAtkColl->SetPos(3, vPos);
                 m_pAtkColl->SetSize(3, bcs::FVEC3(x * GetParamScale(), y * GetParamScale(), z * GetParamScale()));
                 m_pAtkColl->SetAtkPowerAll(fPower);
             }
@@ -2013,7 +2021,8 @@ namespace msw {
             if (m_Unk260 != 0) {
                 float fPower = GetDatF(0x177, GetLvI());
                 m_pAtkColl->SetEnable(3);
-                m_pAtkColl->SetPos(3, m_vPos);
+                bcs::FVEC3 vPos = m_vPos; // a local copy, as the original passes one
+                m_pAtkColl->SetPos(3, vPos);
                 m_pAtkColl->SetSize(3, bcs::FVEC3(x * GetParamScale(), y * GetParamScale(), z * GetParamScale()));
                 m_pAtkColl->SetAtkPowerAll(fPower);
             }
@@ -2112,7 +2121,8 @@ namespace msw {
                 float z = GetDatF(0x20F, 0);
                 float fPower = GetDatF(0x220, GetLvI());
                 m_pAtkColl->SetEnable(3);
-                m_pAtkColl->SetPos(3, m_vPos);
+                bcs::FVEC3 vPos = m_vPos; // a local copy, as the original passes one
+                m_pAtkColl->SetPos(3, vPos);
                 m_pAtkColl->SetSize(3, bcs::FVEC3(x, y, z));
                 m_pAtkColl->SetAtkPowerAll(fPower);
             }
@@ -2135,35 +2145,38 @@ namespace msw {
                 pBody->SetEnableAll();
                 float fFront = 2.0f;
 
-                bcs::FVEC3 vPos;
-                GetVNodePos(VNODE_HIP, vPos);
+                // The two bodies (0, 1): a point in front of the hip.
                 bcs::FVEC3 vOfs;
+                bcs::FVEC3 vPos;
+                bcs::FVEC3 vFrom;
+                bcs::FVEC3 vTo;
+                GetVNodePos(VNODE_HIP, vPos);
                 bcs::BCS_VecZ_RotY(vOfs, fFront, m_vRot.y);
                 bcs::FVEC3 vCenter;
-                bcs::FVEC3Add(&vCenter, &vPos, &vOfs);
+                bcs::FVEC3Sum(vCenter, vPos, vOfs);
                 vPos.x = vCenter.x;
                 vPos.z = vCenter.z;
                 vPos.y = vCenter.y - 6.0f;
-                bcs::FVEC3 vUnused = vCenter;
                 m_pBodyColl->SetPos(0, vPos);
                 m_pBodyColl->SetYRot(0, m_vRot.y);
                 m_pBodyColl->SetPos(1, vPos);
                 m_pBodyColl->SetYRot(1, m_vRot.y);
 
+                // The three capsules (2 to 4) across the body.
                 float fScale = GetParamScale();
-                bcs::FVEC3 vFrom(0.0f, fFront * fScale, -4.0f * fScale);
-                bcs::FVEC3 vTo(0.0f, fFront * fScale, 4.0f * fScale);
+                vFrom.Set(0.0f, fFront * fScale, -4.0f * fScale);
+                vTo.Set(0.0f, fFront * fScale, 4.0f * fScale);
                 bcs::BCS_Vec_RotY(vFrom, vFrom, m_vRot.y);
                 bcs::BCS_Vec_RotY(vTo, vTo, m_vRot.y);
                 GetVNodePos(VNODE_HIP, vPos);
                 bcs::BCS_VecZ_RotY(vOfs, fFront, m_vRot.y);
-                bcs::FVEC3Add(&vCenter, &vPos, &vOfs);
-                vPos.x = vCenter.x;
-                vPos.y = vCenter.y - 4.0f;
-                vPos.z = vCenter.z;
+                bcs::FVEC3 vCenter2;
+                bcs::FVEC3Sum(vCenter2, vPos, vOfs);
+                vPos.x = vCenter2.x;
+                vPos.y = vCenter2.y - 4.0f;
+                vPos.z = vCenter2.z;
                 bcs::FVEC3Add(&vFrom, &vFrom, &vPos);
                 bcs::FVEC3Add(&vTo, &vTo, &vPos);
-                vUnused = vCenter;
                 m_pBodyColl->SetPos(2, vFrom, vTo);
                 m_pBodyColl->SetPos(3, vFrom, vTo);
                 m_pBodyColl->SetPos(4, vFrom, vTo);
@@ -2397,7 +2410,7 @@ namespace msw {
             CGame::SendMessage(99, 3, 1, 0);
             pWork->m_nStep++;
         case 1: {
-            bcs::FVEC3 vPos = m_vPos;
+            bcs::FVEC3 vPos = m_vPos; // a local copy, as the original passes one
             if (vPos.y > 0.0f) {
                 bcs::FVEC3 vNew(0.0f, 0.0f, 0.0f);
                 float fFrame = GetFrameRateF();
@@ -2570,8 +2583,8 @@ namespace msw {
         float fMin = GetDatF(0x239, GetLvI());
         float fMax = GetDatF(0x23C, GetLvI());
         for (long i = 0; i < nNum; i++) {
-            bcs::FVEC3 vFrom = m_vPos;
             bcs::FVEC3 vOfs;
+            bcs::FVEC3 vFrom = m_vPos;
             float fRot = RoundRad(bcs::BCS_RandMax(6.2831855f));
             bcs::BCS_VecZ_RotY(vOfs, bcs::BCS_RandRange(2.0f, 5.0f), fRot);
             vOfs.y = bcs::BCS_RandRange(20.0f, 25.0f);
@@ -2631,6 +2644,7 @@ namespace msw {
             vPos.y = 0.0f;
             bcs::FVEC3 vDir;
             bcs::FVEC3Sub(&vDir, &vPos, &m_vPos);
+            vDir.y = 0.0f;
             bcs::FVEC3 vXZ;
             vXZ.Set(vDir.x, 0.0f, vDir.z);
             bcs::BCS_Vec_Normalize(vDir, vXZ);

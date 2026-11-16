@@ -1278,6 +1278,9 @@ namespace msw {
             void RotateYTo_(float fRotY, float fStep);
             void CollAtkSetEnable_(long nIndex, int bEnable);
             int IsAnimEnd(unsigned long nSlot) const;
+            // (added for BasketF game/basket/unit_2BBEC.cpp) Not zero once
+            // the motion in slot nSlot has looped.
+            int IsAnimLooped(unsigned long nSlot) const;
             void SetMoveMotType(long nType);
             void PlayVoice(long nVoice, unsigned long);
             // (added for msw::CEventChrCore; return types and parameter
@@ -1459,6 +1462,10 @@ namespace msw {
             // towards character pChr; sets motion slot nSlot to frame fFrame.
             float GetRotY_Diff_ToChrXZ(const CChrCore *pChr) const;
             void AnimSetFrame(unsigned long nSlot, float fFrame);
+            // (added for BasketF game/basket/unit_3BB84.cpp) The frames the
+            // team colour blinks (the pass when the pad may change to the
+            // receiver).
+            void SetTeamColorBlinkCount(float fCount);
             long PlayGetOutline_(unsigned long) const;
             void AddPosXZ(float fX, float fZ);
             void WSE_Play(long nSlot, long nSe, unsigned long, long);
@@ -1848,7 +1855,13 @@ namespace msw {
             unsigned char m_Unk278[0x284 - 0x278];
             // 0x284 (meaning not known): cleared at the end of a game.
             float m_fUnk284;
-            unsigned char m_Unk288[0x2C4 - 0x288];
+            unsigned char m_Unk288[0x2AC - 0x288];
+            // 0x2AC (name guessed; BasketF game/basket/unit_2BBEC.cpp): an
+            // offset to the character of an air battle (0, the height
+            // difference, the distance in XZ), eased towards it a tenth
+            // each frame by the jump to the upper floor.
+            bcs::FVEC3 m_BattleOfs;
+            unsigned char m_Unk2B8[0x2C4 - 0x2B8];
             // 0x2C4 (name guessed; added for BossF game/boss/CChrCoreBoss.cpp):
             // where the head turns, as UpdateLookAt_ sets it; cleared to stop
             // looking (ClearLook).

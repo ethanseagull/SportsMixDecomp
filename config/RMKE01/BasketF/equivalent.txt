@@ -59,7 +59,7 @@ BasketF DispContinue__Q23msw16CGameGuideBasketFv near 97.3 97.3: registers of th
 BasketF DispPlayerIconSetCore___Q23msw13CChrManBasketFPCQ23msw8CChrCore near 99.8 stack slots of the three FVEC3 temporaries differ only
 BasketF DispPlayerIcon___Q23msw13CChrManBasketFPCQ23msw8CChrCore near 99.8 stack slots of the three FVEC3 temporaries differ only
 BasketF DtorStateDunk__Q23msw14CChrCoreBasketFv near 99.7 register choice / instruction order only (inlined Fsmq head/tail loads)
-BasketF EffectCoinGetCreate___Q23msw17CGimmickManBasketFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 96.9 the inlined CEffectCoinGet ctor's 2*20 multiply (Twice) is scheduled after the m_fRotSpeed store in ours, before it in the original; the rotation-speed static is anonymous in the original; same values, calls and stores
+BasketF EffectCoinGetCreate___Q23msw17CGimmickManBasketFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 96.9 [real, reviewed] reviewer: ANON vs named s_CoinGetRotSpeedStart (no data flag) plus fmuls schedule/register difference only.
 BasketF GameResult_In__Q23msw14CCockpitBasketFv near 99.0 99.0%: register choice only.
 BasketF GetAppendPos___Q23msw30CBallManBasketHungryBossPackunCFRlRQ23bcs5FVEC3 near 89.1 [real, reviewed] reviewer: Registers, scheduling, two FVEC3 stack slots swapped, one extra reload of AREA_X_NUM global; same arithmetic and stores.
 BasketF GetArtsCurveValue___Q23msw13CChrManBasketCFl near 99.8 [real, reviewed] reviewer: Only stack-offset of two lfs loads (0x84/0x88 vs 0x7c/0x80); no data-value difference reported.
@@ -150,7 +150,7 @@ BasketF Main__Q33msw11CC03_BASKET19CcDaisyFlowerGardenFv near 99.4 f0/f1 registe
 BasketF Main__Q33msw11CC05_BASKET15CcWarioSmokeMgrFv near 98.5 as CcDaisyFlowerGarden::LoopStateAppear: redundant cmpwi/ble zero-trip guard before the ring loop, &hitPos via addi instead of mr, float register numbering, ps_add operand order and stack slots
 BasketF Main__Q33msw11CC09_BASKET17CcKinopioReceiverFv near 99.6 register choice for one load
 BasketF Main__Q33msw11CC17_BASKET18CcKuromaLockonUnitFv near 96.4 scheduling: m_hEffect loaded before CEffectCtrl::GetInstance() in the original (Hockey/Volley/Dodge same)
-BasketF Main__Q33msw14GIMMICK_BASKET14CEffectCoinGetFv near 99.0 99.0%: register/schedule only, same difference as the recorded Volley/Hockey/Dodge copies
+BasketF Main__Q33msw14GIMMICK_BASKET14CEffectCoinGetFv near 99.0 [real, reviewed] reviewer: ANON vs named constants (no data flag), register renumbering, schedule, commutative fmuls operand swap.
 BasketF Main__Q33msw14GIMMICK_BASKET16CEffectCoinScoreFv near 98.8 98.8%: register/schedule only, same difference as the recorded Volley/Hockey/Dodge copies
 BasketF Main___Q23msw14CStageBasket05Ff near 95.3 95.3%: IsGameFlag0 test is clrlwi + double cntlzw in the original, one clrlwi. in ours (same bit, same branch); raft loop addresses three arrays by this + i*stride where ours advances a pointer, two more saved GPRs and a 0x10 larger frame. Addressing and registers only.
 BasketF Main___Q23msw28CStageBasketHungryBossPackunFf near 99.6 99.6%, float registers only: the three rotation floats copied to the stack use f0/f1/f2 for z/y/x in the original and f2/f1/f0 in ours; loads, stores, offsets and calls identical

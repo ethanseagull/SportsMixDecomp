@@ -373,7 +373,7 @@ main UpdateFade__Q23msw11CChrOptTaskFf near 99.5 register choice only: the hide 
 main UpdateFrame__Q23bcs10CAnmMatClrFf unverified 0.0 ours inlines CAnmMatClr::CalcResult where the original calls it (auto-inline budget); same work in the same order, behaviour unchanged. Accepted below the floor by user ruling 2026-11-12 (notes/decisions.md)
 main UpdateFrame__Q23bcs15CAnmBlendMotionFf near 94.7 [real, reviewed] reviewer confirmed: ours merges the original's duplicated 0x5c test into one; same float maths and operands; register choice
 main UpdateFrame__Q23msw10CEventMoveFf near 99.1 paired-single register choice and the stack slots of the two difference temporaries only
-main UpdateFrame__Q23msw13CEvDemoMdlObjFf near 99.0 original reloads m_pMotNameData from memory where ours reuses the register (same value)
+main UpdateFrame__Q23msw13CEvDemoMdlObjFf near 99.0 [real, reviewed] reviewer confirmed: original reloads m_pMotNameData (0x50) with no call or store between
 main UpdateGmkPos__Q23msw13CPinballMechaFv near 99.6 register allocation/order only (diff.py: registers/schedule)
 main UpdateInputMode__Q23msw8CMenuPadFv near 91.4 same loads, stores, calls and branches; the original keeps two dead FVEC2 temporaries on the stack (zero and a copy of the pointer position, frame 0x90 vs 0x80) and addresses m_nInput through a separate index register; register numbering follows
 main UpdateMdlMtx__Q23msw19CStgGmk_Trolley_ActFv near 97.9 the first inlined CStgSrt matrix rebuild tests its flag bits through computed bools (neg/or/srwi, extrwi.) where ours tests them directly; stack slots

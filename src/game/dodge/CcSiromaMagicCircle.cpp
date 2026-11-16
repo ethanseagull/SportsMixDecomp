@@ -91,6 +91,15 @@ namespace CC15_DODGE {
     // guessed)
     class CcSiromaMagicCircleObj : public msw::CGameTask {
         public:
+            // Indexes into m_anStep.
+            enum {
+                STEP_ANM_CHR,
+                STEP_ANM_CLR,
+                STEP_ANM_TEX_SRT,
+                STEP_ANM_TEX_PAT,
+                STEP_ANM_NUM
+            };
+
             CcSiromaMagicCircleObj(bcs::CTask *pParent, bcs::CScnGroup *pGroup, long nType,
                                    nw4r::g3d::ResFile file);
             virtual ~CcSiromaMagicCircleObj();
@@ -108,10 +117,9 @@ namespace CC15_DODGE {
             bcs::CAnmMatClr *m_pAnmClr;    // 0x44
             bcs::CAnmTexSrt *m_pAnmTexSrt; // 0x48
             bcs::CAnmTexPat *m_pAnmTexPat; // 0x4C
-            long m_nChrStep;               // 0x50: 0 start motion, 1 loop, 2 done
-            long m_nClrStep;               // 0x54, the same for the colour animation
-            long m_nTexSrtStep;            // 0x58 (not used)
-            long m_nTexPatStep;            // 0x5C (not used)
+            // 0x50, per animation (STEP_ANM_*): 0 start motion, 1 loop, 2 done;
+            // the texture ones are not used.
+            long m_anStep[STEP_ANM_NUM];
     };
 
     // The trick's magic circle. 0xB4 bytes. (member names guessed)
@@ -275,22 +283,16 @@ namespace CC15_DODGE {
 
     CcSiromaMagicCircleObj::CcSiromaMagicCircleObj(bcs::CTask *pParent, bcs::CScnGroup *pGroup, long nType,
                                                    nw4r::g3d::ResFile file)
-        : msw::CGameTask(pParent, -1)
+        : msw::CGameTask(pParent, -1), m_File(file), m_nType(nType)
     {
-        // (guessed) Written as assignments: with an initialiser list the
-        // constructor is small enough to be inlined into its only caller,
-        // which the original does not do.
-        m_File = file;
-        m_nType = nType;
         m_pMdl = 0;
         m_pAnmChr = 0;
         m_pAnmClr = 0;
         m_pAnmTexSrt = 0;
         m_pAnmTexPat = 0;
-        m_nChrStep = 0;
-        m_nClrStep = 0;
-        m_nTexSrtStep = 0;
-        m_nTexPatStep = 0;
+        for (long i = 0; i < STEP_ANM_NUM; i++) {
+            m_anStep[i] = 0;
+        }
         Create_(pGroup, file);
     }
 
@@ -380,13 +382,13 @@ namespace CC15_DODGE {
         }
 
         if (m_pAnmChr) {
-            switch (m_nChrStep) {
+            switch (m_anStep[STEP_ANM_CHR]) {
                 case 0: {
                     nw4r::g3d::ResAnmChr res = m_File.GetResAnmChr(s_apAnmName[m_nType][0]);
                     if (res.IsValid()) {
                         m_pAnmChr->Play(res, 0, 1.0f, 0.0f, 0.0f);
                     }
-                    m_nChrStep++;
+                    m_anStep[STEP_ANM_CHR]++;
                     break;
                 }
                 case 1:
@@ -395,20 +397,20 @@ namespace CC15_DODGE {
                         if (res.IsValid()) {
                             m_pAnmChr->Play(res, 2, 1.0f, 0.0f, 0.0f);
                         }
-                        m_nChrStep++;
+                        m_anStep[STEP_ANM_CHR]++;
                     }
                     break;
             }
         }
 
         if (m_pAnmClr) {
-            switch (m_nClrStep) {
+            switch (m_anStep[STEP_ANM_CLR]) {
                 case 0: {
                     nw4r::g3d::ResAnmClr res = m_File.GetResAnmClr(s_apAnmName[m_nType][0]);
                     if (res.IsValid()) {
                         m_pAnmClr->ChangeRes(m_pMdl->GetResMdl(), res);
                     }
-                    m_nClrStep++;
+                    m_anStep[STEP_ANM_CLR]++;
                     break;
                 }
                 case 1:
@@ -417,7 +419,7 @@ namespace CC15_DODGE {
                         if (res.IsValid()) {
                             m_pAnmClr->ChangeRes(m_pMdl->GetResMdl(), res);
                         }
-                        m_nClrStep++;
+                        m_anStep[STEP_ANM_CLR]++;
                     }
                     break;
             }

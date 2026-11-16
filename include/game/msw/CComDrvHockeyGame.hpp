@@ -5,6 +5,13 @@
 
 namespace msw {
 
+    // (names guessed; game/hockey/unit_EEA14.cpp) An enemy and the team
+    // mates near enough to take it over in defence.
+    struct DEFENSE_CORE_DATA {
+        CChrCore *m_pEnemy;
+        CChrCore *m_apFriend[3];
+    };
+
     // INCOMPLETE: the three computer drivers the hockey character managers
     // make (game/hockey/CChrManHockey.cpp), all derived from CComDrvHockey
     // (their constructors call CComDrvHockey(long)). Only the constructors
@@ -225,6 +232,39 @@ namespace msw {
             void ActCallGetStopPanel();
             void ActCallAttackBossPackun();
             void ActCallFaceoff();
+
+            // (game/hockey/unit_EEA14.cpp; meanings guessed from the names
+            // and the bodies) Questions the thinking asks about the game.
+            int IsMyTeamHoldBallWithoutKeeper();
+            int CanMoveToTarget_BlueLine(bcs::FVEC3 pos, long nKind);
+            void HockeyKeeperPosTrim(bcs::FVEC3 &rPos);
+            long SearchingForTheEenemy(bcs::FVEC3 pos, float fDis);
+            int isFriendNearTargetGoal(float fDis);
+            int isAttack2(long nAttack, const CChrCore *pTarget);
+            int CheckSwitchRangeForPad(DEFENSE_CORE_DATA &rData);
+            int ChangeDefense2(DEFENSE_CORE_DATA &rData, long &rChr, long &rHold);
+            int CheckSwitchRangeForCOM(DEFENSE_CORE_DATA &rData, long &rChr);
+            int CheckAhoShoot(const CChrCore *pChr);
+            float GetCharaTypeReachDist();
+            float GetSpJudgeWidth();
+            int isExistEnemySpArea(bcs::FVEC3 pos);
+            long GetSpShootCourse(bcs::FVEC3 pos);
+            int GetCloneNinja(bcs::FVEC3 &rPos0, bcs::FVEC3 &rPos1);
+            int isEnterMagicCircle(bcs::FVEC3 pos, bcs::FVEC3 &rEscPos);
+            int isEnterSmokeScreen();
+            int isBehindGoal(bcs::FVEC3 pos) const;
+            int isEnterFireCircle(bcs::FVEC3 pos, bcs::FVEC3 &rEscPos);
+            // (inline in game/hockey/unit_EEA14.cpp; name guessed) The
+            // enemy holding the puck, when the driver can reach it.
+            const CChrCore *GetAttackTargetCore();
+            // Defined in other files (used by game/hockey/unit_EEA14.cpp;
+            // return types guessed).
+            long GetHockeyComLvI();
+            void HockeyPosTrim(bcs::FVEC3 &rPos);
+            void GetRandomOffsetPos(float fMin, float fMax, bcs::FVEC3 &rPos);
+            void GetRandomSectorPositionToDefenseGoal(float fMin, float fMax, float fDeg, bcs::FVEC3 &rPos);
+            unsigned long GetEnableBitWithoutKeeper() const;
+            unsigned long GetTeamEnableBitWithoutKeeper(long nSide) const;
 
             // (.rodata of another file) How far from the centre line the
             // blue lines are.

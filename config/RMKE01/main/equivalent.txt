@@ -83,10 +83,10 @@ main CtorStateEventDemo__Q23msw5CGameFv near 93.1 cmpw/bne in ours where the ori
 main CtorStateGameResult__Q23msw5CGameFv near 96.7 switch compiled as a linear compare chain where the original builds a compare tree, and inline CFsmQueue operations expanding with other branch/register shape; same cases and calls
 main CtorState_BREAK__Q23msw16CStgGmk_Case_ActFv near 96.7 [real, reviewed] reviewer confirmed: the select hEffect ? FindList(h) : 0 and null test laid out differently with the same result; local scale vector store order; same offsets and calls
 main CtorState_BREAK__Q23msw17CStgGmk_Pylon_ActFv near 100.0 store order of the three equal FVEC3 components (x stored last in the original); same values
-main CtorState_BREAK__Q23msw19CStgGmk_Pinball_ActFv near 94.5 null cluster set by explicit li 0 and register reuse in original; ours saves one more register
+main CtorState_BREAK__Q23msw19CStgGmk_Pinball_ActFv near 94.5 [real, reviewed] reviewer confirmed: null cluster from a callee-saved register already 0 instead of a separate li 0; same calls and arguments
 main CtorState_MOVE__Q23msw16CStgGmk_Case_ActFv near 93.9 the CStgSrt flag store is scheduled after the vector stores in the original; stack slots of the two velocity limit vectors swapped
 main CtorState_MOVE__Q23msw17CStgGmk_Pylon_ActFv near 92.3 original keeps the local CGmkRef in memory (dead vptr store at sp+8, parent read back); ours in a register, so FVEC3 temporaries' stack slots shift
-main CtorState_MOVE__Q23msw19CStgGmk_Pinball_ActFv near 98.9 rlwinm. vs extrwi. for the same bit (CStgSrt::GetRotMtx), one stack slot
+main CtorState_MOVE__Q23msw19CStgGmk_Pinball_ActFv near 98.9 [real, reviewed] reviewer confirmed: stack slots and extrwi. vs rlwinm. on the same bit only
 main DeleteJointObj__Q23bcs7CScnObjFv unverified 73.2 73.2%: inlining depth only (AppendDelayDeleteObject inlined one level deeper here); byte-identical under Wii/1.5 and 1.7
 main DemoSkipInputCheck__Q23msw5CGameFl unverified 80.3 80.3%: the pad-type switch (three identical bodies) is lowered differently; register choice
 main Disp__Q23bcs10CStrapTaskFv near 97.9 one li scheduled earlier; same instructions
@@ -229,7 +229,7 @@ main MirrorResult__Q23bcs13CAnmChrMotionFPQ34nw4r3g3d12ChrAnmResultUcUs unverifi
 main Mount__Q23bcs10CRsoModuleFv near 99.3 loop counter and import-table byte offset registers swapped only
 main NewMdl__Q23msw15CStgGmk_TrolleyFlUl near 91.8 inlines CStgGmk_Trolley_Mdl's constructor: the same register reuse for the constant 0 as there; same stores
 main ObjProcGroup__Q23bcs9CScnGroupFUlUlPv near 99.5 [real, reviewed] reviewer confirmed: one unreachable b after case 4 in the original; branch offsets shift only
-main OnAttackHit__Q23msw19CStgGmk_Pinball_ActFPCQ23msw12CCollAtkUnitPCQ23msw13CCollBodyUnitRCQ23bcs5FVEC3Ul near 97.8 one temporary's stack slot, load order and register swap
+main OnAttackHit__Q23msw19CStgGmk_Pinball_ActFPCQ23msw12CCollAtkUnitPCQ23msw13CCollBodyUnitRCQ23bcs5FVEC3Ul near 97.8 [real, reviewed] reviewer confirmed: same value-to-field mapping reordered; temp stack slot; extrwi. vs rlwinm. test the same bit
 main OnBodyDamage__Q23msw16CStgGmk_Case_ActFPQ23msw13CCollBodyUnitPCQ23msw12CCollAtkUnitRCQ23bcs5FVEC3 near 99.8 register choice only (attack word and kind in swapped registers)
 main OnBodyPush__Q23msw16CStgGmk_Case_ActFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 93.2 instruction order of the target position sum (z loaded before the x store) and float register numbering
 main OnBodyPush__Q23msw17CStgGmk_Pylon_ActFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 97.9 register numbering in the lerp and in building to
@@ -390,8 +390,8 @@ main VFunc88__Q23bcs15CAnmBlendMotionCFl near 98.8 add operand order and registe
 main VFunc8C__Q23bcs10CAnmMotionCFl near 98.8 add operand order and register choice only
 main VFunc8C__Q23bcs15CAnmBlendMotionCFl near 98.8 add operand order and register choice only
 main VFuncA8__Q23bcs15CAnmBlendMotionFi near 94.2 [real, reviewed] reviewer confirmed: lwzux vs add+lwzx, same address and load
-main WallHitCheckSub__Q23msw19CStgGmk_Pinball_ActCFPQ23bcs5FVEC3PQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3fRCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 88.8 end-point loops indexed (lwzx/lfsx) in original vs pointer walk; regs/schedule; immediates are stack offsets
-main WallHitCheck__Q23msw19CStgGmk_Pinball_ActFPQ23bcs5FVEC3PQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 97.4 one extra compare on side>=0 before the shared goal call, float regs in bounds check
+main WallHitCheckSub__Q23msw19CStgGmk_Pinball_ActCFPQ23bcs5FVEC3PQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3fRCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 88.8 [real, reviewed] reviewer confirmed: same ps_sub operand order, loop bounds and stored fields; indexed vs pointer walk; differing immediates are stack slots and index step
+main WallHitCheck__Q23msw19CStgGmk_Pinball_ActFPQ23bcs5FVEC3PQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 97.4 [real, reviewed] reviewer confirmed: default case as side=-1 with a later side>=0 test reaches the same path as the original's direct jump; cases 0..3 unchanged; commuted fadds
 main WriteBack__Q33bcs3dwc14CDwcFriendListFPC18DWCstAccFriendDataUxllPCvl unverified 75.0 75%: SetStorageData inlined here, called with bl in the original; original also normalises the first IsValid() to bool (two cntlzw/srwi) - same behaviour, inlining decision only
 main _AnimPlayRes__Q23msw11CEventModelFPQ23bcs7CMdlObjRCQ34nw4r3g3d7ResFilePCcUlff near 99.6 register choice and the stack slot of one ResMdl temporary only
 main _CalcFloor__Q23msw10CSceneCalcFRQ23bcs5FVEC3RQ23bcs5FVEC3 near 97.8 97.8%: float register numbers in the FVEC3Add paired-single blocks only

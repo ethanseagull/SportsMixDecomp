@@ -26,6 +26,11 @@ namespace bcs {
     // spanned from rFrom to rTo with the two widths, in the XZ plane.
     int BCS_Util_IsPointInFaceXZ(const FVEC3 &rPos, const FVEC3 &rFrom, const FVEC3 &rTo, float, float);
 
+    // (DOL; added for HockeyF game/hockey/unit_EEA14.cpp, parameter
+    // meanings guessed) Not zero when the point (x, z), relative to the
+    // centre, lies in the ellipse with radii rx and rz.
+    int BCS_IsPointInEllipse(float x, float z, float rx, float rz);
+
     // In the DOL. Clears size bytes at p, 32 bytes at a time.
     void BCS_CpuClear32(void *p, unsigned long size);
 

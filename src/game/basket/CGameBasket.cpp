@@ -1770,13 +1770,13 @@ namespace msw {
                     nTelop = 3;
                 }
                 break;
-            case 3:
-            case 4:
+            case 5:
                 if (nTelop <= 0 && nCoin >= 5) {
                     nTelop = 3;
                 }
                 break;
-            case 5:
+            case 3:
+            case 4:
                 if (nTelop <= 0 && nCoin >= 5) {
                     nTelop = 3;
                 }

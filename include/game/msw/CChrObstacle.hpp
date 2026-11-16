@@ -48,9 +48,9 @@ namespace msw {
             long m_nObstacleType;        // 0x3C, see GetObstacleType
             unsigned char m_Unk40[0x44 - 0x40];
             bcs::FVEC3 m_Pos;            // 0x44
-            unsigned char m_Unk50[0x4];
+            float m_fRotX;               // 0x50 (BossF's meteor: the rotation of its effects)
             float m_fRotY;               // 0x54
-            unsigned char m_Unk58[0x4];
+            float m_fRotZ;               // 0x58
             float m_fRadius;             // 0x5C
             unsigned char m_Unk60[0x68 - 0x60];
             // 0x68-0x87 (names guessed, mapped for BasketF's

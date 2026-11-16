@@ -12,6 +12,17 @@
 #include "bcs/BCS_Math.hpp"
 #include "nw4r/math/triangular.h"
 
+namespace {
+
+    // The distance between two points in the XZ plane (name guessed;
+    // both are copied).
+    inline float DisXZ(bcs::FVEC3 pos0, bcs::FVEC3 pos1)
+    {
+        return msw::CComMan::GetDisXZ(pos0, pos1);
+    }
+
+}
+
 namespace msw {
 
 // A point near the driver's goal in front of the puck holder (in the
@@ -28,7 +39,11 @@ inline int CComDrvHockeyGame::GetHoldBallSectorPosition(float fMin, float fMax, 
 // Turns to face the shooter; 1 when facing it.
 inline int CComDrvHockeyGame::SpDefenseTurnToShooter(SP_DEFENSE_WORK *pWork) {
     const bcs::FVEC3 &rPos = pWork->m_pShooter->GetPos();
-    bcs::FVEC3 dir(rPos.x - m_MyPos.x, rPos.y, rPos.z - m_MyPos.z);
+    bcs::FVEC3 dir;
+    // (y first: the original stores it first)
+    dir.y = rPos.y;
+    dir.x = rPos.x - m_MyPos.x;
+    dir.z = rPos.z - m_MyPos.z;
     return MethdRotY(bcs::ROUND_PI(nw4r::math::Atan2Rad(dir.x, dir.z)));
 }
 
@@ -541,6 +556,8 @@ void CComDrvHockeyGame::SpDefenseInit_CHR_TYPE_KINOPIO() {
     }
     if (pWork->m_nFormation == 0) {
         pWork->m_fGoal50 = CComMan::GetDatF(0xCA8, fLv);
+        // 0xC68 (Diddy's entry; 0xCB0 would be Kinopio's) as in the
+        // original.
         pWork->m_fGoal54 = CComMan::GetDatF(0xC68, fLv);
         pWork->m_fGoal58 = CComMan::GetDatF(0xCB8, fLv);
         pWork->m_fSectorDeg = CComMan::GetDatF(0xCC0, fLv);
@@ -607,6 +624,195 @@ void CComDrvHockeyGame::SpDefenseMain_CHR_TYPE_KOOPA() {
     } else {
         SpDefenseMain_FormationB_KOOPA();
     }
+}
+
+// Formation A for Koopa: the driver's rank by distance to its own goal
+// picks how far in front of the goal (by the puck holder's distance to it)
+// Koopa takes position; he can keep out of the fire circle and, with no
+// special puck, skate back to that position.
+void CComDrvHockeyGame::SpDefenseMain_FormationA_KOOPA() {
+    SP_DEFENSE_WORK *pWork = static_cast<SP_DEFENSE_WORK *>(GetCurrentActWork());
+    bcs::FVEC3 pos;
+
+    switch (pWork->m_nStep) {
+    case 0:
+        pWork->m_fWaitTime += m_pChr->GetFrameStep();
+        if (pWork->m_fWaitTime >= pWork->m_fWait) {
+            pWork->m_nStep++;
+        }
+        break;
+    case 1: {
+        long nRank = GetMostNearMyGoal();
+        if (nRank < 0) {
+            ReturnAct(0);
+            return;
+        }
+        float fRate;
+        if (nRank == 0) {
+            fRate = pWork->m_fGoal50;
+        } else if (nRank == 1) {
+            fRate = pWork->m_fGoal54;
+        } else {
+            fRate = pWork->m_fGoal58;
+        }
+        const CChrCore *pHold = GetHoldBallCore();
+        if (pHold == 0) {
+            ReturnAct(0);
+            return;
+        }
+        bcs::FVEC3 holdPos = CComMan::GetChrWorldPos(pHold);
+        float fDis = fRate * (DisXZ(holdPos, m_GuardGoalPos) / 10.0f);
+        GetRandomSectorPositionToGoal(pHold, 1, fDis, fDis, pWork->m_fSectorDeg, pWork->m_SavePos);
+        pWork->m_TargetPos = pWork->m_SavePos;
+        if (pWork->m_bAvoidFire == 1) {
+            if (isEnterFireCircle(pWork->m_TargetPos, pos) == 1) {
+                pWork->m_TargetPos = pos;
+            }
+        }
+        pWork->m_nStep++;
+    }
+        // fall through
+    case 2:
+        if (MethdMove(pWork->m_TargetPos, 2.0f)) {
+            m_pChr->MethdBrake(-1.0f, 0);
+            pWork->m_nStep++;
+        }
+        break;
+    case 3: {
+        const bcs::FVEC3 &rPos = pWork->m_pShooter->GetPos();
+        bcs::FVEC3 dir;
+        dir.y = rPos.y;
+        dir.x = rPos.x - m_MyPos.x;
+        dir.z = rPos.z - m_MyPos.z;
+        if (MethdRotY(bcs::ROUND_PI(nw4r::math::Atan2Rad(dir.x, dir.z)))) {
+            pWork->m_nStep++;
+        }
+        break;
+    }
+    case 4:
+        if (pWork->m_bAvoidFire == 0) {
+            CBall *pBall = GetSpBallCore();
+            if (pBall != 0) {
+                pos = pBall->GetPos();
+                MethdMove(pos, 2.0f);
+            } else if (MethdMove(pWork->m_SavePos, 2.0f)) {
+                m_pChr->MethdBrake(-1.0f, 0);
+            }
+        } else {
+            long nFire = isEnterFireCircle(m_MyPos, pos);
+            if (nFire == -1 || nFire == 0) {
+                CBall *pBall = GetSpBallCore();
+                if (pBall != 0) {
+                    pos = pBall->GetPos();
+                    MethdMove(pos, 2.0f);
+                } else if (pWork->m_bReturn == 0) {
+                    m_pChr->MethdBrake(-1.0f, 0);
+                } else if (MethdMove(pWork->m_SavePos, 2.0f)) {
+                    m_pChr->MethdBrake(-1.0f, 0);
+                }
+            } else {
+                pWork->m_TargetPos = pos;
+                if (pWork->m_bReturn == 1) {
+                    if (isEnterFireCircle(pWork->m_SavePos, pos) != 1) {
+                        pWork->m_TargetPos = pWork->m_SavePos;
+                    }
+                }
+                pWork->m_nStep++;
+            }
+        }
+        break;
+    case 5:
+        if (MethdMove(pWork->m_TargetPos, 2.0f)) {
+            pWork->m_nStep = 4;
+        }
+        break;
+    }
+    SpDefenseDivingSteal(pWork);
+}
+
+// Formation B for Koopa: as SpDefenseMain_FormationB, with the fire circle
+// and the way back of formation A.
+void CComDrvHockeyGame::SpDefenseMain_FormationB_KOOPA() {
+    SP_DEFENSE_WORK *pWork = static_cast<SP_DEFENSE_WORK *>(GetCurrentActWork());
+    bcs::FVEC3 dir;
+    bcs::FVEC3 pos;
+
+    switch (pWork->m_nStep) {
+    case 0:
+        pWork->m_fWaitTime += m_pChr->GetFrameStep();
+        if (pWork->m_fWaitTime >= pWork->m_fWait) {
+            pWork->m_nStep++;
+        }
+        break;
+    case 1:
+        if (GetHoldBallSectorPosition(pWork->m_fSectorMin, pWork->m_fSectorMax, pWork->m_fSectorDeg, pWork->m_SavePos)) {
+            pWork->m_TargetPos = pWork->m_SavePos;
+            if (pWork->m_bAvoidFire == 1) {
+                if (isEnterFireCircle(pWork->m_TargetPos, pos) == 1) {
+                    pWork->m_TargetPos = pos;
+                }
+            }
+            pWork->m_nStep++;
+        } else {
+            ReturnAct(0);
+            return;
+        }
+        break;
+    case 2:
+        if (MethdMove(pWork->m_TargetPos, 2.0f)) {
+            m_pChr->MethdBrake(-1.0f, 0);
+            pWork->m_nStep++;
+        }
+        break;
+    case 3: {
+        const bcs::FVEC3 &rPos = pWork->m_pShooter->GetPos();
+        dir.y = rPos.y;
+        dir.x = rPos.x - m_MyPos.x;
+        dir.z = rPos.z - m_MyPos.z;
+        if (MethdRotY(bcs::ROUND_PI(nw4r::math::Atan2Rad(dir.x, dir.z)))) {
+            pWork->m_nStep++;
+        }
+        break;
+    }
+    case 4:
+        if (pWork->m_bAvoidFire == 0) {
+            CBall *pBall = GetSpBallCore();
+            if (pBall != 0) {
+                pos = pBall->GetPos();
+                MethdMove(pos, 2.0f);
+            } else if (MethdMove(pWork->m_SavePos, 2.0f)) {
+                m_pChr->MethdBrake(-1.0f, 0);
+            }
+        } else {
+            long nFire = isEnterFireCircle(m_MyPos, pos);
+            if (nFire == -1 || nFire == 0) {
+                CBall *pBall = GetSpBallCore();
+                if (pBall != 0) {
+                    pos = pBall->GetPos();
+                    MethdMove(pos, 2.0f);
+                } else if (pWork->m_bReturn == 0) {
+                    m_pChr->MethdBrake(-1.0f, 0);
+                } else if (MethdMove(pWork->m_SavePos, 2.0f)) {
+                    m_pChr->MethdBrake(-1.0f, 0);
+                }
+            } else {
+                pWork->m_EscPos = pos;
+                if (pWork->m_bReturn == 1) {
+                    if (isEnterFireCircle(pWork->m_SavePos, pos) != 1) {
+                        pWork->m_EscPos = pWork->m_SavePos;
+                    }
+                }
+                pWork->m_nStep++;
+            }
+        }
+        break;
+    case 5:
+        if (MethdMove(pWork->m_EscPos, 2.0f)) {
+            pWork->m_nStep = 4;
+        }
+        break;
+    }
+    SpDefenseDivingSteal(pWork);
 }
 
 
@@ -759,6 +965,149 @@ void CComDrvHockeyGame::SpDefenseMain_CHR_TYPE_NINJA() {
     }
 }
 
+// Formation A for Ninja: once facing the shooter with clones out, she
+// blocks at a clone (or at the shooter while it holds the puck) with an
+// attack whenever it is in reach. No diving steal.
+void CComDrvHockeyGame::SpDefenseMain_FormationA_NINJA() {
+    SP_DEFENSE_WORK *pWork = static_cast<SP_DEFENSE_WORK *>(GetCurrentActWork());
+    bcs::FVEC3 pos;
+    bcs::FVEC3 clonePos0;
+    bcs::FVEC3 clonePos1;
+    long nClone = GetCloneNinja(clonePos0, clonePos1);
+
+    switch (pWork->m_nStep) {
+    case 0:
+        ActCallGoSpDefenseGoal(pWork->m_fWait, pWork->m_fGoal50, pWork->m_fGoal54, pWork->m_fGoal58, pWork->m_fSectorDeg);
+        pWork->m_nStep++;
+        break;
+    case 1:
+        m_pChr->MethdBrake(-1.0f, 0);
+        pWork->m_nStep++;
+        break;
+    case 2:
+        pos = pWork->m_pShooter->GetPos();
+        pos.x -= m_MyPos.x;
+        pos.z -= m_MyPos.z;
+        if (MethdRotY(bcs::ROUND_PI(nw4r::math::Atan2Rad(pos.x, pos.z))) && nClone > 0) {
+            if (pWork->m_nNinjaMode == 2) {
+                pWork->m_nStep++;
+            } else {
+                pWork->m_nStep = 4;
+            }
+        }
+        break;
+    case 3: {
+        const CChrCore *pHold = GetHoldBallCore();
+        if (pHold != 0 && pHold == pWork->m_pShooter) {
+            pos = pWork->m_pShooter->GetPos();
+            MethdMove(pos, 2.0f);
+            MethdMoveRevise(pos);
+            if (CComManHockey::IsExistTargetCore(m_pChr, pWork->m_pShooter, pWork->m_fAttackDist, pWork->m_fAttackWidth)) {
+                m_pChr->MethdBlockAttack(0);
+            }
+        }
+        break;
+    }
+    case 4:
+        if (nClone == 2) {
+            if (pWork->m_nNinjaMode == 0) {
+                pos = clonePos0;
+            } else {
+                pos = clonePos1;
+            }
+            MethdMove(pos, 2.0f);
+            MethdMoveRevise(pos);
+            if (CComManHockey::IsExistTargetPos(m_pChr, pos, pWork->m_fAttackDist, pWork->m_fAttackWidth)) {
+                m_pChr->MethdBlockAttack(0);
+            }
+        } else if (nClone == 1) {
+            pos = clonePos0;
+            MethdMove(pos, 2.0f);
+            MethdMoveRevise(pos);
+            if (CComManHockey::IsExistTargetPos(m_pChr, pos, pWork->m_fAttackDist, pWork->m_fAttackWidth)) {
+                m_pChr->MethdBlockAttack(0);
+            }
+        } else {
+            m_pChr->MethdBrake(-1.0f, 0);
+        }
+        break;
+    }
+}
+
+// Formation B for Ninja: skates to the point near the goal, then blocks as
+// in formation A.
+void CComDrvHockeyGame::SpDefenseMain_FormationB_NINJA() {
+    SP_DEFENSE_WORK *pWork = static_cast<SP_DEFENSE_WORK *>(GetCurrentActWork());
+    bcs::FVEC3 clonePos0;
+    bcs::FVEC3 clonePos1;
+    long nClone = GetCloneNinja(clonePos0, clonePos1);
+    bcs::FVEC3 pos;
+
+    switch (pWork->m_nStep) {
+    case 0:
+        pWork->m_fWaitTime += m_pChr->GetFrameStep();
+        if (pWork->m_fWaitTime >= pWork->m_fWait) {
+            pWork->m_nStep++;
+        }
+        break;
+    case 1:
+        if (GetHoldBallSectorPosition(pWork->m_fSectorMin, pWork->m_fSectorMax, pWork->m_fSectorDeg, pWork->m_TargetPos)) {
+            pWork->m_nStep++;
+        } else {
+            ReturnAct(0);
+            return;
+        }
+        break;
+    case 2:
+        if (MethdMove(pWork->m_TargetPos, 2.0f)) {
+            m_pChr->MethdBrake(-1.0f, 0);
+            if (nClone > 0) {
+                if (pWork->m_nNinjaMode == 2) {
+                    pWork->m_nStep++;
+                } else {
+                    pWork->m_nStep = 4;
+                }
+            }
+        }
+        break;
+    case 3: {
+        const CChrCore *pHold = GetHoldBallCore();
+        if (pHold != 0 && pHold == pWork->m_pShooter) {
+            pos = pWork->m_pShooter->GetPos();
+            MethdMove(pos, 2.0f);
+            MethdMoveRevise(pos);
+            if (CComManHockey::IsExistTargetCore(m_pChr, pWork->m_pShooter, pWork->m_fAttackDist, pWork->m_fAttackWidth)) {
+                m_pChr->MethdBlockAttack(0);
+            }
+        }
+        break;
+    }
+    case 4:
+        if (nClone == 2) {
+            if (pWork->m_nNinjaMode == 0) {
+                pos = clonePos0;
+            } else {
+                pos = clonePos1;
+            }
+            MethdMove(pos, 2.0f);
+            MethdMoveRevise(pos);
+            if (CComManHockey::IsExistTargetPos(m_pChr, pos, pWork->m_fAttackDist, pWork->m_fAttackWidth)) {
+                m_pChr->MethdBlockAttack(0);
+            }
+        } else if (nClone == 1) {
+            pos = clonePos0;
+            MethdMove(pos, 2.0f);
+            MethdMoveRevise(pos);
+            if (CComManHockey::IsExistTargetPos(m_pChr, pos, pWork->m_fAttackDist, pWork->m_fAttackWidth)) {
+                m_pChr->MethdBlockAttack(0);
+            }
+        } else {
+            m_pChr->MethdBrake(-1.0f, 0);
+        }
+        break;
+    }
+}
+
 
 void CComDrvHockeyGame::SpDefenseInit_CHR_TYPE_SIROMA() {
     SP_DEFENSE_WORK *pWork = static_cast<SP_DEFENSE_WORK *>(GetCurrentActWork());
@@ -798,6 +1147,148 @@ void CComDrvHockeyGame::SpDefenseMain_CHR_TYPE_SIROMA() {
     } else {
         SpDefenseMain_FormationB_SIROMA();
     }
+}
+
+// Formation A for Siroma: as SpDefenseMain_FormationA, keeping out of the
+// magic circle and, with no special puck, holding or going back to where
+// she braked.
+void CComDrvHockeyGame::SpDefenseMain_FormationA_SIROMA() {
+    SP_DEFENSE_WORK *pWork = static_cast<SP_DEFENSE_WORK *>(GetCurrentActWork());
+    bcs::FVEC3 pos;
+
+    switch (pWork->m_nStep) {
+    case 0:
+        ActCallGoSpDefenseGoal(pWork->m_fWait, pWork->m_fGoal50, pWork->m_fGoal54, pWork->m_fGoal58, pWork->m_fSectorDeg);
+        pWork->m_nStep++;
+        break;
+    case 1:
+        pWork->m_SavePos = m_MyPos;
+        pWork->m_nStep++;
+        // fall through
+    case 2:
+        m_pChr->MethdBrake(-1.0f, 0);
+        pWork->m_nStep++;
+        break;
+    case 3: {
+        const bcs::FVEC3 &rPos = pWork->m_pShooter->GetPos();
+        bcs::FVEC3 dir;
+        dir.y = rPos.y;
+        dir.x = rPos.x - m_MyPos.x;
+        dir.z = rPos.z - m_MyPos.z;
+        if (MethdRotY(bcs::ROUND_PI(nw4r::math::Atan2Rad(dir.x, dir.z)))) {
+            pWork->m_nStep++;
+        }
+        break;
+    }
+    case 4: {
+        long nMagic = isEnterMagicCircle(m_MyPos, pos);
+        if (nMagic == -1 || nMagic == 0) {
+            CBall *pBall = GetSpBallCore();
+            if (pBall != 0) {
+                pos = pBall->GetPos();
+                MethdMove(pos, 2.0f);
+            } else if (pWork->m_bReturn == 0) {
+                if (nMagic == 0) {
+                    m_pChr->MethdBrake(-1.0f, 0);
+                } else {
+                    MethdMove(pWork->m_SavePos, 2.0f);
+                }
+            } else if (MethdMove(pWork->m_SavePos, 2.0f)) {
+                m_pChr->MethdBrake(-1.0f, 0);
+            }
+        } else {
+            pWork->m_TargetPos = pos;
+            if (pWork->m_bReturn == 1) {
+                if (isEnterMagicCircle(pWork->m_SavePos, pos) != 1) {
+                    pWork->m_TargetPos = pWork->m_SavePos;
+                }
+            }
+            pWork->m_nStep++;
+        }
+        break;
+    }
+    case 5:
+        if (MethdMove(pWork->m_TargetPos, 2.0f)) {
+            pWork->m_nStep = 4;
+        }
+        break;
+    }
+    SpDefenseDivingSteal(pWork);
+}
+
+// Formation B for Siroma: as SpDefenseMain_FormationB, with the magic
+// circle of formation A.
+void CComDrvHockeyGame::SpDefenseMain_FormationB_SIROMA() {
+    SP_DEFENSE_WORK *pWork = static_cast<SP_DEFENSE_WORK *>(GetCurrentActWork());
+    bcs::FVEC3 dir;
+    bcs::FVEC3 pos;
+
+    switch (pWork->m_nStep) {
+    case 0:
+        pWork->m_fWaitTime += m_pChr->GetFrameStep();
+        if (pWork->m_fWaitTime >= pWork->m_fWait) {
+            pWork->m_nStep++;
+        }
+        break;
+    case 1:
+        if (GetHoldBallSectorPosition(pWork->m_fSectorMin, pWork->m_fSectorMax, pWork->m_fSectorDeg, pWork->m_SavePos)) {
+            pWork->m_TargetPos = pWork->m_SavePos;
+            pWork->m_nStep++;
+        } else {
+            ReturnAct(0);
+            return;
+        }
+        break;
+    case 2:
+        if (MethdMove(pWork->m_TargetPos, 2.0f)) {
+            m_pChr->MethdBrake(-1.0f, 0);
+            pWork->m_nStep++;
+        }
+        break;
+    case 3: {
+        const bcs::FVEC3 &rPos = pWork->m_pShooter->GetPos();
+        dir.y = rPos.y;
+        dir.x = rPos.x - m_MyPos.x;
+        dir.z = rPos.z - m_MyPos.z;
+        if (MethdRotY(bcs::ROUND_PI(nw4r::math::Atan2Rad(dir.x, dir.z)))) {
+            pWork->m_nStep++;
+        }
+        break;
+    }
+    case 4: {
+        long nMagic = isEnterMagicCircle(m_MyPos, pos);
+        if (nMagic == -1 || nMagic == 0) {
+            CBall *pBall = GetSpBallCore();
+            if (pBall != 0) {
+                pos = pBall->GetPos();
+                MethdMove(pos, 2.0f);
+            } else if (pWork->m_bReturn == 0) {
+                if (nMagic == 0) {
+                    m_pChr->MethdBrake(-1.0f, 0);
+                } else {
+                    MethdMove(pWork->m_SavePos, 2.0f);
+                }
+            } else if (MethdMove(pWork->m_SavePos, 2.0f)) {
+                m_pChr->MethdBrake(-1.0f, 0);
+            }
+        } else {
+            pWork->m_EscPos = pos;
+            if (pWork->m_bReturn == 1) {
+                if (isEnterMagicCircle(pWork->m_SavePos, pos) != 1) {
+                    pWork->m_EscPos = pWork->m_SavePos;
+                }
+            }
+            pWork->m_nStep++;
+        }
+        break;
+    }
+    case 5:
+        if (MethdMove(pWork->m_EscPos, 2.0f)) {
+            pWork->m_nStep = 4;
+        }
+        break;
+    }
+    SpDefenseDivingSteal(pWork);
 }
 
 

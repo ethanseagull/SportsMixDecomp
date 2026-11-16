@@ -36,7 +36,9 @@ namespace msw {
                 long m_nFormation;         // 0x3C, 0 formation A, 1 B
                 float m_fWait;             // 0x40, frames before B starts
                 // 0x44-0x4C: formation B's sector near the goal
-                // (GetRandomSectorPositionToGoal's ranges and angle).
+                // (GetRandomSectorPositionToGoal's ranges and angle);
+                // 0x4C is also formation A's last ActCallGoSpDefenseGoal
+                // argument.
                 float m_fSectorMin;
                 float m_fSectorMax;
                 float m_fSectorDeg;
@@ -371,7 +373,7 @@ namespace msw {
             void ActCallGoSpDefenseGoal(float fWait, float, float, float, float);
             CBall *GetSpBallCore();
             void GetRandomSectorPositionToGoal(const CChrCore *pChr, long, float fMin, float fMax, float fDeg, bcs::FVEC3 &rPos);
-            CChrCore *GetMostNearMyGoal();
+            long GetMostNearMyGoal();
 
             // (.rodata of another file) How far from the centre line the
             // blue lines are.

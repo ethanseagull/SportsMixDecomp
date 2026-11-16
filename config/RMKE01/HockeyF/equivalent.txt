@@ -143,6 +143,7 @@ HockeyF Set__Q23msw22CCockpitHockeyTelopOutFv near 99.5 register allocation only
 HockeyF Set__Q23msw24CCockpitHockeyTelopReadyFv near 97.8 [real, reviewed] reviewer confirmed: one more saved register, rest register renumbering; same calls, constants, offsets, branches
 HockeyF Set__Q23msw28CCockpitHockeyIconFightGaugeFv near 98.8 98.8%: register allocation only.
 HockeyF SetupGame__Q23msw19CCockpitHockeyCoderFv near 97.3 register allocation only (loop counter and table pointer swap registers); same instructions and memory accesses; SetVisible(bool) bit insert compiled as srwi+rlwimi instead of rlwinm+rlwimi (same flag byte result; the original matches a two-statement Pane::SetVisible, see report)
+HockeyF SpDefenseMain_FormationA_KOOPA__Q23msw17CComDrvHockeyGameFv near 97.3 [stack] register allocation/order only
 HockeyF SubStateArtsShotCalcSetbackPos___Q23msw14CChrCoreHockeyFRQ23bcs5FVEC3 near 99.6 float register choice only (f28/f29 swapped)
 HockeyF SubStateArtsShotCreateSplitBall___Q23msw21CChrCoreHockeyWaluigiFv near 99.3 [real, reviewed] reviewer confirmed: 0.0f/1.0f swapped in the pool but every load reads the same value; s_afSplitBallOfs copy and rotation temporary in other stack slots, stored and read back consistently
 HockeyF SubStateArtsShotFireBullet___Q23msw19CChrCoreHockeyKoopaFPQ33msw14CChrCoreHockey20STATE_WORK_AIR_TRICKl near 96.4 [real, reviewed] reviewer confirmed: lhz vs lha+clrlwi 16 give the same zero-extended value; extra 0.0 store to a y slot whose normalised result is unused; independent instruction order

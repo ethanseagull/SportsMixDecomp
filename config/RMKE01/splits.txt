@@ -409,7 +409,7 @@ game/msw/CStageNet.cpp:
 	.text       start:0x8016AC7C end:0x8016ACB8
 
 game/msw/CStageScroll.cpp:
-	.text       start:0x8016B778 end:0x8016C17C
+	.text       start:0x8016B778 end:0x8016C304
 
 game/msw/CStgAct.cpp:
 	.text       start:0x8016F538 end:0x8016FF0C

@@ -124,3 +124,4 @@ Matching game/bcs/G2D/CLytResource.cpp
 Equivalent game/msw/menu.cpp
 Equivalent game/msw/CCockpitResultPartyVS.cpp
 Equivalent game/msw/cockpit.cpp
+Equivalent game/msw/CStageScroll.cpp

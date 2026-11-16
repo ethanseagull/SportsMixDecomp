@@ -221,6 +221,7 @@ main LoopState_MOVE__Q23msw16CStgGmk_Case_ActFv near 99.6 stack slots of the eff
 main LoopState_MOVE__Q23msw19CStgGmk_Pinball_ActFv near 99.5 two stack slots swapped, float register choice
 main LoopState_MOVE__Q23msw19CStgGmk_Trolley_ActFv near 93.1 [real, reviewed] reviewer confirmed: same paired-single maths; the six AABB words land in the same order, copied with lfs/stfs instead of lwz/stw (bit-identical); stack slots
 main MainBury___Q23msw9CDropCoinFv near 99.9 one fmadds with its multiplied operands swapped (commutative)
+main MainFunc__Q23msw14CNpcBombCannonFv near 98.5 [schedule] schedule: m_pMdl reload placed after m_vRot.y instead of between x and z; same registers and values
 main MainMove___Q23msw9CDropCoinFv near 97.7 register choice in the inlined reflection; -3.0f constant loaded earlier in the original
 main Main__Q23bcs10CStrapTaskFv near 98.5 one store scheduled before another; same stores
 main Main__Q23bcs6CMovieFv near 99.0 [real, reviewed] reviewer confirmed: inlined IsFrameEnd reloads m_nFlags (0x34) where the original reuses the register; no store, call or volatile access between the reads

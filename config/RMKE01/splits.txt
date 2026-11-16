@@ -821,7 +821,9 @@ game/msw/CGameExDemoBase.cpp:
 	.sdata2     start:0x805C5CD0 end:0x805C5D78
 
 game/msw/CNpcBombCannon.cpp:
-	.text       start:0x8025599C end:0x80256614
+	.text       start:0x8025599C end:0x802567D8
+	.data       start:0x8048D598 end:0x8048D778
+	.sdata2     start:0x805C5D78 end:0x805C5D98
 
 game/msw/CNameMesg.cpp:
 	.text       start:0x802567D8 end:0x80258548

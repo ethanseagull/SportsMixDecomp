@@ -1,11 +1,11 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
-BasketF ActInterrupCommonThrowItem___Q23msw17CComDrvBasketGameFv near 97.5 97.5: stack slots/regs; ours adds a redundant entry guard before the rotated ThrowItem loop (same iterations)
+BasketF ActInterrupCommonThrowItem___Q23msw17CComDrvBasketGameFv near 97.5 [real, reviewed] reviewer: Stack slots/regs, jumptable symbol, bitmask test = same case set {0x18,0x1d,0x37}, redundant null guard before loop; same behaviour.
 BasketF ActInterrupGimmick___Q23msw17CComDrvBasketGameFv near 99.4 registers plus stack slots of the XZ-distance helper temporaries
 BasketF ActInterrupLooseBall___Q23msw17CComDrvBasketGameFv near 99.2 registers plus stack slots of the XZ-distance helper temporaries
 BasketF ActInterrup__Q23msw19CNpcGhostBasketBaseFv near 94.9 94.9%: dead FsmqWrap(-1) compare code in two pushes, doubled cntlzw on two flag tests, load order.
-BasketF ActInterruptDefense___Q23msw17CComDrvBasketGameFv near 97.7 97.7: regs; equivalent branch layout of the nRoot==0x3E exit; m_nMyTeam loaded before CComMan::GetInstance()
+BasketF ActInterruptDefense___Q23msw17CComDrvBasketGameFv near 97.7 [real, reviewed] reviewer: Equivalent branch layout of 0x3E exit (all return), regs, m_nMyTeam load order only; same calls and constants.
 BasketF ActInterruptItemShootCheck___Q23msw17CComDrvBasketGameFv near 99.8 register numbering / scheduling only
-BasketF ActInterruptOffense___Q23msw17CComDrvBasketGameFv near 97.9 97.9: regs/stack slots; original dispatches stage 7/10 through cr1 with a redundant bne cr1; commutative fmuls operand order
+BasketF ActInterruptOffense___Q23msw17CComDrvBasketGameFv near 97.9 [real, reviewed] reviewer: Stage 7/10 dispatch via cr1 vs if/else-if is same logic; regs, stack, commutative fmuls, load order only.
 BasketF ActInterrupt__Q23msw17CComDrvBasketGameFv near 99.4 register numbering / scheduling only
 BasketF AddCoinValue__Q23msw18CCockpitBasketCoinFlll near 99.0 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 BasketF AddSuccessCount__Q23msw16CGameGuideBasketFPCQ23msw8CChrCorel near 98.0 98.0: original reloads m_nType (0x3C) after storing m_nFlags (0x38); ours reuses the first read, same value
@@ -241,10 +241,10 @@ BasketF SubStateSmashCutStraight___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBaske
 BasketF SubStateSmashCut___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket20STATE_WORK_SMASH_CUT near 94.1 94.1: IsAnmFlipPlay ternary cmpwi vs mr. (4x, same test), float register choice/order, two extra mr copies
 BasketF SubThkMainOffenseGoDunkAreaforLuiman___Q23msw17CComDrvBasketGameFv near 99.3 registers plus stack slots of the XZ-distance helper temporaries
 BasketF ThkMainDefenseStar___Q23msw17CComDrvBasketGameFv near 99.6 register numbering / scheduling only
-BasketF ThkMainDefense___Q23msw17CComDrvBasketGameFv near 98.6 registers plus stack slots of the XZ-distance helper temporaries
+BasketF ThkMainDefense___Q23msw17CComDrvBasketGameFv near 98.6 [real, reviewed] reviewer: Only registers, stack slots, subfic scheduling differ; same calls and constants.
 BasketF ThkMainJumpBall___Q23msw17CComDrvBasketGameFv near 97.9 register numbering / scheduling only
 BasketF ThkMainLooseBall___Q23msw17CComDrvBasketGameFv near 99.9 register numbering / scheduling only
-BasketF ThkMainOffense___Q23msw17CComDrvBasketGameFv near 98.6 registers, stack slots of the XZ-distance helper temporaries, and the two pure getters GetBaseShootPoint/GetBaseShootPointToGimmick called in swapped order
+BasketF ThkMainOffense___Q23msw17CComDrvBasketGameFv near 98.6 [real, reviewed] reviewer: Regs, stack slots; GetBaseShootPoint/ToGimmick swapped in unspecified-order sum of two getters (neither has side effects); same constants.
 BasketF ThkMain__Q23msw17CComDrvBasketGameFv near 99.5 register numbering / scheduling only
 BasketF UpDataWaitBall__Q23msw30CBallManBasketHungryBossPackunFv near 99.1 99.1: register numbering of the delivery-pattern value and loop counters
 BasketF UpDateCollBody___Q23msw19CNpcGhostBasketBaseFv near 92.7 register choice / schedule only (UpDateCollBody_: argument load order).

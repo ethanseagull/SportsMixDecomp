@@ -169,7 +169,7 @@ main IsDrawXluJoint__Q23bcs7CScnObjCFv unverified 68.0 68%: inlining depth of th
 main IsEnable__Q23msw11CEvNodeDataFl near 92.7 92.7%: the original loads m_anm and does the cmpwi cr6 compare before saving r30, ours after; constants, calls, accesses and branch targets identical
 main IsEnable__Q23msw13CShadowTexManFl unverified 78.4 switch compare tree vs our linear chain and other branch form; not proven equal by tool
 main IsExistGoalRing__Q23msw5CGameFv unverified 75.9 75.9%: cases 0 and 3 tested as a chain instead of the original's binary tree
-main IsMenuOut__Q23msw16CCockpitMenuBaseFv near 98.5 beq/beq vs blt/ble for the 4/5/0 kind test, equivalent branch form
+main IsMenuOut__Q23msw16CCockpitMenuBaseFv near 98.5 [real, reviewed] reviewer confirmed: original blt/ble range test (state<4 to the ==0 test, 4..5 to true; targets checked in the asm) equals two beq; same result for every state
 main IsNowSlowEffect__Q23msw5CGameFv unverified 84.2 84.2%: block order of the two early returns of 0
 main IsPlayTypeCanChangeLeader__Q23msw5CGameFl unverified 77.4 switch compare tree vs our linear chain and other branch form; not proven equal by tool
 main IsTurnTableOpen__Q23msw12CStage17BaseCFv near 99.8 fadds operands swapped in m_fRot + 10 degrees (commutative); otherwise identical

@@ -109,6 +109,11 @@ namespace msw {
                 float m_fUnk20;
                 unsigned char m_Unk24[0x28 - 0x24];
                 long m_nBodySize; // 0x28
+                unsigned char m_Unk2C[0x44 - 0x2C];
+                // 0x44 (meaning guessed; added for HockeyF
+                // game/hockey/CcNinjaCloneBody.cpp): an effect id; the
+                // hockey ninja's clones appear with it.
+                long m_nUnk44;
             };
             // (contents guessed in game/boss/CChrCoreBoss.cpp) The sizes of
             // the collisions for one body size class (GetPrmBodySize).
@@ -1384,6 +1389,10 @@ namespace msw {
             // Util_SetJumpParam, by fStep frames; sound nSe in sound slot
             // nSlot, and stops that slot (fading over fFrames).
             void SetPos(const bcs::FVEC3 &rPos);
+            // (DOL; added for HockeyF game/hockey/CcNinjaCloneBody.cpp)
+            // Sets x and z of the position only; the yaw of goal nGoal.
+            void SetPosXZ(float x, float z);
+            float GetGoalYRot(long nGoal) const;
             // (added for BasketF CChrCoreBasketKuroma) Moves the character by rMove.
             void AddPos(const bcs::FVEC3 &rMove);
             // (added for BasketF game/basket/unit_25D70.cpp) The same in

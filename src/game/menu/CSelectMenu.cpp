@@ -288,7 +288,14 @@ namespace {
         unsigned char m_Unk12[2]; // 0x12, always 0 (entries are 0x14 bytes)
     };
 
-    const CharaSlotSetUp s_CharaSlotSetUp[] = {
+    // The table is followed by a zero word inside the same object: the
+    // original places it 4-aligned (0x234 bytes), not 8-aligned.
+    struct CharaSlotTable {
+        CharaSlotSetUp m_Entry[28];
+        unsigned long m_Unk230;
+    };
+
+    const CharaSlotTable s_CharaSlotSetUp = { {
         /* 0x131C */ { { { 0x0, 0x0, 0xFF }, { 0x0, 0x0, 0xFF } }, { { 0x4, 0x4, 0xFF }, { 0x4, 0x4, 0xFF } }, { { 0x4, 0x4, 0xFF }, { 0x4, 0x4, 0xFF } } },
         /* 0x1330 */ { { { 0x0, 0x0, 0x0 }, { 0x0, 0x0, 0x0 } }, { { 0x4, 0x4, 0x4 }, { 0x4, 0x4, 0x4 } }, { { 0x4, 0x4, 0x4 }, { 0x4, 0x4, 0x4 } } },
         /* 0x1344 */ { { { 0x0, 0x0, 0xFF }, { 0x0, 0x0, 0xFF } }, { { 0x0, 0x0, 0xFF }, { 0x4, 0x4, 0xFF } }, { { 0x0, 0x4, 0xFF }, { 0x4, 0x4, 0xFF } } },
@@ -317,7 +324,29 @@ namespace {
         /* 0x1510 */ { { { 0x0, 0x1, 0xFF }, { 0x0, 0x2, 0xFF } }, { { 0x0, 0x1, 0xFF }, { 0x4, 0x2, 0xFF } }, { { 0x0, 0x1, 0xFF }, { 0x4, 0x2, 0xFF } } },
         /* 0x1524 */ { { { 0x0, 0x1, 0xFF }, { 0x3, 0x2, 0xFF } }, { { 0x0, 0x1, 0xFF }, { 0x3, 0x2, 0xFF } }, { { 0x0, 0x1, 0xFF }, { 0x3, 0x2, 0xFF } } },
         /* 0x1538 */ { { { 0xFF, 0xFF, 0xFF }, { 0xFF, 0xFF, 0xFF } }, { { 0xFF, 0xFF, 0xFF }, { 0xFF, 0xFF, 0xFF } }, { { 0xFF, 0xFF, 0xFF }, { 0xFF, 0xFF, 0xFF } } },
+    }, 0 };
+
+    // Kept in the game's .rodata although nothing in the module reads it
+    // (0x90 bytes, all 1; see UnusedReferences below).
+    const unsigned char s_Unk1550[0x90] = {
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     };
+
+    // (guessed) Stand-in for code of the original that was optimised away
+    // or dropped by the linker. Behaviour-free; see notes/decisions.md,
+    // "UnusedReferences".
+    inline void UnusedReferences()
+    {
+        (void)s_Unk1550;
+    }
 }
 
 // The camera animation file of the menu background.
@@ -392,13 +421,13 @@ namespace {
     };
 
     const long CAMERA_ANIM_NUM = sizeof(s_CameraAnimTable) / sizeof(s_CameraAnimTable[0]);
-
-    // The speed of each camera animation (GetCameraSpeed).
+    // The speed of each camera animation (GetCameraSpeed). Only 61 values
+    // are given: the last animation gets 0, as in the original.
     const float s_CameraSpeed[CAMERA_ANIM_NUM] = {
         1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
         1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f,
         2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f
+        1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f
     };
 
     // The order of the characters of each team in the game (SelectEnd_Out).
@@ -550,6 +579,7 @@ float msw::_GetModeChangeWaitTime()
 
 long msw::_GetPlayModeFromButtonId(long nBtnKindId, long nPlayerNum)
 {
+    long nIndex = nPlayerNum - 1;
     long aPlayMode[4][4] = {
         { 4, 0, -1, -1 },
         { 6, 0x12, 5, 1 },
@@ -559,13 +589,13 @@ long msw::_GetPlayModeFromButtonId(long nBtnKindId, long nPlayerNum)
 
     switch (nBtnKindId) {
         case 0x32:
-            return aPlayMode[nPlayerNum - 1][0];
+            return aPlayMode[nIndex][0];
         case 0x33:
-            return aPlayMode[nPlayerNum - 1][1];
+            return aPlayMode[nIndex][1];
         case 0x34:
-            return aPlayMode[nPlayerNum - 1][2];
+            return aPlayMode[nIndex][2];
         case 0x35:
-            return aPlayMode[nPlayerNum - 1][3];
+            return aPlayMode[nIndex][3];
     }
     return -2;
 }
@@ -907,1372 +937,6 @@ msw::CSelectMenu::~CSelectMenu()
     Finalize();
 }
 
-// The state of screen 0x32: nothing.
-void msw::CSelectMenu::SelectNull_In()
-{
-}
-
-void msw::CSelectMenu::SelectNull_Loop()
-{
-}
-
-void msw::CSelectMenu::SelectNull_Out()
-{
-}
-
-void msw::CSelectMenu::Disp()
-{
-    ModListDispLoop();
-}
-
-// Makes menu object nObjId from s_NewMenuClassTable and adds it to the
-// task: -2 when it exists already, -3 when the table has no class for it.
-long msw::CSelectMenu::CreateObj(long nObjId)
-{
-    if (FindObj(nObjId) != 0) {
-        return -2;
-    }
-    CMenuLinkBase *(*pNew)(long) = s_NewMenuClassTable[nObjId];
-    CMenuLinkBase *pObj;
-    if (pNew != 0) {
-        pObj = pNew(nObjId);
-    } else {
-        return -3;
-    }
-    return AddObj(pObj);
-}
-
-void msw::CSelectMenu::RemoveObj(long nObjId)
-{
-    CMenuLinkBase *pObj = FindObj(nObjId);
-    if (pObj != 0) {
-        m_LinkList.RemoveObject(pObj);
-    }
-}
-
-const char *msw::CSelectMenu::GetArchiveFileName(long nArchive)
-{
-    return s_FileInputTable[nArchive].m_szPath;
-}
-
-const char *msw::CSelectMenu::GetArchiveRootFolderName(long nArchive)
-{
-    return s_pArchiveRootFolder;
-}
-
-bcs::CLoadMan::FILE_INPUT *msw::CSelectMenu::GetArchiveFileInfo(long nArchive)
-{
-    return &s_FileInputTable[nArchive];
-}
-
-unsigned char msw::CSelectMenu::GetLoadArchiveFileId(long nMode)
-{
-    return s_LoadArchiveFileId[nMode < 0 ? m_nState : nMode];
-}
-
-void msw::CSelectMenu::SetNextMode(long nMode, float fFadeTime)
-{
-    m_Unk98 = 1;
-    m_nNextMode = nMode;
-    m_fUnk94 = fFadeTime;
-}
-
-void msw::CSelectMenu::SetNextMode(long nMode, CSelectMenuLayoutBase *pObj)
-{
-    m_Unk98 = 1;
-    m_nNextMode = nMode;
-    if (pObj != 0) {
-        m_fUnk94 = pObj->GetOutAnimFrameSize();
-        pObj->m_Unk30 = CSelectMenuLayoutBase::STATE_CLOSE;
-    }
-}
-
-float msw::CSelectMenuLayoutBase::GetOutAnimFrameSize()
-{
-    return s_DefaultOutAnimFrameSize;
-}
-
-// Follows the leading pad: marks the others, sends every pad's cursor
-// state to the cockpit and notes which pads use the pointer.
-void msw::CSelectMenu::PadStateCheck()
-{
-    CMenuPadInfo &rInfo = CMenuPadInfo::s_Instance;
-    if (m_Unk27B == 0) {
-        long nLeader = rInfo.m_nPadLeader;
-        long nNewLeader = rInfo.SelectPadLeader(0);
-        if (nLeader != nNewLeader) {
-            ChangeLeaderPad(nNewLeader);
-        }
-    }
-
-    CMenuPadInfo::PAD *pPad = CMenuPadInfo::s_Instance.m_aPad;
-    for (long i = 0; i < 4; i++, pPad++) {
-        unsigned char nFlags = pPad->m_nFlags04;
-        unsigned char nCursor = 0x80;
-        if ((nFlags & 1) && ((nFlags & 4) || i == rInfo.m_nPadLeader)) {
-            nCursor = m_aPadSelect[i].m_Unk03;
-        }
-        CCockpit::SendObjEventTrigger(0x1016, 0x2715 + i, (void *)(nCursor | m_aPadSelect[i].m_nPlayerNo));
-    }
-
-    for (long i = 0; i < 4; i++) {
-        m_aPadSelect[i].m_Unk01 = m_aPadSelect[i].m_Unk00;
-        if (CMenuPad::s_Instance.IsInputPointerMode(i)) {
-            m_aPadSelect[i].m_Unk00 = 0;
-        } else {
-            m_aPadSelect[i].m_Unk00 = 1;
-        }
-    }
-}
-
-// Makes pad nPad the one that leads the menus.
-void msw::CSelectMenu::ChangeLeaderPad(long nPad)
-{
-    CMenuPadInfo::PAD *pPad = CMenuPadInfo::s_Instance.m_aPad;
-    for (long i = 0; i < 4; i++, pPad++) {
-        pPad->SetLeader(i == nPad);
-        m_aPadSelect[i].m_Unk03 = i == nPad ? 0 : 0x40;
-    }
-}
-
-// Moves the cursor of player nPad on pObj from button nOld to nNew.
-inline void msw::CSelectMenu::MoveButtonCursor(CSelectMenuLayoutBase *pObj, long nPad, unsigned short &rCurrent,
-                                               unsigned short nOld, short nNew)
-{
-    SetPreviousButtonKindIdWithoutNone(nPad, nOld, pObj);
-    rCurrent = nNew;
-    pObj->ClearCursorMarkerPosition(nPad, nOld);
-    pObj->m_nPushButtonId[nPad] = nNew;
-    pObj->SetCursorMarkerPosition(nPad, nNew);
-}
-
-// Passes the pointer or the stick of controller nPadNo to menu object
-// pObj for player nPad on screen nMode: moves the player's cursor between
-// the buttons and keeps m_nCurrentBtnKindId up to date.
-void msw::CSelectMenu::InputDataToMenuObj(CSelectMenuLayoutBase *pObj, long nPad, long nPadNo, long nMode)
-{
-    CMenuPadInfo &rInfo = CMenuPadInfo::s_Instance;
-    CMenuPadInfo::PAD &rPad = rInfo.m_aPad[nPadNo];
-    if (!(rPad.m_nFlags04 & 4) && nPadNo != rInfo.m_nPadLeader) {
-        return;
-    }
-
-    PadSelect &rSelect = m_aPadSelect[nPadNo];
-    unsigned short &rCurrent = m_nCurrentBtnKindId[nPad][nMode];
-    unsigned short nCurrent = rCurrent;
-    int bPointer = rSelect.m_Unk00 == 0;
-    if (rSelect.m_Unk00 != rSelect.m_Unk01 || rSelect.m_Unk02 != 0) {
-        m_aPadSelect[nPadNo].m_Unk02 = 0;
-        if (!(rPad.m_nFlags06 & 1)) {
-            unsigned char nCursor = m_aPadSelect[nPadNo].m_Unk03;
-            unsigned char nNew = nCursor | 0x40;
-            if (bPointer == 1) {
-                nNew = nCursor & ~0x40;
-            }
-            m_aPadSelect[nPadNo].m_Unk03 = nNew;
-        }
-        pObj->SetCursorMarkerVisible(nPadNo, 1);
-    }
-
-    if (rPad.m_nFlags06 & 4) {
-        return;
-    }
-
-    if (bPointer == 1) {
-        bcs::FVEC3 pos;
-        CCockpit::SendObjEventTrigger(0x1016, nPadNo + 0x2711, &pos);
-        if (rInfo.m_nCursorMode == 0) {
-            if (!(rPad.m_nFlags06 & 1)) {
-                short nHit = pObj->HitCheck(&pos);
-                if (nHit != 0 && pObj->IsMarkerOnPointer(nPad, nHit)) {
-                    MoveButtonCursor(pObj, nPad, rCurrent, nCurrent, nHit);
-                }
-            }
-        } else if (!(rPad.m_nFlags06 & 1)) {
-            short nHit = pObj->HitCheck(&pos);
-            if (pObj->IsMarkerOnPointer(nPad, nHit)) {
-                MoveButtonCursor(pObj, nPad, rCurrent, nCurrent, nHit);
-            }
-        }
-    } else {
-        if (!(rPad.m_nFlags06 & 2)) {
-            if (pObj->IsButtonKindOfStickMode(nCurrent)) {
-                short nMove = pObj->StickMoveCheck(nPadNo, nCurrent);
-                if (nMove != nCurrent) {
-                    MoveButtonCursor(pObj, nPad, rCurrent, nCurrent, nMove);
-                }
-            } else {
-                unsigned short nPrev = m_nCupBtnKindId[nPad];
-                if (!pObj->IsButtonKindOfStickMode(nPrev)) {
-                    nPrev = pObj->SetDefaultMoveCursor(nPad, nPrev);
-                }
-                rCurrent = nPrev;
-                pObj->m_nPushButtonId[nPad] = nPrev;
-                pObj->SetCursorMarkerPosition(nPad, (short)nPrev);
-            }
-        }
-        bcs::FVEC3 pos;
-        CCockpit::SendObjEventTrigger(0x1016, nPadNo + 0x2711, &pos);
-        unsigned short nHit = pObj->HitCheck(&pos);
-        if (nHit != 0 && pObj->IsMarkerOnPointer(nPad, (short)nHit)) {
-            CMenuPad::s_Instance.m_nPointerOnObj[nPad] = 1;
-        }
-    }
-}
-
-long msw::CSelectMenuLayoutBase::SetCursorMarkerVisible(long, int)
-{
-    return 0;
-}
-
-long msw::CSelectMenuLayoutBase::HitCheck(bcs::FVEC3 *pPos)
-{
-    return 0;
-}
-
-int msw::CSelectMenuLayoutBase::IsMarkerOnPointer(long, long)
-{
-    return 1;
-}
-
-long msw::CSelectMenuLayoutBase::ClearCursorMarkerPosition(long, long)
-{
-    return 0;
-}
-
-long msw::CSelectMenuLayoutBase::SetCursorMarkerPosition(long, long)
-{
-    return 0;
-}
-
-int msw::CSelectMenuLayoutBase::IsButtonKindOfStickMode(long nBtnKindId)
-{
-    return 1;
-}
-
-long msw::CSelectMenuLayoutBase::StickMoveCheck(long nPad, long nBtnKindId)
-{
-    return 0;
-}
-
-long msw::CSelectMenuLayoutBase::SetDefaultMoveCursor(long nPad, long nBtnKindId)
-{
-    return 0;
-}
-
-// Leaves the screen for screen nMode with the back button of pad nPad.
-void msw::CSelectMenu::GoBackToMode(long nPad, long nMode, CSelectMenuLayoutBase *pObj, long nUnk)
-{
-    m_nCurrentBtnKindId[nPad][m_nState] = 1;
-    if (pObj != 0) {
-        pObj->PushButton(nPad, nUnk);
-    }
-    SetNextMode(nMode, pObj);
-}
-
-long msw::CSelectMenuLayoutBase::PushButton(long nPad, long nBtnKindId)
-{
-    return 0;
-}
-
-// The same, only when there is a menu object.
-void msw::CSelectMenu::SetCancelBackMode(long nPad, long nMode, CSelectMenuLayoutBase *pObj, long nUnk)
-{
-    m_nCurrentBtnKindId[nPad][m_nState] = 1;
-    if (pObj != 0) {
-        pObj->PushButton(nPad, nUnk);
-        SetNextMode(nMode, pObj);
-    }
-}
-
-// The menu history: the screens passed through, newest first, as pairs
-// of a screen and the screen it went on to.
-void msw::CSelectMenu::ClearMenuHistory()
-{
-    m_nHistoryNum = 0;
-    for (long i = 0; i < HISTORY_NUM; i++) {
-        m_History[i].m_nState = 0xFF;
-        m_History[i].m_nNextState = 0xFF;
-    }
-}
-
-void msw::CSelectMenu::PushMenuHistory(unsigned char nState, unsigned char nNextState, unsigned short nBtnKindId)
-{
-    static const long index = 0;
-
-    if (nState == nNextState) {
-        return;
-    }
-    if (m_nHistoryNum > 0 && m_History[index].m_nState == nState && m_History[index].m_nNextState == nNextState) {
-        return;
-    }
-    for (long i = m_nHistoryNum - 1; i >= 0; i--) {
-        m_History[i + 1] = m_History[i];
-    }
-    m_History[index].m_nState = nState;
-    m_History[index].m_nNextState = nNextState;
-    m_nHistoryNum++;
-    if ((unsigned long)m_nHistoryNum > HISTORY_NUM) {
-        m_nHistoryNum = HISTORY_NUM;
-    }
-}
-
-msw::CSelectMenu::History *msw::CSelectMenu::GetMenuHistory(unsigned char nState)
-{
-    for (long i = m_nHistoryNum - 1; i >= 0; i--) {
-        if (nState == m_History[i].m_nState) {
-            return &m_History[i];
-        }
-    }
-    return 0;
-}
-
-msw::CSelectMenu::History *msw::CSelectMenu::GetMenuHistoryByNextState(unsigned char nNextState)
-{
-    for (long i = m_nHistoryNum - 1; i >= 0; i--) {
-        if (nNextState == m_History[i].m_nNextState) {
-            return &m_History[i];
-        }
-    }
-    return 0;
-}
-
-// The screen before screen nState, skipping the ones that are not kept
-// in the history (IsPushStateHistory); 1 when there is none.
-unsigned char msw::CSelectMenu::GetPrevMode(unsigned char nState)
-{
-    long i;
-    for (i = 0; i < m_nHistoryNum; i++) {
-        if (m_History[i].m_nNextState == nState) {
-            break;
-        }
-    }
-    for (; i < m_nHistoryNum; i++) {
-        if (m_History[i].m_nNextState == nState) {
-            unsigned char nPrev = m_History[i].m_nState;
-            int bPush = IsPushStateHistory(nPrev);
-            if (bPush == 0) {
-                nState = nPrev;
-                continue;
-            }
-            return nPrev;
-        }
-    }
-    return 1;
-}
-
-long msw::CSelectMenu::GetPrevMode()
-{
-    long nState = m_nState;
-    unsigned char nPrev = GetPrevMode((unsigned char)nState);
-    PopHistoryByState(nPrev, nState);
-    return nPrev;
-}
-
-// Drops the history up to and including the entry nState -> nNextState.
-void msw::CSelectMenu::PopHistoryByState(unsigned char nState, unsigned char nNextState)
-{
-    for (long i = 0; i < m_nHistoryNum; i++) {
-        if (m_History[i].m_nState == nState && m_History[i].m_nNextState == nNextState) {
-            long nRest = m_nHistoryNum - (i + 1);
-            History *pDst = m_History;
-            History *pSrc = &m_History[i + 1];
-            for (long j = 0; j < nRest; j++) {
-                pDst[j] = pSrc[j];
-            }
-            m_nHistoryNum = nRest;
-            return;
-        }
-    }
-}
-
-unsigned short msw::CSelectMenu::GetHistoryButtonKindId(unsigned char nState, long nPad)
-{
-    return m_HistoryBtnKindId[nState].m_nPad[nPad];
-}
-
-void msw::CSelectMenu::SetHistoryButtonKindId(unsigned char nState, long nPad, unsigned short nBtnKindId)
-{
-    m_HistoryBtnKindId[nState].m_nPad[nPad] = nBtnKindId;
-}
-
-// Clears the remembered buttons of screen nState and every later one.
-void msw::CSelectMenu::ClearHistoryButtonKindId(long nState)
-{
-    static const unsigned short btnKindId = 0;
-
-    for (long i = nState; i < STATE_NUM; i++) {
-        for (long j = 0; j < 4; j++) {
-            m_HistoryBtnKindId[(unsigned char)i].m_nPad[j] = btnKindId;
-        }
-    }
-}
-
-// The players per team of the play mode.
-long msw::CSelectMenu::GetTeamPlayerNum()
-{
-    switch (m_nPlayMode) {
-        case 0:
-        case 1:
-        case 9:
-        case 10:
-        case 13:
-        case 14:
-        case 15:
-        case 16:
-            return 3;
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-        case 12:
-        case 17:
-            return 2;
-        case 2:
-        case 3:
-        case 11:
-            return 1;
-    }
-    return 1;
-}
-
-// The character slots (m_aCharaSelectParam). A slot belongs to a pad
-// entry (m_Unk00, or the player kind m_nPlayerKind on the Wi-Fi and
-// tournament menus) and is empty (state 0), being chosen (1), decided (2)
-// or decided for now (3).
-int msw::CSelectMenu::Chara_IsCharaDecide(long nIndex)
-{
-    return m_aCharaSelectParam[nIndex].m_nState >= 2U;
-}
-
-int msw::CSelectMenu::Chara_IsAllDecide(long nEntry)
-{
-    for (long i = 0; i < 6; i++) {
-        switch (m_Unk9B) {
-            case 0:
-            case 2:
-                if (nEntry == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecide(i) == 0) {
-                    return 0;
-                }
-                break;
-            case 4:
-                if (nEntry == m_aCharaSelectParam[i].m_nPlayerKind && Chara_IsCharaDecide(i) == 0) {
-                    return 0;
-                }
-                break;
-            default:
-                if (nEntry == m_aCharaSelectParam[i].m_nPlayerKind && Chara_IsCharaDecide(i) == 0) {
-                    return 0;
-                }
-                break;
-        }
-    }
-    return 1;
-}
-
-// Gives character nChara (colour nColor: variant nColor / 2, shade
-// nColor % 2; 0xFF none) to the first undecided slot of entry nEntry and
-// puts it in state nState.
-long msw::CSelectMenu::Chara_SetDecideChara(long nEntry, long nChara, long nColor, long nUnk0C, long nState)
-{
-    long nCharaSub = nColor >> 1;
-    long nShade = nColor & 1;
-    if (nColor == 0xFF) {
-        nCharaSub = 0xFF;
-        nShade = 0;
-    }
-    for (long i = 0; i < 6; i++) {
-        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecide(i) == 0) {
-            CharaSelectParam &rParam = m_aCharaSelectParam[i];
-            rParam.m_nChara = nChara;
-            rParam.m_nCharaSub = nCharaSub;
-            rParam.m_Unk13[0] = nShade;
-            rParam.m_nState = nState;
-            rParam.m_Unk0C = nUnk0C;
-            return i;
-        }
-    }
-    return -1;
-}
-
-// The same, and plays the character model's decide motion.
-long msw::CSelectMenu::Chara_SetDecideCharaWithMotion(long nEntry, long nChara, long nColor, long nBtnKindId)
-{
-    long nIndex = Chara_SetDecideChara(nEntry, nChara, nColor, nBtnKindId, 2);
-    if (nIndex >= 0) {
-        SelectMenu::CCharaMdl *pMdl = (SelectMenu::CCharaMdl *)FindObj(0x1C);
-        if (pMdl != 0) {
-            pMdl->SetStateChrMenuObj(nIndex, 1);
-        }
-    }
-    return nIndex;
-}
-
-// Takes back character nChara from entry nEntry: empties the last slot
-// being chosen, then puts the last decided slot with that character back
-// to being chosen. Returns that slot, -1 for none.
-long msw::CSelectMenu::Chara_CancelDecideChara(long nEntry, long nChara)
-{
-    long nIndex = -1;
-    for (long i = 5; i >= 0; i--) {
-        CharaSelectParam &rParam = m_aCharaSelectParam[i];
-        if (nEntry == rParam.m_Unk00 && rParam.m_nState == 1) {
-            CharaSelectParam &rClear = m_aCharaSelectParam[i];
-            rClear.m_nState = 0;
-            rClear.m_nChara = 0xFF;
-            rClear.m_nCharaSub = 0xFF;
-            rClear.m_Unk13[0] = 0;
-            rClear.m_MiiSource = RFLDataSource_Default;
-            rClear.m_nMiiIndex = 0;
-            rClear.m_nMiiMode = 0xFF;
-            rClear.m_Unk0C = 0;
-            break;
-        }
-    }
-    for (long i = 5; i >= 0; i--) {
-        CharaSelectParam &rParam = m_aCharaSelectParam[i];
-        if (nEntry == rParam.m_Unk00 && nChara == rParam.m_nChara && Chara_IsCharaDecide(i) == 1) {
-            CharaSelectParam &rSlot = m_aCharaSelectParam[i];
-            if ((unsigned char)(rSlot.m_nChara - 0x13) <= 5 && rSlot.m_nMiiMode != 0xFF) {
-                rSlot.m_nCharaSub = 0xFF;
-                rSlot.m_Unk13[0] = 0;
-                rSlot.m_MiiSource = RFLDataSource_Default;
-                rSlot.m_nMiiIndex = 0;
-                rSlot.m_nMiiMode = 0xFF;
-            }
-            m_aCharaSelectParam[i].m_nState = 1;
-            nIndex = i;
-            break;
-        }
-    }
-    return nIndex;
-}
-
-long msw::CSelectMenu::Chara_CancelDecideCharaWithMotion(long nEntry, long nChara)
-{
-    long nIndex = Chara_CancelDecideChara(nEntry, nChara);
-    if (nIndex >= 0) {
-        SelectMenu::CCharaMdl *pMdl = (SelectMenu::CCharaMdl *)FindObj(0x1C);
-        if (pMdl != 0) {
-            pMdl->SetStateChrMenuObj(nIndex, 0);
-        }
-    }
-    return nIndex;
-}
-
-// Puts character nChara (colour nColor, -1 or 0xFF none) in the first
-// undecided slot of entry nPad as being chosen; bShade forces the second
-// shade.
-void msw::CSelectMenu::Chara_SetSelectChara(long nPad, long nChara, long nColor, int bShade)
-{
-    long nCharaSub = nColor >> 1;
-    long nShade = nColor & 1;
-    if (nColor == 0xFF || nColor == -1) {
-        nCharaSub = 0xFF;
-        nShade = 0;
-    }
-    if (bShade != 0) {
-        nShade = 1;
-    }
-    for (long i = 0; i < 6; i++) {
-        if (nPad == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecide(i) == 0) {
-            CharaSelectParam &rParam = m_aCharaSelectParam[i];
-            rParam.m_nChara = nChara;
-            rParam.m_nCharaSub = nCharaSub;
-            rParam.m_Unk13[0] = nShade;
-            rParam.m_nState = 1;
-            rParam.m_MiiSource = RFLDataSource_Default;
-            rParam.m_nMiiIndex = 0;
-            rParam.m_nMiiMode = 0xFF;
-            rParam.m_Unk0C = 0;
-            break;
-        }
-    }
-}
-
-// -1 when character nChara cannot be taken by entry nPad: another entry
-// has it, or the entry has decided it already. The Mii (0x13) is always
-// free.
-long msw::CSelectMenu::Chara_CheckSelectChara(long nPad, long nChara, long nColor)
-{
-    if (nChara == 0x13) {
-        return 1;
-    }
-    for (long i = 0; i < 6; i++) {
-        CharaSelectParam &rParam = m_aCharaSelectParam[i];
-        if (nPad == rParam.m_Unk00) {
-            if (nChara == rParam.m_nChara && rParam.m_nState == 2) {
-                return -1;
-            }
-        } else if (nChara == rParam.m_nChara) {
-            return -1;
-        }
-    }
-    return 1;
-}
-
-long msw::CSelectMenu::Chara_CheckSelectChara(long nPad, long nChara)
-{
-    for (long i = 0; i < 6; i++) {
-        CharaSelectParam &rParam = m_aCharaSelectParam[i];
-        if (nPad == rParam.m_Unk00) {
-            if (nChara == rParam.m_nChara && rParam.m_nState == 2) {
-                return -1;
-            }
-        } else if (nChara == rParam.m_nChara) {
-            return -1;
-        }
-    }
-    return 1;
-}
-
-long msw::CSelectMenu::Chara_GetDecideCharaNum(long nEntry)
-{
-    long nNum = 0;
-    for (long i = 0; i < 6; i++) {
-        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecide(i) == 1) {
-            nNum++;
-        }
-    }
-    return nNum;
-}
-
-msw::CSelectMenu::CharaSelectParam *msw::CSelectMenu::Chara_GetLastDecideChara(long nEntry)
-{
-    for (long i = 5; i >= 0; i--) {
-        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecide(i) == 1) {
-            return &m_aCharaSelectParam[i];
-        }
-    }
-    return 0;
-}
-
-long msw::CSelectMenu::Chara_GetSaveCharaIndex(long nIndex, long &rEntry, long &rChara, long &rCharaSub, long &rColor,
-                                               long &rPlayerKind)
-{
-    rEntry = m_aCharaSaveParam[nIndex].m_Unk00;
-    rChara = m_aCharaSaveParam[nIndex].m_nChara;
-    rCharaSub = m_aCharaSaveParam[nIndex].m_nCharaSub;
-    rColor = m_aCharaSaveParam[nIndex].m_Unk13[0];
-    rPlayerKind = m_aCharaSelectParam[nIndex].m_nPlayerKind;
-    return 0;
-}
-
-
-// Gives the Mii (mode nMiiMode, index nIndex of source, createId) to the
-// first undecided slot of pad nPad.
-void msw::CSelectMenu::Mii_SelectParam(long nPad, unsigned char nMiiMode, long nIndex, RFLDataSource source,
-                                       RFLCreateID createId)
-{
-    for (long i = 0; i < 6; i++) {
-        if (nPad == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecide(i) == 0) {
-            if (m_nCharaColor[nPad] & 0xAA) {
-                m_aCharaSelectParam[i].m_Unk13[0] = 1;
-            } else {
-                m_aCharaSelectParam[i].m_Unk13[0] = 0;
-            }
-            CharaSelectParam &rParam = m_aCharaSelectParam[i];
-            rParam.m_nCharaSub = 0;
-            rParam.m_nMiiMode = nMiiMode;
-            rParam.m_nMiiIndex = nIndex;
-            rParam.m_MiiSource = source;
-            rParam.m_MiiCreateId = createId;
-            return;
-        }
-    }
-}
-
-unsigned char msw::CSelectMenu::Mii_GetMiiMode(long nIndex)
-{
-    return m_aCharaSelectParam[nIndex].m_nMiiMode;
-}
-
-RFLDataSource msw::CSelectMenu::Mii_GetMiiDataSource(long nIndex)
-{
-    return m_aCharaSelectParam[nIndex].m_MiiSource;
-}
-
-long msw::CSelectMenu::Mii_GetMiiIndex(long nIndex)
-{
-    return m_aCharaSelectParam[nIndex].m_nMiiIndex;
-}
-
-unsigned long long msw::CSelectMenu::Mii_GetMiiCreateId(long nIndex)
-{
-    return *(unsigned long long *)&m_aCharaSelectParam[nIndex].m_MiiCreateId;
-}
-
-// Decides the Mii (0x13) for entry nEntry.
-void msw::CSelectMenu::Mii_SetMiiParam(long nEntry, unsigned char nMiiMode, long nIndex, RFLDataSource source,
-                                       RFLCreateID createId)
-{
-    long nSlot = Chara_SetDecideChara(nEntry, 0x13, 0, 0x4A, 3);
-    if (m_nCharaColor[nEntry] & 0xAA) {
-        m_aCharaSelectParam[nSlot].m_Unk13[0] = 1;
-    }
-    CharaSelectParam &rParam = m_aCharaSelectParam[nSlot];
-    rParam.m_nMiiMode = nMiiMode;
-    rParam.m_nMiiIndex = nIndex;
-    rParam.m_MiiSource = source;
-    rParam.m_MiiCreateId = createId;
-}
-
-// Drops the Mii nMiiIndex of source from entry nEntry: the slots being
-// chosen are emptied, the decided ones go back to being chosen.
-void msw::CSelectMenu::Mii_CancelMiiParam(long nEntry, RFLDataSource source, long nMiiIndex)
-{
-    static const unsigned char chrType = 0x13;
-
-    for (long i = 5; i >= 0; i--) {
-        CharaSelectParam &rParam = m_aCharaSelectParam[i];
-        if (nEntry == rParam.m_Unk00 && rParam.m_nChara == chrType && rParam.m_nState == 1) {
-            rParam.m_nState = 0;
-            rParam.m_nChara = 0xFF;
-            rParam.m_nCharaSub = 0xFF;
-            rParam.m_Unk13[0] = 0;
-            rParam.m_Unk0C = 0;
-            rParam.m_MiiSource = RFLDataSource_Default;
-            rParam.m_nMiiIndex = 0;
-            rParam.m_nMiiMode = 0xFF;
-        }
-    }
-    for (long i = 5; i >= 0; i--) {
-        CharaSelectParam &rParam = m_aCharaSelectParam[i];
-        if (nEntry == rParam.m_Unk00 && rParam.m_nChara == chrType && source == rParam.m_MiiSource &&
-            nMiiIndex == rParam.m_nMiiIndex && Chara_IsCharaDecide(i)) {
-            rParam.m_nState = 1;
-            rParam.m_nChara = 0xFF;
-            rParam.m_nCharaSub = 0xFF;
-            rParam.m_Unk13[0] = 0;
-            rParam.m_Unk0C = 0;
-            rParam.m_MiiSource = RFLDataSource_Default;
-            rParam.m_nMiiIndex = 0;
-            rParam.m_nMiiMode = 0xFF;
-        }
-    }
-}
-
-unsigned char msw::CSelectMenu::Mii_GetSaveMiiMode(long nIndex)
-{
-    return m_aCharaSaveParam[nIndex].m_nMiiMode;
-}
-
-RFLDataSource msw::CSelectMenu::Mii_GetSaveMiiDataSource(long nIndex)
-{
-    return m_aCharaSaveParam[nIndex].m_MiiSource;
-}
-
-long msw::CSelectMenu::Mii_GetSaveMiiIndex(long nIndex)
-{
-    return m_aCharaSaveParam[nIndex].m_nMiiIndex;
-}
-
-unsigned long long msw::CSelectMenu::Mii_GetSaveMiiCreateId(long nIndex)
-{
-    return *(unsigned long long *)&m_aCharaSaveParam[nIndex].m_MiiCreateId;
-}
-
-// The second player's Mii in a two-player Wi-Fi game.
-void msw::CSelectMenu::WiFi_Set2PMiiParam(unsigned char nMiiMode, long nIndex, RFLDataSource source,
-                                          RFLCreateID createId)
-{
-    m_nStarMiiUnk = nMiiMode;
-    m_nStarMiiIndex = nIndex;
-    m_StarMiiSource = source;
-    m_StarMiiCreateId = createId;
-}
-
-RFLStoreData msw::CSelectMenu::WiFi_Get2PMiiStoreData()
-{
-    RFLStoreData data;
-    bcs::CMiiMan::GetStoreData(data, m_StarMiiSource, m_StarMiiCreateId);
-    return data;
-}
-
-wchar_t *msw::CSelectMenu::WiFi_Get2PMiiName()
-{
-    RFLStoreData data;
-    bcs::CMiiMan::GetStoreData(data, m_StarMiiSource, m_StarMiiCreateId);
-    const wchar_t *pName;
-    if (m_nStarMiiUnk != 0) {
-        pName = GetMessageString("List_Mii_Name", m_nStarMiiIndex);
-    } else {
-        RFLAdditionalInfo info;
-        bcs::CMiiMan::GetAdditionalInfo(info, data);
-        pName = info.name;
-    }
-    wcscpy(m_Wifi2PName, pName);
-    return m_Wifi2PName;
-}
-
-wchar_t *msw::CSelectMenu::GetMiiName(RFLStoreData data)
-{
-    SAVE_DATA_PLAYER *pPlayer = CSave::GetPlayerData(-1);
-    SAVE_DATA_PLAYER::MiiData *pMii = pPlayer->GetIndexMii(pPlayer->SearchMiiIndex(data));
-    const wchar_t *pName;
-    if (pMii->m_Source != RFLDataSource_Official) {
-        pName = GetMessageString("List_Mii_Name", pMii->m_nNameId);
-    } else {
-        RFLAdditionalInfo info;
-        bcs::CMiiMan::GetAdditionalInfo(info, data);
-        pName = info.name;
-    }
-    wcscpy(m_MiiNameWork, pName);
-    return m_MiiNameWork;
-}
-
-// Sets up the six character slots for the play mode: who owns each slot
-// (s_CharaSlotSetUp, by pad entry) and empties them.
-void msw::CSelectMenu::InitCharaSelectParam()
-{
-    const CharaSlotSetUp *pTable = s_CharaSlotSetUp;
-    const CharaSlotSetUp *pSetUp;
-    unsigned char nPlayMode = m_nPlayMode;
-    if ((long)m_Unk9B == 2) {
-        switch (nPlayMode) {
-            case 4:
-                pSetUp = &pTable[23];
-                break;
-            case 6:
-                pSetUp = &pTable[24];
-                break;
-            case 7:
-                pSetUp = &pTable[25];
-                break;
-            case 8:
-                pSetUp = &pTable[26];
-                break;
-            case 0:
-                pSetUp = &pTable[3];
-                break;
-            case 5:
-                pSetUp = &pTable[5];
-                break;
-            case 1:
-                pSetUp = &pTable[6];
-                break;
-            case 9:
-                pSetUp = &pTable[7];
-                break;
-            default:
-                pSetUp = &pTable[27];
-                break;
-        }
-    } else {
-        switch (nPlayMode) {
-            case 12:
-                pSetUp = &pTable[0];
-                break;
-            case 13:
-                pSetUp = &pTable[1];
-                break;
-            case 0:
-                pSetUp = &pTable[3];
-                break;
-            case 1:
-                pSetUp = &pTable[6];
-                break;
-            case 4:
-                pSetUp = &pTable[2];
-                break;
-            case 5:
-                pSetUp = &pTable[5];
-                break;
-            case 6:
-                pSetUp = &pTable[4];
-                break;
-            case 7:
-                pSetUp = &pTable[8];
-                break;
-            case 8:
-                pSetUp = &pTable[11];
-                break;
-            case 9:
-                pSetUp = &pTable[7];
-                break;
-            case 10:
-                pSetUp = &pTable[14];
-                break;
-            case 14:
-                pSetUp = &pTable[15];
-                break;
-            case 15:
-                pSetUp = &pTable[16];
-                break;
-            case 16:
-                pSetUp = &pTable[17];
-                break;
-            case 17:
-                pSetUp = &pTable[10];
-                break;
-            case 18:
-                pSetUp = &pTable[18];
-                break;
-            case 19:
-                pSetUp = &pTable[19];
-                break;
-            case 20:
-                pSetUp = &pTable[9];
-                break;
-            case 21:
-                pSetUp = &pTable[20];
-                break;
-            case 22:
-                pSetUp = &pTable[12];
-                break;
-            case 23:
-                pSetUp = &pTable[13];
-                break;
-            case 24:
-                pSetUp = &pTable[21];
-                break;
-            case 25:
-                pSetUp = &pTable[22];
-                break;
-            default:
-                pSetUp = &pTable[27];
-                break;
-        }
-    }
-
-    for (long nTeam = 0; nTeam < 2; nTeam++) {
-        for (long i = 0; i < 3; i++) {
-            long nSlot = nTeam * 3 + i;
-            long nEntry = GetPadEntryId(pSetUp->m_nEntry[nTeam][i]);
-            CharaSelectParam &rParam = m_aCharaSelectParam[nSlot];
-            rParam.m_Unk00 = nEntry;
-            rParam.m_nPlayerKind = GetPadEntryId(pSetUp->m_nPlayerKind[nTeam][i]);
-            rParam.m_Unk08 = pSetUp->m_nUnk08[nTeam][i];
-            rParam.m_nState = 0;
-            rParam.m_nChara = 0xFF;
-            rParam.m_nCharaSub = 0xFF;
-            rParam.m_Unk13[0] = 0;
-            rParam.m_Unk0C = 0;
-            rParam.m_MiiSource = RFLDataSource_Default;
-            rParam.m_nMiiIndex = 0;
-            rParam.m_nMiiMode = 0xFF;
-        }
-    }
-    for (long i = 0; i < 4; i++) {
-        m_HistoryBtnKindId[0xE].m_nPad[i] = 0;
-    }
-}
-
-void msw::CSelectMenu::ChangeTeamCharaSelectParam()
-{
-    InitCharaSelectParam();
-}
-
-// Keeps the slots as they are now (Chara_GetSaveCharaIndex and the
-// Mii_GetSave* getters read the copy).
-void msw::CSelectMenu::SetCharaSelectSaveParam()
-{
-    m_aCharaSaveParam[0] = m_aCharaSelectParam[0];
-    m_aCharaSaveParam[1] = m_aCharaSelectParam[1];
-    m_aCharaSaveParam[2] = m_aCharaSelectParam[2];
-    m_aCharaSaveParam[3] = m_aCharaSelectParam[3];
-    m_aCharaSaveParam[4] = m_aCharaSelectParam[4];
-    m_aCharaSaveParam[5] = m_aCharaSelectParam[5];
-}
-
-int msw::CSelectMenu::IsPushStateHistory(long nState)
-{
-    if (nState == 0x11 || nState == 0x2F || nState == 0x31) {
-        return 0;
-    }
-    return 1;
-}
-
-long msw::CSelectMenu::GetPlayerEntryId(long nPad)
-{
-    return m_nPadPlayer[nPad];
-}
-
-// The entry of controller nPad (unchanged above 3 or without an entry).
-long msw::CSelectMenu::GetPadEntryId(long nPad)
-{
-    if ((unsigned long)nPad > 3) {
-        return nPad;
-    }
-    for (long i = 0; i < 4; i++) {
-        if (nPad == m_nPadPlayer[i]) {
-            return i;
-        }
-    }
-    return nPad;
-}
-
-// Remembers button nBtnKindId as player nPad's previous button, unless it
-// is none or one pObj's stick cannot reach.
-void msw::CSelectMenu::SetPreviousButtonKindIdWithoutNone(long nPad, unsigned short nBtnKindId,
-                                                          CSelectMenuLayoutBase *pObj)
-{
-    if (nBtnKindId != 0 && pObj->IsButtonKindOfStickMode(nBtnKindId)) {
-        m_nCupBtnKindId[nPad] = nBtnKindId;
-    }
-}
-
-long msw::CSelectMenu::Chara_FindNotDecideCharaIndex(long nEntry)
-{
-    for (long i = 0; i < 6; i++) {
-        switch (m_Unk9B) {
-            case 0:
-            case 2:
-                if (nEntry == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecide(i) == 0) {
-                    return i;
-                }
-                break;
-            default:
-                if (nEntry == m_aCharaSelectParam[i].m_nPlayerKind && Chara_IsCharaDecide(i) == 0) {
-                    return i;
-                }
-                break;
-        }
-    }
-    return -1;
-}
-
-long msw::CSelectMenu::Chara_FindSelectCharaIndex(long nEntry)
-{
-    for (long i = 0; i < 6; i++) {
-        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecideSelect(i) == 1) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-long msw::CSelectMenu::Chara_FindNoneCharaIndex(long nEntry)
-{
-    for (long i = 0; i < 6; i++) {
-        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecideNone(i) == 1) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-long msw::CSelectMenu::Chara_FindLastCharaIndex(long nEntry)
-{
-    for (long i = 5; i >= 0; i--) {
-        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && m_aCharaSelectParam[i].m_nState != 0) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-msw::CSelectMenu::CharaSelectParam *msw::CSelectMenu::GetCharaSelectParam(long nIndex)
-{
-    if ((unsigned long)nIndex <= 5) {
-        return &m_aCharaSelectParam[nIndex];
-    }
-    return 0;
-}
-
-int msw::CSelectMenu::Chara_IsCharaDecideNone(long nIndex)
-{
-    return m_aCharaSelectParam[nIndex].m_nState == 0;
-}
-
-int msw::CSelectMenu::Chara_IsCharaDecideAlready(long nIndex)
-{
-    return m_aCharaSelectParam[nIndex].m_nState == 2;
-}
-
-int msw::CSelectMenu::Chara_IsCharaDecideSelect(long nIndex)
-{
-    return m_aCharaSelectParam[nIndex].m_nState == 1;
-}
-
-int msw::CSelectMenu::Chara_IsCharaDecideTemporary(long nIndex)
-{
-    return m_aCharaSelectParam[nIndex].m_nState == 3;
-}
-
-void msw::CSelectMenu::Chara_ChangeDecideTemporaryToDecideAlready()
-{
-    static const long num = 3;
-
-    for (long i = 0; i < 6; i++) {
-        if (m_aCharaSelectParam[i].m_nState == num) {
-            m_aCharaSelectParam[i].m_nState = 2;
-        }
-    }
-}
-
-// Every pad that has decided all its characters gives its last one back
-// (the back button on the character select screen).
-void msw::CSelectMenu::Chara_CancelLastDecideChara()
-{
-    long nState = m_nState;
-    SelectMenu::CCharaSelect *pSelect = (SelectMenu::CCharaSelect *)FindObj(0x10);
-    for (long nPad = 0; nPad < 4; nPad++) {
-        if (!Chara_IsAllDecide(nPad)) {
-            continue;
-        }
-        CharaSelectParam *pParam = Chara_GetLastDecideChara(nPad);
-        if (pParam == 0) {
-            continue;
-        }
-        unsigned char nChara = pParam->m_nChara;
-        unsigned short nBtnKindId = -1;
-        for (long i = 0; i < 19; i++) {
-            if (nChara == s_CharaButton[i].m_nChara) {
-                nBtnKindId = s_CharaButton[i].m_nBtnKindId;
-                break;
-            }
-        }
-        m_nCurrentBtnKindId[nPad][nState] = nBtnKindId;
-        if (pSelect != 0) {
-            pSelect->m_nPushButtonId[nPad] = nBtnKindId;
-            pSelect->SetCursorMarkerPosition(nPad, nBtnKindId);
-        }
-        Chara_CancelDecideChara(nPad, nChara);
-        if (pSelect != 0) {
-            pSelect->PushCancelButton(nPad, nBtnKindId);
-        }
-    }
-}
-
-void msw::CSelectMenu::SetBlockFadeOut(float fFadeTime)
-{
-    float fSpeed = 1.0f;
-    if (m_Unk27F == 0) {
-        fSpeed = 1.0f / fFadeTime;
-    }
-    bcs::CMainApp::StartMasterFade(0, fSpeed);
-    m_Unk27F = 1;
-}
-
-void msw::CSelectMenu::SetWhiteFadeOut(float fFadeTime)
-{
-    float fSpeed = 1.0f;
-    if (m_Unk27F == 0) {
-        fSpeed = 1.0f / fFadeTime;
-    }
-    bcs::CMainApp::StartMasterFade(1, fSpeed);
-    m_Unk27F = 2;
-}
-
-void msw::CSelectMenu::SetFadeIn(float fFadeTime)
-{
-    float fSpeed = 1.0f;
-    if (m_Unk27F != 0) {
-        fSpeed = 1.0f / fFadeTime;
-    }
-    bcs::CMainApp::StartMasterFade(4, fSpeed);
-    m_Unk27F = 0;
-}
-
-float msw::CSelectMenu::GetBgmFadeOutTime()
-{
-    return 30.0f;
-}
-
-void msw::CSelectMenu::DecrementDelayFrameCount()
-{
-    float fWait = m_fEntryErrorWait;
-    fWait -= bcs::CMainApp::GetAppFrameRateF();
-    if (fWait < 0.0f) {
-        fWait = 0.0f;
-    }
-    m_fEntryErrorWait = fWait;
-}
-
-int msw::CSelectMenu::IsBackButtonMove(long nPad)
-{
-    return m_nCurrentBtnKindId[nPad][m_Unk9D] == 1;
-}
-
-const msw::CSelectMenu::MenuBGM *msw::CSelectMenu::GetMenuBGMId(long nBgm)
-{
-    if (nBgm >= MENU_BGM_NUM) {
-        return 0;
-    }
-    return &s_MenuBGM[nBgm];
-}
-
-float msw::CSelectMenu::GetMenuBGMFadeoutTime()
-{
-    return 60.0f;
-}
-
-// Starts menu music nBgm unless it is playing already.
-void msw::CSelectMenu::PlayMenuBGM(long nBgm)
-{
-    const MenuBGM *pBgm = GetMenuBGMId(nBgm);
-    menu::CSndBGM &rBGM = menu::CSndBGM::s_Instance;
-    if (pBgm != 0 && pBgm->m_nSeq != rBGM.GetSeq()) {
-        StopMenuBGM();
-        if (pBgm->m_bPlay == 0) {
-            rBGM.SeqLoad(pBgm->m_nSeq, 1);
-        } else {
-            menu::CSndBGM::s_Instance.Play(pBgm->m_nSeq);
-        }
-    }
-}
-
-void msw::CSelectMenu::PlayMenuBGMToTop(long nBgm)
-{
-}
-
-void msw::CSelectMenu::StopMenuBGM()
-{
-    menu::CSndBGM &rBGM = menu::CSndBGM::s_Instance;
-    if (rBGM.GetTaskId() != 0) {
-        rBGM.Stop(rBGM.GetTaskId(), GetMenuBGMFadeoutTime());
-    }
-}
-
-// Starts menu music nBgm again when it has stopped.
-void msw::CSelectMenu::LoopPlayMenuBGM(long nBgm)
-{
-    const MenuBGM *pBgm = GetMenuBGMId(nBgm);
-    menu::CSndBGM &rBGM = menu::CSndBGM::s_Instance;
-    if (pBgm != 0 && pBgm->m_nSeq == rBGM.GetSeq() && !rBGM.IsPlayNow(rBGM.GetTaskId())) {
-        if (pBgm->m_bPlay == 0) {
-            rBGM.SeqLoad(pBgm->m_nSeq, 1);
-        } else {
-            menu::CSndBGM::s_Instance.Play(pBgm->m_nSeq);
-        }
-    }
-}
-
-void msw::CSelectMenu::PlayMenuSE(long nSe)
-{
-    menu::CSndEff::s_Instance.Play(nSe, 1);
-}
-
-void msw::CSelectMenu::Load(long nArchive)
-{
-    if (nArchive >= 0) {
-        bcs::CLoadMan::FILE_INPUT *pFile = &s_FileInputTable[nArchive];
-        if (pFile->m_nId & 1) {
-            bcs::G2D::CLytResource *pRes = bcs::G2D::CLytResource::GetInstance();
-            if (pRes != 0) {
-                pRes->LoadDataASync(pFile);
-            }
-        }
-    }
-}
-
-void msw::CSelectMenu::UnLoad(long nArchive)
-{
-    if (nArchive >= 0) {
-        bcs::CLoadMan::FILE_INPUT *pFile = &s_FileInputTable[nArchive];
-        if (pFile->m_nId & 1) {
-            bcs::G2D::CLytResource *pRes = bcs::G2D::CLytResource::GetInstance();
-            if (pRes != 0) {
-                pRes->Cleanup(pFile->m_szPath);
-            }
-            bcs::CLoadMan::UnLoad(pFile);
-        }
-    }
-}
-
-int msw::CSelectMenu::IsLoaded(long nArchive)
-{
-    if (bcs::G2D::CLytResource::GetInstance() == 0) {
-        return 0;
-    }
-    bcs::CLoadMan::FILE_INPUT *pFile = &s_FileInputTable[nArchive];
-    if (!(pFile->m_nId & 1)) {
-        return 1;
-    }
-    return bcs::CLoadMan::IsLoaded(pFile->m_szPath, pFile->m_nId);
-}
-
-int msw::CSelectMenu::IsComplete(long nArchive)
-{
-    bcs::G2D::CLytResource *pRes = bcs::G2D::CLytResource::GetInstance();
-    if (pRes == 0) {
-        return 0;
-    }
-    bcs::CLoadMan::FILE_INPUT *pFile = &s_FileInputTable[nArchive];
-    if (!(pFile->m_nId & 1)) {
-        return 1;
-    }
-    return pRes->IsCompleteDataASync(pFile) >= 0;
-}
-
-int msw::CSelectMenu::IsReading(long nArchive)
-{
-    bcs::CLoadMan::FILE_INPUT *pFile = &s_FileInputTable[nArchive];
-    if (pFile->m_nId & 1) {
-        return bcs::CLoadMan::IsReading(pFile->m_szPath, pFile->m_nId);
-    }
-    return 1;
-}
-
-// Builds the archive table (the path in the language's folder) and
-// starts loading what the first screen needs.
-void msw::CSelectMenu::InitLoad()
-{
-    const char *pFolder = menu::GetLocalizeFolderName();
-    const bcs::CLoadMan::FILE_INPUT *pSrc = s_FileInputInit;
-    bcs::CLoadMan::FILE_INPUT *pDst = s_FileInputTable;
-    for (long i = 0; i < ARCHIVE_NUM; i++, pSrc++, pDst++) {
-        sprintf(pDst->m_szPath, pSrc->m_szPath, pFolder);
-        pDst->m_nId = pSrc->m_nId;
-        pDst->m_nFlags = pSrc->m_nFlags;
-        pDst->m_Unk108 = pSrc->m_Unk108;
-        pDst->m_nAlign = pSrc->m_nAlign;
-        pDst->m_Unk10C = pSrc->m_Unk10C;
-        pDst->m_Unk106 = pSrc->m_Unk106;
-    }
-
-    Load(2);
-    switch (menu::CStateSave::GetInstance()->GetStartMenuMode()) {
-        case 6:
-        case 7:
-        case 8:
-            Load(12);
-            break;
-        case 3:
-            Load(4);
-            break;
-        case 4:
-            Load(5);
-            break;
-    }
-}
-
-int msw::CSelectMenu::IsCompleteOfInitLoad()
-{
-    switch (menu::CStateSave::GetInstance()->GetStartMenuMode()) {
-        case 6:
-        case 7:
-        case 8:
-            if (!IsComplete(12)) {
-                return 0;
-            }
-            break;
-        case 3:
-            if (!IsComplete(4)) {
-                return 0;
-            }
-            break;
-        case 4:
-            if (!IsComplete(5)) {
-                return 0;
-            }
-            break;
-        default:
-            if (!IsComplete(2)) {
-                return 0;
-            }
-            break;
-    }
-    return 1;
-}
-
-float msw::CSelectMenu::GetCameraSpeed(long nAnim)
-{
-    return s_CameraSpeed[nAnim];
-}
-
 // Sets up the menu: the menu singletons, the state machine (one state per
 // screen), the menu objects, the camera, then the first screen, chosen by
 // where the menu was entered from (menu::CStateSave).
@@ -2482,7 +1146,9 @@ void msw::CSelectMenu::Initialize()
     m_Unk70C = 0;
     m_nUnlockStep = 0;
     m_nUnlockCount = 0;
-    if (GetCupId() == 0xFF) {
+    // The original compares the cup byte with -1 as a long, so this never
+    // resets the cup (kept as the game has it).
+    if ((long)GetCupId() == -1) {
         SetCupId(0);
         SetStageId(0);
     }
@@ -2493,6 +1159,19 @@ void msw::CSelectMenu::Initialize()
         SendObjEvent(1, 0x56);
     }
     CDataWork::GetInstance()->SetCntInfoDemo(1);
+}
+
+// The state of screen 0x32: nothing.
+void msw::CSelectMenu::SelectNull_In()
+{
+}
+
+void msw::CSelectMenu::SelectNull_Loop()
+{
+}
+
+void msw::CSelectMenu::SelectNull_Out()
+{
 }
 
 // Puts every member back to its start value.
@@ -2534,7 +1213,9 @@ void msw::CSelectMenu::InitVariable()
         m_aPadSelect[i].m_Unk03 = 0x80;
         m_nPadPlayer[i] = i;
         pPad[i].m_nFlags04 &= ~4;
-        pPad[i].m_nFlags06 = (pPad[i].m_nFlags06 | 4) & ~1 & ~2;
+        pPad[i].m_nFlags06 |= 4;
+        pPad[i].m_nFlags06 &= ~1;
+        pPad[i].m_nFlags06 &= ~2;
     }
     for (long i = 0; i < 4; i++) {
         long nPlayerNo = CMenuPadInfo::s_Instance.GetDefaultPlayerNo(i);
@@ -2546,7 +1227,11 @@ void msw::CSelectMenu::InitVariable()
         } else {
             pPad[i].m_nFlags04 &= ~4;
         }
-        m_aPadSelect[i].m_Unk03 = bLeader ? 0 : 0x40;
+        unsigned char nUnk03 = 0x40;
+        if (bLeader) {
+            nUnk03 = 0;
+        }
+        m_aPadSelect[i].m_Unk03 = nUnk03;
     }
 
     ClearMenuHistory();
@@ -2607,7 +1292,8 @@ void msw::CSelectMenu::Main()
     menu::CVibEff::s_Instance.MainLoop();
     PadStateCheck();
 
-    if ((m_Unk98 != 0) == 1) {
+    int bModeEnd = m_Unk98 != 0;
+    if (bModeEnd == 1) {
         float fWait = m_fUnk94;
         fWait -= bcs::CMainApp::GetAppFrameRateF();
         if (fWait <= 0.0f) {
@@ -2618,7 +1304,7 @@ void msw::CSelectMenu::Main()
                 if (s_LoadArchiveFileId[m_nNextMode] != nArchive) {
                     UnLoad(nArchive);
                 }
-                long nNext = m_nNextMode;
+                unsigned long nNext = m_nNextMode;
                 long nPad = 0;
                 long nState = m_nState;
                 int bPush = 1;
@@ -2667,6 +1353,1365 @@ void msw::CSelectMenu::Main()
     WifiFriendMatchChallenger();
 }
 
+void msw::CSelectMenu::Disp()
+{
+    ModListDispLoop();
+}
+
+// Makes menu object nObjId from s_NewMenuClassTable and adds it to the
+// task: -2 when it exists already, -3 when the table has no class for it.
+long msw::CSelectMenu::CreateObj(long nObjId)
+{
+    if (FindObj(nObjId) != 0) {
+        return -2;
+    }
+    CMenuLinkBase *(*pNew)(long) = s_NewMenuClassTable[nObjId];
+    CMenuLinkBase *pObj;
+    if (pNew != 0) {
+        pObj = pNew(nObjId);
+    } else {
+        return -3;
+    }
+    return AddObj(pObj);
+}
+
+void msw::CSelectMenu::RemoveObj(long nObjId)
+{
+    CMenuLinkBase *pObj = FindObj(nObjId);
+    if (pObj != 0) {
+        m_LinkList.RemoveObject(pObj);
+    }
+}
+
+const char *msw::CSelectMenu::GetArchiveFileName(long nArchive)
+{
+    return s_FileInputTable[nArchive].m_szPath;
+}
+
+const char *msw::CSelectMenu::GetArchiveRootFolderName(long nArchive)
+{
+    return s_pArchiveRootFolder;
+}
+
+bcs::CLoadMan::FILE_INPUT *msw::CSelectMenu::GetArchiveFileInfo(long nArchive)
+{
+    return &s_FileInputTable[nArchive];
+}
+
+unsigned char msw::CSelectMenu::GetLoadArchiveFileId(long nMode)
+{
+    return s_LoadArchiveFileId[nMode >= 0 ? nMode : m_nState];
+}
+
+void msw::CSelectMenu::SetNextMode(long nMode, float fFadeTime)
+{
+    m_Unk98 = 1;
+    m_nNextMode = nMode;
+    m_fUnk94 = fFadeTime;
+}
+
+void msw::CSelectMenu::SetNextMode(long nMode, CSelectMenuLayoutBase *pObj)
+{
+    m_Unk98 = 1;
+    m_nNextMode = nMode;
+    if (pObj != 0) {
+        m_fUnk94 = pObj->GetOutAnimFrameSize();
+        pObj->m_Unk30 = CSelectMenuLayoutBase::STATE_CLOSE;
+    }
+}
+
+float msw::CSelectMenuLayoutBase::GetOutAnimFrameSize()
+{
+    return s_DefaultOutAnimFrameSize;
+}
+
+// Follows the leading pad: marks the others, sends every pad's cursor
+// state to the cockpit and notes which pads use the pointer.
+void msw::CSelectMenu::PadStateCheck()
+{
+    CMenuPadInfo &rInfo = CMenuPadInfo::s_Instance;
+    if (m_Unk27B == 0) {
+        long nLeader = rInfo.m_nPadLeader;
+        long nNewLeader = rInfo.SelectPadLeader(0);
+        if (nLeader != nNewLeader) {
+            ChangeLeaderPad(nNewLeader);
+        }
+    }
+
+    CMenuPadInfo::PAD *pPad = CMenuPadInfo::s_Instance.m_aPad;
+    for (long i = 0; i < 4; i++, pPad++) {
+        unsigned char nFlags = pPad->m_nFlags04;
+        unsigned char nCursor = 0x80;
+        if ((nFlags & 1) && ((nFlags & 4) || i == rInfo.m_nPadLeader)) {
+            nCursor = m_aPadSelect[i].m_Unk03;
+        }
+        CCockpit::SendObjEventTrigger(0x1016, 0x2715 + i, (void *)(nCursor | m_aPadSelect[i].m_nPlayerNo));
+    }
+
+    for (long i = 0; i < 4; i++) {
+        m_aPadSelect[i].m_Unk01 = m_aPadSelect[i].m_Unk00;
+        if (CMenuPad::s_Instance.IsInputPointerMode(i)) {
+            m_aPadSelect[i].m_Unk00 = 0;
+        } else {
+            m_aPadSelect[i].m_Unk00 = 1;
+        }
+    }
+}
+
+// Makes pad nPad the one that leads the menus.
+void msw::CSelectMenu::ChangeLeaderPad(long nPad)
+{
+    CMenuPadInfo::PAD *pPad = CMenuPadInfo::s_Instance.m_aPad;
+    for (long i = 0; i < 4; i++, pPad++) {
+        pPad->SetLeader(i == nPad);
+        m_aPadSelect[i].m_Unk03 = i == nPad ? 0 : 0x40;
+    }
+}
+
+// Moves the cursor of player nPad on pObj from button nOld to nNew.
+inline void msw::CSelectMenu::MoveButtonCursor(CSelectMenuLayoutBase *pObj, long nPad, unsigned short &rCurrent,
+                                               unsigned short nOld, long nNew)
+{
+    SetPreviousButtonKindIdWithoutNone(nPad, nOld, pObj);
+    rCurrent = nNew;
+    pObj->ClearCursorMarkerPosition(nPad, nOld);
+    pObj->m_nPushButtonId[nPad] = nNew;
+    pObj->SetCursorMarkerPosition(nPad, nNew);
+}
+
+// Passes the pointer or the stick of controller nPadNo to menu object
+// pObj for player nPad on screen nMode: moves the player's cursor between
+// the buttons and keeps m_nCurrentBtnKindId up to date.
+void msw::CSelectMenu::InputDataToMenuObj(CSelectMenuLayoutBase *pObj, long nPad, long nPadNo, long nMode)
+{
+    CMenuPadInfo &rInfo = CMenuPadInfo::s_Instance;
+    CMenuPadInfo::PAD &rPad = rInfo.m_aPad[nPadNo];
+    if (!(rPad.m_nFlags04 & 4) && nPadNo != rInfo.m_nPadLeader) {
+        return;
+    }
+
+    PadSelect &rSelect = m_aPadSelect[nPadNo];
+    unsigned short &rCurrent = m_nCurrentBtnKindId[nPad][nMode];
+    unsigned short nCurrent = rCurrent;
+    int bPointer = rSelect.m_Unk00 == 0;
+    if (rSelect.m_Unk00 != rSelect.m_Unk01 || rSelect.m_Unk02 != 0) {
+        m_aPadSelect[nPadNo].m_Unk02 = 0;
+        if (!(rPad.m_nFlags06 & 1)) {
+            unsigned char nCursor = m_aPadSelect[nPadNo].m_Unk03;
+            long nNew = nCursor | 0x40;
+            if (bPointer == 1) {
+                nNew = nCursor & ~0x40;
+            }
+            m_aPadSelect[nPadNo].m_Unk03 = nNew;
+        }
+        pObj->SetCursorMarkerVisible(nPadNo, 1);
+    }
+
+    if (rPad.m_nFlags06 & 4) {
+        return;
+    }
+
+    if (bPointer == 1) {
+        bcs::FVEC3 pos;
+        CCockpit::SendObjEventTrigger(0x1016, nPadNo + 0x2711, &pos);
+        if (rInfo.m_nCursorMode == 0) {
+            if (!(rPad.m_nFlags06 & 1)) {
+                long nHit = pObj->HitCheck(&pos);
+                if (nHit != 0 && pObj->IsMarkerOnPointer(nPad, nHit)) {
+                    MoveButtonCursor(pObj, nPad, rCurrent, nCurrent, nHit);
+                }
+            }
+        } else if (!(rPad.m_nFlags06 & 1)) {
+            long nHit = pObj->HitCheck(&pos);
+            if (pObj->IsMarkerOnPointer(nPad, nHit)) {
+                MoveButtonCursor(pObj, nPad, rCurrent, nCurrent, nHit);
+            }
+        }
+    } else {
+        if (!(rPad.m_nFlags06 & 2)) {
+            if (pObj->IsButtonKindOfStickMode(nCurrent)) {
+                long nMove = pObj->StickMoveCheck(nPadNo, nCurrent);
+                if (nMove != nCurrent) {
+                    MoveButtonCursor(pObj, nPad, rCurrent, nCurrent, nMove);
+                }
+            } else {
+                long nPrev = m_nCupBtnKindId[nPad];
+                if (!pObj->IsButtonKindOfStickMode(nPrev)) {
+                    nPrev = pObj->SetDefaultMoveCursor(nPad, nPrev);
+                }
+                rCurrent = nPrev;
+                pObj->m_nPushButtonId[nPad] = nPrev;
+                pObj->SetCursorMarkerPosition(nPad, nPrev);
+            }
+        }
+        bcs::FVEC3 pos;
+        CCockpit::SendObjEventTrigger(0x1016, nPadNo + 0x2711, &pos);
+        unsigned short nHit = pObj->HitCheck(&pos);
+        if (nHit != 0 && pObj->IsMarkerOnPointer(nPad, nHit)) {
+            CMenuPad::s_Instance.m_nPointerOnObj[nPad] = 1;
+        }
+    }
+}
+
+long msw::CSelectMenuLayoutBase::SetCursorMarkerVisible(long, int)
+{
+    return 0;
+}
+
+long msw::CSelectMenuLayoutBase::HitCheck(bcs::FVEC3 *pPos)
+{
+    return 0;
+}
+
+int msw::CSelectMenuLayoutBase::IsMarkerOnPointer(long, long)
+{
+    return 1;
+}
+
+long msw::CSelectMenuLayoutBase::ClearCursorMarkerPosition(long, long)
+{
+    return 0;
+}
+
+long msw::CSelectMenuLayoutBase::SetCursorMarkerPosition(long, long)
+{
+    return 0;
+}
+
+int msw::CSelectMenuLayoutBase::IsButtonKindOfStickMode(long nBtnKindId)
+{
+    return 1;
+}
+
+long msw::CSelectMenuLayoutBase::StickMoveCheck(long nPad, long nBtnKindId)
+{
+    return 0;
+}
+
+long msw::CSelectMenuLayoutBase::SetDefaultMoveCursor(long nPad, long nBtnKindId)
+{
+    return 0;
+}
+
+// Leaves the screen for screen nMode with the back button of pad nPad.
+void msw::CSelectMenu::GoBackToMode(long nPad, long nMode, CSelectMenuLayoutBase *pObj, long nUnk)
+{
+    m_nCurrentBtnKindId[nPad][m_nState] = 1;
+    if (pObj != 0) {
+        pObj->PushButton(nPad, nUnk);
+    }
+    SetNextMode(nMode, pObj);
+}
+
+long msw::CSelectMenuLayoutBase::PushButton(long nPad, long nBtnKindId)
+{
+    return 0;
+}
+
+// The same, only when there is a menu object.
+void msw::CSelectMenu::SetCancelBackMode(long nPad, long nMode, CSelectMenuLayoutBase *pObj, long nUnk)
+{
+    m_nCurrentBtnKindId[nPad][m_nState] = 1;
+    if (pObj != 0) {
+        pObj->PushButton(nPad, nUnk);
+        SetNextMode(nMode, pObj);
+    }
+}
+
+// The menu history: the screens passed through, newest first, as pairs
+// of a screen and the screen it went on to.
+void msw::CSelectMenu::ClearMenuHistory()
+{
+    m_nHistoryNum = 0;
+    for (long i = 0; i < HISTORY_NUM; i++) {
+        m_History[i].m_nState = 0xFF;
+        m_History[i].m_nNextState = 0xFF;
+    }
+}
+
+void msw::CSelectMenu::PushMenuHistory(unsigned char nState, unsigned char nNextState, unsigned short nBtnKindId)
+{
+    static const long index = 0;
+
+    if (nState == nNextState) {
+        return;
+    }
+    long nNum = m_nHistoryNum;
+    if (nNum > 0 && m_History[index].m_nState == nState && m_History[index].m_nNextState == nNextState) {
+        return;
+    }
+    for (long i = nNum - 1; i >= 0; i--) {
+        m_History[i + 1] = m_History[i];
+    }
+    m_History[index].m_nState = nState;
+    m_History[index].m_nNextState = nNextState;
+    m_nHistoryNum++;
+    if ((unsigned long)m_nHistoryNum > HISTORY_NUM) {
+        m_nHistoryNum = HISTORY_NUM;
+    }
+}
+
+msw::CSelectMenu::History *msw::CSelectMenu::GetMenuHistory(unsigned char nState)
+{
+    for (long i = m_nHistoryNum - 1; i >= 0; i--) {
+        if (nState == m_History[i].m_nState) {
+            return &m_History[i];
+        }
+    }
+    return 0;
+}
+
+msw::CSelectMenu::History *msw::CSelectMenu::GetMenuHistoryByNextState(unsigned char nNextState)
+{
+    for (long i = m_nHistoryNum - 1; i >= 0; i--) {
+        if (nNextState == m_History[i].m_nNextState) {
+            return &m_History[i];
+        }
+    }
+    return 0;
+}
+
+// The screen before screen nState, skipping the ones that are not kept
+// in the history (IsPushStateHistory); 1 when there is none.
+unsigned char msw::CSelectMenu::GetPrevMode(unsigned char nState)
+{
+    History *pHistory = m_History;
+    long i;
+    for (i = 0; i < m_nHistoryNum; pHistory++, i++) {
+        if (pHistory->m_nNextState == nState) {
+            break;
+        }
+    }
+    for (; i < m_nHistoryNum; pHistory++, i++) {
+        if (pHistory->m_nNextState == nState) {
+            unsigned char nPrev = pHistory->m_nState;
+            int bPush = IsPushStateHistory(nPrev);
+            if (bPush) {
+                return nPrev;
+            }
+            nState = nPrev;
+        }
+    }
+    return 1;
+}
+
+long msw::CSelectMenu::GetPrevMode()
+{
+    long nState = m_nState;
+    long nPrev = GetPrevMode((unsigned char)nState);
+    PopHistoryByState(nPrev, nState);
+    return nPrev;
+}
+
+// Drops the history up to and including the entry nState -> nNextState.
+void msw::CSelectMenu::PopHistoryByState(unsigned char nState, unsigned char nNextState)
+{
+    History *pHistory = m_History;
+    for (long i = 0; i < m_nHistoryNum; pHistory++, i++) {
+        if (pHistory->m_nState == nState && pHistory->m_nNextState == nNextState) {
+            long nRest = m_nHistoryNum - (i + 1);
+            History *pDst = m_History;
+            History *pSrc = &m_History[i + 1];
+            for (long j = 0; j < nRest; j++) {
+                pDst[j] = pSrc[j];
+            }
+            m_nHistoryNum = nRest;
+            return;
+        }
+    }
+}
+
+unsigned short msw::CSelectMenu::GetHistoryButtonKindId(unsigned char nState, long nPad)
+{
+    return m_HistoryBtnKindId[nState].m_nPad[nPad];
+}
+
+void msw::CSelectMenu::SetHistoryButtonKindId(unsigned char nState, long nPad, unsigned short nBtnKindId)
+{
+    m_HistoryBtnKindId[nState].m_nPad[nPad] = nBtnKindId;
+}
+
+// Clears the remembered buttons of screen nState and every later one.
+void msw::CSelectMenu::ClearHistoryButtonKindId(long nState)
+{
+    static const unsigned short btnKindId = 0;
+
+    for (long i = nState; i < STATE_NUM; i++) {
+        for (long j = 0; j < 4; j++) {
+            m_HistoryBtnKindId[(unsigned char)i].m_nPad[j] = btnKindId;
+        }
+    }
+}
+
+// The players per team of the play mode.
+long msw::CSelectMenu::GetTeamPlayerNum()
+{
+    switch (m_nPlayMode) {
+        case 0:
+        case 1:
+        case 9:
+        case 10:
+        case 13:
+        case 14:
+        case 15:
+        case 16:
+            return 3;
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 12:
+        case 17:
+            return 2;
+        case 2:
+        case 3:
+        case 11:
+            return 1;
+    }
+    return 1;
+}
+
+// The character slots (m_aCharaSelectParam). A slot belongs to a pad
+// entry (m_Unk00, or the player kind m_nPlayerKind on the Wi-Fi and
+// tournament menus) and is empty (state 0), being chosen (1), decided (2)
+// or decided for now (3).
+int msw::CSelectMenu::Chara_IsCharaDecide(long nIndex)
+{
+    return m_aCharaSelectParam[nIndex].m_nState >= 2U;
+}
+
+int msw::CSelectMenu::Chara_IsAllDecide(long nEntry)
+{
+    for (long i = 0; i < 6; i++) {
+        switch (m_Unk9B) {
+            case 0:
+            case 2:
+                if (nEntry == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecide(i) == 0) {
+                    return 0;
+                }
+                break;
+            case 4:
+                if (nEntry == m_aCharaSelectParam[i].m_nPlayerKind && Chara_IsCharaDecide(i) == 0) {
+                    return 0;
+                }
+                break;
+            default:
+                if (nEntry == m_aCharaSelectParam[i].m_nPlayerKind && Chara_IsCharaDecide(i) == 0) {
+                    return 0;
+                }
+                break;
+        }
+    }
+    return 1;
+}
+
+// Gives character nChara (colour nColor: variant nColor / 2, shade
+// nColor % 2; 0xFF none) to the first undecided slot of entry nEntry and
+// puts it in state nState.
+long msw::CSelectMenu::Chara_SetDecideChara(long nEntry, long nChara, long nColor, long nUnk0C, long nState)
+{
+    long nCharaSub = nColor >> 1;
+    long nShade = nColor & 1;
+    if (nColor == 0xFF) {
+        nCharaSub = 0xFF;
+        nShade = 0;
+    }
+    for (long i = 0; i < 6; i++) {
+        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecide(i) == 0) {
+            CharaSelectParam &rParam = m_aCharaSelectParam[i];
+            rParam.m_nChara = nChara;
+            rParam.m_nCharaSub = nCharaSub;
+            rParam.m_Unk13[0] = nShade;
+            rParam.m_nState = nState;
+            rParam.m_Unk0C = nUnk0C;
+            return i;
+        }
+    }
+    return -1;
+}
+
+// The same, and plays the character model's decide motion.
+long msw::CSelectMenu::Chara_SetDecideCharaWithMotion(long nEntry, long nChara, long nColor, long nBtnKindId)
+{
+    long nIndex = Chara_SetDecideChara(nEntry, nChara, nColor, nBtnKindId, 2);
+    if (nIndex >= 0) {
+        SelectMenu::CCharaMdl *pMdl = (SelectMenu::CCharaMdl *)FindObj(0x1C);
+        if (pMdl != 0) {
+            pMdl->SetStateChrMenuObj(nIndex, 1);
+        }
+    }
+    return nIndex;
+}
+
+// Takes back character nChara from entry nEntry: empties the last slot
+// being chosen, then puts the last decided slot with that character back
+// to being chosen. Returns that slot, -1 for none.
+long msw::CSelectMenu::Chara_CancelDecideChara(long nEntry, long nChara)
+{
+    long nIndex = -1;
+    for (long i = 5; i >= 0; i--) {
+        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && m_aCharaSelectParam[i].m_nState == 1) {
+            CharaSelectParam &rClear = m_aCharaSelectParam[i];
+            rClear.m_nState = 0;
+            rClear.m_nChara = 0xFF;
+            rClear.m_nCharaSub = 0xFF;
+            rClear.m_Unk13[0] = 0;
+            rClear.m_MiiSource = RFLDataSource_Default;
+            rClear.m_nMiiIndex = 0;
+            rClear.m_nMiiMode = 0xFF;
+            rClear.m_Unk0C = 0;
+            break;
+        }
+    }
+    for (long i = 5; i >= 0; i--) {
+        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && nChara == m_aCharaSelectParam[i].m_nChara && Chara_IsCharaDecide(i) == 1) {
+            CharaSelectParam &rSlot = m_aCharaSelectParam[i];
+            if ((unsigned char)(rSlot.m_nChara - 0x13) <= 5 && rSlot.m_nMiiMode != 0xFF) {
+                rSlot.m_nCharaSub = 0xFF;
+                rSlot.m_Unk13[0] = 0;
+                rSlot.m_MiiSource = RFLDataSource_Default;
+                rSlot.m_nMiiIndex = 0;
+                rSlot.m_nMiiMode = 0xFF;
+            }
+            m_aCharaSelectParam[i].m_nState = 1;
+            nIndex = i;
+            break;
+        }
+    }
+    return nIndex;
+}
+
+long msw::CSelectMenu::Chara_CancelDecideCharaWithMotion(long nEntry, long nChara)
+{
+    long nIndex = Chara_CancelDecideChara(nEntry, nChara);
+    if (nIndex >= 0) {
+        SelectMenu::CCharaMdl *pMdl = (SelectMenu::CCharaMdl *)FindObj(0x1C);
+        if (pMdl != 0) {
+            pMdl->SetStateChrMenuObj(nIndex, 0);
+        }
+    }
+    return nIndex;
+}
+
+// Puts character nChara (colour nColor, -1 or 0xFF none) in the first
+// undecided slot of entry nPad as being chosen; bShade forces the second
+// shade.
+void msw::CSelectMenu::Chara_SetSelectChara(long nPad, long nChara, long nColor, int bShade)
+{
+    long nCharaSub = nColor >> 1;
+    long nShade = nColor & 1;
+    if (nColor == 0xFF || nColor == -1) {
+        nCharaSub = 0xFF;
+        nShade = 0;
+    }
+    if (bShade != 0) {
+        nShade = 1;
+    }
+    for (long i = 0; i < 6; i++) {
+        if (nPad == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecide(i) == 0) {
+            CharaSelectParam &rParam = m_aCharaSelectParam[i];
+            rParam.m_nChara = nChara;
+            rParam.m_nCharaSub = nCharaSub;
+            rParam.m_Unk13[0] = nShade;
+            rParam.m_nState = 1;
+            rParam.m_MiiSource = RFLDataSource_Default;
+            rParam.m_nMiiIndex = 0;
+            rParam.m_nMiiMode = 0xFF;
+            rParam.m_Unk0C = 0;
+            break;
+        }
+    }
+}
+
+// -1 when character nChara cannot be taken by entry nPad: another entry
+// has it, or the entry has decided it already. The Mii (0x13) is always
+// free.
+long msw::CSelectMenu::Chara_CheckSelectChara(long nPad, long nChara, long nColor)
+{
+    if (nChara == 0x13) {
+        return 1;
+    }
+    for (long i = 0; i < 6; i++) {
+        if (nPad == m_aCharaSelectParam[i].m_Unk00) {
+            if (nChara == m_aCharaSelectParam[i].m_nChara && m_aCharaSelectParam[i].m_nState == 2) {
+                return -1;
+            }
+        } else if (nChara == m_aCharaSelectParam[i].m_nChara) {
+            return -1;
+        }
+    }
+    return 1;
+}
+
+long msw::CSelectMenu::Chara_CheckSelectChara(long nPad, long nChara)
+{
+    for (long i = 0; i < 6; i++) {
+        if (nPad == m_aCharaSelectParam[i].m_Unk00) {
+            if (nChara == m_aCharaSelectParam[i].m_nChara && m_aCharaSelectParam[i].m_nState == 2) {
+                return -1;
+            }
+        } else if (nChara == m_aCharaSelectParam[i].m_nChara) {
+            return -1;
+        }
+    }
+    return 1;
+}
+
+long msw::CSelectMenu::Chara_GetDecideCharaNum(long nEntry)
+{
+    long nNum = 0;
+    for (long i = 0; i < 6; i++) {
+        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecide(i) == 1) {
+            nNum++;
+        }
+    }
+    return nNum;
+}
+
+msw::CSelectMenu::CharaSelectParam *msw::CSelectMenu::Chara_GetLastDecideChara(long nEntry)
+{
+    for (long i = 5; i >= 0; i--) {
+        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecide(i) == 1) {
+            return &m_aCharaSelectParam[i];
+        }
+    }
+    return 0;
+}
+
+long msw::CSelectMenu::Chara_GetSaveCharaIndex(long nIndex, long &rEntry, long &rChara, long &rCharaSub, long &rColor,
+                                               long &rPlayerKind)
+{
+    rEntry = m_aCharaSaveParam[nIndex].m_Unk00;
+    rChara = m_aCharaSaveParam[nIndex].m_nChara;
+    rCharaSub = m_aCharaSaveParam[nIndex].m_nCharaSub;
+    rColor = m_aCharaSaveParam[nIndex].m_Unk13[0];
+    rPlayerKind = m_aCharaSelectParam[nIndex].m_nPlayerKind;
+    return 0;
+}
+
+
+// Gives the Mii (mode nMiiMode, index nIndex of source, createId) to the
+// first undecided slot of pad nPad.
+void msw::CSelectMenu::Mii_SelectParam(long nPad, unsigned char nMiiMode, long nIndex, RFLDataSource source,
+                                       RFLCreateID createId)
+{
+    for (long i = 0; i < 6; i++) {
+        if (nPad == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecide(i) == 0) {
+            if (m_nCharaColor[nPad] & 0xAA) {
+                m_aCharaSelectParam[i].m_Unk13[0] = 1;
+            } else {
+                m_aCharaSelectParam[i].m_Unk13[0] = 0;
+            }
+            CharaSelectParam &rParam = m_aCharaSelectParam[i];
+            rParam.m_nCharaSub = 0;
+            rParam.m_nMiiMode = nMiiMode;
+            rParam.m_nMiiIndex = nIndex;
+            rParam.m_MiiSource = source;
+            rParam.m_MiiCreateId = createId;
+            return;
+        }
+    }
+}
+
+unsigned char msw::CSelectMenu::Mii_GetMiiMode(long nIndex)
+{
+    return m_aCharaSelectParam[nIndex].m_nMiiMode;
+}
+
+RFLDataSource msw::CSelectMenu::Mii_GetMiiDataSource(long nIndex)
+{
+    return m_aCharaSelectParam[nIndex].m_MiiSource;
+}
+
+long msw::CSelectMenu::Mii_GetMiiIndex(long nIndex)
+{
+    return m_aCharaSelectParam[nIndex].m_nMiiIndex;
+}
+
+unsigned long long msw::CSelectMenu::Mii_GetMiiCreateId(long nIndex)
+{
+    return *(unsigned long long *)&m_aCharaSelectParam[nIndex].m_MiiCreateId;
+}
+
+// Decides the Mii (0x13) for entry nEntry.
+void msw::CSelectMenu::Mii_SetMiiParam(long nEntry, unsigned char nMiiMode, long nIndex, RFLDataSource source,
+                                       RFLCreateID createId)
+{
+    long nSlot = Chara_SetDecideChara(nEntry, 0x13, 0, 0x4A, 3);
+    if (m_nCharaColor[nEntry] & 0xAA) {
+        m_aCharaSelectParam[nSlot].m_Unk13[0] = 1;
+    }
+    CharaSelectParam &rParam = m_aCharaSelectParam[nSlot];
+    rParam.m_nMiiMode = nMiiMode;
+    rParam.m_nMiiIndex = nIndex;
+    rParam.m_MiiSource = source;
+    rParam.m_MiiCreateId = createId;
+}
+
+// Drops the Mii nMiiIndex of source from entry nEntry: the slots being
+// chosen are emptied, the decided ones go back to being chosen.
+void msw::CSelectMenu::Mii_CancelMiiParam(long nEntry, RFLDataSource source, long nMiiIndex)
+{
+    static const unsigned char chrType = 0x13;
+
+    for (long i = 5; i >= 0; i--) {
+        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && m_aCharaSelectParam[i].m_nChara == chrType && m_aCharaSelectParam[i].m_nState == 1) {
+            m_aCharaSelectParam[i].m_nState = 0;
+            m_aCharaSelectParam[i].m_nChara = 0xFF;
+            m_aCharaSelectParam[i].m_nCharaSub = 0xFF;
+            m_aCharaSelectParam[i].m_Unk13[0] = 0;
+            m_aCharaSelectParam[i].m_Unk0C = 0;
+            m_aCharaSelectParam[i].m_MiiSource = RFLDataSource_Default;
+            m_aCharaSelectParam[i].m_nMiiIndex = 0;
+            m_aCharaSelectParam[i].m_nMiiMode = 0xFF;
+        }
+    }
+    for (long i = 5; i >= 0; i--) {
+        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && m_aCharaSelectParam[i].m_nChara == chrType &&
+            source == m_aCharaSelectParam[i].m_MiiSource && nMiiIndex == m_aCharaSelectParam[i].m_nMiiIndex && Chara_IsCharaDecide(i)) {
+            m_aCharaSelectParam[i].m_nState = 1;
+            m_aCharaSelectParam[i].m_nChara = 0xFF;
+            m_aCharaSelectParam[i].m_nCharaSub = 0xFF;
+            m_aCharaSelectParam[i].m_Unk13[0] = 0;
+            m_aCharaSelectParam[i].m_Unk0C = 0;
+            m_aCharaSelectParam[i].m_MiiSource = RFLDataSource_Default;
+            m_aCharaSelectParam[i].m_nMiiIndex = 0;
+            m_aCharaSelectParam[i].m_nMiiMode = 0xFF;
+        }
+    }
+}
+
+unsigned char msw::CSelectMenu::Mii_GetSaveMiiMode(long nIndex)
+{
+    return m_aCharaSaveParam[nIndex].m_nMiiMode;
+}
+
+RFLDataSource msw::CSelectMenu::Mii_GetSaveMiiDataSource(long nIndex)
+{
+    return m_aCharaSaveParam[nIndex].m_MiiSource;
+}
+
+long msw::CSelectMenu::Mii_GetSaveMiiIndex(long nIndex)
+{
+    return m_aCharaSaveParam[nIndex].m_nMiiIndex;
+}
+
+unsigned long long msw::CSelectMenu::Mii_GetSaveMiiCreateId(long nIndex)
+{
+    return *(unsigned long long *)&m_aCharaSaveParam[nIndex].m_MiiCreateId;
+}
+
+// The second player's Mii in a two-player Wi-Fi game.
+void msw::CSelectMenu::WiFi_Set2PMiiParam(unsigned char nMiiMode, long nIndex, RFLDataSource source,
+                                          RFLCreateID createId)
+{
+    m_nStarMiiUnk = nMiiMode;
+    m_nStarMiiIndex = nIndex;
+    m_StarMiiSource = source;
+    m_StarMiiCreateId = createId;
+}
+
+RFLStoreData msw::CSelectMenu::WiFi_Get2PMiiStoreData()
+{
+    RFLStoreData data;
+    bcs::CMiiMan::GetStoreData(data, m_StarMiiSource, m_StarMiiCreateId);
+    return data;
+}
+
+wchar_t *msw::CSelectMenu::WiFi_Get2PMiiName()
+{
+    RFLStoreData data;
+    bcs::CMiiMan::GetStoreData(data, m_StarMiiSource, m_StarMiiCreateId);
+    const wchar_t *pName;
+    if (m_nStarMiiUnk != 0) {
+        pName = GetMessageString("List_Mii_Name", m_nStarMiiIndex);
+    } else {
+        RFLAdditionalInfo info;
+        bcs::CMiiMan::GetAdditionalInfo(info, data);
+        pName = info.name;
+    }
+    wcscpy(m_Wifi2PName, pName);
+    return m_Wifi2PName;
+}
+
+wchar_t *msw::CSelectMenu::GetMiiName(RFLStoreData data)
+{
+    SAVE_DATA_PLAYER *pPlayer = CSave::GetPlayerData(-1);
+    SAVE_DATA_PLAYER::MiiData *pMii = pPlayer->GetIndexMii(pPlayer->SearchMiiIndex(data));
+    const wchar_t *pName;
+    if (pMii->m_Source != RFLDataSource_Official) {
+        pName = GetMessageString("List_Mii_Name", pMii->m_nNameId);
+    } else {
+        RFLAdditionalInfo info;
+        bcs::CMiiMan::GetAdditionalInfo(info, data);
+        pName = info.name;
+    }
+    wcscpy(m_MiiNameWork, pName);
+    return m_MiiNameWork;
+}
+
+// Sets up the six character slots for the play mode: who owns each slot
+// (s_CharaSlotSetUp, by pad entry) and empties them.
+void msw::CSelectMenu::InitCharaSelectParam()
+{
+    const CharaSlotSetUp *pTable = s_CharaSlotSetUp.m_Entry;
+    const CharaSlotSetUp *pSetUp;
+    unsigned char nPlayMode = m_nPlayMode;
+    if ((long)m_Unk9B == 2) {
+        switch (nPlayMode) {
+            case 4:
+                pSetUp = &pTable[23];
+                break;
+            case 6:
+                pSetUp = &pTable[24];
+                break;
+            case 7:
+                pSetUp = &pTable[25];
+                break;
+            case 8:
+                pSetUp = &pTable[26];
+                break;
+            case 0:
+                pSetUp = &pTable[3];
+                break;
+            case 5:
+                pSetUp = &pTable[5];
+                break;
+            case 1:
+                pSetUp = &pTable[6];
+                break;
+            case 9:
+                pSetUp = &pTable[7];
+                break;
+            default:
+                pSetUp = &pTable[27];
+                break;
+        }
+    } else {
+        switch (nPlayMode) {
+            case 12:
+                pSetUp = &pTable[0];
+                break;
+            case 13:
+                pSetUp = &pTable[1];
+                break;
+            case 0:
+                pSetUp = &pTable[3];
+                break;
+            case 1:
+                pSetUp = &pTable[6];
+                break;
+            case 4:
+                pSetUp = &pTable[2];
+                break;
+            case 5:
+                pSetUp = &pTable[5];
+                break;
+            case 6:
+                pSetUp = &pTable[4];
+                break;
+            case 7:
+                pSetUp = &pTable[8];
+                break;
+            case 8:
+                pSetUp = &pTable[11];
+                break;
+            case 9:
+                pSetUp = &pTable[7];
+                break;
+            case 10:
+                pSetUp = &pTable[14];
+                break;
+            case 14:
+                pSetUp = &pTable[15];
+                break;
+            case 15:
+                pSetUp = &pTable[16];
+                break;
+            case 16:
+                pSetUp = &pTable[17];
+                break;
+            case 17:
+                pSetUp = &pTable[10];
+                break;
+            case 18:
+                pSetUp = &pTable[18];
+                break;
+            case 19:
+                pSetUp = &pTable[19];
+                break;
+            case 20:
+                pSetUp = &pTable[9];
+                break;
+            case 21:
+                pSetUp = &pTable[20];
+                break;
+            case 22:
+                pSetUp = &pTable[12];
+                break;
+            case 23:
+                pSetUp = &pTable[13];
+                break;
+            case 24:
+                pSetUp = &pTable[21];
+                break;
+            case 25:
+                pSetUp = &pTable[22];
+                break;
+            default:
+                pSetUp = &pTable[27];
+                break;
+        }
+    }
+
+    for (long nTeam = 0; nTeam < 2; nTeam++) {
+        for (long i = 0; i < 3; i++) {
+            long nSlot = nTeam * 3 + i;
+            long nEntry = GetPadEntryId(pSetUp->m_nEntry[nTeam][i]);
+            CharaSelectParam &rParam = m_aCharaSelectParam[nSlot];
+            rParam.m_Unk00 = nEntry;
+            rParam.m_nPlayerKind = GetPadEntryId(pSetUp->m_nPlayerKind[nTeam][i]);
+            rParam.m_Unk08 = pSetUp->m_nUnk08[nTeam][i];
+            rParam.m_nState = 0;
+            rParam.m_nChara = 0xFF;
+            rParam.m_nCharaSub = 0xFF;
+            rParam.m_Unk13[0] = 0;
+            rParam.m_Unk0C = 0;
+            rParam.m_MiiSource = RFLDataSource_Default;
+            rParam.m_nMiiIndex = 0;
+            rParam.m_nMiiMode = 0xFF;
+        }
+    }
+    for (long i = 0; i < 4; i++) {
+        m_HistoryBtnKindId[0xE].m_nPad[i] = 0;
+    }
+    UnusedReferences();
+}
+
+void msw::CSelectMenu::ChangeTeamCharaSelectParam()
+{
+    InitCharaSelectParam();
+}
+
+// Keeps the slots as they are now (Chara_GetSaveCharaIndex and the
+// Mii_GetSave* getters read the copy).
+void msw::CSelectMenu::SetCharaSelectSaveParam()
+{
+    m_aCharaSaveParam[0] = m_aCharaSelectParam[0];
+    m_aCharaSaveParam[1] = m_aCharaSelectParam[1];
+    m_aCharaSaveParam[2] = m_aCharaSelectParam[2];
+    m_aCharaSaveParam[3] = m_aCharaSelectParam[3];
+    m_aCharaSaveParam[4] = m_aCharaSelectParam[4];
+    m_aCharaSaveParam[5] = m_aCharaSelectParam[5];
+}
+
+int msw::CSelectMenu::IsPushStateHistory(long nState)
+{
+    if (nState == 0x11 || nState == 0x2F || nState == 0x31) {
+        return 0;
+    }
+    return 1;
+}
+
+long msw::CSelectMenu::GetPlayerEntryId(long nPad)
+{
+    return m_nPadPlayer[nPad];
+}
+
+// The entry of controller nPad (unchanged above 3 or without an entry).
+long msw::CSelectMenu::GetPadEntryId(long nPad)
+{
+    if ((unsigned long)nPad > 3) {
+        return nPad;
+    }
+    for (long i = 0; i < 4; i++) {
+        if (nPad == m_nPadPlayer[i]) {
+            return i;
+        }
+    }
+    return nPad;
+}
+
+// Remembers button nBtnKindId as player nPad's previous button, unless it
+// is none or one pObj's stick cannot reach.
+void msw::CSelectMenu::SetPreviousButtonKindIdWithoutNone(long nPad, unsigned short nBtnKindId,
+                                                          CSelectMenuLayoutBase *pObj)
+{
+    if (nBtnKindId != 0 && pObj->IsButtonKindOfStickMode(nBtnKindId)) {
+        m_nCupBtnKindId[nPad] = nBtnKindId;
+    }
+}
+
+long msw::CSelectMenu::Chara_FindNotDecideCharaIndex(long nEntry)
+{
+    for (long i = 0; i < 6; i++) {
+        switch (m_Unk9B) {
+            case 0:
+            case 2:
+                if (nEntry == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecide(i) == 0) {
+                    return i;
+                }
+                break;
+            default:
+                if (nEntry == m_aCharaSelectParam[i].m_nPlayerKind && Chara_IsCharaDecide(i) == 0) {
+                    return i;
+                }
+                break;
+        }
+    }
+    return -1;
+}
+
+long msw::CSelectMenu::Chara_FindSelectCharaIndex(long nEntry)
+{
+    for (long i = 0; i < 6; i++) {
+        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecideSelect(i) == 1) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+long msw::CSelectMenu::Chara_FindNoneCharaIndex(long nEntry)
+{
+    for (long i = 0; i < 6; i++) {
+        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && Chara_IsCharaDecideNone(i) == 1) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+long msw::CSelectMenu::Chara_FindLastCharaIndex(long nEntry)
+{
+    for (long i = 5; i >= 0; i--) {
+        if (nEntry == m_aCharaSelectParam[i].m_Unk00 && m_aCharaSelectParam[i].m_nState != 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+msw::CSelectMenu::CharaSelectParam *msw::CSelectMenu::GetCharaSelectParam(long nIndex)
+{
+    if ((unsigned long)nIndex <= 5) {
+        return &m_aCharaSelectParam[nIndex];
+    }
+    return 0;
+}
+
+int msw::CSelectMenu::Chara_IsCharaDecideNone(long nIndex)
+{
+    return m_aCharaSelectParam[nIndex].m_nState == 0;
+}
+
+int msw::CSelectMenu::Chara_IsCharaDecideAlready(long nIndex)
+{
+    return m_aCharaSelectParam[nIndex].m_nState == 2;
+}
+
+int msw::CSelectMenu::Chara_IsCharaDecideSelect(long nIndex)
+{
+    return m_aCharaSelectParam[nIndex].m_nState == 1;
+}
+
+int msw::CSelectMenu::Chara_IsCharaDecideTemporary(long nIndex)
+{
+    return m_aCharaSelectParam[nIndex].m_nState == 3;
+}
+
+void msw::CSelectMenu::Chara_ChangeDecideTemporaryToDecideAlready()
+{
+    static const long num = 3;
+
+    for (long nTeam = 0; nTeam < 2; nTeam++) {
+        for (long i = 0; i < num; i++) {
+            long nSlot = nTeam * num + i;
+            if (m_aCharaSelectParam[nSlot].m_nState == 3) {
+                m_aCharaSelectParam[nSlot].m_nState = 2;
+            }
+        }
+    }
+}
+
+namespace {
+    // The button of character nChara (s_CharaButton), -1 for none.
+    inline long FindCharaButton(long nChara)
+    {
+        const CharaButton *pButton = s_CharaButton;
+        for (long i = 0; i < 19; i++, pButton++) {
+            if (nChara == pButton->m_nChara) {
+                return pButton->m_nBtnKindId;
+            }
+        }
+        return -1;
+    }
+}
+
+// Every pad that has decided all its characters gives its last one back
+// (the back button on the character select screen).
+void msw::CSelectMenu::Chara_CancelLastDecideChara()
+{
+    long nState = m_nState;
+    SelectMenu::CCharaSelect *pSelect = (SelectMenu::CCharaSelect *)FindObj(0x10);
+    for (long nPad = 0; nPad < 4; nPad++) {
+        if (!Chara_IsAllDecide(nPad)) {
+            continue;
+        }
+        CharaSelectParam *pParam = Chara_GetLastDecideChara(nPad);
+        if (pParam == 0) {
+            continue;
+        }
+        long nChara = pParam->m_nChara;
+        long nBtnKindId = FindCharaButton(nChara);
+        m_nCurrentBtnKindId[nPad][nState] = nBtnKindId;
+        if (pSelect != 0) {
+            pSelect->m_nPushButtonId[nPad] = nBtnKindId;
+            pSelect->SetCursorMarkerPosition(nPad, nBtnKindId);
+        }
+        Chara_CancelDecideChara(nPad, nChara);
+        if (pSelect != 0) {
+            pSelect->PushCancelButton(nPad, nBtnKindId);
+        }
+    }
+}
+
+void msw::CSelectMenu::SetBlockFadeOut(float fFadeTime)
+{
+    float fSpeed = 1.0f;
+    if (m_Unk27F == 0) {
+        fSpeed = 1.0f / fFadeTime;
+    }
+    bcs::CMainApp::StartMasterFade(0, fSpeed);
+    m_Unk27F = 1;
+}
+
+void msw::CSelectMenu::SetWhiteFadeOut(float fFadeTime)
+{
+    float fSpeed = 1.0f;
+    if (m_Unk27F == 0) {
+        fSpeed = 1.0f / fFadeTime;
+    }
+    bcs::CMainApp::StartMasterFade(1, fSpeed);
+    m_Unk27F = 2;
+}
+
+void msw::CSelectMenu::SetFadeIn(float fFadeTime)
+{
+    float fSpeed = 1.0f;
+    if (m_Unk27F != 0) {
+        fSpeed = 1.0f / fFadeTime;
+    }
+    bcs::CMainApp::StartMasterFade(4, fSpeed);
+    m_Unk27F = 0;
+}
+
+float msw::CSelectMenu::GetBgmFadeOutTime()
+{
+    return 30.0f;
+}
+
+void msw::CSelectMenu::DecrementDelayFrameCount()
+{
+    float fWait = m_fEntryErrorWait;
+    fWait -= bcs::CMainApp::GetAppFrameRateF();
+    if (fWait < 0.0f) {
+        fWait = 0.0f;
+    }
+    m_fEntryErrorWait = fWait;
+}
+
+int msw::CSelectMenu::IsBackButtonMove(long nPad)
+{
+    return m_nCurrentBtnKindId[nPad][m_Unk9D] == 1;
+}
+
+const msw::CSelectMenu::MenuBGM *msw::CSelectMenu::GetMenuBGMId(long nBgm)
+{
+    if (nBgm >= MENU_BGM_NUM) {
+        return 0;
+    }
+    return &s_MenuBGM[nBgm];
+}
+
+float msw::CSelectMenu::GetMenuBGMFadeoutTime()
+{
+    return 60.0f;
+}
+
+// Starts menu music nBgm unless it is playing already.
+void msw::CSelectMenu::PlayMenuBGM(long nBgm)
+{
+    const MenuBGM *pBgm = GetMenuBGMId(nBgm);
+    menu::CSndBGM &rBGM = menu::CSndBGM::s_Instance;
+    if (pBgm != 0 && pBgm->m_nSeq != rBGM.GetSeq()) {
+        StopMenuBGM();
+        if (pBgm->m_bPlay == 0) {
+            rBGM.SeqLoad(pBgm->m_nSeq, 1);
+        } else {
+            menu::CSndBGM::s_Instance.Play(pBgm->m_nSeq);
+        }
+    }
+}
+
+void msw::CSelectMenu::PlayMenuBGMToTop(long nBgm)
+{
+}
+
+void msw::CSelectMenu::StopMenuBGM()
+{
+    menu::CSndBGM &rBGM = menu::CSndBGM::s_Instance;
+    if (rBGM.GetTaskId() != 0) {
+        rBGM.Stop(rBGM.GetTaskId(), GetMenuBGMFadeoutTime());
+    }
+}
+
+// Starts menu music nBgm again when it has stopped.
+void msw::CSelectMenu::LoopPlayMenuBGM(long nBgm)
+{
+    menu::CSndBGM &rBGM = menu::CSndBGM::s_Instance;
+    const MenuBGM *pBgm = GetMenuBGMId(nBgm);
+    if (pBgm != 0 && pBgm->m_nSeq == rBGM.GetSeq() && !rBGM.IsPlayNow(rBGM.GetTaskId())) {
+        if (pBgm->m_bPlay == 0) {
+            rBGM.SeqLoad(pBgm->m_nSeq, 1);
+        } else {
+            menu::CSndBGM::s_Instance.Play(pBgm->m_nSeq);
+        }
+    }
+}
+
+void msw::CSelectMenu::PlayMenuSE(long nSe)
+{
+    menu::CSndEff::s_Instance.Play(nSe, 1);
+}
+
+void msw::CSelectMenu::Load(long nArchive)
+{
+    if (nArchive >= 0) {
+        bcs::CLoadMan::FILE_INPUT *pFile = &s_FileInputTable[nArchive];
+        if (pFile->m_nId & 1) {
+            bcs::G2D::CLytResource *pRes = bcs::G2D::CLytResource::GetInstance();
+            if (pRes != 0) {
+                pRes->LoadDataASync(pFile);
+            }
+        }
+    }
+}
+
+void msw::CSelectMenu::UnLoad(long nArchive)
+{
+    if (nArchive >= 0) {
+        bcs::CLoadMan::FILE_INPUT *pFile = &s_FileInputTable[nArchive];
+        if (pFile->m_nId & 1) {
+            bcs::G2D::CLytResource *pRes = bcs::G2D::CLytResource::GetInstance();
+            if (pRes != 0) {
+                pRes->Cleanup(pFile->m_szPath);
+            }
+            bcs::CLoadMan::UnLoad(pFile);
+        }
+    }
+}
+
+int msw::CSelectMenu::IsLoaded(long nArchive)
+{
+    if (bcs::G2D::CLytResource::GetInstance() == 0) {
+        return 0;
+    }
+    bcs::CLoadMan::FILE_INPUT *pFile = &s_FileInputTable[nArchive];
+    if ((pFile->m_nId & 1) == 0) {
+        return 1;
+    }
+    return bcs::CLoadMan::IsLoaded(pFile->m_szPath, pFile->m_nId);
+}
+
+int msw::CSelectMenu::IsComplete(long nArchive)
+{
+    bcs::G2D::CLytResource *pRes = bcs::G2D::CLytResource::GetInstance();
+    if (pRes == 0) {
+        return 0;
+    }
+    bcs::CLoadMan::FILE_INPUT *pFile = &s_FileInputTable[nArchive];
+    if ((pFile->m_nId & 1) == 0) {
+        return 1;
+    }
+    return pRes->IsCompleteDataASync(pFile) >= 0;
+}
+
+int msw::CSelectMenu::IsReading(long nArchive)
+{
+    bcs::CLoadMan::FILE_INPUT *pFile = &s_FileInputTable[nArchive];
+    if ((pFile->m_nId & 1) == 0) {
+        return 1;
+    }
+    return bcs::CLoadMan::IsReading(pFile->m_szPath, pFile->m_nId);
+}
+
+// Builds the archive table (the path in the language's folder) and
+// starts loading what the first screen needs.
+void msw::CSelectMenu::InitLoad()
+{
+    const char *pFolder = menu::GetLocalizeFolderName();
+    for (long i = 0; i < ARCHIVE_NUM; i++) {
+        sprintf(s_FileInputTable[i].m_szPath, s_FileInputInit[i].m_szPath, pFolder);
+        s_FileInputTable[i].m_nId = s_FileInputInit[i].m_nId;
+        s_FileInputTable[i].m_nFlags = s_FileInputInit[i].m_nFlags;
+        s_FileInputTable[i].m_Unk108 = s_FileInputInit[i].m_Unk108;
+        s_FileInputTable[i].m_nAlign = s_FileInputInit[i].m_nAlign;
+        s_FileInputTable[i].m_Unk10C = s_FileInputInit[i].m_Unk10C;
+        s_FileInputTable[i].m_Unk106 = s_FileInputInit[i].m_Unk106;
+    }
+
+    Load(2);
+    switch (menu::CStateSave::GetInstance()->GetStartMenuMode()) {
+        case 6:
+        case 7:
+        case 8:
+            Load(12);
+            break;
+        case 3:
+            Load(4);
+            break;
+        case 4:
+            Load(5);
+            break;
+    }
+}
+
+int msw::CSelectMenu::IsCompleteOfInitLoad()
+{
+    switch (menu::CStateSave::GetInstance()->GetStartMenuMode()) {
+        case 6:
+        case 7:
+        case 8:
+            if (!IsComplete(12)) {
+                return 0;
+            }
+            break;
+        case 3:
+            if (!IsComplete(4)) {
+                return 0;
+            }
+            break;
+        case 4:
+            if (!IsComplete(5)) {
+                return 0;
+            }
+            break;
+        default:
+            if (!IsComplete(2)) {
+                return 0;
+            }
+            break;
+    }
+    return 1;
+}
+
+float msw::CSelectMenu::GetCameraSpeed(long nAnim)
+{
+    return s_CameraSpeed[nAnim];
+}
+
 // The end of the select menu: the screen fades out and the state machine
 // waits in screen 0x32 while SelectEnd_Out starts the game.
 void msw::CSelectMenu::SelectEnd_In()
@@ -2678,9 +2723,10 @@ void msw::CSelectMenu::SelectEnd_Loop()
     m_pPlayerData = CSave::GetPlayerData(-1);
     Scratch(1);
     float fWait = 60.0f;
-    if (m_Unk9B != 1) {
+    if ((long)m_Unk9B != 1) {
         if (CEventDemo::m_bDemonstration) {
-            SetBlockFadeOut(20.0f);
+            float fDemoWait = 20.0f;
+            SetBlockFadeOut(fDemoWait);
         } else {
             SetWhiteFadeOut(fWait);
         }
@@ -3315,29 +3361,29 @@ long msw::CSelectMenu::WiFiMiiSexRand(RFLStoreData data)
 // is.
 void msw::CSelectMenu::WiFiMiiCharSetName(RFLStoreData *pData, long nChara)
 {
-    dwc::CGameDwc::PlayerInfo &rOther = m_pGameDwc->m_PlayerInfo[m_pGameDwc->m_Dwc.GetEmAID()];
-    RFLStoreData data = rOther.m_StoreData;
-    RFLStoreData data2P = rOther.m_StoreData2P;
+    long nOther = m_pGameDwc->m_Dwc.GetEmAID();
+    RFLStoreData data = m_pGameDwc->m_PlayerInfo[nOther].m_StoreData;
+    RFLStoreData data2P = m_pGameDwc->m_PlayerInfo[nOther].m_StoreData2P;
     if (memcmp(&data, pData, sizeof(RFLStoreData)) == 0) {
-        CGame::SetCharName(nChara, rOther.m_Name, 0x20);
+        CGame::SetCharName(nChara, m_pGameDwc->m_PlayerInfo[nOther].m_Name, 0x20);
         m_nWifiMiiChara[0] = nChara;
         return;
     }
     if (memcmp(&data2P, pData, sizeof(RFLStoreData)) == 0) {
-        CGame::SetCharName(nChara, rOther.m_Name2P, 0x20);
+        CGame::SetCharName(nChara, m_pGameDwc->m_PlayerInfo[nOther].m_Name2P, 0x20);
         m_nWifiMiiChara[1] = nChara;
         return;
     }
 
-    dwc::CGameDwc::PlayerInfo &rMine = m_pGameDwc->m_PlayerInfo[m_pGameDwc->m_Dwc.GetMyAID()];
-    RFLStoreData myData = rMine.m_StoreData;
-    RFLStoreData myData2P = rMine.m_StoreData2P;
+    long nMine = m_pGameDwc->m_Dwc.GetMyAID();
+    RFLStoreData myData = m_pGameDwc->m_PlayerInfo[nMine].m_StoreData;
+    RFLStoreData myData2P = m_pGameDwc->m_PlayerInfo[nMine].m_StoreData2P;
     if (memcmp(&myData, pData, sizeof(RFLStoreData)) == 0) {
-        CGame::SetCharName(nChara, rMine.m_Name, 0x20);
+        CGame::SetCharName(nChara, m_pGameDwc->m_PlayerInfo[nMine].m_Name, 0x20);
         return;
     }
     if (memcmp(&myData2P, pData, sizeof(RFLStoreData)) == 0) {
-        CGame::SetCharName(nChara, rMine.m_Name2P, 0x20);
+        CGame::SetCharName(nChara, m_pGameDwc->m_PlayerInfo[nMine].m_Name2P, 0x20);
     }
 }
 
@@ -3355,6 +3401,7 @@ void msw::CSelectMenu::WiFiExChangeMii()
             m_pGameDwc->m_PlayerInfo[nOther].m_StoreData = guest;
             m_pGameDwc->SetPlayerName(nOther, GetMessageString("List_Mii_Name", nGuest));
             if (m_nWifiMiiChara[0] >= 0) {
+                CGame::SetCharName(m_nWifiMiiChara[0], GetMessageString("List_Mii_Name", nGuest), 0x20);
                 CGame::SetMiiStoreData(m_nWifiMiiChara[0], guest);
             }
         }
@@ -3369,6 +3416,7 @@ void msw::CSelectMenu::WiFiExChangeMii()
             m_pGameDwc->m_PlayerInfo[nOther].m_StoreData2P = guest;
             m_pGameDwc->SetPlayerName2P(nOther, GetMessageString("List_Mii_Name", nGuest));
             if (m_nWifiMiiChara[1] >= 0) {
+                CGame::SetCharName(m_nWifiMiiChara[1], GetMessageString("List_Mii_Name", nGuest), 0x20);
                 CGame::SetMiiStoreData(m_nWifiMiiChara[1], guest);
             }
         }
@@ -3563,31 +3611,31 @@ wchar_t *msw::CSelectMenu::ExchangeFriendCode(unsigned long long nCode)
 // to the start of the Wi-Fi menus.
 long msw::CSelectMenu::WifiErrorCheck()
 {
-    if (dwc::CGameDwc::m_ErrorStep == 0) {
-        return 1;
-    }
-    CMenuLinkBase *pObj = FindObj(0xFF);
-    if (pObj != 0) {
-        m_LinkList.RemoveObject(pObj);
-    }
-    if (dwc::CGameDwc::m_ErrorStep == 10) {
-        ClearMenuHistory();
-        PushMenuHistory(1, 2, 0);
-        PushMenuHistory(2, 4, 0);
-        if (dwc::CGameDwc::GetErrorType() == -2 || dwc::CGameDwc::GetInstance() == 0) {
-            Backup();
-            menu::CStateSave::GetInstance()->SetStartMenuMode(2);
-            CMainStep::ChangeStep(2);
-            CGame::SetReturnStep(0);
-        } else if (dwc::CGameDwc::GetErrorType() == -1) {
-            Backup();
-            menu::CStateSave::GetInstance()->SetStartMenuMode(8);
-            CMainStep::ChangeStep(2);
-            CGame::SetReturnStep(0);
-            CancelVsFriend();
+    if (dwc::CGameDwc::m_ErrorStep != 0) {
+        CMenuLinkBase *pObj = FindObj(0xFF);
+        if (pObj != 0) {
+            m_LinkList.RemoveObject(pObj);
         }
+        if (dwc::CGameDwc::m_ErrorStep == 10) {
+            ClearMenuHistory();
+            PushMenuHistory(1, 2, 0);
+            PushMenuHistory(2, 4, 0);
+            if (dwc::CGameDwc::GetErrorType() == -2 || dwc::CGameDwc::GetInstance() == 0) {
+                Backup();
+                menu::CStateSave::GetInstance()->SetStartMenuMode(2);
+                CMainStep::ChangeStep(2);
+                CGame::SetReturnStep(0);
+            } else if (dwc::CGameDwc::GetErrorType() == -1) {
+                Backup();
+                menu::CStateSave::GetInstance()->SetStartMenuMode(8);
+                CMainStep::ChangeStep(2);
+                CGame::SetReturnStep(0);
+                CancelVsFriend();
+            }
+        }
+        return 0;
     }
-    return 0;
+    return 1;
 }
 
 // Every three seconds: looks for a friend who wants a match.
@@ -3648,7 +3696,8 @@ void msw::CSelectMenu::TimeOver_Loop()
     float fTime = CSelectMenuLayoutBase::s_DefaultOutAnimOverTime;
     SetWhiteFadeOut(fTime);
     SetNextMode(1, fTime);
-    CMenuPadInfo::s_Instance.m_aPad[0].m_nFlags06 &= ~1 & ~2;
+    CMenuPadInfo::s_Instance.m_aPad[0].m_nFlags06 &= ~1;
+    CMenuPadInfo::s_Instance.m_aPad[0].m_nFlags06 &= ~2;
 }
 
 void msw::CSelectMenu::TimeOver_Out()
@@ -3665,8 +3714,9 @@ void msw::CSelectMenu::Test_In()
     SendObjEventTrigger(0, 0, (void *)L"BgDisp\x306E\x30C6\x30B9\x30C8");
     SendObjEventTrigger(0x3E, 0x4D, 0);
     Build(0x3E);
-    CCameraMenuBG::s_Instance.SetAnimTable(s_CameraAnimTable, CAMERA_ANIM_NUM, _IsOpenMixSportsFlag() == 1);
-    CCameraMenuBG::s_Instance.Play(0x25, GetCameraSpeed(0x25), 0.0f);
+    CCameraMenuBG &rCamera = CCameraMenuBG::s_Instance;
+    rCamera.SetAnimTable(s_CameraAnimTable, CAMERA_ANIM_NUM, _IsOpenMixSportsFlag() == 1);
+    rCamera.Play(0x25, GetCameraSpeed(0x25), 0.0f);
     SendObjEventTrigger(0x3B, 0x36, (void *)0xA);
     SelectMenu::CBgDisplay *pBg = (SelectMenu::CBgDisplay *)FindObj(0x3E);
     if (pBg != 0) {

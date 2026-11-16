@@ -132,7 +132,7 @@ BasketF LoopStateSizeChange__Q23msw14CChrCoreBasketFv near 99.8 99.8: FsmqGetWor
 BasketF LoopStateSliding__Q23msw14CChrCoreBasketFv near 99.9 99.9: register choice, operand order inside fnmsubs/fmadds
 BasketF LoopStateSmashCut__Q23msw14CChrCoreBasketFv near 93.2 [real, reviewed] reviewer: only mr./cmpwi on the IsAnmFlipPlay result and li/lfs argument setup order differ; same constants, calls and args
 BasketF LoopStateSmashCut__Q23msw19CChrCoreBasketYoshiFv near 85.9 control flow, calls, constants and fields match; ours keeps one .rodata base register where the original reloads lis/@l per constant (toolchain.md literal pooling), and cmpwi vs mr. on IsAnmFlipPlay
-BasketF LoopStateSmashCut__Q23msw20CChrCoreBasketKuromaFv near 94.5 stack slots of vector temporaries, register choice, fmadds operand order, one extra fmr in the original
+BasketF LoopStateSmashCut__Q23msw20CChrCoreBasketKuromaFv near 94.6 [real, reviewed] reviewer: stack slots, commutative fmadds/fmuls, scheduling; CAtkCollision ctor runs before disjoint field stores (0x58-0x70) in ours, no overlap
 BasketF LoopStateSmashCut__Q23msw21CChrCoreBasketKinopioFv near 98.5 two local vectors in different stack slots; register renumbering and load order
 BasketF LoopStateTurn__Q23msw14CChrCoreBasketFv near 99.8 [real, reviewed] reviewer: li 0/ori 7 vs li 7, register renumbering, and fmuls operands swapped (0x78(r31)*0x10(r30)); commutative
 BasketF MainCamera_Normal__Q23msw15CCameraBasketHBFv near 98.5 98.5%, schedule: after the second CalcCurveBlend the two fmr come in the other order and y goes to another saved float register; m_Unk280/m_Unk110 loaded in the other order at the end; calls, constants and memory accesses identical
@@ -149,7 +149,7 @@ BasketF Main__Q23msw18CCockpitBasketCoinFv near 98.8 register choice only (as CC
 BasketF Main__Q33msw11CC03_BASKET19CcDaisyFlowerGardenFv near 99.4 f0/f1 register swap
 BasketF Main__Q33msw11CC05_BASKET15CcWarioSmokeMgrFv near 98.5 [real, reviewed] reviewer: Extra zero-trip guard before ring loop, regs, stack slots, ps_add operand order; same calls and constants.
 BasketF Main__Q33msw11CC09_BASKET17CcKinopioReceiverFv near 99.6 register choice for one load
-BasketF Main__Q33msw11CC17_BASKET18CcKuromaLockonUnitFv near 96.4 scheduling: m_hEffect loaded before CEffectCtrl::GetInstance() in the original (Hockey/Volley/Dodge same)
+BasketF Main__Q33msw11CC17_BASKET18CcKuromaLockonUnitFv near 96.4 [real, reviewed] reviewer: m_hEffect (0x40 of saved this) loaded before vs after side-effect-free GetInstance(); same value passed to FindList
 BasketF Main__Q33msw14GIMMICK_BASKET14CEffectCoinGetFv near 99.0 [real, reviewed] reviewer: ANON vs named constants (no data flag), register renumbering, schedule, commutative fmuls operand swap.
 BasketF Main__Q33msw14GIMMICK_BASKET16CEffectCoinScoreFv near 98.8 98.8%: register/schedule only, same difference as the recorded Volley/Hockey/Dodge copies
 BasketF Main___Q23msw14CStageBasket05Ff near 95.3 95.3%: IsGameFlag0 test is clrlwi + double cntlzw in the original, one clrlwi. in ours (same bit, same branch); raft loop addresses three arrays by this + i*stride where ours advances a pointer, two more saved GPRs and a 0x10 larger frame. Addressing and registers only.
@@ -220,7 +220,7 @@ BasketF SubStateArtsShotFireBullet___Q23msw19CChrCoreBasketSlimeFPQ33msw14CChrCo
 BasketF SubStateArtsShotFireBullet___Q23msw19CChrCoreBasketWarioFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICKl near 99.2 float register numbering and the order of the game-mode/character-id loads only
 BasketF SubStateArtsShotFireBullet___Q23msw21CChrCoreBasketKinopioFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICKl near 99.6 register choice only
 BasketF SubStateArtsShotFireBullet___Q23msw21CChrCoreBasketKoopaJrFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICKl near 93.3 93.3%: register choice, stack slot layout (frame 0x1e0 vs 0x1f0) and where the copy of the goal's XZ position is spilled (the original stores its members to scattered dead stack slots with frsp on y); same constants, calls, branches and memory reads
-BasketF SubStateArtsShotIsReadyArtsShot___Q23msw20CChrCoreBasketKuromaFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK near 100.0 100% by objdiff; one lfs reads the .rodata pool at +0x5C in the original vs +0x58 in ours: the same constant (10.0f for Start) at a swapped pool address, as in SubStateArtsShotPlayTrickMotion_
+BasketF SubStateArtsShotIsReadyArtsShot___Q23msw20CChrCoreBasketKuromaFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK near 100.0 [real, reviewed] reviewer: lfs pool +0x5c (orig) vs +0x58 (ours) both hold 10.0f (0x41200000); checked both rodata dumps
 BasketF SubStateArtsShotPlayTrickMotion___Q23msw20CChrCoreBasketKuromaFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK near 99.1 same constants 5.0f/10.0f read from swapped .rodata pool addresses (pool order)
 BasketF SubStateArtsShotPlayTrickMotion___Q23msw20CChrCoreBasketSiromaFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK near 98.9 registers in inlined normalize; circle position stores x,y,z vs x,z,y
 BasketF SubStateArtsShotReadyArtsShot___Q23msw14CChrCoreBasketFPQ33msw14CChrCoreBasket20STATE_WORK_AIR_TRICK near 97.4 instruction order only: the fmr copies for Util_SetJumpParam's arguments and the fsubs are ordered differently

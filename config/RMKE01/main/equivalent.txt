@@ -112,8 +112,8 @@ main EventStart__Q23msw17CVictoryDemoPartyFv near 99.6 register choice; jump tab
 main EventTimer__Q23msw12CVictoryDemoFssUl near 99.5 register choice only
 main ExitHaltState__Q23msw5CGameFi unverified 82.2 switch compare tree vs our linear chain and other branch form; not proven equal by tool
 main Finalize__Q23msw5CGameFv unverified 99.0 the original passes 0.0f in f1 to CGameSnd::StopAllSound (a fade time); our header declares it without arguments, so the lfs is missing; everything else identical
-main FindFunctionTag__Q33msw2vm7CVMDataFPCcl near 88.7 64-bit hash multiply scheduled differently, one extra mr in the original; register allocation only
-main FindValueTag__Q33msw2vm7CVMDataFPCcl near 88.7 64-bit hash multiply scheduled differently, one extra mr in the original; register allocation only
+main FindFunctionTag__Q33msw2vm7CVMDataFPCcl near 88.7 [real, reviewed] reviewer confirmed: same 64-bit multiply-add operands; add order, register numbers and one extra mr in the original
+main FindValueTag__Q33msw2vm7CVMDataFPCcl near 88.7 [real, reviewed] reviewer confirmed: same 64-bit multiply-add operands; add order, register numbers and one extra mr in the original
 main FindWave__Q23msw19CStgGmk_WaveClusterCFRQ23bcs5FVEC3RQ23bcs5FVEC3f near 99.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main Force___Q43msw6CC_CMN5LUIGI14CcOvacuumForceFf near 99.2 float callee-saved register allocation only
 main GameWorkReset___Q23msw5CGameFv unverified 46.9 46.9%: ours inlines ClearLastGoalInfo (the original calls it), merges the two identical SetTurnStartMode branches and drops a sign extension; same stores
@@ -244,7 +244,7 @@ main OpAddAddress__Q33msw2vm6CVMCpuFv near 99.6 register allocation and instruct
 main OpFillFloat__Q33msw2vm6CVMCpuFv near 94.2 register allocation and instruction scheduling only
 main OpFillInt__Q33msw2vm6CVMCpuFv near 94.8 register allocation and instruction scheduling only
 main OpLoadLocalIndex__Q33msw2vm6CVMCpuFv unverified 70.2 schedule/register only per diff.py (operand loads and index shifts interleaved differently); below 85, two models tried
-main OpLoadRefIndex__Q33msw2vm6CVMCpuFv near 97.6 original reloads m_pStack once more (no store between); same values
+main OpLoadRefIndex__Q33msw2vm6CVMCpuFv near 97.6 [real, reviewed] reviewer confirmed: original reloads m_pStack (0x18) with no store between; same values
 main OpMod__Q33msw2vm6CVMCpuFv near 97.5 register allocation and instruction scheduling only
 main OpMulImm__Q33msw2vm6CVMCpuFv near 99.5 register allocation and instruction scheduling only
 main OpPopAddrBlock__Q33msw2vm6CVMCpuFv unverified 76.4 original loads the popped value inside each branch of the bit-30 address test, ours once before it (no store between); two models tried
@@ -261,8 +261,8 @@ main OpPopValueBlock__Q33msw2vm6CVMCpuFv near 89.1 register allocation and instr
 main OpPopValueIndex__Q33msw2vm6CVMCpuFv unverified 82.4 schedule/register only per diff.py (operand loads and index shifts interleaved differently); below 85, two models tried
 main OpPopValue__Q33msw2vm6CVMCpuFv near 85.5 register allocation and instruction scheduling only
 main OpPushAddrBlock__Q33msw2vm6CVMCpuFv near 87.3 register allocation and instruction scheduling only
-main OpPushLocalBlockIndex__Q33msw2vm6CVMCpuFv near 85.5 register allocation and instruction scheduling only
-main OpPushLocalBlock__Q33msw2vm6CVMCpuFv near 88.9 register allocation and instruction scheduling only
+main OpPushLocalBlockIndex__Q33msw2vm6CVMCpuFv near 85.5 [real, reviewed] reviewer confirmed: same loads, stores and counts in the unrolled and tail loops; registers, schedule, one more saved GPR, add order of nIndex
+main OpPushLocalBlock__Q33msw2vm6CVMCpuFv near 88.9 [real, reviewed] reviewer confirmed: same lwzx/stwx and m_nSP updates in both loops; registers, schedule, one more saved GPR
 main OpPushLocal__Q33msw2vm6CVMCpuFv unverified 81.0 schedule/register only per diff.py (operand loads and index shifts interleaved differently); below 85, two models tried
 main OpPushRefBlockIndex__Q33msw2vm6CVMCpuFv unverified 83.8 schedule/register only per diff.py (operand loads and index shifts interleaved differently); below 85, two models tried
 main OpPushRefBlock__Q33msw2vm6CVMCpuFv near 97.9 register allocation and instruction scheduling only
@@ -348,7 +348,7 @@ main Set__Q23msw10CSignBoardFv near 99.8 [schedule] 99.8%: register numbering ar
 main Set__Q23msw20CCockpitMarkerIcon2DFv near 99.2 register numbering only (the pane accessor pointer lands in another register)
 main Set__Q23msw22CCockpitModelTelopHoldFv near 99.8 register numbering only
 main Set__Q23msw23CCockpitResultPartyTeamFv near 99.1 [schedule] register allocation only: the inlined text-box max-value helper swaps the registers holding m_pPaneAccessor and the text box length
-main Setup__Q33msw2vm7CVMDataFv near 95.0 register allocation; version range tests carry an extra clrlwi 24 in the original, same result for any byte
+main Setup__Q33msw2vm7CVMDataFv near 95.0 [real, reviewed] reviewer confirmed: the original's extra clrlwi 24 before an unsigned range compare gives the same result for any byte; register renumbering in the inlined Unscramble loop
 main Stage02_IsOnWave__Q23msw12CStage02BaseCFRCQ23bcs5FVEC3 near 99.2 99.2%: float register choice for rWavePos.x + margin (new FPR vs reused f0)
 main Stage04_RegistCart__Q23msw12CStage04BaseFPQ23bcs7CMdlObjl near 98.9 98.9%: node index and CStgSeSlot* swap registers; register choice only
 main Stage17_CalcFloorFlowPos__Q23msw12CStage17BaseCFRQ23bcs5FVEC3RCQ23bcs5FVEC3Q33msw9CStageMan9FLOW_TYPE near 97.7 [real, reviewed] reviewer confirmed: i*4 kept in a saved register instead of recomputed; same loads and calls

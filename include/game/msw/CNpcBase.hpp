@@ -42,7 +42,9 @@ namespace msw {
             virtual long GetNpcType() const;                           // 0x1C
             virtual void Reset();                                      // 0x20
             virtual long SendMessage(long, long, long, long, long);    // 0x24
-            virtual long GetThinkLevel() const;                        // 0x28
+            // (inline: VolleyF's game/volley/CNpcGhostVolley.cpp and the
+            // other modules' NPC files each have a weak copy returning 0)
+            virtual long GetThinkLevel() const { return 0; }           // 0x28
             virtual void AnimPlay(long, int, float, float);            // 0x2C
             virtual void AnimStop();                                   // 0x30
             virtual void AnimSetSpeed(float);                          // 0x34
@@ -50,7 +52,7 @@ namespace msw {
             virtual void AttachBall(CBall *);                          // 0x3C
             virtual void AttachBall(CBall *, long, float, unsigned long); // 0x40
             virtual void DetachBall();                                 // 0x44
-            virtual int IsHaveBall() const;                            // 0x48
+            virtual int IsHaveBall() const { return 0; }               // 0x48 (inline, as GetThinkLevel)
             virtual int IsHoldBall() const;                            // 0x4C
             virtual int CanbeCatch() const { return 0; }               // 0x50
             // 0x54 to 0x70 (added for BasketF game/basket/CNpcGhostBasketBase.cpp;
@@ -81,6 +83,15 @@ namespace msw {
             float AnimGetFrameNum();
             int IsAnimEnd();
             int IsAnimLoop();
+            // (DOL; added for VolleyF game/volley/CNpcGhostVolley.cpp) The
+            // frame count of motion nMot of the model's resource.
+            float AnimGetResFrameNum(long nMot);
+            // (DOL; added for VolleyF game/volley/CNpcGhostVolley.cpp) Erases
+            // every effect the NPC made.
+            void Eff_EraseAll();
+            // (DOL; added for VolleyF game/volley/CNpcGhostVolley.cpp, return
+            // type guessed) Stored as the spike's outline parameter.
+            long PlayGetOutline_(unsigned long) const;
             // Plays sound nId at pPos (null: at the NPC).
             void PlaySePos(long nId, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
             // The ball the NPC carries; null when none.

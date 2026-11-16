@@ -152,7 +152,7 @@ BasketF Main__Q33msw11CC09_BASKET17CcKinopioReceiverFv near 99.6 register choice
 BasketF Main__Q33msw11CC17_BASKET18CcKuromaLockonUnitFv near 96.4 [real, reviewed] reviewer: m_hEffect (0x40 of saved this) loaded before vs after side-effect-free GetInstance(); same value passed to FindList
 BasketF Main__Q33msw14GIMMICK_BASKET14CEffectCoinGetFv near 99.0 [real, reviewed] reviewer: ANON vs named constants (no data flag), register renumbering, schedule, commutative fmuls operand swap.
 BasketF Main__Q33msw14GIMMICK_BASKET16CEffectCoinScoreFv near 98.8 98.8%: register/schedule only, same difference as the recorded Volley/Hockey/Dodge copies
-BasketF Main___Q23msw14CStageBasket05Ff near 95.3 95.3%: IsGameFlag0 test is clrlwi + double cntlzw in the original, one clrlwi. in ours (same bit, same branch); raft loop addresses three arrays by this + i*stride where ours advances a pointer, two more saved GPRs and a 0x10 larger frame. Addressing and registers only.
+BasketF Main___Q23msw14CStageBasket05Ff near 95.3 [real, reviewed] reviewer: double cntlzw is the same bit test as clrlwi.; raft loop index+stride vs advanced pointers give identical addresses; fcmpu eq operand swap; two extra saved GPRs
 BasketF Main___Q23msw28CStageBasketHungryBossPackunFf near 99.6 99.6%, float registers only: the three rotation floats copied to the stack use f0/f1/f2 for z/y/x in the original and f2/f1/f0 in ours; loads, stores, offsets and calls identical
 BasketF Main___Q23msw30CStageBasketHungryBossPackun71Ff near 95.1 [real, reviewed] reviewer: savegpr_19 vs 20, stepped-pointer vs indexed addressing yield same offsets (0x254/0x23c/0x26c), flag bool test, stack slots.
 BasketF Main___Q33msw11CC14_BASKET12CcNinjaCloneFf near 99.5 registers and load order

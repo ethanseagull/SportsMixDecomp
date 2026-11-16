@@ -254,7 +254,7 @@ BasketF UpDateGuid__Q23msw16CGameGuideBasketFv near 97.6 97.6: flag bit test as 
 BasketF UpDateMyKeyState__Q23msw16CChrDrvPadBasketFli near 98.6 Float constants addressed per literal as in the original (pool-off stand-in in the .cpp). Schedule/register order only (diff.py: schedule).
 BasketF UpDate__Q33msw6BASKET15CStickStateRollFfff near 97.9 Float constants addressed per literal as in the original (pool-off stand-in in the .cpp). Schedule/register order only (diff.py: schedule).
 BasketF UpdateCollAtk___Q23msw21CChrCoreBasketKinopioFv near 97.3 work pointer register and radius lfs scheduled earlier
-BasketF UpdateMdl__Q23msw14CStageBasket13FUlf near 98.1 register choice and common-subexpression reuse only: in the second and third inline CPool::Handle node lookups ours keeps nodes + (id & 0xFFFF) * 0x2C in a register (one extra mr), the original recomputes the add; same loads, stores, branches and calls
+BasketF UpdateMdl__Q23msw14CStageBasket13FUlf near 98.1 [real, reviewed] reviewer: Same element address 0x2c*idx computed, kept in different registers; extra mr and one add CSE'd; no behaviour change.
 BasketF Util_SearchPassTo___Q23msw13CChrManBasketFPPQ23msw8CChrCorePPQ23msw8CNpcBaselfRQ23bcs5FVEC3 near 98.2 register allocation/instruction order only
 BasketF Util_SearchPassTo___Q23msw13CChrManBasketFlf near 99.3 register allocation/instruction order only
 BasketF Util_SearchPassmeetTo___Q23msw13CChrManBasketFlfRQ23bcs5FVEC3 near 98.6 [real, reviewed] reviewer: Registers, head/tail load order, cmplwi vs cmpwi on 0/1 value, reload vs fmr of same stack float.

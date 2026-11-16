@@ -102,7 +102,7 @@ BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketNinjaFv near 98.1 VEC3->FVEC3 c
 BasketF LoopStateAirTrick__Q23msw20CChrCoreBasketDonkeyFv near 94.4 stack slots of the vector temporaries and register choice differ; (m_nStatusFlag & 4) != 0 for flows 0, 2 and 6 is extrwi in ours, rlwinm/cntlzw/cntlzw in the original (same 0/1 value)
 BasketF LoopStateAirTrick__Q23msw21CChrCoreBasketSabotenFv near 95.5 [real, reviewed] reviewer: extrwi vs double-cntlzw of flag&4 same bool, register renumbering, stack slots, GetPos y load earlier, jumptable name
 BasketF LoopStateAlleyoop__Q23msw14CChrCoreBasketFv near 99.6 register choice / instruction order only (inlined Fsmq head/tail loads)
-BasketF LoopStateAppear__Q33msw11CC03_BASKET19CcDaisyFlowerGardenFv near 98.5 redundant cmpwi/ble zero-trip guard before the ring loop, &hitPos via addi instead of mr, float register numbering and ps_add operand order (reviewer confirmed)
+BasketF LoopStateAppear__Q33msw11CC03_BASKET19CcDaisyFlowerGardenFv near 98.5 [real, reviewed] reviewer: extra zero-trip guard same loop condition, &hitPos via addi vs mr, float regs and store/ps_add order same values
 BasketF LoopStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateBlockWorkLose__Q23msw14CChrCoreBasketFv near 99.9 99.9: register choice only
 BasketF LoopStateCatch__Q23msw14CChrCoreBasketFv near 96.3 [real, reviewed] reviewer: IsJump test: original double cntlzw/srwi bool then beq, ours rlwinm. beq, same condition; rest registers only.

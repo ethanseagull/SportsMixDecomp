@@ -19,6 +19,15 @@ namespace msw {
             float m_fUnk18;
             float m_fUnk1C;
             float m_fCurve; // 0x20, CItemBallBasket::GetCurveValue (name guessed)
+            // 0x24 (name guessed): where the shot goes (SetShootParam_ puts
+            // CChrCoreBasket::GetTargetShootPos here). Meanings of the
+            // fields above, from CBallBasket::SetShootParamTest2_: 0x00
+            // not zero for a straight shot; 0x04 not zero for a curving
+            // one; 0x08 the chance of scoring; 0x0C the speed (per second);
+            // 0x10, 0x14 the lowest and highest top of the arc; 0x18, 0x1C
+            // the fewest and most frames of the flight; 0x20 how far a
+            // curving shot bends.
+            bcs::FVEC3 m_vTarget;
         };
     }
 
@@ -135,8 +144,9 @@ namespace msw {
             virtual void ReleaseBall(const bcs::FVEC3 &);                     // 0x4F4
             virtual void SetChrReflectMode(const bcs::FVEC3 &);               // 0x4F8
             virtual void SetChrReflectMode(long, float, float, float);        // 0x4FC
-            virtual void CheckCollision__();                                  // 0x500
-            virtual void CollSubCheckBG_(bcs::FVEC3 &, bcs::FVEC3 &);         // 0x504
+            // (return values: see CollSubCheckAll_)
+            virtual long CheckCollision__();                                  // 0x500
+            virtual long CollSubCheckBG_(bcs::FVEC3 &, bcs::FVEC3 &);         // 0x504
             virtual void TrgGoalIn_();                                        // 0x508
             virtual void RingHit();                                           // 0x50C
             virtual int IsDummy() const;                                      // 0x510
@@ -157,7 +167,51 @@ namespace msw {
 
             // Plays the effect of a ball going through the ring.
             void PlayGoalInEff();
+            // (names from the symbols; meanings guessed)
+            void PlaySeArtsOrbit_();
+            void GetBasketPosAfterFrame(bcs::FVEC3 &rPos, float fFrame, int bCurve) const;
+            // The collision checks of one step from rFrom to the ball's
+            // position. They return what was hit: 0 nothing, 2 the floor,
+            // 3 a wall, 4 the ring (rebound), 5 the backboard, 6 a block,
+            // 8 and 10 the inside of the ring (8: through it).
+            long CollSubCheckAll_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal);
+            long CollSubCheckGoalIn_(long nGoal, bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, const bcs::FVEC3 &rFrom,
+                                     const bcs::FVEC3 &rTo, int bRebound) const;
+            long CollSubCheckGoalOut_(long nGoal, bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, const bcs::FVEC3 &rFrom,
+                                      const bcs::FVEC3 &rTo);
+            long CollSubCheckDef_(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal);
+            void SetHitDef_();
+            int ReboundDemoCheck_(long nHit, int &rbBound);
+            void ReboundDemoMakeParam_(long nHit);
+            long ReboundDemoCalcNum_();
+            void ReboundDemoSetParam_();
+            int JudgeGoalIn_();
+            int CheckGoalIn_();
+            float SetPassModeParam__(long nType, const bcs::FVEC3 &rTarget, float fSpeed, float &rFrame, int, int);
+            // Sets the flight of a shot; returns its XZ distance (0: none).
+            float SetShootParamTest2_(const BALL_BASKET::SHOT_PARAM &rParam);
+            void AddAirBallMiss_(bcs::FVEC3 &rTarget);
+            // (name from the symbol of its constant fDist) The shot of a
+            // ball with an item. (inline, defined in CBallBasket.cpp)
+            void SetShootParamItem_();
+            float CalcXZVel2(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, bcs::FVEC3 &rVel, float &rDecel,
+                             float &rFrame, float fSpeed0, float fSpeed1, float fMinFrame, float fMaxFrame) const;
+            float SetShootParam_(float fRate);
+            void SetArtsShootParam_(float fRate);
+            int IsArtsShootAtkEnbale() const;
+            int IsLayUpShootMode() const;
+            void PlayEffLayUp(const CChrCore *pChr);
+            void PlayArtsEff();
+            void SetJustShootFlg(int bJust);
+            void StopJustSignEff();
             void CheckCurveStep_();
+            // (inline, defined in CBallBasket.cpp) Tables of the passes and
+            // shots by type and game level; the top of a lob.
+            float GetPassFrameMin_(long nType) const;
+            float GetPassFrameMax_(long nType) const;
+            float GetPassRate_(long nType) const;
+            long GetShotFrameMin_() const;
+            float GetMidHeight(long nType, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo) const;
             // Moves rPos by rVel for one step under fGravity. (argument
             // names guessed)
             void FuncMove_(bcs::FVEC3 &rPos, bcs::FVEC3 &rVel, float fGravity, float fRate);
@@ -183,22 +237,61 @@ namespace msw {
             void OffBasketFlag(unsigned long nBit) { m_nBasketFlag &= ~nBit; }
 
         protected:
-            unsigned char m_Unk318[0x320 - 0x318];
-            float m_fTimer320;          // 0x320, counted down by m_fMoveRate
-            unsigned char m_Unk324[0x338 - 0x324];
+            // Clears the curve of a shot (m_nCurveStep and its parameters).
+            void ClearCurve_()
+            {
+                m_nCurveStep = 0;
+                m_fTimer320 = 0.0f;
+                m_fCurveDecel = 0.0f;
+                m_fCurveTime = 0.0f;
+                m_vCurveAccel.x = 0.0f;
+                m_vCurveAccel.y = 0.0f;
+                m_vCurveAccel.z = 0.0f;
+            }
+            // (name guessed) What every bounce does first: the curve stops,
+            // the shot can no longer score.
+            void ClearShot_()
+            {
+                ClearCurve_();
+                m_fGoalInRate = 0.0f;
+                m_nBasketFlag &= ~0x40;
+            }
+            // (name guessed) The ball is loose: a shot in the air has
+            // missed, the game goes into loose ball mode, a ball that was
+            // passed or shot goes back to free move. (inline, defined in
+            // CBallBasket.cpp)
+            void SetLooseBall_();
+            // (name guessed) Sets the axis the ball rolls about for a
+            // velocity rVel along the floor. (inline, defined in
+            // CBallBasket.cpp)
+            void SetRollAxis_(const bcs::FVEC3 &rVel);
+
+            // 0x318 (name guessed): the step of the shot's curve: 0 and 1
+            // none, 2 and 3 curving (CheckCurveStep_ ends it after
+            // m_fCurveTime frames).
+            long m_nCurveStep;
+            long m_nCurveDir;           // 0x31C (name guessed): 2 or 4, the side a curving shot bends to
+            float m_fTimer320;          // 0x320, counted down by m_fMoveRate (frames before the curve starts)
+            float m_fCurveDecel;        // 0x324 (name guessed): the XZ speed lost per frame (FuncMove_)
+            float m_fCurveTime;         // 0x328 (name guessed): frames the curve lasts
+            bcs::FVEC3 m_vCurveAccel;   // 0x32C (name guessed): added to the velocity each frame of the curve
             unsigned long m_nBasketFlag; // 0x338
-            unsigned char m_Unk33C[0x344 - 0x33C];
+            unsigned long m_nAttachNode; // 0x33C (name guessed): the node of the model holding the ball
+            long m_nPassType;           // 0x340 (name guessed): the type SetPassMode got
             long m_nShotChrIdx;         // 0x344
             long m_nPassChrIdx;         // 0x348
             // 0x34C (name guessed): the player number of the character a
             // pass goes to (BasketF's computer driver compares it with
             // CChrCore::GetPlayerNo).
             long m_nPassTargetNo;
-            unsigned char m_Unk350[0x354 - 0x350];
+            long m_nHitDefChrNo;        // 0x350 (name guessed): the character that blocked the ball, -1 for none
             long m_nShotArea;           // 0x354
             long m_nShotTeamIdx;        // 0x358 (passed to CGame::GetTargetGoalIdx)
             long m_nTargetGoalIdx;      // 0x35C
-            unsigned char m_Unk360[0x370 - 0x360];
+            long m_n360;                // 0x360 (meaning not known)
+            long m_nArtsStep;           // 0x364 (name guessed): the step of a special shot
+            long m_n368;                // 0x368 (meaning not known)
+            long m_nTouchChrNo;         // 0x36C (name guessed): the player number of the last character to touch the ball
             float m_fChargePower;       // 0x370
             float m_fUnk374;            // 0x374
             float m_fNoCatchCount;      // 0x378, counted down by m_fFrameRate
@@ -207,11 +300,31 @@ namespace msw {
             // 0x384 (name guessed): set by Waluigi's special shot on each
             // ball it throws (SetArtsShotUnk).
             float m_fArtsShotUnk384;
-            unsigned char m_Unk388[0x398 - 0x388];
+            float m_fArtsTimer;         // 0x388 (name guessed): frames left in the step of a special shot
+            float m_fArtsWarpNum;       // 0x38C (name guessed): warps left (Kamek's special shot)
+            float m_fArtsWarpDist;      // 0x390 (name guessed): the distance from the goal that triggers a warp
+            float m_fArtsWarpCount;     // 0x394 (name guessed): warps done
             float m_fGoalInRate;        // 0x398
-            unsigned char m_Unk39C[0x3A0 - 0x39C];
+            float m_fPassTime;          // 0x39C (name guessed): frames left of a pass
             float m_fShootCurveValue;   // 0x3A0
-            unsigned char m_Unk3A4[0x468 - 0x3A4];
+            float m_fRiverTimer;        // 0x3A4 (name guessed): frames until a ball fallen into the river comes back
+            bcs::FVEC3 m_vShootStartPos; // 0x3A8 (name from GetShootStartPos)
+            // 0x3B4-0x467 (names guessed): the bounces off the ring before a
+            // rebound (ReboundDemo*_), cleared together.
+            struct REBOUND {
+                long m_bValid;          // 0x00
+                float m_fRotY;          // 0x04, the direction of the bounce
+                float m_fFrame;         // 0x08, frames to the next bounce
+                float m_fDist;          // 0x0C, distance from the goal
+                float m_fHeight;        // 0x10, height over the ring
+            };
+            long m_nReboundNum;         // 0x3B4
+            long m_nReboundCount;       // 0x3B8
+            REBOUND m_aRebound[8];      // 0x3BC
+            // 0x45C: the bounce off the floor after the rim (CheckGoalIn_).
+            float m_fBoundRotY;
+            float m_fBoundAngle;        // 0x460
+            float m_fBoundDist;         // 0x464
     };
 
     // A dummy ball of the basket game, size 0x468 (CBallManBasket's
@@ -220,6 +333,13 @@ namespace msw {
         public:
             CBallBasketDummy(bcs::CTask *pParent, long nBallNo);
             virtual ~CBallBasketDummy();
+
+            virtual int CanbeCatch() const;
+            virtual void CreateCollBody_();
+            virtual void LoopStateFreeMove();
+            virtual void DtorStateArtsShoot();
+            virtual void TrgGoalIn_();
+            virtual int IsDummy() const;
     };
 }
 

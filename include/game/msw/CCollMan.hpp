@@ -8,6 +8,8 @@
 
 namespace msw {
 
+    class CCollDefUnit;
+
     // DOL collision routines outside CCollMan (Q23msw4COLL: a namespace or a
     // class of statics). Added for HockeyF game/hockey/CCollManHockey.cpp.
     namespace COLL {
@@ -80,6 +82,17 @@ namespace msw {
             static int DetectMapHit(bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal, float &rTime, const bcs::FVEC3 &rFrom,
                                     const bcs::FVEC3 &rTo, float fRadius, long, unsigned long);
             static int CheckMapInner(const bcs::FVEC3 &rPos, float fRadius, unsigned long);
+            // (DOL; added for BasketF game/basket/CBallBasket.cpp, meanings
+            // guessed from the names and the caller) The defence unit the
+            // ball moving from rFrom to rTo hits (rPos, rVel: where, and the
+            // velocity after), or null; whether a defender stands in the way
+            // of a shot from rStart (rRate: how much it lowers the chance of
+            // scoring); whether the ground at rPos moves.
+            static CCollDefUnit *CheckBallReflect(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius,
+                                                  bcs::FVEC3 &rPos, bcs::FVEC3 &rVel);
+            static int CheckBallObstruct(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius,
+                                         const bcs::FVEC3 &rStart, float, bcs::FVEC3 &rPos, float &rRate);
+            static int IsGrdMove(const bcs::FVEC3 &rPos);
             // HockeyF's CStgGmk_Pinball_Act_Hockey::WallHitCheck compares the
             // result unsigned with 0x20 and 0x40 (a goal post hit).
             static unsigned long DetectBallGoalIn(long &rGoal, bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal,

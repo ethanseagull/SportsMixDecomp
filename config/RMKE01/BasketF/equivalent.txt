@@ -48,12 +48,12 @@ BasketF CtorStateAttach__Q23msw16CBallBasketFruitFv near 99.4 float register cho
 BasketF CtorStateBlockCut__Q23msw14CChrCoreBasketFv near 98.0 98.0: instruction schedule only (autopilot regs no gain)
 BasketF CtorStateDunk__Q23msw14CChrCoreBasketFv near 99.7 register choice / instruction order only (inlined Fsmq head/tail loads)
 BasketF CtorStateJumpCatch__Q23msw14CChrCoreBasketFv near 91.8 [real, reviewed] reviewer: cmpwi vs mr., schedule, fnmsubs multiplicand swap (commutative); same calls and constants.
-BasketF CtorStateJumpUpper__Q23msw19CChrCoreBasketSlimeFv near 95.5 95.5%: second float of the const param struct read through a copy of the base register; same values/stores
+BasketF CtorStateJumpUpper__Q23msw19CChrCoreBasketSlimeFv near 95.5 [real, reviewed] reviewer: Pool float read as 0x4(base+8) vs 0xc(base): same address; one extra addi, load order.
 BasketF CtorStateNeutral__Q23msw14CChrCoreBasketFv near 99.7 99.7: stores to m_UnkEC and m_nStatusFlag in the other order, register choice
 BasketF CtorStateReboundDunk__Q23msw14CChrCoreBasketFv near 99.9 register choice / instruction order only (inlined Fsmq head/tail loads)
 BasketF CtorStateSideStep__Q23msw14CChrCoreBasketFv near 99.1 99.1: instruction schedule only
 BasketF CtorStateSmashCut__Q23msw14CChrCoreBasketFv near 95.1 [real, reviewed] reviewer: cmpwi vs mr., stack slots, fadds operand order, register renumbering; same calls and values
-BasketF CtorStateSmashCut__Q23msw19CChrCoreBasketSlimeFv near 95.5 95.5%: second float of the const param struct read through a copy of the base register; same values/stores
+BasketF CtorStateSmashCut__Q23msw19CChrCoreBasketSlimeFv near 95.5 [real, reviewed] reviewer: Pool float read via copy of base (0x4(base+0)) vs 0x4(base): same address; one extra addi, load order.
 BasketF DetectMapHit___Q23msw14CCollManBasketFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 98.7 schedule only: the 0.0f load at entry is scheduled later among the copy of rTo into rPos; constants, calls, memory accesses and branch targets identical
 BasketF DispContinue__Q23msw16CGameGuideBasketFv near 97.3 [real, reviewed] reviewer: Only register of cached m_pChr and block order of li 1/lbz branches; same conditions and result.
 BasketF DispPlayerIconSetCore___Q23msw13CChrManBasketFPCQ23msw8CChrCore near 99.8 stack slots of the three FVEC3 temporaries differ only
@@ -63,7 +63,7 @@ BasketF EffectCoinGetCreate___Q23msw17CGimmickManBasketFRCQ23bcs5FVEC3Q33msw9DRO
 BasketF GameResult_In__Q23msw14CCockpitBasketFv near 99.0 99.0%: register choice only.
 BasketF GetAppendPos___Q23msw30CBallManBasketHungryBossPackunCFRlRQ23bcs5FVEC3 near 89.1 [real, reviewed] reviewer: Registers, scheduling, two FVEC3 stack slots swapped, one extra reload of AREA_X_NUM global; same arithmetic and stores.
 BasketF GetArtsCurveValue___Q23msw13CChrManBasketCFl near 99.8 [real, reviewed] reviewer: Only stack-offset of two lfs loads (0x84/0x88 vs 0x7c/0x80); no data-value difference reported.
-BasketF GetArtsEffectUnit__Q23msw19CChrCoreBasketSlimeFl near 90.9 90.9%: same colour values/stores into static SLIME_COL_SET; array base addressing (stwu @l vs addi) and one more saved register, as Yoshi GetEffectUnit
+BasketF GetArtsEffectUnit__Q23msw19CChrCoreBasketSlimeFl near 90.9 [real, reviewed] reviewer: Same static colour bytes stored to same table; only register allocation, array base addressing (stwu vs addi) and one more saved register.
 BasketF GetBgCollRadiusXZ__Q23msw16CBallBasketFruitCFv near 99.3 float register choice for 0.23f and the scale array
 BasketF GetBgCollRadius__Q23msw16CBallBasketFruitCFv near 99.3 float register choice for 0.23f and the scale array
 BasketF GetDir4ToBattle___Q23msw13CChrManBasketCFf near 99.8 [real, reviewed] reviewer: Constant pool offsets shifted by 8 consistently; diff.py data check finds identical values.

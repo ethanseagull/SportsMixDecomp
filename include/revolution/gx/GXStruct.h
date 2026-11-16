@@ -23,6 +23,21 @@ typedef struct _GXRenderModeObj {
     unsigned char vfilter[7];          // 0x32
 } GXRenderModeObj;
 
+// The SDK's render modes (added for the DOL's game/bcs/CMainApp.cpp, which
+// picks one at start-up; named in the DOL from their TV mode words).
+#ifdef __cplusplus
+extern "C" {
+#endif
+extern GXRenderModeObj GXNtsc480IntDf;
+extern GXRenderModeObj GXNtsc480Prog;
+extern GXRenderModeObj GXMpal480IntDf;
+extern GXRenderModeObj GXPal528IntDf;
+extern GXRenderModeObj GXEurgb60Hz480IntDf;
+extern GXRenderModeObj GXEurgb60Hz480Prog;
+#ifdef __cplusplus
+}
+#endif
+
 // An RGBA colour as GX takes it (passed by value).
 typedef struct _GXColor {
     unsigned char r;

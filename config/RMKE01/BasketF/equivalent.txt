@@ -330,7 +330,6 @@ BasketF SetUpDisappear__Q33msw11CC14_BASKET12CcNinjaCloneFv near 98.3 [real, rev
 BasketF SetUpJumpBallerInfo__Q23msw11CGameBasketFv near 89.6 [real, reviewed] reviewer: pPad pointer addresses the same 0x244+12*team+4*n slots; switch(nPadNum) default vs cases 2..3 differs only for nPadNum > 3, impossible (three slots)
 BasketF Set__Q23msw18CCockpitBasketCoinFv near 99.3 register choice only (as CCockpitHockeyCoin::Set)
 BasketF Set__Q23msw19CCockpitBasketCoderFv near 99.6 register allocation only (loop counter and table pointer swap registers); same instructions and memory accesses; as HockeyF
-BasketF Set__Q23msw22CCockpitBasketHarapekoFv near 93.0 [real, reviewed] reviewer: Registers/savegpr count, separate s_LayoutRes/s_PaneName symbols vs one rodata base (no data flag), same calls and order.
 BasketF SetupGame__Q23msw19CCockpitBasketCoderFv near 97.3 register allocation only (loop counters and table pointers); SetVisible(bool) bit insert compiled as srwi+rlwimi instead of rlwinm+rlwimi (same flag byte result); as HockeyF
 BasketF ShotArtsBall___Q23msw21CChrCoreBasketWaluigiFl near 99.6 float register choice for the 1/60 multiply operands and one byte load into r0 vs r9
 BasketF StartGuideTelop__Q23msw16CGameGuideBasketFlPCQ23msw8CChrCore near 99.9 [real, reviewed] reviewer: Only .rodata offsets of float constants shift uniformly by 0x14 (unread bytes); no data-value difference reported.
@@ -400,7 +399,6 @@ BasketF __ct__Q33msw11CC03_BASKET19CcDaisyFlowerGardenFPQ23bcs5CTaskPQ23msw8CChr
 BasketF __ct__Q33msw11CC05_BASKET16CcWarioSmokeBombFPQ23bcs5CTaskPQ23msw8CChrCoreQ34nw4r3g3d7ResFileQ34nw4r3g3d7ResFilePCQ33msw7CC_DATA20ARTS_OPT_CREATE_INFORCQ23bcs5FVEC3RCQ23bcs10QUATERNIONRCQ23bcs5FVEC3 near 98.2 float register numbering and the place of one fmr/lfs pair only
 BasketF __ct__Q33msw11CC14_BASKET14CcNinjaFactoryFPQ23bcs5CTaskPQ23msw8CChrCorePCQ23msw13CCollBodyUnitPQ23msw5CBall near 99.9 ptmf stack slots only
 BasketF __ct__Q33msw11CC15_BASKET19CcSiromaMagicCircleFPQ23bcs5CTaskPQ23msw8CChrCoreRCQ23bcs5FVEC3 near 99.9 stack slots of inlined ptmf temporaries
-BasketF __ct__Q33msw11CC15_BASKET22CcSiromaMagicCircleObjFPQ23bcs5CTaskPQ23bcs9CScnGrouplQ34nw4r3g3d7ResFile near 95.1 [real, reviewed] reviewer: One extra dead store of 0 to m_File (0x34) immediately overwritten by the file value; final state identical.
 BasketF __ct__Q33msw14GIMMICK_BASKET16CEffectCoinScoreFPQ23bcs5CTaskRCQ23bcs5FVEC3fl near 99.5 99.5%: float register choice, one load scheduled; register/schedule only, same difference as the recorded Volley/Hockey/Dodge copies
 BasketF __dt__Q23bcs106CPool<Q33msw7STAGE1113CStgRndAnmObj,Q23bcs42CPoolNode<Q33msw7STAGE1113CStgRndAnmObj,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants
 BasketF __dt__Q23bcs41CFixedPool<Ul,32,Q23bcs15CPoolNode<Ul,0>>Fv near 98.8 instruction schedule and register choice only (diff.py: schedule); same calls, offsets and constants

@@ -4,6 +4,7 @@
 #include "bcs/CUnivTask.hpp"
 #include "bcs/FVEC3.hpp"
 #include "nw4r/ut/List.hpp"
+#include "revolution/gx/GXTexture.h"
 
 namespace msw {
 
@@ -11,22 +12,27 @@ namespace msw {
     class CChrCore;
     class CCollBodyUnit;
 
-    // INCOMPLETE: data members are not mapped. Size 0x344 (CItemManBoss is
-    // allocated with that size and adds nothing). Return types are guesses
-    // unless a body is given.
+    // Size 0x344 (CItemManBoss is allocated with that size and adds
+    // nothing). Return types are guesses unless a body is given. Source:
+    // src/game/msw/CItemMan.cpp (the DOL file also holds CItem).
     //
     // Creates and owns the items of a game. A DOL class; each game module
     // derives its own (CItemManHockey in HockeyF) to create its own item
     // classes. The virtual functions are in the order of the DOL's vtable
     // (lbl_8046FC58); the bodies given here are those of the DOL's unnamed
     // functions in that vtable, which HockeyF also emits as weak functions.
-    class CItemMan : public bcs::CUnivTask {
+    // The base is CUnivTaskEx: the DOL destructor tests `this` twice before
+    // calling bcs::CTask's.
+    class CItemMan : public bcs::CUnivTaskEx {
         public:
             CItemMan(bcs::CTask *pParent);
             virtual ~CItemMan();
             virtual void Main();
 
-            virtual long SendMessage(long, long, long, long);
+            // (void: the DOL body leaves r3 as it is; nobody reads a result)
+            // Message 0xB hides every item lying on the field or drifting
+            // and removes the drifting ones.
+            virtual void SendMessage(long nMsg, long, long, long);
             // Creates an item of the given kind (CItem::KIND_*) at pos.
             virtual CItem *CreateItem(long kind, const bcs::FVEC3 &pos) { return 0; }
             virtual CItem *CreateStockItem(long kind, CChrCore *pChr);
@@ -70,9 +76,35 @@ namespace msw {
             CItem *ItemGetFirst() { return static_cast<CItem *>(nw4r::ut::List_GetFirst(&m_ItemList)); }
             CItem *ItemGetNext(CItem *pItem) { return static_cast<CItem *>(nw4r::ut::List_GetNext(&m_ItemList, pItem)); }
 
+            // Number of item kinds (CItem::KIND_*, 7 to 11 included).
+            enum { KIND_NUM = 12 };
+
+            // (names guessed) The per-kind parameters the ExParamSet_
+            // functions set; each sets one value and its bit in nFlag.
+            // Defaults from ExParamInitialize in brackets.
+            struct EX_PARAM {
+                unsigned long nFlag;   // 0x00, which values were set
+                float fLife;           // 0x04 (600), bit 0x1
+                float fUnk08;          // 0x08 (600), no setter
+                float fDispScale;      // 0x0C (1), bit 0x2
+                float fThrowSpeed;     // 0x10 (1), bit 0x4
+                float fTurnSpeed;      // 0x14 (0), bit 0x8
+                float fEffectFrame;    // 0x18 (0), bit 0x10
+                float fDropCoinRate;   // 0x1C (0), bit 0x20
+                long nDropCoinMin;     // 0x20 (0), bit 0x40
+                long nDropCoinMax;     // 0x24 (0), bit 0x80
+                long nReboundNum;      // 0x28 (1), bit 0x100
+                float fPThrowDist;     // 0x2C (1), bit 0x200
+                float fPThrowHeight;   // 0x30 (1), bit 0x400
+                float fPThrowFrame;    // 0x34 (30), bit 0x800
+                float fExplodeRange;   // 0x38 (1), bit 0x1000
+            };
+
         protected:
             nw4r::ut::List m_ItemList;           // 0x34, the items (name guessed)
-            unsigned char m_Unk40[0x344 - 0x40]; // 0x40
+            GXTexObj *m_pIconTexBuf;             // 0x40, KIND_NUM texture objects
+            GXTexObj *m_pIconTex[KIND_NUM];      // 0x44, per kind, null when its file has no icon
+            EX_PARAM m_ExParam[KIND_NUM];        // 0x74
     };
 }
 

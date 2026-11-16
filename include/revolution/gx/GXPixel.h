@@ -21,6 +21,15 @@ void GXSetBlendMode(GXBlendMode type, GXBlendFactor src_factor, GXBlendFactor ds
 // Added for MenuF game/menu/CBgDisplay.cpp.
 void GXSetFog(GXFogType type, float startz, float endz, float nearz, float farz, GXColor color);
 
+// Added for the DOL's game/bcs/CMainApp.cpp. The range adjustment table is
+// only passed through (the game passes none).
+struct _GXFogAdjTable;
+void GXSetFogRangeAdj(GXBool enable, unsigned short center, const struct _GXFogAdjTable *table);
+void GXSetZCompLoc(GXBool before_tex);
+void GXSetDstAlpha(GXBool enable, unsigned char alpha);
+void GXSetPixelFmt(GXPixelFmt pix_fmt, GXZFmt16 z_fmt);
+void GXSetDither(GXBool dither);
+
 #ifdef __cplusplus
 }
 #endif

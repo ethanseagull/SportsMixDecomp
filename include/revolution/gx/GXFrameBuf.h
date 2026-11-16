@@ -17,6 +17,14 @@ void GXSetTexCopyDst(unsigned short wd, unsigned short ht, GXTexFmt fmt, GXBool 
 void GXSetCopyFilter(GXBool aa, const unsigned char sample_pattern[12][2], GXBool vf, const unsigned char vfilter[7]);
 void GXCopyTex(void *dest, GXBool clear);
 
+// The display copy (added for the DOL's game/bcs/CMainApp.cpp).
+void GXSetDispCopySrc(unsigned short left, unsigned short top, unsigned short wd, unsigned short ht);
+void GXSetDispCopyDst(unsigned short wd, unsigned short ht);
+float GXGetYScaleFactor(unsigned short efbHeight, unsigned short xfbHeight);
+unsigned long GXSetDispCopyYScale(float vscale);
+void GXSetDispCopyGamma(GXGamma gamma);
+void GXCopyDisp(void *dest, GXBool clear);
+
 #ifdef __cplusplus
 }
 #endif

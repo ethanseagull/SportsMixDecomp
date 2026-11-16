@@ -74,12 +74,8 @@ HockeyF LoopStateLoop__Q33msw11CC15_HOCKEY19CcSiromaMagicCircleFv near 99.2 [sch
 HockeyF LoopState_OPEN__Q23msw28CStgGmk_Container_Act_HockeyFv near 99.8 schedule and float register numbering only
 HockeyF MainCamera_Normal__Q23msw15CCameraHockeyCSFv near 98.3 schedule and float register choice around the CalcCurveBlend calls, as BasketF CCameraBasketHB::MainCamera_Normal (98.5% near); calls, constants and memory accesses identical
 HockeyF MainCamera__Q23msw17CCameraHockeyGameFv near 95.9 [real, reviewed] reviewer confirmed: register renaming, reordered independent loads and stores to distinct stack slots, jump-table names; same calls, offsets and constants
-HockeyF MainCrashSkate___Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG unverified 75.3 original calls UpdateCmdBuf_, ours inlines it (same effect); #pragma auto_inline off gives 100% but is not allowed under rule 3 (one function, not file-wide evidence)
-HockeyF MainDefense___Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG unverified 85.6 original calls UpdateCmdBuf_, ours inlines it (same effect); #pragma auto_inline off gives 100% but is not allowed under rule 3 (one function, not file-wide evidence)
 HockeyF MainFunc__Q23msw9CFightingFf near 99.4 [real, reviewed] reviewer confirmed: andi./bne vs andi./cntlzw/srwi./beq is the same condition with the same target (epilogue, r0 not read); temporary register choice and independent stack store order
 HockeyF MainFunc__Q33msw11CC05_HOCKEY16CcWarioSmokeBombFf near 95.8 stack slots (frame 0x80 vs 0x60) and register order only; same as the Basket/Volley/Dodge copies
-HockeyF MainOffenseOnBall___Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG unverified 93.0 original calls UpdateCmdBuf_, ours inlines it (same effect); #pragma auto_inline off gives 100% but is not allowed under rule 3 (one function, not file-wide evidence)
-HockeyF MainOffense___Q23msw16CChrDrvPadHockeyFPQ33msw7CChrDrv8_CHR_MSG unverified 89.0 original calls UpdateCmdBuf_, ours inlines it (same effect); #pragma auto_inline off gives 100% but is not allowed under rule 3 (one function, not file-wide evidence)
 HockeyF Main__Q23msw18CArrowSignalHockeyFv near 99.0 register choice and instruction order only (fmadds operand registers, order of the character position copy)
 HockeyF Main__Q23msw18CCockpitHockeyCoinFv near 98.8 register choice only: the loop counters and the pane-accessor temporary sit in r27/r28, the original's first loop counter in r30; same instructions otherwise
 HockeyF Main__Q23msw19CBallMarker2DHockeyFv near 97.5 [real, reviewed] reviewer confirmed: register numbering, cmpw operand order of an equality test, order of two independent loop increments, named static vs anonymous label; same offsets and widths
@@ -189,7 +185,6 @@ HockeyF __ct__Q33msw11CC05_HOCKEY16CcWarioSmokeBombFPQ23bcs5CTaskPQ23msw8CChrCor
 HockeyF __ct__Q33msw11CC14_HOCKEY16CcNinjaCloneBallFPQ23bcs5CTaskPQ23bcs7CMdlObjlPQ23msw5CBall near 99.8 [schedule] register allocation/order only
 HockeyF __ct__Q33msw11CC14_HOCKEY16CcNinjaCloneBodyFPQ23bcs5CTaskPQ23msw8CChrCorePQ23msw5CBallfllPCQ23msw13CCollBodyUnit near 99.4 [stack] register allocation/order only
 HockeyF __ct__Q33msw11CC15_HOCKEY19CcSiromaMagicCircleFPQ23bcs5CTaskPQ23msw8CChrCoreRCQ23bcs5FVEC3 near 98.4 [schedule] register allocation/order only (as the basket sibling)
-HockeyF __ct__Q33msw11CC15_HOCKEY22CcSiromaMagicCircleObjFPQ23bcs5CTaskPQ23bcs9CScnGrouplQ34nw4r3g3d7ResFile near 95.1 [real, reviewed] reviewer confirmed: ours has one extra stw 0 to m_File (0x34) from the ResFile default ctor, overwritten by the next store to the same offset; otherwise registers
 HockeyF __ct__Q33msw14GIMMICK_HOCKEY16CEffectCoinScoreFPQ23bcs5CTaskRCQ23bcs5FVEC3RCQ23bcs5FVEC3fl near 99.5 float register choice and one load scheduled differently
 HockeyF __dt__Q23bcs106CPool<Q33msw7STAGE1113CStgRndAnmObj,Q23bcs42CPoolNode<Q33msw7STAGE1113CStgRndAnmObj,0>,Q33bcs4pool6NoLock>Fv near 98.9 instruction order only (shared bcs/CPool.hpp, same as BasketF)
 HockeyF __dt__Q23bcs41CFixedPool<Ul,32,Q23bcs15CPoolNode<Ul,0>>Fv near 98.8 instruction order only (shared bcs/CPool.hpp, same as BasketF)

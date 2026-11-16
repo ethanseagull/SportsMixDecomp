@@ -96,7 +96,15 @@ typedef enum _GXTexGenType {
 } GXTexGenType;
 
 typedef enum _GXTexGenSrc {
-    GX_TG_TEX0 = 4
+    GX_TG_TEX0 = 4,
+    // (GX_TG_TEX1 to 7 added for the DOL's game/bcs/CMainApp.cpp)
+    GX_TG_TEX1,
+    GX_TG_TEX2,
+    GX_TG_TEX3,
+    GX_TG_TEX4,
+    GX_TG_TEX5,
+    GX_TG_TEX6,
+    GX_TG_TEX7
 } GXTexGenSrc;
 
 typedef enum _GXTexMtx {
@@ -237,6 +245,13 @@ typedef enum _GXTevStageID {
 typedef enum _GXTexCoordID {
     GX_TEXCOORD0,
     GX_TEXCOORD1,
+    // (GX_TEXCOORD2 to 7 added for the DOL's game/bcs/CMainApp.cpp)
+    GX_TEXCOORD2,
+    GX_TEXCOORD3,
+    GX_TEXCOORD4,
+    GX_TEXCOORD5,
+    GX_TEXCOORD6,
+    GX_TEXCOORD7,
     GX_MAX_TEXCOORD = 8,
     GX_TEXCOORD_NULL = 0xFF
 } GXTexCoordID;
@@ -327,5 +342,31 @@ typedef enum _GXFogType {
 typedef enum _GXZTexOp {
     GX_ZT_DISABLE
 } GXZTexOp;
+
+// Added for the DOL's game/bcs/CMainApp.cpp (the default GX state and the
+// display copy); values of the public GX API.
+typedef enum _GXClipMode {
+    GX_CLIP_ENABLE,
+    GX_CLIP_DISABLE
+} GXClipMode;
+
+typedef enum _GXGamma {
+    GX_GM_1_0,
+    GX_GM_1_7,
+    GX_GM_2_2
+} GXGamma;
+
+typedef enum _GXPixelFmt {
+    GX_PF_RGB8_Z24,
+    GX_PF_RGBA6_Z24,
+    GX_PF_RGB565_Z16
+} GXPixelFmt;
+
+typedef enum _GXZFmt16 {
+    GX_ZC_LINEAR,
+    GX_ZC_NEAR,
+    GX_ZC_MID,
+    GX_ZC_FAR
+} GXZFmt16;
 
 #endif /* !REVOLUTION_GX_GXENUM_H_ */

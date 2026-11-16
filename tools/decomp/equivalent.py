@@ -27,6 +27,7 @@ Usage:
     python tools/decomp/equivalent.py check        drop entries that now match exactly
     python tools/decomp/equivalent.py audit [--module M]
                     classify every near entry with diff.py; writes notes/near-audit.txt
+                    (notes/near-audit-<M>.txt with --module)
 """
 import argparse
 import json
@@ -225,7 +226,8 @@ def main():
                     for h in why:
                         lines.append(f"       found:   {h}")
             lines.append("")
-        out = ROOT / "notes" / "near-audit.txt"
+        # one file per module, so parallel review sessions do not overwrite each other's audit
+        out = ROOT / "notes" / (f"near-audit-{args.module}.txt" if args.module else "near-audit.txt")
         out.write_text("\n".join(lines), encoding="utf-8", newline="\n")
         for kind in order:
             if groups.get(kind):

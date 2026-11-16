@@ -32,7 +32,7 @@ main CalcChrAnmResultFromMtx__3bcsFQ34nw4r3g3d7ResNodePQ34nw4r3g3d12ChrAnmResult
 main CalcRootMtx__Q23bcs7CScnObjFv near 99.4 99.4%: f1/f4 register swap in the inlined MTX34RotXYZRad arguments
 main CalcRotMtxSide__Q23msw7CStgSrtFRQ23bcs6FMTX34RCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 99.2 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
 main CalcRotMtx__Q23msw7CStgSrtFRQ23bcs6FMTX34RCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 99.2 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
-main CalcSortValue__Q23bcs7CScnObjFPCQ23bcs6FMTX34 near 90.7 90.7%: three flag tests compile to rlwinm. instead of the original double cntlzw; same truth value, corner and centre code identical
+main CalcSortValue__Q23bcs7CScnObjFPCQ23bcs6FMTX34 near 90.7 [real, reviewed] reviewer confirmed: double cntlzw negation vs rlwinm. give the same truth value; vector add operand order and stack slots only; same constants
 main CalcView__Q33bcs2EF8CManagerFll near 97.7 fovy/aspect load order, addi r3 placement before C_MTXLightPerspective and one fmr register; reviewer checked
 main Calc__Q23msw10CSceneCalcFRQ23bcs10CCameraAnmRQ23bcs5FVEC3RQ23bcs5FVEC3Rf near 94.3 94.3%: float register numbers inside the inlined paired-single FVEC3Add and order of the lfs/stfs pairs copying the model offset
 main Calc__Q33msw4menu12CMoviePlayerFv near 97.7 instruction order only: Open argument evaluation, mr before Start, lfs order in the three float compares; jump table local name differs (reviewer confirmed)
@@ -228,7 +228,7 @@ main MakeDL__Q33bcs3G2D12CLineStripDLFv near 99.7 register numbering only (renum
 main MirrorResult__Q23bcs13CAnmChrMotionFPQ34nw4r3g3d12ChrAnmResultUcUs unverified 82.6 row addresses kept in saved registers across PSVECCrossProduct/Normalize where the original recomputes them (frame 0x20 vs 0x10, 545 vs 527 instructions); not fully explained; two models tried
 main Mount__Q23bcs10CRsoModuleFv near 99.3 loop counter and import-table byte offset registers swapped only
 main NewMdl__Q23msw15CStgGmk_TrolleyFlUl near 91.8 inlines CStgGmk_Trolley_Mdl's constructor: the same register reuse for the constant 0 as there; same stores
-main ObjProcGroup__Q23bcs9CScnGroupFUlUlPv near 99.5 99.5%: original has one unreachable b after case 4; branch offsets shift
+main ObjProcGroup__Q23bcs9CScnGroupFUlUlPv near 99.5 [real, reviewed] reviewer confirmed: one unreachable b after case 4 in the original; branch offsets shift only
 main OnAttackHit__Q23msw19CStgGmk_Pinball_ActFPCQ23msw12CCollAtkUnitPCQ23msw13CCollBodyUnitRCQ23bcs5FVEC3Ul near 97.8 one temporary's stack slot, load order and register swap
 main OnBodyDamage__Q23msw16CStgGmk_Case_ActFPQ23msw13CCollBodyUnitPCQ23msw12CCollAtkUnitRCQ23bcs5FVEC3 near 99.8 register choice only (attack word and kind in swapped registers)
 main OnBodyPush__Q23msw16CStgGmk_Case_ActFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 93.2 instruction order of the target position sum (z loaded before the x store) and float register numbering
@@ -300,7 +300,7 @@ main SendEvent__Q23msw10CSignBoardFlPv near 99.2 [schedule] 99.2%: register numb
 main SendEvent__Q23msw18CCockpitModelTelopFlPv near 96.4 [real, reviewed] reviewer confirmed: m_hEffect[0] (0x64) read before the switch instead of after GetInstance; nothing stores it between
 main SendEvent__Q23msw22CCockpitModelTelopHoldFlPv near 93.9 [real, reviewed] reviewer confirmed: two signed compares vs subi 4; cmplwi 1 select the same {4,5} for every value; m_hEffect[0] loaded after GetInstance, which does not write it
 main SendMessage___Q23msw5CGameFllll unverified 84.1 switch compare tree vs our linear chain and other branch form; not proven equal by tool
-main SetAlphaRateF__Q23bcs7CScnObjFf near 93.6 93.6%: original also stores the converted short to a second, unread stack slot; temporary at sp+0xC vs 0x8
+main SetAlphaRateF__Q23bcs7CScnObjFf near 93.6 [real, reviewed] reviewer confirmed: original also stores the converted short to an unread stack slot; same compare and clamp
 main SetAnimEnable__Q33bcs3G2D10CLayoutObjFli near 98.4 register allocation only: one saved register for the transform pointer
 main SetButtonInfo__Q23msw18CCockpitButtonInfoFPCQ33msw18CCockpitButtonInfo10ButtonInfo near 98.9 register allocation and one reordered pointer increment only (r12/r13 swap around wcslen/memcpy)
 main SetCharName__Q23msw5CGameFlPCwl near 97.9 instruction order only

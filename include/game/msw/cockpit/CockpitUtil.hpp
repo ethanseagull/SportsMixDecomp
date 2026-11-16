@@ -38,14 +38,18 @@ namespace msw {
 
         // Added for VolleyF game/volley/CCockpitVolleyCoder.cpp (return type
         // and argument names guessed): gives text pane pPane of layout
-        // pLayoutName in pPaneCtrl the font resource pFontName.
-        void SetTextFont(bcs::G2D::CPaneCtrl *pPaneCtrl, nw4r::lyt::Pane *pPane, const char *pLayoutName,
+        // pLayoutName in pPaneCtrl the font resource pFontName, keeping its
+        // font size. pLayoutName is not read. 0, or a negative number that
+        // tells which step failed.
+        long SetTextFont(bcs::G2D::CPaneCtrl *pPaneCtrl, nw4r::lyt::Pane *pPane, const char *pLayoutName,
                          const char *pFontName);
 
         // Added for HockeyF game/hockey/CCockpitHockeyCoder.cpp (argument
         // names guessed): the special-shot telop of pane nPane; the four
         // panes after it are the telop's parts. The coder passes -1.0f to
-        // hide it.
+        // hide it. Plays nInAnim, then (fRate above 1) nLoopAnim at speed
+        // 1 / fRate and nOutAnim; nHideAnim for a negative fRate. -1
+        // without the pane, else 0.
         // Added for VolleyF game/volley/CCockpitVolley.cpp (return types
         // and argument names guessed): the number of split views (the
         // cockpits make the second view's objects when it is above 1), and
@@ -59,11 +63,18 @@ namespace msw {
         // 0x801DF710; return type and argument names guessed): the clock
         // at fTime, with animations nAnim and nAnimAll on text panes nPane
         // and nShadowPane. The three last arguments are -1, -1 and 0 there.
-        void SetTimeValue(CMenuPaneAccessor *pAccessor, float fTime, int nArg, int bForce, long nAnim,
-                          long nAnimAll, long nPane, long nShadowPane, long nArg0, long nArg1, long nArg2);
+        // As CTimeCount::SetTimeValue (minutes into text box nPane, seconds
+        // into nShadowPane), then, in the last ten seconds, the seconds into
+        // text box nCountTextPane with animation nCountAnim on pane
+        // nCountPane; otherwise that box gets "x" and nCountPane is hidden.
+        // -1 without pAccessor or with a negative count pane; else the
+        // count shown, -1 when none.
+        long SetTimeValue(CMenuPaneAccessor *pAccessor, float fTime, int nArg, int bForce, long nAnim,
+                          long nAnimAll, long nPane, long nShadowPane, long nCountPane, long nCountTextPane,
+                          long nCountAnim);
 
-        void SetSPGaugeTelop(CMenuPaneAccessor *pAccessor, long nPane, long nPane1, long nPane2, long nPane3,
-                             long nPane4, float fRate);
+        long SetSPGaugeTelop(CMenuPaneAccessor *pAccessor, long nPane, long nInAnim, long nLoopAnim,
+                             long nOutAnim, long nHideAnim, float fRate);
     }
 }
 

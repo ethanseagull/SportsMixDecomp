@@ -358,6 +358,7 @@ main SetTeamArtsGauge___Q23msw5CGameFlff near 86.3 [real, reviewed] reviewer con
 main SetTeamCoin__Q23msw5CGameFlUl near 91.8 [real, reviewed] reviewer confirmed: same unsigned clamp through vtable 0x154, same store and cockpit call; clamp result register and block placement only
 main SetTeamPeriodScore__Q23msw5CGameFlll unverified 69.6 69.6%: the period row is addressed from row+0x20 in ours; same loads and stores
 main SetTextBoxString__Q23msw17CMenuPaneAccessorFlPCwUs near 99.9 one cmplw has its operands swapped (text length vs nLen) in an equality test; same result
+main SetTimeValue__Q23msw7cockpitFPQ23msw17CMenuPaneAccessorfiilllllll near 99.4 [real, reviewed] reviewer confirmed: same loads/stores; second word of L":xx" addressed as symbol+4 (original has a separate label), plus r19/r21 swap
 main SetTimeValue__Q33msw7cockpit10CTimeCountFPQ23msw17CMenuPaneAccessorfilllli near 99.6 register allocation only (three saved registers permuted); declaration-order search no gain in 24 tries
 main SetTime__Q23msw5CGameFf near 91.5 [real, reviewed] reviewer confirmed: original's frsp on a single is a no-op; same clamp compares, constants and stores
 main SetTourCockpitFilePath__Q23msw4menuFPQ33bcs8CLoadMan10FILE_INPUTll near 90.5 [real, reviewed] reviewer confirmed: base+0x100 held in a saved register instead of recomputed; same switch cases, sprintf calls and bit set/clear

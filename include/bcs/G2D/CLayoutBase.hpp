@@ -138,6 +138,9 @@ namespace bcs {
                 // (name guessed; inline, no symbol) How many animations
                 // BuildAnim made. GetAnimFrameMax checks its index against it.
                 unsigned long GetAnimNum() const { return m_nAnimNum; }
+                // (name guessed; inline, no symbol; added for the DOL's
+                // msw::cockpit::SetTextFont) The resource accessor (0x18).
+                nw4r::lyt::ResourceAccessor *GetResAccessor() const { return m_pAccessor; }
 
             private:
                 // (DOL fn_800A26B4, no symbol; name guessed) Clears 0x14 to

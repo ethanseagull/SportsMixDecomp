@@ -628,7 +628,10 @@ game/msw/CStage11Base.cpp:
 	.text       start:0x801DDA34 end:0x801DF228
 
 game/msw/cockpit.cpp:
-	.text       start:0x801DF710 end:0x801E00F8
+	.text       start:0x801DF710 end:0x801E0130
+	.rodata     start:0x80443100 end:0x80443118
+	.sdata      start:0x805BFE48 end:0x805BFE60
+	.sdata2     start:0x805C4D68 end:0x805C4D80
 
 game/msw/CStgGmk_Pinball.cpp:
 	.text       start:0x801E0130 end:0x801E782C

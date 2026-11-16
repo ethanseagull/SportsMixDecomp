@@ -115,6 +115,7 @@ Equivalent game/bcs/G2D/CLytManager.cpp
 Equivalent game/msw/CEventNodeBase.cpp
 Equivalent game/msw/CSignBoard.cpp
 Equivalent game/msw/CCockpitResultPartyTeam.cpp
+Equivalent game/bcs/CWorldEnv.cpp
 Equivalent game/msw/CCockpitPauseRuleInfo.cpp
 Matching game/msw/CStage09Base.cpp
 Equivalent game/msw/TournamentWork.cpp

@@ -84,7 +84,14 @@ game/bcs/CLoadMan.cpp:
 	.text       start:0x8004C094 end:0x8004DC9C
 
 game/bcs/CMainApp.cpp:
-	.text       start:0x80051B5C end:0x80052818
+	.text       start:0x80050BFC end:0x80052854
+	.ctors      start:0x8042D1A0 end:0x8042D1A4
+	.rodata     start:0x8042EDA0 end:0x8042EE18
+	.data       start:0x804676D8 end:0x80467700
+	.bss        start:0x804CCD38 end:0x804CCDD0
+	.sdata      start:0x805BF968 end:0x805BF978
+	.sbss       start:0x805C08E0 end:0x805C0958
+	.sdata2     start:0x805C1E08 end:0x805C1E40
 
 game/bcs/CMdlObj.cpp:
 	.text       start:0x80054FDC end:0x8005A9AC
@@ -155,7 +162,10 @@ game/bcs/CXmlReader.cpp:
 	.text       start:0x800C2618 end:0x800C33DC
 
 game/msw/CMainStep.cpp:
-	.text       start:0x800C3824 end:0x800C45D4
+	.text       start:0x800C3824 end:0x800C4938
+	.data       start:0x8046A8F8 end:0x8046AB98
+	.sbss       start:0x805C0BB0 end:0x805C0BB8
+	.sdata2     start:0x805C2440 end:0x805C2448
 
 game/msw/CBall.cpp:
 	.text       start:0x800C4938 end:0x800CBEA8

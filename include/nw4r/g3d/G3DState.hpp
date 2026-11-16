@@ -18,6 +18,9 @@ namespace nw4r {
             // (DOL fn_804166F0; added for bcs::CWorldEnv) The render mode
             // g3d was given by SetRenderModeObj (the address of its copy).
             const GXRenderModeObj &GetRenderModeObj();
+            // (added for the DOL's game/bcs/CMainApp.cpp) Gives g3d the
+            // render mode (it keeps a copy).
+            void SetRenderModeObj(const GXRenderModeObj &rRmode);
         }
     }
 }

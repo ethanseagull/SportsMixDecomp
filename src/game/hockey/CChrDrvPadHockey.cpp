@@ -480,7 +480,13 @@ inline void CChrDrvPadHockey::ClearStickParam_()
 
 void CChrDrvPadHockey::CheckStickParam()
 {
-    static const float fEnableFrame = 10.0f;
+    // The original keeps fEnableFrame in .rodata (after the file's other
+    // literals) but every read uses the pooled 10.0f; under flags=noauto
+    // a plain static const is folded away, so the object is a
+    // one-element array nothing reads and the value a local constant.
+    static const float fEnableFrame[1] = { 10.0f };
+    (void)fEnableFrame;
+    const float fEnable = 10.0f;
 
     if (m_fStickPower < 0.4f) {
         ClearStickParam_();
@@ -491,7 +497,7 @@ void CChrDrvPadHockey::CheckStickParam()
 
     if (!(m_nStickFlag & STICK_ON)) {
         m_nStickFlag |= STICK_ON;
-        m_fStickEnableFrame = fEnableFrame;
+        m_fStickEnableFrame = fEnable;
         m_fStickStartDeg = fDeg;
         m_fStickLastDeg = fDeg;
         m_fStickFrame = 0.0f;
@@ -532,7 +538,7 @@ void CChrDrvPadHockey::CheckStickParam()
                 m_nStickRoll |= ROLL_RIGHT;
                 ClearStickParam_();
             }
-            m_fStickEnableFrame = fEnableFrame;
+            m_fStickEnableFrame = fEnable;
         }
     } else if (((m_nStickFlag >> 2) & 1) == 1) {
         if (fDiff < 0.0f) {
@@ -546,7 +552,7 @@ void CChrDrvPadHockey::CheckStickParam()
                 m_nStickRoll |= ROLL_LEFT;
                 ClearStickParam_();
             }
-            m_fStickEnableFrame = fEnableFrame;
+            m_fStickEnableFrame = fEnable;
         }
     } else if (fAbs <= fStartRot) {
         if (fDiff > 0.0f) {
@@ -555,7 +561,7 @@ void CChrDrvPadHockey::CheckStickParam()
             m_nStickFlag |= STICK_LEFT;
         }
         m_fStickLastDeg = fDeg;
-        m_fStickEnableFrame = fEnableFrame;
+        m_fStickEnableFrame = fEnable;
     }
 }
 

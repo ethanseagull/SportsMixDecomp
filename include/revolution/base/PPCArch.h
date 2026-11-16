@@ -12,6 +12,8 @@ extern "C" {
 
 // Reads the HID2 register.
 unsigned long PPCMfhid2(void);
+// (added for the DOL's game/bcs/CMainApp.cpp) Stops the processor for good.
+void PPCHalt(void);
 
 #ifdef __cplusplus
 }

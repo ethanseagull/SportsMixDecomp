@@ -496,7 +496,7 @@ void msw::CChrCoreVolley::SubStateRunNormal_(STATE_WORK_RUN *pWork)
     } else {
         float fDecel = m_fTimeScale * (m_fFrameStep * GetCcParam_()->m_Unk14);
         pWork->m_fSpeed -= fDecel;
-        if (pWork->m_fSpeed <= fMin) {
+        if (pWork->m_fSpeed <= 0.0f) {
             pWork->m_bRun = 0;
         }
         fMin = 0.0f;

@@ -779,7 +779,7 @@ namespace msw {
             // (no symbol; name guessed) Moves player nPad's cursor on pObj
             // from button nOld to nNew (inline in InputDataToMenuObj).
             void MoveButtonCursor(CSelectMenuLayoutBase *pObj, long nPad, unsigned short &rCurrent,
-                                  unsigned short nOld, short nNew);
+                                  unsigned short nOld, long nNew);
 
         public:
             // The archives (built by InitLoad).

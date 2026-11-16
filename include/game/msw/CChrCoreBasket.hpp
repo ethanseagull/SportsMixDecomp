@@ -28,7 +28,13 @@ namespace msw {
                 long m_nDashTurnDeg;           // 0x44
                 long m_nTurnFrame;             // 0x48
                 float m_fTurnDist;             // 0x4C
-                unsigned char m_Unk050[0x10C - 0x50];
+                unsigned char m_Unk050[0x88 - 0x50];
+                // 0x88, 0x8C (names guessed; game/basket/unit_2BBEC.cpp): the
+                // frames of the jump block during which its defence
+                // collision is on.
+                long m_nJumpBlockDefStart;     // 0x88
+                long m_nJumpBlockDefEnd;       // 0x8C
+                unsigned char m_Unk090[0x10C - 0x90];
                 // 0x10C-0x170 (names guessed; game/basket/unit_38A7C.cpp): the
                 // dunk's jump height and run-up frames, and whether its run-up
                 // is counted in loops (0: timed); the same for the rebound
@@ -52,7 +58,32 @@ namespace msw {
                 long m_nLayUpHoldFrame;        // 0x168
                 float m_fLayUpHeight;          // 0x16C
                 long m_nLayUpJumpFrame;        // 0x170
-                unsigned char m_Unk174[0x1CC - 0x174];
+                unsigned char m_Unk174[0x188 - 0x174];
+                // 0x188-0x1C4 (names guessed; game/basket/unit_2BBEC.cpp):
+                // the blend frames of the swat; the jump to the upper floor:
+                // its turn on the way up and how much of it the fall takes
+                // back (degrees), its jump, hold, second turn and fall frames,
+                // the frames between which it counts (a window), the height
+                // over the jump block's, the kind and height of its attack
+                // collision, the count after which its flags swap, and the
+                // percentage the second turn keeps each frame.
+                long m_nSwatItBlend;           // 0x188
+                long m_nJumpUpperRotDeg;       // 0x18C
+                long m_nJumpUpperRotBackDeg;   // 0x190
+                long m_nJumpUpperJumpFrame;    // 0x194
+                long m_nJumpUpperHoldFrame;    // 0x198
+                long m_nJumpUpperTurnFrame;    // 0x19C
+                long m_nJumpUpperFallFrame;    // 0x1A0
+                long m_nJumpUpperWinStart;     // 0x1A4
+                long m_nJumpUpperWinEnd;       // 0x1A8
+                float m_fJumpUpperHeight;      // 0x1AC
+                long m_nJumpUpperCollType;     // 0x1B0
+                unsigned char m_Unk1B4[0x1B8 - 0x1B4];
+                float m_fJumpUpperCollHeight;  // 0x1B8
+                unsigned char m_Unk1BC[0x1C0 - 0x1BC];
+                long m_nJumpUpperSwapCount;    // 0x1C0
+                long m_nJumpUpperTurnRate;     // 0x1C4
+                unsigned char m_Unk1C8[0x1CC - 0x1C8];
                 // 0x1CC-0x1E4 (names guessed; game/basket/unit_2FD1C.cpp, the
                 // smash cut): two values the cut keeps as floats in its work
                 // (meaning not known), the reach of the cut, then the turn
@@ -169,6 +200,11 @@ namespace msw {
             // from the names) Not zero when a dunk from here may miss; how
             // far the dash has gone (0 to 1).
             int CanbeDunkMissDist() const;
+            // (added for game/basket/CGameBasket.cpp; meanings guessed from
+            // the names) Not zero when the character can jump for a dunk;
+            // the frames left of the trick move (state 0x1E).
+            int CanbeDunkJump() const;
+            float GetStateWorkTrickMoveRemainderFrame() const;
             float GetDashActRate() const;
             // (added for game/basket/CGameGuideBasket.cpp; meanings guessed
             // from the names) How far into its dunk the character is, in
@@ -437,6 +473,34 @@ namespace msw {
             void SubStateSmashCut_(STATE_WORK_SMASH_CUT *pWork);
             void SubStateSmashCutStraight_(STATE_WORK_SMASH_CUT *pWork);
             void Util_SendMsgToEnemy(CChrDrv::MSG_ID id, long, long, unsigned long, unsigned long);
+
+            // Added for game/basket/unit_2BBEC.cpp (the jump block, swat
+            // and jump to the upper floor; names from the symbols, return
+            // types and meanings guessed). The works of the jump block and
+            // the swat (mapped there); the yaw of the camera plus fRange;
+            // the radius of the jump's attack collision; how long the
+            // ball holder can still hang on in an air battle, and how much
+            // the input slows its fall.
+            struct STATE_WORK_JUMP_BLOCK;
+            struct STATE_WORK_SWAT_IT;
+            float GetCameraToRadRange(float fRange) const;
+            float GetJumpCutColR() const;
+            float GetStaddleLastTime_() const;
+            float GetStaddleInputDownRate_() const;
+
+            // Added for game/basket/unit_3BB84.cpp (the pass, aerial pass and
+            // jump pass states; names from the symbols, meanings guessed).
+            // The works of the pass states (mapped there); the kind of pass
+            // to pTo at rPos (-1 without the ball: 2 the alley-oop, 3 the
+            // plain, 4 and 6 the battle passes, 5 the long one); tells the
+            // receiver the frames the ball flies; the depth of the court;
+            // passes the ball.
+            struct STATE_WORK_PASS;
+            struct STATE_WORK_JUMP_PASS;
+            long CheckPassType_(const bcs::FVEC3 &rPos, const CChrCore *pTo);
+            void SendPassCatchFrame_(CChrCore *pTo, const bcs::FVEC3 &rPos, float fFrame);
+            float GetCourtDepth() const;
+            void Util_PassBall(long nType, CChrCore *pTo, const bcs::FVEC3 &rPos, float, int, int);
 
             // Overrides of CChrCore's virtuals, in vtable order (the slots of
             // __vt__Q23msw14CChrCoreBasket, read from BasketF, that name
@@ -876,8 +940,27 @@ namespace msw {
 
     // (field names guessed; only what the character units read is mapped)
     struct CChrCoreBasket::STATE_WORK_JUMP_UPPER {
-        unsigned char m_Unk00[0x24];
+        // 0x00-0x20 (names guessed; game/basket/unit_2BBEC.cpp): the step
+        // of the jump (0 to 5), the step of the air battle with the
+        // character of the event, flag bits, the character's bit (1 <<
+        // player number), and the frames left of the current part.
+        long m_nStep;                  // 0x00
+        long m_nBattleStep;            // 0x04
+        unsigned long m_nFlag;         // 0x08
+        unsigned long m_nPlayerBit;    // 0x0C
+        unsigned char m_Unk10[0x20 - 0x10];
+        float m_fHoldFrame;            // 0x20
         float m_fFrame;                // 0x24, the frames of the jump so far (the Slime's after-images)
+        // 0x28-0x3C (names guessed; game/basket/unit_2BBEC.cpp): the
+        // fraction of a frame not yet counted in m_fFrame, the frames of
+        // the whole jump, the turn per frame, a count of frames inside
+        // the parameter's window, and how long the air battle goes on.
+        float m_fFrameFrac;            // 0x28
+        float m_fFrameNum;             // 0x2C
+        float m_fRotY;                 // 0x30
+        float m_fCount;                // 0x34
+        unsigned char m_Unk38[0x3C - 0x38];
+        float m_fBattleFrame;          // 0x3C
     };
 
     // The characters without members or overrides of their own known yet

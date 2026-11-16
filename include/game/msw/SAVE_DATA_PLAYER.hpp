@@ -86,6 +86,14 @@ namespace msw {
         void SetVolleyFeintScore(long nMade, long nMissed);
         void SetVolleyBlockScore(long nMade, long nMissed);
         void SetVolleySpikeSaveScore(long nMade, long nMissed);
+        // (added for BasketF game/basket/CGameBasket.cpp; argument names
+        // guessed) The same for a basketball game: dunks, layups, throws,
+        // three-pointers and blocks.
+        void SetBasketDunkScore(long nMade, long nMissed);
+        void SetBasketLayupScore(long nMade, long nMissed);
+        void SetBasketThrowingScore(long nMade, long nMissed);
+        void SetBasketThreePointScore(long nMade, long nMissed);
+        void SetBasketBlockScore(long nMade, long nMissed);
 
         // Size 0x38. (added for MenuF game/menu/CMiiSel.cpp; names
         // guessed) One Mii of the player's list, or one of the guest Miis.

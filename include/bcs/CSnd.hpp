@@ -28,7 +28,7 @@ namespace bcs {
             // Frees sound heap nHeap. fn_800795C0
             static int DestroyHeap(long nHeap);
             // SoundHeap::SaveState of heap nHeap; the level for
-            // LoadHeapState. fn_80079668
+            // LoadHeapState.
             static long SaveHeapState(long nHeap);
             // SoundHeap::LoadState: frees what heap nHeap got after level
             // nLevel. fn_800796FC

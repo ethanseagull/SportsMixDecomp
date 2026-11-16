@@ -55,10 +55,14 @@ game/bcs/G2D/CPaneObj.cpp:
 	.text       start:0x8003D030 end:0x8003ECE0
 
 game/bcs/G2D/CLytManager.cpp:
-	.text       start:0x8003F554 end:0x8003FE74
+	.text       start:0x8003F300 end:0x800400A4
+	.data       start:0x80466958 end:0x80466970
+	.bss        start:0x804CCB20 end:0x804CCB30
+	.sdata2     start:0x805C1CA0 end:0x805C1CE0
 
 game/bcs/G2D/CLytResource.cpp:
 	.text       start:0x800401A0 end:0x80040B70
+	.sbss       start:0x805C0880 end:0x805C0884
 
 game/bcs/CScnObj.cpp:
 	.text       start:0x80041888 end:0x80044B00
@@ -95,10 +99,10 @@ game/bcs/CMiiMan.cpp:
 	.text       start:0x8006832C end:0x800695C8
 
 game/bcs/CMovie.cpp:
-	.text       start:0x800695C8 end:0x8006A15C
+	.text       start:0x800695C8 end:0x8006A458
 
 game/bcs/CPadWI.cpp:
-	.text       start:0x800708F0 end:0x8007109C
+	.text       start:0x800708F0 end:0x80071128
 
 game/bcs/CRenderMan.cpp:
 	.text       start:0x80073DAC end:0x8007852C
@@ -207,10 +211,8 @@ game/msw/CCollMan.cpp:
 	.text       start:0x800F6744 end:0x800FA63C
 
 game/msw/CCollUnit.cpp:
-	.text       start:0x801067E4 end:0x80106EA4
-
-game/msw/CCollDefUnit.cpp:
-	.text       start:0x80107294 end:0x801072A0
+	.text       start:0x801066C8 end:0x801072C0
+	.bss        start:0x804D33E0 end:0x804D3408
 
 game/msw/CBodyCollision.cpp:
 	.text       start:0x801072C0 end:0x801084B0
@@ -486,7 +488,14 @@ game/msw/CCockpitResult.cpp:
 	.rodata     start:0x8043DC60 end:0x8043DC90
 
 game/msw/menu.cpp:
-	.text       start:0x8019B2C4 end:0x8019BBF4
+	.text       start:0x8019B2C4 end:0x8019BC7C
+	.ctors      start:0x8042D224 end:0x8042D228
+	.rodata     start:0x8043DCD8 end:0x8043DCF0
+	.data       start:0x80480760 end:0x804807E8
+	.bss        start:0x804D7168 end:0x804D7180
+	.sdata      start:0x805BFD88 end:0x805BFD90
+	.sbss       start:0x805C0D10 end:0x805C0D20
+	.sdata2     start:0x805C4108 end:0x805C4130
 
 game/msw/CTrophyObj.cpp:
 	.text       start:0x8019BEF0 end:0x8019CAE0
@@ -619,7 +628,10 @@ game/msw/CStage11Base.cpp:
 	.text       start:0x801DDA34 end:0x801DF228
 
 game/msw/cockpit.cpp:
-	.text       start:0x801DF710 end:0x801E00F8
+	.text       start:0x801DF710 end:0x801E0130
+	.rodata     start:0x80443100 end:0x80443118
+	.sdata      start:0x805BFE48 end:0x805BFE60
+	.sdata2     start:0x805C4D68 end:0x805C4D80
 
 game/msw/CStgGmk_Pinball.cpp:
 	.text       start:0x801E0130 end:0x801E782C
@@ -643,10 +655,9 @@ game/msw/CTmGameHandler.cpp:
 	.text       start:0x801E9F48 end:0x801EAD84
 
 game/msw/CStage09Base.cpp:
-	.text       start:0x801EB004 end:0x801EC050
-
-game/msw/CStage09Base/CConveyor.cpp:
-	.text       start:0x801EC07C end:0x801EC7E0
+	.text       start:0x801EB004 end:0x801EC8D4
+	.data       start:0x80485B10 end:0x80485C48
+	.sdata2     start:0x805C4E30 end:0x805C4E48
 
 game/bcs/G2D/CLineStripDL.cpp:
 	.text       start:0x801EC8D4 end:0x801ECE98
@@ -771,7 +782,11 @@ game/msw/CCockpitResultPartyTeam.cpp:
 	.sdata2     start:0x805C57D0 end:0x805C5870
 
 game/msw/CCockpitResultPartyVS.cpp:
-	.text       start:0x8023CD30 end:0x8023D6C4
+	.text       start:0x8023C340 end:0x8023D74C
+	.rodata     start:0x80449D28 end:0x80449FA8
+	.data       start:0x8048BB58 end:0x8048BCF8
+	.sdata      start:0x805BFF48 end:0x805BFF50
+	.sdata2     start:0x805C5870 end:0x805C59E0
 
 game/msw/CStage16Base.cpp:
 	.text       start:0x8023D970 end:0x8023EB38
@@ -807,7 +822,7 @@ game/msw/CCockpitPauseLayoutBase.cpp:
 	.text       start:0x8025C344 end:0x8025C3F4
 
 game/msw/CCockpitPauseRuleInfo.cpp:
-	.text       start:0x8025F47C end:0x8025FB4C
+	.text       start:0x8025F47C end:0x8025FBCC
 
 game/msw/CGamePadCheck.cpp:
 	.text       start:0x8025FBCC end:0x802616DC

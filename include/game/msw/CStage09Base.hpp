@@ -24,10 +24,13 @@ namespace msw {
         public:
             // (purpose guessed) How the conveyors relate to each other;
             // CStageBasket09 sets 1 before the stage is initialised. The
-            // constructor's default is 1 too.
+            // constructor's default is 1 too. With 2 the conveyors run in
+            // alternate directions (Conveyor_StartAll and the like reverse
+            // every odd conveyor, or every one but the chosen one).
             enum CV_RELATE {
                 CV_RELATE_0,
-                CV_RELATE_1
+                CV_RELATE_1,
+                CV_RELATE_2
             };
 
             // One conveyor belt. A DOL class, size 0x50, vptr at 0x4C after
@@ -56,12 +59,12 @@ namespace msw {
                     float m_fUnk10;                // 0x10
                     float m_fUnk14;                // 0x14
                     float m_fCurSpeed;             // 0x18
-                    float m_fUnk1C;                // 0x1C
+                    float m_fTargetSpeed;          // 0x1C, the speed m_fCurSpeed moves towards (per frame)
                     float m_fLastSpeed;            // 0x20
                     float m_fOddDist;              // 0x24
                     CStageMdlListNode *m_pMdlNode;  // 0x28
                     CStageMdlListNode *m_pMdlNode2; // 0x2C
-                    float m_fUnk30;                // 0x30
+                    float m_fAccTimer;             // 0x30, below zero when no acceleration is running (AccStart)
                     long m_nSpeedLevel;            // 0x34, nonzero while running fast
                     int m_bForceStop;              // 0x38
                     float m_fDelayTimer;           // 0x3C, below zero when no delayed start or stop is pending
@@ -103,16 +106,22 @@ namespace msw {
                     virtual void GetFlow(bcs::FVEC3 &rFlow) const;                       // 0x80
                     virtual float GetFlowRate() const;                                   // 0x84
 
-                    // Tuning, given by the sport's subclass.
-                    virtual float GetParam_CvSpeed() const = 0;                          // 0x88, per frame
+                    // Tuning, given by the sport's subclass (the DOL's own
+                    // vtable has these bodies, so none of them is pure).
+                    virtual float GetParam_CvSpeed() const { return 0.0f; }              // 0x88, per second
                     virtual float GetParam_JumpAccFollow() const { return 1.0f; }        // 0x8C
                     virtual float GetParam_JumpAccAgainst() const { return 1.0f; }       // 0x90
-                    virtual float GetParam_AnmFlow() const = 0;                          // 0x94
-                    virtual float GetParam_MdlAnmDir() const = 0;                        // 0x98, 1 or -1
+                    virtual float GetParam_AnmFlow() const { return 1.0f; }              // 0x94
+                    virtual float GetParam_MdlAnmDir() const { return 1.0f; }            // 0x98, 1 or -1
                     virtual void SetSpeed(float speed);                                  // 0x9C
             };
 
             CStage09Base();
+
+            // (names guessed) Called by a conveyor when its delayed start or
+            // stop happens.
+            void SetStartEvent(int bEvent) { m_bStartEvent = bEvent; }
+            void SetStopEvent(int bEvent) { m_bStopEvent = bEvent; }
 
         private:
             CConveyor **m_ppConveyor; // 0x00, GetConveyorNum entries (CreateConveyor)

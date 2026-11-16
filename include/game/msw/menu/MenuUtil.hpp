@@ -43,9 +43,11 @@ namespace msw {
         // The scale of a cockpit face icon for character nChr.
         const nw4r::math::VEC2 &GetCockpitFaceIconScale(long nChr);
         // nValue as text in pOut, through the swprintf format pFormat.
-        void GetNumericText(long nValue, const wchar_t *pFormat, wchar_t *pOut);
+        // Returns pOut.
+        wchar_t *GetNumericText(long nValue, const wchar_t *pFormat, wchar_t *pOut);
         // The screen position of the world position rPos for view nView.
-        void GetWorldScreenPosition(const bcs::FVEC3 &rPos, long nView, bcs::FVEC3 &rOut);
+        // Always returns 0.
+        int GetWorldScreenPosition(const bcs::FVEC3 &rPos, long nView, bcs::FVEC3 &rOut);
 
         // nNum as text, in a static buffer (swprintf). The second argument
         // is passed -1 by the coin counters; what it selects is not known.

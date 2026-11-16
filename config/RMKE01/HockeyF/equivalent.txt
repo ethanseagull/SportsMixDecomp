@@ -200,6 +200,7 @@ HockeyF __dt__Q33msw11CC15_HOCKEY19CcSiromaMagicCircleFv near 98.9 [schedule] re
 HockeyF __dt__Q33msw7STAGE1120CBgFirePillarClusterFv near 98.1 instruction order only (shared CStage11Base.hpp, same as BasketF)
 HockeyF __sinit_\CChrCoreHockeySlime_cpp unverified 84.3 register allocation and order of the colour-table stores (stmw of five registers instead of four stw); the twelve colours were decoded from the original and are the same
 HockeyF __sinit_\CShootMarker_cpp unverified 78.9 static initialiser of the two colour tables: same stores of the same constants to the same addresses, in another order and with other registers (78.9%)
+HockeyF __sinit_\CcNinjaCloneBody_cpp near 97.2 [registers] register allocation/order only
 HockeyF getChargePlayerCore__Q23msw17CComDrvHockeyGameFv near 99.0 [registers] register allocation/order only
 HockeyF isComCombination__Q23msw17CComDrvHockeyGameFv near 99.7 [stack] register allocation/order only
 HockeyF isEnemyPass__Q23msw17CComDrvHockeyGameFv near 99.5 [schedule] register allocation/order only

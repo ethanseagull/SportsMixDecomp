@@ -286,7 +286,7 @@ game/msw/CDropCoinMan.cpp:
 	.sdata2     start:0x805C2B78 end:0x805C2C08
 
 game/msw/CItemMan.cpp:
-	.text       start:0x80126AE8 end:0x80127814
+	.text       start:0x80126AE8 end:0x801278BC
 
 game/msw/CItem.cpp:
 	.text       start:0x8012830C end:0x8012C1F0

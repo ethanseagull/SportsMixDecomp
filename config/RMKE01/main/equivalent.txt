@@ -4,6 +4,7 @@ main AddTeamArtsGauge___Q23msw5CGameFlff near 91.1 [real, reviewed] reviewer con
 main AddTeamCoin___Q23msw5CGameFll unverified 76.0 76%: register allocation (ours saves r27-r31 with _savegpr) and address recomputation; same calls and stores (inspected)
 main AddTeamGainCoin__Q23msw5CGameFll unverified 74.7 74.7%: the original recomputes the array address for the store
 main AddTeamPeriodScore__Q23msw5CGameFlll unverified 64.5 64.5%: the period row is addressed from row+0x20 in ours; same loads and stores
+main Add__Q23bcs13CSndGroupListFUls near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: weak copy the original emits only because LoadGameGroups calls it out of line; the header IsExist+Add body is the same work and ours inlines it at every call. Recorded by hand
 main AnimPlay__Q23msw11CChrOptTaskFliff near 98.9 register choice only: the abs() of a negative motion id uses r6/r0 in the original, r0/r4 in ours
 main AnimPlay__Q23msw11CEventModelFPCQ33msw11CEventModel13MOT_NAME_DATAlfl near 97.1 [real, reviewed] reviewer confirmed: original reloads pData (0x50) after storing it, only stores to other offsets between
 main AnimPlay__Q23msw11CEventModelFPCQ33msw11CEventModel8MOT_DATAlfl near 98.0 [real, reviewed] reviewer confirmed: original reloads pData (0x4c) after storing it, no call or store to it between
@@ -132,7 +133,6 @@ main GetChrOptColor_Kinopio__Q23msw7CC_DATAFl unverified 81.2 Original forms the
 main GetHockeyUnk1C__Q23msw5CGameFv near 88.3 equivalent branch form only: the original lowers the play-type switch (cases 0, 2, 4) as CW's binary search (cmpwi 2; beq; bge; cmpwi 0 ...), ours as a compare chain, and reloads the GameWork address before the shared return; same tests and result
 main GetLocationAdjustScaleH__Q33bcs3G2D11CLytManagerFi near 98.5 [schedule] register allocation/order only
 main GetLocationAdjustScale__Q33bcs3G2D11CLytManagerFPQ23bcs5FVEC3i unverified 60.2 60.2%, below the near floor only: reviewer confirmed output {480/efbHeight,1,1} identical; every other difference is a store to a never-read stack slot (dead inlined safe-area rate, unused viWidth conversion), frame 0x60 vs 0x50
-main GetHockeyUnk1C__Q23msw5CGameFv near 88.3 [real, reviewed] reviewer confirmed: compare tree selects the same {0,2,4} as our chain; g_GameWork reload with no store between
 main GetMenuResultId__Q23msw18CCockpitButtonInfoFl unverified 74.4 below 85%: the validity test branches the other way (original falls through to return the invalid value, ours to the load); same instructions otherwise
 main GetMiiName__Q23msw5CGameFR12RFLStoreDataPwl near 94.4 [real, reviewed] reviewer confirmed: same GetAdditionalInfo arguments (raw asm); copy loop order and saved registers only
 main GetMinusPad__Q23msw14CGamePauseTaskFi near 90.1 [real, reviewed] reviewer confirmed: frsp on a fadds result is a no-op; one fewer saved register, frame size, base pointer vs index addressing of the same arrays
@@ -183,6 +183,7 @@ main IsNowSlowEffect__Q23msw5CGameFv unverified 84.2 84.2%: block order of the t
 main IsPlayTypeCanChangeLeader__Q23msw5CGameFl unverified 77.4 switch compare tree vs our linear chain and other branch form; not proven equal by tool
 main IsTurnTableOpen__Q23msw12CStage17BaseCFv near 99.8 fadds operands swapped in m_fRot + 10 degrees (commutative); otherwise identical
 main JudgeStickMove___Q23msw13CMenuPartListFllUlll near 92.7 [real, reviewed] reviewer confirmed: ushort-return clrlwi placed once at the top vs at each return, same truncation on every path; register numbering
+main LoadGameGroups__Q23msw8CGameSndFRCQ33msw8CGameSnd9GAME_INFOi near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: the original is over the all-or-nothing inline budget and calls CSndGroupList ctor/Add and GetGameType out of line; ours inlines those same bodies; calls, arguments, branches and tail identical. Recorded by hand: equivalent.py has no floor exception for this ruling
 main LoadGameSnd__Q23msw8CGameSndFv near 99.1 r3/r4 swapped for the GameWork pointer and the zero stored to m_nStage; same stores, calls and branches
 main LoadLocInfoTbl__Q23msw20CStgGmk_PylonClusterFv near 97.9 [real, reviewed] reviewer confirmed: lwzx with (i+1)<<2 vs add and lwz 4(base+i*4), same address and load
 main LookAt__Q23msw7CStgSrtFRCQ23bcs5FVEC3f near 98.5 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
@@ -231,7 +232,6 @@ main Main__Q23msw22CCockpitModelTelopHoldFv near 98.5 [real, reviewed] reviewer 
 main Main__Q23msw8CBallManFv near 99.1 register allocation only: the loop counter and the strength-reduced table offset are given each other's registers (li order swapped); same instructions, same memory accesses and branches
 main Main__Q33bcs3G2D11CLytManagerFv near 93.5 [schedule] register allocation/order only
 main Main__Q33msw6CC_CMN10CMdlEffectFv near 96.5 instruction order and registers only: the original loads m_hEffect before the CEffectCtrl::GetInstance call (ours after; nothing between can change it), and schedules the floor-flow float adds differently
-main Main__Q33msw6CC_CMN10CMdlEffectFv near 96.5 [real, reviewed] reviewer confirmed: same float add pairs to the same places, reordered; m_hEffect loaded after GetInstance, which does not write it
 main MakeDL__Q33bcs3G2D10CScissorDLFv unverified 83.2 83%: original keeps two dead u16 stack stores (sth of the F32ToU16 results), widens the sizes to int and truncates to 16 bits at the call instead of at the clamp assignment; otherwise scheduling and stack slots. Same values reach SetGDScissor in every case as far as read, not proven
 main MakeDL__Q33bcs3G2D12CLineStripDLFv near 99.7 register numbering only (renumbered diff empty)
 main MirrorResult__Q23bcs13CAnmChrMotionFPQ34nw4r3g3d12ChrAnmResultUcUs unverified 82.6 row addresses kept in saved registers across PSVECCrossProduct/Normalize where the original recomputes them (frame 0x20 vs 0x10, 545 vs 527 instructions); not fully explained; two models tried
@@ -294,11 +294,7 @@ main PopTeamItem___Q23msw5CGameFl near 91.8 switch on the roulette state {0,1}: 
 main Pop__Q23msw16CCockpitPartMoveFRQ33msw16CCockpitPartMove12PartMoveInfo near 99.4 registers only: the 0xC and 0x10 fields of the entry go through r5/r6 swapped; same loads, stores and order (12 load/store orders and a struct copy tried)
 main PushMotorAll__Q23bcs6CPadWIFv near 88.2 [schedule] register allocation/order only
 main PushTeamItem___Q23msw5CGameFll near 95.0 switch compiled as a linear compare chain where the original builds a compare tree, and inline CFsmQueue operations expanding with other branch/register shape; same cases and calls
-main Play__Q23bcs10CAnmMotionFlUlfff near 97.3 [real, reviewed] reviewer confirmed: redundant m_pExInfo (0x24) reload with no store between; abs computed in other registers; same offsets and call
-main Play__Q23bcs15CAnmBlendMotionFRCQ33bcs15CAnmBlendMotion8ANIM_ARGUl near 90.3 [real, reviewed] reviewer confirmed: ANIM_ARG element loaded once per branch instead of once before (same value, no store between); stack slots swapped; register choice and order
-main PopTeamItem___Q23msw5CGameFl near 91.8 [real, reviewed] reviewer confirmed: the original proceeds for states 0 and 1 and returns otherwise, the same set as ours
-main Pop__Q23msw16CCockpitPartMoveFRQ33msw16CCockpitPartMove12PartMoveInfo near 99.4 registers only: the 0xC and 0x10 fields of the entry go through r5/r6 swapped; same loads, stores and order (12 load/store orders and a struct copy tried)
-main PushTeamItem___Q23msw5CGameFll near 95.0 [real, reviewed] reviewer confirmed: after the fix (fn_80139D28 called when m_bUseRoulette is set, as the original): every branch checked against the raw asm; IsPushable switch lowering only
+main ReloadGameSnd__Q23msw8CGameSndFv near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: the original tail-calls LoadGameSnd, ours inlines LoadGameSnd's body; nothing else differs. Recorded by hand: equivalent.py has no floor exception for this ruling
 main RemoveChildAt__Q23bcs9CScnGroupFUl unverified 80.0 80%: GetChild inlined here, called in the original; rest identical
 main RemoveEntryAll__Q23bcs10CCameraManFv near 97.4 [real, reviewed] reviewer confirmed: identical code; relocation symbol _f_bss vs m_pCamera at the same address
 main RemoveGuideTelop___Q23msw13CGameGuideManFv near 97.9 [real, reviewed] reviewer confirmed: original re-reads 0x3c right after the compare with no call or store between
@@ -316,6 +312,7 @@ main SendEvent__Q23msw10CSignBoardFlPv near 99.2 [schedule] 99.2%: register numb
 main SendEvent__Q23msw18CCockpitModelTelopFlPv near 96.4 [real, reviewed] reviewer confirmed: m_hEffect[0] (0x64) read before the switch instead of after GetInstance; nothing stores it between
 main SendEvent__Q23msw22CCockpitModelTelopHoldFlPv near 93.9 [real, reviewed] reviewer confirmed: two signed compares vs subi 4; cmplwi 1 select the same {4,5} for every value; m_hEffect[0] loaded after GetInstance, which does not write it
 main SendMessage___Q23msw5CGameFllll unverified 84.1 switch compare tree vs our linear chain and other branch form; not proven equal by tool
+main Set3DBackColorAll__Q23bcs9CWorldEnvFQ23bcs9BCS_Color unverified 83.5 schedule only at 83.5%: the original loads all four colour bytes before storing, ours interleaves; same stores, autopilot regs no gain
 main SetAlphaRateF__Q23bcs7CScnObjFf near 93.6 [real, reviewed] reviewer confirmed: original also stores the converted short to an unread stack slot; same compare and clamp
 main SetAnimEnable__Q33bcs3G2D10CLayoutObjFli near 98.4 register allocation only: one saved register for the transform pointer
 main SetButtonInfo__Q23msw18CCockpitButtonInfoFPCQ33msw18CCockpitButtonInfo10ButtonInfo near 98.9 register allocation and one reordered pointer increment only (r12/r13 swap around wcslen/memcpy)
@@ -350,7 +347,6 @@ main SetPlayerIcon__Q23msw23CCockpitResultPartyTeamFll near 88.3 [real, reviewed
 main SetPointLightColor__Q23msw14CEffectClusterF8_GXColor8_GXColor near 89.8 schedule only: second colour word loaded after the member-pointer lwzu/copy instead of before; same stores and calls
 main SetPos__Q23msw9CCollUnitFRCQ23bcs5FVEC3 near 89.8 [real, reviewed] reviewer: original reloads m_nFlag10 after the m_PrevPos float stores (alias caution); ours reuses the entry value; no caller points rPos into the flag, same result
 main SetResultButton__Q23msw14CCockpitResultFll near 98.5 98.5%: float register numbering in the delay computation; callee is the unnamed task constructor fn_8023D858
-main SetResultButton__Q23msw14CCockpitResultFll near 98.5 [real, reviewed] reviewer confirmed: fn_8023D858 is the CResultButtonTask constructor ours calls; float register numbering
 main SetRotY__Q23msw7CStgSrtFf near 99.0 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
 main SetTeamArtsGauge___Q23msw5CGameFlff near 86.3 [real, reviewed] reviewer confirmed: after the fix (full sound Play passes 0, 1, 0 as the original's f1/f2/f3): float register choice, fmr copies and order only
 main SetTeamCoin__Q23msw5CGameFlUl near 91.8 [real, reviewed] reviewer confirmed: same unsigned clamp through vtable 0x154, same store and cockpit call; clamp result register and block placement only
@@ -397,6 +393,7 @@ main UpdateInputMode__Q23msw8CMenuPadFv near 91.4 [real, reviewed] reviewer conf
 main UpdateMdlMtx__Q23msw19CStgGmk_Trolley_ActFv near 98.3 [real, reviewed] reviewer confirmed: after the fix (GetMdl(0) block is the else of the parent test, as the original's loop exit to the epilogue shows): stack slots, a dead local vector store, argument register labels and (flags&7)!=0 idiom forms
 main UpdateNoInputCount__Q23msw8CMenuPadFv near 92.0 [real, reviewed] reviewer confirmed: index step vs pointer step reach the same 0x458/0x45c addresses; same float accesses and stores
 main UpdateParam__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
+main UpdateViewSplit__Q23bcs9CWorldEnvFv near 94.6 [schedule] instruction order of the viewport stores only
 main UpdateWavePos__Q23msw16CStgGmk_Wave_ActFf near 99.3 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main UpdateWaveTimer__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main Update__Q23msw11CStgSrtMoveFf near 93.5 [real, reviewed] reviewer confirmed: extrwi. vs rlwinm. on the same bit; reviewer simulated the paired-single block symbolically, same values in every non-stack cell
@@ -428,6 +425,7 @@ main _UpdateFloor__Q23msw11CEventModelFv near 99.0 stack slots of the two FVEC3S
 main __ct__Q23bcs10CAnmTexPatFPCQ23bcs7CMdlObjQ34nw4r3g3d12ResAnmTexPatil unverified 84.1 84.1: calls Create as the original; only the res copy load is ordered after the member stores and saved registers differ; two models tried
 main __ct__Q23bcs10CStrapTaskFPFv_v near 98.7 instruction order of the member stores and the register holding the stored 0
 main __ct__Q23bcs13CAnmChrMotionFv near 92.6 same stores; the vptr store comes after the CFrameCtrl member stores in the original, before them in ours
+main __ct__Q23bcs13CSndGroupListFv near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: weak copy the original emits only because LoadGameGroups calls it out of line; the header body (m_nNum = 0) is the same work and ours inlines it at every call. Recorded by hand
 main __ct__Q23bcs7CMdlRefFPCQ23bcs7CMdlObjQ34nw4r3g3d6ResMdlUlUll near 95.4 [real, reviewed] reviewer confirmed: inline vs call: ours calls SetLink, whose body (fn_8005E0BC plus the 0x1c8/0x1cc stores) is inlined in the original; GXSetCullMode alias; stack slots and a dead slot load
 main __ct__Q23msw10CEventMoveFPQ23msw11CEventModelPQ23msw14CEventNodeBasei near 99.9 only the .sdata2 relocation of 0.0f differs (constant pool not carved for this unit)
 main __ct__Q23msw13CAtkCollisionFlllUl near 99.0 [real, reviewed] reviewer confirmed: loop counter and offset registers swapped, two li reordered, vtable symbol shown as ANON; no data difference
@@ -454,17 +452,11 @@ main __dt__Q23msw17CStgGmk_Pylon_ActFv unverified 81.2 original inlines ~CStgGmk
 main __dt__Q23msw19CStgGmk_Pinball_ActFv unverified 81.9 original inlines ~CStgGmkAct (vtables, slot 0x184 DeleteBallCollProxy, ~CStgAct); ours calls ~CStgGmkAct out of line, same effects
 main __dt__Q23msw19CStgGmk_Trolley_ActFv near 85.7 calls the DOL's weak msw::CStgGmkAct destructor (0x8014B558) instead of inlining the same body (vtable stores, DeleteBallCollProxy, ~CStgAct); an inline definition in CStgGmkAct.hpp changes HockeyF's weak function order
 main __dt__Q23msw23CStgGmk_WaterPillar_ActFv unverified 81.9 calls msw::CStgGmkAct::~CStgGmkAct where the original inlines it (DeleteBallCollProxy + CStgAct dtor); declaring that dtor inline in CStgGmkAct.hpp makes the Matching CStgGmkAct.o emit the base vtable (multiply defined at link). Same behaviour; base dtor needs a definition for a non-matching link
-main __dt__Q23msw5CGameFv near 95.1 only the inline CUnivTask destructor's second 'this' null check (cmpwi/beq/beq) before ~CTask is missing: CGame.hpp still derives CGame from bcs::CTask (TODO base); same calls and stores
+main __dt__Q23msw5CGameFv near 98.4 [real, reviewed] reviewer confirmed: original has a second redundant null check of this; same vtable stores and calls
 main __dt__Q33bcs3G2D11CLayoutBaseFv near 98.8 the original keeps a redundant beq on the same cr0 (inlined multi-archive flag check of DetachArcResourceLinkAll); dead branch, no behaviour change
 main __dt__Q33bcs3G2D11CLytManagerFv near 99.2 [schedule] register allocation/order only
-main __dt__Q23msw5CGameFv near 98.4 [real, reviewed] reviewer confirmed: original has a second redundant null check of this; same vtable stores and calls
-main __dt__Q33bcs3G2D11CLayoutBaseFv near 98.8 [real, reviewed] reviewer confirmed: same dead second beq only
 main __dt__Q43msw6CC_CMN5SLIME14CcSquadFactoryFv near 99.1 register allocation only: loop counter and offset registers r29/r30 swapped
 main __sinit_\CC_DATA_cpp near 90.4 [real, reviewed] reviewer confirmed: same constant stores to the same distinct offsets in another order and with other base registers; no data-value difference
 main __sinit_\CChrMarker_cpp near 96.1 register allocation only (same constants, same stores)
 main sort<PPQ23bcs7CScnObj,PFPCQ23bcs7CScnObjPCQ23bcs7CScnObj_i>__3stdFPPQ23bcs7CScnObjPPQ23bcs7CScnObjPFPCQ23bcs7CScnObjPCQ23bcs7CScnObj_i_v near 96.6 96.6%: register allocation in the inlined selection sort and scheduling of shuffle_range / j=last-1 only
 main sort<PPQ23bcs7CScnObj,RPFPCQ23bcs7CScnObjPCQ23bcs7CScnObj_i>__3stdFPPQ23bcs7CScnObjPPQ23bcs7CScnObjRPFPCQ23bcs7CScnObjPCQ23bcs7CScnObj_i_v near 96.6 96.6%: register allocation in the inlined selection sort and scheduling of shuffle_range / j=last-1 only
-main LoadGameGroups__Q23msw8CGameSndFRCQ33msw8CGameSnd9GAME_INFOi near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: the original is over the all-or-nothing inline budget and calls CSndGroupList ctor/Add and GetGameType out of line; ours inlines those same bodies; calls, arguments, branches and tail identical. Recorded by hand: equivalent.py has no floor exception for this ruling
-main ReloadGameSnd__Q23msw8CGameSndFv near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: the original tail-calls LoadGameSnd, ours inlines LoadGameSnd's body; nothing else differs. Recorded by hand: equivalent.py has no floor exception for this ruling
-main __ct__Q23bcs13CSndGroupListFv near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: weak copy the original emits only because LoadGameGroups calls it out of line; the header body (m_nNum = 0) is the same work and ours inlines it at every call. Recorded by hand
-main Add__Q23bcs13CSndGroupListFUls near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: weak copy the original emits only because LoadGameGroups calls it out of line; the header IsExist+Add body is the same work and ours inlines it at every call. Recorded by hand

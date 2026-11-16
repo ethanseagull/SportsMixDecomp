@@ -115,3 +115,4 @@ Equivalent game/bcs/G2D/CLytManager.cpp
 Equivalent game/msw/CEventNodeBase.cpp
 Equivalent game/msw/CSignBoard.cpp
 Equivalent game/msw/CCockpitResultPartyTeam.cpp
+Equivalent game/bcs/CWorldEnv.cpp

@@ -137,7 +137,7 @@ TourF _Init__Q23msw19CTournamentRouteManFv near 99.9 instruction order only
 TourF _MakeRouteSelect__Q23msw15CTournamentStepFl near 96.5 the route mask's sign bit taken with extsb/srawi instead of extrwi/neg (same value)
 TourF _MakeRouteSelect__Q23msw15CTournamentStepFll near 95.1 the route masks' sign bits taken with extsb/srawi instead of extrwi/neg (same values)
 TourF _OffsetCupUpChar__Q23msw15CTournamentStepFlRCQ23bcs5FVEC3 near 96.9 stack slots of the two vectors swapped and float pool offsets
-TourF _OpSysCallCreateTeamMission__Q23msw9CTmScriptFv near 89.3 local array 4 bytes higher on the stack, repeated nNum>0 test folded, registers
+TourF _OpSysCallCreateTeamMission__Q23msw9CTmScriptFv unverified 89.5 random index choice: original tests nNum>0 twice and takes index 0 when nNum<=0, ours tests nNum<1 with no index-0 path; not proven equal
 TourF _OpSysCallEraseTeam__Q23msw9CTmScriptFv near 98.8 register allocation/instruction order only
 TourF _OpSysCallGetLoseTeam__Q23msw9CTmScriptFv near 99.0 register allocation/instruction order only
 TourF _OpSysCallGetPointMatch__Q23msw9CTmScriptFv near 99.2 register allocation/instruction order only
@@ -155,10 +155,10 @@ TourF _OpSysCallSetMapObjPoint__Q23msw9CTmScriptFv near 91.8 register allocation
 TourF _OpSysCallSetMapObj__Q23msw9CTmScriptFv near 94.7 register allocation/instruction order only
 TourF _OpSysCallSetMatchMake__Q23msw9CTmScriptFv near 99.7 register allocation/instruction order only
 TourF _OpSysCallSetPanelItem__Q23msw9CTmScriptFv near 98.7 register allocation/instruction order only
-TourF _OpSysCallSetPointOffset__Q23msw9CTmScriptFv near 95.9 original has an extra frsp on an already-single y/100; no effect
-TourF _OpSysCallSetRouteWrite__Q23msw9CTmScriptFv near 94.5 original re-reads the route flag byte before the store; same value
+TourF _OpSysCallSetPointOffset__Q23msw9CTmScriptFv near 95.9 [real, reviewed] reviewer: extra frsp on an fsubs result that is already single (no effect), commuted fadds, pool-load order, stack slots and registers; no data value differs
+TourF _OpSysCallSetRouteWrite__Q23msw9CTmScriptFv near 94.5 [real, reviewed] reviewer: the original reloads lbz 0x3 with no store in between (redundant reload); register choice and order otherwise
 TourF _OpSysCallSetRuleItem__Q23msw9CTmScriptFv near 99.2 register allocation/instruction order only
-TourF _OpSysCallStockRelayPoint__Q23msw9CTmScriptFv near 91.0 0xFF fill and copy loop unrolled differently; same stores in same order
+TourF _OpSysCallStockRelayPoint__Q23msw9CTmScriptFv near 91.0 [real, reviewed] reviewer: same 0xFF fill of bytes 0x68..0x87 (unrolled bdnz loop vs 32 straight stores) and the same copy loop; registers only otherwise
 TourF _OpSysCallUnlockOpen__Q23msw9CTmScriptFv near 97.2 register allocation/instruction order only
 TourF _RemoveTimer__Q23msw19CTournamentRouteManFll near 96.9 register choice only
 TourF _SetClear__Q23msw15CTournamentStepFv unverified 86.3 index of the first-time flag computed in another order; not checked further

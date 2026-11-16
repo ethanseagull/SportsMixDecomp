@@ -79,11 +79,11 @@ BasketF GetJustShotTimingMin___Q23msw14CBallManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FV
 BasketF GetMemBer__Q23msw17CComManBasketGameFlPPCQ23msw8CChrCorellPCQ23msw8CChrCore near 99.5 register allocation only
 BasketF GetMemberNoBadCondition__Q23msw17CComManBasketGameFlPPCQ23msw8CChrCorellPCQ23msw8CChrCore near 99.6 register allocation only
 BasketF GetMoveTgtPosRand__Q23msw19CNpcGhostBasketBaseCFv near 94.2 94.2%: local int table reached through the float-pool base instead of its own lis; registers.
-BasketF GetPanelParam_Cycle__Q23msw14CStageBasket10CFl near 99.0 99.0%: fcmpu operands swapped (equality), bss table relocation name
-BasketF GetPanelParam_Interval__Q23msw14CStageBasket10CFl near 99.0 99.0%: fcmpu operands swapped (equality), bss table relocation name
-BasketF GetPanelParam_LifeRand__Q23msw14CStageBasket10CFl near 99.0 99.0%: fcmpu operands swapped (equality), bss table relocation name
-BasketF GetPanelParam_Life__Q23msw14CStageBasket10CFl near 99.0 99.0%: fcmpu operands swapped (equality), bss table relocation name
-BasketF GetPanelParam_Size__Q23msw14CStageBasket10CFl near 99.0 99.0%: fcmpu operands swapped (equality), bss table relocation name
+BasketF GetPanelParam_Cycle__Q23msw14CStageBasket10CFl near 99.0 [real, reviewed] reviewer: Only ANON vs named table symbol (no data-differs flag) and fcmpu operand swap on an equality compare; same behaviour.
+BasketF GetPanelParam_Interval__Q23msw14CStageBasket10CFl near 99.0 [real, reviewed] reviewer: Only ANON vs named table symbol (no data-differs flag) and fcmpu operand swap on an equality compare; same behaviour.
+BasketF GetPanelParam_LifeRand__Q23msw14CStageBasket10CFl near 99.0 [real, reviewed] reviewer: Only ANON vs named table symbol (no data-differs flag) and fcmpu operand swap on an equality compare; same behaviour.
+BasketF GetPanelParam_Life__Q23msw14CStageBasket10CFl near 99.0 [real, reviewed] reviewer: Only ANON vs named table symbol (no data-differs flag) and fcmpu operand swap on an equality compare; same behaviour.
+BasketF GetPanelParam_Size__Q23msw14CStageBasket10CFl near 99.0 [real, reviewed] reviewer: Only ANON vs named table symbol (no data-differs flag) and fcmpu operand swap on an equality compare; same behaviour.
 BasketF GetParam_FlashColor__Q23msw14CStageBasket06CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2 bytes); load order of the four params and register choice differ, 63.3%. 9 attempts over two models, no gain.
 BasketF GetParam_FlashColor__Q23msw14CStageBasket15CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
 BasketF GetParam_FlashColor__Q23msw14CStageBasket16CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.

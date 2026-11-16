@@ -72,8 +72,8 @@ TourF PushRoute__Q23msw10CRouteBaseFRQ33msw10CRouteBase11_PUSH_PARAMUlff near 99
 TourF PushRoute__Q23msw10CRouteMoveFPQ23msw10CRouteBaseUlff unverified 93.4 one load only in the original in the open-route branch
 TourF PushRoute__Q23msw11CRouteDokanFRQ33msw10CRouteBase11_PUSH_PARAMUlff unverified 97.8 calls VEC3::operator+= and the ResFile copy constructor in the original, bcs::FVEC3Add and ResFile(ResFileData*) in ours; stack slots differ
 TourF PushRoute__Q23msw14CRouteBigGunInFRQ33msw10CRouteBase11_PUSH_PARAMUlff near 99.9 register numbering inside the inlined FVEC3Add paired-single block only (identical instructions and order otherwise); regs search no gain
-TourF PushRoute__Q23msw14CRouteShipMoveFRQ33msw10CRouteBase11_PUSH_PARAMUlff near 97.8 the follow-up event blocks read nNext once into a register; the original re-reads the same unchanged field for the call argument
-TourF PushRoute__Q23msw14CRouteShipRideFRQ33msw10CRouteBase11_PUSH_PARAMUlff near 98.7 nId + 0x200 computed into r0 at the store (one extra mr) and paired-single register choice; same values
+TourF PushRoute__Q23msw14CRouteShipMoveFRQ33msw10CRouteBase11_PUSH_PARAMUlff near 97.8 [real, reviewed] reviewer: register choice, order and a redundant reload of 0x20 with no store or call between; swapped 0x38/0x40 stores store the same values
+TourF PushRoute__Q23msw14CRouteShipRideFRQ33msw10CRouteBase11_PUSH_PARAMUlff near 98.7 [real, reviewed] reviewer: paired-single registers, nId+0x200 added at another point (same stored value) and one extra mr that does no work
 TourF PushRoute__Q23msw15CRouteBigGunOutFRQ33msw10CRouteBase11_PUSH_PARAMUlff near 99.6 register allocation only (identical after renumbering); regs search no gain
 TourF PushRoute__Q23msw16CRouteJumpPointsFRQ33msw10CRouteBase11_PUSH_PARAMUlff unverified 84.5 7436-byte route builder written for behaviour from the m2c draft: the trim and direction loops are shared helpers in ours, so frame, loop shapes and call order differ
 TourF RandomSelectLeaderChar__Q23msw14TournamentWorkFli near 96.8 the team point i+1 is truncated to a byte after the add instead of before (same stored byte)

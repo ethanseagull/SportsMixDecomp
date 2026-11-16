@@ -153,7 +153,7 @@ main GetResAnmName__Q23bcs15CAnmBlendMotionCFl near 98.8 add operand order and r
 main GetResMotExtInfo__Q23bcs10CAnmMotionCFl near 98.0 add operand order and register choice only
 main GetResMotExtInfo__Q23bcs15CAnmBlendMotionCFl near 98.0 add operand order and register choice only
 main GetTeamPadBits__Q23msw5CGameFl unverified 60.1 60.1%: the 0..3 range test becomes one unsigned compare in ours (two signed compares in the original); same results
-main GetTextLength__Q33msw4menu8CMessageFss near 94.3 one extra extsh of an already sign-extended short where the zero and call paths join, and one lwz moved; same value
+main GetTextLength__Q33msw4menu8CMessageFss near 94.3 [real, reviewed] reviewer confirmed: extra extsh of a freshly loaded 0 is a no-op; one lwz reordered
 main GetVector3__Q33msw2vm9CVMScriptCFi near 98.7 register choice only (f0/f2 swapped)
 main GetViewTargetTeam__Q23msw5CGameFl near 87.7 game-mode switch (cases 1-2) lowered as two compares instead of the original's binary tree
 main GetVirtualPos__Q23msw19CStgGmk_Trolley_ActCFv near 96.5 instruction order only: the add of the rail node's translation into pos loads its operands in a different order; same slots and result

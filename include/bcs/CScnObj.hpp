@@ -249,6 +249,9 @@ namespace bcs {
             long GetDrawPriorityXlu() const { return m_nDrawPriorityXlu; }
             // (name guessed) The handle GetScnObj takes.
             unsigned long GetHandle() const { return m_nHandle; }
+            // (added for HockeyF game/hockey/CcNinjaCloneBody.cpp) The first
+            // object of the joint list (SetJointObj), null for none.
+            CScnObj *GetJointObj() const { return m_pJointObj; }
             // (name guessed) The mask at 0xEE that CScnObjGather::Add tests
             // against its cull mask; VolleyF's CBallTargetMarker sets it per
             // view in UpdateViewFlag_.
@@ -325,6 +328,15 @@ namespace bcs {
                 SetRotX(fRotX);
                 SetRotY(fRotY);
                 SetRotZ(fRotZ);
+            }
+
+            // (name guessed) msw::CNpcBehemothBoss::SetupLookAtParam_ (BossF)
+            // stores the three through one load of the model pointer.
+            void SetTrans(float fX, float fY, float fZ)
+            {
+                m_vTrans.x = fX;
+                m_vTrans.y = fY;
+                m_vTrans.z = fZ;
             }
 
             void SetRot(float fRotX, float fRotY, float fRotZ)

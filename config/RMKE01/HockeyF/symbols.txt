@@ -1987,7 +1987,7 @@ DtorState__Q23bcs67CStateTemplate<Q23bcs43CFsm<Q33msw11CC14_HOCKEY16CcNinjaClone
 CtorState__Q23bcs53CStateTemplate<Q33msw11CC14_HOCKEY16CcNinjaCloneBall>Fv = .text:0x00068270; // type:function size:0x48 scope:global
 LoopState__Q23bcs53CStateTemplate<Q33msw11CC14_HOCKEY16CcNinjaCloneBall>Fv = .text:0x000682B8; // type:function size:0x48 scope:global
 DtorState__Q23bcs53CStateTemplate<Q33msw11CC14_HOCKEY16CcNinjaCloneBall>Fv = .text:0x00068300; // type:function size:0x48 scope:global
-fn_7_68348 = .text:0x00068348; // type:function size:0x6C
+__sinit_\CcNinjaCloneBody_cpp = .text:0x00068348; // type:function size:0x6C scope:local
 @52@__dt__Q33msw11CC14_HOCKEY16CcNinjaCloneBallFv = .text:0x000683B4; // type:function size:0x8 scope:global
 @148@__dt__Q33msw11CC14_HOCKEY16CcNinjaCloneBodyFv = .text:0x000683BC; // type:function size:0x8 scope:global
 __ct__Q23msw19CChrCoreHockeyPeachFv = .text:0x000683C4; // type:function size:0x3C scope:global

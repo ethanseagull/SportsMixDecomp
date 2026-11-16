@@ -29,7 +29,7 @@ TourF GetCameraDirect__Q23msw15CRouteBigGunOutFRQ23bcs5FVEC3Rflf near 95.7 inlin
 TourF GetLoseTeam__Q23msw14TournamentWorkFl near 99.4 instruction order only
 TourF GetMoveEventId__Q23msw10CRouteMoveCFll near 95.5 register choice and operand order of the adds only
 TourF GetOffsetFrame__Q23msw10CRouteBaseFffff unverified 93.8 one more saved register and a larger frame (0x190 vs 0x160): the vector temporaries of the distance helper are laid out differently; logic follows the asm
-TourF GetPointFastRoute__Q23msw14TournamentWorkFUcUcUcPsPsPQ33msw14TournamentWork11_LINK_POINTPQ33msw14TournamentWork11_MOVE_POINTll near 87.7 registers; first store is sthux instead of add+sth (same address); 0x7fff loaded twice instead of once
+TourF GetPointFastRoute__Q23msw14TournamentWorkFUcUcUcPsPsPQ33msw14TournamentWork11_LINK_POINTPQ33msw14TournamentWork11_MOVE_POINTll near 87.7 [real, reviewed] reviewer: register renumbering; sthux vs add+sth to the same address; 0x7fff loaded once vs twice (r0 still holds it); offsets, widths and branches the same
 TourF GetPointOffsetTeam__Q23msw14TournamentDataFll near 99.9 the point-offset table sits at another offset of the float pool; code otherwise identical
 TourF GetResultPos__Q23msw14CRouteDataMoveFRQ23bcs5FVEC3fi near 95.9 instruction order and register choice only
 TourF GetResultPos__Q23msw17CRoutePhysOffsetYFRQ23bcs5FVEC3fi unverified 86.6 paired-single arc position: the original interleaves the two scalings, ours uses separate helper calls (frame and temporaries differ)
@@ -39,8 +39,8 @@ TourF GetSelectDir2d__Q23msw10CRouteBaseFPQ23msw11CEventModell unverified 90.9 s
 TourF GetSelectDir__Q23msw16CRouteJumpPointsFfi near 99.5 instruction order only
 TourF GetTeamMatchDir__3mswFll near 99.3 float pool offsets and register order only
 TourF GetUsedChar__Q23msw14TournamentWorkFli near 99.7 register allocation only (autopilot regs: no gain in 6 tries)
-TourF InitMoveRouteRot__Q23msw14CTournamentManFl near 99.0 the unit's -1.0f literal sits after 1e-5 in .rodata (cause not found), so some float loads use offsets 4-8 bytes away; same values. Otherwise register and order only
-TourF InitMoveRoute__Q23msw14CTournamentManFl near 98.2 the unit's -1.0f literal sits after 1e-5 in .rodata (cause not found), so some float loads use offsets 4-8 bytes away; same values. Otherwise register and order only
+TourF InitMoveRouteRot__Q23msw14CTournamentManFl near 99.0 [real, reviewed] reviewer: float pool at other offsets (same values), stack slots 0x8/0x14 swapped, registers
+TourF InitMoveRoute__Q23msw14CTournamentManFl near 98.2 [real, reviewed] reviewer: float/double pool at other offsets (same values), two stack temporaries swapped, registers
 TourF Initialize__Q23msw27CTournamentRouteMan_Stage32Fv near 99.7 the two argument registers of the first _GetResAnm call are set up in the other order; regs search no gain
 TourF LeapDataSceneCamera__Q23msw14CTournamentManFlsUl near 99.2 register choice and instruction order only
 TourF LoopStateEventPlay__Q23msw15CTournamentStepFv near 99.6 register choice and instruction order; the route mask's sign bit taken with extsb/srawi instead of extrwi/neg (same value); float pool offsets shifted by the unit's .rodata order (same constants)
@@ -82,7 +82,7 @@ TourF RouteSelectSetup__Q23msw15CTournamentStepFUcPCUclll near 93.1 float pool o
 TourF RouteSelect__Q23msw15CTournamentStepFRl near 96.4 registers, literal offsets, fade mode shifted at use instead of preshifted (0x300/0x700 vs 3/7<<8), one frsp
 TourF SelectFastRouteBasic__Q23msw14TournamentWorkFUcPUsllPQ33msw14TournamentWork11_MOVE_POINTf near 98.4 register choice and instruction order only
 TourF SendEvent__Q23msw27CCockpitTournamentTelopLogoFlPv near 99.6 99.6%, schedule only: r29/r31 swapped between the text-pane index and the text pointer
-TourF SetCameraActive__Q23msw14CTournamentManFs near 99.5 one FVEC3 temporary in a different stack slot (0x18 vs 0x24)
+TourF SetCameraActive__Q23msw14CTournamentManFs near 99.5 [real, reviewed] reviewer: FVEC3 temporaries swapped between stack slots 0x18/0x24 at every use, two pool loads at other offsets (same values), registers
 TourF SetCameraPoint__Q23msw14CTournamentManFll near 90.9 the two int-to-float conversions run in the other order
 TourF SetCameraRateFrame__Q23msw14CTournamentManFffff near 99.0 register choice and instruction order only
 TourF SetCameraRate__Q23msw14CTournamentManFfff near 98.9 register choice and instruction order only
@@ -90,15 +90,15 @@ TourF SetEffectPoint__Q23msw14CTournamentManFllllUlUl near 88.7 register choice 
 TourF SetLeaderNoUnlock__Q23msw14TournamentWorkFllUl unverified 89.5 a call to CUnlockFlags::GetCharType placed differently; not explained
 TourF SetLosePos__3mswFll near 99.8 if/else branches in the opposite order: same result
 TourF SetMatchMake__Q23msw15CTournamentStepFlll near 94.0 the original re-reads the match's two side bytes for each compare, ours keeps them in registers
-TourF SetMoveLine__Q23msw14CTournamentManFllffff near 98.8 the unit's -1.0f literal sits after 1e-5 in .rodata (cause not found), so some float loads use offsets 4-8 bytes away; same values. Otherwise register and order only
-TourF SetMoveRoute__Q23msw14CTournamentManFliPUslfif near 96.6 the unit's -1.0f literal sits after 1e-5 in .rodata (cause not found), so some float loads use offsets 4-8 bytes away; same values. Otherwise register and order only
+TourF SetMoveLine__Q23msw14CTournamentManFllffff near 98.8 [real, reviewed] reviewer: float pool at other offsets (same values), registers and load order; psq/ps_add work, fields and calls identical
+TourF SetMoveRoute__Q23msw14CTournamentManFliPUslfif near 96.6 [real, reviewed] reviewer: float/double pool at other offsets (same values), registers, two field loads placed after the getter calls instead of before with no store between
 TourF SetNode__Q23msw14CRouteDataMoveFRCQ34nw4r3g3d7ResFilePCcl unverified 95.7 the node-count check of the animation dictionary compiles with one branch and a zero more than the original
 TourF SetRouteWrite__Q23msw19CTournamentRouteManFli near 91.0 register allocation and instruction order only; step masks are bytes as in the original
 TourF SetWinRoute__Q23msw19CTournamentRouteManFPUslii near 88.1 instruction order and register choice; ours recomputes the flag byte index (extrwi) in the clear branch, same value
 TourF Set__Q23msw27CCockpitTournamentTelopLogoFv near 99.1 99.1%, schedule only: saved registers for the pane-link pointer, child count and parent pane in the reparenting loop are assigned differently; same instructions otherwise
 TourF Set__Q23msw31CCockpitTournamentMenuWinTrophyFv near 98.1 98.1%. Instruction for instruction the same as the original once the saved registers r24-r31 are masked: only which saved register holds which value differs (original: part r31, CLytCtrl/list r30, this r29; ours: list r31, this r30, part and CLytCtrl r26). No effect on behaviour.
 TourF SetupChipModel__Q23msw19CTournamentRouteManFlllRCQ23bcs5FVEC3lllill near 91.0 instruction order and register choice of the grid position conversion
-TourF SetupChrModelSub__Q23msw14CTournamentManFlli near 93.5 loop index strength-reduced instead of added each pass; same addresses
+TourF SetupChrModelSub__Q23msw14CTournamentManFlli near 93.5 [real, reviewed] reviewer: loop index strength-reduced differently, both compute 2*n+j+0xf; count, compare and branches the same
 TourF SetupInitial__Q23msw9CTmScriptFPQ23msw16CTmScriptHandler near 97.8 register allocation/instruction order only
 TourF SetupMatch__Q23msw9CTmScriptFlll near 99.9 register allocation/instruction order only
 TourF SetupMove__Q23msw10CRouteMoveFfi unverified 90.3 two instructions more in ours in the action reset loop

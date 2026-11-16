@@ -1744,7 +1744,11 @@ namespace msw {
             // 0x192 (name guessed): a third model node for effects (BasketF's
             // tumble damage attaches its effect 0x584 there).
             unsigned short m_nEffNodeSub2;
-            unsigned char m_Unk194[0x1A0 - 0x194];
+            // 0x194, 0x196 (names guessed; VolleyF game/volley/unit_3B628.cpp
+            // attaches the endure gauge effects 0x649 and 0x64A there).
+            unsigned short m_nEffNodeEndure0;
+            unsigned short m_nEffNodeEndure1;
+            unsigned char m_Unk198[0x1A0 - 0x198];
             // 0x1A0-0x1AC (names guessed): a change of body size; the scale
             // it starts from, the one it goes to (below 1 when shrinking),
             // how far it has got (0 when none runs) and the normal scale

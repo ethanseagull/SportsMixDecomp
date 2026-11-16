@@ -5,8 +5,8 @@ main AddTeamCoin___Q23msw5CGameFll unverified 76.0 76%: register allocation (our
 main AddTeamGainCoin__Q23msw5CGameFll unverified 74.7 74.7%: the original recomputes the array address for the store
 main AddTeamPeriodScore__Q23msw5CGameFlll unverified 64.5 64.5%: the period row is addressed from row+0x20 in ours; same loads and stores
 main AnimPlay__Q23msw11CChrOptTaskFliff near 98.9 register choice only: the abs() of a negative motion id uses r6/r0 in the original, r0/r4 in ours
-main AnimPlay__Q23msw11CEventModelFPCQ33msw11CEventModel13MOT_NAME_DATAlfl near 97.1 register choice: the original reuses r4 for the sequence flag after storing pData
-main AnimPlay__Q23msw11CEventModelFPCQ33msw11CEventModel8MOT_DATAlfl near 98.0 register choice: the original reuses r4 for the sequence flag after storing pData; same loads, stores and calls
+main AnimPlay__Q23msw11CEventModelFPCQ33msw11CEventModel13MOT_NAME_DATAlfl near 97.1 [real, reviewed] reviewer confirmed: original reloads pData (0x50) after storing it, only stores to other offsets between
+main AnimPlay__Q23msw11CEventModelFPCQ33msw11CEventModel8MOT_DATAlfl near 98.0 [real, reviewed] reviewer confirmed: original reloads pData (0x4c) after storing it, no call or store to it between
 main AnimPlay__Q23msw13CChrOptMdlObjFliff near 98.6 register choice only: the abs() of a negative motion id uses r6/r0 in the original, r0/r4 in ours
 main AnimPlay__Q23msw13CEvDemoMdlChrFlUlffi near 99.2 register choice in the inlined abs() of the motion-table index only (as CEventChrCore::AnimPlay)
 main AnimPlay__Q23msw13CEvDemoMdlObjFlUlffi near 99.2 schedule and register choice only
@@ -398,8 +398,8 @@ main _CalcFloor__Q23msw10CSceneCalcFRQ23bcs5FVEC3RQ23bcs5FVEC3 near 97.8 97.8%: 
 main _CalcRotOffset__Q23bcs14CCameraAnmCalcFRQ23bcs10CCameraAnmRQ23bcs5FVEC3RQ23bcs5FVEC3Rf near 98.3 f0/f1 operand choice inside the shared FVEC3Add paired-single helper only
 main _GetFlipResult__Q23msw14CEventNodeBaseFRQ34nw4r3g3d12ChrAnmResultRCQ23bcs5FVEC3l unverified 73.0 73.0%: ours keeps the three matrix-row addresses (result+0x1C/0x2C/0x3C) in saved r27-r29 across PSVECCrossProduct/PSVECNormalize (0x20 frame, _savegpr_27); original recomputes each with addi from r30. Reviewer found the same loads, stores, calls, constants and branches, but it is below the 85% floor
 main _GetResAnimNo__Q23msw11CEventModelCFl near 96.8 register choice/order in the inlined abs() only
-main _NextMotionName__Q23msw11CEventModelFsf near 94.7 an extra extsh of the short nStep parameter (a no-op on a value passed as short) and register choice
-main _NextMotion__Q23msw11CEventModelFsf near 93.6 an extra extsh of the short nStep parameter (a no-op on a value passed as short) and register choice
+main _NextMotionName__Q23msw11CEventModelFsf near 94.7 [real, reviewed] reviewer confirmed: same extra extsh feeding add then sth only
+main _NextMotion__Q23msw11CEventModelFsf near 93.6 [real, reviewed] reviewer confirmed: original's extra extsh of nStep only feeds add then sth (low 16 bits); sum sign-extended in both
 main _OnMotTrg__Q23msw13CEvDemoMdlChrFPCQ33bcs14CAnmObjMotBase7MOT_TRG unverified 78.1 ours inlines _PlayNodeSe (case 0x12) where the original calls it; the rest is the same code. Restating _PlayNodeSe, and writing the foot-sound blocks out instead of through the helper, did not stop the inlining
 main _PlayResult__Q23msw12CVictoryDemoFPCcl near 99.2 one addi rX,rY,0 where ours emits mr, plus register choice
 main _PlayResult__Q23msw17CVictoryDemoPartyFPCcl near 98.7 one addi rX,rY,0 where ours emits mr, plus register choice

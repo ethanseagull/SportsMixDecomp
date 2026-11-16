@@ -67,6 +67,11 @@ namespace bcs {
                 // into the archive list once CLoadMan has it: its index
                 // there, or -1 when it is not loaded.
                 long GetResourceFromDvdMan(const char *pPath, unsigned long nId);
+                // (the DOL's fn_80040C88; name guessed; added for DOL
+                // game/msw/CLytCtrl.cpp) Takes archive pData (nSize bytes,
+                // owned by CLoadMan) into the list under pPath, once: its
+                // index there, or -1 when pData is null or nSize is 0.
+                long AttachResource(const char *pPath, void *pData, unsigned long nSize);
                 // (added for MenuF game/menu/CSelectMenu.cpp) Loading an
                 // archive in the background (0 when it started, -1 without
                 // a file, -2 when CLoadMan refused), and its state: negative

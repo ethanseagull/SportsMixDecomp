@@ -47,7 +47,7 @@ BasketF CtorStateAppear__Q23msw16CNpcStringBasketFv near 99.4 99.4: register num
 BasketF CtorStateAttach__Q23msw16CBallBasketFruitFv near 99.4 float register choice for the tilt-centre and 0/1 axis constants; same loads, operations and stores
 BasketF CtorStateBlockCut__Q23msw14CChrCoreBasketFv near 98.0 98.0: instruction schedule only (autopilot regs no gain)
 BasketF CtorStateDunk__Q23msw14CChrCoreBasketFv near 99.7 register choice / instruction order only (inlined Fsmq head/tail loads)
-BasketF CtorStateJumpCatch__Q23msw14CChrCoreBasketFv near 91.5 register choice and order; mr. vs cmpwi on IsAnmFlipPlay's result; fnmsubs multiplies the same two values with operands swapped (commutative)
+BasketF CtorStateJumpCatch__Q23msw14CChrCoreBasketFv near 91.8 [real, reviewed] reviewer: cmpwi vs mr., schedule, fnmsubs multiplicand swap (commutative); same calls and constants.
 BasketF CtorStateJumpUpper__Q23msw19CChrCoreBasketSlimeFv near 95.5 95.5%: second float of the const param struct read through a copy of the base register; same values/stores
 BasketF CtorStateNeutral__Q23msw14CChrCoreBasketFv near 99.7 99.7: stores to m_UnkEC and m_nStatusFlag in the other order, register choice
 BasketF CtorStateReboundDunk__Q23msw14CChrCoreBasketFv near 99.9 register choice / instruction order only (inlined Fsmq head/tail loads)
@@ -105,7 +105,7 @@ BasketF LoopStateAlleyoop__Q23msw14CChrCoreBasketFv near 99.6 register choice / 
 BasketF LoopStateAppear__Q33msw11CC03_BASKET19CcDaisyFlowerGardenFv near 98.5 redundant cmpwi/ble zero-trip guard before the ring loop, &hitPos via addi instead of mr, float register numbering and ps_add operand order (reviewer confirmed)
 BasketF LoopStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateBlockWorkLose__Q23msw14CChrCoreBasketFv near 99.9 99.9: register choice only
-BasketF LoopStateCatch__Q23msw14CChrCoreBasketFv near 96.3 register choice and instruction order; the jump-flag test is a double cntlzw boolean in the original vs rlwinm. in ours (equivalent branch form); mr. vs cmpwi on IsAnmFlipPlay's result
+BasketF LoopStateCatch__Q23msw14CChrCoreBasketFv near 96.3 [real, reviewed] reviewer: IsJump test: original double cntlzw/srwi bool then beq, ours rlwinm. beq, same condition; rest registers only.
 BasketF LoopStateCatch__Q23msw19CNpcGhostBasketBaseFv near 99.6 one dead branch.
 BasketF LoopStateDamage__Q23msw14CChrCoreBasketFv near 100.0 only fnmsubs takes its two multiply operands in the other order (same product); everything else identical after the FsmqNext fix
 BasketF LoopStateDash__Q23msw14CChrCoreBasketFv near 98.9 97.7: FsmqGetNextState head/tail reload, push load order, li 0/ori 3 flag pattern
@@ -119,7 +119,7 @@ BasketF LoopStateGameSetup__Q23msw27CGameBasketHungryBossPackunFv near 98.2 regi
 BasketF LoopStateGetLooseBall__Q23msw19CNpcGhostBasketBaseFv near 99.4 original compares MoveRun's unused result.
 BasketF LoopStateIdle__Q23msw19CNpcGhostBasketBaseFv near 99.3 register allocation only (diff.py: registers); was 100% before the 2026-11-11 merge of main's CChrCore/CNpcBase header changes
 BasketF LoopStateItemShoot__Q23msw14CChrCoreBasketFv near 96.2 96.2: original frame 0x10 larger (stack slots), status flag reloaded once more, mr. vs cmpwi on the +-4 motion select
-BasketF LoopStateJumpCatch__Q23msw14CChrCoreBasketFv near 90.4 register choice (pool base r31 vs r28) and order; mr. vs cmpwi on IsAnmFlipPlay's result
+BasketF LoopStateJumpCatch__Q23msw14CChrCoreBasketFv near 90.6 [real, reviewed] reviewer: Register renumbering, schedule, base reg kept, cmpwi vs mr. on same value; same calls, offsets, constants.
 BasketF LoopStateLayUp__Q23msw14CChrCoreBasketFv near 97.8 97.8: cntlzw 0/1 conversion of & 4 (same truth), stack slots, registers
 BasketF LoopStateLoop__Q33msw11CC15_BASKET19CcSiromaMagicCircleFv near 99.2 register numbering / order of independent loads only
 BasketF LoopStateMove__Q23msw16CNpcStringBasketFv near 99.9 99.9: register numbering in the 0.0f == y compare

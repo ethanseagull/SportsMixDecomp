@@ -2,7 +2,7 @@
 BasketF ActInterrupCommonThrowItem___Q23msw17CComDrvBasketGameFv near 97.5 [real, reviewed] reviewer: Stack slots/regs, jumptable symbol, bitmask test = same case set {0x18,0x1d,0x37}, redundant null guard before loop; same behaviour.
 BasketF ActInterrupGimmick___Q23msw17CComDrvBasketGameFv near 99.4 registers plus stack slots of the XZ-distance helper temporaries
 BasketF ActInterrupLooseBall___Q23msw17CComDrvBasketGameFv near 99.2 registers plus stack slots of the XZ-distance helper temporaries
-BasketF ActInterrup__Q23msw19CNpcGhostBasketBaseFv near 94.9 94.9%: dead FsmqWrap(-1) compare code in two pushes, doubled cntlzw on two flag tests, load order.
+BasketF ActInterrup__Q23msw19CNpcGhostBasketBaseFv near 94.8 [real, reviewed] reviewer: dead li -1 vs folded 1 (same stored index), double-cntlzw vs rlwinm., load order, branch inversion; calls/offsets same
 BasketF ActInterruptDefense___Q23msw17CComDrvBasketGameFv near 97.7 [real, reviewed] reviewer: Equivalent branch layout of 0x3E exit (all return), regs, m_nMyTeam load order only; same calls and constants.
 BasketF ActInterruptItemShootCheck___Q23msw17CComDrvBasketGameFv near 99.8 register numbering / scheduling only
 BasketF ActInterruptOffense___Q23msw17CComDrvBasketGameFv near 97.9 [real, reviewed] reviewer: Stage 7/10 dispatch via cr1 vs if/else-if is same logic; regs, stack, commutative fmuls, load order only.
@@ -78,7 +78,7 @@ BasketF GetJustShotTimingMin___Q23msw13CChrManBasketCFPCQ23msw14CChrCoreBasket n
 BasketF GetJustShotTimingMin___Q23msw14CBallManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3PCQ23msw5CBall near 96.5 [real, reviewed] reviewer: stack slots, registers, head/tail load order, equivalent clamp branch form; early returns both 0; same constants
 BasketF GetMemBer__Q23msw17CComManBasketGameFlPPCQ23msw8CChrCorellPCQ23msw8CChrCore near 99.5 register allocation only
 BasketF GetMemberNoBadCondition__Q23msw17CComManBasketGameFlPPCQ23msw8CChrCorellPCQ23msw8CChrCore near 99.6 register allocation only
-BasketF GetMoveTgtPosRand__Q23msw19CNpcGhostBasketBaseCFv near 94.2 94.2%: local int table reached through the float-pool base instead of its own lis; registers.
+BasketF GetMoveTgtPosRand__Q23msw19CNpcGhostBasketBaseCFv near 94.2 [real, reviewed] reviewer: int table copied from same .rodata+0x88 via kept base reg; rest registers/operand order
 BasketF GetPanelParam_Cycle__Q23msw14CStageBasket10CFl near 99.0 [real, reviewed] reviewer: Only ANON vs named table symbol (no data-differs flag) and fcmpu operand swap on an equality compare; same behaviour.
 BasketF GetPanelParam_Interval__Q23msw14CStageBasket10CFl near 99.0 [real, reviewed] reviewer: Only ANON vs named table symbol (no data-differs flag) and fcmpu operand swap on an equality compare; same behaviour.
 BasketF GetPanelParam_LifeRand__Q23msw14CStageBasket10CFl near 99.0 [real, reviewed] reviewer: Only ANON vs named table symbol (no data-differs flag) and fcmpu operand swap on an equality compare; same behaviour.
@@ -106,7 +106,7 @@ BasketF LoopStateAppear__Q33msw11CC03_BASKET19CcDaisyFlowerGardenFv near 98.5 re
 BasketF LoopStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateBlockWorkLose__Q23msw14CChrCoreBasketFv near 99.9 99.9: register choice only
 BasketF LoopStateCatch__Q23msw14CChrCoreBasketFv near 96.3 [real, reviewed] reviewer: IsJump test: original double cntlzw/srwi bool then beq, ours rlwinm. beq, same condition; rest registers only.
-BasketF LoopStateCatch__Q23msw19CNpcGhostBasketBaseFv near 99.6 one dead branch.
+BasketF LoopStateCatch__Q23msw19CNpcGhostBasketBaseFv near 99.4 [real, reviewed] reviewer: one redundant unconditional b, nothing else
 BasketF LoopStateDamage__Q23msw14CChrCoreBasketFv near 100.0 only fnmsubs takes its two multiply operands in the other order (same product); everything else identical after the FsmqNext fix
 BasketF LoopStateDash__Q23msw14CChrCoreBasketFv near 98.9 [real, reviewed] reviewer: load order of 0x18/0x1c/0x20 and li 0/ori 3 vs li 3 only
 BasketF LoopStateDisappear__Q33msw11CC15_BASKET19CcSiromaMagicCircleFv near 99.9 register numbering / order of independent loads only
@@ -116,7 +116,7 @@ BasketF LoopStateFall__Q23msw14CChrCoreBasketFv near 99.9 99.9: instruction orde
 BasketF LoopStateFire__Q33msw11CC15_BASKET19CcSiromaMagicCircleFv near 99.9 register numbering / order of independent loads only
 BasketF LoopStateGameSet__Q23msw27CGameBasketHungryBossPackunFv near 99.0 register allocation only: in the inlined bcs::CFsmQueue::FsmqPush the old tail and the wrapped next index swap registers; same instructions and memory accesses
 BasketF LoopStateGameSetup__Q23msw27CGameBasketHungryBossPackunFv near 98.2 register allocation only: in the inlined bcs::CFsmQueue::FsmqNext the head+1 value and the queue size swap registers; same instructions and memory accesses
-BasketF LoopStateGetLooseBall__Q23msw19CNpcGhostBasketBaseFv near 99.4 original compares MoveRun's unused result.
+BasketF LoopStateGetLooseBall__Q23msw19CNpcGhostBasketBaseFv near 99.1 [real, reviewed] reviewer: only a dead cmpwi of MoveRun result, no branch uses it
 BasketF LoopStateIdle__Q23msw19CNpcGhostBasketBaseFv near 99.3 register allocation only (diff.py: registers); was 100% before the 2026-11-11 merge of main's CChrCore/CNpcBase header changes
 BasketF LoopStateItemShoot__Q23msw14CChrCoreBasketFv near 96.2 [real, reviewed] reviewer: frame 0x10 larger, vector temporaries in other stack slots, register renumbering, mr. vs cmpwi; same calls and offsets
 BasketF LoopStateJumpCatch__Q23msw14CChrCoreBasketFv near 90.6 [real, reviewed] reviewer: Register renumbering, schedule, base reg kept, cmpwi vs mr. on same value; same calls, offsets, constants.

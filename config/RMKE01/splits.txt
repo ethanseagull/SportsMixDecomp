@@ -505,7 +505,11 @@ game/msw/menu.cpp:
 	.sdata2     start:0x805C4108 end:0x805C4130
 
 game/msw/CTrophyObj.cpp:
-	.text       start:0x8019BEF0 end:0x8019CAE0
+	.text       start:0x8019BC7C end:0x8019CC80
+	.rodata     start:0x8043DCF0 end:0x8043DD28
+	.data       start:0x804807E8 end:0x80480A70
+	.sdata      start:0x805BFD90 end:0x805BFD9C
+	.sdata2     start:0x805C4130 end:0x805C4198
 
 game/msw/CCockpitModelTelop.cpp:
 	.text       start:0x8019CC80 end:0x8019DC9C

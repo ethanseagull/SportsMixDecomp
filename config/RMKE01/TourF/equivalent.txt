@@ -120,7 +120,7 @@ TourF TimerEvent__Q23msw27CTournamentRouteMan_Stage33FllfUli near 98.5 register 
 TourF UpdateFrame__Q23msw10CRouteMoveFf near 86.6 one saved register fewer and the two vector-difference temporaries are copied in another order; same values
 TourF UpdateFrame__Q23msw14CTournamentManFf near 97.9 registers and order in the inlined Lerp subtractions, operand order of one fmadds
 TourF UpdateFrame__Q23msw16CEvMoveActTmJumpFRCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 99.2 equivalent branch form of the route null check
-TourF UpdateFrame__Q23msw18CEvMoveActTmBigGunFRCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 98.6 the null-route early return is one beq instead of bne over an unconditional b (equivalent branch form); nested and local-variable forms tried
+TourF UpdateFrame__Q23msw18CEvMoveActTmBigGunFRCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 98.6 [real, reviewed] reviewer: equivalent branch form only (bne over b vs one beq on the null-route early return)
 TourF UpdateFrame__Q23msw18CEvMoveActTmNormalFRCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 85.6 instruction order and register choice only
 TourF VsMatchPause__Q23msw15CTournamentStepFlll near 93.0 registers, float multiply operand order in the inlined GetTeamMatchDir, a larger stack frame for the vector temporaries
 TourF _CanbeExit__Q23msw15CTournamentExitFv near 98.8 extsb. vs cmpwi 0 on the same byte for a zero test: equivalent

@@ -351,8 +351,8 @@ main Set__Q23msw23CCockpitResultPartyTeamFv near 99.1 [schedule] register alloca
 main Setup__Q33msw2vm7CVMDataFv near 95.0 register allocation; version range tests carry an extra clrlwi 24 in the original, same result for any byte
 main Stage02_IsOnWave__Q23msw12CStage02BaseCFRCQ23bcs5FVEC3 near 99.2 99.2%: float register choice for rWavePos.x + margin (new FPR vs reused f0)
 main Stage04_RegistCart__Q23msw12CStage04BaseFPQ23bcs7CMdlObjl near 98.9 98.9%: node index and CStgSeSlot* swap registers; register choice only
-main Stage17_CalcFloorFlowPos__Q23msw12CStage17BaseCFRQ23bcs5FVEC3RCQ23bcs5FVEC3Q33msw9CStageMan9FLOW_TYPE near 97.7 i*4 for m_ppTurnTable[i] kept in a saved register instead of recomputed with slwi before each access; same loads, calls and results
-main Stage17_GetFloorFlow__Q23msw12CStage17BaseCFRQ23bcs5FVEC3RCQ23bcs5FVEC3Q33msw9CStageMan9FLOW_TYPE near 97.1 i*4 for m_ppTurnTable[i] kept in a saved register instead of recomputed with slwi before each access, and two vector pointer registers swapped; same loads, calls and results
+main Stage17_CalcFloorFlowPos__Q23msw12CStage17BaseCFRQ23bcs5FVEC3RCQ23bcs5FVEC3Q33msw9CStageMan9FLOW_TYPE near 97.7 [real, reviewed] reviewer confirmed: i*4 kept in a saved register instead of recomputed; same loads and calls
+main Stage17_GetFloorFlow__Q23msw12CStage17BaseCFRQ23bcs5FVEC3RCQ23bcs5FVEC3Q33msw9CStageMan9FLOW_TYPE near 97.1 [real, reviewed] reviewer confirmed: i*4 kept in a saved register (i unchanged between uses); same loads and stores, pointer registers swapped
 main Stage17_Main__Q23msw12CStage17BaseFf near 99.9 fcmpu operands swapped in the GetParam_TrolleyRate() != 0.0f test (equality compare is symmetric); otherwise identical
 main StartCameraQuake___Q23msw5CGameFlll near 97.5 instruction order only
 main StartSlowEffect__Q23msw5CGameFffff near 96.8 register choice and one spilled register slot; same calls and stores

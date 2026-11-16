@@ -120,3 +120,4 @@ Equivalent game/msw/CCockpitPauseRuleInfo.cpp
 Matching game/msw/CStage09Base.cpp
 Equivalent game/bcs/CMdlObj/CopiedMatAccess.cpp
 Equivalent game/msw/TournamentWork.cpp
+Matching game/bcs/G2D/CLytResource.cpp

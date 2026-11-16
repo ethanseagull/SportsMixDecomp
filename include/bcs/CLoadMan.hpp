@@ -80,7 +80,13 @@ namespace bcs {
             // loading a FILE_INPUT (Load(const char *, ...) builds one and
             // calls it); fn_8004D300: the FILE_INPUT version of GetSize
             // (same lookup, returns the entry's word at 0x118).
-            static void Load(const FILE_INPUT *pFile);
+            // Returns non-zero when loading started (bcs::G2D::CLytResource::
+            // LoadDataASync tests it; the void callers ignore it).
+            static int Load(const FILE_INPUT *pFile);
+            // (added for DOL game/bcs/G2D/CLytResource.cpp; the DOL's
+            // fn_8004D6B4, name guessed from the char-path version before it)
+            // Non-zero once the FILE_INPUT has loaded.
+            static int IsLoadEnd(const FILE_INPUT *pFile);
             static unsigned long GetSize(const FILE_INPUT *pFile);
             static int IsLoadEnd(const FILE_INPUT *pFile, long nNum);
             static unsigned long GetSize(const char *pPath, unsigned long nId);

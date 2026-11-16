@@ -62,6 +62,7 @@ game/bcs/G2D/CLytManager.cpp:
 
 game/bcs/G2D/CLytResource.cpp:
 	.text       start:0x800401A0 end:0x80040B70
+	.sbss       start:0x805C0880 end:0x805C0884
 
 game/bcs/CScnObj.cpp:
 	.text       start:0x80041888 end:0x80044B00

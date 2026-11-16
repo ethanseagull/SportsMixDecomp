@@ -26,6 +26,12 @@ namespace nw4r {
 
             class LinkListImpl {
                 public:
+                    // (added for DOL game/bcs/G2D/CLytResource.cpp; the
+                    // DOL's fn_803D4340) Unlinks every node.
+                    ~LinkListImpl();
+                    // (the DOL's fn_803D4420) Unlinks every node.
+                    void Clear();
+
                     unsigned long GetSize() const { return mSize; }
 
                     unsigned long mSize; // 0x00

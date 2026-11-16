@@ -786,10 +786,12 @@ namespace msw {
                         break;
                 }
                 if (pName != 0) {
-                    char szName[32];
+                    char szName[128];
                     if (CTournament::IsMixTournamentGame()) {
+                        // The mix tournament plays only its own line animation.
                         sprintf(szName, "co_to_mix%s", pName);
                         m_pLine->AnimPlay(szName, 0x1F, 0.0f, m_pLine->AnimResFrame(szName, 0x1F), 1);
+                        return;
                     }
                     sprintf(szName, "co_to_%s", pName);
                     float fFrame = m_pLine->AnimResFrame(szName, 0x1F);

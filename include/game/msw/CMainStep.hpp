@@ -68,6 +68,44 @@ namespace msw {
             virtual void LoopStateFinalize() {}
             virtual void DtorStateFinalize() {}
 
+            // (added for DOL game/msw/CMainStep.cpp) The state table's hooks:
+            // non-virtual wrappers that call the state functions virtually
+            // (the DOL emits each one, 16 bytes, before the empty virtual it
+            // calls).
+            void CtorStateInitialize_() { CtorStateInitialize(); }
+            void LoopStateInitialize_() { LoopStateInitialize(); }
+            void DtorStateInitialize_() { DtorStateInitialize(); }
+            void CtorStateSaveInit_() { CtorStateSaveInit(); }
+            void LoopStateSaveInit_() { LoopStateSaveInit(); }
+            void DtorStateSaveInit_() { DtorStateSaveInit(); }
+            void CtorStateMenu_() { CtorStateMenu(); }
+            void LoopStateMenu_() { LoopStateMenu(); }
+            void DtorStateMenu_() { DtorStateMenu(); }
+            void CtorStateTournament_() { CtorStateTournament(); }
+            void LoopStateTournament_() { LoopStateTournament(); }
+            void DtorStateTournament_() { DtorStateTournament(); }
+            void CtorStateUnlock_() { CtorStateUnlock(); }
+            void LoopStateUnlock_() { LoopStateUnlock(); }
+            void DtorStateUnlock_() { DtorStateUnlock(); }
+            void CtorStateGameBasket_() { CtorStateGameBasket(); }
+            void LoopStateGameBasket_() { LoopStateGameBasket(); }
+            void DtorStateGameBasket_() { DtorStateGameBasket(); }
+            void CtorStateGameVolley_() { CtorStateGameVolley(); }
+            void LoopStateGameVolley_() { LoopStateGameVolley(); }
+            void DtorStateGameVolley_() { DtorStateGameVolley(); }
+            void CtorStateGameDodge_() { CtorStateGameDodge(); }
+            void LoopStateGameDodge_() { LoopStateGameDodge(); }
+            void DtorStateGameDodge_() { DtorStateGameDodge(); }
+            void CtorStateGameHockey_() { CtorStateGameHockey(); }
+            void LoopStateGameHockey_() { LoopStateGameHockey(); }
+            void DtorStateGameHockey_() { DtorStateGameHockey(); }
+            void CtorStateGameBoss_() { CtorStateGameBoss(); }
+            void LoopStateGameBoss_() { LoopStateGameBoss(); }
+            void DtorStateGameBoss_() { DtorStateGameBoss(); }
+            void CtorStateFinalize_() { CtorStateFinalize(); }
+            void LoopStateFinalize_() { LoopStateFinalize(); }
+            void DtorStateFinalize_() { DtorStateFinalize(); }
+
             // Asks the state machine for `step`, or for the step set with
             // SetNextStep when `step` is negative.
             void DoChangeStep(long step);
@@ -82,6 +120,14 @@ namespace msw {
             static long GetStep();
 
             static CMainStep *g_pInstance;
+
+        private:
+            // (DOL fn_800C46BC, name guessed; added for DOL
+            // game/msw/CMainStep.cpp) Called by AppLoop when the task of a
+            // state has ended: with m_Unk8C set, stops the sound, ends the
+            // online session and puts the system settings back to their
+            // defaults.
+            void ResetSystem();
 
         protected:
             unsigned long m_nTaskId; // 0x7C, id of the task the current state created (name guessed)

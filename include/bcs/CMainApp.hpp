@@ -53,6 +53,9 @@ namespace bcs {
             // (added for VolleyF game/volley/CGameVolley.cpp; argument
             // guessed) Runs the game at half the frame rate while set.
             static void SetHalfFps(int bHalf);
+            // (added for DOL game/msw/CMainStep.cpp; argument guessed) The
+            // speed of the application clock.
+            static void SetAppSpeed(float fSpeed);
             static int IsPauseReady(unsigned long nMask);
             static int IsPause(unsigned long nMask);
             static void SetPause(unsigned long nMask, int bPause);

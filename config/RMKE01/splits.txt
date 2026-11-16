@@ -155,7 +155,10 @@ game/bcs/CXmlReader.cpp:
 	.text       start:0x800C2618 end:0x800C33DC
 
 game/msw/CMainStep.cpp:
-	.text       start:0x800C3824 end:0x800C45D4
+	.text       start:0x800C3824 end:0x800C4938
+	.data       start:0x8046A8F8 end:0x8046AB98
+	.sbss       start:0x805C0BB0 end:0x805C0BB8
+	.sdata2     start:0x805C2440 end:0x805C2448
 
 game/msw/CBall.cpp:
 	.text       start:0x800C4938 end:0x800CBEA8

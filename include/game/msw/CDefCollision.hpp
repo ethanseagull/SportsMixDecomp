@@ -18,7 +18,7 @@ namespace msw {
             void Create(long num, long kind, long type, unsigned long arg);
             // Unit index (the units are msw::CCollDefUnit, which derive from
             // CCollUnit).
-            CCollUnit *GetColl(long index) const;
+            CCollDefUnit *GetColl(long index) const;
             void SetEnableAll();
             void SetDisableAll();
             void SetPosAll(const bcs::FVEC3 &rPos);

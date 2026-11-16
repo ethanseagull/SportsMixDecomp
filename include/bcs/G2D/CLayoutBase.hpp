@@ -34,7 +34,16 @@ namespace bcs {
                 CBase();
 
                 unsigned long m_nId; // 0x00
-                unsigned char m_Unk04[0xC];
+                // (names guessed, from DOL game/bcs/G2D/CLytManager.cpp)
+                // Bit 0x8: hidden, CLytManager::Main skips the object; bit
+                // 0x10 set with it. Both follow m_nHideCount.
+                unsigned long m_nFlag;      // 0x04
+                unsigned long m_nHideCount; // 0x08, low byte used, 0 to 255
+                long m_nWait;               // 0x0C, Main skips the object unless 0
+
+                // (name guessed; .sbss 0x805C087C) The id the next object
+                // gets; never 0. The CLytManager constructor resets it to 1.
+                static unsigned long s_nNextId;
 
                 // vptr at 0x10
                 virtual ~CBase();

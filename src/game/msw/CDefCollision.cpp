@@ -60,7 +60,7 @@ namespace msw {
         }
     }
 
-    CCollUnit *CDefCollision::GetColl(long index) const
+    CCollDefUnit *CDefCollision::GetColl(long index) const
     {
         return &m_pColl[index];
     }
@@ -140,7 +140,7 @@ namespace msw {
     void CDefCollision::SetMyNoHitFlagAll(unsigned long flag)
     {
         for (unsigned long i = 0; i < m_nNum; i++) {
-            m_pColl[i].m_nNoHitFlag = flag;
+            m_pColl[i].m_nMyNoHitFlag = flag;
         }
     }
 

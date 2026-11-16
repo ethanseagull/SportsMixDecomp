@@ -73,9 +73,9 @@ BasketF GetFirstLookInfo_MultiPlay__Q23msw17CCameraBasketGameFRQ23bcs5FVEC3RQ23b
 BasketF GetFirstLookInfo_SinglePlay__Q23msw17CCameraBasketGameFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 99.5 99.5: register numbering only
 BasketF GetFloorFlow__Q23msw30CStageBasketHungryBossPackun72CFRQ23bcs5FVEC3RCQ23bcs5FVEC3Q33msw9CStageMan9FLOW_TYPE near 99.6 load order of the direction constant and m_fMove before the fmuls
 BasketF GetJustShotTimingMax___Q23msw13CChrManBasketCFPCQ23msw14CChrCoreBasket near 98.1 [real, reviewed] reviewer: Stack slots and .rodata offsets (table 0x84 vs 0x90, 5.5, lfd) differ; diff.py data check reports no value difference.
-BasketF GetJustShotTimingMax___Q23msw14CBallManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3PCQ23msw5CBall near 96.5 stack slots, registers, and the queue head and tail loaded in the other order; same calls and constants
+BasketF GetJustShotTimingMax___Q23msw14CBallManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3PCQ23msw5CBall near 96.5 [real, reviewed] reviewer: the one real difference (boss state-0 early return 0 vs 999) is fixed; left: stack slots, registers, head/tail load order, as GetJustShotTimingMin
 BasketF GetJustShotTimingMin___Q23msw13CChrManBasketCFPCQ23msw14CChrCoreBasket near 98.1 [real, reviewed] reviewer: Same as Max: stack slots and pool offsets only, values equal per diff.py data check.
-BasketF GetJustShotTimingMin___Q23msw14CBallManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3PCQ23msw5CBall near 96.5 stack slots, registers, and the queue head and tail loaded in the other order; same calls and constants
+BasketF GetJustShotTimingMin___Q23msw14CBallManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3PCQ23msw5CBall near 96.5 [real, reviewed] reviewer: stack slots, registers, head/tail load order, equivalent clamp branch form; early returns both 0; same constants
 BasketF GetMemBer__Q23msw17CComManBasketGameFlPPCQ23msw8CChrCorellPCQ23msw8CChrCore near 99.5 register allocation only
 BasketF GetMemberNoBadCondition__Q23msw17CComManBasketGameFlPPCQ23msw8CChrCorellPCQ23msw8CChrCore near 99.6 register allocation only
 BasketF GetMoveTgtPosRand__Q23msw19CNpcGhostBasketBaseCFv near 94.2 94.2%: local int table reached through the float-pool base instead of its own lis; registers.

@@ -295,10 +295,10 @@ long msw::CBallManBasket::GetJustShotTimingMax_(const bcs::FVEC3 &rFrom, const b
     if (pBall == 0) {
         return 0;
     }
-    // No timing while the boss Piranha Plant is in state 0.
+    // Window end pushed out while the boss Piranha Plant is in state 0.
     CNpcBossPackun *pBoss = CChrManBasket::GetInstance()->GetBossPackun_(0);
     if (pBoss != 0 && pBoss->GetState() == 0) {
-        return 0;
+        return 999;
     }
 
     const CBallBasket *pBasketBall = static_cast<const CBallBasket *>(pBall);

@@ -116,3 +116,4 @@ Equivalent game/msw/CEventNodeBase.cpp
 Equivalent game/msw/CSignBoard.cpp
 Equivalent game/msw/CCockpitResultPartyTeam.cpp
 Equivalent game/msw/CCockpitPauseRuleInfo.cpp
+Matching game/msw/CStage09Base.cpp

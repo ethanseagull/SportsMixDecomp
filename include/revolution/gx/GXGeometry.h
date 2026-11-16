@@ -27,6 +27,12 @@ static inline void GXEnd(void) {}
 // Added for MenuF game/menu/CBgDisplay.cpp.
 void GXSetCoPlanar(GXBool enable);
 
+// Added for the DOL's game/bcs/CMainApp.cpp (bcs::CMainApp::ResetGP).
+void GXSetPointSize(unsigned char pointSize, GXTexOffset texOffsets);
+void GXEnableTexOffsets(GXTexCoordID coord, GXBool line_enable, GXBool point_enable);
+void GXSetTexCoordScaleManually(GXTexCoordID coord, GXBool enable, unsigned short ss, unsigned short ts);
+void GXSetTexCoordCylWrap(GXTexCoordID coord, GXBool s_enable, GXBool t_enable);
+
 #ifdef __cplusplus
 }
 #endif

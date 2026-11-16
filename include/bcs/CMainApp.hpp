@@ -21,8 +21,8 @@ namespace bcs {
 
             // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp: the
             // render mode in use (the cockpit reads the frame buffer size).
-            // The DOL's object is 0x70 bytes; what follows the render mode
-            // object is not known.
+            // (The 0x30 bytes after it in the DOL are the frame alarm of
+            // game/bcs/CMainApp.cpp, a file-local object.)
             static GXRenderModeObj g_Rmode;
 
             // Added for MenuF game/menu/CBackground.cpp: the address of
@@ -50,6 +50,10 @@ namespace bcs {
             // in nMask is ready or on; pauses or resumes them; whether the
             // 3D fade runs.
             static void SetUnivSpeed(float fSpeed);
+            // (added for the DOL's game/bcs/CMainApp.cpp) The speed of the
+            // application clock (SetAppSpeed clamps it to [1/256, 16]; it
+            // is taken at the start of the next frame).
+            static float GetAppSpeed();
             // (added for VolleyF game/volley/CGameVolley.cpp; argument
             // guessed) Runs the game at half the frame rate while set.
             static void SetHalfFps(int bHalf);

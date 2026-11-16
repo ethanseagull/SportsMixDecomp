@@ -84,7 +84,14 @@ game/bcs/CLoadMan.cpp:
 	.text       start:0x8004C094 end:0x8004DC9C
 
 game/bcs/CMainApp.cpp:
-	.text       start:0x80051B5C end:0x80052818
+	.text       start:0x80050BFC end:0x80052854
+	.ctors      start:0x8042D1A0 end:0x8042D1A4
+	.rodata     start:0x8042EDA0 end:0x8042EE18
+	.data       start:0x804676D8 end:0x80467700
+	.bss        start:0x804CCD38 end:0x804CCDD0
+	.sdata      start:0x805BF968 end:0x805BF978
+	.sbss       start:0x805C08E0 end:0x805C0958
+	.sdata2     start:0x805C1E08 end:0x805C1E40
 
 game/bcs/CMdlObj.cpp:
 	.text       start:0x80054FDC end:0x8005A9AC

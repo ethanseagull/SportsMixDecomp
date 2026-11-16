@@ -106,9 +106,9 @@ main Eff_CreateAttach__Q23msw14CStgEffectSlotFlllPCcPCQ23bcs5FVEC3iiiUl near 99.
 main EnableRuleOptionFlag__Q23msw5CGameFUli unverified 71.9 71.9%: as SetTeamAutoSpikeJumpType, inlined four times
 main EndGoalDemo___Q23msw5CGameFv near 97.8 the IsDelete test branches the other way round (same result)
 main EventDemoSetUp__Q23msw5CGameFv near 89.8 the inlined FsmqGetState empty test is a compare and branch instead of cntlzw; same result
-main EventFirst__Q23msw12CVictoryDemoFv near 96.9 the original tests the unrolled cut-array fill loop's condition twice (extra ble cr1) plus register numbering; equivalent branch form
-main EventFirst__Q23msw17CVictoryDemoPartyFv near 95.9 the original tests the unrolled cut-array fill loop's condition twice (extra ble cr1) plus register numbering; equivalent branch form
-main EventStart__Q23msw17CVictoryDemoPartyFv near 99.6 register choice; jump table symbol name is ours
+main EventFirst__Q23msw12CVictoryDemoFv near 96.9 [real, reviewed] reviewer confirmed: same dead duplicate ble cr1; register numbering
+main EventFirst__Q23msw17CVictoryDemoPartyFv near 95.9 [real, reviewed] reviewer confirmed: original has a dead duplicate ble cr1 right after an identical one; register renaming
+main EventStart__Q23msw17CVictoryDemoPartyFv near 99.6 [real, reviewed] reviewer confirmed: jump table symbol name only; no data difference
 main EventTimer__Q23msw12CVictoryDemoFssUl near 99.5 register choice only
 main ExitHaltState__Q23msw5CGameFi unverified 82.2 switch compare tree vs our linear chain and other branch form; not proven equal by tool
 main Finalize__Q23msw5CGameFv unverified 99.0 the original passes 0.0f in f1 to CGameSnd::StopAllSound (a fade time); our header declares it without arguments, so the lfs is missing; everything else identical
@@ -401,9 +401,9 @@ main _GetResAnimNo__Q23msw11CEventModelCFl near 96.8 register choice/order in th
 main _NextMotionName__Q23msw11CEventModelFsf near 94.7 [real, reviewed] reviewer confirmed: same extra extsh feeding add then sth only
 main _NextMotion__Q23msw11CEventModelFsf near 93.6 [real, reviewed] reviewer confirmed: original's extra extsh of nStep only feeds add then sth (low 16 bits); sum sign-extended in both
 main _OnMotTrg__Q23msw13CEvDemoMdlChrFPCQ33bcs14CAnmObjMotBase7MOT_TRG unverified 78.1 ours inlines _PlayNodeSe (case 0x12) where the original calls it; the rest is the same code. Restating _PlayNodeSe, and writing the foot-sound blocks out instead of through the helper, did not stop the inlining
-main _PlayResult__Q23msw12CVictoryDemoFPCcl near 99.2 one addi rX,rY,0 where ours emits mr, plus register choice
-main _PlayResult__Q23msw17CVictoryDemoPartyFPCcl near 98.7 one addi rX,rY,0 where ours emits mr, plus register choice
-main _SetPlayerNode__Q23msw17CVictoryDemoPartyFll near 89.6 register allocation: original saves one more GPR (_savegpr_27 vs four stw), same instruction sequence otherwise
+main _PlayResult__Q23msw12CVictoryDemoFPCcl near 99.2 [real, reviewed] reviewer confirmed: addi rX,rY,0 vs mr rX,rY only
+main _PlayResult__Q23msw17CVictoryDemoPartyFPCcl near 98.7 [real, reviewed] reviewer confirmed: addi rX,rY,0 vs mr rX,rY only
+main _SetPlayerNode__Q23msw17CVictoryDemoPartyFll near 89.6 [real, reviewed] reviewer confirmed: _savegpr_27 vs inline saves and register moves; same calls, constants, sprintf arguments and stores
 main _SetRot__Q23msw13CEvDemoMdlChrFRCQ23bcs5FVEC3 near 88.8 load order only: the original loads m_pMdl after rRot.x, ours after all three angles; same wrap loops and stores
 main _SetRot__Q23msw13CEvDemoMdlObjFRCQ23bcs5FVEC3 near 88.8 instruction order only: m_pMdl load scheduled after the first lfs
 main _UpdateFloor__Q23msw11CEventModelFv near 99.0 stack slots of the two FVEC3Sum temporaries swapped and paired-single register choice only

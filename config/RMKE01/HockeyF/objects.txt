@@ -28,7 +28,7 @@ Equivalent game/hockey/CCollManHockey.cpp
 Matching game/hockey/CComDrvHockey.cpp
 Matching game/hockey/CStageHockey01.cpp
 Matching game/hockey/CBallMarkerHockey.cpp
-Equivalent game/hockey/CStageHockey07.cpp
+Matching game/hockey/CStageHockey07.cpp
 Matching game/hockey/CStageHockey04.cpp
 Equivalent game/hockey/CChrDrvPadHockey.cpp
 Equivalent game/hockey/CChrManHockey.cpp
@@ -93,3 +93,6 @@ Equivalent game/hockey/Gmk_Container_Hockey.cpp
 Equivalent game/hockey/unit_E8AB8.cpp
 Equivalent game/hockey/CRadarIcon2DHockeyGoal.cpp
 Equivalent game/hockey/CCockpitHockeyMap.cpp
+Equivalent game/hockey/CcWarioSmokeMgr.cpp
+Equivalent game/hockey/CcDaisyFlowerGarden.cpp
+Equivalent game/hockey/CStgGmk_Pylon_Act_Hockey.cpp

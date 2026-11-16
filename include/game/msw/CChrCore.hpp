@@ -1001,6 +1001,11 @@ namespace msw {
             // DOL. The yaw (radians) from the character towards a point,
             // in the XZ plane.
             float GetRotY_ToPosXZ(const bcs::FVEC3 &pos) const;
+            // (DOL; added for BossF game/boss/CChrCoreBoss.cpp, meanings
+            // guessed) Turns the head towards rPos by fRate a frame; stops
+            // looking (inline in CChrCoreBoss::UpdateLook_).
+            void UpdateLookAt_(const bcs::FVEC3 &rPos, float fRate, int);
+            void ClearLook() { m_LookRot.Set(0.0f, 0.0f, 0.0f); }
             // DOL (added for HockeyF game/hockey/CChrCoreHockeyLuigi.cpp). The
             // yaw towards the goal the character's team attacks.
             float GetRotY_ToGoal() const;
@@ -1158,6 +1163,9 @@ namespace msw {
             void GetTargetGoalPos(bcs::FVEC3 &rPos) const;
             // The distance to rPos in the XZ plane.
             float GetDist_ToPosXZ(const bcs::FVEC3 &rPos) const;
+            // (DOL; added for BossF game/boss/CChrCoreBoss.cpp) The square of
+            // the distance to pChr in the XZ plane.
+            float GetDist_ToChrXZSq(const CChrCore *pChr) const;
             // (name guessed; the DOL's fn_800E1E1C) The distance to rPos.
             float GetDist_ToPos(const bcs::FVEC3 &rPos) const;
             // (name guessed; the DOL's fn_800E1EC4) The square of it.
@@ -1215,6 +1223,9 @@ namespace msw {
             // (DOL; added for BasketF game/basket/CComDrvBasketGame.cpp) The
             // item kind of the stocked item, negative for none.
             long GetStockItemType() const;
+            // (DOL; added for BossF game/boss/CChrCoreBoss.cpp) Replaces the
+            // stocked item (null: none).
+            void SetStockItem(CItem *pItem);
             // (DOL; added for BasketF game/basket/unit_65B7C.cpp) Drops the
             // stocked item.
             void DeleteStockItem();
@@ -1254,6 +1265,9 @@ namespace msw {
             // virtual node.
             void GetTransNodePos(bcs::FVEC3 &rPos) const;
             void GetNodePos(const char *pName, bcs::FVEC3 &rPos) const;
+            // (DOL; added for BossF game/boss/CChrCoreBoss.cpp) The position
+            // of model node nNode.
+            void GetNodePos(long nNode, bcs::FVEC3 &rPos) const;
             void GetVNodePos(long nNode, bcs::FVEC3 &rPos) const;
             const bcs::FVEC3 &GetRot();
             // Turns towards fRotY by fRate of the difference.
@@ -1264,6 +1278,9 @@ namespace msw {
             void RotateYTo_(float fRotY, float fStep);
             void CollAtkSetEnable_(long nIndex, int bEnable);
             int IsAnimEnd(unsigned long nSlot) const;
+            // (added for BasketF game/basket/unit_2BBEC.cpp) Not zero once
+            // the motion in slot nSlot has looped.
+            int IsAnimLooped(unsigned long nSlot) const;
             void SetMoveMotType(long nType);
             void PlayVoice(long nVoice, unsigned long);
             // (added for msw::CEventChrCore; return types and parameter
@@ -1441,6 +1458,14 @@ namespace msw {
             // the shot plays with; moves the character in XZ.
             void Util_NodePatchWarpToTransNodeXZ();
             float GetRotY_Diff_ToPosXZ(const bcs::FVEC3 &rPos) const;
+            // (DOL; added for DodgeF game/dodge/unit_3F694.cpp) The same
+            // towards character pChr; sets motion slot nSlot to frame fFrame.
+            float GetRotY_Diff_ToChrXZ(const CChrCore *pChr) const;
+            void AnimSetFrame(unsigned long nSlot, float fFrame);
+            // (added for BasketF game/basket/unit_3BB84.cpp) The frames the
+            // team colour blinks (the pass when the pad may change to the
+            // receiver).
+            void SetTeamColorBlinkCount(float fCount);
             long PlayGetOutline_(unsigned long) const;
             void AddPosXZ(float fX, float fZ);
             void WSE_Play(long nSlot, long nSe, unsigned long, long);
@@ -1476,7 +1501,8 @@ namespace msw {
             // root node's offset; gets the stocked item ready to throw;
             // the yaw to throw it at; throws it.
             void MoveRunXZ_(float fRotY, float fSpeed, float fRate);
-            long Util_ChangeRot4(float fRot);
+            // Static: the original never passes this (no mr r3 before any call).
+            static long Util_ChangeRot4(float fRot);
             void Util_ExchgToWaistPos();
             void Util_NodePatchZeroTrans();
             void PrepareShotStockItem(float fFrame);
@@ -1528,7 +1554,8 @@ namespace msw {
             // stopping one by its handle (over fFrames).
             const bcs::FVEC3 &GetGuardGoalPos() const;
             unsigned long Eff_GetHandle(long nSlot) const;
-            const CCollBodyUnit *CollBodyGetColl_(long nIndex);
+            // (not const: CChrCoreBoss::UpdateCollAtk_ changes the unit's flags)
+            CCollBodyUnit *CollBodyGetColl_(long nIndex);
             unsigned long PlayMoveSe(long nSe, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
             void StopSe(unsigned long hSe, float fFrames);
             // (DOL) The motion trigger callback the model calls with the
@@ -1549,6 +1576,15 @@ namespace msw {
                                                        bcs::FVEC3 &rVel, void *pArg);
             // The push collisions' size and offset.
             void ResetCollBodyPush_(float fRadius, float fHeight, float, float);
+            // (DOL; added for BossF game/boss/CChrCoreBoss.cpp) Moves the
+            // push collision's offset and size on by fFrame frames (see
+            // m_PushOfsInter).
+            void CalcBodyCollInter_(float fFrame);
+            // (DOL; added for BossF game/boss/CChrCoreBoss.cpp, meanings guessed
+            // from the names) The move of the frame from the floor's flow and
+            // the forced move.
+            void FloorFlowMove_();
+            void ForceMove_();
             // The parts of the per-frame update.
             void UpdateScaleState_();
             void ClearOnBallChargePower();
@@ -1627,7 +1663,25 @@ namespace msw {
             CBodyCollision *m_pCollBody;
             CAtkCollision *m_pCollAtk;
             CDefCollision *m_pCollDef;
-            unsigned char m_Unk108[0x150 - 0x108];
+            // 0x108, 0x128 (names guessed; added for BossF
+            // game/boss/CChrCoreBoss.cpp): the push collision's offset from
+            // the model's root (x and z) and its size (radius and depth),
+            // each moving from m_From to m_To while m_fRate runs from 1 down
+            // to 0 by m_fSpeed a frame (CalcBodyCollInter_); m_Now is the
+            // value in use.
+            struct BODY_COLL_INTER {
+                float m_fFromX, m_fFromZ; // 0x00
+                float m_fToX, m_fToZ;     // 0x08
+                float m_fNowX, m_fNowZ;   // 0x10
+                float m_fSpeed;           // 0x18
+                float m_fRate;            // 0x1C
+            };
+            BODY_COLL_INTER m_PushOfsInter;
+            BODY_COLL_INTER m_PushSizeInter;
+            // 0x148, 0x14C (names guessed): the push collision's power and
+            // rank (CBodyCollision::SetPushPower, SetPushRank).
+            long m_nPushPower;
+            long m_nPushRank;
             // 0x150 (name guessed): the id of a ball task; the White Mage's
             // magic circle (VolleyF CC15_VOLLEY::CcSiromaMagicCircle) waits
             // on it until the ball is shot.
@@ -1790,14 +1844,29 @@ namespace msw {
             // the character this far (plus 0.01) inside the stage's edges, so
             // likely a body radius.
             float m_fUnk26C;
-            unsigned char m_Unk270[0x274 - 0x270];
+            // 0x270 (name guessed; added for BossF game/boss/CChrCoreBoss.cpp):
+            // the flags the character's map collision is checked with (its
+            // guard court index, low byte, and 0x02000000), passed to
+            // CCollMan::DetectMapHit with m_fUnk26C as the radius.
+            unsigned long m_nMapHitFlag;
             // 0x274 (name guessed; added for BossF game/boss/unit_18E08.cpp):
             // cleared when the run state leaves its receive poses.
             float m_fUnk274;
             unsigned char m_Unk278[0x284 - 0x278];
             // 0x284 (meaning not known): cleared at the end of a game.
             float m_fUnk284;
-            unsigned char m_Unk288[0x2F8 - 0x288];
+            unsigned char m_Unk288[0x2AC - 0x288];
+            // 0x2AC (name guessed; BasketF game/basket/unit_2BBEC.cpp): an
+            // offset to the character of an air battle (0, the height
+            // difference, the distance in XZ), eased towards it a tenth
+            // each frame by the jump to the upper floor.
+            bcs::FVEC3 m_BattleOfs;
+            unsigned char m_Unk2B8[0x2C4 - 0x2B8];
+            // 0x2C4 (name guessed; added for BossF game/boss/CChrCoreBoss.cpp):
+            // where the head turns, as UpdateLookAt_ sets it; cleared to stop
+            // looking (ClearLook).
+            bcs::FVEC3 m_LookRot;
+            unsigned char m_Unk2D0[0x2F8 - 0x2D0];
             // 0x2F8 (name from GetAirTrickStatePassFrame, which returns it).
             float m_fAirTrickStatePassFrame;
             unsigned char m_Unk2FC[0x574 - 0x2FC];

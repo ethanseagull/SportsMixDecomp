@@ -16,6 +16,7 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+import decomp_common as dc  # noqa: E402  (tools/decomp/decomp_common.py)
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 CR_BITS = {"lt": 0, "gt": 1, "eq": 2, "un": 3, "so": 3}
@@ -61,7 +62,7 @@ def main():
     args = ap.parse_args()
 
     base = ROOT / "build" / args.version
-    index = json.loads((ROOT / "build" / "decomp" / f"index_{args.version}.json").read_text(encoding="utf-8"))
+    index = dc.load_index(args.version)
     hits = [f for f in index if f["name"] == args.function and args.module in (None, f["module"])]
     if not hits:
         sys.exit(f"{args.function} not found in the index (rebuild it with tools/decomp/index.py)")
@@ -79,6 +80,10 @@ def main():
 
     work = ROOT / "build" / "decomp" / "draft"
     work.mkdir(parents=True, exist_ok=True)
+    # one directory per call: matchers in one checkout run drafts at the same time
+    import atexit, shutil, tempfile  # noqa: E401
+    work = Path(tempfile.mkdtemp(dir=work))
+    atexit.register(shutil.rmtree, work, True)
     inputs = []
     for n, path in enumerate(p for p in files if p.exists()):
         dest = work / f"{n}.s"

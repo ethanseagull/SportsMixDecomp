@@ -13,14 +13,14 @@ import argparse
 import json
 from collections import Counter, defaultdict
 from pathlib import Path
+import decomp_common as dc  # noqa: E402  (tools/decomp/decomp_common.py)
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 def load(version: str):
-    report = json.loads((ROOT / "build" / version / "report.json").read_text(encoding="utf-8"))
-    index_path = ROOT / "build" / "decomp" / f"index_{version}.json"
-    index = json.loads(index_path.read_text(encoding="utf-8")) if index_path.exists() else []
+    report = dc.load_report(version)
+    index = dc.load_index(version)
     return report, index
 
 

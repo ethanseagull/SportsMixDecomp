@@ -29,6 +29,9 @@ namespace msw {
             int SearchValueNearPos(long &rX, long &rY, char nValue, const bcs::FVEC3 &rPos) const;
             // The position of cell (nX, nY).
             void GetPos(bcs::FVEC3 &rPos, long nX, long nY, int) const;
+            // (added for VolleyF's CComDrvVolleyGame::Util_GetCornerOpenSpace)
+            long GetWidth() const { return m_nWidth; }
+            long GetHeight() const { return m_nHeight; }
 
         private:
             signed char m_Grid[10][10]; // 0x04

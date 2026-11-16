@@ -576,8 +576,8 @@ void msw::CChrCoreBasket::SubStateArtsShotCalcRotParam_(ROT_LERP1 &rLerp, float 
     if (fDiff > PI) {
         fDiff -= PI2;
     }
-    rLerp.m_afUnk[3] = 0.0f;
     rLerp.m_afUnk[1] = fDiff / rLerp.m_afUnk[2];
+    rLerp.m_afUnk[3] = 0.0f;
 }
 
 void msw::CChrCoreBasket::SubStateArtsShotClearMoveParamWork_(CC_DATA::CHR_PARAM::MOVE_PARAM &rParam)
@@ -701,7 +701,8 @@ void msw::CChrCoreBasket::SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRIC
 
     float fDistSq = DistSqXZ(pWork->m_TargetPos, GetPos());
     if (fDistSq > 0.0f) {
-        float fFrame = Max(1.0f, pWork->m_fTrickFrame - GetCcParam2_()->m_fArtsMoveEndFrame);
+        float fFrame = pWork->m_fTrickFrame - GetCcParam2_()->m_fArtsMoveEndFrame;
+        fFrame = Max(1.0f, fFrame);
         pWork->m_MoveParam.m_nType = 0xB;
         pWork->m_MoveParam.m_fDist = nw4r::math::FSqrt(fDistSq);
         pWork->m_MoveParam.m_fFrame = 0.0f;

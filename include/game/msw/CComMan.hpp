@@ -203,6 +203,17 @@ namespace msw {
             static CDropCoin *DropCoin_GetPtr(unsigned long nId);
             static bcs::FVEC3 DropCoin_GetPos(const CDropCoin *pCoin);
             static long DropCoin_GetNearChr(const CDropCoin *pCoin, unsigned long nBits);
+            // (DOL; added for VolleyF game/volley/CComDrvVolleyGame.cpp,
+            // meanings guessed from the names) The position in the world of
+            // coin nId; whether pChr is in bad condition (the volley driver
+            // then leaves the panels and coins alone); the nearest "?" panel
+            // of the kinds in nKindBits, and the nearest falling green shell,
+            // in court nCourt (0: none), and the XZ distance to that shell.
+            static bcs::FVEC3 DropCoin_GetWorldPos(unsigned long nId);
+            static int IsBadCondition(CChrCore *pChr);
+            static unsigned long QPanel_GetNearInCourt(const bcs::FVEC3 &rPos, long nCourt, unsigned long nKindBits);
+            static unsigned long FallGShell_GetNearInCourt(const bcs::FVEC3 &rPos, long nCourt);
+            static float FallGShell_GetNearDisXZ(const bcs::FVEC3 &rPos, long nCourt);
 
             // (DOL; added for VolleyF game/volley/unit_C0918.cpp; meanings
             // guessed from the names and the callers) Whether the way from
@@ -248,6 +259,11 @@ namespace msw {
             static CChrCore *GetPadDrvChrCoreRand(long nTeam);
             static bcs::FVEC3 GetChrPosXZ(const CChrCore *pChr);
             static int IsExistComRootActChr(long nTeam, long nAct);
+            // (added for VolleyF game/volley/unit_9FDD0.cpp, meanings guessed)
+            // The same leaving character nChr out; the falling green shell
+            // itself (null when it is gone).
+            static int IsExistComRootActChr_WithoutONE(long nTeam, long nAct, long nChr);
+            static CItem *FallGShell_GetPtr(unsigned long nShell);
             // The court rPos (in the court's frame) lies in.
             static long GetCourtIdxByPos(const bcs::FVEC3 &rPos);
 

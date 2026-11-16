@@ -270,6 +270,13 @@ namespace msw {
             void SetBallCatchEnableRoot_(float fRange, float, const bcs::FVEC3 &pos);
             // Takes the ball in after a receive.
             void ReceiveBall_(long, long nFlag, float, long nType, long);
+            // (inline in game/boss/CChrCoreBoss.cpp; names guessed) Picks a
+            // loose ball up into the serve stance; receives pBall in pose
+            // nPose from the neutral stance; receives it in the pose its
+            // direction asks for, at the character's height.
+            void TakeLooseBall_(CBall *pBall);
+            void ReceiveAtPose_(CBall *pBall, long nPose);
+            void ReceiveNow_(CBall *pBall);
             // The direction the ball is knocked to.
             float GetFlickDir_(const CBall *pBall);
             float GetReceiveBaseDir_();
@@ -611,6 +618,30 @@ namespace msw {
         float m_fMoveFrame;          // 0x48, frames of the move below
         CC_DATA::CHR_PARAM::MOVE_PARAM m_MoveParam; // 0x4C
         CChrCore::DIR_MOVE m_DirMove; // 0x5C
+    };
+
+    // The neutral state's work (names guessed; moved here from
+    // game/boss/unit_18E08.cpp, which runs the state, for
+    // CChrCoreBoss::HookBallCatchCmn_).
+    struct CChrCoreBoss::STATE_WORK_NEUTRAL {
+        long m_nStep;  // 0x00
+        long m_nType;  // 0x04: the pose type (SubStateGetNeutralPoseType_), -1 at the start
+        long m_nPose;  // 0x08: the receive or toss pose
+    };
+
+    // The shoot stance's work in the state queue (moved here from
+    // game/boss/CStickObj.cpp, which runs the state).
+    struct CChrCoreBoss::STATE_WORK_SHOOT_STANCE {
+        // 0x00: 0 raise the stick, 1 hold, 2 hold (looping motion), 3 shot,
+        // 4 put down, 5 over
+        long m_nStep;
+        unsigned char m_Unk04[0x4];
+        long m_nShot;      // 0x08: 2 once the driver asks for the shot
+        unsigned char m_Unk0C[0x4];
+        int m_bNoHit;      // 0x10: no hit window when set (never set here)
+        int m_bHit;        // 0x14: set while the motion is in the hit window
+        float m_fHitRate;  // 0x18: 0 to 1 across the hit window
+        int m_bCanCancel;  // 0x1C: the stance may be left from now on
     };
 
     class CChrCoreBossMario : public CChrCoreBoss {

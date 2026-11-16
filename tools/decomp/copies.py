@@ -18,6 +18,7 @@ import argparse
 import json
 from collections import defaultdict
 from pathlib import Path
+import decomp_common as dc  # noqa: E402  (tools/decomp/decomp_common.py)
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 
@@ -26,8 +27,8 @@ class Copies:
     def __init__(self, version="RMKE01", report=None):
         base = ROOT / "build"
         if report is None:
-            report = json.loads((base / version / "report.json").read_text(encoding="utf-8"))
-        index = json.loads((base / "decomp" / f"index_{version}.json").read_text(encoding="utf-8"))
+            report = dc.load_report(version)
+        index = dc.load_index(version)
         self.info = {(f["module"], f["name"]): f for f in index}
         self.exact = defaultdict(list)   # hash -> matched (module, name, source)
         self.shape = defaultdict(list)   # mnemonic sequence -> matched

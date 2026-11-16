@@ -215,6 +215,9 @@ namespace msw {
             // nChrBits stands between the driver and rPos (fWidth wide,
             // fLen long).
             unsigned long GetEmTeamEnableBit() const;
+            // (added for VolleyF's CComDrvVolleyGame) The driver's team's
+            // characters as bits.
+            unsigned long GetMyTeamEnableBit() const;
             int IsExistChrToTarget(const bcs::FVEC3 &rPos, float fWidth, float fLen, unsigned long nChrBits) const;
             long LotProbability(const long *pRate, long nNum) const;
             float GetEmCourtLeft() const;
@@ -251,6 +254,12 @@ namespace msw {
             // The middle of the other team's court.
             float GetEmCourtCenterX() const;
             float GetEmCourtCenterZ() const;
+            // (DOL; added for VolleyF game/volley/unit_9FDD0.cpp, meanings
+            // guessed from the names) The XZ distance between two positions
+            // in the court's frame, measured in the world; whether a
+            // character stands in the way of an item thrown at rPos.
+            float GetWorldDisXZ(const bcs::FVEC3 &rPos0, const bcs::FVEC3 &rPos1) const;
+            int IsExistChrToThrowItemTarget(const bcs::FVEC3 &rPos);
 
             // DOL. The common actions, one per frame while running; derived
             // drivers list them in their action tables (g_ActFuncMap).

@@ -1077,6 +1077,7 @@ void msw::CChrCoreVolley::LoopStateFall()
         pWork->m_fTime -= m_fFrameStep;
         if (pWork->m_fTime <= 0.0f) {
             if (MethdRebirth()) {
+                return;
             }
         }
     }

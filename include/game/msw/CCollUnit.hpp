@@ -26,8 +26,10 @@ namespace msw {
 
             void SetCollKind(long kind);
             void SetCollType(long type);
-            // (added for game/basket/unit_2FD1C.cpp) The kind of attack (bits
-            // 8 to 15; the smash cut sets 0x20000; also msw::CBombExplosion::Create_).
+            // (DOL) The kind of attack of an attack unit (bits 8 to 15 of the
+            // word at 0x84; the smash cut sets 0x20000; also
+            // msw::CBombExplosion::Create_, BossF game/boss/CChrCoreBoss.cpp and
+            // game/basket/unit_2FD1C.cpp).
             void SetAtkType(unsigned long type);
             void SetPos(const bcs::FVEC3 &rPos);
             // Recomputes the bounding box (m_AabbMin, m_AabbMax) for the
@@ -88,6 +90,21 @@ namespace msw {
             // SetMyNoHitFlag 0x20 (m_nNoHitFlag). Which is which is not known.
             void SetNoHitFlag(unsigned long flag) { m_nMyNoHitFlag = flag; }
             void SetMyNoHitFlag(unsigned long flag) { m_nNoHitFlag = flag; }
+            // (names guessed; inline in BossF's CChrCoreBoss::UpdateCollAtk_)
+            // A capsule from rPos to rPos2; the strength an attack unit
+            // knocks a character away with.
+            void SetCapsule(const bcs::FVEC3 &rPos, const bcs::FVEC3 &rPos2)
+            {
+                SetPos(rPos);
+                m_Pos2 = rPos2;
+            }
+            void SetVanishPower(float fPower) { m_fVanishPower = fPower; }
+            // (name guessed; inline in BossF's CChrCoreBoss::UpdateCollBody_)
+            // The other end of a capsule.
+            void SetPos2(const bcs::FVEC3 &rPos2) { m_Pos2 = rPos2; }
+
+            // The set classes write the units' fields directly.
+            friend class CDefCollision;
 
             // 0x00: vtable
             nw4r::ut::Link m_Link;       // 0x04, in one of CCollMan's unit lists

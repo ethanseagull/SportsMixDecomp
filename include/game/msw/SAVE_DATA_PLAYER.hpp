@@ -78,6 +78,14 @@ namespace msw {
             short m_nNew;             // 0x2
         };
         CharInfo *GetCharInfo(long nGameKind, short nChr);
+        // (added for VolleyF game/volley/CGameVolley.cpp; argument names
+        // guessed) Adds a volleyball game's score book counts: made and
+        // missed serves, spikes, feints, blocks and spike saves.
+        void SetVolleyServiceScore(long nMade, long nMissed);
+        void SetVolleySpikeScore(long nMade, long nMissed);
+        void SetVolleyFeintScore(long nMade, long nMissed);
+        void SetVolleyBlockScore(long nMade, long nMissed);
+        void SetVolleySpikeSaveScore(long nMade, long nMissed);
 
         // Size 0x38. (added for MenuF game/menu/CMiiSel.cpp; names
         // guessed) One Mii of the player's list, or one of the guest Miis.

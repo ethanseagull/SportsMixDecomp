@@ -137,7 +137,7 @@ void msw::CCameraVolleyBoss::MainCamera()
     SetCamMode(0, 0);
     MakeingCamZoom();
     MainCamera_Normal();
-    CalcCamData(0.964355f);
+    CalcCamData(0.96435546875f); // 0x3F76E000 exactly; 0.964355f rounds to 0x3F76DFF8
 }
 
 void msw::CCameraVolleyBoss::MainCamera_Normal()

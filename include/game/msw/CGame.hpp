@@ -5,6 +5,7 @@
 #include "bcs/FVEC3.hpp"
 #include "bcs/CTask.hpp"
 #include "bcs/CTaskMan.hpp"
+#include "bcs/CUnivTask.hpp"
 #include "revolution/rfl.h"
 
 namespace msw {
@@ -27,14 +28,14 @@ namespace msw {
     // destructor: bcs::CFsmQueue<CGame> (0x60 bytes, its vptr at 0x34 +
     // 0x5C). Then CGame's own virtual functions from slot 0x24.
     //
-    // TODO(base): the true first base is bcs::CUnivTask (same size and
-    // slots; it only overrides GetFrameRateF). It is written as bcs::CTask
-    // for now because including bcs/CUnivTask.hpp here reorders the weak
-    // CTask inlines of SystemF's CMainStepEx.cpp (CUnivTask's inline body
-    // names CTask::GetFrameRateF, and weak inlines come out in reverse order
-    // of first reference), which fails SystemF's hash check. Switch back
-    // before any source emits a vtable of a CGame-derived class.
-    class CGame : public bcs::CTask, public bcs::CFsmQueue<CGame> {
+    // The first base is bcs::CUnivTask (same size and slots; it only
+    // overrides GetFrameRateF). It was written as bcs::CTask until
+    // 2026-11-15, because including bcs/CUnivTask.hpp reordered the weak
+    // CTask inlines of SystemF's CMainStepEx.cpp; CUnivTask's inline body no
+    // longer names CTask::GetFrameRateF, which was the cause. With CTask the
+    // vtables of CGameBasketHungryBossPackun, CGameBoss, CGameVolley and
+    // CGameVolleyVsBoss named CTask::GetFrameRateF (no universe speed).
+    class CGame : public bcs::CUnivTask, public bcs::CFsmQueue<CGame> {
         public:
             enum GAME_MODE {
                 GAME_MODE_BASKET, // enumerator names guessed; the values are

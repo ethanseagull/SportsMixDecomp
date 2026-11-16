@@ -5,6 +5,7 @@
 // CChrCoreBoss's inline virtuals. The characters' own classes are files of
 // their own (game/boss/CChrCoreBoss<Name>.cpp).
 #include "game/msw/CChrCoreBoss.hpp"
+#include "game/msw/CChrCoreInline.hpp"
 
 #include "bcs/BCS_Rand.hpp"
 #include "bcs/BCS_Vec.hpp"
@@ -12,10 +13,13 @@
 #include "bcs/CAnmBlendMotion.hpp"
 #include "bcs/CMdlObj.hpp"
 #include "bcs/CTaskMan.hpp"
+#include "bcs/CWorldEnv.hpp"
+#include "game/msw/BallBossSpikeShotArg.hpp"
 #include "game/msw/CAtkCollision.hpp"
 #include "game/msw/CBall.hpp"
 #include "game/msw/CBallMan.hpp"
 #include "game/msw/CBodyCollision.hpp"
+#include "game/msw/CCollBodyUnit.hpp"
 #include "game/msw/CCollDefUnit.hpp"
 #include "game/msw/CCollMan.hpp"
 #include "game/msw/CCollUnit.hpp"
@@ -30,6 +34,8 @@
 #include "game/msw/CNpcBase.hpp"
 #include "game/msw/CStageMan.hpp"
 #include "nw4r/math/triangular.h"
+
+#include <math.h>
 
 namespace {
 
@@ -81,6 +87,24 @@ namespace {
     inline float Min(float a, float b)
     {
         return a > b ? b : a;
+    }
+
+    // (guessed helper) x kept in [lo, hi].
+    inline float Clamp(float x, float lo, float hi)
+    {
+        return x > hi ? hi : (x < lo ? lo : x);
+    }
+
+    // (guessed helper) From a to b by t.
+    inline float Interp(float a, float b, float t)
+    {
+        return t * (b - a) + a;
+    }
+
+    // (guessed helper) From a to b by t, t kept in [0, 1].
+    inline float Lerp(float a, float b, float t)
+    {
+        return Interp(a, b, Clamp(t, 0.0f, 1.0f));
     }
 
     // (guessed helper) The boss of the battle: the NPC of kind 0, or else
@@ -440,22 +464,39 @@ void msw::CChrCoreBoss::SetConditionEffect_(long nCondition, unsigned long nType
                 nSlot = 7;
             }
             break;
-        case 9:
+        case 9: {
+            // (guess) The original picks a value per character here and
+            // never uses it: its compare chain stays, the stores do not, and
+            // 1.3, 1.4, 0.9 and 0.8 sit in .rodata ahead of the move speed
+            // rates. Which of them the last two characters take is not
+            // known. Behaviour-free (notes/decisions.md, dead comparisons).
+            float fScale;
             switch (GetChrIdS()) {
                 case 6:
+                    fScale = 1.3f;
                     break;
                 case 7:
+                    fScale = 1.4f;
                     break;
                 case 8:
+                    fScale = 0.9f;
                     break;
                 case 10:
+                    fScale = 0.8f;
                     break;
                 case 11:
+                    fScale = 1.3f;
                     break;
                 case 12:
+                    fScale = 1.4f;
+                    break;
+                default:
+                    fScale = 1.0f;
                     break;
             }
+            (void)fScale;
             break;
+        }
     }
     for (; nSlot < 9; nSlot++) {
         Eff_Stop(nSlot);
@@ -469,24 +510,34 @@ float msw::CChrCoreBoss::CalcMoveSpeedRate_(float fSpeed, long)
 
 float msw::CChrCoreBoss::CalcContiditionMoveSpeed_(float fSpeed) const
 {
+    // (The rate goes through a local: written straight into fSpeed the body is
+    // small enough for CalcMoveSpeedRate_ to inline it, which the original
+    // does not.)
+    float fRate;
     switch (m_nComLevel) {
         case 1:
-            fSpeed *= 1.7f;
+            fRate = 1.7f;
+            fSpeed *= fRate;
             break;
         case 4:
-            fSpeed *= 1.3f;
+            fRate = 1.3f;
+            fSpeed *= fRate;
             break;
         case 6:
-            fSpeed *= 0.5f;
+            fRate = 0.5f;
+            fSpeed *= fRate;
             break;
         case 7:
-            fSpeed *= 0.6f;
+            fRate = 0.6f;
+            fSpeed *= fRate;
             break;
         case 8:
-            fSpeed *= 0.6f;
+            fRate = 0.6f;
+            fSpeed *= fRate;
             break;
         case 10:
-            fSpeed *= 0.7f;
+            fRate = 0.7f;
+            fSpeed *= fRate;
             break;
     }
     return fSpeed;
@@ -644,6 +695,192 @@ void msw::CChrCoreBoss::HookBallCatch_()
     HookBallCatchCmn_(pBall);
 }
 
+inline void msw::CChrCoreBoss::TakeLooseBall_(CBall *pBall)
+{
+    Eff_CreateAttach(10, 0x567, m_nEffNodeArts, 0, 0, 3, 0);
+    AttachBall(pBall->GetBallNo(), 5, 0.0f, 0);
+    PlaySePos(0xE0A, pBall->GetPos(), 0, -1, 0.0f, 1.0f, 0.0f);
+    SetServeMode_(1);
+    m_nStatusFlag |= 1;
+    FsmqChangeState(STATE_NEUTRAL);
+    CGame::SetLooseBallModeFlag(0);
+    DriverSendMessage((CChrDrv::MSG_ID)0xD, pBall->GetBallNo(), GetPlayerNo(), 0, 0);
+    CChrMan::AllSendMsg((CChrDrv::MSG_ID)0xE, pBall->GetBallNo(), GetPlayerNo(), 0, 0);
+    CChrMan::AllSendMsg((CChrDrv::MSG_ID)0x14, 0, 0, 0, 0);
+}
+
+inline void msw::CChrCoreBoss::ReceiveAtPose_(CBall *pBall, long nPose)
+{
+    STATE_WORK_RECEIVE *pWork = SetStateReceive_(pBall, 0, nPose);
+    float fFrame = pBall->GetTouchDownFrame(m_afReceiveHeight[nPose]);
+    pBall->GetPosAfterFrame(pWork->m_BallPos, fFrame);
+    pWork->m_nFlag |= 0x200;
+    pWork->m_fUnk38 = fFrame;
+    if (fFrame < 5.0f) {
+        fFrame = 5.0f;
+    }
+    BallCatch_(pBall, fFrame, -1, 0);
+}
+
+inline void msw::CChrCoreBoss::ReceiveNow_(CBall *pBall)
+{
+    long nPose = GetReceivePoseDir_(GetReceiveBaseDir_());
+    STATE_WORK_RECEIVE *pWork = SetStateReceive_(pBall, 0, nPose);
+    pBall->GetPosAfterFrame(pWork->m_BallPos, pBall->GetTouchDownFrame(m_afReceiveHeight[nPose] + GetPosY()));
+    pWork->m_nFlag |= 0x600;
+    BallCatch_(pBall, 5.0f, -1, 0);
+}
+
+// What the character does with a ball that reached its catch collision, by
+// its state: in the neutral stance, running, side-stepping or turning it
+// picks a loose ball up or receives it (in the pose it stands in, or the
+// one the ball's direction asks for); in a receive, the receive goes on
+// with the ball; a spike or an air trick takes it. A ball it may not touch
+// is missed, and knocks the character down when it was not its to take.
+void msw::CChrCoreBoss::HookBallCatchCmn_(CBall *pBall)
+{
+    long nState = FsmqGetState();
+    int bTouchable = pBall->CanebVolleyTouch(GetPlayerNo());
+    int bTouch = 0;
+    if (IsBossRightBallTouch(pBall->GetBallNo()) && bTouchable) {
+        bTouch = 1;
+    }
+
+    switch (nState) {
+        case STATE_NEUTRAL:
+            if (bTouch && CanbeReceiveCondition()) {
+                STATE_WORK_NEUTRAL *pWork = FsmqGetWork<STATE_WORK_NEUTRAL>();
+                long nType = pWork->m_nType;
+                long nPose = pWork->m_nPose;
+                if (pBall->CanbeVolleyPickup(GetPlayerNo()) && !pBall->IsPassMode()) {
+                    TakeLooseBall_(pBall);
+                } else {
+                    switch (nType) {
+                        case 2:
+                        case 3:
+                            ReceiveAtPose_(pBall, nPose);
+                            break;
+                        case 1: {
+                            STATE_WORK_RECEIVE *pReceive = SetStateReceive_(pBall, 2, nPose);
+                            bcs::FVEC3 pos;
+                            GetVNodePos(4, pos);
+                            float fFrame = pBall->GetTouchDownFrame(pos.y);
+                            pReceive->m_fUnk38 = fFrame;
+                            if (fFrame < 5.0f) {
+                                fFrame = 5.0f;
+                            }
+                            BallCatch_(pBall, fFrame, -1, 0);
+                            break;
+                        }
+                        default:
+                            ReceiveAtPose_(pBall, GetReceivePoseDir_(GetReceiveBaseDir_()));
+                            break;
+                    }
+                }
+            } else {
+                Util_MissBall_(pBall, 3.0f, 8.0f);
+                if (!bTouchable) {
+                    MethdDamage(0, WrapRad(GetRotY_FromPosXZ(pBall->GetPos())));
+                }
+                if (!CanbeReceiveCondition()) {
+                    MethdDamage(1, WrapRad(3.1415927f + GetRotY()));
+                }
+            }
+            break;
+        case STATE_RUN:
+        case STATE_SIDE_STEP:
+        case STATE_TURN:
+            if (bTouch && CanbeReceiveCondition()) {
+                if (pBall->CanbeVolleyPickup(GetPlayerNo()) && !pBall->IsPassMode()) {
+                    TakeLooseBall_(pBall);
+                } else {
+                    ReceiveNow_(pBall);
+                }
+            } else {
+                Util_MissBall_(pBall, 3.0f, 8.0f);
+                if (!bTouchable) {
+                    MethdDamage(0, WrapRad(GetRotY_FromPosXZ(pBall->GetPos())));
+                }
+                if (!CanbeReceiveCondition()) {
+                    MethdDamage(1, WrapRad(3.1415927f + GetRotY()));
+                }
+            }
+            break;
+        case STATE_RECEIVE:
+            if (bTouch) {
+                STATE_WORK_RECEIVE *pWork = FsmqGetWork<STATE_WORK_RECEIVE>();
+                pWork->m_Dir = pBall->GetVelocity();
+                switch (pWork->m_nKind) {
+                    case 1:
+                        if (!(pWork->m_nFlag & 1)) {
+                            pWork->m_nFlag |= 1;
+                            if (pBall->IsArtsShootMode()) {
+                                pWork->m_nFlag |= 0x100;
+                            }
+                            BallCatch_(pBall, 5.0f, -1, 0);
+                        }
+                        break;
+                    case 2:
+                        if (pWork->m_nFlag & 0x10000) {
+                            ReceiveNow_(pBall);
+                        } else if (!(pWork->m_nFlag & 1)) {
+                            pWork->m_nFlag |= 1;
+                            BallCatch_(pBall, 5.0f, -1, 0);
+                        }
+                        break;
+                    case 3: {
+                        int bAgain = 0;
+                        if (pWork->m_nStep <= 4 && !(m_nStatusFlag & 0x400)) {
+                            bAgain = 1;
+                        }
+                        if (bAgain) {
+                            ReceiveNow_(pBall);
+                        } else if (!(pWork->m_nFlag & 1)) {
+                            pWork->m_nFlag |= 1;
+                            BallCatch_(pBall, 5.0f, -1, 0);
+                        }
+                        break;
+                    }
+                    case 4:
+                        ReceiveNow_(pBall);
+                        break;
+                    default:
+                        if (pWork->m_nFlag & 0x4000) {
+                            ReceiveNow_(pBall);
+                        } else {
+                            SetReceiveEndureWork_(pBall, pWork);
+                            if (!(pWork->m_nFlag & 1)) {
+                                pWork->m_nFlag |= 1;
+                                BallCatch_(pBall, 5.0f, -1, 0);
+                            }
+                        }
+                        break;
+                }
+            } else {
+                Util_MissBall_(pBall, 3.0f, 8.0f);
+                if (!bTouchable) {
+                    MethdDamage(0, WrapRad(GetRotY_FromPosXZ(pBall->GetPos())));
+                }
+            }
+            break;
+        case STATE_JUMP:
+            break;
+        case STATE_DAMAGE:
+            Util_MissBall_(pBall, 3.0f, 8.0f);
+            break;
+        case STATE_SPIKE:
+            BallCatch_(pBall, 10.0f, -1, 0);
+            break;
+        case STATE_AIR_TRICK:
+            BallCatch_(pBall, 2.0f, -1, 0);
+            break;
+        default:
+            Util_MissBall_(pBall, 3.0f, 8.0f);
+            MethdDamage(4, GetRotY());
+            break;
+    }
+}
+
 // Takes pBall into the hand: sound nSe (when not negative), the item the
 // character holds goes onto the ball (or turns into a coin when the ball
 // takes none), then the drivers and the other characters are told.
@@ -676,6 +913,181 @@ void msw::CChrCoreBoss::BallCatch_(CBall *pBall, float fFrame, long nSe, unsigne
     CChrMan::AllSendMsg((CChrDrv::MSG_ID)0xE, pBall->GetBallNo(), GetPlayerNo(), 0, 0);
 }
 
+namespace {
+
+    // The square of the distance between two points seen from above.
+    inline float DistXZSq(const bcs::FVEC3 &r1, const bcs::FVEC3 &r2)
+    {
+        bcs::FVEC3 p1(r1.x, 0.0f, r1.z);
+        bcs::FVEC3 p2(r2.x, 0.0f, r2.z);
+        return bcs::FVEC3DistSq(&p1, &p2);
+    }
+
+
+}
+
+namespace {
+
+    // (inline in the original; name guessed) Of two candidates on the same
+    // side of pSelf (in x) the farther one, of two on either side the
+    // nearer one.
+    inline msw::CChrCore *SelectPassToChr(msw::CChrCore *pSelf, msw::CChrCore *pBest, msw::CChrCore *pChr)
+    {
+        float fDx = pSelf->GetPos().x - pChr->GetPos().x;
+        float fBestDx = pSelf->GetPos().x - pBest->GetPos().x;
+        if ((fDx <= 0.0f && fBestDx <= 0.0f) || (fDx >= 0.0f && fBestDx >= 0.0f)) {
+            float fBest = DistXZSq(pSelf->GetPos(), pBest->GetPos());
+            if (DistXZSq(pSelf->GetPos(), pChr->GetPos()) > fBest) {
+                pBest = pChr;
+            }
+        } else {
+            float fBest = DistXZSq(pSelf->GetPos(), pBest->GetPos());
+            if (DistXZSq(pSelf->GetPos(), pChr->GetPos()) < fBest) {
+                pBest = pChr;
+            }
+        }
+        return pBest;
+    }
+
+}
+
+// The player number the ball is passed to. With up to four characters, the
+// one two numbers on. Otherwise, with bReceive: a team mate in the spike or
+// air trick before its swing (when nobody of the team stands in the front
+// zone), else anybody of the team, by SelectPassToChr_ while somebody stands
+// in the front zone ... by the smaller |z| when not; without bReceive the
+// farthest team mate who can take a pass.
+long msw::CChrCoreBoss::SearchPassToChrIdx_(int bReceive)
+{
+    long nTo = GetPlayerNo();
+    long nNum = CChrMan::GetChrCoreNum();
+    if (nNum <= 4) {
+        nTo += 2;
+        nTo %= nNum;
+    } else if (bReceive) {
+        CChrCore *pBest = 0;
+        int bFront = 1;
+        for (long i = GetPlayerNo() & 1; i < nNum; i += 2) {
+            CChrCore *pChr = CChrMan::GetChrCore(i);
+            if (pChr && !pChr->IsDisable() && pChr->GetPlayerNo() != GetPlayerNo() && pChr->GetUnk17B()) {
+                bFront = 0;
+                break;
+            }
+        }
+        if (bFront) {
+            for (long i = GetPlayerNo() & 1; i < nNum; i += 2) {
+                // (a team mate in a spike or an air trick before the swing)
+                int bOK = 0;
+                CChrCore *pChr = CChrMan::GetChrCore(i);
+                if (pChr && !pChr->IsDisable() && pChr->GetPlayerNo() != GetPlayerNo()) {
+                    switch (pChr->FsmqGetState()) {
+                        case STATE_SPIKE:
+                            if (!pChr->IsVolleySpikeSwingEnd()) {
+                                bOK = 1;
+                            }
+                            break;
+                        case STATE_AIR_TRICK:
+                            if (!pChr->IsVolleyAirTrickSwingEnd()) {
+                                bOK = 1;
+                            }
+                            break;
+                    }
+                }
+                if (bOK) {
+                    if (!pBest) {
+                        pBest = pChr;
+                    } else {
+                        pBest = SelectPassToChr(this, pBest, pChr);
+                    }
+                }
+            }
+            if (!pBest) {
+                for (long i = GetPlayerNo() & 1; i < nNum; i += 2) {
+                    CChrCore *pChr = CChrMan::GetChrCore(i);
+                    if (pChr && !pChr->IsDisable() && pChr->GetPlayerNo() != GetPlayerNo()) {
+                        if (!pBest) {
+                            pBest = pChr;
+                        } else {
+                            pBest = SelectPassToChr(this, pBest, pChr);
+                        }
+                    }
+                }
+            }
+        } else {
+            for (long i = GetPlayerNo() & 1; i < nNum; i += 2) {
+                // (a team mate in a spike or an air trick before the swing)
+                int bOK = 0;
+                CChrCore *pChr = CChrMan::GetChrCore(i);
+                if (pChr && !pChr->IsDisable() && pChr->GetPlayerNo() != GetPlayerNo()) {
+                    switch (pChr->FsmqGetState()) {
+                        case STATE_SPIKE:
+                            if (!pChr->IsVolleySpikeSwingEnd()) {
+                                bOK = 1;
+                            }
+                            break;
+                        case STATE_AIR_TRICK:
+                            if (!pChr->IsVolleyAirTrickSwingEnd()) {
+                                bOK = 1;
+                            }
+                            break;
+                    }
+                }
+                if (bOK) {
+                    if (!pBest) {
+                        pBest = pChr;
+                    } else if (fabsf(pChr->GetPos().z) < fabsf(pBest->GetPos().z)) {
+                        pBest = pChr;
+                    }
+                }
+            }
+            if (!pBest) {
+                for (long i = GetPlayerNo() & 1; i < nNum; i += 2) {
+                    CChrCore *pChr = CChrMan::GetChrCore(i);
+                    if (pChr && !pChr->IsDisable() && pChr->GetPlayerNo() != GetPlayerNo()) {
+                        if (!pBest) {
+                            pBest = pChr;
+                        } else if (fabsf(pChr->GetPos().z) < fabsf(pBest->GetPos().z)) {
+                            pBest = pChr;
+                        }
+                    }
+                }
+            }
+        }
+        if (pBest) {
+            nTo = pBest->GetPlayerNo();
+        }
+    } else {
+        float fMax = 0.0f;
+        for (long i = GetPlayerNo() & 1; i < nNum; i += 2) {
+            CChrCore *pChr = CChrMan::GetChrCore(i);
+            if (pChr && !pChr->IsDisable() && pChr->GetPlayerNo() != GetPlayerNo() &&
+                !(pChr->GetStatusFlag() & 0x80000)) {
+                float fDist = GetDist_ToChrXZSq(pChr);
+                if (fDist > fMax) {
+                    fMax = fDist;
+                    nTo = pChr->GetPlayerNo();
+                }
+            }
+        }
+    }
+    return nTo;
+}
+
+namespace CChrCoreBoss_cpp {
+
+    // uncalled stand-in: the original file holds the weak copy of
+    // CStageMan::GetTeamGroundRect here, after SearchPassToChrIdx_, although
+    // none of its functions calls it; whatever did was stripped. A virtual
+    // call makes this compiler emit the copy. Nothing calls this function
+    // and the module link strips it (notes/decisions.md, "Uncalled stand-in
+    // functions").
+    void UnusedTeamGroundRect(const msw::CStageMan *pStage)
+    {
+        pStage->GetTeamGroundRect(0, 0, 0, 0, 0);
+    }
+
+}
+
 // The yaw towards the court the team attacks.
 float msw::CChrCoreBoss::GetTargetCourtDir_()
 {
@@ -699,6 +1111,177 @@ void msw::CChrCoreBoss::SendMessage_(long nMsg, long, long, long)
             }
         }
     }
+}
+
+// The direction pBall is knocked away in: between the direction from the
+// character to the ball and the ball's own course, mostly the latter.
+// Without a ball, the reverse of the character's yaw.
+float msw::CChrCoreBoss::GetFlickDir_(const CBall *pBall)
+{
+    if (!pBall) {
+        return WrapRad(-1.0f * GetRotY());
+    }
+    float fRot = GetRotY_FromPosXZ(pBall->GetPos());
+    float fDir = fRot;
+    bcs::FVEC3 vel = pBall->GetVelocity();
+    if (fabsf(vel.x) > 0.0f || fabsf(vel.z) > 0.0f) {
+        fDir = GetRotYXZ(vel);
+    }
+    float fDiff = WrapRadPi(fDir - fRot);
+    float fRate = 0.85f;
+    return WrapRad(fRot + Lerp(0.0f, fDiff, fRate));
+}
+
+// The character misses pBall. What is left of it here: the receiver is
+// looked up and a point fMin to fMax (at random) from the ball worked out,
+// but neither is used. (The original's code that sent the ball on is
+// gone.)
+void msw::CChrCoreBoss::Util_MissBall_(CBall *pBall, float fMin, float fMax)
+{
+    if (!pBall) {
+        return;
+    }
+    if (fMin > fMax) {
+        float f = fMin;
+        fMin = fMax;
+        fMax = f;
+    }
+    if (fMin < fMax) {
+        fMin = bcs::BCS_RandRange(fMin, fMax);
+    }
+    bcs::FVEC3 pos;
+    GetBossTargetMarkerPos(pos, 0);
+    m_nBossFlag &= ~7;
+    CChrMan::GetChrCore(SearchPassToChrIdx_(0));
+    pos = pBall->GetPos();
+    int bSent = 1;
+    bcs::FVEC3 ofs;
+    bcs::BCS_VecZ_RotY(ofs, fMin, WrapRad(bcs::BCS_RandMax(6.2831855f)));
+    bcs::FVEC3Add(&pos, &pos, &ofs);
+    // (The original keeps this test of a flag it has just set, so the
+    // effect is never made.)
+    if (!bSent) {
+        Eff_CreateSimple(-1, pBall->GetPos(), GetRotY(), 3, 0, 0);
+    }
+}
+
+// Spikes pBall (nType 2: a super spike, 5: ... with fFrame; nCourse 1 or
+// 2 a course the driver chose; bItem: the stocked item goes with it) at
+// the boss target marker, or else at the boss, then hands the attack to
+// the other team.
+void msw::CChrCoreBoss::Util_SpikeBall_(CBall *pBall, long nCourse, long nType, float fFrame, int bItem)
+{
+    if (!pBall) {
+        return;
+    }
+    const CHR_CORE_BOSS::CC_PARAM_BOSS *pParam = GetCcParam_();
+    BALL::BOSS::SPIKE_SHOT_ARG arg;
+    arg.m_nUnk0C = nType;
+    arg.m_nUnk2C = m_nPlayerNo;
+    arg.m_nUnk30 = m_nTeamNo;
+    arg.m_nUnk34 = GetTargetCourtIdx();
+    arg.m_fUnk40 = GetRotY();
+    arg.m_nUnk54 = PlayGetOutline_(1);
+    if (arg.m_nUnk14) {
+        arg.m_fUnk58 = pParam->m_UnkEC;
+        arg.m_fUnk5C = pParam->m_UnkF0;
+        arg.m_fUnk60 = pParam->m_UnkF4;
+        arg.m_fUnk64 = pParam->m_UnkF8;
+        arg.m_fUnk6C = pParam->m_UnkFC;
+        arg.m_fUnk70 = pParam->m_Unk100;
+        arg.m_fUnk74 = pParam->m_Unk104;
+        arg.m_fUnk78 = pParam->m_Unk108;
+    } else {
+        arg.m_fUnk58 = pParam->m_UnkB8;
+        arg.m_fUnk5C = pParam->m_UnkBC;
+        arg.m_fUnk60 = pParam->m_UnkC0;
+        arg.m_fUnk64 = pParam->m_UnkC4;
+        arg.m_fUnk6C = pParam->m_UnkC8;
+        arg.m_fUnk70 = pParam->m_UnkCC;
+        arg.m_fUnk74 = pParam->m_UnkD0;
+        arg.m_fUnk78 = pParam->m_UnkD4;
+    }
+    bcs::FVEC3 pos;
+    if (!GetBossTargetMarkerPos(pos, 0)) {
+        pos = GetPos();
+        // (the original reads the position once more without using it)
+        GetPos();
+        pos.Set(0.0f, 0.0f, 0.0f);
+        const CNpcBase *pBoss = SearchBoss();
+        if (pBoss) {
+            pos = pBoss->GetPos();
+            pos.y = 0.0f;
+        }
+    }
+    m_nBossFlag &= ~7;
+    GetTargetCourtIdx();
+    arg.m_vUnk00 = pos;
+    if (nType == 2) {
+        arg.m_nUnk20 = 1;
+        arg.m_nUnk44 = 0xC85;
+        arg.m_fUnk58 = pParam->m_UnkD8;
+        arg.m_fUnk5C = pParam->m_UnkDC;
+        arg.m_fUnk60 = pParam->m_UnkE0;
+        arg.m_fUnk64 = pParam->m_UnkE4;
+        arg.m_fUnk6C = pParam->m_UnkE8;
+        arg.m_fUnk70 = 0.0f;
+        arg.m_fUnk74 = 0.0f;
+        arg.m_fUnk78 = 0.0f;
+    } else {
+        arg.m_nUnk44 = 0xC85;
+    }
+    if (nType == 5) {
+        arg.m_nUnk4C = 0x56E;
+        PlayVoice(0x35, 0);
+    } else {
+        arg.m_nUnk4C = 0x575;
+        PlayVoice(0x33, 0);
+    }
+    if (GetCcParam_()->m_Unk00 == 2) {
+        arg.m_nUnk10 = 1;
+    }
+    if (nType == 5) {
+        arg.m_fUnk38 = fFrame;
+        DriverSendMessage((CChrDrv::MSG_ID)0x53, 4, 1, 0, 0);
+    } else {
+        switch (nCourse) {
+            case 1:
+                arg.m_nUnk18 = 1;
+                break;
+            case 2:
+                arg.m_nUnk18 = 2;
+                break;
+        }
+        if (bItem) {
+            arg.m_nUnk3C = GetStockItemType();
+        }
+        if (m_nStatusFlag & 0x20000) {
+            arg.m_nUnk3C = 4;
+        }
+        int nResult = pBall->SetVsBossSpikeShotMode(arg);
+        if (bItem && (nResult & 8)) {
+            SetStockItem(0);
+        }
+        long nPower = 1;
+        if (nResult & 1) {
+            nPower = 7;
+        }
+        if (nResult & 0x10) {
+            nPower = 7;
+        } else if (nResult & 2) {
+            if (bcs::CWorldEnv::GetViewSplitNum() <= 1 && IsPadCtrl()) {
+                float fLineFrame = 30.0f;
+                CGame::StartSaturatedLinework(Max(1.0f, fLineFrame));
+            }
+            CGame::StartCameraQuake(8, m_nPlayerNo, -1);
+        }
+        DriverSendMessage((CChrDrv::MSG_ID)0x53, nPower, 1, 0, 0);
+    }
+    long nTeam = m_nTeamNo;
+    nTeam++;
+    nTeam %= CGame::g_GameWork.m_nTeamNum;
+    CGame::SetOffenseTeam(nTeam);
+    CChrMan::AllSendMsg((CChrDrv::MSG_ID)0x17, nTeam, 0, 0, 0);
 }
 
 // Sends pBall on after a receive of kind nType (1, 2: a toss, 4 to 6: a
@@ -774,6 +1357,105 @@ void msw::CChrCoreBoss::Util_ReceiveBall_(CBall *pBall, long nType, long nCatch,
     pBall->SetVsBossPassMode(target, nKind, GetPlayerNo(), GetTeamNo(), nTo, nCatch, PlayGetOutline_(1));
     CChrMan::AllSendMsg((CChrDrv::MSG_ID)0x9C, pBall->GetBallNo(), GetPlayerNo(), GetTeamNo(), GetTeamNo());
     DriverSendMessage((CChrDrv::MSG_ID)0x53, nPass, 1, 0, 0);
+}
+
+namespace {
+
+    // (guessed helper) The yaw from pChr towards the boss's position on the
+    // ground (the origin when there is no boss).
+    inline float GetRotY_ToBossXZ(const msw::CChrCore *pChr)
+    {
+        bcs::FVEC3 pos(0.0f, 0.0f, 0.0f);
+        const msw::CNpcBase *pBoss = SearchBoss();
+        if (pBoss) {
+            pos = pBoss->GetPos();
+            pos.y = 0.0f;
+        }
+        return pChr->GetRotY_ToPosXZ(pos);
+    }
+
+}
+
+// Where a pass to player nPlayerNo goes (rPos), and its kind: 2 into the
+// spike of a character that is jumping (at the height its spike takes the
+// ball, the charged one when bCharge and the spike is a super spike), 1 to
+// the hands of a character (nHeight >= 1; moved towards the middle of the
+// court, or ahead of a running character), 0 to its feet.
+long msw::CChrCoreBoss::Util_SetPassBallTargetPos_(bcs::FVEC3 &rPos, long nPlayerNo, long nHeight, int bCharge)
+{
+    CChrCore *pTo = CChrMan::GetChrCore(nPlayerNo);
+    rPos = pTo->GetPos();
+    long nState = pTo->FsmqGetState();
+    long nKind = 0;
+    if (nState == STATE_SPIKE) {
+        nKind = 2;
+        if (!(pTo->FsmqGetWork<STATE_WORK_SPIKE>()->m_nFlag & 0x40)) {
+            bCharge = 0;
+        }
+    }
+
+    bcs::FVEC3 ofs;
+    float fHeight = 3.0f;
+    pTo->GetVolleySpikeOffsetPos(0, ofs);
+    if (bCharge) {
+        fHeight = 3.2f;
+        pTo->GetVolleySpikeOffsetPos(1, ofs);
+    }
+
+    if (nKind == 2) {
+        rPos.y = 0.25f * pTo->GetVolleySpikeAdsorbRangeY(bCharge) + fHeight;
+        bcs::FVEC3 vec;
+        bcs::BCS_Vec_RotY(vec, ofs, GetRotY_ToBossXZ(this));
+        bcs::FVEC3Add(&rPos, &rPos, &vec);
+    } else if (nHeight >= 1) {
+        rPos.y = fHeight;
+        bcs::FVEC3 vec;
+        bcs::BCS_Vec_RotY(vec, ofs, GetRotY_ToBossXZ(this));
+        bcs::FVEC3Add(&rPos, &rPos, &vec);
+        if (nState != STATE_SPIKE && nState != STATE_AIR_TRICK) {
+            int bRun = 0;
+            if (nState == STATE_RUN) {
+                bRun = 1;
+            }
+            if (!bRun) {
+                // Pulled towards the middle of the court by a quarter of
+                // how much farther than 4 from it the receiver stands.
+                bcs::FVEC3 pos(pTo->GetPos());
+                float fZ = fabsf(pos.z);
+                bcs::FVEC3 court = CStageMan::GetInstance()->GetTeamCourtOffset(GetGuardCourtIdx());
+                float fOver = fZ - fabsf(court.z);
+                if (fOver >= 4.0f) {
+                    fOver -= 4.0f;
+                    fOver *= 0.25f;
+                    if (pos.z < 0.0f) {
+                        rPos.z += fOver;
+                    } else {
+                        rPos.z -= fOver;
+                    }
+                }
+            } else {
+                // Ahead of the runner, short of the walls.
+                bcs::BCS_VecZ_RotY(vec, 2.5f, pTo->GetRotY());
+                rPos.x += vec.x;
+                rPos.z += vec.z;
+                bcs::FVEC3 from(pTo->GetPos());
+                bcs::FVEC3 to(rPos);
+                bcs::FVEC3 hit;
+                bcs::FVEC3 normal;
+                float fTime;
+                if (CCollMan::DetectMapHit(hit, normal, fTime, from, to, 0.8f, 1,
+                                           (GetGuardCourtIdx() & 0xFF) | 0x82000000)) {
+                    rPos.x = hit.x;
+                    rPos.z = hit.z;
+                }
+            }
+        }
+        nKind = 1;
+    } else {
+        nKind = 0;
+        rPos.y = 0.0f;
+    }
+    return nKind;
 }
 
 // Lets the held ball fall towards fRotY. The original works out a speed and
@@ -1140,6 +1822,208 @@ void msw::CChrCoreBoss::SetTargetMarkerDisable_()
     m_nBossFlag &= ~4;
 }
 
+// The move of the frame: the body radius the map is checked with grows
+// back slowly (0.05 a frame at most) to the one of the moment (the scale
+// while bit 0x8000 of the status is set, none in the air trick, smaller in
+// the serve mode) and shrinks at once; then the floor flow and forced
+// moves, and the model is kept out of the walls.
+void msw::CChrCoreBoss::UpdatePos_()
+{
+    float fRadius;
+    if (m_nStatusFlag & 0x8000) {
+        fRadius = Clamp(m_fScaleBase - 1.0f, 0.0f, 2.0f);
+    } else if (FsmqGetState() == STATE_AIR_TRICK) {
+        fRadius = 0.0f;
+    } else if (IsBossServeMode()) {
+        fRadius = 0.4f;
+    } else {
+        fRadius = 1.1f;
+    }
+    if (fRadius < m_fUnk26C) {
+        m_fUnk26C = fRadius;
+    } else if (fRadius > m_fUnk26C) {
+        float fStep = Min(fRadius - m_fUnk26C, 0.05f);
+        fStep *= m_fTimeScale * m_fFrameStep;
+        m_fUnk26C += fStep;
+        m_fUnk26C = Min(m_fUnk26C, fRadius);
+    }
+    FloorFlowMove_();
+    ForceMove_();
+    bcs::FVEC3 hit;
+    bcs::FVEC3 normal;
+    bcs::FVEC3 pos = m_pMdl->m_vTrans;
+    float fTime;
+    m_nMapHitFlag = (unsigned char)GetGuardCourtIdx() | 0x02000000;
+    if (CCollMan::DetectMapHit(hit, normal, fTime, pos, pos, m_fUnk26C, 1, m_nMapHitFlag)) {
+        m_pMdl->m_vTrans = hit;
+    }
+}
+
+// Places the body collisions on the character: the push collision (0) at
+// its offset from the model's root, turned by the yaw; the body, catch and
+// damage capsules (1, 2, 3, 6) above it; the catch of the boss receive (6,
+// m_fBallCatchUnk7CC wide); the catch of a ball the character may take (5,
+// in the neutral stance, running, turning or some receives; widened by the
+// ball's catchable rate); and the catch set by SetBallCatchEnable* (4).
+void msw::CChrCoreBoss::UpdateCollBody_()
+{
+    if (m_pCollBody) {
+        float fRotY = GetRotY();
+        m_pCollBody->SetEnableAll();
+        bcs::FVEC3 root;
+        GetTransNodePos(root);
+        CalcBodyCollInter_(m_fFrameStep * m_fTimeScale);
+
+        bcs::FVEC3 pos(m_PushOfsInter.m_fNowX, 0.0f, m_PushOfsInter.m_fNowZ);
+        if (0.0f != fRotY) {
+            bcs::BCS_Vec_RotY(pos, pos, WrapRad(fRotY));
+        }
+        bcs::FVEC3Add(&pos, &pos, &root);
+        m_pCollBody->SetPos(0, pos);
+        m_pCollBody->SetSize(0, m_PushSizeInter.m_fNowX * m_fScaleBase, 1.8f * m_fScaleBase,
+                             m_PushSizeInter.m_fNowZ * m_fScaleBase);
+        m_pCollBody->SetYRot(0, fRotY);
+        m_pCollBody->SetPushRank(0, m_nPushRank);
+        m_pCollBody->SetPushPower(0, m_nPushPower);
+
+        bcs::FVEC3 low(pos);
+        bcs::FVEC3 high(pos);
+        low.y += 0.25f * m_fScaleBase;
+        high.y += 0.75f * m_fScaleBase;
+        m_pCollBody->SetPos(2, low, high);
+        m_pCollBody->SetPos(3, low, high);
+        m_pCollBody->SetPos(6, low, high);
+        m_pCollBody->SetPos(1, low, high);
+
+        // Above the normal size the radii grow by 0.7 of the scale only.
+        float fScale = m_fScaleBase;
+        if (fScale > 1.0f) {
+            fScale = 0.7f * (fScale - 1.0f) + 1.0f;
+        }
+        m_pCollBody->SetRadius(2, 0.5f * fScale);
+        m_pCollBody->SetRadius(3, 0.5f * fScale);
+        m_pCollBody->SetRadius(1, 0.4f * fScale);
+
+        CCollUnit *pColl = m_pCollBody->GetColl(6);
+        if (m_fBallCatchUnk7CC <= 0.0f) {
+            pColl->OffFlag10(1);
+        } else {
+            pColl->SetSize(m_fBallCatchUnk7CC * fScale, 0.0f, 0.0f);
+        }
+
+        CBall *pBall = GetTargetBall_();
+        pColl = m_pCollBody->GetColl(5);
+        if (pColl) {
+            int bCatch = 0;
+            bcs::FVEC3 size(2.0f, 1.1f, 1.0f);
+            float fRate = 0.0f;
+            if (pBall && IsBossRightBallTouch(pBall->GetBallNo())) {
+                fRate = pBall->GetVolleyCatchableRate();
+                switch (FsmqGetState()) {
+                    case STATE_NEUTRAL:
+                        bCatch = 1;
+                        size.y = 0.9f;
+                        break;
+                    case STATE_RUN:
+                    case STATE_TURN:
+                        bCatch = 1;
+                        break;
+                    case STATE_RECEIVE: {
+                        size.y = 0.9f;
+                        STATE_WORK_RECEIVE *pWork = FsmqGetWork<STATE_WORK_RECEIVE>();
+                        switch (pWork->m_nKind) {
+                            case 0:
+                                bCatch = 1;
+                                if (m_nBallCatchMode == 0 || m_fBallCatchRange <= 0.0f) {
+                                    bCatch = 0;
+                                }
+                                break;
+                            case 2:
+                                bCatch = 0;
+                                if (pWork->m_nFlag & 0x10000) {
+                                    bCatch = 1;
+                                }
+                                break;
+                        }
+                        break;
+                    }
+                }
+            }
+            if (bCatch && fRate > 0.0f) {
+                float fScaleXZ = m_fScaleBase * fRate;
+                size.x *= fScaleXZ;
+                size.y *= m_fScaleBase;
+                size.z *= fScaleXZ;
+                pColl->SetSize(size);
+                pColl->SetPos(pos);
+            } else {
+                pColl->OffFlag10(1);
+            }
+        }
+
+        pColl = m_pCollBody->GetColl(4);
+        if (pColl) {
+            float fRate = 1.0f;
+            if (pBall && IsBossRightBallTouch(pBall->GetBallNo())) {
+                fRate = pBall->GetVolleyCatchableRate();
+            }
+            switch (m_nBallCatchMode) {
+                case 1: {
+                    // Placed from the character (or one of its nodes),
+                    // turned by its yaw.
+                    bcs::FVEC3 base;
+                    if (m_nBallCatchNode > 0) {
+                        GetNodePos(m_nBallCatchNode, base);
+                    } else {
+                        base = GetPos();
+                    }
+                    bcs::FVEC3 catchPos;
+                    bcs::BCS_Vec_RotY(catchPos, m_BallCatchPos0, GetRotY());
+                    bcs::FVEC3Add(&catchPos, &catchPos, &base);
+                    pColl->SetCollType(m_nBallCatchShape);
+                    pColl->SetPos(catchPos);
+                    if (m_nBallCatchShape == 3) {
+                        bcs::BCS_Vec_RotY(catchPos, m_BallCatchPos1, GetRotY());
+                        bcs::FVEC3Add(&catchPos, &catchPos, &base);
+                        pColl->SetPos2(catchPos);
+                    }
+                    bcs::FVEC3 size(m_fBallCatchRange * fRate, m_fBallCatchHeight, m_fBallCatchRange2 * fRate);
+                    pColl->SetSize(size);
+                    break;
+                }
+                case 2: {
+                    // Placed in the world.
+                    pColl->SetCollType(m_nBallCatchShape);
+                    pColl->SetPos(m_BallCatchPos0);
+                    if (m_nBallCatchShape == 3) {
+                        pColl->SetPos2(m_BallCatchPos1);
+                    }
+                    bcs::FVEC3 size(m_fBallCatchRange * fRate, m_fBallCatchHeight, m_fBallCatchRange2 * fRate);
+                    pColl->SetSize(size);
+                    break;
+                }
+                default:
+                    pColl->SetCollType(0);
+                    pColl->OffFlag10(1);
+                    break;
+            }
+        }
+
+        if (m_nStatusFlag & 0x40000000) {
+            m_pCollBody->SetDisable(2);
+        } else {
+            m_pCollBody->SetEnable(2);
+        }
+        if (m_UnkEC & 4) {
+            m_pCollBody->SetPushDisable(0);
+            m_pCollBody->SetPushDisable(1);
+        } else {
+            m_pCollBody->SetPushEnable(0);
+            m_pCollBody->SetPushEnable(1);
+        }
+    }
+}
+
 // The second half of the update: the look, the hit counts, the attack and
 // defence collisions, and picking up coins and treading on ? panels.
 void msw::CChrCoreBoss::UpdateFunc_()
@@ -1159,6 +2043,89 @@ void msw::CChrCoreBoss::UpdateFunc_()
         CGimmickMan::DropCoinPickup(low, m_pCollBody->GetRadius(3), high.y - low.y, CallbackDropCoinPickup, this);
         CheckQPanel_();
     }
+}
+
+// Where the character looks: at the target ball while it waits or runs
+// (at the boss, the spike's target, when the serve is its own or the ball
+// is out of play or held), while it spikes (not in a super spike) and while
+// it receives (some kinds only); otherwise straight ahead.
+void msw::CChrCoreBoss::UpdateLook_()
+{
+    if (CBallMan::GetActiveBallNum() <= 0) {
+        return;
+    }
+    CBall *pBall = GetTargetBall_();
+    if (!pBall) {
+        return;
+    }
+    switch (FsmqGetState()) {
+        case STATE_RUN:
+        case STATE_TURN:
+        case STATE_NEUTRAL:
+            if (!CanbeReceiveCondition()) {
+                ClearLook();
+                return;
+            }
+            if ((m_nStatusFlag & 1) || !pBall->IsActive() || pBall->IsAttach()) {
+                bcs::FVEC3 pos;
+                GetSpikeTargetPosRot_(&pos);
+                UpdateLookAt_(pos, 0.125f, 0);
+                return;
+            }
+            UpdateLookAt_(pBall->GetPos(), 0.125f, 0);
+            return;
+        case STATE_SPIKE:
+            if (FsmqGetWork<STATE_WORK_SPIKE>()->m_nFlag & 0x40) {
+                ClearLook();
+                return;
+            }
+            UpdateLookAt_(pBall->GetPos(), 0.125f, 0);
+            return;
+        case STATE_RECEIVE: {
+            int bLook = 0;
+            STATE_WORK_RECEIVE *pWork = FsmqGetWork<STATE_WORK_RECEIVE>();
+            if ((pWork->m_nKind >= 3 && pWork->m_nKind <= 4) ||
+                ((pWork->m_nKind == 0 || pWork->m_nKind == 2) && !(pWork->m_nFlag & 0x800))) {
+                bLook = 1;
+            }
+            if (bLook) {
+                UpdateLookAt_(pBall->GetPos(), 0.125f, 0);
+                return;
+            }
+        }
+        default:
+            ClearLook();
+            break;
+    }
+}
+
+// The attack collision of the frame: in the shoot stance, while its motion
+// is in the hit window, unit 0 is a capsule at the character growing from
+// the parameters' smallest to largest radius across the window. The body
+// units 0 and 1 lose their attack (bits 3 and 8) every frame.
+void msw::CChrCoreBoss::UpdateCollAtk_()
+{
+    if (m_pCollAtk) {
+        m_pCollAtk->SetDisableAll();
+    }
+    if (FsmqGetState() == STATE_SHOOT_STANCE) {
+        STATE_WORK_SHOOT_STANCE *pWork = FsmqGetWork<STATE_WORK_SHOOT_STANCE>();
+        CCollUnit *pUnit = m_pCollAtk->GetColl(0);
+        if (pUnit && pWork->m_bHit) {
+            pUnit->SetCollType(1);
+            pUnit->SetAtkType(0xC);
+            pUnit->SetShape(0x20);
+            pUnit->SetCapsule(GetPos(), GetPos());
+            float fRadius = Interp(GetCcParam_()->m_Unk224, GetCcParam_()->m_Unk228, pWork->m_fHitRate);
+            pUnit->SetSize(bcs::FVEC3(fRadius, 1.0f, fRadius));
+            pUnit->SetVanishPower(20.0f);
+            pUnit->OnFlag10(1);
+        }
+    }
+    CCollBodyUnit *pBody0 = CollBodyGetColl_(0);
+    CCollBodyUnit *pBody1 = CollBodyGetColl_(1);
+    pBody0->m_nBodyFlag &= ~0x108;
+    pBody1->m_nBodyFlag &= ~0x108;
 }
 
 // Treading on a ? panel gives the team an item (when it has none) or shows
@@ -1192,7 +2159,7 @@ void msw::CChrCoreBoss::CheckQPanel_()
                 CreateStockItem(nItem);
             }
         } else if (nItem == -1) {
-            bcs::FVEC3 ofs(0.0f, 0.75f, 0.0f);
+            bcs::FVEC3 ofs(0.0f, 1.8f, 0.0f);
             CCockpitBoss::CreateMiniTelop(9, GetPlayerNo(), &ofs);
         }
     }
@@ -1316,6 +2283,48 @@ int msw::CChrCoreBoss::Util_GetJumpLandMotID(int bLand)
     return Util_GetLandMotID(bLand ? 0x28 : -1);
 }
 
+// The leader of the team that serves first: takes ball nBall and stands in
+// the serve pose (motion 1, first frame).
+void msw::CChrCoreBoss::Util_SetOffenseLeaderFirstState(long nBall)
+{
+    CBallMan::SetBallPos(nBall, GetPosPtr());
+    AttachBall(nBall, 5, 0.0f, 0);
+    m_nStatusFlag |= 1;
+    FsmqClear();
+    FsmqChangeState(STATE_NEUTRAL);
+    if (m_pMdl) {
+        AnimPlay(3, 1, 0, 0.0f, 0.0f);
+        m_pMdl->UpdateFrame(0.0f);
+        Util_NodePatchTransCopy();
+        RecalcAllMatrix();
+        AnimStop(3);
+    }
+    SetServeMode_(1);
+    ResetCollBodyPush_(0.5f, 0.5f, 0.0f, 0.0f);
+    CBall *pBall = GetAttachBall();
+    if (pBall) {
+        pBall->SetShotChrIdx(m_nPlayerNo);
+        pBall->SetPassChrIdx(m_nPlayerNo);
+        pBall->SetShotTeamIdx(m_nTeamNo);
+    }
+}
+
+// The leader of the other team: waits in the idle pose.
+void msw::CChrCoreBoss::Util_SetDefenseLeaderFirstState()
+{
+    FsmqClear();
+    FsmqChangeState(STATE_NEUTRAL);
+    if (m_pMdl) {
+        AnimPlay(3, Util_GetIdleMotID(), 0, 0.0f, 0.0f);
+        m_pMdl->UpdateFrame(0.0f);
+        Util_NodePatchTransCopy();
+        RecalcAllMatrix();
+        AnimStop(3);
+    }
+    SetServeMode_(0);
+    ResetCollBodyPush_(0.5f, 0.5f, 0.0f, 0.0f);
+}
+
 // A tap of the dribble: the held ball bounces.
 int msw::CChrCoreBoss::CallbackDribbleTap_()
 {
@@ -1374,10 +2383,172 @@ void msw::CChrCoreBoss::CallbackBallCatch2(CCollBodyUnit *, CBall *pBall, void *
     }
 }
 
+// Catch collision 4 touched pBall: when the character may catch it, the
+// ball bounces off it (more softly while bit 0x8000 of the status is set)
+// and no longer hits it.
+void msw::CChrCoreBoss::CallbackBallCatch2_(CBall *pBall)
+{
+    if (!pBall) {
+        return;
+    }
+    int nCatch = CallbackBallCatch2__(pBall);
+    if (!(nCatch & 1)) {
+        return;
+    }
+    if (!pBall->IsAttach() && !pBall->IsInvincible() && (pBall->GetNoCatchCount() <= 0.0f || (nCatch & 2)) &&
+        !pBall->IsFlag4()) {
+        float fRate = 0.0f;
+        pBall->SetNoHitChr(m_nPlayerNo);
+        if (m_nStatusFlag & 0x8000) {
+            fRate = 0.25f;
+        }
+        pBall->SetChrReflectMode(m_nPlayerNo, fRate);
+    }
+}
+
+// Whether catch collision 4 may catch pBall: bit 0 it bounces off, bit 1
+// even while it may not be caught yet. In the catching states the ball is
+// taken in instead (0).
+int msw::CChrCoreBoss::CallbackBallCatch2__(CBall *pBall)
+{
+    if (m_nStatusFlag & 0x02000000) {
+        return 0;
+    }
+    if (m_UnkEC & 0x20000000) {
+        return 1;
+    }
+    if (!IsBossRightBallTouch(pBall->GetBallNo())) {
+        return 0;
+    }
+    if (m_nStatusFlag & 0x8000) {
+        return 3;
+    }
+    switch (FsmqGetState()) {
+        case STATE_JUMP_UPPER:
+            return 1;
+        case STATE_PASS:
+        case STATE_AERIAL_PASS:
+        case STATE_JUMP_SHOOT:
+        case STATE_AERIAL_SHOOT:
+            return 0;
+        case STATE_DAMAGE:
+            return 0;
+        default:
+            if (pBall->GetNoCatchCount() > 0.0f) {
+                return 0;
+            }
+        case STATE_PASS_CATCH:
+        case STATE_BALL_CATCH:
+            SetHookBallCatch(pBall);
+            return 0;
+    }
+}
+
 void msw::CChrCoreBoss::CallbackBallCatch3(CCollBodyUnit *, CBall *pBall, void *pArg)
 {
     if (pArg) {
         static_cast<CChrCoreBoss *>(pArg)->CallbackBallCatch3_(pBall);
+    }
+}
+
+// Catch collision 6 touched pBall: when the character may catch it, the
+// ball bounces off it if it is already marked (bit 0) or the team has
+// touched it three times (and is then marked); otherwise it is missed.
+void msw::CChrCoreBoss::CallbackBallCatch3_(CBall *pBall)
+{
+    if (!pBall) {
+        return;
+    }
+    int nCatch = CallbackBallCatch3__(pBall);
+    if ((nCatch & 1) && !pBall->IsAttach() && !pBall->IsInvincible() &&
+        (pBall->GetNoCatchCount() <= 0.0f || (nCatch & 2)) && !pBall->IsFlag4() &&
+        !pBall->IsChrBit178(m_nPlayerNo)) {
+        float fRate = 0.0f;
+        if (m_nStatusFlag & 0x8000) {
+            fRate = 0.25f;
+        }
+        if (pBall->IsFlag1()) {
+            pBall->SetChrReflectMode(m_nPlayerNo, fRate);
+            return;
+        }
+        if (pBall->GetVolleyTouchNum(m_nTeamNo) >= 3) {
+            pBall->SetChrReflectMode(m_nPlayerNo, fRate);
+            pBall->OnFlag(1);
+            return;
+        }
+        Util_MissBall_(pBall, 3.0f, 5.0f);
+    }
+}
+
+// Whether catch collision 6 may catch pBall (as CallbackBallCatch2__). A
+// spike that has hit the ball is hurt by it instead (1).
+int msw::CChrCoreBoss::CallbackBallCatch3__(CBall *pBall)
+{
+    if (m_nStatusFlag & 0x02000000) {
+        return 0;
+    }
+    if (m_UnkEC & 0x20000000) {
+        return 1;
+    }
+    if (!IsBossRightBallTouch(pBall->GetBallNo())) {
+        return 0;
+    }
+    if (m_nStatusFlag & 0x8000) {
+        return 3;
+    }
+    switch (FsmqGetState()) {
+        case STATE_SERVE:
+        case STATE_JUMP:
+            return 0;
+        case STATE_DAMAGE:
+            return 0;
+        case STATE_SPIKE: {
+            STATE_WORK_SPIKE *pWork = FsmqGetWork<STATE_WORK_SPIKE>();
+            if (pWork->m_nFlag & 1) {
+                if (!pBall->IsChrBit178(m_nPlayerNo)) {
+                    if (!(m_UnkEC & 0x8000) && !IsInvincible()) {
+                        float fRotY = GetRotY_FromPosXZ(pBall->GetPos());
+                        unsigned long nFlag = 0x20000;
+                        long nState = FsmqGetState();
+                        if (nState == STATE_SPIKE || nState == STATE_AIR_TRICK) {
+                            nFlag = 0x12;
+                        }
+                        SetHookDamage(nFlag, fRotY, 0.0f, 0.0f, -1, 0.0f, 0, 0, -1, -1);
+                    }
+                    return 1;
+                }
+                return 0;
+            }
+            break;
+        }
+        default:
+            if (pBall->GetNoCatchCount() > 0.0f) {
+                return 0;
+            }
+            break;
+    }
+    SetHookBallCatch(pBall);
+    return 0;
+}
+
+// An attack hit a body owned by something of kind 3 or 5 during the shoot stance: a stance
+// about to shoot misses its shot; the hit effect and message 0x53.
+void msw::CChrCoreBoss::CallbackAttackHit_(const CCollAtkUnit *, const CCollBodyUnit *pBody,
+                                           const bcs::FVEC3 &rPos, unsigned long)
+{
+    if (pBody) {
+        long nKind = pBody->m_nOwnerKind;
+        if (nKind == 5 || nKind == 3) {
+            if (FsmqGetState() == STATE_SHOOT_STANCE) {
+                STATE_WORK_SHOOT_STANCE *pWork = FsmqGetWork<STATE_WORK_SHOOT_STANCE>();
+                if (pWork->m_nStep == 3) {
+                    pWork->m_bNoHit = 1;
+                    pWork->m_bHit = 0;
+                }
+                Eff_CreateSimple(0xC, rPos, 3, 0, 0);
+                DriverSendMessage((CChrDrv::MSG_ID)0x53, 6, 1, 0, 0);
+            }
+        }
     }
 }
 
@@ -1447,8 +2618,8 @@ float msw::CChrCoreBoss::GetDunkTargetPosRot_(bcs::FVEC3 *pPos) const
     if (pBoss) {
         long nNode = pBoss->GetNodeID("eff_face");
         pBoss->GetNodePos(nNode > 0 ? nNode : 0, pos);
-        pos.y = 3.0f;
     }
+    pos.y = 3.0f;
     float fRot = GetRotY_ToPosXZ(pos);
     if (pPos) {
         *pPos = pos;
@@ -1465,8 +2636,8 @@ void msw::CChrCoreBoss::CalcRotParam_(ROT_LERP1 &rLerp, float fRotY, float fFram
     if (fDiff > 3.1415927f) {
         fDiff -= 6.2831855f;
     }
-    rLerp.m_afUnk[3] = 0.0f;
     rLerp.m_afUnk[1] = fDiff / rLerp.m_afUnk[2];
+    rLerp.m_afUnk[3] = 0.0f;
 }
 
 // Where the ball can be caught (see m_nBallCatchMode).

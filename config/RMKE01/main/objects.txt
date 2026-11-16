@@ -45,7 +45,7 @@ Equivalent game/msw/CStage17Base.cpp
 Matching game/msw/CMenuLinkList.cpp
 Matching game/msw/CStgGmkAct.cpp
 Matching game/bcs/CWifiPadBase.cpp
-NonMatching game/msw/CGameSnd.cpp
+Equivalent game/msw/CGameSnd.cpp
 Matching game/bcs/CGDLObj.cpp
 Equivalent game/msw/cockpit/CMissionCount.cpp
 Matching game/msw/CEvDemoRes/_CHR_INFO.cpp
@@ -112,3 +112,6 @@ Matching game/msw/ArchiveFont.cpp
 Equivalent game/msw/CCollUnit.cpp
 Equivalent game/bcs/CPadWI.cpp
 Equivalent game/bcs/G2D/CLytManager.cpp
+Equivalent game/msw/CEventNodeBase.cpp
+Equivalent game/msw/CSignBoard.cpp
+Equivalent game/msw/CCockpitResultPartyTeam.cpp

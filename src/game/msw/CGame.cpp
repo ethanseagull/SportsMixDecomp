@@ -630,7 +630,7 @@ namespace msw {
         }
     }
 
-    CGame::CGame(bcs::CTask *pParent, GAME_MODE mode) : bcs::CTask(pParent, -1)
+    CGame::CGame(bcs::CTask *pParent, GAME_MODE mode) : bcs::CUnivTask(pParent, -1)
     {
         AddUnk08(-0x63);
         m_nNextState = 5;
@@ -2587,7 +2587,8 @@ namespace msw {
                 break;
             case 4:
                 if (StateWorkDecStateCount_()) {
-                    CEventDemo::Cleanup(SetGameResultNext_());
+                    SetGameResultNext_();
+                    CEventDemo::Cleanup(1);
                     m_nStateStep++;
                 }
                 break;
@@ -3915,7 +3916,10 @@ namespace msw {
                         CGame::g_GameWork.m_nGameMode != CGame::GAME_MODE_BOSS) {
                         nPad = GetMinusPad(1);
                         if (nPad >= 0) {
-                            ClearHold();
+                            for (int i = 0; i < 4; i++) {
+                                m_anUnk60[i] = 0;
+                                m_afUnk70[i] = 0.0f;
+                            }
                             if (bcs::CWifiPad::IsDown(0x1000, nPad)) {
                                 CMenuPadInfo::s_Instance.m_nPadLeader = nPad;
                                 m_nUnk38 = 0;
@@ -5433,7 +5437,7 @@ namespace msw {
             fFrame = 60.0f;
         }
         if (fOld < 1.0f && fNew >= 1.0f) {
-            CGameSnd::Play(0xC08, 0, 1, -1, 0.0f, 0.0f, 0.0f);
+            CGameSnd::Play(0xC08, 0, 1, -1, 0.0f, 1.0f, 0.0f);
             SetCockpitArtsGaugeRatio_(nTeam, fNew, 0.0f);
             SetCockpitArtsGaugeSpAnim_(nTeam, 1);
         } else if (fOld >= 1.0f && fNew < 1.0f) {
@@ -5456,7 +5460,7 @@ namespace msw {
             fFrame = 60.0f;
         }
         if (fOld < 1.0f && fNew >= 1.0f) {
-            CGameSnd::Play(0xC08, 0, 1, -1, 0.0f, 0.0f, 0.0f);
+            CGameSnd::Play(0xC08, 0, 1, -1, 0.0f, 1.0f, 0.0f);
             SetCockpitArtsGaugeRatio_(nTeam, fNew, 0.0f);
             SetCockpitArtsGaugeSpAnim_(nTeam, 1);
         } else if (fOld >= 1.0f && fNew < 1.0f) {
@@ -5516,7 +5520,7 @@ namespace msw {
         if (pRoulette && pRoulette->IsPushable()) {
             pRoulette->StopSnd();
             pRoulette->m_nItem = nItem;
-            if (pRoulette->m_bUseRoulette == 0) {
+            if (pRoulette->m_bUseRoulette) {
                 fn_80139D28(pRoulette->m_nTeam, 0, pRoulette->m_nItem);
             }
             if (pRoulette->m_nItem == 4) {

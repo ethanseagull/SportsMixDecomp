@@ -314,7 +314,7 @@ void msw::CCameraVolleyGame::MainCamera()
     } else {
         MainCamera_Normal();
     }
-    CalcCamData(0.964355f);
+    CalcCamData(0.96435546875f); // 0x3F76E000 exactly; 0.964355f rounds to 0x3F76DFF8
 }
 
 // Waiting to serve: look at the server, higher for a jump serve and for the

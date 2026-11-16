@@ -50,6 +50,9 @@ namespace bcs {
             // in nMask is ready or on; pauses or resumes them; whether the
             // 3D fade runs.
             static void SetUnivSpeed(float fSpeed);
+            // (added for VolleyF game/volley/CGameVolley.cpp; argument
+            // guessed) Runs the game at half the frame rate while set.
+            static void SetHalfFps(int bHalf);
             static int IsPauseReady(unsigned long nMask);
             static int IsPause(unsigned long nMask);
             static void SetPause(unsigned long nMask, int bPause);

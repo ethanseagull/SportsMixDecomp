@@ -1,3 +1,10 @@
+// First, before this file's own header: the weak CTask inlines that only
+// CMainStepEx's vtable uses (GetFrameRateF, Disp) come out in the original's
+// order only when bcs/CUnivTask.hpp is read before game/msw/CMainStepEx.hpp.
+// Included later (through game/msw/CGame.hpp, whose first base is
+// CUnivTask), Disp comes out first and SystemF's hash check fails. Found by
+// trying placements (notes/toolchain.md, 2026-11-15).
+#include "bcs/CUnivTask.hpp"
 #include "game/msw/CMainStepEx.hpp"
 
 #include "bcs/CCamera.hpp"

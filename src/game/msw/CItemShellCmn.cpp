@@ -139,7 +139,7 @@ namespace msw {
 
             // Reflect the velocity off the push direction unless already moving away.
             float fDot = 2.0f * bcs::FVEC3Dot(&m_vVelocity, &dir);
-            if (fDot <= 0.0f) {
+            if (!(fDot > 0.0f)) {
                 bcs::FVEC3 reflect;
                 bcs::FVEC3Scale(&reflect, &dir, fDot);
                 bcs::FVEC3Sub(&m_vVelocity, &m_vVelocity, &reflect);

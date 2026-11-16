@@ -16,6 +16,14 @@ matcher several turns per function. This does the comparison and labels it:
                 calls, loads/stores, conversions, branches, constant addressing)
   missing       the function is not in the compiled object
 
+Names of anonymous data (@123, lbl_*) are masked, so two loads of *different*
+literals look the same to the comparison, and objdiff's score has the same
+blind spot (ArtsOptFadeOut(0.0f, 5.0f) scores 100% against an original that
+passes 5.0f, 0.0f). Every class except `real` and `missing` is therefore also
+checked for data values: each literal or data object an instruction reads is
+looked up in both disassemblies and its bytes compared. A function that loads a
+different value is reported as `real` with a "data values differ" hint.
+
 Usage:
     python tools/decomp/diff.py <unit>                  every function not at 100%
     python tools/decomp/diff.py <unit> <function>       one function, with the full diff
@@ -34,6 +42,7 @@ import subprocess
 import sys
 from collections import Counter
 from pathlib import Path
+import decomp_common as dc  # noqa: E402  (tools/decomp/decomp_common.py)
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 INSN = re.compile(r"^/\* .*?\*/\t(\S+)(?:\s+(.*))?$")
@@ -43,7 +52,7 @@ NUM = re.compile(r"(?<![\w(])-?0x[0-9a-fA-F]+|(?<![\w(r])\b\d+\b(?!\()")
 
 
 def report_units(version):
-    report = json.loads((ROOT / "build" / version / "report.json").read_text(encoding="utf-8"))
+    report = dc.load_report(version)  # regenerated first if an object is newer
     out = {}
     for u in report["units"]:
         module, _, name = u["name"].partition("/")
@@ -172,18 +181,267 @@ def hints(a, b):
     return out
 
 
-def classify(orig, ours):
+OBJ_START = re.compile(r'^\.obj\s+("[^"]*"|[^\s,]+)')
+DATA_REF = re.compile(r'("[^"]*"|[A-Za-z_.$@][\w.$@<>,:\\-]*?)(\+0x[0-9A-Fa-f]+|\+\d+)?@(l|sda21|sda2)\b')
+WIDTH = {"lfs": 4, "lfsu": 4, "lfsx": 4, "lfd": 8, "lfdu": 8, "lwz": 4, "lwzu": 4, "lhz": 2, "lha": 2,
+         "lhzu": 2, "lhau": 2, "lbz": 1, "lbzu": 1, "psq_l": 8, "psq_lu": 8, "lmw": 4}
+ADDRESS_OF = ("addi", "addic", "ori", "la")
+ADDRESS_SPAN = 64  # bytes compared when an instruction takes a data object's address
+
+
+def _int(tok):
+    return int(tok, 0)
+
+
+def _unescape(s):
+    out = bytearray()
+    i = 0
+    simple = {"n": 10, "t": 9, "r": 13, "0": 0, "\\": 92, '"': 34, "'": 39, "a": 7, "b": 8, "f": 12, "v": 11}
+    while i < len(s):
+        c = s[i]
+        if c == "\\" and i + 1 < len(s):
+            n = s[i + 1]
+            if n == "x" and re.match(r"[0-9A-Fa-f]{2}", s[i + 2:i + 4]):
+                out.append(int(s[i + 2:i + 4], 16))
+                i += 4
+                continue
+            if n in simple:
+                out.append(simple[n])
+                i += 2
+                continue
+        out += c.encode("utf-8", errors="replace")
+        i += 1
+    return bytes(out)
+
+
+def parse_data(text):
+    """{symbol: (bytes, {offset: pointer target})} for every .obj ... .endobj block.
+
+    Pointers (.4byte sym, .rel sym) are left as zeros in the bytes and listed by
+    offset, so a table of function pointers compares by (masked) target name."""
+    import struct
+    out, name, buf, ptrs = {}, None, None, None
+    for line in text.splitlines():
+        m = OBJ_START.match(line)
+        if m:
+            name, buf, ptrs = m.group(1).strip('"'), bytearray(), {}
+            continue
+        if name is None:
+            continue
+        s = line.strip()
+        if s.startswith(".endobj"):
+            out[name] = (bytes(buf), ptrs)
+            name = None
+            continue
+        d, _, arg = s.partition(" ")
+        arg = arg.strip()
+        if not arg.startswith('"'):
+            arg = arg.split(" #", 1)[0].strip()  # dtk comments, e.g. ".4byte 0xFFFFFFFF # NaN"
+        try:
+            if d in (".4byte", ".2byte", ".byte"):
+                width = {".4byte": 4, ".2byte": 2, ".byte": 1}[d]
+                for tok in ([t.strip() for t in arg.split(",")] if d == ".byte" else [arg]):
+                    try:
+                        buf += (_int(tok) & ((1 << (8 * width)) - 1)).to_bytes(width, "big")
+                    except ValueError:  # a symbol: a pointer (quotes kept, mask_symbols needs them)
+                        ptrs[len(buf)] = tok
+                        buf += bytes(width)
+            elif d == ".rel":
+                ptrs[len(buf)] = arg.split(",")[0].strip()
+                buf += bytes(4)
+            elif d == ".float":
+                buf += struct.pack(">f", float(arg))
+            elif d == ".double":
+                buf += struct.pack(">d", float(arg))
+            elif d == ".skip":
+                buf += bytes(_int(arg))
+            elif d in (".string", ".ascii", ".string16"):
+                body = _unescape(arg[1:-1]) if arg.startswith('"') else b""
+                if d == ".string16":
+                    buf += body.decode("utf-8", errors="replace").encode("utf-16-be") + b"\0\0"
+                else:
+                    buf += body + (b"\0" if d == ".string" else b"")
+        except (ValueError, OverflowError):
+            pass  # unparsed directive: the object keeps what was read so far
+    return out
+
+
+def _value_at(data, sym, off, width):
+    """(bytes, ((rel offset, masked pointer), ...)) at sym+off, or None if unknown."""
+    if sym not in data:
+        return None
+    raw, ptrs = data[sym]
+    if width is None:
+        width = max(0, min(ADDRESS_SPAN, len(raw) - off))
+    if off + width > len(raw):
+        return None
+    # A pointer to anonymous data compares as ANON whatever its offset: the original
+    # splits a pool into one label per object, our object addresses one @N + offset.
+    p = tuple(sorted((o - off, re.sub(r"ANON(\+0x[0-9A-Fa-f]+|\+\d+)?", "ANON", mask_symbols(t)))
+                     for o, t in ptrs.items() if off <= o < off + width))
+    return raw[off:off + width], p
+
+
+def _show(mn, val):
+    import struct
+    raw, ptrs = val
+    if ptrs:
+        return "pointer(s) to " + ", ".join(t for _, t in ptrs)
+    if mn.startswith("lfs") and len(raw) == 4:
+        return repr(struct.unpack(">f", raw)[0])
+    if mn.startswith("lfd") and len(raw) == 8:
+        return repr(struct.unpack(">d", raw)[0])
+    if len(raw) > 16:
+        return raw[:16].hex() + "..."
+    return "0x" + raw.hex() if raw else "(empty)"
+
+
+def data_reads(insns, data):
+    """[(index, mnemonic, value)] for every instruction that reads data or takes a
+    data object's address; value is None where the object can't be resolved."""
+    out = []
+    for i, (mn, ops) in enumerate(insns):
+        width = WIDTH.get(mn)
+        if width is None and mn not in ADDRESS_OF:
+            continue
+        for m in DATA_REF.finditer(ops):
+            sym = m.group(1).strip('"')
+            off = int(m.group(2)[1:], 0) if m.group(2) else 0
+            out.append((i, mn, _value_at(data, sym, off, width)))
+    return out
+
+
+def _common(reads_a, reads_b):
+    """Address-of reads see a whole object, whose size can differ by alignment
+    padding alone (a vtable of 0xC bytes in ours, 0x10 in the original): compare
+    only the bytes both have."""
+    out_a, out_b = [], []
+    for (i, mn, va), (j, mn_b, vb) in zip(reads_a, reads_b):
+        if mn in ADDRESS_OF and va is not None and vb is not None:
+            n = min(len(va[0]), len(vb[0]))
+            va = (va[0][:n], tuple(p for p in va[1] if p[0] < n))
+            vb = (vb[0][:n], tuple(p for p in vb[1] if p[0] < n))
+        out_a.append((i, mn, va))
+        out_b.append((j, mn_b, vb))
+    return out_a, out_b
+
+
+# Pointer targets that can't be checked by name: functions the original has no
+# name for (fn_8003B624) and cross-module references dtk leaves unresolved.
+UNNAMED_TARGET = re.compile(r"^(?:fn_[0-9A-Fa-f]{6,8}|_unresolved)$")
+
+
+_CODE = None
+
+
+def _code_hashes():
+    """{function name: set of code hashes} from the function index, so two names
+    for the same code compare equal: the DOL linker folds identical functions,
+    and the original's vtable then names the one copy it kept (CStgMdl's
+    IsSceneEntry slot names nw4r WsdPlayer::GetVoiceOutCount, both li r3, 0; blr)."""
+    global _CODE
+    if _CODE is None:
+        _CODE = {}
+        for f in dc.load_index():
+            # the index hash masks symbol names, so only functions that refer to
+            # none (no call, branch or address) are known to be the same bytes
+            if not set(f["ops"].split()) & {"bl", "b", "lis", "bctrl"}:
+                _CODE.setdefault(f["name"], set()).add(f["hash"])
+    return _CODE
+
+
+def _same_ptr(ta, tb):
+    """ta: pointer target in the original, tb: in ours (masked names)."""
+    if ta == tb:
+        return True
+    if ta is None or tb is None:
+        return False
+    if UNNAMED_TARGET.match(ta) or UNNAMED_TARGET.match(tb):
+        return True
+    if ta == "ANON" and not tb.startswith("ANON"):
+        return True  # the original has no name for this data (lbl_*), ours gave it one
+    code = _code_hashes()
+    return bool(code.get(ta, set()) & code.get(tb, set()))
+
+
+def same_value(va, vb):
+    """Equal bytes, and pointers equal by masked name (an unnamed target matches any)."""
+    (ra, pa), (rb, pb) = va, vb
+    if ra != rb:
+        return False
+    pa, pb = dict(pa), dict(pb)
+    return all(_same_ptr(pa.get(o), pb.get(o)) for o in set(pa) | set(pb))
+
+
+def _first_difference(va, vb):
+    """'at +0xN: X vs Y' for the first byte or pointer where two object reads differ."""
+    (ra, pa), (rb, pb) = va, vb
+    pa, pb = dict(pa), dict(pb)
+    for off in range(0, max(len(ra), len(rb)), 4):
+        ta, tb = pa.get(off), pb.get(off)
+        if not _same_ptr(ta, tb) or ra[off:off + 4] != rb[off:off + 4]:
+            def one(raw, t):
+                return t if t else "0x" + raw[off:off + 4].hex()
+            return f"at +0x{off:X}: {one(ra, ta)} in the original, {one(rb, tb)} in ours"
+    return "same bytes, different pointers"
+
+
+def data_hint(orig, ours, data_a, data_b, aligned):
+    """A hint when a data read gets a different value in ours, else None."""
+    ra, rb = data_reads(orig, data_a), data_reads(ours, data_b)
+    if len(ra) == len(rb):
+        ra, rb = _common(ra, rb)
+    if aligned and len(ra) == len(rb):
+        for (i, mn, va), (_, _, vb) in zip(ra, rb):
+            if va is not None and vb is not None and not same_value(va, vb):
+                if mn in ADDRESS_OF:
+                    return (f"data values differ: instruction {i + 1} ({mn}) takes the address of an object whose "
+                            f"contents differ {_first_difference(va, vb)} (a table entry, string or initialiser)")
+                return (f"data values differ: instruction {i + 1} ({mn}) reads {_show(mn, va)} in the original, "
+                        f"{_show(mn, vb)} in ours (wrong constant, swapped arguments or another object)")
+        return None
+    # Out of order: pair by value, loads only (an address-of read's span depends
+    # on which object it is paired with, and the pairing is unknown here). Only
+    # when every load resolves on both sides: a literal defined in another unit
+    # is unknown in one disassembly and would unbalance the counts.
+    la = [(mn, v) for _, mn, v in ra if mn not in ADDRESS_OF]
+    lb = [(mn, v) for _, mn, v in rb if mn not in ADDRESS_OF]
+    if len(la) != len(lb) or any(v is None for _, v in la + lb):
+        return None
+    ca, cb = Counter(la), Counter(lb)
+    if ca != cb:
+        only_a = [f"{mn} {_show(mn, v)}" for (mn, v) in (ca - cb)]
+        only_b = [f"{mn} {_show(mn, v)}" for (mn, v) in (cb - ca)]
+        return (f"data values differ: the original reads {', '.join(only_a[:4]) or '-'}, "
+                f"ours {', '.join(only_b[:4]) or '-'}")
+    return None
+
+
+def classify(orig, ours, data_a=None, data_b=None):
+    """data_a/data_b: parse_data() of the original and of our disassembly. Without
+    them the data-value check is skipped (the old behaviour)."""
     a = [(m, mask_symbols(o)) for m, o in orig]
     b = [(m, mask_symbols(o)) for m, o in ours]
     if a == b:
-        return "match", []
-    if canon_regs(a) == canon_regs(b):
-        return "registers", []
-    if Counter(no_regs(a)) == Counter(no_regs(b)):
-        return "schedule", []
-    if Counter(no_regs(no_stack(a))) == Counter(no_regs(no_stack(b))):
-        return "stack", []
-    return "real", hints(a, b)
+        cls = "match"
+    elif canon_regs(a) == canon_regs(b):
+        cls = "registers"
+    elif Counter(no_regs(a)) == Counter(no_regs(b)):
+        cls = "schedule"
+    elif Counter(no_regs(no_stack(a))) == Counter(no_regs(no_stack(b))):
+        cls = "stack"
+    else:
+        h = hints(a, b)
+        if data_a is not None:
+            dh = data_hint(orig, ours, data_a, data_b, aligned=False)
+            if dh:
+                h.append(dh)
+        return "real", h
+    if data_a is not None:
+        dh = data_hint(orig, ours, data_a, data_b, aligned=cls in ("match", "registers"))
+        if dh:
+            return "real", [dh]
+    return cls, []
 
 
 def disasm_ours(version, unit):
@@ -202,8 +460,10 @@ def disasm_ours(version, unit):
 
 def analyse(version, unit, module, wanted=None):
     """[(function, class, hints, original insns, our insns)]"""
-    orig = parse((ROOT / "build" / version / ("" if module == "main" else module) / "asm" / (unit + ".s")).read_text(encoding="utf-8", errors="replace"))
-    ours = parse(disasm_ours(version, unit))
+    orig_text = (ROOT / "build" / version / ("" if module == "main" else module) / "asm" / (unit + ".s")).read_text(encoding="utf-8", errors="replace")
+    ours_text = disasm_ours(version, unit)
+    orig, ours = parse(orig_text), parse(ours_text)
+    data_a, data_b = parse_data(orig_text), parse_data(ours_text)
     rows = []
     for fn, insns in orig.items():
         if wanted is not None and fn not in wanted:
@@ -211,7 +471,7 @@ def analyse(version, unit, module, wanted=None):
         if fn not in ours:
             rows.append((fn, "missing", ["not in the compiled object (named differently, or not written)"], insns, []))
             continue
-        cls, why = classify(insns, ours[fn])
+        cls, why = classify(insns, ours[fn], data_a, data_b)
         rows.append((fn, cls, why, insns, ours[fn]))
     return rows
 

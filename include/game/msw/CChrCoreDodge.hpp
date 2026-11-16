@@ -523,7 +523,7 @@ namespace msw {
             virtual void AnimPlayBufPopFront_();                       // 0x1018, return type guessed
             virtual int AnimPlayBufGetFront_();                        // 0x101C, return type guessed
             virtual void MotActSet(MOT_ACT_CONTEXT &, long, const MOT_ACT_PARAM &, float, float); // 0x1020, return type guessed
-            virtual float MotActUpdate(MOT_ACT_CONTEXT &, float);      // 0x1024, return type guessed
+            virtual int MotActUpdate(MOT_ACT_CONTEXT &, float);        // 0x1024 (int: 1 once the motion has run its frames)
             virtual CChrCore *Util_GetNearOuterChr(long, float, float) const; // 0x1028, return type guessed
             virtual CChrCore *Util_GetNearInnerChr(long, float, float) const; // 0x102C, return type guessed
             virtual CChrCore *Util_GetNearOuterChrExclusive(long, float, float) const; // 0x1030, return type guessed
@@ -536,7 +536,7 @@ namespace msw {
             virtual void ArtsFadeReset() const;                        // 0x104C, return type guessed
             virtual int IsArtsInputEnable() const;                     // 0x1050, return type guessed
             virtual int IsArtsBranchEnable() const;                    // 0x1054, return type guessed
-            virtual void ArtsInputCheck();                             // 0x1058, return type guessed
+            virtual int ArtsInputCheck();                              // 0x1058 (int: the driver's answer)
             virtual void ArtsNextSubStep(int);                         // 0x105C, return type guessed
             virtual void ArtsNextSubStep(int, long);                   // 0x1060, return type guessed
             virtual void DoArtsNextSubStep();                          // 0x1064, return type guessed
@@ -641,7 +641,11 @@ namespace msw {
             int SubStateDamageLoopDizzy_(STATE_WORK_DAMAGE *pWork);
             int SubStateDamageLoopTumble_(STATE_WORK_DAMAGE *pWork);
 
-            unsigned char m_Unk574[0x644 - 0x574];
+            unsigned char m_Unk574[0x5A8 - 0x574];
+            // 0x5A8 (name guessed; game/dodge/unit_3F694.cpp): the jump shot
+            // sets it to the frame of the throw plus 30 when the ball leaves.
+            float m_fShootTime;
+            unsigned char m_Unk5AC[0x644 - 0x5AC];
             // 0x644, 0x648 (names guessed; Reset_ sets both, UpdateStamina
             // counts them down): the frames before the stamina starts to
             // charge, and before it starts to drain again.
@@ -705,6 +709,56 @@ namespace msw {
         long m_nArtsLevel;             // 0x124
         float m_fShotFrame;            // 0x128, the frame of the shot motion the ball leaves at (name guessed)
         long m_nAfterStep;             // 0x12C, the step after the shot (the Moogle)
+    };
+
+    // (added for game/dodge/unit_3F694.cpp; names guessed from what
+    // CChrCoreDodge::MotActSet does with them) A motion played for a given
+    // number of frames, with the model turned around one axis meanwhile and
+    // an optional effect.
+    struct CChrCoreDodge::MOT_ACT_PARAM {
+        long m_nUse;                   // 0x00, MotActSet does nothing when 0
+        float m_fBlend;                // 0x04, the blend frames of the motion
+        float m_fFrame;                // 0x08, how many frames the motion lasts
+        int m_bLoop;                   // 0x0C, passed to AnimPlay
+        float m_fSpeed;                // 0x10, scales the motion speed when above 0
+        long m_nRotAxis;               // 0x14, 1: Y, 2: X, 3: Z (MOT_ACT_CONTEXT::m_nRotAxis)
+        float m_fRotNum;               // 0x18, full turns over the motion
+        long m_nEffect;                // 0x1C, negative for none
+        long m_nEffNode;               // 0x20, the model node of the effect (index into the node table at 0x180)
+        long m_nEffType;               // 0x24
+    };
+
+    // (names guessed) What MotActSet starts and MotActUpdate advances.
+    struct CChrCoreDodge::MOT_ACT_CONTEXT {
+        int m_bActive;                 // 0x00
+        float m_fFrameMax;             // 0x04
+        float m_fFrame;                // 0x08
+        long m_nRotAxis;               // 0x0C
+        float m_fRotNum;               // 0x10
+        float m_fRotY;                 // 0x14, the character's yaw when it started
+    };
+
+    // (added for game/dodge/unit_3F694.cpp; names guessed) The work of the
+    // jump shot state (CtorStateJumpShoot ... DtorStateJumpShoot), passed to
+    // OnShootSubStepChange each time its step changes.
+    struct CChrCoreDodge::STATE_WORK_ITEM_SHOOT {
+        long m_nStep;                  // 0x00, 0 to 8
+        float m_fRotY;                 // 0x04, the direction of the throw
+        float m_fStartRotY;            // 0x08, the yaw when the state began
+        float m_fShotFrame;            // 0x0C, the motion frame the ball leaves at
+        int m_bJump;                   // 0x10, thrown in the air (bit 0x400 of m_nStatusFlag)
+        int m_bItem;                   // 0x14, an item is thrown instead of the ball
+        long m_nShootType;             // 0x18, set by whoever starts the state (0, 2, 3, 5, 6)
+        long m_nMotType;               // 0x1C, the kind of motion (2: the charged throw)
+        float m_fRunSpeed;             // 0x20, the run speed carried into the throw
+        float m_fTimer;                // 0x24, counts down
+        float m_fFrame;                // 0x28
+        float m_fFrameMax;             // 0x2C
+        float m_fStopFrame;            // 0x30, where the motion waits (m_bJump clear)
+        float m_fRunRotY;              // 0x34
+        unsigned long m_nFlag;         // 0x38, bit 0: the voice of type 3 played, bit 1: start at step 2
+        CC_DATA::CHR_PARAM::MOVE_PARAM m_MoveParam; // 0x3C
+        CChrCore::DIR_MOVE m_DirMove;  // 0x4C
     };
 
     // Size 0x968.

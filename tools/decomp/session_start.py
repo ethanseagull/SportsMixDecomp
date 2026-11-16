@@ -39,13 +39,29 @@ def main():
             ahead = run("git", "rev-list", "--count", f"{main}..HEAD")
             print(f"{main} has {behind or '?'} commit(s) this branch lacks; this branch has {ahead or '?'} not landed."
                   " Land after every committed unit: py -3.12 tools/decomp/worktree.py land")
+            # Old tools in a worktree skip newer checks (73 near records bypassed the
+            # near gate on 11-12..14 that way): say so before any matching starts.
+            newer = run("git", "log", "--oneline", f"HEAD..{main}", "--", "tools/")
+            if newer:
+                print(f"WARNING: {main} has newer tools ({len(newer.splitlines())} commit(s) to tools/). "
+                      f"Bring them in before matching: py -3.12 tools/decomp/worktree.py land (or sync from the main checkout).")
     overlap = run(sys.executable, "tools/decomp/worktree.py", "overlap", "--quiet-if-none")
     if overlap:
         print(overlap)
     out = run(sys.executable, "tools/decomp/next.py")
     lines = [l for l in out.splitlines() if l.strip()]
-    print("\n".join(lines[:14]))
-    print("Read notes/decisions.md and notes/autonomy.md before a run; tools are listed in CLAUDE.md.")
+    if lines:
+        print("\n".join(lines[:14]))
+    else:
+        print("(next.py printed nothing: it failed or took over 60 s; run py -3.12 tools/decomp/next.py by hand)")
+    # The files every agent reads stay small enough to be read whole.
+    budgets = {"CLAUDE.md": 10, "notes/toolchain.md": 14, "notes/idioms.md": 18,
+               "notes/decisions.md": 10, "notes/log.md": 120}
+    over = [f"{p} {(ROOT / p).stat().st_size // 1024} KB (budget {kb} KB)" for p, kb in budgets.items()
+            if (ROOT / p).exists() and (ROOT / p).stat().st_size > kb * 1024]
+    if over:
+        print("Over budget, curate them (notes/README.md, 'Keeping notes small'): " + "; ".join(over))
+    print("Read notes/README.md (what to read, and where findings go); tools are listed in CLAUDE.md.")
 
 
 if __name__ == "__main__":

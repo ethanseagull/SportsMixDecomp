@@ -336,7 +336,8 @@ long msw::CCockpitHockeyResult::SetCountScore(long *pScore0, long *pScore1, long
                 bcs::G2D::CPaneObj *pObj = m_pPaneAccessor->GetPaneObj(nPane);
 
                 if (pObj != 0) {
-                    float fSpeed = GetCountSpeed(m_fUnk00 + m_fUnk04 * i);
+                    float fDelay = m_fUnk04 * i;
+                    float fSpeed = GetCountSpeed(m_fUnk00 + fDelay);
 
                     if (fSpeed > 0.0f) {
                         pObj->PlayAnimation(ANIM_SCORE_COUNT, fSpeed, 0.0f, 0, 1, 1);

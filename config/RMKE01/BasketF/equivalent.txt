@@ -67,7 +67,7 @@ BasketF GetArtsEffectUnit__Q23msw19CChrCoreBasketSlimeFl near 90.9 90.9%: same c
 BasketF GetBgCollRadiusXZ__Q23msw16CBallBasketFruitCFv near 99.3 float register choice for 0.23f and the scale array
 BasketF GetBgCollRadius__Q23msw16CBallBasketFruitCFv near 99.3 float register choice for 0.23f and the scale array
 BasketF GetDir4ToBattle___Q23msw13CChrManBasketCFf near 99.8 [real, reviewed] reviewer: Constant pool offsets shifted by 8 consistently; diff.py data check finds identical values.
-BasketF GetEffectUnit__Q23msw19CChrCoreBasketYoshiFl near 89.7 same values/order into the static YOSHI_COL_SET array; only the array base addressing (stwu @l vs separate addi) and one more saved register differ
+BasketF GetEffectUnit__Q23msw19CChrCoreBasketYoshiFl near 89.7 [real, reviewed] reviewer: same byte values and order into same static array; only base-register addressing/regs differ
 BasketF GetFirstLookInfo_MultiPlay__Q23msw15CCameraBasketHBFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 99.7 99.7%, registers only: in the character loop the z*scale product and pos.x swap float registers
 BasketF GetFirstLookInfo_MultiPlay__Q23msw17CCameraBasketGameFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 98.8 98.8: one store scheduled one slot later, clamp fmuls commutative operand order (as HockeyF)
 BasketF GetFirstLookInfo_SinglePlay__Q23msw17CCameraBasketGameFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 99.5 99.5: register numbering only
@@ -131,7 +131,7 @@ BasketF LoopStatePursuit__Q23msw19CNpcGhostBasketBaseFv near 99.8 register choic
 BasketF LoopStateSizeChange__Q23msw14CChrCoreBasketFv near 99.8 99.8: FsmqGetWork tail/head load order
 BasketF LoopStateSliding__Q23msw14CChrCoreBasketFv near 99.9 99.9: register choice, operand order inside fnmsubs/fmadds
 BasketF LoopStateSmashCut__Q23msw14CChrCoreBasketFv near 93.2 [real, reviewed] reviewer: only mr./cmpwi on the IsAnmFlipPlay result and li/lfs argument setup order differ; same constants, calls and args
-BasketF LoopStateSmashCut__Q23msw19CChrCoreBasketYoshiFv near 85.9 control flow, calls, constants and fields match; ours keeps one .rodata base register where the original reloads lis/@l per constant (toolchain.md literal pooling), and cmpwi vs mr. on IsAnmFlipPlay
+BasketF LoopStateSmashCut__Q23msw19CChrCoreBasketYoshiFv near 86.7 [real, reviewed] reviewer: one kept rodata base vs per-constant lis/@l, cmpwi vs mr., regs; no data-value diff reported
 BasketF LoopStateSmashCut__Q23msw20CChrCoreBasketKuromaFv near 94.6 [real, reviewed] reviewer: stack slots, commutative fmadds/fmuls, scheduling; CAtkCollision ctor runs before disjoint field stores (0x58-0x70) in ours, no overlap
 BasketF LoopStateSmashCut__Q23msw21CChrCoreBasketKinopioFv near 98.5 two local vectors in different stack slots; register renumbering and load order
 BasketF LoopStateTurn__Q23msw14CChrCoreBasketFv near 99.8 [real, reviewed] reviewer: li 0/ori 7 vs li 7, register renumbering, and fmuls operands swapped (0x78(r31)*0x10(r30)); commutative

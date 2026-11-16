@@ -206,6 +206,12 @@ namespace msw {
             void SetDunkRelease_(long nGoal, float fFrame);
             // pChr was team nTeam's leader before the change.
             void SetPrevLeader_(long nTeam, const CChrCore *pChr);
+            // (added for game/basket/unit_581FC.cpp; guessed inlines:
+            // CChrCoreBasket::MethdChgLeader gets the instance for each)
+            // Not zero while team nTeam's leader changed lately; the leader
+            // before the change.
+            static int IsPrevLeaderFrame(long nTeam) { return GetInstance()->m_fPrevLeaderFrame[nTeam] > 0.0f; }
+            static const CChrCore *GetPrevLeader(long nTeam) { return GetInstance()->m_pPrevLeader[nTeam]; }
 
         protected:
             void CreateObj_();

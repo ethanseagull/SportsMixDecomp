@@ -186,6 +186,11 @@ namespace msw {
             long GetCurrentActType() const;
             int ActMain();
             int IsMyTeamHoldBall(long nTeam) const;
+            // (DOL; added for HockeyF game/hockey/unit_B0048.cpp) Whether the
+            // other team holds the ball (-1 as IsMyTeamHoldBall); the XZ
+            // distance between two world positions.
+            int IsEmTeamHoldBall(long nTeam) const;
+            float GetWorldDisXZ(const bcs::FVEC3 &rPos0, const bcs::FVEC3 &rPos1) const;
             void SetAlarm(long nAlarm, float fFrame);
             int IsHaveMyStockItem() const;
 

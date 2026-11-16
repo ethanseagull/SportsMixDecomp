@@ -53,7 +53,7 @@ TourF LoopStateGameVictory__Q23msw15CTournamentStepFv near 99.3 [real, reviewed]
 TourF LoopStateInitialize__Q23msw15CTournamentStepFv unverified 92.4 branch structure differs (beq/bne counts); not checked
 TourF LoopStateMoveEnd__Q23msw15CTournamentStepFv near 92.6 [real, reviewed] reviewer: block placement, float pool at other offsets (same values), fcmpo+mfcr+extrwi+beq equals ble, a redundant clrlwi before extsb, statics named vs anonymous
 TourF LoopStateMoveResult__Q23msw15CTournamentStepFv near 92.7 [real, reviewed] reviewer: equivalent two-way branch forms, fcmpo+mfcr+beq equals ble, float pool at other offsets (same values), commuted fadds, a redundant reload of m_UnkD0, an idempotent extsb
-TourF LoopStateMoveSetup__Q23msw15CTournamentStepFv unverified 96.3 calls GetMatchInfo where the original calls MatchInfo (a different function, bodies reported identical); otherwise registers, block order and equivalent sign-bit forms
+TourF LoopStateMoveSetup__Q23msw15CTournamentStepFv near 96.3 [real, reviewed] reviewer: side bytes read through the MatchInfo result where the original uses the GetMatchInfo result (identical DOL bodies, same address; both sides make the same calls), SetState blocks swapped with the same mapping, extrwi+neg vs extsb+srawi 7, redundant clrlwi/reload, float-pool offset
 TourF LoopStateNextCup__Q23msw15CTournamentStepFv unverified 96.1 button table built on the stack differently (string pool, byte conversions); not checked line by line
 TourF LoopStateNpcCallMove__Q23msw15CTournamentStepFv unverified 91.7 the original calls GetTournamentInfo once more; frame differs
 TourF LoopStateNpcCallPlay__Q23msw15CTournamentStepFv unverified 98.2 branch form differs (ble in ours); not checked
@@ -107,12 +107,12 @@ TourF SetupSelect__Q23msw14CTournamentManFPPQ23msw10CRouteBaseUcPCUclllfff near 
 TourF SetupStagePoint__Q23msw19CTournamentRouteManFli near 99.0 instruction order only
 TourF SortCmpParamTurn__3mswFPCcPCc near 93.8 [real, reviewed] reviewer: compare operands and branch sense swapped together (cmpw A,B; ble vs cmpw B,A; bge), same signedness, one lbz hoisted
 TourF TeamCreate__Q23msw15CTournamentStepFllff near 95.0 [real, reviewed] reviewer: saved-register count and frame size, shifted stack slots, commuted adds, a dead stack copy dropped, two AnimResFrame getter calls (resource frame-count lookups, no side effects) in the opposite order
-TourF TeamErase__Q23msw15CTournamentStepFll unverified 96.6 control flow differs: the original skips EraseEffect, the TeamInfo flag clear and SetDisp(0) when nType==1; ours runs them for every nType
+TourF TeamErase__Q23msw15CTournamentStepFll near 99.6 [real, reviewed] reviewer: float-pool loads at other offsets and in another order (same values), commuted fadds; control flow now as the original
 TourF TeamPos__Q23msw15CTournamentStepFlll near 90.8 [real, reviewed] reviewer: ori 1 vs li 1 on a flag that the inlined GetPointMarkerFlag starts at 0, a redundant byte truncation, commuted float adds, registers
-TourF TimeStateGameCallMove__Q23msw15CTournamentStepFcsUli unverified 98.2 the original skips event 1 when bReset is set or m_UnkC6 is nonzero; ours has neither test and always runs CleanMoveRoute and SetBattlePause
+TourF TimeStateGameCallMove__Q23msw15CTournamentStepFcsUli near 99.2 [real, reviewed] reviewer: float-pool offsets (same values), registers, commuted fadds/fmuls operands; guards now as the original
 TourF TimeStateGameCallPlay__Q23msw15CTournamentStepFcsUli unverified 97.4 one immediate, one extsb and branches differ; not checked
 TourF TimeStateGameStart__Q23msw15CTournamentStepFcsUli near 99.2 [real, reviewed] reviewer: float pool and jump table at another offset (same values, no data difference), li registers and store order only
-TourF TimeStateNpcCallMove__Q23msw15CTournamentStepFcsUli unverified 98.4 the original skips event 0 when bReset is set; ours has no such test
+TourF TimeStateNpcCallMove__Q23msw15CTournamentStepFcsUli near 99.2 [real, reviewed] reviewer: float-pool offsets (same values), registers, commuted fadds/fmuls operands; guards now as the original
 TourF TimeStateNpcCallPlay__Q23msw15CTournamentStepFcsUli near 99.8 [real, reviewed] reviewer: float pool at another offset (same values), order of independent loads and extsb only
 TourF TimerEvent__Q23msw27CTournamentRouteMan_Stage32FllfUli near 99.0 case 0x13 inlines TournamentWork::GetPointViewPos, which computes z before x (stack temporaries, registers, order); register numbering otherwise
 TourF TimerEvent__Q23msw27CTournamentRouteMan_Stage33FllfUli near 98.5 register and instruction order only, mostly the inlined point-offset conversions; regs search no gain in 24 tries
@@ -125,7 +125,6 @@ TourF VsMatchPause__Q23msw15CTournamentStepFlll near 93.0 [real, reviewed] revie
 TourF _CanbeExit__Q23msw15CTournamentExitFv near 98.8 [real, reviewed] reviewer: extsb. vs cmpwi 0 before bne test the same zero condition on an lbz byte; r0 not read afterwards
 TourF _ChangeStateEvent__Q23msw15CTournamentStepFc unverified 94.6 one extra extsb in ours; not checked
 TourF _CheckEventEntry__Q23msw15CTournamentStepFll unverified 97.7 string pool offsets and one extra clrlwi; not checked
-TourF _CheckResult__Q23msw15CTournamentExitFi unverified 98.2 default case: the original picks step 12 for result >= -1 (else 8); ours reuses the compare with 1001, so results 0..1000 take another step
 TourF _CheckUnlockStage__Q23msw9CTmScriptFl near 98.4 register allocation/instruction order only
 TourF _CleanAfterErase__Q23msw15CTournamentStepFv near 98.9 [real, reviewed] reviewer: one redundant reload of match.nState (0xc) with no store or call between
 TourF _DefPushCamera__Q23msw19CTournamentRouteManFPQ33msw10CRouteBase10_PUSH_INFOlfPQ23msw11CEventModel near 94.1 instruction order and register choice only

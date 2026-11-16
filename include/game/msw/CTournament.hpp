@@ -76,6 +76,12 @@ namespace msw {
             // guessed). Whether the mission forbids the computer of team
             // nTeam the named kind of shot.
             static int IsMissionComThrowingShootDisable(long nTeam);
+            // (added for BasketF game/basket/CGameBasket.cpp; static, return
+            // types and meanings guessed) The shot clock ran out; whether a
+            // basket of shot type nShootType by team nTeam is not counted
+            // by the mission (above 0; 4 also ends the game).
+            static void ShotClockTimeOver();
+            static long IsMissionShootFalseRetry(long nTeam, long nShootType);
             // (added for VolleyF game/volley/CComDrvVolleyGame.cpp) Whether
             // mission rule nRule applies to team nTeam.
             static int IsMissionRuleEnable(long nRule, long nTeam);

@@ -200,6 +200,11 @@ namespace msw {
             // from the names) Not zero when a dunk from here may miss; how
             // far the dash has gone (0 to 1).
             int CanbeDunkMissDist() const;
+            // (added for game/basket/CGameBasket.cpp; meanings guessed from
+            // the names) Not zero when the character can jump for a dunk;
+            // the frames left of the trick move (state 0x1E).
+            int CanbeDunkJump() const;
+            float GetStateWorkTrickMoveRemainderFrame() const;
             float GetDashActRate() const;
             // (added for game/basket/CGameGuideBasket.cpp; meanings guessed
             // from the names) How far into its dunk the character is, in

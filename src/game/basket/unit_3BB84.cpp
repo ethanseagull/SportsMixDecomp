@@ -149,9 +149,6 @@ long msw::CChrCoreBasket::CheckPassType_(const bcs::FVEC3 &rPos, const CChrCore 
 void msw::CChrCoreBasket::LoopStatePass()
 {
     STATE_WORK_PASS *pWork = FsmqGetWork<STATE_WORK_PASS>();
-    // (always 0 here; the plain pass motion would be mirrored with them)
-    int bNoFlip = 0;
-    int bFlip = 0;
 
     switch (pWork->m_nStep) {
         case 0:
@@ -185,13 +182,10 @@ void msw::CChrCoreBasket::LoopStatePass()
             pWork->m_nPassType = CheckPassType_(pWork->m_Target, pWork->m_pTo);
             switch (pWork->m_nPassType) {
                 default:
-                    if (!bNoFlip && bFlip) {
-                        AnimPlay(3, -0x72, 0, 8.0f, 0.0f);
-                    } else {
-                        AnimPlay(3, 0x72, 0, 8.0f, 0.0f);
-                    }
+                    // (the original also has a mirrored AnimPlay(3, -0x72, ...)
+                    // behind two flags that are always 0: dead code)
+                    AnimPlay(3, 0x72, 0, 8.0f, 0.0f);
                     pWork->m_fShotFrame = 8.0f;
-                    bFlip = 1;
                     break;
                 case 4:
                 case 6:

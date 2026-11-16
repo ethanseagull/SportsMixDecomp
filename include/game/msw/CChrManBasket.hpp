@@ -109,6 +109,9 @@ namespace msw {
             CNpcGhostBasketBase *CreateGhost_(long nType, long nTeam);
             // Team nTeam's ghost; null when there is none.
             CNpcBase *GetGhost_(long nTeam);
+            // (added for game/basket/unit_9AFD4.cpp; guessed static wrapper:
+            // ActLoopDefGhost computes the team before CChrMan::GetInstance)
+            static CNpcBase *GetGhost(long nTeam) { return GetInstance()->GetGhost_(nTeam); }
             // (added for game/basket/CComDrvBasketGame.cpp; guessed inline:
             // the driver reads the member after CChrMan::GetInstance) The
             // character whose special shot plays; null for none.

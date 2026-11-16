@@ -220,6 +220,7 @@ main LoopState_MOVE__Q23msw19CStgGmk_Trolley_ActFv near 93.1 [real, reviewed] re
 main MainBury___Q23msw9CDropCoinFv near 99.9 one fmadds with its multiplied operands swapped (commutative)
 main MainMove___Q23msw9CDropCoinFv near 97.7 register choice in the inlined reflection; -3.0f constant loaded earlier in the original
 main Main__Q23bcs10CStrapTaskFv near 98.5 one store scheduled before another; same stores
+main Main__Q23bcs6CMovieFv near 99.0 [real, reviewed] reviewer confirmed: inlined IsFrameEnd reloads m_nFlags (0x34) where the original reuses the register; no store, call or volatile access between the reads
 main Main__Q23bcs8CTaskManFi near 99.7 register choice for the request loop counter and offset only
 main Main__Q23msw11CPinballManFf near 99.1 register allocation/order only (diff.py: registers/schedule)
 main Main__Q23msw13CGameStopTaskFv near 96.5 [real, reviewed] reviewer confirmed: compare tree maps 0, 1 and default as ours; three independent stfs reordered
@@ -285,6 +286,7 @@ main OpPushValue__Q33msw2vm6CVMCpuFv unverified 83.8 schedule/register only per 
 main OpRemoveBlock__Q33msw2vm6CVMCpuFv near 87.2 register allocation and instruction scheduling only
 main OpReturnBlock__Q33msw2vm6CVMCpuFv unverified 79.2 copy loop uses different induction variables, 6 instructions longer; same copies; two models tried
 main OpReturnValue__Q33msw2vm6CVMCpuFv near 97.8 register allocation and instruction scheduling only
+main Open__Q23bcs6CMovieFPCcil near 97.7 [schedule] register swap between the mutex pointer and the inlined CMovieThread::GetState value
 main Pause__Q23bcs8CSndTaskFfi near 98.1 [real, reviewed] reviewer confirmed: subi 0x40; cmplwi 0x23 is the unsigned form of 0x40 <= id <= 0x63, same exits for every id
 main PlayAnim__Q33bcs3G2D10CLayoutObjFlff near 96.5 register allocation only: nAnim/this/transform pointer permuted across r29-r31; same calls, constants and accesses
 main PlayGameResultBGM___Q23msw5CGameFv near 90.3 [real, reviewed] reviewer confirmed: unsigned vs signed compares on bytes, cntlzw vs branch, tree vs chain on results 1 and 2, a reload with no store between, a consistent counter swap
@@ -381,11 +383,13 @@ main StartCameraQuake___Q23msw5CGameFlll near 97.5 instruction order only
 main StartSlowEffect__Q23msw5CGameFffff near 96.8 [real, reviewed] reviewer confirmed: m_pArtsTaskRoot reloaded after the allocation instead of kept in a saved register; the allocator cannot write it; same calls, stores and constants
 main StartSlowEffect___Q23msw5CGameFffff near 99.1 [real, reviewed] reviewer confirmed: a never-written stack local reloaded after operator new instead of kept in a saved register
 main StartZone__Q23msw26CStgGmk_WaterPillarClusterFl near 98.7 float register choice only, in the inlined paired-single add and the delay value
+main Start__Q23bcs6CMovieFUl near 99.1 [schedule] register swap between the mutex pointer and the inlined CMovieThread::GetState value
 main Start__Q23msw15CGameScoredViewFl near 99.7 register choice only: pointer registers of the two inlined paired-single vector adds
 main Start__Q23msw8CGameVibFllll unverified 84.3 84.3%: same calls, loads, constants and branches; the original keeps the pattern table base and the nPattern*0x24 offset in two saved registers (ours folds them into one) and has a 0x10-larger frame; only register/stack layout found, but under the 85% floor
 main StepIn__Q23msw16CCockpitMenuBaseFv near 99.0 r5/r7 swapped in the unrolled default-button loop; same instructions otherwise
 main Step__Q23msw14CGameSpeedCtrlFf near 99.3 [real, reviewed] reviewer confirmed: original has a dead store of the unclamped sum to 0x4c, overwritten on every path before any read
 main StopAllCameraQuake__Q23msw5CGameFv near 98.1 instruction order only
+main Stop__Q23bcs6CMovieFv near 98.9 [schedule] register swap between the mutex pointer and the inlined CMovieThread::GetState value
 main TeamItemStartRoulette___Q23msw5CGameFll near 90.4 [real, reviewed] reviewer confirmed: compare tree returns 1 for states 0 and 2 and 0 otherwise, same as ours (read from the raw asm)
 main TrgArtsEvent___Q23msw5CGameFl near 96.0 [real, reviewed] reviewer confirmed: original copies the returned colour struct to another slot before reading it; ours reads the same bytes directly; same calls
 main UpdateColl__Q23msw16CStgGmk_Case_ActFv unverified 92.7 reviewer: frame 0x1e0 vs 0x190, two more frsp and extra vector stores in the original; reviewer saw the same calls, offsets and constants but could not trace every stack slot

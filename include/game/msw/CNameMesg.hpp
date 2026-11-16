@@ -12,6 +12,10 @@ namespace msw {
         public:
             // The name of character nType in colour nColor.
             static const wchar_t *GetCharName(long nType, long nColor, long);
+            // (added for BasketF game/basket/CGameBasket.cpp; return type and
+            // meanings guessed) Puts the retry message of a tournament
+            // mission into telop nObjId, with the game time left.
+            static void SetRetryMessage(long nObjId, long nTime);
             // The name of party stage nStage; nSide is -1 or 1.
             static const wchar_t *GetPartyStageName(long nSide, long nStage);
             // The mission text of sport nGameMode for nUnk and rule nRule,

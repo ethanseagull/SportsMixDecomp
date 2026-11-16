@@ -327,6 +327,9 @@ namespace msw {
     // The Hungry Boss Packun stages: the size of the court.
     extern float BASKET_PRM_BOSS_PACKUN_COURT_WIDTH;
     extern float BASKET_PRM_BOSS_PACKUN_COURT_DEPTH;
+    // (added for game/basket/CGameBasket.cpp) The radius of their
+    // three-point line.
+    extern float BASKET_PRM_BOSS_PACKUN_COURT_3POINT_SIZE;
 
     // The fruit balls (msw::CBallBasketFruit). Fruit suffixes: OR orange,
     // BA blue apple, RA red apple, SU watermelon (suica), ME melon (guessed).

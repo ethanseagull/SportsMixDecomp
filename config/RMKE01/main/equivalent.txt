@@ -294,6 +294,11 @@ main PopTeamItem___Q23msw5CGameFl near 91.8 switch on the roulette state {0,1}: 
 main Pop__Q23msw16CCockpitPartMoveFRQ33msw16CCockpitPartMove12PartMoveInfo near 99.4 registers only: the 0xC and 0x10 fields of the entry go through r5/r6 swapped; same loads, stores and order (12 load/store orders and a struct copy tried)
 main PushMotorAll__Q23bcs6CPadWIFv near 88.2 [schedule] register allocation/order only
 main PushTeamItem___Q23msw5CGameFll near 95.0 switch compiled as a linear compare chain where the original builds a compare tree, and inline CFsmQueue operations expanding with other branch/register shape; same cases and calls
+main Play__Q23bcs10CAnmMotionFlUlfff near 97.3 [real, reviewed] reviewer confirmed: redundant m_pExInfo (0x24) reload with no store between; abs computed in other registers; same offsets and call
+main Play__Q23bcs15CAnmBlendMotionFRCQ33bcs15CAnmBlendMotion8ANIM_ARGUl near 90.3 [real, reviewed] reviewer confirmed: ANIM_ARG element loaded once per branch instead of once before (same value, no store between); stack slots swapped; register choice and order
+main PopTeamItem___Q23msw5CGameFl near 91.8 [real, reviewed] reviewer confirmed: the original proceeds for states 0 and 1 and returns otherwise, the same set as ours
+main Pop__Q23msw16CCockpitPartMoveFRQ33msw16CCockpitPartMove12PartMoveInfo near 99.4 registers only: the 0xC and 0x10 fields of the entry go through r5/r6 swapped; same loads, stores and order (12 load/store orders and a struct copy tried)
+main PushTeamItem___Q23msw5CGameFll near 95.0 [real, reviewed] reviewer confirmed: after the fix (fn_80139D28 called when m_bUseRoulette is set, as the original): every branch checked against the raw asm; IsPushable switch lowering only
 main ReloadGameSnd__Q23msw8CGameSndFv near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: the original tail-calls LoadGameSnd, ours inlines LoadGameSnd's body; nothing else differs. Recorded by hand: equivalent.py has no floor exception for this ruling
 main RemoveChildAt__Q23bcs9CScnGroupFUl unverified 80.0 80%: GetChild inlined here, called in the original; rest identical
 main RemoveEntryAll__Q23bcs10CCameraManFv near 97.4 [real, reviewed] reviewer confirmed: identical code; relocation symbol _f_bss vs m_pCamera at the same address
@@ -360,6 +365,7 @@ main SetUp__Q23msw7CStgSrtFfff near 96.8 float register choice inside the paired
 main SetVector3__Q33msw2vm9CVMScriptFiQ23bcs5FVEC3 unverified 74.2 schedule only: next float of v loaded before the previous store in the original
 main Set__Q23msw10CSignBoardFv near 99.8 [schedule] 99.8%: register numbering around the CreateAttachEffect/FindList/SetDelayTime block; autopilot regs no gain
 main Set__Q23msw20CCockpitMarkerIcon2DFv near 99.2 register numbering only (the pane accessor pointer lands in another register)
+main Set__Q23msw21CCockpitPauseRuleInfoFv near 98.8 [schedule] register allocation only (nKind index register)
 main Set__Q23msw22CCockpitModelTelopHoldFv near 99.8 register numbering only
 main Set__Q23msw23CCockpitResultPartyTeamFv near 99.1 [schedule] register allocation only: the inlined text-box max-value helper swaps the registers holding m_pPaneAccessor and the text box length
 main Setup__Q33msw2vm7CVMDataFv near 95.0 [real, reviewed] reviewer confirmed: the original's extra clrlwi 24 before an unsigned range compare gives the same result for any byte; register renumbering in the inlined Unscramble loop

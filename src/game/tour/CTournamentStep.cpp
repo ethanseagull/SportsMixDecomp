@@ -3267,9 +3267,10 @@ namespace msw {
         if (!(TournamentWork::GetPointInfo(nPoint)->nFlag & 0x20)) {
             _AddTimerRel(0, 30.0f + m_fUnkB8, m_UnkD0, 0);
             m_fUnkB8 += 140.0f;
+        } else {
+            _StartFade(1, 1.0f / 60.0f, 1);
+            m_nSubStep = 50;
         }
-        _StartFade(1, 1.0f / 60.0f, 1);
-        m_nSubStep = 50;
     }
 
     void CTournamentStep::LoopStateNpcCallPlay()
@@ -3604,7 +3605,8 @@ namespace msw {
                 pMan->SetEffect(0x1E7, 0x552, 4, 0, 0);
             }
             break;
-        case 2:
+        case 2: // nothing to do for event 2
+            break;
         case 1:
             if (!bReset) {
                 _StartFade(1, 1.0f / 30.0f, 1);

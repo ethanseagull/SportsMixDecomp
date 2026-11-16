@@ -56,10 +56,9 @@ namespace {
     }
 
     // The kinds of throw that come with the hand effect (m_nShootType).
-    inline int IsStrongShoot(long nType)
-    {
-        return (nType == 5 || nType == 6) || nType == 2;
-    }
+    // A macro, not an inline function: the original tests the condition
+    // in place, an inline's int result is kept as a value by our compiler.
+#define IsStrongShoot(nType) (((nType) >= 5 && (nType) <= 6) || (nType) == 2)
 
     // (names guessed) The work of the arts event: the air trick state's
     // work as ArtsProc and the Arts* functions use it.
@@ -138,6 +137,15 @@ void msw::CChrCoreDodge::CtorStateJumpShoot()
         pWork->m_nMotType = 2;
     }
     switch (pWork->m_nMotType) {
+        case 3:
+            if (m_nStatusFlag & 0x400) {
+                nMot = 0x4B;
+                pWork->m_fShotFrame = pParam->m_Unk3C;
+            } else {
+                nMot = 0x46;
+            }
+            fSpeed = pParam->m_Unk4F4;
+            break;
         case 2:
         case 5:
         case 6:
@@ -156,15 +164,6 @@ void msw::CChrCoreDodge::CtorStateJumpShoot()
                 pWork->m_fShotFrame = pParam->m_Unk38;
                 pWork->m_nMotType = 2;
             }
-            break;
-        case 3:
-            if (m_nStatusFlag & 0x400) {
-                nMot = 0x4B;
-                pWork->m_fShotFrame = pParam->m_Unk3C;
-            } else {
-                nMot = 0x46;
-            }
-            fSpeed = pParam->m_Unk4F4;
             break;
         default:
             if (m_nStatusFlag & 0x400) {
@@ -198,19 +197,15 @@ void msw::CChrCoreDodge::CtorStateJumpShoot()
     if (bCharge) {
         fFrameMax = s_fChargeTime[0];
     } else {
-        switch (pWork->m_nMotType) {
-            case 2:
-                fFrameMax = -1.0f;
-                break;
-            case 5:
-                fFrameMax = -1.0f;
-                break;
-            case 6:
-                fFrameMax = -1.0f;
-                break;
-            default:
-                fFrameMax = pParam->m_Unk440;
-                break;
+        long nMotType = pWork->m_nMotType;
+        if (nMotType == 2) {
+            fFrameMax = -1.0f;
+        } else if (nMotType == 5) {
+            fFrameMax = -1.0f;
+        } else if (nMotType == 6) {
+            fFrameMax = -1.0f;
+        } else {
+            fFrameMax = pParam->m_Unk440;
         }
     }
     pWork->m_fFrameMax = fFrameMax;
@@ -254,8 +249,8 @@ void msw::CChrCoreDodge::LoopStateJumpShoot()
                 }
             }
         } else {
-            float fSpeed = pWork->m_fRunSpeed
-                + m_fTimeScale * (m_fFrameStep * (CalcMoveSpeedRate_(1.0f, 0) * -pParam->m_Unk444));
+            float fAccel = m_fTimeScale * (m_fFrameStep * (CalcMoveSpeedRate_(1.0f, 0) * -pParam->m_Unk444));
+            float fSpeed = pWork->m_fRunSpeed + fAccel;
             pWork->m_fRunSpeed = fSpeed;
             float fMin = 0.0f;
             if (fSpeed > fMin) {
@@ -593,16 +588,17 @@ void msw::CChrCoreDodge::LoopStateLineOver()
 
     switch (pWork->m_nStep & ~0x100) {
         case 0:
-            if (!IsAnimEnd(3)) {
+            if (IsAnimEnd(3)) {
+                pWork->m_nStep++;
+                if (pWork->m_nStep & 0x100) {
+                    FsmqDoChain();
+                    break;
+                }
+                AnimPlay(3, 0x50, 0, 0.0f, 0.0f);
+            } else {
                 Util_DoDirMove(pWork->m_MoveParam, AnimGetFrame(3), pWork->m_DirMove, 1);
                 break;
             }
-            pWork->m_nStep++;
-            if (pWork->m_nStep & 0x100) {
-                FsmqDoChain();
-                break;
-            }
-            AnimPlay(3, 0x50, 0, 0.0f, 0.0f);
             // fall through
         case 1:
         case 2:
@@ -611,12 +607,13 @@ void msw::CChrCoreDodge::LoopStateLineOver()
                     switch (pWork->m_nStep & ~0x100) {
                         case 1:
                             AnimPlay(3, 0x60, 0, 0.0f, 0.0f);
-                            // fall through
-                        default:
                             pWork->m_nStep++;
                             break;
                         case 2:
                             FsmqDoChain();
+                            break;
+                        default:
+                            pWork->m_nStep++;
                             break;
                     }
                 } else {
@@ -903,11 +900,12 @@ int msw::CChrCoreDodge::IsArtsTrig(long nTrig, float fFrame, float fTrgFrame)
     }
     ARTS_WORK *pWork = FsmqGetWork<ARTS_WORK>();
     unsigned long nBit = 1 << nTrig;
+    int bTrig = 0;
     if (!(pWork->m_nTrigFlag & nBit) && fFrame <= fTrgFrame) {
         pWork->m_nTrigFlag |= nBit;
-        return 1;
+        bTrig = 1;
     }
-    return 0;
+    return bTrig;
 }
 
 // The spin attack: the model spins three times while the character hops.

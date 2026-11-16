@@ -1,6 +1,7 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
 DodgeF ActLoopSpOffMoveMarker__Q23msw16CComDrvDodgeGameFv near 97.9 register choice only inside the inlined paired-single FVEC3Add (sum register shares the first operand's register in the original, the second's in ours) and the instruction order around it; same loads, stores and calls
 DodgeF AddCoinValue__Q23msw17CCockpitDodgeCoinFlll near 98.8 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
+DodgeF ArtsProc__Q23msw13CChrCoreDodgeFQ33msw13CChrCoreDodge10ARTS_EVENT near 97.6 [schedule] instruction order or register choice only, same operations
 DodgeF CalcPos___Q210CC09_DODGE22CcKinopioBoundMushroomFv near 99.4 register choice in the paired-single vector add and angle wrap loops (VolleyF copy same)
 DodgeF CallbackBodyDamage___Q23msw21CItemDodgeBombDD_BaseFPQ23msw13CCollBodyUnitPCQ23msw12CCollAtkUnitRCQ23bcs5FVEC3 near 99.0 99.0%: float register choice and scheduling only.
 DodgeF CallbackBodyPush___Q23msw21CItemDodgeBombDD_BaseFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 92.4 [real, reviewed] reviewer confirmed: ble+b vs bgt is the same condition (NaN included); two identical switch store blocks in another order; float registers
@@ -21,7 +22,9 @@ DodgeF CreateMdl___Q210CC05_DODGE16CcWarioSmokeUnitFRCQ23bcs5FVEC3 near 93.3 [re
 DodgeF CreateMdl___Q210CC14_DODGE16CcNinjaCloneBodyFv near 99.8 register numbering / order of independent loads only
 DodgeF CreateMiniTelop__Q23msw13CCockpitDodgeFllPQ23bcs5FVEC3 near 98.9 98.9%: float registers given to bcs::FVEC3Add's paired-single block; same loads, ps_add, stores.
 DodgeF CtorStateDamage__Q23msw13CChrCoreDodgeFv near 99.8 99.8: switch case body placement (case 4 body before case 3)
+DodgeF CtorStateJumpShoot__Q23msw13CChrCoreDodgeFv near 99.8 [schedule] instruction order or register choice only, same operations
 DodgeF CtorStateRebirth__Q23msw13CChrCoreDodgeFv near 92.2 [real, reviewed] reviewer confirmed: m_nPlayerNo (0x176) loaded after the virtual ball call and GetPos instead of before; neither callee writes it; saved-register count only otherwise
+DodgeF CtorStateSpinAttack__Q23msw13CChrCoreDodgeFv near 98.0 [schedule] instruction order or register choice only, same operations
 DodgeF CursorInit__Q23msw16CLockCursorDodgeFv near 97.1 [real, reviewed] reviewer confirmed: original keeps offset and pointer counters in swapped stack slots, ours a running pointer; same strings, iterations, no data diff
 DodgeF DetectMapHit___Q23msw13CCollManDodgeFRQ23bcs5FVEC3RQ23bcs5FVEC3RfRCQ23bcs5FVEC3RCQ23bcs5FVEC3flUl near 98.5 Branches, calls, constants, offsets and stack layout match; float constants are addressed per literal as in the original (pool-off stand-in). Only instruction scheduling and register order differ.
 DodgeF Disp__Q23msw16CLockCursorDodgeFv near 98.2 same bit written: original's Pane::SetVisible clears bit 0 then inserts the bool (rlwinm+rlwimi), our one-line header form does it in one step; a two-statement SetVisible in nw4r/lyt/Pane.hpp gives 98.9 (regs only), not applied (shared header)
@@ -64,6 +67,8 @@ DodgeF LoopStateDisappear__Q210CC15_DODGE19CcSiromaMagicCircleFv near 99.9 order
 DodgeF LoopStateDizzy__Q23msw13CChrCoreDodgeFv near 99.0 99.0: load order of m_fFrameStep vs literal
 DodgeF LoopStateFall__Q23msw13CChrCoreDodgeFv near 98.9 [real, reviewed] reviewer confirmed: two plain loads swapped, FVEC3 stack slots moved, dead trailing cmpwi after the last bctrl in the original; no constant, call, offset or branch differs
 DodgeF LoopStateFire__Q210CC15_DODGE19CcSiromaMagicCircleFv near 99.9 order of three constant loads
+DodgeF LoopStateJumpShoot__Q23msw13CChrCoreDodgeFv near 99.1 [real, reviewed] reviewer confirmed: jump table symbol name, one commutative fmuls operand swap, register renumbering and scheduling only
+DodgeF LoopStateLineOver__Q23msw13CChrCoreDodgeFv near 98.0 [real, reviewed] reviewer confirmed: the inner switch's m_nStep increment is one shared block in the original and repeated after AnimPlay in ours; same paths and values
 DodgeF LoopStateLoop__Q210CC14_DODGE16CcNinjaCloneBodyFv near 97.1 register numbering / order of independent loads only
 DodgeF LoopStateSliding__Q23msw13CChrCoreDodgeFv near 99.5 99.5: commutative fmuls/fnmsubs operand order, regs
 DodgeF LoopStateThrow__Q23msw21CItemDodgeBombDD_BaseFv near 95.8 [real, reviewed] reviewer confirmed: flash clamped to [0,1] so the level is 55..255, where psq_st u8 and the (u8) cast both truncate to the same byte; redundant frsp, frame size, store and pool-load order

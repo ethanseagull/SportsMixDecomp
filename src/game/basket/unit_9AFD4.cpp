@@ -61,7 +61,9 @@ void CComDrvBasketGame::ActLoopJumpBall()
     switch (pWork->m_nStep) {
         case 0: {
             float fLv = GetComLvF();
-            ActCallWait(CComManBasket::GetRandValueI(CComMan::GetDatI(0xDBF, fLv), CComMan::GetDatI(0xDC7, fLv)));
+            long nMin = CComMan::GetDatI(0xDBF, fLv);
+            long nMax = CComMan::GetDatI(0xDC7, fLv);
+            ActCallWait(CComManBasket::GetRandValueI(nMin, nMax));
             pWork->m_nStep++;
             break;
         }
@@ -129,7 +131,9 @@ void CComDrvBasketGame::ActLoopGoOffense()
                 break;
             case 2: {
                 float fLv = GetComLvF();
-                ActCallWait(CComManBasket::GetRandValueI(CComMan::GetDatI(0x888, fLv), CComMan::GetDatI(0x890, fLv)));
+                long nMin = CComMan::GetDatI(0x888, fLv);
+                long nMax = CComMan::GetDatI(0x890, fLv);
+                ActCallWait(CComManBasket::GetRandValueI(nMin, nMax));
                 pWork->m_nStep++;
                 break;
             }
@@ -204,8 +208,11 @@ void CComDrvBasketGame::ActLoopGoOffense2()
                 ReturnAct(1);
                 break;
             }
-            ActCallWait(CComManBasket::GetRandValueI(CComMan::GetDatI(0x8A0, GetComLvF()),
-                                                     CComMan::GetDatI(0x8A8, GetComLvF())));
+            {
+                long nMin = CComMan::GetDatI(0x8A0, GetComLvF());
+                long nMax = CComMan::GetDatI(0x8A8, GetComLvF());
+                ActCallWait(CComManBasket::GetRandValueI(nMin, nMax));
+            }
             pWork->m_nStep++;
             break;
         default:
@@ -268,9 +275,13 @@ void CComDrvBasketGame::ActLoopGoDefense()
             }
         case 2:
             if (m_pMarkChr != 0 && m_pMarkChr->IsHoldBall()) {
-                ActCallWait(CComManBasket::GetRandValueI(CComMan::GetDatI(0x8F8, fLv), CComMan::GetDatI(0x900, fLv)));
+                long nMin = CComMan::GetDatI(0x8F8, fLv);
+                long nMax = CComMan::GetDatI(0x900, fLv);
+                ActCallWait(CComManBasket::GetRandValueI(nMin, nMax));
             } else {
-                ActCallWait(CComManBasket::GetRandValueI(CComMan::GetDatI(0x908, fLv), CComMan::GetDatI(0x910, fLv)));
+                long nMin = CComMan::GetDatI(0x908, fLv);
+                long nMax = CComMan::GetDatI(0x910, fLv);
+                ActCallWait(CComManBasket::GetRandValueI(nMin, nMax));
             }
             pWork->m_nStep = 999;
             break;
@@ -714,6 +725,7 @@ void CComDrvBasketGame::ActLoopGoHome()
 // Runs to a panel of the free area, drawn by the panels' scores.
 void CComDrvBasketGame::ActLoopGoFreeArea()
 {
+    long *pRate;
     POS_WORK *pWork = static_cast<POS_WORK *>(GetCurrentActWork());
     switch (pWork->m_nStep) {
         case 0: {
@@ -725,7 +737,7 @@ void CComDrvBasketGame::ActLoopGoFreeArea()
             long nTop;
             long nBottom;
             GetFreeAreaRect(nLeft, nRight, nTop, nBottom);
-            long *pRate = aRate;
+            pRate = aRate;
             for (long h = nTop; h <= nBottom; h++) {
                 for (long w = nLeft; w <= nRight; w++) {
                     *pRate++ = GetPanelDate(w, h);
@@ -765,7 +777,9 @@ void CComDrvBasketGame::ActLoopGetBall()
     const float &fLv = GetComLvF();
     switch (pWork->m_nStep) {
         case 0:
-            ActCallWait(CComManBasket::GetRandValueI(CComMan::GetDatI(0xDAF, fLv), CComMan::GetDatI(0xDB7, fLv)));
+            long nMin = CComMan::GetDatI(0xDAF, fLv);
+            long nMax = CComMan::GetDatI(0xDB7, fLv);
+            ActCallWait(CComManBasket::GetRandValueI(nMin, nMax));
             pWork->m_nStep++;
             break;
         case 1: {
@@ -829,7 +843,9 @@ void CComDrvBasketGame::ActLoopGetHatenaPanel()
                 }
             }
             float fLv = GetComLvF();
-            ActCallWait(CComManBasket::GetRandValueI(CComMan::GetDatI(0xA4D, fLv), CComMan::GetDatI(0xA55, fLv)));
+            long nMin = CComMan::GetDatI(0xA4D, fLv);
+            long nMax = CComMan::GetDatI(0xA55, fLv);
+            ActCallWait(CComManBasket::GetRandValueI(nMin, nMax));
             pWork->m_nStep++;
             break;
         }
@@ -853,7 +869,9 @@ void CComDrvBasketGame::ActLoopGoRunRand()
     switch (pWork->m_nStep) {
         case 0: {
             float fRot = bcs::DEG_TO_RAD(RandMaxI(360));
-            float fDist = CComManBasket::GetRandValueF(CComMan::GetDatF(0x848, fLv), CComMan::GetDatF(0x850, fLv));
+            float fMin = CComMan::GetDatF(0x848, fLv);
+            float fMax = CComMan::GetDatF(0x850, fLv);
+            float fDist = CComManBasket::GetRandValueF(fMin, fMax);
             bcs::FVEC3 dir;
             bcs::BCS_VecZ_RotY(dir, 1.0f, fRot);
             pWork->m_Pos.x = dir.x * fDist + m_MyPos.x;
@@ -1227,12 +1245,17 @@ void CComDrvBasketGame::ActLoopJumpShoot()
         }
         case 1: {
             long nRate = CComMan::GetDatI(0xB67, fLv);
+            bool bLot = LotRate() < nRate;
             pWork->m_fRelease = 100.0f;
-            if (LotRate() < nRate) {
-                pWork->m_fRelease = CComManBasket::GetRandValueI(CComMan::GetDatI(0xB6F, fLv), CComMan::GetDatI(0xB77, fLv));
+            if (bLot) {
+                long nLo = CComMan::GetDatI(0xB6F, fLv);
+                long nHi = CComMan::GetDatI(0xB77, fLv);
+                pWork->m_fRelease = CComManBasket::GetRandValueI(nLo, nHi);
             } else {
                 pWork->m_nFlag |= 1;
-                pWork->m_fRelease = CComManBasket::GetRandValueI(CComMan::GetDatI(0xB7F, fLv), CComMan::GetDatI(0xB87, fLv));
+                long nLo = CComMan::GetDatI(0xB7F, fLv);
+                long nHi = CComMan::GetDatI(0xB87, fLv);
+                pWork->m_fRelease = CComManBasket::GetRandValueI(nLo, nHi);
             }
             pWork->m_fRelease /= 100.0f;
             pWork->m_bUnk24 = 0;
@@ -1355,7 +1378,7 @@ void CComDrvBasketGame::ActLoopReboundDunk()
             bcs::FVEC3 diff;
             bcs::FVEC3Sub(&diff, &m_TargetGoalPos, &m_MyPos);
             pWork->m_Pos = diff;
-            bcs::FVEC3 dir = pWork->m_Pos;
+            bcs::FVEC3 dir = diff;
             bcs::BCS_Vec_Normalize(pWork->m_Pos, pWork->m_Pos);
             pWork->m_Pos.x = fDist * pWork->m_Pos.x + m_MyPos.x;
             pWork->m_Pos.y = 0.0f;
@@ -1535,7 +1558,9 @@ void CComDrvBasketGame::ActLoopBlockade()
             };
             switch (LotProbability(aRate, 6)) {
                 case 0:
-                    ActCallWait(CComManBasket::GetRandValueI(CComMan::GetDatI(0x838, fLv), CComMan::GetDatI(0x840, fLv)));
+                    long nMin = CComMan::GetDatI(0x838, fLv);
+                    long nMax = CComMan::GetDatI(0x840, fLv);
+                    ActCallWait(CComManBasket::GetRandValueI(nMin, nMax));
                     break;
                 case 1:
                     EntryAct(ACT_GO_BACK);
@@ -1593,7 +1618,9 @@ void CComDrvBasketGame::ActLoopGoBack()
             if (nRang > nMaxRang) {
                 nRang = nMaxRang;
             }
-            float fRot = bcs::DEG_TO_RAD(RandRangeI(-nRang, nRang)) + m_pChr->GetRotY_FromPosXZ(m_pChr->GetTargetGoalPos());
+            float fRand = bcs::DEG_TO_RAD(RandRangeI(-nRang, nRang));
+            CChrCore *pChr = m_pChr;
+            float fRot = fRand + pChr->GetRotY_FromPosXZ(pChr->GetTargetGoalPos());
             fRot = RoundRad(fRot);
             bcs::BCS_VecZ_RotY(pWork->m_Pos, 1.0f, fRot);
             pWork->m_Pos.x = pWork->m_Pos.x * fDist + m_MyPos.x;
@@ -1623,14 +1650,18 @@ void CComDrvBasketGame::ActLoopGoZiguzagu()
     long nType = m_pChr->GetChrTypeID();
     switch (pWork->m_nStep) {
         case 0: {
-            float fDist = CComManBasket::GetRandValueF(CComMan::GetDatF(0xAC6, nType), CComMan::GetDatF(0xADB, nType));
+            float fDistMin = CComMan::GetDatF(0xAC6, nType);
+            float fDistMax = CComMan::GetDatF(0xADB, nType);
+            float fDist = CComManBasket::GetRandValueF(fDistMin, fDistMax);
             long aRate[2] = {0, 0};
-            float fGoalRot = m_pChr->GetRotY_ToPosXZ(m_pChr->GetTargetGoalPos());
+            CChrCore *pMe = m_pChr;
+            float fGoalRot = pMe->GetRotY_ToPosXZ(pMe->GetTargetGoalPos());
             for (long i = 0; i < CChrMan::GetChrCoreNum(); i++) {
                 const CChrCore *pChr = CChrMan::GetChrCore(i);
                 if (pChr != 0 && !pChr->IsDisable() && pChr->GetTeamNo() != m_nMyTeam &&
-                    CComManBasket::GetDistXZ(pChr, m_pChr) <= fDist) {
-                    float fRot = RoundRadPI(m_pChr->GetRotY_ToPosXZ(pChr->GetPos()) - fGoalRot);
+                    !(CComManBasket::GetDistXZ(pChr, m_pChr) > fDist)) {
+                    CChrCore *pSelf = m_pChr;
+                    float fRot = RoundRadPI(pSelf->GetRotY_ToPosXZ(pChr->GetPos()) - fGoalRot);
                     long nSide = !(fRot < 0.0f);
                     aRate[nSide] -= CComMan::GetDatI(0xAF0, nType);
                 }
@@ -1643,7 +1674,9 @@ void CComDrvBasketGame::ActLoopGoZiguzagu()
                 aRate[0] = 50;
             }
             pWork->m_nSide = 1 - LotProbability(aRate, 2);
-            float fDeg = CComManBasket::GetRandValueI(CComMan::GetDatI(0xA9C, nType), CComMan::GetDatI(0xAB1, nType));
+            long nDegMin = CComMan::GetDatI(0xA9C, nType);
+            long nDegMax = CComMan::GetDatI(0xAB1, nType);
+            float fDeg = CComManBasket::GetRandValueI(nDegMin, nDegMax);
             if (fDeg > 75.0f) {
                 fDeg = 75.0f;
             }
@@ -1683,13 +1716,17 @@ void CComDrvBasketGame::ActLoopGoSide()
             float fWidth = CComMan::GetDatF(0x870, fLv);
             float fDepth = CComMan::GetDatF(0x868, fLv);
             CStageMan *pStage = CStageMan::GetInstance();
+            float fMin, fMax;
             if (rMyPos.x > 0.0f) {
                 float fLeft = pStage->GetCourtLeft();
-                pWork->m_Pos.x = CComManBasket::GetRandValueF(fLeft, fLeft + fWidth);
+                fMin = fLeft;
+                fMax = fLeft + fWidth;
             } else {
                 float fRight = pStage->GetCourtRight();
-                pWork->m_Pos.x = CComManBasket::GetRandValueF(fRight - fWidth, fRight);
+                fMin = fRight - fWidth;
+                fMax = fRight;
             }
+            pWork->m_Pos.x = CComManBasket::GetRandValueF(fMin, fMax);
             pWork->m_Pos.y = 0.0f;
             pWork->m_Pos.z = rMyPos.z + CComManBasket::GetRandValueF(-fDepth, fDepth);
             pWork->m_Pos.z = pWork->m_Pos.z > pStage->GetCourtBack()   ? pStage->GetCourtBack()
@@ -2070,12 +2107,13 @@ namespace msw {
 // The combination play: runs to the goal when far from it.
 void CComDrvBasketGame::ActCallCombination()
 {
+    bcs::FVEC3 d;
     static const float fCheckDist = 3.0f;
     COMBO_WORK *pWork = static_cast<COMBO_WORK *>(EntryAct(ACT_COMBINATION));
     bcs::FVEC3 diff;
     const bcs::FVEC3 &rGoal = m_pChr->GetTargetGoalPos();
     bcs::FVEC3Sub(&diff, &m_pChr->GetPos(), &rGoal);
-    bcs::FVEC3 d = diff;
+    d = diff;
     pWork->m_bFar = fCheckDist < bcs::BCS_Vec_GetLenXZ(d);
 }
 
@@ -2543,7 +2581,9 @@ void CComDrvBasketGame::ActLoopDefAlleyoop()
                 return;
             }
             if (MethdBKRunTest(pWork->m_Pos, GetAttainmentMoveMinDist(), 1.0f, 0)) {
-                m_pChr->RotateYRate_(m_pChr->GetRotY_ToPosXZ(pWork->m_pTarget->GetPos()), 0.2f);
+                CChrCore *pChr = m_pChr;
+                float fRot = pChr->GetRotY_ToPosXZ(pWork->m_pTarget->GetPos());
+                m_pChr->RotateYRate_(fRot, 0.2f);
             }
             bcs::FVEC3 diff;
             const bcs::FVEC3 &rTargetPos = pWork->m_pTarget->GetPos();
@@ -2634,9 +2674,13 @@ void CComDrvBasketGame::ActLoopGoEscape()
             pos.z = pos.z * fDist + m_pChr->GetPos().z;
             bcs::FVEC3 target;
             if (pItem->GetItemType() == CItem::KIND_BOMB && pItem->GetThrowTargetPos(target)) {
+                // (sic) The original subtracts d itself, not yet set, where
+                // the bomb's target was surely meant; d is then overwritten
+                // with the result.
+                bcs::FVEC3 d;
                 bcs::FVEC3 diff;
-                bcs::FVEC3Sub(&diff, &pos, &target);
-                bcs::FVEC3 d = diff;
+                bcs::FVEC3Sub(&diff, &pos, &d);
+                d = diff;
                 float fLen = bcs::BCS_Vec_GetLenXZ(d);
                 float fBlast = 0.5f + pItem->GetExplosionCollSize();
                 if (fLen < fBlast) {

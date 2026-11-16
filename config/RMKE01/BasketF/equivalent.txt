@@ -136,7 +136,7 @@ BasketF LoopStateSmashCut__Q23msw20CChrCoreBasketKuromaFv near 94.5 stack slots 
 BasketF LoopStateSmashCut__Q23msw21CChrCoreBasketKinopioFv near 98.5 two local vectors in different stack slots; register renumbering and load order
 BasketF LoopStateTurn__Q23msw14CChrCoreBasketFv near 99.8 99.8: run-work flag stored as li 0/ori 7 vs li 7 (same value), one load order
 BasketF MainCamera_Normal__Q23msw15CCameraBasketHBFv near 98.5 98.5%, schedule: after the second CalcCurveBlend the two fmr come in the other order and y goes to another saved float register; m_Unk280/m_Unk110 loaded in the other order at the end; calls, constants and memory accesses identical
-BasketF MainCamera__Q23msw17CCameraBasketGameFv near 98.8 98.8: f30/f31 swapped for front/look rates, 0.0f and m_Unk110 sum registers; jump table local names (as HockeyF)
+BasketF MainCamera__Q23msw17CCameraBasketGameFv near 98.8 [real, reviewed] reviewer: Float register swaps and jumptable symbol names only; same constants, offsets and calls.
 BasketF MainFunc__Q23msw16CNpcStringBasketFv near 99.5 99.5: fmadds operand order and registers in the shadow update
 BasketF MainFunc__Q23msw19CNpcGhostBasketBaseFv near 98.9 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF MainFunc__Q33msw11CC05_BASKET16CcWarioSmokeBombFf near 95.8 stack slots only: the unused copy of the old position is split into scalar slots, the two colour temporaries and the landing point sit at other offsets (frame 0x80 vs 0x60); velocity.y stored one instruction earlier

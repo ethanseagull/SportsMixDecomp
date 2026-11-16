@@ -104,10 +104,11 @@ void CComDrvBasketGame::ActLoopGoOffense()
                 pWork->m_nStep++;
             }
             case 1:
-                if (MethdBKRunTest(pWork->m_Pos, GetAttainmentMoveMinDist(), 1.0f, 0)) {
-                    pWork->m_nStep++;
+                if (!MethdBKRunTest(pWork->m_Pos, GetAttainmentMoveMinDist(), 1.0f, 0)) {
+                    break;
                 }
-                break;
+                // Arrived: finish in the same frame.
+                pWork->m_nStep++;
             default:
                 ReturnAct(1);
                 break;
@@ -415,12 +416,15 @@ void CComDrvBasketGame::ActLoopGoDefense3()
                 if (m_pChr->IsNowBlockWork()) {
                     bcs::FVEC3 side;
                     bcs::BCS_VecZ_RotY(side, 1.0f, m_pMarkChr->GetRotY_ToGoal());
-                    float fX = RandRangeF(CComMan::GetDatF(0x978, fLv), CComMan::GetDatF(0x980, fLv));
-                    float fRot = RoundRadPI(m_pMarkChr->GetRotY_ToPosXZ(m_pChr->GetPos()) - m_pMarkChr->GetRotY_ToGoal());
+                    float fMinX = CComMan::GetDatF(0x978, fLv);
+                    float fX = RandRangeF(fMinX, CComMan::GetDatF(0x980, fLv));
+                    CChrCore *pChr = m_pChr;
+                    float fRot = RoundRadPI(m_pMarkChr->GetRotY_ToPosXZ(pChr->GetPos()) - m_pMarkChr->GetRotY_ToGoal());
                     if (fRot > 0.0f) {
                         fX = -fX;
                     }
-                    float fZ = RandRangeF(CComMan::GetDatF(0x988, fLv), CComMan::GetDatF(0x990, fLv));
+                    float fMinZ = CComMan::GetDatF(0x988, fLv);
+                    float fZ = RandRangeF(fMinZ, CComMan::GetDatF(0x990, fLv));
                     if (RandMaxI(1)) {
                         fZ = -fZ;
                     }
@@ -508,9 +512,8 @@ void CComDrvBasketGame::ActLoopGoDefPassCourse()
                 }
                 bcs::FVEC3 diff;
                 bcs::FVEC3Sub(&diff, &pHolder->GetPos(), &markPos);
-                bcs::FVEC3 xz(diff.x, 0.0f, diff.z);
-                bcs::FVEC3 dir;
-                bcs::BCS_Vec_Normalize(dir, xz);
+                bcs::FVEC3 dir = diff;
+                bcs::BCS_Vec_Normalize(dir, bcs::FVEC3(diff.x, 0.0f, diff.z));
                 pWork->m_Pos.x = fDist * dir.x + markPos.x;
                 pWork->m_Pos.y = 0.0f;
                 pWork->m_Pos.z = fDist * dir.z + markPos.z;
@@ -983,6 +986,7 @@ void CComDrvBasketGame::ActLoopPass()
                 ReturnAct(0);
                 break;
             }
+            const bcs::FVEC3 &goalPos = m_TargetGoalPos;
             for (long i = 0; i < nNum; i++) {
                 const CChrCore *pChr = info.m_apChr[i];
                 {
@@ -1004,7 +1008,7 @@ void CComDrvBasketGame::ActLoopPass()
                 }
                 {
                     static const long nNearGoalPoint = 100;
-                    float fRate = 1.0f - CComManBasket::GetDistXZ(m_TargetGoalPos, CComMan::GetChrPos(pChr)) / 10.0f;
+                    float fRate = 1.0f - CComManBasket::GetDistXZ(goalPos, CComMan::GetChrPos(pChr)) / 10.0f;
                     if (fRate > 1.0f) {
                         fRate = 1.0f;
                     } else if (fRate < 0.0f) {
@@ -1069,7 +1073,7 @@ void CComDrvBasketGame::ActLoopPass()
                 case 0x15:
                 case 0x16:
                 case 0x22:
-                    break;
+                    return;
                 default:
                     ReturnAct(1);
                     break;
@@ -1332,7 +1336,8 @@ void CComDrvBasketGame::ActLoopGoReboundDunk()
                 break;
             }
             long nArg = CComMan::GetDatI(0xDA7, fLv);
-            Get3PointAreaRandPos(pWork->m_Pos, CComMan::GetDatF(0xD97, fLv), CComMan::GetDatF(0xD9F, fLv), nArg);
+            float fArg0 = CComMan::GetDatF(0xD97, fLv);
+            Get3PointAreaRandPos(pWork->m_Pos, fArg0, CComMan::GetDatF(0xD9F, fLv), nArg);
             pWork->m_nStep++;
         }
         case 1:
@@ -1770,8 +1775,7 @@ void CComDrvBasketGame::ActLoopSpinMove()
             return;
         }
         pWork->m_nStep++;
-    }
-    if (m_pChr->GetState() != 0x1E) {
+    } else if (m_pChr->GetState() != 0x1E) {
         ReturnAct(1);
     }
 }
@@ -2779,7 +2783,7 @@ void CComDrvBasketGame::ActLoopDefGhost()
     switch (pWork->m_nStep) {
         case 0: {
             long nEmTeam = 1 - m_pChr->GetTeamNo();
-            CNpcBase *pGhost = static_cast<CChrManBasket *>(CChrMan::GetInstance())->GetGhost_(nEmTeam);
+            CNpcBase *pGhost = CChrManBasket::GetGhost(nEmTeam);
             if (pGhost == 0) {
                 ReturnAct(0);
                 return;

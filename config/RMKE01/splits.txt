@@ -628,7 +628,10 @@ game/msw/CStage11Base.cpp:
 	.text       start:0x801DDA34 end:0x801DF228
 
 game/msw/cockpit.cpp:
-	.text       start:0x801DF710 end:0x801E00F8
+	.text       start:0x801DF710 end:0x801E0130
+	.rodata     start:0x80443100 end:0x80443118
+	.sdata      start:0x805BFE48 end:0x805BFE60
+	.sdata2     start:0x805C4D68 end:0x805C4D80
 
 game/msw/CStgGmk_Pinball.cpp:
 	.text       start:0x801E0130 end:0x801E782C
@@ -779,7 +782,11 @@ game/msw/CCockpitResultPartyTeam.cpp:
 	.sdata2     start:0x805C57D0 end:0x805C5870
 
 game/msw/CCockpitResultPartyVS.cpp:
-	.text       start:0x8023CD30 end:0x8023D6C4
+	.text       start:0x8023C340 end:0x8023D74C
+	.rodata     start:0x80449D28 end:0x80449FA8
+	.data       start:0x8048BB58 end:0x8048BCF8
+	.sdata      start:0x805BFF48 end:0x805BFF50
+	.sdata2     start:0x805C5870 end:0x805C59E0
 
 game/msw/CStage16Base.cpp:
 	.text       start:0x8023D970 end:0x8023EB38

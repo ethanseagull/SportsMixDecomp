@@ -348,7 +348,10 @@ main SetMtx__Q23msw19CStgGmk_Pinball_MdlFRCQ23bcs6FMTX34 near 98.2 register choi
 main SetPadAssignSemiAuto__Q23msw5CGameFv unverified 49.3 store scheduling and case layout differ; each case's eight values checked against the asm by simulation
 main SetParamSemiAuto__Q23msw5CGameFv unverified 79.1 switch tables differ, and the original has a dead duplicate-character loop ours omits; GameWorkReset_ made static (original called it from this static with no object)
 main SetPeriodResult___Q23msw5CGameFv unverified 52.3 52.3%: register allocation (stmw vs single saves) and address forms of the two arrays; same calls
+main SetPlayerIcon__Q23msw21CCockpitResultPartyVSFll near 99.6 [schedule] schedule/register order only
 main SetPlayerIcon__Q23msw23CCockpitResultPartyTeamFll near 88.3 [real, reviewed] reviewer confirmed: the two pure IsPadCtrl booleans computed after GetPaneName instead of before; register numbering; same calls, constants and branches
+main SetPlayerRank__Q23msw21CCockpitResultPartyVSFll near 96.5 [schedule] schedule/register order only
+main SetPlayerTime__Q23msw21CCockpitResultPartyVSFlf near 95.6 [schedule] schedule/register order only
 main SetPointLightColor__Q23msw14CEffectClusterF8_GXColor8_GXColor near 89.8 schedule only: second colour word loaded after the member-pointer lwzu/copy instead of before; same stores and calls
 main SetPos__Q23msw9CCollUnitFRCQ23bcs5FVEC3 near 89.8 [real, reviewed] reviewer: original reloads m_nFlag10 after the m_PrevPos float stores (alias caution); ours reuses the entry value; no caller points rPos into the flag, same result
 main SetResultButton__Q23msw14CCockpitResultFll near 98.5 98.5%: float register numbering in the delay computation; callee is the unnamed task constructor fn_8023D858
@@ -357,6 +360,7 @@ main SetTeamArtsGauge___Q23msw5CGameFlff near 86.3 [real, reviewed] reviewer con
 main SetTeamCoin__Q23msw5CGameFlUl near 91.8 [real, reviewed] reviewer confirmed: same unsigned clamp through vtable 0x154, same store and cockpit call; clamp result register and block placement only
 main SetTeamPeriodScore__Q23msw5CGameFlll unverified 69.6 69.6%: the period row is addressed from row+0x20 in ours; same loads and stores
 main SetTextBoxString__Q23msw17CMenuPaneAccessorFlPCwUs near 99.9 one cmplw has its operands swapped (text length vs nLen) in an equality test; same result
+main SetTimeValue__Q23msw7cockpitFPQ23msw17CMenuPaneAccessorfiilllllll near 99.4 [real, reviewed] reviewer confirmed: same loads/stores; second word of L":xx" addressed as symbol+4 (original has a separate label), plus r19/r21 swap
 main SetTimeValue__Q33msw7cockpit10CTimeCountFPQ23msw17CMenuPaneAccessorfilllli near 99.6 register allocation only (three saved registers permuted); declaration-order search no gain in 24 tries
 main SetTime__Q23msw5CGameFf near 91.5 [real, reviewed] reviewer confirmed: original's frsp on a single is a no-op; same clamp compares, constants and stores
 main SetTourCockpitFilePath__Q23msw4menuFPQ33bcs8CLoadMan10FILE_INPUTll near 90.5 [real, reviewed] reviewer confirmed: base+0x100 held in a saved register instead of recomputed; same switch cases, sprintf calls and bit set/clear
@@ -366,6 +370,7 @@ main SetVector3__Q33msw2vm9CVMScriptFiQ23bcs5FVEC3 unverified 74.2 schedule only
 main Set__Q23msw10CSignBoardFv near 99.8 [schedule] 99.8%: register numbering around the CreateAttachEffect/FindList/SetDelayTime block; autopilot regs no gain
 main Set__Q23msw20CCockpitMarkerIcon2DFv near 99.2 register numbering only (the pane accessor pointer lands in another register)
 main Set__Q23msw21CCockpitPauseRuleInfoFv near 98.8 [schedule] register allocation only (nKind index register)
+main Set__Q23msw21CCockpitResultPartyVSFv near 99.1 [schedule] schedule/register order only
 main Set__Q23msw22CCockpitModelTelopHoldFv near 99.8 register numbering only
 main Set__Q23msw23CCockpitResultPartyTeamFv near 99.1 [schedule] register allocation only: the inlined text-box max-value helper swaps the registers holding m_pPaneAccessor and the text box length
 main Setup__Q33msw2vm7CVMDataFv near 95.0 [real, reviewed] reviewer confirmed: the original's extra clrlwi 24 before an unsigned range compare gives the same result for any byte; register renumbering in the inlined Unscramble loop

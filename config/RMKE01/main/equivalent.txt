@@ -236,7 +236,7 @@ main OnBodyPush__Q23msw17CStgGmk_Pylon_ActFPQ23msw13CCollBodyUnitPQ23msw13CCollB
 main OnBodyPush__Q23msw19CStgGmk_Pinball_ActFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 93.2 register allocation/order only (diff.py: registers/schedule)
 main OnBodyPush__Q23msw23CStgGmk_WaterPillar_ActFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 98.6 register choice and the stack slots of the two position copies (prev/pos) only
 main OnBodyPush__Q23msw7CStgActFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 97.4 order of the y and z stores into the local 'to' vector only
-main OnReflectHit__Q23msw23CStgGmk_WaterPillar_ActFPCQ23msw12CCollDefUnitPCQ23msw5CBallRQ23bcs5FVEC3RQ23bcs5FVEC3 near 93.9 float register choice in the inlined paired-single FVEC3Sub/length check; the return value 0x102 is built as li 2 + ori 0x100 in the original, one li here (same value)
+main OnReflectHit__Q23msw23CStgGmk_WaterPillar_ActFPCQ23msw12CCollDefUnitPCQ23msw5CBallRQ23bcs5FVEC3RQ23bcs5FVEC3 near 93.9 [real, reviewed] reviewer confirmed: li 2; ori 0x100 vs li 0x102 give the same value; float registers swapped in the length check
 main OnUpdate__Q23msw19CStgGmk_Pinball_ActFf near 99.7 register allocation/order only (diff.py: registers/schedule)
 main OnUpdate__Q23msw19CStgGmk_Trolley_ActFf near 99.4 stack slots of the locals (the unused copy of the old position) and the operand order of one commutative fmuls
 main OnUpdate__Q23msw23CStgGmk_WaterPillar_ActFf near 97.1 register choice and instruction order only, in the inlined paired-single FVEC3Sub (eye to pillar) and the 1.0f load

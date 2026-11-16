@@ -78,6 +78,10 @@ namespace msw {
             void CloseMenu(long nObjId);
             // Message nMsg of message group nGroup (group meaning guessed).
             static const wchar_t *GetMessageText(long nGroup, long nMsg);
+            // (DOL fn_8019A0F0, no symbol; name guessed) The sort z of a
+            // page of the menu: fSortZ - 10 (added for
+            // game/msw/CCockpitPauseRuleInfo.cpp).
+            static float GetPageSortZ(float fSortZ);
             // Fill the score board pages from the game; pTotal receives the
             // two teams' total points (two words). Return types guessed.
             void SetPauseResultParameter(CCockpitPauseResult *pResult, long *pTotal);

@@ -178,7 +178,9 @@ namespace msw {
             // 0x0E5C: one bit per route of the map, set once its line has
             // been drawn (msw::CTournamentRouteMan, TourF). (name guessed)
             unsigned char aRouteFlag[0x20];
-            unsigned char m_Unk0E7C[0xF7C - 0xE7C];
+            // 0x0E7C: the flags (ROUTE_INFO::nFlag) of the first 0x100
+            // routes, kept by Backup and put back by Restore. (name guessed)
+            unsigned char aRouteFlagBackup[0x100];
             // 0x0F7C: flags of the scripts, kept by BackupFlags (TourF
             // CTmScript); the last one says whether the user's team won.
             // (names guessed)
@@ -238,6 +240,10 @@ namespace msw {
             // matches come; CTmScript::SetupMatch takes the first and turns
             // the list. (name guessed)
             signed char aGameModeOrder[4];
+            // 0x1078: four bytes msw::CTournament (DOL) sets before
+            // ResetFlags; kept in the save data. (name guessed)
+            signed char aUnk1078[4];
+            unsigned char m_Unk107C[4];
 
             // (inline; TourF game/tour/CTournamentStep.cpp has a weak copy)
             // The user's team.
@@ -362,6 +368,46 @@ namespace msw {
         MATCH_INFO &MatchInfo(long nMatch);
         const TEAM_INFO &GetTeamInfo(long nTeam);
         TEAM_INFO &TeamInfo(long nTeam);
+
+        // The tournament part of the save data, 0x700 bytes: the parts of
+        // TOURNAMENT_INFO, the teams and the matches that Load and Save
+        // copy. (type and member names guessed)
+        struct TOURNAMENT_SAVE {
+            PLAYER_INFO aPlayer[3];             // 0x000
+            wchar_t aPlayerName[3][0x20];       // 0x0F0
+            // 0x1B0-0x1BB: TOURNAMENT_INFO 0x1050-0x105B
+            signed char nTurnIndex;
+            signed char nTurnMode;
+            signed char nPlayerMax;
+            signed char nLevel;
+            unsigned char m_Unk1B4[2];
+            signed char nStage;
+            signed char nBgm;
+            signed char nExitStep;
+            signed char nEventNextState;
+            signed char nUnk1BA;
+            unsigned char nMarkerFlag;
+            float fMarkerY;                     // 0x1BC
+            short nDemoType;                    // 0x1C0
+            short nUnk1C2;                      // 0x1C2
+            signed char aLeaderTeam[4];         // 0x1C4: TOURNAMENT_INFO 0x103C-0x103F
+            signed char aTurnTeam[16];          // 0x1C8
+            unsigned char aRouteFlag[0x20];     // 0x1D8
+            unsigned char aRouteFlagBackup[0x100]; // 0x1F8
+            signed char aFlag[0x40];            // 0x2F8
+            signed char aFirstFlag[0x80];       // 0x338
+            signed char aGameModeOrder[4];      // 0x3B8
+            signed char aUnk1078[4];            // 0x3BC
+            TEAM_INFO aTeam[16];                // 0x3C0
+            MATCH_INFO aMatch[16];              // 0x600
+        };
+
+        // (names guessed) Clears the script flags (nType 2), and with
+        // nType 1 the first-time flags of every cup too.
+        void ResetFlags(long nType);
+        // (names guessed) Copy the tournament from and to the save data.
+        void Load(TOURNAMENT_SAVE *pSave);
+        void Save(TOURNAMENT_SAVE *pSave);
 
         // (return type guessed) Starts the tournament map's music.
         void BgmPlay();

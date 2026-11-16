@@ -48,6 +48,18 @@ namespace bcs {
             // restore the rumble of every pad around a pause.
             static void PushMotorAll();
             static void PopMotorAll();
+            // (added for game/bcs/CPadWI.cpp; names guessed) Stops the
+            // rumble of every remote (fn_80070F88). Switches the pointer
+            // (DPD) of remote nPad on / off and tells whether it is on
+            // (fn_80070A80, fn_80070AC0, fn_80070B00). PushDPD saves the
+            // pointer settings of every remote (non-zero for the outermost
+            // push), PopDPD restores them (fn_80070B14, fn_80070B70).
+            static void StopMotorAll();
+            static void EnableDPD(long nPad);
+            static void DisableDPD(long nPad);
+            static int IsEnableDPD(long nPad);
+            static int PushDPD();
+            static int PopDPD();
     };
 }
 

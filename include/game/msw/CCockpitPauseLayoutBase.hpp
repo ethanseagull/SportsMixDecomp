@@ -33,19 +33,27 @@ namespace msw {
     };
 
     // A page of the pause menu with a title and message texts. Size 0x64
-    // (BossF allocates it). Lives in the DOL.
+    // (BossF allocates it). Lives in the DOL (game/msw/CCockpitPauseRuleInfo.cpp).
+    // nKind picks the layout: 0 the mission rule page, 1 the rule page.
     class CCockpitPauseRuleInfo : public CCockpitPauseLayoutBase {
         public:
             CCockpitPauseRuleInfo(long nId, long nKind, float fSortZ);
             virtual ~CCockpitPauseRuleInfo();
+            virtual void Main();
+            virtual long SendEvent(long nEvent, void *pParam);
+            virtual void Disp();
             virtual int Set();
             virtual void Remove();
 
             void SetTitleText(const wchar_t *pText);
+            // nLine is 0 or 1.
             void SetMessageText(long nLine, const wchar_t *pText);
 
         private:
-            unsigned char m_Unk60[0x4]; // 0x60
+            // (no symbol; name guessed) Plays the in/out animations.
+            void StateControl();
+
+            long m_nKind; // 0x60
     };
 
     // The score board page of the pause menu: the teams' points. Size 0x64

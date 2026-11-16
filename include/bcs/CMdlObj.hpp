@@ -9,6 +9,69 @@
 namespace nw4r {
     namespace g3d {
         struct ChrAnmResult;
+
+        // (added for DOL game/bcs/CMdlObj/CopiedMatAccess.cpp; they belong
+        // in nw4r/g3d/ResMat.hpp and a ResTev.hpp, move them there when
+        // those are next edited) The size of one material's copy of each
+        // block, as bcs::CMdlObj keeps them; contents not used.
+        struct ResTexObjData { unsigned char data[0x104]; };
+        struct ResTlutObjData { unsigned char data[0x64]; };
+        struct ResTexSrtData { unsigned char data[0x248]; };
+        struct ResMatMiscData { unsigned char data[0xC]; };
+        struct ResPixDL { unsigned char data[0x20]; };
+        struct ResTevColorDL { unsigned char data[0x80]; };
+        struct ResIndMtxAndScaleDL { unsigned char data[0x40]; };
+        struct ResTexCoordGenDL { unsigned char data[0xA0]; };
+        struct ResTevData { unsigned char data[0x200]; };
+
+        // Handles to a material's pixel, texture coordinate and TEV display
+        // lists. Minimal declarations written for this project; the
+        // alignment checks, files and lines are the ones in the DOL's inline
+        // copies (bcs::CMdlObj::CopiedMatAccess's constructors).
+        class ResMatPix {
+            public:
+                explicit ResMatPix(void *pData = 0) : m_pData(pData)
+                {
+                    if ((unsigned long)pData & 0x1F) {
+                        db::Panic("g3d_resmat_ac.h", 340, "NW4R:Failed assertion !((u32)p & 0x1f)");
+                    }
+                }
+
+                bool IsValid() const { return m_pData != 0; }
+
+            private:
+                void *m_pData; // 0x00
+        };
+
+        class ResMatTexCoordGen {
+            public:
+                explicit ResMatTexCoordGen(void *pData = 0) : m_pData(pData)
+                {
+                    if ((unsigned long)pData & 0x1F) {
+                        db::Panic("g3d_resmat_ac.h", 513, "NW4R:Failed assertion !((u32)p & 0x1f)");
+                    }
+                }
+
+                bool IsValid() const { return m_pData != 0; }
+
+            private:
+                void *m_pData; // 0x00
+        };
+
+        class ResTev {
+            public:
+                explicit ResTev(void *pData = 0) : m_pData(pData)
+                {
+                    if ((unsigned long)pData & 0x1F) {
+                        db::Panic("g3d_restev_ac.h", 37, "NW4R:Failed assertion !((u32)p & 0x1f)");
+                    }
+                }
+
+                bool IsValid() const { return m_pData != 0; }
+
+            private:
+                void *m_pData; // 0x00
+        };
     }
 }
 
@@ -183,38 +246,56 @@ namespace bcs {
             CAnmObj *GetAnmObjTexPat() const { return m_pAnmObj3; }
             CAnmObj *GetAnmObjShp() const { return m_pAnmObj5; }
 
-            // (DOL) Access to the copied material nMat of a model. Size
-            // about 0x34 (layout.py: fields up to 0x30); only the first word
-            // is read from outside, null when there is no such material.
+            // (DOL game/bcs/CMdlObj/CopiedMatAccess.cpp) Access to the copy
+            // of material nMat that a model keeps of each block of its
+            // material resource, like nw4r's ScnMdl::CopiedMatAccess. Size
+            // 0x34. Every handle is null and m_pMdl is null when the model
+            // has no such material. Each getter returns its handle (null
+            // without a model or without that copy); bMarkDirty sets that
+            // block's bit in the material's dirty word so the model sends
+            // the copy to the GPU again.
             class CopiedMatAccess {
                 public:
                     CopiedMatAccess(CMdlObj *pMdl, unsigned long nMat);
+                    // (DOL fn_8005AFD4, named here) The material of that name.
+                    CopiedMatAccess(const char *pMatName, CMdlObj *pMdl);
 
-                    bool IsValid() const { return m_pData != 0; }
-                    nw4r::g3d::ResTexObj GetResTexObj(int nIndex);
+                    bool IsValid() const { return m_pMdl != 0; }
+                    nw4r::g3d::ResTexObj GetResTexObj(int bMarkDirty);    // bit 0x01
+                    // (DOL fn_8005B3E0, named here after nw4r)
+                    nw4r::g3d::ResTexSrt GetResTexSrt(bool bMarkDirty);   // bit 0x04
+                    // (DOL fn_8005B428, named here after nw4r)
+                    nw4r::g3d::ResGenMode GetResGenMode(bool bMarkDirty); // bit 0x10
+                    // (DOL; added for game/msw/CStgMdl.cpp, name after nw4r)
+                    nw4r::g3d::ResMatMisc GetResMatMisc(bool bMarkDirty); // bit 0x20
+                    // (DOL fn_8005B4B8, named here after nw4r)
+                    nw4r::g3d::ResMatPix GetResMatPix(bool bMarkDirty);   // bit 0x80
                     // (DOL; added for VolleyF game/volley/CBallTargetMarker.cpp)
-                    nw4r::g3d::ResMatTevColor GetResMatTevColor(int nIndex);
-                    // (DOL fn_8005B470, unnamed; added for game/msw/CStgMdl.cpp,
-                    // name after nw4r) The material's miscellaneous block;
-                    // bMarkDirty sets bit 0x20 of the material's word.
-                    nw4r::g3d::ResMatMisc GetResMatMisc(bool bMarkDirty);
-                    // (added for DOL game/bcs/CMdlRef.cpp; name guessed) The
-                    // material's GenMode block. Probably the DOL's fn_8005B428
-                    // inlined with its mark-dirty flag false (that one sets
-                    // bit 0x10 of the material's word when the flag is set).
+                    nw4r::g3d::ResMatTevColor GetResMatTevColor(int bMarkDirty);
+                    // (added for DOL game/bcs/CMdlRef.cpp) GetResGenMode(false):
+                    // the original's CMdlRef, in the same file, inlines it.
                     nw4r::g3d::ResGenMode GetResGenMode()
                     {
-                        if (m_pData != 0 && m_pGenMode != 0) {
-                            return nw4r::g3d::ResGenMode(m_pGenMode);
+                        if (m_pMdl != 0 && m_GenMode.IsValid()) {
+                            return m_GenMode;
                         }
                         return nw4r::g3d::ResGenMode(0);
                     }
 
                 private:
-                    void *m_pData;                 // 0x00
-                    unsigned char m_Unk04[0x14];   // 0x04
-                    void *m_pGenMode;              // 0x18
-                    unsigned char m_Unk1C[0x18];   // 0x1C
+                    CMdlObj *m_pMdl;                                 // 0x00
+                    unsigned long m_nMat;                            // 0x04
+                    nw4r::g3d::ResTexObj m_TexObj;                   // 0x08
+                    nw4r::g3d::ResTlutObj m_TlutObj;                 // 0x0C
+                    nw4r::g3d::ResTexSrt m_TexSrt;                   // 0x10
+                    nw4r::g3d::ResMatChan m_Chan;                    // 0x14
+                    nw4r::g3d::ResGenMode m_GenMode;                 // 0x18
+                    nw4r::g3d::ResMatMisc m_MatMisc;                 // 0x1C
+                    nw4r::g3d::ResMatPix m_Pix;                      // 0x20
+                    nw4r::g3d::ResMatTevColor m_TevColor;            // 0x24
+                    nw4r::g3d::ResMatIndMtxAndScale m_IndMtxAndScale; // 0x28
+                    nw4r::g3d::ResMatTexCoordGen m_TexCoordGen;      // 0x2C
+                    nw4r::g3d::ResTev m_Tev;                         // 0x30
             };
 
         private:
@@ -241,7 +322,24 @@ namespace bcs {
             CAnmObj *m_pAnmObj3;          // 0x154
             CAnmObj *m_pAnmObjTexSrt;     // 0x158
             CAnmObj *m_pAnmObj5;          // 0x15C
-            unsigned char m_Unk160[0x48]; // 0x160
+            // (names after nw4r's ScnMdl; added for DOL
+            // game/bcs/CMdlObj/CopiedMatAccess.cpp) One dirty word per
+            // material, then the model's copies of each material block, one
+            // element per material (null when the block is not copied).
+            unsigned long *m_pMatBufDirtyFlag;                      // 0x160
+            unsigned char m_Unk164[0xC];                            // 0x164
+            nw4r::g3d::ResTexObjData *m_pTexObjBuf;                 // 0x170
+            nw4r::g3d::ResTlutObjData *m_pTlutObjBuf;               // 0x174
+            nw4r::g3d::ResTexSrtData *m_pTexSrtBuf;                 // 0x178
+            nw4r::g3d::ResMatChanData *m_pChanBuf;                  // 0x17C
+            nw4r::g3d::ResGenModeData *m_pGenModeBuf;               // 0x180
+            nw4r::g3d::ResMatMiscData *m_pMatMiscBuf;               // 0x184
+            nw4r::g3d::ResPixDL *m_pPixBuf;                         // 0x188
+            nw4r::g3d::ResTevColorDL *m_pTevColorBuf;               // 0x18C
+            nw4r::g3d::ResIndMtxAndScaleDL *m_pIndMtxAndScaleBuf;   // 0x190
+            nw4r::g3d::ResTexCoordGenDL *m_pTexCoordGenBuf;         // 0x194
+            nw4r::g3d::ResTevData *m_pTevBuf;                       // 0x198
+            unsigned char m_Unk19C[0xC];                            // 0x19C
 
         protected:
             // (name guessed) White after construction, like m_BaseColor;

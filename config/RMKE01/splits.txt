@@ -55,7 +55,10 @@ game/bcs/G2D/CPaneObj.cpp:
 	.text       start:0x8003D030 end:0x8003ECE0
 
 game/bcs/G2D/CLytManager.cpp:
-	.text       start:0x8003F554 end:0x8003FE74
+	.text       start:0x8003F300 end:0x800400A4
+	.data       start:0x80466958 end:0x80466970
+	.bss        start:0x804CCB20 end:0x804CCB30
+	.sdata2     start:0x805C1CA0 end:0x805C1CE0
 
 game/bcs/G2D/CLytResource.cpp:
 	.text       start:0x800401A0 end:0x80040B70
@@ -98,7 +101,7 @@ game/bcs/CMovie.cpp:
 	.text       start:0x800695C8 end:0x8006A15C
 
 game/bcs/CPadWI.cpp:
-	.text       start:0x800708F0 end:0x8007109C
+	.text       start:0x800708F0 end:0x80071128
 
 game/bcs/CRenderMan.cpp:
 	.text       start:0x80073DAC end:0x8007852C
@@ -207,10 +210,8 @@ game/msw/CCollMan.cpp:
 	.text       start:0x800F6744 end:0x800FA63C
 
 game/msw/CCollUnit.cpp:
-	.text       start:0x801067E4 end:0x80106EA4
-
-game/msw/CCollDefUnit.cpp:
-	.text       start:0x80107294 end:0x801072A0
+	.text       start:0x801066C8 end:0x801072C0
+	.bss        start:0x804D33E0 end:0x804D3408
 
 game/msw/CBodyCollision.cpp:
 	.text       start:0x801072C0 end:0x801084B0
@@ -643,10 +644,9 @@ game/msw/CTmGameHandler.cpp:
 	.text       start:0x801E9F48 end:0x801EAD84
 
 game/msw/CStage09Base.cpp:
-	.text       start:0x801EB004 end:0x801EC050
-
-game/msw/CStage09Base/CConveyor.cpp:
-	.text       start:0x801EC07C end:0x801EC7E0
+	.text       start:0x801EB004 end:0x801EC8D4
+	.data       start:0x80485B10 end:0x80485C48
+	.sdata2     start:0x805C4E30 end:0x805C4E48
 
 game/bcs/G2D/CLineStripDL.cpp:
 	.text       start:0x801EC8D4 end:0x801ECE98
@@ -807,7 +807,7 @@ game/msw/CCockpitPauseLayoutBase.cpp:
 	.text       start:0x8025C344 end:0x8025C3F4
 
 game/msw/CCockpitPauseRuleInfo.cpp:
-	.text       start:0x8025F47C end:0x8025FB4C
+	.text       start:0x8025F47C end:0x8025FBCC
 
 game/msw/CGamePadCheck.cpp:
 	.text       start:0x8025FBCC end:0x802616DC

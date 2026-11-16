@@ -35,7 +35,7 @@ main CalcRotMtx__Q23msw7CStgSrtFRQ23bcs6FMTX34RCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 
 main CalcSortValue__Q23bcs7CScnObjFPCQ23bcs6FMTX34 near 90.7 [real, reviewed] reviewer confirmed: double cntlzw negation vs rlwinm. give the same truth value; vector add operand order and stack slots only; same constants
 main CalcView__Q33bcs2EF8CManagerFll near 97.7 fovy/aspect load order, addi r3 placement before C_MTXLightPerspective and one fmr register; reviewer checked
 main Calc__Q23msw10CSceneCalcFRQ23bcs10CCameraAnmRQ23bcs5FVEC3RQ23bcs5FVEC3Rf near 94.3 94.3%: float register numbers inside the inlined paired-single FVEC3Add and order of the lfs/stfs pairs copying the model offset
-main Calc__Q33msw4menu12CMoviePlayerFv near 97.7 instruction order only: Open argument evaluation, mr before Start, lfs order in the three float compares; jump table local name differs (reviewer confirmed)
+main Calc__Q33msw4menu12CMoviePlayerFv near 97.7 [real, reviewed] reviewer confirmed: jump table label name only (no data difference); loads reordered with no store between
 main CallTrg__Q23bcs13CAnmChrMotionFv near 98.9 register choice and instruction order only
 main CallbackBodyPush___Q23msw13CItemMushroomFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 96.5 [real, reviewed] reviewer confirmed: ble over b vs bgt take the same path for every compare result including NaN; same paired-single operands
 main CallbackBodyPush___Q23msw13CItemShellCmnFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 96.6 original branches ble+b where ours uses one bgt/ble form on the same condition and targets; float register numbering

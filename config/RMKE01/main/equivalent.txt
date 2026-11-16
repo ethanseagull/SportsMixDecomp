@@ -291,7 +291,7 @@ main Reset___Q23msw13CGameGuideManFv near 98.5 inlined CGameGuideTelop::Remove: 
 main RestoreSpeed__Q23msw14CGameSpeedCtrlFfil near 99.9 order of two float stores
 main Roll__Q23msw19CStgGmk_Pinball_MdlFRCQ23bcs5FVEC3ff near 98.5 register allocation/order only (diff.py: registers/schedule)
 main ScoreBookApplyCountWork___Q23msw5CGameFv near 85.9 switch compiled as a linear compare chain where the original builds a compare tree, and inline CFsmQueue operations expanding with other branch/register shape; same cases and calls
-main SearchFriendMatchChallengerAll__Q33bcs3dwc14CDwcFriendListCFv near 98.7 98.7%: original retests the valid bit with clrlwi. for the second inlined IsFriendMatchChallenger, ours reuses the first result (cmpwi)
+main SearchFriendMatchChallengerAll__Q33bcs3dwc14CDwcFriendListCFv near 98.7 [real, reviewed] reviewer confirmed: first clrlwi. result kept in a register instead of re-running it on an unchanged register; no calls between
 main SearchStickMove___Q23msw13CMenuPartListFlUsUlUsl near 87.9 the original re-zero-extends (clrlwi 16) the 16-bit kind ids it returns and compares, keeping one extra saved register; ours uses the incoming values directly. The callers pass zero-extended values, so results are the same; also register numbering and block order
 main SearchTrgFrame__Q23bcs10CAnmMotionCFlUlf near 95.0 register choice and instruction order only
 main SearchTrgFrame__Q23bcs15CAnmBlendMotionCFlUlf near 95.0 register choice and instruction order only

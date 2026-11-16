@@ -2159,7 +2159,7 @@ void msw::CChrCoreBoss::CheckQPanel_()
                 CreateStockItem(nItem);
             }
         } else if (nItem == -1) {
-            bcs::FVEC3 ofs(0.0f, 0.75f, 0.0f);
+            bcs::FVEC3 ofs(0.0f, 1.8f, 0.0f);
             CCockpitBoss::CreateMiniTelop(9, GetPlayerNo(), &ofs);
         }
     }

@@ -6,12 +6,12 @@ BossF ActLoopThrowItem__Q23msw11CComDrvBossFv near 99.3 register numbering insid
 BossF AddCoinValue__Q23msw16CCockpitBossCoinFlll near 99.0 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
 BossF CalcXZVel2__Q23msw9CBallBossCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3RQ23bcs5FVEC3RfRfffff near 97.1 registers only (one address computed earlier)
 BossF CallbackBallCatch2___Q23msw12CChrCoreBossFPQ23msw5CBall near 99.6 register numbering only (the no-hit bit word and the 1 << player shift)
-BossF CallbackBallCatch___Q23msw12CChrCoreBossFPQ23msw5CBall near 96.5 equivalent branch forms only (the original has beq+b / ble+b+b where ours has bne / bgt); same tests, calls and store
+BossF CallbackBallCatch___Q23msw12CChrCoreBossFPQ23msw5CBall near 96.5 [real, reviewed] reviewer confirmed: inverted branch layout only (same condition bits), same constant, calls and offsets
 BossF CallbackBodyPush___Q23msw9CBallBossFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 99.5 register choice inside the paired-single length-squared helper only
 BossF CanbeSpike__Q23msw12CChrCoreBossCFi near 99.9 f29/f30 swapped (base height vs prediction frame); register choice only
 BossF ChangeTextFont__Q23msw21CCockpitBossBallPowerFli near 97.0 register allocation only (nPane and the pane accessor temporaries swap registers); same calls, constants, loads, stores and branches
 BossF CheckCollision___Q23msw9CBallBossFv near 98.6 instruction order/register allocation only
-BossF CheckQPanel___Q23msw12CChrCoreBossFv near 94.3 register allocation (this kept in another register, one extra saved register) and literal pool offsets only: the file's float pool lacks the literals of the functions not written yet, so constants sit at other offsets (same values)
+BossF CheckQPanel___Q23msw12CChrCoreBossFv near 94.4 [real, reviewed] reviewer found the MiniTelop offset y read 0.75f where the original reads 1.8f; fixed. Left: register allocation (this spilled to the stack in the original, kept in a saved register in ours) and argument setup order; same calls, loads and constants
 BossF CheckSlow___Q23msw12CChrCoreBossFv near 99.4 register numbering/instruction order only
 BossF CollSubCheckBG___Q23msw9CBallBossFRQ23bcs5FVEC3RQ23bcs5FVEC3 near 98.7 stack slots, and hit flag held as 16-bit (ori/clrlwi) vs int; same truth value
 BossF CreateBallIcon__Q23msw16CRadarIcon2DBossFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc unverified 94.1 original frame is 0x80 (ours 0x50) and it stores a .rodata float (0.0f?) to stack slots 0x0C, 0x1C, 0x20 at entry: a local object (likely a vector/size passed by reference later) that our source lacks; the rest is the same calls in a slightly different block order with renumbered registers. Find that object before calling it correct
@@ -24,11 +24,11 @@ BossF CtorStateReceive__Q23msw12CChrCoreBossFv near 95.9 register numbering and 
 BossF DropBall___Q23msw12CChrCoreBossFf near 99.9 literal pool offsets only: the file's float pool lacks the literals of the functions not written yet, so constants sit at other offsets (same values)
 BossF EffectCoinGetCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 96.9 the inlined CEffectCoinGet ctor's 2*20 multiply (Twice) is scheduled after the m_fRotSpeed store in ours, before it in the original; the rotation-speed static is anonymous in the original; same values, calls and stores
 BossF EffectCoinScoreCreate___Q23msw15CGimmickManBossFRCQ23bcs5FVEC3RCQ23bcs5FVEC3l near 97.9 register choice only (loop counter and clamped count swap registers; one mr scheduled differently)
-BossF FireReceiver___Q23msw18CChrCoreBossKuromaFv near 98.2 delete-flag test clrlwi. vs clrlwi/cntlzw/srwi (same predicate); store order/stack slots of DetectMapHit locals; register numbering
+BossF FireReceiver___Q23msw18CChrCoreBossKuromaFv near 98.2 [real, reviewed] reviewer confirmed: double cntlzw bool vs clrlwi. (same test), the two DetectMapHit buffers at 0xb0/0xbc swapped with the read-back from the same buffer the call writes; F-register naming
 BossF FireReceiver___Q23msw19CChrCoreBossKinopioFv near 98.1 float registers in x*x+z*z and scheduling of the paired-single address setup
 BossF FuncMove___Q23msw9CBallBossFRQ23bcs5FVEC3RQ23bcs5FVEC3ff unverified 78.5 78.5: paired-single scheduling, ps_mr copies and temp slots differ; same operations seen, not proven (sonnet tried too)
 BossF GetAirTrickTargetPos___Q23msw12CChrCoreBossCFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3f near 98.9 register allocation/instruction order only
-BossF GetBossBallShotCollPos__Q23msw12CChrCoreBossCFlRQ23bcs5FVEC3Rf near 93.1 one more saved register (_savegpr_26) and register numbering inside the paired-single add; same calls, loads and stores
+BossF GetBossBallShotCollPos__Q23msw12CChrCoreBossCFlRQ23bcs5FVEC3Rf near 93.1 [real, reviewed] reviewer confirmed: one saved register more (_savegpr_26 vs 27), register naming, commuted ps_add operands; same calls, loads, stores
 BossF GetCrossPosCircleXZ__FQ23bcs5FVEC3Q23bcs5FVEC3Q23bcs5FVEC3fRfRQ23bcs5FVEC3 near 99.0 stack slots of the subtraction temporaries and the XZ copy swapped, register choice; same instructions otherwise
 BossF GetFirstLookInfo_MultiPlay__Q23msw11CCameraBossFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 92.6 stack slots, registers and stfsux addressing of the position table; same calls and constants
 BossF GetHomePos__Q23msw11CComDrvBossFRQ23bcs5FVEC3 near 99.4 inlined ShoudEscFromBoss loads the queue tail before the head; register numbering in the inlined paired-single helpers; same instructions otherwise
@@ -42,14 +42,14 @@ BossF GetVolleyPosAfterFrame__Q23msw9CBallBossCFRQ23bcs5FVEC3fi unverified 82.9 
 BossF GetVolleyVelAfterFrame__Q23msw9CBallBossCFRQ23bcs5FVEC3fi near 98.6 stack slots/frame size only: original keeps an unused vector copy as one stack object
 BossF HookBallCatchCmn___Q23msw12CChrCoreBossFPQ23msw5CBall near 99.7 register numbering only (the inlined FsmqChangeState's queue size/next-tail registers and the neutral work's type/pose loads); same calls, branches, loads and stores
 BossF HookBallCatch___Q23msw12CChrCoreBossFv near 95.0 register choice and load order around g_nEventChrIdx only; same calls and branches
-BossF IsBossRightBallTouch__Q23msw12CChrCoreBossCFl near 93.0 the alley-oop case's equality result is formed with cmpw/bne/li 1/li 0 in the original and with subf/cntlzw/srwi in ours (same 0/1 value); rest identical
-BossF LifeGaugeInWait__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
-BossF LifeGaugeIn__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
-BossF LifeGaugeOutWait__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
-BossF LifeGaugeOut__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
+BossF IsBossRightBallTouch__Q23msw12CChrCoreBossCFl near 93.0 [real, reviewed] reviewer confirmed: equality result formed with cmpw/bne/li in the original and subf/cntlzw/srwi in ours (same 0/1); nothing else differs
+BossF LifeGaugeInWait__Q23msw21CCockpitBossBallPowerFv near 100.0 [real, reviewed] reviewer confirmed: only the sPowerPane table address differs (0x910 vs 0x8e8); both tables hold the same bytes and only index 0 is read
+BossF LifeGaugeIn__Q23msw21CCockpitBossBallPowerFv near 100.0 [real, reviewed] reviewer confirmed: only the sPowerPane table address differs (0x910 vs 0x8e8); both tables hold the same bytes and only index 0 is read
+BossF LifeGaugeOutWait__Q23msw21CCockpitBossBallPowerFv near 100.0 [real, reviewed] reviewer confirmed: only the sPowerPane table address differs (0x910 vs 0x8e8); both tables hold the same bytes and only index 0 is read
+BossF LifeGaugeOut__Q23msw21CCockpitBossBallPowerFv near 100.0 [real, reviewed] reviewer confirmed: only the sPowerPane table address differs (0x910 vs 0x8e8); both tables hold the same bytes and only index 0 is read
 BossF LoopStateDamage__Q23msw12CChrCoreBossFv near 100.0 fnmsubs takes its two multiply operands in the other order (same product) and the switch jump table is a local symbol under another name; everything else identical after the FsmqNext fix
 BossF LoopStateDunk__Q23msw12CChrCoreBossFv near 99.2 stack slot order only (the by-value copy for the XZ length and the difference vector swap slots) plus register order
-BossF LoopStateGameSetup__Q23msw9CGameBossFv near 97.8 the inlined CFsmQueue::FsmqPushState reads head before tail and reloads the tail once; the original reads the tail first. Same queue update and work pointer.
+BossF LoopStateGameSetup__Q23msw9CGameBossFv near 98.2 [real, reviewed] reviewer confirmed: register numbering and ours reloads field 0x50 with no store in between; 30.0f same value under another label; calls, offsets, branches identical
 BossF LoopStateItemShoot__Q23msw12CChrCoreBossFv near 99.0 register allocation and instruction order only
 BossF LoopStateLoop__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFv near 99.9 register allocation only
 BossF LoopStateMainLoop__Q23msw9CGameBossFv near 99.5 register allocation only (loop counter/character pointer of the inlined all-characters-beaten check)
@@ -66,31 +66,31 @@ BossF MainCamera_Normal__Q23msw11CCameraBossFv near 85.6 stack layout, the origi
 BossF MainCamera__Q23msw11CCameraBossFv near 97.8 stack slots and one temporary copy the original keeps; same calls, constants and accesses
 BossF MainCamera__Q33msw22@unnamed@GameBoss_cpp@18CcVsBossArtsCameraFv near 98.8 paired-single lerp instructions interleaved in a different order and register numbering only
 BossF MainOnBall___Q23msw14CChrDrvPadBossFPQ33msw7CChrDrv8_CHR_MSG near 99.9 float register choice only (camera yaw in f0 vs f1)
-BossF Main__Q23msw21CCockpitBossBallPowerFv near 100.0 same .rodata table (font names) 0x28 earlier in our .rodata (unit's .rodata short before it); instructions identical otherwise
+BossF Main__Q23msw21CCockpitBossBallPowerFv near 100.0 [real, reviewed] reviewer confirmed: only the sPowerPane table address differs (0x910 vs 0x8e8); both tables hold the same bytes and only index 0 is read
 BossF Main__Q33msw12GIMMICK_BOSS14CEffectCoinGetFv near 99.0 register choice only (stack-vector address registers, paired-single temporaries); same as the Dodge/Volley/Hockey/Basket copies
 BossF Main__Q33msw12GIMMICK_BOSS16CEffectCoinScoreFv near 98.8 register choice only (fmadds operand order of a product by a zero speed, stack-vector address registers); same as the Volley/Basket copies
 BossF MenuCallGameResult___Q23msw9CGameBossFv near 98.8 register allocation only
 BossF MenuCallInterval___Q23msw9CGameBossFv near 98.7 register allocation only
 BossF MethdChgLeader__Q23msw12CChrCoreBossFv near 99.7 abs() result in r3 instead of r0; register choice only
 BossF MethdSideStep__Q23msw12CChrCoreBossFff near 99.0 the two float parameters kept in f30/f31 the other way round; register choice only
-BossF MethdTimeOver__Q23msw12CChrCoreBossFl near 98.4 after the switch ours reloads m_nQueueTail (0x1C) where the original reuses the register; nothing writes it in between, so same value; rest register renumbering
+BossF MethdTimeOver__Q23msw12CChrCoreBossFl near 98.4 [real, reviewed] reviewer confirmed: one redundant reload of the queue field at 28(r3) in ours (no store between), register choice
 BossF MethdTurnOver__Q23msw12CChrCoreBossFl near 99.5 r7/r8 swapped in the inlined queue push; register choice only
 BossF NormalizeCanMoveWorldPos__Q23msw11CComDrvBossCFRQ23bcs5FVEC3 near 97.5 float register allocation (radius sum, inlined FVEC3LenSq, final adds); same instructions and stack slots
 BossF OnMsgN__Q23msw14CChrDrvPadBossFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG near 99.7 float register choice only (512.0f in f2 vs f3 in case 0x97)
 BossF SearchPassToChrIdx___Q23msw12CChrCoreBossFi near 99.1 stack slots only: the two XZ distance branches of the inlined candidate choice have their vector pairs at swapped addresses; plus register numbering
-BossF SendMessage___Q23msw12CChrCoreBossFllll near 92.2 the original returns 0 in r3 (li r3,0 / bgt instead of bgtlr); CChrCore declares the slot void for the other modules' callers, so ours returns nothing; same tests and store
+BossF SendMessage___Q23msw12CChrCoreBossFllll near 92.2 [real, reviewed] reviewer confirmed: early bgtlr/bnelr returns vs a shared epilogue, and the original's li r3,0 return value, which no caller reads (slot void in CChrCore.hpp); same tests and store
 BossF SendMessage___Q23msw9CGameBossFllll near 100.0 register allocation/order only (diff.py: schedule, 100.0% rounded)
-BossF SetBallPowerState__Q23msw21CCockpitBossBallPowerFll near 99.0 only the rodata offset of sPowerPane differs (0x8e8 vs 0x910): the original .rodata holds 0x28 more bytes of @LOCAL@ statics from dead-stripped inline helpers (GaugeBossLineAnim, LifeGaugeAnim, CoinBackAnim, BossLifeGaugeIn, SetSPGaugeAnim); same table, same code
+BossF SetBallPowerState__Q23msw21CCockpitBossBallPowerFll near 99.0 [real, reviewed] reviewer confirmed: sPowerPane table at another .rodata offset (same contents for every team index callers pass), register numbering and address computation order
 BossF SetBallPowerValueColor__Q23msw21CCockpitBossBallPowerFli near 86.7 instruction order only: the addi of the sPowerPane address is scheduled before the subf instead of after
 BossF SetBallPowerValue__Q23msw21CCockpitBossBallPowerFls unverified 82.2 instruction order only (82%, short function): the sPowerPane addi, the accessor load and li r6,0 are scheduled in a different order; same instructions otherwise
-BossF SetBossLifePercent__Q23msw17CCockpitBossCoderFf near 100.0 frameMax 30.0f sits at a different .rodata offset (0x7A8 vs 0x780, same value); instructions identical otherwise
+BossF SetBossLifePercent__Q23msw17CCockpitBossCoderFf near 100.0 [real, reviewed] reviewer confirmed: frameMax 30.0f read from another .rodata offset (0x7a8 vs 0x780, same value); instructions identical otherwise
 BossF SetChrReflectMode__Q23msw9CBallBossFlf near 99.6 instruction order/register allocation only
 BossF SetCoinValue__Q23msw16CCockpitBossCoinFll near 98.9 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches
-BossF SetEndEffect__Q23msw25CItemBallChangeEffectBossFv near 21.7 tail call vs framed call only: only difference: original calls bcs::CTaskMan::GetTask inside a 0x10 frame, ours tail-calls it (same callee, same lwz 0x34 argument, result returned unchanged); reviewer confirmed
+BossF SetEndEffect__Q23msw25CItemBallChangeEffectBossFv near 21.7 tail call vs framed call only: reviewer confirmed: tail call vs framed call of bcs::CTaskMan::GetTask, same 0x34 argument, result returned unchanged; nothing else differs
 BossF SetFaceIcon__Q23msw17CCockpitBossCoderFPQ33bcs3G2D9CPaneCtrl near 96.3 instruction order and registers only: the chrNo array copy and the m_nPlayerNum load are scheduled differently; same calls, constants, loads, stores and branches
 BossF SetFaceIcon__Q23msw17CCockpitBossCoderFPQ33bcs3G2D9CPaneCtrlllPCQ23msw8CChrCore near 98.9 registers, plus the star pane's visible bit (Pane::SetVisible inline) is inserted with srwi+rlwimi instead of rlwinm+rlwimi: same byte value stored; all calls, constants, loads and branches the same
 BossF SetHeightObjState___Q23msw21CBallTargetMarkerBossFv near 98.8 float register choice (fmadds operand order, fdivs clamp temporaries) and one lwz scheduled earlier; same operations and constants
-BossF SetLifeValue__Q23msw17CCockpitBossCoderFlff near 87.3 register allocation only: the original keeps the pane accessor in its own saved register (five saved GPRs via _savegpr_27), ours shares it with the looked-up life pane (four, saved with stw); same calls, constants, loads, stores and branches
+BossF SetLifeValue__Q23msw17CCockpitBossCoderFlff near 87.3 [real, reviewed] reviewer confirmed: register allocation only (_savegpr_27 vs inline saves, this in another register); tables, floats, offsets, calls identical
 BossF SetOutTelop__Q23msw17CCockpitBossCoderFli near 99.6 register allocation and order of the sLifePane index arithmetic only; same calls, constants, loads, stores and branches
 BossF SetPassModeParam___Q23msw9CBallBossFRCQ23bcs5FVEC3ffff near 96.8 original keeps always-true 10.0>4.0 test in MapRange inline; rest register order
 BossF SetSpikeParam___Q23msw9CBallBossFRQ43msw4BALL4BOSS14SPIKE_SHOT_ARG near 99.4 instruction order/register allocation only
@@ -126,8 +126,8 @@ BossF TrgDamage___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.
 BossF TrgGoalIn___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
 BossF TrgReceive___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
 BossF TrgShootStart___Q23msw17CItemBallBossBombFv near 100.0 .rodata order of the 4.5f/180.0f CBombExplosion constants (original 4.5f first); same values in f1/f2, instructions identical otherwise
-BossF UpdateCockpitCount___Q23msw9CGameBossFv near 92.4 the original also compares g_GameWork.m_fUnk20 <= 0 (fcmpo/cror) and never uses the result; ours drops the dead compare (empty if, unused bool and empty-inline stand-ins all eliminated). Rest is register numbering. No behaviour change.
-BossF UpdateCollBody___Q23msw12CChrCoreBossFv near 97.5 the original reloads m_nQueueHead/m_nQueueTail for the receive work after the state switch where ours reuses the registers (nothing is written between, same value); float registers of FVEC3Add's paired-single blocks and the schedule of the catch size stores
+BossF UpdateCockpitCount___Q23msw9CGameBossFv near 92.4 [real, reviewed] reviewer confirmed: the original's g_GameWork.m_fUnk20 compare is dead (no branch reads cr0 before the next call); rest is register numbering
+BossF UpdateCollBody___Q23msw12CChrCoreBossFv near 97.5 [real, reviewed] reviewer confirmed: ours reuses the loaded 0x18/0x1c values the original reloads (no store or call between), register allocation and commuted ps_add/fmuls operands; every store the same value
 BossF UpdateCollBody___Q23msw9CBallBossFv near 99.8 register allocation/instruction order only
 BossF UpdateFunc___Q23msw12CChrCoreBossFv near 99.7 register numbering only (diff.py: same instructions and relocations after renumbering)
 BossF UpdateHomePos__Q23msw11CComDrvBossFv near 94.3 first loop: the original indexes the three local tables and the two member arrays with base+offset counters (lfsx, add), ours steps pointers; hence one saved GPR more (r21) and a 0x10 larger frame in the original; register numbering elsewhere; same operations in the same order
@@ -142,4 +142,4 @@ BossF __ct__Q33msw12GIMMICK_BOSS16CEffectCoinScoreFPQ23bcs5CTaskRCQ23bcs5FVEC3fl
 BossF __ct__Q33msw13CHR_CORE_BOSS9CStickObjFPQ23bcs5CTaskQ34nw4r3g3d6ResMdlPQ23bcs7CMdlObjll near 99.9 stack slots only: the four SetState pointer-to-member temporaries are copied to different stack offsets; same values, stores and calls
 BossF __ct__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFPQ23bcs5CTaskRCQ23bcs5FVEC3l near 99.9 stack slots of the pointer-to-member temporaries of SetState differ; same values stored to the state table
 BossF __dt__Q33msw22@unnamed@GameBoss_cpp@16CcVsBossSpCircleFv near 99.0 register allocation only (one register of the inlined CFsm destructor)
-BossF __sinit_\CChrCoreBoss_cpp near 100.0 literal pool offsets only: the file's float pool lacks the literals of the functions not written yet, so constants sit at other offsets (same values)
+BossF __sinit_\CChrCoreBoss_cpp near 100.0 [real, reviewed] reviewer confirmed: 1.2f read from another pool offset (0xdc vs 0xd0), same value; instructions identical otherwise

@@ -259,6 +259,11 @@ namespace msw {
             static CChrCore *GetPadDrvChrCoreRand(long nTeam);
             static bcs::FVEC3 GetChrPosXZ(const CChrCore *pChr);
             static int IsExistComRootActChr(long nTeam, long nAct);
+            // (added for VolleyF game/volley/unit_9FDD0.cpp, meanings guessed)
+            // The same leaving character nChr out; the falling green shell
+            // itself (null when it is gone).
+            static int IsExistComRootActChr_WithoutONE(long nTeam, long nAct, long nChr);
+            static CItem *FallGShell_GetPtr(unsigned long nShell);
             // The court rPos (in the court's frame) lies in.
             static long GetCourtIdxByPos(const bcs::FVEC3 &rPos);
 

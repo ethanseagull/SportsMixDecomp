@@ -2,6 +2,9 @@
 #define REVOLUTION_GD_H_
 
 #include "revolution/gx/GXEnum.h"
+#include "revolution/gx/GXStruct.h"
+#include "revolution/gx/GXTexture.h"
+#include "revolution/mtx.h"
 
 // The GD library builds GX display lists in memory. Only what is used so
 // far (added for the DOL's game/bcs/G2D/CLineStripDL.cpp). Names follow the
@@ -25,6 +28,15 @@ typedef struct _GDLObj {
 extern GDLObj *__GDCurrentDL;
 
 void GDOverflowed(void);
+
+// (added for the DOL's game/bcs/G2D/CLytManager.cpp) The GD counterparts
+// of the GX state functions of the same names.
+void GDSetProjection(const Mtx44 mtx, GXProjectionType type);
+void GDSetZTexture(GXZTexOp op, GXTexFmt fmt, unsigned long bias);
+void GDSetFog(GXFogType type, float startz, float endz, float nearz, float farz, GXColor color);
+void GDSetZMode(GXBool compare_enable, GXCompare func, GXBool update_enable);
+void GDSetCoPlanar(GXBool enable);
+void GDSetCullMode(GXCullMode mode);
 
 #ifdef __cplusplus
 }

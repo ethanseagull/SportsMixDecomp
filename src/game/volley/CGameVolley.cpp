@@ -271,9 +271,8 @@ namespace msw {
                             float fCamDist = 4.2f;
                             CChrCore *pChr = CChrMan::GetTeamLeader(i);
                             if (pChr && pChr->IsEnable()) {
-                                float fRot = -0.87266463f;
                                 pChr->OffDispFlag(4);
-                                fRot = WrapRad(fRot);
+                                float fRot = WrapRad(-0.87266463f);
                                 if (i != 0) {
                                     fRot = WrapRad(-fRot);
                                 }

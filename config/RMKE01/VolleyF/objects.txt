@@ -103,4 +103,4 @@ Equivalent game/volley/unit_380D8.cpp
 NonMatching game/volley/unit_9FDD0.cpp
 Equivalent game/volley/CComDrvVolleyGame.cpp
 Matching game/volley/unit_AA504.cpp
-NonMatching game/volley/CGameVolley.cpp
+Equivalent game/volley/CGameVolley.cpp

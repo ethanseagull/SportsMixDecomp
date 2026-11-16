@@ -10,6 +10,11 @@ extern "C" {
 // Turns the locked cache (scratch memory at 0xE0000000) on.
 void LCEnable(void);
 
+// (added for DOL game/bcs/EF/CResource.cpp) Data cache maintenance of a
+// range of memory.
+void DCInvalidateRange(void *pAddr, unsigned long nBytes);
+void DCFlushRange(void *pAddr, unsigned long nBytes);
+
 #ifdef __cplusplus
 }
 #endif

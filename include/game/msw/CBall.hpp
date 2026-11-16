@@ -36,7 +36,23 @@ namespace msw {
     // namespaces and not classes is a guess, see notes/toolchain.md)
     namespace BALL {
         namespace VOLLEY {
-            struct SERVE_TOSS_ARG;
+            // (added for VolleyF game/volley/unit_3B628.cpp; field names
+            // and meanings guessed) The toss of a serve
+            // (CBall::SetVolleyServeTossMode).
+            struct SERVE_TOSS_ARG {
+                long m_nType;          // 0x00, 0 over hand, 1 under hand, 2 jump
+                long m_nPlayerNo;      // 0x04
+                long m_nTeamNo;        // 0x08
+                bcs::FVEC3 m_Pos;      // 0x0C, where the toss starts
+                float m_fTopY;         // 0x18, the height of the toss
+                float m_fCatchY;       // 0x1C, the height it is caught again at
+                float m_fUnk20;        // 0x20
+                float m_fScale;        // 0x24, the ball model's scale
+                float m_fUnk28;        // 0x28
+                float m_fUnk2C;        // 0x2C
+                bcs::CMdlObj *m_pMdl;  // 0x30, the server's model (none for the jump serve)
+                long m_nOutline;       // 0x34
+            };
             struct SERVE_SHOT_ARG;
             struct SPIKE_SHOT_ARG;
             struct PASS_SHOT_ARG;
@@ -527,6 +543,8 @@ namespace msw {
             // velocity.
             bcs::CMdlObj *GetMdlObj() const { return m_pMdlObj; }
             const bcs::FVEC3 &GetVelocity() const { return m_Velocity; }
+            // (added for VolleyF game/volley/unit_3B628.cpp) See m_nMdlNode.
+            unsigned long GetMdlNode() const { return m_nMdlNode; }
             // (names guessed; added for DodgeF game/dodge/CItemBallBombDodge.cpp)
             // Direct access for the dodgeball item behaviours, which read
             // and write these members of the ball without a call.
@@ -544,6 +562,9 @@ namespace msw {
             void PlayMoveSe(long nSe, const bcs::FVEC3 *pPos, unsigned long nArg2, long nArg3, float fArg4,
                             float fVolume, float fArg6);
             void PlaySePos(long nSe, const bcs::FVEC3 *pPos, unsigned long nArg2, long nArg3, float fArg4,
+                           float fVolume, float fArg6);
+            // (DOL) The same at rPos.
+            void PlaySePos(long nSe, const bcs::FVEC3 &rPos, unsigned long nArg2, long nArg3, float fArg4,
                            float fVolume, float fArg6);
             // (DOL; return types guessed) Used by BasketF's
             // msw::CBallBasketFruit.
@@ -573,6 +594,10 @@ namespace msw {
             void ResetVelGravity_();
             void Eff_CreateSimple(long nEffect, const bcs::FVEC3 &rPos, unsigned long, unsigned long);
             void Eff_CreateSimple(long nEffect, const bcs::FVEC3 &rPos, float, unsigned long, unsigned long);
+            // (DOL) The same in effect slot nSlot (stopped with Eff_Stop).
+            void Eff_CreateSimple(long nSlot, long nEffect, const bcs::FVEC3 &rPos, unsigned long, unsigned long);
+            void Eff_CreateSimple(long nSlot, long nEffect, const bcs::FVEC3 &rPos, float, unsigned long,
+                                  unsigned long);
             // Solves the vertical motion: the start velocity and gravity of a
             // flight of fFrame frames from fStartY over fTopY to fEndY.
             void CalcYVG(float fStartY, float fTopY, float fEndY, float fFrame, float &rVel, float &rGravity) const;
@@ -582,6 +607,44 @@ namespace msw {
             // while the ball carries an item.
             int IsItemBall() const;
             void LinkItemEffect_(unsigned long nId);
+            // (DOL; added for BasketF game/basket/CBallBasket.cpp, return
+            // types and parameter names guessed) The attack hit callback
+            // CreateCollAttack_ registers; pArg is the ball.
+            static void CallbackAttackHit(const CCollAtkUnit *pAtk, const CCollBodyUnit *pBody,
+                                          const bcs::FVEC3 &rPos, unsigned long nFlag, void *pArg);
+            // Starts trail effect nEffect behind the ball.
+            void EffectSetTail_(long nEffect);
+            // The same for trail slot nSlot (the plain one uses slot 0), and
+            // stopping it.
+            void EffectSetTail_(long nSlot, long nEffect, unsigned long);
+            void EffectStopTail_(long nSlot);
+            // Moves the ball to where the hand holding it is.
+            void CalcAttachPosInter_();
+            // Sets one coordinate of m_OffsetPos.
+            void SetOffsetPosY(float fY);
+            void SetOffsetPosZ(float fZ);
+            // The collision radii back to their defaults.
+            void ResetBodyCollRadius_();
+            // Turns the ball as it rolls by rMove.
+            void RollBall_(const bcs::FVEC3 &rMove);
+            // Clears the squash of the model; places the model at the ball.
+            void ResetSquashParam();
+            void CalcRoot_();
+            // Plays sound nSe in sound slot nSlot, following the ball
+            // (arguments after pPos as PlaySePos).
+            void SE_PlayMove(long nSlot, long nSe, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
+            // The velocity of a jump ball thrown up between the players.
+            void CalcJumpBallVel(float, float, float, float, float, float);
+            // rVel for a flight from rFrom to rTo leaving at fAngle under
+            // fGravity.
+            void CalcVelByShootAngle(bcs::FVEC3 &rVel, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fAngle,
+                                     float fGravity) const;
+            // The XZ velocity of a flight from rFrom to rTo; returns the
+            // speed, rFrame the frames it takes.
+            float CalcXZVel(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float, bcs::FVEC3 &rVel, float &rFrame,
+                            float, float, float) const;
+            // The frames of a flight from rFrom to rTo.
+            float CalcXZFrame(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float, float) const;
             void ClearOffsetPos();
 
         protected:
@@ -644,7 +707,10 @@ namespace msw {
             // 0x168 (name guessed): the ball's scale; BossF's CBallBoss grows
             // it with the coin power and multiplies its radii by it.
             float m_fScale;
-            unsigned char m_Unk16C[0xC];   // 0x16C
+            // 0x16C (name guessed): the radius of the ball's attack unit
+            // (BasketF's CBallBasket::UpdateCollAtk_ copies it into the unit).
+            float m_fAtkRadius;
+            unsigned char m_Unk170[0x8];   // 0x170
             // 0x178 (meaning not known; added for BossF
             // game/boss/CChrCoreBoss.cpp): one bit per player; a character
             // whose bit is set does not take the ball in (CallbackBallCatch3_).
@@ -652,11 +718,22 @@ namespace msw {
             // 0x17C (meaning guessed): one bit per player the ball may not
             // hit (BossF's CBallBoss sets the shooter's).
             long m_Unk17C;
-            unsigned char m_Unk180[0xC];   // 0x180
+            unsigned char m_Unk180[0x4];   // 0x180
+            // 0x184 (name guessed; VolleyF game/volley/unit_3B628.cpp reads
+            // the scale of the ball model at it): the model node of the ball.
+            unsigned long m_nMdlNode;
+            unsigned char m_Unk188[0x4];   // 0x188
             // 0x18C (meaning not known): BossF's CBallBoss copies its attach
             // lift here.
             float m_f18C;
-            unsigned char m_Unk190[0x30];  // 0x190
+            unsigned char m_Unk190[0x20];  // 0x190
+            // 0x1B0, 0x1B4 (names guessed): a hook BasketF's
+            // CBallBasket::CallbackBodyDamage_ calls instead of its own
+            // handling while the ball is held, with the argument stored
+            // next to it; zero for none.
+            long (*m_pBodyDamageHook)(CBall *pBall, const CCollAtkUnit *pAtk, const bcs::FVEC3 &rPos, void *pArg);
+            void *m_pBodyDamageHookArg;
+            unsigned char m_Unk1B8[0x8];   // 0x1B8
             long m_nShootType;             // 0x1C0, returned by GetDodgeShootType (name guessed)
             unsigned char m_Unk1C4[0xC];   // 0x1C4
             float m_fAlphaRate;            // 0x1D0 (name guessed; SetAlphaRate's value)

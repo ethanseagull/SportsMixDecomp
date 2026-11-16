@@ -12,6 +12,10 @@ namespace msw {
             // part of it. Field meanings are not known; types are the
             // access widths seen in the game.
             struct SPIKE_SHOT_ARG {
+                // (VolleyF, out of line; added for
+                // game/volley/CNpcGhostVolley.cpp, which builds one)
+                SPIKE_SHOT_ARG();
+
                 float m_fUnk00;          // 0x00
                 float m_fUnk04;          // 0x04
                 float m_fUnk08;          // 0x08

@@ -12,8 +12,7 @@ namespace msw {
     // Size 0x68 (CCockpitVolley::CreateObjImpl allocates it, object 53):
     // the rhythm game's receive count and point-up texts
     // (game/volley/CCockpitVolleyRhythmB.cpp). Virtuals from the VolleyF
-    // vtable; return types and argument names are guesses. The members are
-    // not mapped (0x60 word, bytes at 0x64 to 0x67).
+    // vtable; return types and argument names are guesses.
     class CCockpitVolleyRhythmB : public CCockpitVolleyLayoutBase {
         public:
             CCockpitVolleyRhythmB(long nId, float fSortZ);
@@ -30,11 +29,21 @@ namespace msw {
             virtual int ScoreInWait();
 
             void SetReceiveCount(long nCount);
-            void SetPointUpText(long nPlayer, const bcs::FVEC3 &rPos, long nPoint);
-            void ClearPointUpText(long nPlayer);
+            // Pops up nPoint over rPos for player nPlayer; returns 0.
+            long SetPointUpText(long nPlayer, const bcs::FVEC3 &rPos, long nPoint);
+            // Hides player nPlayer's pop-ups; returns 0.
+            long ClearPointUpText(long nPlayer);
 
         private:
-            unsigned char m_Unk60[0x68 - 0x60];
+            void SetAnimGauge(long nAnim);
+            // Makes the pop-up panes of every player.
+            void CreatePointUp(bcs::G2D::CPaneCtrl *pPaneCtrl);
+
+            // Pop-ups per player (they are used in turn).
+            static const unsigned char s_CountUpPaneNum;
+
+            long m_nPlayerNum;              // 0x60
+            unsigned char m_nCountUpIdx[4]; // 0x64, next pop-up per player
     };
 }
 

@@ -103,7 +103,11 @@ namespace msw {
             // The character's data at m_pChrData; only the body size class
             // (0 small, 1 middle, 2 large) is known.
             struct CHR_DATA {
-                unsigned char m_Unk00[0x28];
+                unsigned char m_Unk00[0x20];
+                // 0x20 (meaning not known): above 0, BasketF's
+                // CChrCoreBasket::MethdGameSet keeps status bit 0x200 set.
+                float m_fUnk20;
+                unsigned char m_Unk24[0x28 - 0x24];
                 long m_nBodySize; // 0x28
             };
             // (contents guessed in game/boss/CChrCoreBoss.cpp) The sizes of
@@ -1050,6 +1054,8 @@ namespace msw {
             // (names guessed) Inline in the original; the modules read the
             // bytes directly, as signed values.
             long GetPlayerNo() const { return m_nPlayerNo; }
+            // (name guessed; added for BasketF game/basket/CBallBasket.cpp)
+            long GetColor() const { return m_nColor; }
             // DOL. (name from the DOL; what height it gives is not checked)
             float GetPosY() const;
             long GetTeamNo() const { return m_nTeamNo; }
@@ -1534,6 +1540,22 @@ namespace msw {
             // (names guessed) Inline in the module: see m_hBall and m_nFlagF4.
             unsigned long GetBallHandle() const { return m_hBall; }
             void OnFlagF4(unsigned long nBit) { m_nFlagF4 |= nBit; }
+            unsigned long GetFlagF4() const { return m_nFlagF4; }
+            // Added for BasketF game/basket/unit_581FC.cpp (DOL; return
+            // types and meanings guessed from the names). Marks a dribble
+            // tap; the offset of the model from the position, and its
+            // setter; the height of the waist; attaches the character to
+            // the scene object of handle hObj; a voice of the base table
+            // (nRand picks among its variants), and whether one plays; the
+            // yaw from the goal the team defends to the character.
+            void SetTap();
+            const bcs::FVEC3 &GetOffsetPos();
+            void SetOffsetPos(const bcs::FVEC3 &rOfs);
+            float GetWaistBaseHeight() const;
+            void SetAttach_(unsigned long hObj, long);
+            void PlayVoiceBase(long nVoice, unsigned long, long nRand);
+            int IsPlayVoice() const;
+            float GetRotY_FromGuardGoal() const;
 
             // Added for BasketF game/basket/CChrCoreBasketNinja.cpp (names
             // from the weak copies in BasketF; meanings guessed). Bits of
@@ -1744,7 +1766,11 @@ namespace msw {
             // 0x192 (name guessed): a third model node for effects (BasketF's
             // tumble damage attaches its effect 0x584 there).
             unsigned short m_nEffNodeSub2;
-            unsigned char m_Unk194[0x1A0 - 0x194];
+            // 0x194, 0x196 (names guessed; VolleyF game/volley/unit_3B628.cpp
+            // attaches the endure gauge effects 0x649 and 0x64A there).
+            unsigned short m_nEffNodeEndure0;
+            unsigned short m_nEffNodeEndure1;
+            unsigned char m_Unk198[0x1A0 - 0x198];
             // 0x1A0-0x1AC (names guessed): a change of body size; the scale
             // it starts from, the one it goes to (below 1 when shrinking),
             // how far it has got (0 when none runs) and the normal scale

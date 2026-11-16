@@ -17,7 +17,10 @@ namespace msw {
         // INCOMPLETE: only what the character units read; names guessed.
         class CC_PARAM_BASKET2 {
             public:
-                unsigned char m_Unk000[0x3C];
+                unsigned char m_Unk000[0x38];
+                // 0x38 (name guessed; game/basket/unit_581FC.cpp): the frames
+                // of the dash.
+                long m_nDashFrame;
                 // 0x3C-0x4C (names guessed; game/basket/unit_25D70.cpp): the
                 // frames of the dash's after effect, the frame from which a
                 // turn of the stick by more than m_nDashTurnDeg degrees
@@ -28,13 +31,32 @@ namespace msw {
                 long m_nDashTurnDeg;           // 0x44
                 long m_nTurnFrame;             // 0x48
                 float m_fTurnDist;             // 0x4C
-                unsigned char m_Unk050[0x88 - 0x50];
+                // 0x50-0x5C (names guessed; game/basket/unit_581FC.cpp, the
+                // trick move): the frames of the spin, two values the move
+                // keeps in its work (meaning not known), and the angle the
+                // spin turns off the goal (degrees).
+                long m_nTrickMoveFrame;        // 0x50
+                float m_fTrickMoveUnk54;       // 0x54
+                float m_fTrickMoveUnk58;       // 0x58
+                long m_nTrickMoveRotDeg;       // 0x5C
+                unsigned char m_Unk060[0x88 - 0x60];
                 // 0x88, 0x8C (names guessed; game/basket/unit_2BBEC.cpp): the
                 // frames of the jump block during which its defence
                 // collision is on.
                 long m_nJumpBlockDefStart;     // 0x88
                 long m_nJumpBlockDefEnd;       // 0x8C
-                unsigned char m_Unk090[0x10C - 0x90];
+                unsigned char m_Unk090[0xAC - 0x90];
+                // 0xAC-0xB4, 0xD4, 0xD8 (names guessed; game/basket/CBallBasket.cpp,
+                // SetShootParam_): how a shot of this character flies (0 an
+                // arc, 1 straight, 2 curving), its speed and how far it
+                // bends; the kind and speed of its "just" shot.
+                long m_nShotKind;              // 0xAC
+                float m_fShotSpeed;            // 0xB0
+                float m_fShotCurve;            // 0xB4
+                unsigned char m_Unk0B8[0xD4 - 0xB8];
+                long m_nJustShotKind;          // 0xD4
+                float m_fJustShotSpeed;        // 0xD8
+                unsigned char m_Unk0DC[0x10C - 0xDC];
                 // 0x10C-0x170 (names guessed; game/basket/unit_38A7C.cpp): the
                 // dunk's jump height and run-up frames, and whether its run-up
                 // is counted in loops (0: timed); the same for the rebound
@@ -164,6 +186,7 @@ namespace msw {
     }
 
     class CBall;
+    class CNpcBase;
 
     // The basketball character core (BasketF).
     //
@@ -223,6 +246,13 @@ namespace msw {
             // Starts the combination pass in direction fRotY; zero when it
             // cannot.
             int MethdCombinationPass(float fRotY);
+            // (added for game/basket/CBallBasket.cpp; meanings guessed from
+            // the names) The frames a special shot of this character cannot
+            // be knocked away; plays the sound of a special shot going in.
+            float GetArtsShotRefelectDisableFrame() const;
+            // (meaning guessed) Where this character's shot goes.
+            bcs::FVEC3 GetTargetShootPos() const;
+            void PlaySeSPSuccess(const bcs::FVEC3 &rPos);
 
             // Added for game/basket/CChrCoreBasketKinopio.cpp (BasketF;
             // meanings guessed from the names). The down frames and the
@@ -501,6 +531,46 @@ namespace msw {
             void SendPassCatchFrame_(CChrCore *pTo, const bcs::FVEC3 &rPos, float fFrame);
             float GetCourtDepth() const;
             void Util_PassBall(long nType, CChrCore *pTo, const bcs::FVEC3 &rPos, float, int, int);
+
+            // Added for game/basket/unit_581FC.cpp (the Canbe*/Methd*
+            // members; names from the symbols, return types and meanings
+            // guessed). The quarter of the dunk battle a yaw falls in; the
+            // block cut without the gauge check; whether a dribble's turn
+            // goes left (1) and whether the stick has moved over enough to
+            // ask again; the change of the pad to this character; whether
+            // rPos is inside the three-point line (widened by fMargin) of
+            // the goal attacked.
+            long GetDir4ToBattle(float fRot);
+            int CanbeBlockCut_(int bNow);
+            long SubStateRDBGetRotFlag_(float fRotY, float fStartRotY);
+            int SubStateRDBIsUpdateRotFlag_(float fRotY, float fOldRotY, float fStartRotY);
+            void OnChrChange();
+            int IsTargetGoal3PointArea(const bcs::FVEC3 &rPos, float fMargin) const;
+            // pChr answers the dunk of the air trick with a block; the
+            // dunk is only started facing the goal; the passes and aerial
+            // passes the Methd* members start.
+            int MethdAirTrickDunkToEndure(CChrCore *pChr);
+            int DunkRotCheck_();
+            int MethdPass_(CChrCore *pTo, CNpcBase *pNpc, float fRotY, long bTarget, const bcs::FVEC3 *pPos, int,
+                           long nType);
+            int MethdAerialPass_(CChrCore *pTo, CNpcBase *pNpc, float fRotY, long bTarget, const bcs::FVEC3 *pPos,
+                                 int);
+            // The team defends; the smash cut is unlocked; the reach (and
+            // its angle in degrees) of the jump block; how long the ball
+            // holder hangs on in an air battle; the frames of the star
+            // condition; the pass request's motion plays, and its loops;
+            // counts a shot of kind nKind in the score book.
+            int IsNowDefense() const;
+            int IsSmashCutEnable() const;
+            float GetJumpBlockRevR() const;
+            long GetJumpBlockRevRangRad() const;
+            float GetStaddleLimitTime_() const;
+            long GetStarConditionFrame() const;
+            int IsPassRequestMotPlay() const;
+            long GetPassRequestMotLoopNum() const;
+            void AddCountWorkShootNum(long nKind);
+            // The computer's smash cut, at the ball holder.
+            int MethdAutoSmashCut();
 
             // Overrides of CChrCore's virtuals, in vtable order (the slots of
             // __vt__Q23msw14CChrCoreBasket, read from BasketF, that name
@@ -826,18 +896,23 @@ namespace msw {
             // type guessed): where the character will be after fFrame frames.
             virtual void GetFuturePos(bcs::FVEC3 &rPos, float fFrame); // 0xD4C
 
-            // 0x57C (name guessed): flag bits; with 0x800 set a catch can be
-            // followed by an aerial pass (CChrDrvPadBasket::MethdPass).
-            unsigned char m_Unk574[0x578 - 0x574];
+            // 0x574 (name guessed): what GetCcParam2_ returns (its inline
+            // body is in game/basket/CBallBasket.cpp, which has a weak copy).
+            const CHR_CORE_BASKET::CC_PARAM_BASKET2 *m_pCcParam2;
             // 0x578 (name guessed; game/basket/unit_25D70.cpp): frames the
             // block work goes on after its start (20 when it starts).
             float m_fBlockWorkWait;
+            // 0x57C (name guessed): flag bits; with 0x800 set a catch can be
+            // followed by an aerial pass (CChrDrvPadBasket::MethdPass).
             unsigned long m_nBasketFlag;
             unsigned char m_Unk580[0x584 - 0x580];
             // 0x584 (name guessed; game/basket/unit_25D70.cpp): frames of
             // the dash's after effect (flag 0x80000 of m_nBasketFlag).
             float m_fDashEffFrame;
-            unsigned char m_Unk588[0x598 - 0x588];
+            // 0x588 (name guessed; game/basket/unit_581FC.cpp): while above
+            // 0 the trick move may start outside a battle.
+            float m_fTrickMoveWait;
+            unsigned char m_Unk58C[0x598 - 0x58C];
             // 0x598-0x5A0 (name guessed; game/basket/unit_25D70.cpp): the
             // gap of the second body push collision (CalcPush1GapValue);
             // the run state clears it.

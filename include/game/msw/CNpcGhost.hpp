@@ -25,7 +25,7 @@ namespace msw {
     // from BasketF's __vt__Q23msw19CNpcGhostBasketBase and what
     // game/basket/CNpcGhostBasketBase.cpp reads; return types and member
     // names are guesses. The state functions marked inline are the ones
-    // BasketF emits as weak copies (empty in the DOL); the others are DOL
+    // BasketF or VolleyF emit as weak copies (empty); the others are DOL
     // functions.
     class CNpcGhost : public CNpcBase, public bcs::CFsmQueue<CNpcGhost> {
         public:
@@ -61,6 +61,9 @@ namespace msw {
             virtual long SendMessage(long, long, long, long, long);
             virtual void AttachBall(CBall *pBall, long nNode, float, unsigned long);
             virtual void DetachBall();
+            // Bit 1 of m_nGhostFlag. Defined out of line in BasketF's
+            // game/basket/unit_581FC.cpp and at the end of
+            // game/volley/CNpcGhostVolley.cpp (weak copies in the original).
             virtual int IsHoldBall() const;
 
             // Own virtual functions, 0x80 on.
@@ -85,30 +88,30 @@ namespace msw {
             virtual void CtorStateSteele() {}
             virtual void LoopStateSteele() {}
             virtual void DtorStateSteele() {}
-            virtual void CtorStateGetLooseBall();
-            virtual void LoopStateGetLooseBall();
-            virtual void DtorStateGetLooseBall();
-            virtual void CtorStateMotPlay();
-            virtual void LoopStateMotPlay();
+            virtual void CtorStateGetLooseBall() {}
+            virtual void LoopStateGetLooseBall() {}
+            virtual void DtorStateGetLooseBall() {}
+            virtual void CtorStateMotPlay() {}
+            virtual void LoopStateMotPlay() {}
             virtual void DtorStateMotPlay() {}
-            virtual void CtorStatePursuit();
-            virtual void LoopStatePursuit();
-            virtual void DtorStatePursuit();
+            virtual void CtorStatePursuit() {}
+            virtual void LoopStatePursuit() {}
+            virtual void DtorStatePursuit() {}
             virtual void CtorStateDisappears();
             virtual void LoopStateDisappears();
             virtual void DtorStateDisappears();
             virtual void CtorStateAppearance();
             virtual void LoopStateAppearance();
             virtual void DtorStateAppearance();
-            virtual void CtorStatePass();
-            virtual void LoopStatePass();
-            virtual void DtorStatePass();
-            virtual void CtorStatePassCatch();
-            virtual void LoopStatePassCatch();
-            virtual void DtorStatePassCatch();
-            virtual void CtorStateCatch();
-            virtual void LoopStateCatch();
-            virtual void DtorStateCatch();
+            virtual void CtorStatePass() {}
+            virtual void LoopStatePass() {}
+            virtual void DtorStatePass() {}
+            virtual void CtorStatePassCatch() {}
+            virtual void LoopStatePassCatch() {}
+            virtual void DtorStatePassCatch() {}
+            virtual void CtorStateCatch() {}
+            virtual void LoopStateCatch() {}
+            virtual void DtorStateCatch() {}
             virtual void CtorStateHidden() {}
             virtual void LoopStateHidden() {}
             virtual void DtorStateHidden() {}
@@ -118,6 +121,14 @@ namespace msw {
             virtual void CtorStateSpike() {}
             virtual void LoopStateSpike() {}
             virtual void DtorStateSpike() {}
+
+            // 0x158 on (added for VolleyF game/volley/CNpcGhostVolley.cpp,
+            // whose vtable names these two as CNpcGhost's, weak and empty
+            // there; BasketF's CNpcGhostBasketBase overrides both).
+            // Not zero when the ghost can take a pass.
+            virtual int CanbePassCatch() const { return 0; }
+            // Starts catching the pass of pBall aimed at rPos.
+            virtual int MethdSetPassCatchState(CBall *pBall, const bcs::FVEC3 &rPos, long nPassType) { return 0; }
 
             // (DOL) The goal the ghost's team attacks.
             long GetTargetGoalIdx() const;

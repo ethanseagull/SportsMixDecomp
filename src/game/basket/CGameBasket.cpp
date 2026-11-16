@@ -163,18 +163,23 @@ namespace msw {
             float fUnk1C;        // 0x1C
         };
 
+        // Starts the combination play of pChr (it tests the character again).
+        static inline void StartCombinationPlay(CChrCoreBasket *pChr)
+        {
+            if (pChr != 0) {
+                pChr->SetStateCombinationPlay(0);
+            }
+        }
+
         // Not zero while the shot clock runs: bit 0 of CChrManBasket's
         // flags, unless the game has no shot clock (bit 4).
         inline unsigned long IsShotClockRun()
         {
             CChrManBasket *pMan = CChrManBasket::GetInstance();
-            unsigned long bRun;
             if (pMan->IsNoShotClock()) {
-                bRun = 0;
-            } else {
-                bRun = pMan->GetFlagAC() & 1;
+                return 0;
             }
-            return bRun;
+            return pMan->GetFlagAC() & 1;
         }
 
         // Not zero while the shot clock is shown: always in a game without
@@ -545,12 +550,12 @@ namespace msw {
             IncCoinHistCount(GetFrameRateF());
             CheckSpEndure();
             CheckExceptionalCamera_();
-            if (m_nBasketFlag & 8) {
-                // The rebound camera ends a while after it started, once no
-                // shot is in the air.
+            if (GetBasketFlag_() & 8) {
+                // The rebound camera ends a while after it started, once the
+                // ball is no longer rebounding.
                 int bNoShoot = 1;
                 CBall *pBall = CBallMan::GetBallPtr(0);
-                if (pBall && pBall->IsShootMode()) {
+                if (pBall && pBall->IsNowRebound()) {
                     bNoShoot = 0;
                 }
                 if (bNoShoot) {
@@ -590,7 +595,8 @@ namespace msw {
     {
         static const long nID = 8;
 
-        if (!(m_nGameFlag & 2) && !(m_nGameFlag & 0x2000) && !IsReqArtsEvent_() && g_GameWork.m_fUnk20 > 0.0f) {
+        unsigned long nFlag = GetGameFlag_();
+        if (!(nFlag & 2) && !(nFlag & 0x2000) && !IsReqArtsEvent_() && g_GameWork.m_fUnk20 > 0.0f) {
             float fTime = g_GameWork.m_fGameTime;
             if (fTime <= 0.0f) {
                 if (g_GameWork.GetGameType() != GAME_TYPE_PARTY) {
@@ -617,7 +623,7 @@ namespace msw {
                 CGameBGM::HurryUp();
             }
             CCockpitBasket::SetTime(g_GameWork.m_fGameTime, IsTimeColorChange());
-            if (fTime <= 900.0f && !(m_nGameFlag & 0x200)) {
+            if (fTime <= 900.0f && !(GetGameFlag_() & 0x200)) {
                 m_nGameFlag |= 0x200;
             }
         }
@@ -1180,7 +1186,14 @@ namespace msw {
             static const long nWinMarginPt = 50;
             for (long nTeam = 0; nTeam < 2; nTeam++) {
                 long nDiff = GetTeamScore(nTeam) - GetTeamScore(1 - nTeam);
-                long nPoint = nDiff >= 1 ? nWinSkillPt : (nDiff == 0 ? 10 : -nWinSkillPt);
+                long nPoint;
+                if (nDiff >= 1) {
+                    nPoint = nWinSkillPt;
+                } else if (nDiff == 0) {
+                    nPoint = 10;
+                } else {
+                    nPoint = -nWinSkillPt;
+                }
                 long nMargin = Clamp(nDiff, -nWinMargin, nWinMargin);
                 SetTeamSkillPoint(nTeam, nPoint + (long)((float)(nMargin * nWinMarginPt) / nWinMargin));
             }
@@ -1784,7 +1797,7 @@ namespace msw {
     // team whose character starts the next state.
     void CGameBasket::ForceGameExit_(long nTeam)
     {
-        if (!(m_nGameFlag & 0x20000)) {
+        if (!(GetGameFlag_() & 0x20000)) {
             switch (m_nUnk12C) {
                 case 3:
                     m_nGameFlag |= 0x20000 | 1;
@@ -2575,7 +2588,7 @@ namespace msw {
         for (long i = 0; i < CChrMan::GetChrCoreNum(); i++) {
             CChrCoreBasket *pChr = static_cast<CChrCoreBasket *>(CChrMan::GetChrCore(i));
             if (pChr) {
-                pChr->SetStateCombinationPlay(0);
+                StartCombinationPlay(pChr);
             }
         }
         m_nBasketFlag &= ~0x10;
@@ -2705,7 +2718,8 @@ namespace msw {
 
     void CGameBasket::SetRiverFallRestart_(long nTeam)
     {
-        if (!(m_nGameFlag & 1) && !(m_nGameFlag & 0x800)) {
+        unsigned long nFlag = GetGameFlag_();
+        if (!(nFlag & 1) && !(nFlag & 0x800)) {
             m_nRiverFallTeam = nTeam;
             m_nGameFlag |= 0x800;
         }
@@ -2796,7 +2810,7 @@ namespace msw {
     {
         if (nColor == -2 || nColor == -1) {
             long nPrev = m_nShotClockCount;
-            unsigned long bOn = (m_nGameFlag >> 14) & 1;
+            unsigned long bOn = (GetGameFlag_() >> 14) & 1;
             m_nGameFlag &= ~0x4000;
             m_nShotClockCount = -1;
             if (nColor == -2 && !bOn) {
@@ -2898,22 +2912,23 @@ namespace msw {
             long nPanel = pStage->GetCurrentPanelType();
             long nTotal = pStage->GetPanelScore(nScore, nPanel);
             SetGoalBonusColor(0);
-            if (IsPanelBonus(nPanel)) {
+            unsigned short nType = nPanel;
+            if (IsPanelBonus(nType)) {
                 SetGoalBonusColor(3);
             }
-            if (nPanel == 5) {
+            if (nType == 5) {
                 SetGoalBonusColor(2);
             }
-            if (nPanel == 6) {
+            if (nType == 6) {
                 SetGoalBonusColor(3);
             }
-            if (nPanel == 7) {
+            if (nType == 7) {
                 SetGoalBonusColor(3);
             }
-            if (nPanel == 8) {
+            if (nType == 8) {
                 SetGoalBonusColor(3);
             }
-            if (nPanel == 9) {
+            if (nType == 9) {
                 SetGoalBonusColor(4);
             }
             switch (pStage->GetPanelBonusType()) {
@@ -3031,10 +3046,15 @@ namespace msw {
                     }
                 }
                 break;
-            case 0x34:
-                if ((unsigned long)nArg2 <= 1) {
+            case 0x34: {
+                int bOther = 0;
+                if ((unsigned long)nArg2 > 1) {
+                    bOther = 1;
+                }
+                if (!bOther) {
                     break;
                 }
+            }
                 // fall through
             case 0x35: {
                 // A shot: the slow motion of a close shot, and the special

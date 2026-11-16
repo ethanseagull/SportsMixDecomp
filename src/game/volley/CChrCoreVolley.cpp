@@ -951,7 +951,7 @@ long msw::CChrCoreVolley::GetReceivePoseDir_(float fDir)
     return nPose;
 }
 
-long msw::CChrCoreVolley::GetReceivePoseMotID_(long nPose, long nPart)
+short msw::CChrCoreVolley::GetReceivePoseMotID_(long nPose, long nPart)
 {
     return s_ReceivePoseMot[nPose][nPart];
 }
@@ -973,7 +973,7 @@ long msw::CChrCoreVolley::GetTossPoseDir_(float)
     return 0;
 }
 
-long msw::CChrCoreVolley::GetTossPoseMotID_(long nPose, long nPart)
+short msw::CChrCoreVolley::GetTossPoseMotID_(long nPose, long nPart)
 {
     return s_TossPoseMot[nPose][nPart];
 }
@@ -995,7 +995,7 @@ long msw::CChrCoreVolley::GetJumpTossPoseDir_(float)
     return 0;
 }
 
-long msw::CChrCoreVolley::GetJumpTossPoseMotID_(long, long nPart)
+short msw::CChrCoreVolley::GetJumpTossPoseMotID_(long, long nPart)
 {
     return s_JumpTossPoseMot[nPart];
 }

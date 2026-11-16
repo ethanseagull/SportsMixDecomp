@@ -8,6 +8,8 @@ extern "C" {
 // Only what is used so far (MenuF game/menu/CTitle.cpp). Declaration of the
 // public GX API; the body is in main.dol.
 void GXSetNumTexGens(unsigned char nTexGens);
+// (added for DOL game/bcs/EF/CResource.cpp)
+void GXInvalidateVtxCache(void);
 
 #ifdef __cplusplus
 }

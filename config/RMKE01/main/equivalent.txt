@@ -62,7 +62,7 @@ main ChgDemoDisp__Q23msw9CItemBallFi near 98.2 98.2%: diff.py class schedule; th
 main Cleanup__Q23msw10CEventDemoFi near 96.2 register choice only: m_Work address and task pointer swap r4/r5
 main ClearChrIconImpl__Q23msw17CCockpitChrIcon2DFlil near 98.9 98.9%: r23-r26 assigned in a different order; register-only
 main ClearChrIcon__Q23msw17CCockpitChrIcon2DFlil near 99.1 99.1%: register choice only
-main CopyNodeMtx__Q23bcs7CMdlRefFPCQ23bcs7CMdlObj near 97.0 97.0%: identical instructions; only the callee name differs (CalcSkinning is the unnamed DOL fn_80417C90)
+main CopyNodeMtx__Q23bcs7CMdlRefFPCQ23bcs7CMdlObj near 97.0 [real, reviewed] reviewer confirmed: callee is the same unnamed CalcSkinning; clrlslwi vs slwi on an lhzx value (already zero-extended)
 main CreateBuryCoin__Q23msw12CDropCoinManFRCQ23bcs5FVEC3RCQ23bcs5FVEC3l near 99.1 float register choice and load order only
 main CreateDriftItem___Q23msw11CGimmickManFlRCQ23bcs5FVEC3RCQ23bcs5FVEC3ff near 99.7 the two fmadds take the random value and the width in swapped operand order (same product); source order of the factors does not change it, declaration-order search found nothing
 main CreateMdl___Q23msw18CEffectCoinGetBaseFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinTypei unverified 98.2 ResFile stored to the stack before the alignment-assert branch in the original, after it in ours (one extra mr)
@@ -74,7 +74,7 @@ main Create__Q23bcs10CAnmTexPatFPCQ23bcs7CMdlObjQ34nw4r3g3d12ResAnmTexPatil near
 main Create__Q23bcs10CAnmTexSrtFPCQ23bcs7CMdlObjQ34nw4r3g3d12ResAnmTexSrtil near 98.3 [real, reviewed] reviewer confirmed: redundant m_Res reload and stack store order only
 main Create__Q23bcs15CAnmBlendMotionFPCQ23bcs7CMdlObjQ34nw4r3g3d7ResFilePCQ33bcs14CAnmObjMotBase12NODE_EX_INFOUlUll near 86.8 [real, reviewed] reviewer confirmed: register renumbering, operand swap, reordered loads and a reload of the 0x2a count with no store to it between
 main Create__Q23bcs7CAnmShpFPCQ23bcs7CMdlObjQ34nw4r3g3d9ResAnmShpil near 98.8 [real, reviewed] reviewer confirmed: redundant m_Res reload before the 0x24 read and stack store order only
-main Create__Q23bcs7CMdlRefFQ34nw4r3g3d6ResMdlUll near 98.7 98.7%: GenMode handle in another stack slot, one reload of its pointer CSEd; GXSetCullMode is the unnamed fn_8040C620
+main Create__Q23bcs7CMdlRefFQ34nw4r3g3d6ResMdlUll near 98.7 [real, reviewed] reviewer confirmed: same GXSetCullMode alias; GenMode handle slot and a dead slot load only
 main Create__Q23msw13CDefCollisionFlllUl near 98.0 register choice only: loop counter and byte offset registers swapped in the three store loops
 main Create___Q43msw6CC_CMN5SLIME14CcSquadFactoryFPQ23msw8CChrCorePCf near 99.8 instruction order only: the three pointer increments at the loop end are scheduled in another order
 main CtorStateChgCourt__Q23msw5CGameFv near 96.7 switch compiled as a linear compare chain where the original builds a compare tree, and inline CFsmQueue operations expanding with other branch/register shape; same cases and calls
@@ -410,7 +410,7 @@ main _UpdateFloor__Q23msw11CEventModelFv near 99.0 stack slots of the two FVEC3S
 main __ct__Q23bcs10CAnmTexPatFPCQ23bcs7CMdlObjQ34nw4r3g3d12ResAnmTexPatil unverified 84.1 84.1: calls Create as the original; only the res copy load is ordered after the member stores and saved registers differ; two models tried
 main __ct__Q23bcs10CStrapTaskFPFv_v near 98.7 instruction order of the member stores and the register holding the stored 0
 main __ct__Q23bcs13CAnmChrMotionFv near 92.6 same stores; the vptr store comes after the CFrameCtrl member stores in the original, before them in ours
-main __ct__Q23bcs7CMdlRefFPCQ23bcs7CMdlObjQ34nw4r3g3d6ResMdlUlUll near 95.4 95.4%: calls SetLink where the original inlines it (same-file inline: the original file is the whole bcs model file), the GenMode handle sits in another stack slot and one reload of its pointer is CSEd; GXSetCullMode is the unnamed fn_8040C620
+main __ct__Q23bcs7CMdlRefFPCQ23bcs7CMdlObjQ34nw4r3g3d6ResMdlUlUll near 95.4 [real, reviewed] reviewer confirmed: inline vs call: ours calls SetLink, whose body (fn_8005E0BC plus the 0x1c8/0x1cc stores) is inlined in the original; GXSetCullMode alias; stack slots and a dead slot load
 main __ct__Q23msw10CEventMoveFPQ23msw11CEventModelPQ23msw14CEventNodeBasei near 99.9 only the .sdata2 relocation of 0.0f differs (constant pool not carved for this unit)
 main __ct__Q23msw13CAtkCollisionFlllUl near 99.0 [real, reviewed] reviewer confirmed: loop counter and offset registers swapped, two li reordered, vtable symbol shown as ANON; no data difference
 main __ct__Q23msw13CDefCollisionFlllUl near 98.2 register choice only: loop counter and byte offset registers swapped in the three store loops

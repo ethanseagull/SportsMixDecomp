@@ -10,6 +10,7 @@
 typedef union {
     unsigned char u8;
     unsigned short u16;
+    short s16;
     unsigned long u32;
     float f32;
 } PPCWGPipe;
@@ -20,6 +21,14 @@ static inline void GXPosition2f32(float x, float y)
 {
     GXWGFifo.f32 = x;
     GXWGFifo.f32 = y;
+}
+
+// (added for DOL game/bcs/CMovie.cpp)
+static inline void GXPosition3s16(short x, short y, short z)
+{
+    GXWGFifo.s16 = x;
+    GXWGFifo.s16 = y;
+    GXWGFifo.s16 = z;
 }
 
 static inline void GXTexCoord2f32(float s, float t)

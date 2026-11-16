@@ -210,6 +210,10 @@ namespace msw {
             // of the kinds in nKindBits, and the nearest falling green shell,
             // in court nCourt (0: none), and the XZ distance to that shell.
             static bcs::FVEC3 DropCoin_GetWorldPos(unsigned long nId);
+            // (added for HockeyF game/hockey/unit_B0048.cpp; meaning guessed
+            // from the name) The XZ distance from rPos to the nearest dropped
+            // coin; negative for none. The long is passed as -1.
+            static float DropCoin_GetNearDisXZ(const bcs::FVEC3 &rPos, long);
             static int IsBadCondition(CChrCore *pChr);
             static unsigned long QPanel_GetNearInCourt(const bcs::FVEC3 &rPos, long nCourt, unsigned long nKindBits);
             static unsigned long FallGShell_GetNearInCourt(const bcs::FVEC3 &rPos, long nCourt);

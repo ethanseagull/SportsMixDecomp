@@ -15,6 +15,8 @@ int wcsncmp(const wchar_t *s1, const wchar_t *s2, size_t n);
 // Added for MenuF game/menu/CBackground.cpp.
 wchar_t *wcscpy(wchar_t *pDst, const wchar_t *pSrc);
 wchar_t *wcsncpy(wchar_t *pDst, const wchar_t *pSrc, size_t n);
+// Added for the DOL's game/msw/cockpit.cpp (fn_802AA698).
+wchar_t *wcsncat(wchar_t *pDst, const wchar_t *pSrc, size_t n);
 
 #ifdef __cplusplus
 }

@@ -37,7 +37,10 @@ game/bcs/EF/CEffect.cpp:
 	.text       start:0x8001E510 end:0x8001FEE8
 
 game/bcs/EF/CResource.cpp:
-	.text       start:0x80020720 end:0x800212EC
+	.text       start:0x80020634 end:0x800213CC
+	.rodata     start:0x8042DB50 end:0x8042DB58
+	.data       start:0x80464E68 end:0x80464E74
+	.sbss       start:0x805C082C end:0x805C0830
 
 game/bcs/EF/CManager.cpp:
 	.text       start:0x80022A14 end:0x80022F78
@@ -62,6 +65,7 @@ game/bcs/G2D/CLytManager.cpp:
 
 game/bcs/G2D/CLytResource.cpp:
 	.text       start:0x800401A0 end:0x80040B70
+	.sbss       start:0x805C0880 end:0x805C0884
 
 game/bcs/CScnObj.cpp:
 	.text       start:0x80041888 end:0x80044B00
@@ -98,7 +102,7 @@ game/bcs/CMiiMan.cpp:
 	.text       start:0x8006832C end:0x800695C8
 
 game/bcs/CMovie.cpp:
-	.text       start:0x800695C8 end:0x8006A15C
+	.text       start:0x800695C8 end:0x8006A458
 
 game/bcs/CPadWI.cpp:
 	.text       start:0x800708F0 end:0x80071128
@@ -335,7 +339,11 @@ game/msw/CCockpitTelopStageIntro.cpp:
 	.text       start:0x8013B974 end:0x8013BA38
 
 game/msw/CLytCtrl.cpp:
-	.text       start:0x8013EADC end:0x8013F5F0
+	.text       start:0x8013E624 end:0x8013F65C
+	.rodata     start:0x8043B200 end:0x8043B238
+	.data       start:0x804715E8 end:0x80471600
+	.sbss       start:0x805C0C38 end:0x805C0C40
+	.sdata2     start:0x805C30A8 end:0x805C30B0
 
 game/msw/LayoutTask.cpp:
 	.text       start:0x8013F65C end:0x8013F660
@@ -408,7 +416,7 @@ game/msw/CStageNet.cpp:
 	.text       start:0x8016AC7C end:0x8016ACB8
 
 game/msw/CStageScroll.cpp:
-	.text       start:0x8016B778 end:0x8016C17C
+	.text       start:0x8016B778 end:0x8016C304
 
 game/msw/CStgAct.cpp:
 	.text       start:0x8016F538 end:0x8016FF0C
@@ -487,7 +495,14 @@ game/msw/CCockpitResult.cpp:
 	.rodata     start:0x8043DC60 end:0x8043DC90
 
 game/msw/menu.cpp:
-	.text       start:0x8019B2C4 end:0x8019BBF4
+	.text       start:0x8019B2C4 end:0x8019BC7C
+	.ctors      start:0x8042D224 end:0x8042D228
+	.rodata     start:0x8043DCD8 end:0x8043DCF0
+	.data       start:0x80480760 end:0x804807E8
+	.bss        start:0x804D7168 end:0x804D7180
+	.sdata      start:0x805BFD88 end:0x805BFD90
+	.sbss       start:0x805C0D10 end:0x805C0D20
+	.sdata2     start:0x805C4108 end:0x805C4130
 
 game/msw/CTrophyObj.cpp:
 	.text       start:0x8019BEF0 end:0x8019CAE0
@@ -620,7 +635,10 @@ game/msw/CStage11Base.cpp:
 	.text       start:0x801DDA34 end:0x801DF228
 
 game/msw/cockpit.cpp:
-	.text       start:0x801DF710 end:0x801E00F8
+	.text       start:0x801DF710 end:0x801E0130
+	.rodata     start:0x80443100 end:0x80443118
+	.sdata      start:0x805BFE48 end:0x805BFE60
+	.sdata2     start:0x805C4D68 end:0x805C4D80
 
 game/msw/CStgGmk_Pinball.cpp:
 	.text       start:0x801E0130 end:0x801E782C
@@ -771,7 +789,11 @@ game/msw/CCockpitResultPartyTeam.cpp:
 	.sdata2     start:0x805C57D0 end:0x805C5870
 
 game/msw/CCockpitResultPartyVS.cpp:
-	.text       start:0x8023CD30 end:0x8023D6C4
+	.text       start:0x8023C340 end:0x8023D74C
+	.rodata     start:0x80449D28 end:0x80449FA8
+	.data       start:0x8048BB58 end:0x8048BCF8
+	.sdata      start:0x805BFF48 end:0x805BFF50
+	.sdata2     start:0x805C5870 end:0x805C59E0
 
 game/msw/CStage16Base.cpp:
 	.text       start:0x8023D970 end:0x8023EB38

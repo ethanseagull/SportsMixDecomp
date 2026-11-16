@@ -20,6 +20,9 @@ namespace msw {
             // other team's (from the callers, CComDrvHockey's
             // InitMyTeamKeeperCore / InitEmTeamKeeperCore).
             static CChrCore *GetKeeperCore(long nTeam, long nSide);
+            // (added for HockeyF game/hockey/unit_B0048.cpp) A random number
+            // from n1 to n2 (whether n2 is included is not known).
+            static long GetRandValueI(long n1, long n2);
 
             float GetElapsedTime();
             int CanReachTarget(long, int, const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float);

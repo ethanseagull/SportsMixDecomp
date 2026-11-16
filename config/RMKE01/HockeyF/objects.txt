@@ -96,3 +96,6 @@ Equivalent game/hockey/CCockpitHockeyMap.cpp
 Equivalent game/hockey/CcWarioSmokeMgr.cpp
 Equivalent game/hockey/CcDaisyFlowerGarden.cpp
 Equivalent game/hockey/CStgGmk_Pylon_Act_Hockey.cpp
+Equivalent game/hockey/CCockpitHockeyClash.cpp
+Equivalent game/hockey/CcSiromaMagicCircle.cpp
+Equivalent game/hockey/unit_B0048.cpp flags=noauto

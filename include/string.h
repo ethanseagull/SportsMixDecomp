@@ -15,6 +15,8 @@ char *strncpy(char *dst, const char *src, size_t n);
 void *memcpy(void *dst, const void *src, size_t n);
 void *memset(void *pDst, int c, size_t n);
 int memcmp(const void *p0, const void *p1, size_t n);
+// (the DOL's fn_802A636C; added for DOL game/bcs/EF/CResource.cpp)
+char *strstr(const char *s, const char *sub);
 
 #ifdef __cplusplus
 }

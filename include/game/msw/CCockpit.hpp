@@ -103,6 +103,14 @@ namespace msw {
             // (DOL; added for BasketF game/basket/CStageBasket10.cpp; return
             // type guessed) Shows the points icon nKind for team nTeam at *pPos.
             static void SetShootPtsIcon(long nTeam, const bcs::FVEC3 *pPos, long nKind);
+            // (DOL, static; added for BasketF game/basket/CGameBasket.cpp,
+            // return types and meanings guessed) Counts team nTeam's score
+            // up to nScore; the marker icon nObjId over *pPos (set, moved,
+            // cleared with or without its animation).
+            static void AddTeamScore(long nTeam, long nScore);
+            static void SetMarkerIcon(long nObjId, const bcs::FVEC3 *pPos);
+            static void ClearMarkerIcon(long nObjId, int bAnim);
+            static void SetMarkerIconPosition(long nObjId, const bcs::FVEC3 *pPos);
             // (DOL, static; added for BasketF game/basket/CChrManBasket.cpp;
             // parameter meanings guessed) The head icon of human player
             // nCtrlPlayer over player nPlayer: at *pPos plus *pOfs, with the

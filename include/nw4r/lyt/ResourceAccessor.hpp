@@ -43,8 +43,15 @@ namespace nw4r {
         };
 
         // (added for DOL game/bcs/G2D/CLayoutBase.cpp) One archive of a
-        // MultiArcResourceAccessor. Not mapped.
-        class ArcResourceLink;
+        // MultiArcResourceAccessor. Not mapped. The destructor is empty and
+        // inline: bcs::G2D::CLytResource::DeleteArcResourceLink tests the
+        // pointer before freeing it.
+        class ArcResourceLink {
+            public:
+                ~ArcResourceLink() {}
+        };
+
+        typedef ut::LinkList<FontRefLink, 0> FontRefList;
 
         // What msw::CLytCtrl::NewArcResourceAccessor returns. 0xB0 bytes
         // (game/msw/CNowLoading.cpp allocates it).
@@ -52,7 +59,11 @@ namespace nw4r {
             public:
                 // (the DOL's fn_8042A2F0)
                 ArcResourceAccessor();
-                virtual ~ArcResourceAccessor();
+                // The destructor is implicit: the DOL's only copy
+                // (fn_8004045C) is a weak one, emitted by
+                // game/bcs/G2D/CLytResource.cpp right after its first
+                // (virtual) caller. It empties mFontList and runs
+                // ~ResourceAccessor.
                 virtual void *GetResource(unsigned long nType, const char *pName, unsigned long *pSize);
                 virtual ut::Font *GetFont(const char *pName);
                 // (the DOL's fn_8042A350) Opens the archive at pArchive with
@@ -65,7 +76,9 @@ namespace nw4r {
                 void UnregistFont(FontRefLink *pLink);
 
             private:
-                unsigned char m_Unk04[0xAC]; // 0x04
+                unsigned char m_Unk04[0x24 - 0x04]; // 0x04
+                FontRefList mFontList;              // 0x24
+                char mResRootDir[0x80];             // 0x30
         };
 
         // (added for DOL game/bcs/G2D/CLayoutBase.cpp) An accessor over
@@ -73,6 +86,9 @@ namespace nw4r {
         class MultiArcResourceAccessor : public ResourceAccessor {
             public:
                 void Detach(ArcResourceLink *pLink);
+                // (added for DOL game/bcs/G2D/CLytResource.cpp; the DOL's
+                // fn_8042A4E0) Forgets every archive.
+                void DetachAll();
                 void RegistFont(FontRefLink *pLink);
                 void UnregistFont(FontRefLink *pLink);
         };

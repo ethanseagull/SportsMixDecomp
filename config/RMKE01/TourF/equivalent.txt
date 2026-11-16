@@ -135,7 +135,7 @@ TourF _Init__Q23msw19CTournamentRouteManFv near 99.9 instruction order only
 TourF _MakeRouteSelect__Q23msw15CTournamentStepFl near 96.5 [real, reviewed] reviewer: only extrwi+neg vs extsb+srawi 7, the same 0/-1 from bit 7
 TourF _MakeRouteSelect__Q23msw15CTournamentStepFll near 95.1 [real, reviewed] reviewer: extrwi+neg vs extsb+srawi 7, the same 0/-1 from bit 7
 TourF _OffsetCupUpChar__Q23msw15CTournamentStepFlRCQ23bcs5FVEC3 near 96.9 [real, reviewed] reviewer: registers, the same three stfs in another order, a load and extsb reordered, float pool at another offset (same values)
-TourF _OpSysCallCreateTeamMission__Q23msw9CTmScriptFv unverified 89.5 random index choice: original tests nNum>0 twice and takes index 0 when nNum<=0, ours tests nNum<1 with no index-0 path; not proven equal
+TourF _OpSysCallCreateTeamMission__Q23msw9CTmScriptFv near 89.5 [real, reviewed] reviewer: the original re-tests nNum > 0 inside the nNum > 0 branch (inlined RandomIndex, its index-0 path unreachable), ours folds it; aGameMode at another stack offset, registers and order
 TourF _OpSysCallEraseTeam__Q23msw9CTmScriptFv near 98.8 register allocation/instruction order only
 TourF _OpSysCallGetLoseTeam__Q23msw9CTmScriptFv near 99.0 register allocation/instruction order only
 TourF _OpSysCallGetPointMatch__Q23msw9CTmScriptFv near 99.2 register allocation/instruction order only

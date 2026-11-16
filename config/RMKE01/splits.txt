@@ -37,7 +37,10 @@ game/bcs/EF/CEffect.cpp:
 	.text       start:0x8001E510 end:0x8001FEE8
 
 game/bcs/EF/CResource.cpp:
-	.text       start:0x80020720 end:0x800212EC
+	.text       start:0x80020634 end:0x800213CC
+	.rodata     start:0x8042DB50 end:0x8042DB58
+	.data       start:0x80464E68 end:0x80464E74
+	.sbss       start:0x805C082C end:0x805C0830
 
 game/bcs/EF/CManager.cpp:
 	.text       start:0x80022A14 end:0x80022F78
@@ -99,7 +102,7 @@ game/bcs/CMiiMan.cpp:
 	.text       start:0x8006832C end:0x800695C8
 
 game/bcs/CMovie.cpp:
-	.text       start:0x800695C8 end:0x8006A15C
+	.text       start:0x800695C8 end:0x8006A458
 
 game/bcs/CPadWI.cpp:
 	.text       start:0x800708F0 end:0x80071128
@@ -336,7 +339,11 @@ game/msw/CCockpitTelopStageIntro.cpp:
 	.text       start:0x8013B974 end:0x8013BA38
 
 game/msw/CLytCtrl.cpp:
-	.text       start:0x8013EADC end:0x8013F5F0
+	.text       start:0x8013E624 end:0x8013F65C
+	.rodata     start:0x8043B200 end:0x8043B238
+	.data       start:0x804715E8 end:0x80471600
+	.sbss       start:0x805C0C38 end:0x805C0C40
+	.sdata2     start:0x805C30A8 end:0x805C30B0
 
 game/msw/LayoutTask.cpp:
 	.text       start:0x8013F65C end:0x8013F660
@@ -409,7 +416,7 @@ game/msw/CStageNet.cpp:
 	.text       start:0x8016AC7C end:0x8016ACB8
 
 game/msw/CStageScroll.cpp:
-	.text       start:0x8016B778 end:0x8016C17C
+	.text       start:0x8016B778 end:0x8016C304
 
 game/msw/CStgAct.cpp:
 	.text       start:0x8016F538 end:0x8016FF0C

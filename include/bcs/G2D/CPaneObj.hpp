@@ -32,6 +32,9 @@ namespace bcs {
                 // Added for BasketF game/basket/CCockpitBasketHarapeko.cpp
                 // (return type guessed): stops every animation.
                 void StopAllAnimation(int nArg);
+                // Added for HockeyF game/hockey/CCockpitHockeyClash.cpp
+                // (return type guessed): drops every queued animation.
+                void CancelNextAnimationAll(int nArg);
                 // Added for MenuF game/menu/CBackground.cpp: jumps animation
                 // nAnim to frame fFrame (return type guessed).
                 void SetAnimCurrentFrame(long nAnim, float fFrame);

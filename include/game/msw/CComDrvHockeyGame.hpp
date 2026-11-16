@@ -111,6 +111,125 @@ namespace msw {
             void ActCallDamage();
             void ActCallDamageFall();
 
+            // (game/hockey/unit_B0048.cpp) The interrupt checks ActInterrupt
+            // makes every frame, and the thinking ThkMain does when no action
+            // runs. Each check returns 1 when it started (or keeps) an action.
+            void ThkInterruptItemThrow();
+            int ThkInterruptEscape();
+            int ThkInterruptLoseBall();
+            int ThkInterruptLoseBall_ShootSteal();
+            int ThkInterruptOnBaller();
+            int ThkInterruptOnBaller_Pass();
+            int ThkInterruptOnBaller_ItemBallShoot();
+            int ThkInterruptOnBaller_SpShoot();
+            int ThkInterruptOnBaller_EscapeFromStar();
+            int ThkInterruptOnBaller_Shoot();
+            int ThkInterruptOnBaller_Blockade();
+            int ThkInterruptMyTeamHoldBall();
+            int ThkInterruptMyTeamHoldBall_NoMarkJudge();
+            int ThkInterruptMyTeamHoldBall_RunIntoBefore();
+            int ThkInterruptMyTeamHoldBall_DirectShootCharge();
+            int ThkInterruptEnemyTeamHoldBall();
+            int ThkInterruptEnemyTeamHoldBall_PassSteal();
+            int ThkInterruptEnemyTeamHoldBall_AttackChance();
+            int ThkInterruptEnemyTeamHoldBall_GoalProtect();
+            int ThkDefense();
+            // nOrder: 0 when the marked enemy holds the puck, 1 when the
+            // driver is its team's nearest to its own goal, 2 otherwise;
+            // nAdd is added to the rate.
+            int ThkDefense_GetHatenaPanel(long nOrder, long nAdd);
+            int ThkDefense_GetCoin(long nOrder, long nAdd);
+            int ThkDefense_GetGreenShell(long nOrder, long nAdd);
+            int ThkDefense_GetStopPanel(long nOrder, long nAdd);
+            int ThkDefense_AttackBossPackun(long nOrder, long nAdd);
+            // (inline in game/hockey/unit_B0048.cpp; names guessed) Pieces
+            // of the checks above that several of them share.
+            int ThkInterruptEscapeFromStar();
+            int ThkInterruptGoShootAreaForCharge();
+            int ThkInterruptGoKeeperPassCatch();
+            int ThkFaceoff();
+            int ThkBallKeep();
+            int ThkOffense();
+            void ThkLooseBall();
+            void ClearShootReq();
+            void ActCallGoDefenseFor(long nNo);
+
+            // Defined in other files (used by game/hockey/unit_B0048.cpp;
+            // return types guessed unless a caller shows them).
+            long GetStageTargetPosition(bcs::FVEC3 &rOut, const bcs::FVEC3 &rPos, int, int);
+            void HockeyGoalPosTrim(bcs::FVEC3 &rPos);
+            int IsThinkTimingForOnBaller();
+            void ResetItemBallShootTiming();
+            int isItemBallShootTiming();
+            long GetMyTeamMemberNumWithoutMe() const;
+            void GetConditionScore(const CChrCore **apChr, long nNum);
+            CChrCore *getChargePlayerCore();
+            int CheckPassToChrCore(const CChrCore *pChr);
+            int isAgeShoot() const;
+            int isEnemyGoalBehind();
+            int CheckItemBallShoot();
+            int CheckSpShootProbability();
+            CChrCore *GetNearStarEnemy();
+            int What1On1State();
+            long GetHockeyShootScore();
+            long CalcActiveShootScore(const CChrCore *pChr, float);
+            int SetShootKind();
+            void ResetShootKind();
+            int isFriendOnBallerNowCharge();
+            float GetTargetGoalDistXZ(const CChrCore *pChr, float) const;
+            int isExistFromTargetGoalAngle(float fAngle);
+            int isExistEnemyBetweenTargetGoal(float fWidth);
+            int isEnemyPass();
+            int isAttack(long);
+            int isDivingStealDist();
+            int isFaceoffEnd();
+            int isNowFighting();
+            int isComCombination();
+            int WhatIsTheStatePackRebound();
+            long GetThkStatus() const;
+            long GoGetPackToGetEstablished();
+            int isTeamCoinMAX() const;
+            int isGetQPanel(long nKind, float &rDist, bcs::FVEC3 &rPos);
+            int isGetGreenShell(bcs::FVEC3 &rPos);
+            int isExistBossPackun(bcs::FVEC3 &rPos);
+            int CheckThrowItem(const CChrCore *pChr);
+            void ActCallEscape(bcs::FVEC3 pos);
+            void ActCallFight();
+            void ActCallCombination();
+            void ActCallSpDefense(long nChr);
+            void ActCallSpShoot();
+            void ActCallSpOffense();
+            void ActCallGoEscape(const CChrCore *pChr);
+            void ActCallGoShootArea(long);
+            void ActCallDivingSteal();
+            void ActCallPass(const CChrCore *pChr);
+            void ActCallItemShoot();
+            void ActCallShoot(int nKind);
+            void ActCallBlockade();
+            void ActCallGoKeeperPassCatch();
+            void ActCallGoBlueLine();
+            void ActCallGoOffense(int);
+            void ActCallDirectShootCharge();
+            void ActCallAttackChance();
+            void ActCallGoalProtect();
+            void ActCallGoRunRand();
+            void ActCallWaitBrake(float fFrame);
+            void ActCallBallKeep();
+            void ActCallOffense();
+            void ActCallBrake();
+            void ActCallGoDefense(long nNo, int);
+            void ActCallGoDefPassCourse(long nNo);
+            void ActCallGetHatenaPanel();
+            void ActCallGetCoin();
+            void ActCallGetGreenShell();
+            void ActCallGetStopPanel();
+            void ActCallAttackBossPackun();
+            void ActCallFaceoff();
+
+            // (.rodata of another file) How far from the centre line the
+            // blue lines are.
+            static const float BlueLineDef;
+
             // The actions, one per frame while running (12-byte member
             // function pointers).
             typedef void (CComDrvHockeyGame::*ActFunc)();
@@ -167,7 +286,12 @@ namespace msw {
             float m_fUnk3A0;                // 0x3A0
             float m_fUnk3A4;                // 0x3A4
             float m_fUnk3A8;                // 0x3A8
-            unsigned char m_Unk3AC[0x3BC - 0x3AC];
+            unsigned char m_Unk3AC[0x3B0 - 0x3AC];
+            // 0x3B0, 0x3B4 (meaning guessed): an attack chance is due, and
+            // the time counted towards it.
+            long m_nUnk3B0;
+            float m_fUnk3B4;
+            unsigned char m_Unk3B8[0x3BC - 0x3B8];
             long m_nUnk3BC;                 // 0x3BC
             long m_nUnk3C0;                 // 0x3C0
             unsigned char m_Unk3C4[0x3CC - 0x3C4];
@@ -187,7 +311,8 @@ namespace msw {
             // first stops while m_nUnk354 bit 0 is set.
             float m_fShotClock;
             float m_fUnk3F4;
-            unsigned char m_Unk3F8[0x3FC - 0x3F8];
+            short m_nShootKind;             // 0x3F8 (name guessed)
+            unsigned char m_Unk3FA[0x3FC - 0x3FA];
             long m_nUnk3FC;                 // 0x3FC
             // 0x400, 0x404 (names guessed): a shot, or an item ball shot,
             // asked for on a pass (PassMsgJobs).
@@ -210,7 +335,8 @@ namespace msw {
             long m_nUnk430;                 // 0x430
             unsigned char m_Unk434[0x43C - 0x434];
             float m_fUnk43C;                // 0x43C, computer data 0xF64
-            unsigned char m_Unk440[0x454 - 0x440];
+            float m_fUnk440;                // 0x440, counts up every frame
+            unsigned char m_Unk444[0x454 - 0x444];
             // 0x454-0x45C: the character of a special shot (GetSpShootCharIdx;
             // -1 for none), set by messages 0x7C/0x7D.
             short m_nSpShootChr;

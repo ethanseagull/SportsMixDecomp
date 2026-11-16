@@ -45,7 +45,9 @@ namespace msw {
             virtual void Unk2C();
             virtual void Unk30();
             virtual void Unk34();
-            virtual void Unk38();
+            // 0x38, fn_80167F7C: the destructor (CStageScroll::CMdlNode deletes
+            // its model through this slot).
+            virtual ~CStageMdl();
             virtual void Unk3C();
             virtual void Unk40();
             virtual void Unk44();

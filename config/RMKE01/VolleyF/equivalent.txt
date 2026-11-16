@@ -22,12 +22,14 @@ VolleyF CoinInWait__Q23msw19CCockpitVolleyCoderFv near 98.8 register allocation 
 VolleyF CoinIn__Q23msw19CCockpitVolleyCoderFv near 98.8 register allocation only: loop counter, table pointer and accessor temporary in other saved registers
 VolleyF CoinOutWait__Q23msw19CCockpitVolleyCoderFv near 98.8 register allocation only: loop counter, table pointer and accessor temporary in other saved registers
 VolleyF CoinOut__Q23msw19CCockpitVolleyCoderFv near 98.8 register allocation only: loop counter, table pointer and accessor temporary in other saved registers
+VolleyF CountUpCheck__Q23msw21CCockpitVolleyRhythmAFv near 94.3 [real, reviewed] reviewer confirmed: clamp branch computes a self-compare whose cr0 result is dead in both (lt vs gt bit extracted), fmr placed differently; same stored value; rest registers
 VolleyF CreateBoundMushroom___Q23msw21CChrCoreVolleyKinopioFv near 97.9 register allocation only
 VolleyF CreateCharaIcon__Q23msw18CRadarIcon2DVolleyFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc near 99.9 [real, reviewed] reviewer confirmed: consistent swap of two saved registers and the symbol name for the same table
 VolleyF CreateMdl___Q33msw11CC05_VOLLEY16CcWarioSmokeUnitFRCQ23bcs5FVEC3 near 93.3 [real, reviewed] reviewer confirmed: original has three dead float stack stores (larger frame); same stores, calls and reads
 VolleyF CreateMdl___Q33msw11CC14_VOLLEY16CcNinjaCloneBallFPQ23msw5CBall near 98.9 the reload of m_pMdl for SetRotXYZ is scheduled after the three angle loads instead of after the first
 VolleyF CreateMdl___Q33msw11CC14_VOLLEY16CcNinjaCloneBodyFPQ23msw5CBallRCQ23bcs5FVEC3 near 98.9 the reload of m_pMdl for SetRotXYZ is scheduled after the three angle loads instead of after the first
 VolleyF CreateMiniTelop___Q23msw11CGameVolleyFll near 96.7 96.7%: load order of the team byte and g_GameWork word before the compare; registers
+VolleyF CreatePointUp__Q23msw21CCockpitVolleyRhythmBFPQ33bcs3G2D9CPaneCtrl near 99.0 [schedule] register allocation/instruction order only
 VolleyF Create___Q23msw17CBallTargetMarkerFi near 92.8 [real, reviewed] reviewer confirmed: model-name table base kept in a register vs rebuilt with lis/addi; same offsets, calls and flags
 VolleyF Create___Q23msw22CChrTargetMarkerVolleyFv near 99.7 [real, reviewed] reviewer confirmed: original masks ~nView to 16 bits before passing it to SetViewFlag(unsigned short), a 16-bit store; same stored value
 VolleyF Create___Q23msw30CBallTargetMarkerRhythmReceiveFi near 99.1 [real, reviewed] reviewer confirmed: register renaming and one extra copy of the table base; same offsets and calls
@@ -165,6 +167,11 @@ VolleyF SearchPersonalBall__Q23msw15CComManVolleyRRFPCQ23msw8CChrCorei near 99.8
 VolleyF SendEvent__Q23msw24CCockpitVolleyTelopServeFlPv near 99.9 99.9%, registers only: the layout pointer of the inlined GetLytObj sits in another saved register in two cases; same calls, constants and branches (autopilot regs applied)
 VolleyF SendMessage__Q23msw14CStageVolley11Fllll near 99.0 99.0%: register allocation only (autopilot regs: no gain in 24 tries).
 VolleyF SendMessage___Q23msw11CGameVolleyFllll near 98.6 98.6%: register allocation (one saved register fewer in ours), same calls and accesses
+VolleyF SetAnimBonus__Q23msw21CCockpitVolleyRhythmAFlf near 99.9 [real, reviewed] reviewer confirmed: one-entry pane table (6) read at another .rodata pool offset (static-const order), same value 6; loop counter registers
+VolleyF SetAnimCombo__Q23msw21CCockpitVolleyRhythmAFl near 99.4 [registers] register allocation/instruction order only
+VolleyF SetAnimGauge__Q23msw21CCockpitVolleyRhythmBFl near 99.4 [registers] register allocation/instruction order only
+VolleyF SetAnimScore__Q23msw21CCockpitVolleyRhythmAFl near 97.2 [schedule] register allocation/instruction order only
+VolleyF SetBallIcon__Q23msw21CCockpitVolleyRhythmAFlli near 99.0 [schedule] register allocation/instruction order only
 VolleyF SetCamParam__Q23msw17CCameraVolleyGameFv near 98.4 float register allocation only (same stores, same constants)
 VolleyF SetChrIcon__Q23msw14CCockpitVolleyFlllPCQ23bcs5FVEC3PCv near 99.8 register allocation only (second icon pointer r10 vs r11)
 VolleyF SetCoinSpecialAnim__Q23msw14CCockpitVolleyFli near 99.8 register allocation only
@@ -180,10 +187,12 @@ VolleyF SetHeightObjState___Q23msw30CBallTargetMarkerRhythmReceiveFv near 98.4 f
 VolleyF SetIconFace__Q23msw23CCockpitChrIcon2DVolleyFll near 99.1 [real, reviewed] reviewer confirmed: one more callee-saved register (frame 0x60 vs 0x50), register renaming; same calls, constants and accesses
 VolleyF SetLifeValue__Q23msw23CCockpitVolleyLifeGaugeFlll near 98.6 register allocation only (renumbered diff is empty)
 VolleyF SetPerfectIcon__Q23msw20CCockpitVolleyResultFPlPll near 99.6 register allocation only (float temporaries of the count speed swapped)
+VolleyF SetPointUpText__Q23msw21CCockpitVolleyRhythmBFlRCQ23bcs5FVEC3l near 99.9 [schedule] register allocation/instruction order only
 VolleyF SetSPContrllerDisp__Q23msw14CCockpitVolleyFll near 99.8 register allocation only
 VolleyF SetSPGaugeRatio__Q23msw14CCockpitVolleyFlff near 99.8 register allocation only (gauge pointer in r0 vs a saved register)
 VolleyF SetSPGauge__Q23msw21CCockpitVolleySPGaugeFlf near 99.1 99.1%, registers only: the 0x43300000 conversion word and the array offset swap r0/r3
 VolleyF SetScoreFont__Q23msw19CCockpitVolleyCoderFli near 99.9 register allocation only: the two score table pointers swap registers
+VolleyF SetScorePosition__Q23msw21CCockpitVolleyRhythmAFl near 99.3 [schedule] register allocation/instruction order only
 VolleyF SetScoreValue__Q23msw19CCockpitVolleyCoderFll unverified 81.2 same control flow, tables, calls and constants; the original computes nScore >= 100 before the first SetDisp call and keeps it in a saved register (one more saved register), ours after it; not proven beyond that
 VolleyF SetServeScoreAnim__Q23msw18CCockpitVolleyCoinFl near 99.1 register choice only: loop counter and pane-accessor temporary swap r27/r28
 VolleyF SetTeamScore__Q23msw14CCockpitVolleyFv near 99.6 register allocation only (score and coder pointer swapped in the inlined SetTeamScore(long,long,int))

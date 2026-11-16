@@ -186,6 +186,9 @@ namespace msw {
             long GetCurrentActType() const;
             int ActMain();
             int IsMyTeamHoldBall(long nTeam) const;
+            // (DOL; added for HockeyF game/hockey/unit_B0048.cpp) Whether the
+            // other team holds the ball (-1 as IsMyTeamHoldBall).
+            int IsEmTeamHoldBall(long nTeam) const;
             void SetAlarm(long nAlarm, float fFrame);
             int IsHaveMyStockItem() const;
 

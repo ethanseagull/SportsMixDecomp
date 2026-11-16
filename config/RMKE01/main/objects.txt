@@ -122,5 +122,9 @@ Equivalent game/bcs/CMdlObj/CopiedMatAccess.cpp
 Equivalent game/msw/TournamentWork.cpp
 Matching game/bcs/G2D/CLytResource.cpp
 Equivalent game/msw/menu.cpp
+Equivalent game/bcs/CMovie.cpp
 Equivalent game/msw/CCockpitResultPartyVS.cpp
 Equivalent game/msw/cockpit.cpp
+Equivalent game/bcs/EF/CResource.cpp
+Equivalent game/msw/CStageScroll.cpp
+Equivalent game/msw/CLytCtrl.cpp

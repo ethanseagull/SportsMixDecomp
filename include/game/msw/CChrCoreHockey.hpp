@@ -761,13 +761,43 @@ namespace msw {
             unsigned long m_hMagic;
     };
 
+    // The White Mage: her shot trick draws a magic circle
+    // (CC15_HOCKEY::CcSiromaMagicCircle) that the target marker moves and
+    // that fires a pillar of light at the shot. Allocated with 0x780 bytes.
     class CChrCoreHockeySiroma : public CChrCoreHockey {
         public:
             CChrCoreHockeySiroma();
             virtual ~CChrCoreHockeySiroma();
+            virtual int MoveTargetMarkerPos(float fRotY);              // 0x5C
+            virtual int AutoMoveTargetMarkerPos();                     // 0x60
+            virtual void Reset_();                                     // 0x384
+            virtual void CtorStateAirTrick();                          // 0x584
+            virtual void LoopStateAirTrick();                          // 0x588
             virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xCD8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual int SubStateArtsShotIsEndArtsShot_(STATE_WORK_AIR_TRICK *); // 0xD10
+            // 0xD50, new in this class: the target marker's yaw moves the
+            // circle a step that way.
+            virtual void SubStateAirTrickMoveTargetMarker_(STATE_WORK_AIR_TRICK *pWork);
+
         protected:
-            unsigned char m_Unk76C[0x780 - 0x76C];
+            // (inline helpers, names guessed) Deletes the magic circle, if
+            // any; the computer's level for its parameters (as Luigi's).
+            void ReleaseMagic_();
+            float GetComDatLevel_();
+
+            // (names guessed)
+            unsigned long m_hMagic;      // 0x76C, task id of the magic circle, 0 for none
+            // 0x770: frames the computer waits before it gives up on a
+            // target; 0x774: frames it keeps aiming after that; 0x778: set
+            // once the first has run out; 0x77C: frames before it starts to
+            // aim at all.
+            float m_fComAimWait;
+            float m_fComAimKeep;
+            int m_bComAimTimeUp;
+            float m_fComAimDelay;
     };
 
     class CChrCoreHockeySlime : public CChrCoreHockey {

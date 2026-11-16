@@ -109,6 +109,10 @@ namespace bcs {
                 // (name guessed) Bit 0 of the word at 0x44, what C3DCoin
                 // passes to both.
                 int GetAdjustMode() const { return m_nFlag & 1; }
+                // (names guessed; added for DOL game/msw/CLytCtrl.cpp) Turn
+                // the location adjust on and off.
+                void OnAdjustMode() { m_nFlag |= 1; }
+                void OffAdjustMode() { m_nFlag &= ~1; }
 
             private:
                 inline CLytManager();

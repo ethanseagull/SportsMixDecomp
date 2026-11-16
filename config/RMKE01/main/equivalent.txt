@@ -312,7 +312,7 @@ main SetCockpitFilePath__Q23msw4menuFPQ33bcs8CLoadMan10FILE_INPUTllPCc near 91.1
 main SetCockpitItemIconDisp___Q23msw5CGameFii unverified 75.2 switch compare tree vs our linear chain and other branch form; not proven equal by tool
 main SetDefaultCursorFlag__Q23msw18CCockpitButtonInfoFl near 98.7 register allocation and scheduling only: same branchless per-pad select, the original allocates the leader-compare temporaries in other registers
 main SetDefault__Q33msw5CGame8GameWorkFv unverified 52.6 Mii fill loop form and store order differ
-main SetDelayResultButton__Q23msw14CCockpitResultFv near 98.1 98.1%: identical instructions; only the callee name differs (task constructor is the unnamed fn_8023D74C)
+main SetDelayResultButton__Q23msw14CCockpitResultFv near 98.1 [real, reviewed] reviewer confirmed: the original's fn_8023D74C is the CDelayResultButtonTask constructor ours calls; fadds operands the same
 main SetDispFlag__Q33msw7cockpit10CEffectSetFi near 99.8 register allocation only (loop pointer and EF manager swap r8/r10); declaration-order search no gain
 main SetFirstGoalIdx___Q23msw5CGameFv unverified 75.9 switch compare tree vs our linear chain and other branch form; not proven equal by tool
 main SetFlags__Q23msw10CEventDemoFUl unverified 41.4 same four lwz/or/stw on WORK 0x14..0x20; original does each word in turn, ours hoists the loads (schedule only, 41%, 7 forms tried)
@@ -332,7 +332,7 @@ main SetParamSemiAuto__Q23msw5CGameFv unverified 79.1 switch tables differ, and 
 main SetPeriodResult___Q23msw5CGameFv unverified 52.3 52.3%: register allocation (stmw vs single saves) and address forms of the two arrays; same calls
 main SetPlayerIcon__Q23msw23CCockpitResultPartyTeamFll near 88.3 [real, reviewed] reviewer confirmed: label boolean (bPadCtrl !=0 / ==0) computed before GetPaneName into a saved register (2 extra mr), register numbering otherwise; same calls, constants, accesses, branches
 main SetPointLightColor__Q23msw14CEffectClusterF8_GXColor8_GXColor near 89.8 schedule only: second colour word loaded after the member-pointer lwzu/copy instead of before; same stores and calls
-main SetResultButton__Q23msw14CCockpitResultFll near 98.5 98.5%: float register numbering in the delay computation; callee is the unnamed task constructor fn_8023D858
+main SetResultButton__Q23msw14CCockpitResultFll near 98.5 [real, reviewed] reviewer confirmed: fn_8023D858 is the CResultButtonTask constructor ours calls; float register numbering
 main SetRotY__Q23msw7CStgSrtFf near 99.0 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
 main SetTeamArtsGauge___Q23msw5CGameFlff near 87.0 register choice and float move order
 main SetTeamCoin__Q23msw5CGameFlUl near 91.8 register choice and the placement of the clamp's merge block

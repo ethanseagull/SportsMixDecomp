@@ -138,6 +138,30 @@ namespace bcs {
                 return static_cast<W *>(FsmqGetWork_());
             }
 
+            // (name guessed; inline in BasketF's CChrCoreBasket::MethdFall
+            // and MethdDamage) The work memory of the state queued after the
+            // head; null when there is none or the states have none.
+            void *FsmqGetNextWork_() const
+            {
+                if (FsmqIsEmpty()) {
+                    return 0;
+                }
+                void *pWork = m_pWorkQueue;
+                if (!pWork || !m_nWorkSize) {
+                    return 0;
+                }
+                long idx = m_nQueueHead + 1;
+                if (idx >= m_nQueueSize) {
+                    idx %= m_nQueueSize;
+                } else if (idx < 0) {
+                    idx += m_nQueueSize;
+                }
+                if (idx == m_nQueueTail) {
+                    return 0;
+                }
+                return static_cast<char *>(pWork) + m_nWorkSize * idx;
+            }
+
             // (names guessed) Inline in msw::CStgGmk_WaterPillar's Activate
             // and Inactivate, which run them on the actor's queue (DOL).
 

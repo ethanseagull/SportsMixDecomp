@@ -23,6 +23,11 @@ namespace bcs {
     // vector of length len along +Z turned by rotY (radians) about Y. In the
     // DOL.
     void BCS_VecZ_RotY(FVEC3 &rOut, float len, float rotY);
+    // (DOL; added for BasketF game/basket/CBallBasket.cpp, meaning guessed
+    // from the name) Where the line through rPos along rDir crosses the
+    // plane through rPlanePos with normal rNormal; zero when it does not.
+    int BCS_GetPointToPlaneCross(FVEC3 &rOut, const FVEC3 &rPos, const FVEC3 &rDir, const FVEC3 &rPlanePos,
+                                 const FVEC3 &rNormal);
     // (added for BasketF game/basket/CChrCoreBasketKinopio.cpp) The same
     // for a vector of length len along X.
     void BCS_VecX_RotY(FVEC3 &rOut, float len, float rotY);

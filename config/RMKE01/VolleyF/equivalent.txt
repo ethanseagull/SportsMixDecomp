@@ -46,6 +46,7 @@ VolleyF GameResult_In__Q23msw14CCockpitVolleyFv near 99.1 register allocation on
 VolleyF GetAssignRainbowBall__Q23msw15CComDrvVolleyRRCFv near 99.1 [real, reviewed] reviewer confirmed: separate li 0 vs shared zero register, uniform pool offset shift, registers and increment scheduling
 VolleyF GetAssumedTeamCourtOffset___Q23msw14CStageVolley05CFflRQ23bcs5FVEC3 near 99.8 99.8%: operand order of two commutative fmuls (sin*width, (cos-1)*depth) only.
 VolleyF GetBlockReadyPos__Q23msw17CComDrvVolleyGameCFRQ23bcs5FVEC3 near 99.6 instruction order or register choice only, same operations
+VolleyF GetCrossPosCircleXZ__FQ23bcs5FVEC3Q23bcs5FVEC3Q23bcs5FVEC3fRfRQ23bcs5FVEC3 near 99.6 [schedule] schedule: instruction order only
 VolleyF GetDatSpTargetMarker__Q23msw17CComDrvVolleyGameFPfPfi near 99.9 stack frame 0x20 bytes smaller (original reserves unused local space); same instructions, offsets and calls
 VolleyF GetDefHomePos__Q23msw17CComDrvVolleyGameCFRQ23bcs5FVEC3 near 99.4 instruction order or register choice only, same operations
 VolleyF GetDispScale__Q23msw17CBallMarkerVolleyCFv near 98.6 fmadds multiplicand order swapped (rate * diff vs diff * rate, same result)
@@ -143,6 +144,7 @@ VolleyF MenuCallPause___Q23msw11CGameVolleyFv near 98.4 98.4%: register numberin
 VolleyF MethdChgLeader__Q23msw14CChrCoreVolleyFv near 99.7 register choice only: abs() result of the nearest-teammate search lands in r3 instead of r0 (autopilot regs: no gain)
 VolleyF MethdFall__Q23msw14CChrCoreVolleyFv near 99.0 register choice only in the inlined FsmqCutQueue/FsmqPush
 VolleyF MethdJump__Q23msw14CChrCoreVolleyFv near 99.6 register choice only in the inlined state-queue push (autopilot regs: no gain in 23 tries)
+VolleyF MethdRun__Q23msw14CChrCoreVolleyFff near 100.0 [schedule] compare order of the ==1 and ==4 tests only (objdiff 100%, diff.py schedule)
 VolleyF MethdTimeOver__Q23msw14CChrCoreVolleyFl near 98.8 register choice only (head/tail/size registers swapped) in the inlined queue cut and push
 VolleyF MethdTurnOver__Q23msw14CChrCoreVolleyFl near 99.5 register choice only (r7/r8 swapped) in the inlined FsmqSetState wrap
 VolleyF MovePos___Q33msw11CC09_VOLLEY22CcKinopioBoundMushroomFf near 99.6 multiply operands of one fmadds swapped (commutative)
@@ -229,6 +231,7 @@ VolleyF SubStateDamageCtorLDmg___Q23msw14CChrCoreVolleyFPQ33msw8CChrCore17STATE_
 VolleyF SubStateDamageLoopDizzy___Q23msw14CChrCoreVolleyFPQ33msw8CChrCore17STATE_WORK_DAMAGE near 99.8 register allocation/order only
 VolleyF SubStateReceiveDoProcDiveReceive___Q23msw19CChrCoreVolleyYoshiFPQ33msw14CChrCoreVolley18STATE_WORK_RECEIVE near 99.8 f2/f3 swapped in the angle wrap (same as the boss sibling)
 VolleyF SubStateReceiveDoProcDiveReceive___Q23msw20CChrCoreVolleySiromaFPQ33msw14CChrCoreVolley18STATE_WORK_RECEIVE near 99.7 register allocation only (angle wrap loop)
+VolleyF SubStateRunNormal___Q23msw14CChrCoreVolleyFPQ33msw14CChrCoreVolley14STATE_WORK_RUN near 99.1 [schedule] schedule: instruction order and register numbering only
 VolleyF SubStateRunReceivePose___Q23msw14CChrCoreVolleyFPQ33msw14CChrCoreVolley14STATE_WORK_RUN near 100.0 instruction order or register choice only, same operations
 VolleyF SubStateSpikeDoCombAutoSwingCheck___Q23msw14CChrCoreVolleyFPQ33msw14CChrCoreVolley16STATE_WORK_SPIKE near 98.8 register choice inside the paired-single FVEC3Add/FVEC3Sub helpers only
 VolleyF SubStateSpikeDoGetHomingTargetPos___Q23msw14CChrCoreVolleyFPQ33msw14CChrCoreVolley16STATE_WORK_SPIKEPQ23msw5CBall near 98.8 register choice inside the paired-single FVEC3Add/FVEC3Scale/FVEC3Sub helpers only

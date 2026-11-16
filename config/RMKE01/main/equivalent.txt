@@ -40,7 +40,7 @@ main CallTrg__Q23bcs13CAnmChrMotionFv near 98.9 register choice and instruction 
 main CallbackBodyPush___Q23msw13CItemMushroomFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 96.5 ble+b vs one bgt for the moving-away skip (same condition and targets); float register numbering
 main CallbackBodyPush___Q23msw13CItemShellCmnFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 96.6 original branches ble+b where ours uses one bgt/ble form on the same condition and targets; float register numbering
 main CallbackBodyPush___Q23msw14CItemToadstoolFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 96.5 ble+b vs one bgt for the moving-away skip (same condition and targets); float register numbering
-main CallbackBodyPush___Q23msw9CItemBombFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 95.9 early-return test in the inline reflect: original ble over a b to the shared tail, ours one bgt to the same place (equivalent branch form), plus paired-single register numbering
+main CallbackBodyPush___Q23msw9CItemBombFPQ23msw13CCollBodyUnitPQ23msw13CCollBodyUnitPQ23bcs5FVEC3 near 95.9 [real, reviewed] reviewer confirmed: ble over b vs a single bgt branch the same way for every compare result including NaN; same paired-single operands
 main CanbePause__Q23msw14CGamePauseTaskCFv near 87.9 register renaming; the final boolean is a branch in ours where the original uses cntlzw/srwi; same result
 main ChangeCameraBaseDir__Q23msw5CGameFv near 96.1 inlined GetViewTargetTeam's game-mode switch lowered as a compare chain instead of a binary tree
 main ChangeCameraBaseDir___Q23msw5CGameFv near 90.1 inlined game-mode switch lowered as a compare chain instead of a binary tree; base register vs @l addressing
@@ -201,7 +201,7 @@ main LoopStateResultMenu__Q23msw5CGameFv near 96.1 switch compiled as a linear c
 main LoopStateSave__Q23msw5CGameFv near 99.1 switch compiled as a linear compare chain where the original builds a compare tree, and inline CFsmQueue operations expanding with other branch/register shape; same cases and calls
 main LoopStateThrow__Q23msw11CItemGShellFv near 95.4 original reloads m_nFlag (0xD8) before clearing 0x200, ours reuses the loaded value (nothing writes it between); register numbering and order
 main LoopStateThrow__Q23msw11CItemRShellFv near 95.7 original reloads m_nFlag (0xD8) before clearing 0x200, ours reuses the loaded value (nothing writes it between); register numbering and order
-main LoopStateThrow__Q23msw9CItemBombFv near 99.1 brightness byte kept in its own stack slot at 0x8 in the original, with one extra dead stb of it (frame 0x30 vs 0x20); constants, calls and conversions identical
+main LoopStateThrow__Q23msw9CItemBombFv near 99.1 [real, reviewed] reviewer confirmed: original keeps the brightness byte in another slot and stores it once more (dead store); fnmsubs operands swapped (same product); same constants and stores
 main LoopStateTurnResult__Q23msw5CGameFv unverified 64.4 ours merges the three FsmqChangeState tails into one
 main LoopStateWaitStartBase__Q23msw5CGameFv near 90.1 switch compiled as a linear compare chain where the original builds a compare tree, and inline CFsmQueue operations expanding with other branch/register shape; same cases and calls
 main LoopState_MOVE__Q23msw16CStgGmk_Case_ActFv near 99.6 stack slots of the effect rotation temporaries only

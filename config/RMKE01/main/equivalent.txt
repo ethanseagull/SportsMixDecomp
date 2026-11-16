@@ -381,7 +381,7 @@ main UpdateNoInputCount__Q23msw8CMenuPadFv near 92.0 [real, reviewed] reviewer c
 main UpdateParam__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main UpdateWavePos__Q23msw16CStgGmk_Wave_ActFf near 99.3 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main UpdateWaveTimer__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
-main Update__Q23msw11CStgSrtMoveFf near 93.5 scheduling and float registers in the paired-single maths; inlined GetRotMtx tests flag bit 2 with rlwinm. where the original has extrwi. (same bit, same branch); stack, calls, constants, offsets, branches identical
+main Update__Q23msw11CStgSrtMoveFf near 93.5 [real, reviewed] reviewer confirmed: extrwi. vs rlwinm. on the same bit; reviewer simulated the paired-single block symbolically, same values in every non-stack cell
 main Update__Q33msw14CStgEffectSlot8CEffSlotFf near 95.2 [real, reviewed] reviewer confirmed: zero kept in a callee-saved register used as the null cluster instead of li 0; same calls, arguments and stores
 main UseTeamCoin___Q23msw5CGameFll unverified 78.8 78.8%: register allocation and address recomputation; same calls and stores (inspected)
 main VFunc48__Q23bcs13CAnmChrMotionFv near 99.6 register choice and instruction order only

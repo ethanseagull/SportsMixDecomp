@@ -1,6 +1,9 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
 VolleyF ActCallSpKoopaOff__Q23msw17CComDrvVolleyGameFv near 93.9 [real, reviewed] reviewer confirmed: this in an extra saved register and m_nCourtIdx loaded before vs after RandRangeF, which does not write it
+VolleyF ActLoopReceiveGo__Q23msw17CComDrvVolleyGameFv near 99.7 [stack] stack: stack slot order only
+VolleyF ActLoopReceiveSudden__Q23msw17CComDrvVolleyGameFv near 99.5 [stack] stack: stack slot order only
 VolleyF ActLoopSpOffMoveMarker__Q23msw17CComDrvVolleyGameFv near 97.7 [real, reviewed] reviewer confirmed: original has a dead copy of vector temporaries and reloads m_fRate where ours keeps it in a register; commuted fadds
+VolleyF ActLoopTargetMarkerGo__Q23msw17CComDrvVolleyGameFv near 99.6 [real, reviewed] reviewer confirmed: only a dead cmpwi r3,0 after IsExistComRootActChr_WithoutONE in the original (cr0 overwritten by the next fcmpo, r3 unused); same call and arguments
 VolleyF ActSubfSpKoopaDef_GetEscPos__Q23msw17CComDrvVolleyGameFRQ23bcs5FVEC3RCQ23bcs5FVEC3 near 99.4 float register allocation in the inlined normalise only (99.4%)
 VolleyF ActSubfSpNinjaDef_CareTarget__Q23msw17CComDrvVolleyGameFRQ23bcs5FVEC3l near 99.5 register choice of the target pointer and stack slots of the two temporaries only (99.5%)
 VolleyF AddCoinValue__Q23msw18CCockpitVolleyCoinFlll near 99.0 register allocation only: the original gives the GetPaneObj lookups' accessor temporaries their own saved register, ours shares it with the looked-up objects (one saved register fewer, smaller frame); same calls, constants, loads, stores and branches

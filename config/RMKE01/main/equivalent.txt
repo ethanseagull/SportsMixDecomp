@@ -186,6 +186,7 @@ main JudgeStickMove___Q23msw13CMenuPartListFllUlll near 92.7 [real, reviewed] re
 main LoadGameGroups__Q23msw8CGameSndFRCQ33msw8CGameSnd9GAME_INFOi near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: the original is over the all-or-nothing inline budget and calls CSndGroupList ctor/Add and GetGameType out of line; ours inlines those same bodies; calls, arguments, branches and tail identical. Recorded by hand: equivalent.py has no floor exception for this ruling
 main LoadGameSnd__Q23msw8CGameSndFv near 99.1 r3/r4 swapped for the GameWork pointer and the zero stored to m_nStage; same stores, calls and branches
 main LoadLocInfoTbl__Q23msw20CStgGmk_PylonClusterFv near 97.9 [real, reviewed] reviewer confirmed: lwzx with (i+1)<<2 vs add and lwz 4(base+i*4), same address and load
+main Load__Q23msw14TournamentWorkFPQ33msw14TournamentWork15TOURNAMENT_SAVE near 95.0 [real, reviewed] reviewer confirmed: same memory traffic; file statics of the wider TournamentWork/CTournament file addressed from one base in the original, extern here (own lis/addi each), savegpr_24 vs 25
 main LookAt__Q23msw7CStgSrtFRCQ23bcs5FVEC3f near 98.5 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
 main LoopState5__Q23msw13CItemRouletteFv near 95.9 [real, reviewed] reviewer confirmed: cntlzw/srwi./beq vs bne on the same 0x4306 mask, branch forms, swapped equality operands
 main LoopStateBreak__Q23msw11CItemBananaFv near 97.9 float register numbering and instruction order only (same code as CItemShellCmn::LoopStateBreak)
@@ -302,6 +303,7 @@ main RepeatPlay__Q33msw10CStgSeSlot7CSESlotFflRCQ23bcs5FVEC3fflUllfff near 99.7 
 main Reset___Q23msw13CGameGuideManFv near 98.5 [real, reviewed] reviewer confirmed: same redundant reload of 0x3c only
 main RestoreSpeed__Q23msw14CGameSpeedCtrlFfil near 99.9 order of two float stores
 main Roll__Q23msw19CStgGmk_Pinball_MdlFRCQ23bcs5FVEC3ff near 98.5 register allocation/order only (diff.py: registers/schedule)
+main Save__Q23msw14TournamentWorkFPQ33msw14TournamentWork15TOURNAMENT_SAVE near 94.7 [real, reviewed] reviewer confirmed: same memory traffic; file statics of the wider TournamentWork/CTournament file addressed from one base in the original, extern here (own lis/addi each), savegpr_24 vs 25
 main ScoreBookApplyCountWork___Q23msw5CGameFv near 85.9 [real, reviewed] reviewer confirmed: stack slot, cmplwi vs cmpwi on an lbz tested for equality, branchless vs cntlzw ==2 test, compare tree vs chain, a g_GameWork reload with no store between, -1 locals from a constant table vs immediates; same calls, arguments and jump tables
 main SearchFriendMatchChallengerAll__Q33bcs3dwc14CDwcFriendListCFv near 98.7 [real, reviewed] reviewer confirmed: first clrlwi. result kept in a register instead of re-running it on an unchanged register; no calls between
 main SearchStickMove___Q23msw13CMenuPartListFlUsUlUsl near 87.9 [real, reviewed] reviewer confirmed: the original's extra clrlwi 16 act on values already 16-bit (lhz loads or zero-extended ushort args); block layout, register numbering, stmw count

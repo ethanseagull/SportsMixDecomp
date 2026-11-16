@@ -21,6 +21,10 @@ namespace nw4r {
                 void SetViewRect(const ut::Rect &rRect) { mViewRect = rRect; }
                 void SetLocationAdjustScale(const math::VEC2 &rScale) { mLocationAdjustScale = rScale; }
                 void SetLocationAdjust(bool bAdjust) { mFlag.locationAdjust = bAdjust; }
+                // (added for the DOL's game/bcs/G2D/CLytManager.cpp)
+                bool IsLocationAdjust() const { return mFlag.locationAdjust; }
+                void SetMultipleViewMtxOnDraw(bool bOn) { mFlag.mulViewDraw = bOn; }
+                void SetDebugDrawMode(bool bOn) { mFlag.debugDrawMode = bOn; }
 
             private:
                 math::MTX34 mViewMtx;             // 0x04

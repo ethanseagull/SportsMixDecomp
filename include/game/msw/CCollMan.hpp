@@ -4,6 +4,7 @@
 #include "bcs/CTask.hpp"
 #include "bcs/FVEC3.hpp"
 #include "bcs/FVEC4.hpp"
+#include "nw4r/ut/List.hpp"
 
 namespace msw {
 
@@ -16,6 +17,9 @@ namespace msw {
         int DetectHitPos_CapsuleCuboid(const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius,
                                        const bcs::FVEC3 &rCenter, const bcs::FVEC3 &rSize, float rotY,
                                        bcs::FVEC3 &rHit);
+        // (name guessed; DOL fn_801016B0) Per axis, the smaller of rA and rB
+        // into rMin and the larger into rMax.
+        void GetMinMax(bcs::FVEC3 &rMin, bcs::FVEC3 &rMax, const bcs::FVEC3 &rA, const bcs::FVEC3 &rB);
     }
 
     // Collision of the ball and the characters with the court. A DOL class,
@@ -126,6 +130,13 @@ namespace msw {
                                                             float fRadius);
 
             static CCollMan *m_pInstance;
+
+            // (names guessed) Every body, attack and defence unit, linked
+            // through CCollUnit::m_Link; the units join and leave in their
+            // constructors and destructors.
+            static nw4r::ut::List m_BodyUnitList;
+            static nw4r::ut::List m_AtkUnitList;
+            static nw4r::ut::List m_DefUnitList;
 
         protected:
             // DOL functions the modules' DetectMapHit_ build on. rRect is a

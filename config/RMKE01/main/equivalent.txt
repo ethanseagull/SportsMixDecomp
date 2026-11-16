@@ -4,6 +4,7 @@ main AddTeamArtsGauge___Q23msw5CGameFlff near 91.1 [real, reviewed] reviewer con
 main AddTeamCoin___Q23msw5CGameFll unverified 76.0 76%: register allocation (ours saves r27-r31 with _savegpr) and address recomputation; same calls and stores (inspected)
 main AddTeamGainCoin__Q23msw5CGameFll unverified 74.7 74.7%: the original recomputes the array address for the store
 main AddTeamPeriodScore__Q23msw5CGameFlll unverified 64.5 64.5%: the period row is addressed from row+0x20 in ours; same loads and stores
+main Add__Q23bcs13CSndGroupListFUls near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: weak copy the original emits only because LoadGameGroups calls it out of line; the header IsExist+Add body is the same work and ours inlines it at every call. Recorded by hand
 main AnimPlay__Q23msw11CChrOptTaskFliff near 98.9 register choice only: the abs() of a negative motion id uses r6/r0 in the original, r0/r4 in ours
 main AnimPlay__Q23msw11CEventModelFPCQ33msw11CEventModel13MOT_NAME_DATAlfl near 97.1 [real, reviewed] reviewer confirmed: original reloads pData (0x50) after storing it, only stores to other offsets between
 main AnimPlay__Q23msw11CEventModelFPCQ33msw11CEventModel8MOT_DATAlfl near 98.0 [real, reviewed] reviewer confirmed: original reloads pData (0x4c) after storing it, no call or store to it between
@@ -174,6 +175,7 @@ main IsNowSlowEffect__Q23msw5CGameFv unverified 84.2 84.2%: block order of the t
 main IsPlayTypeCanChangeLeader__Q23msw5CGameFl unverified 77.4 switch compare tree vs our linear chain and other branch form; not proven equal by tool
 main IsTurnTableOpen__Q23msw12CStage17BaseCFv near 99.8 fadds operands swapped in m_fRot + 10 degrees (commutative); otherwise identical
 main JudgeStickMove___Q23msw13CMenuPartListFllUlll near 92.7 [real, reviewed] reviewer confirmed: ushort-return clrlwi placed once at the top vs at each return, same truncation on every path; register numbering
+main LoadGameGroups__Q23msw8CGameSndFRCQ33msw8CGameSnd9GAME_INFOi near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: the original is over the all-or-nothing inline budget and calls CSndGroupList ctor/Add and GetGameType out of line; ours inlines those same bodies; calls, arguments, branches and tail identical. Recorded by hand: equivalent.py has no floor exception for this ruling
 main LoadGameSnd__Q23msw8CGameSndFv near 99.1 r3/r4 swapped for the GameWork pointer and the zero stored to m_nStage; same stores, calls and branches
 main LoadLocInfoTbl__Q23msw20CStgGmk_PylonClusterFv near 97.9 [real, reviewed] reviewer confirmed: lwzx with (i+1)<<2 vs add and lwz 4(base+i*4), same address and load
 main LookAt__Q23msw7CStgSrtFRCQ23bcs5FVEC3f near 98.5 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
@@ -281,6 +283,7 @@ main Play__Q23bcs15CAnmBlendMotionFRCQ33bcs15CAnmBlendMotion8ANIM_ARGUl near 90.
 main PopTeamItem___Q23msw5CGameFl near 91.8 [real, reviewed] reviewer confirmed: the original proceeds for states 0 and 1 and returns otherwise, the same set as ours
 main Pop__Q23msw16CCockpitPartMoveFRQ33msw16CCockpitPartMove12PartMoveInfo near 99.4 registers only: the 0xC and 0x10 fields of the entry go through r5/r6 swapped; same loads, stores and order (12 load/store orders and a struct copy tried)
 main PushTeamItem___Q23msw5CGameFll near 95.0 [real, reviewed] reviewer confirmed: after the fix (fn_80139D28 called when m_bUseRoulette is set, as the original): every branch checked against the raw asm; IsPushable switch lowering only
+main ReloadGameSnd__Q23msw8CGameSndFv near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: the original tail-calls LoadGameSnd, ours inlines LoadGameSnd's body; nothing else differs. Recorded by hand: equivalent.py has no floor exception for this ruling
 main RemoveChildAt__Q23bcs9CScnGroupFUl unverified 80.0 80%: GetChild inlined here, called in the original; rest identical
 main RemoveEntryAll__Q23bcs10CCameraManFv near 97.4 [real, reviewed] reviewer confirmed: identical code; relocation symbol _f_bss vs m_pCamera at the same address
 main RemoveGuideTelop___Q23msw13CGameGuideManFv near 97.9 [real, reviewed] reviewer confirmed: original re-reads 0x3c right after the compare with no call or store between
@@ -344,6 +347,7 @@ main SetUp__Q23msw7CStgSrtFfff near 96.8 float register choice inside the paired
 main SetVector3__Q33msw2vm9CVMScriptFiQ23bcs5FVEC3 unverified 74.2 schedule only: next float of v loaded before the previous store in the original
 main Set__Q23msw10CSignBoardFv near 99.8 [schedule] 99.8%: register numbering around the CreateAttachEffect/FindList/SetDelayTime block; autopilot regs no gain
 main Set__Q23msw20CCockpitMarkerIcon2DFv near 99.2 register numbering only (the pane accessor pointer lands in another register)
+main Set__Q23msw21CCockpitPauseRuleInfoFv near 98.8 [schedule] register allocation only (nKind index register)
 main Set__Q23msw22CCockpitModelTelopHoldFv near 99.8 register numbering only
 main Set__Q23msw23CCockpitResultPartyTeamFv near 99.1 [schedule] register allocation only: the inlined text-box max-value helper swaps the registers holding m_pPaneAccessor and the text box length
 main Setup__Q33msw2vm7CVMDataFv near 95.0 [real, reviewed] reviewer confirmed: the original's extra clrlwi 24 before an unsigned range compare gives the same result for any byte; register renumbering in the inlined Unscramble loop
@@ -408,6 +412,7 @@ main _UpdateFloor__Q23msw11CEventModelFv near 99.0 stack slots of the two FVEC3S
 main __ct__Q23bcs10CAnmTexPatFPCQ23bcs7CMdlObjQ34nw4r3g3d12ResAnmTexPatil unverified 84.1 84.1: calls Create as the original; only the res copy load is ordered after the member stores and saved registers differ; two models tried
 main __ct__Q23bcs10CStrapTaskFPFv_v near 98.7 instruction order of the member stores and the register holding the stored 0
 main __ct__Q23bcs13CAnmChrMotionFv near 92.6 same stores; the vptr store comes after the CFrameCtrl member stores in the original, before them in ours
+main __ct__Q23bcs13CSndGroupListFv near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: weak copy the original emits only because LoadGameGroups calls it out of line; the header body (m_nNum = 0) is the same work and ours inlines it at every call. Recorded by hand
 main __ct__Q23bcs7CMdlRefFPCQ23bcs7CMdlObjQ34nw4r3g3d6ResMdlUlUll near 95.4 [real, reviewed] reviewer confirmed: inline vs call: ours calls SetLink, whose body (fn_8005E0BC plus the 0x1c8/0x1cc stores) is inlined in the original; GXSetCullMode alias; stack slots and a dead slot load
 main __ct__Q23msw10CEventMoveFPQ23msw11CEventModelPQ23msw14CEventNodeBasei near 99.9 only the .sdata2 relocation of 0.0f differs (constant pool not carved for this unit)
 main __ct__Q23msw13CAtkCollisionFlllUl near 99.0 [real, reviewed] reviewer confirmed: loop counter and offset registers swapped, two li reordered, vtable symbol shown as ANON; no data difference
@@ -435,7 +440,3 @@ main __sinit_\CC_DATA_cpp near 90.4 [real, reviewed] reviewer confirmed: same co
 main __sinit_\CChrMarker_cpp near 96.1 register allocation only (same constants, same stores)
 main sort<PPQ23bcs7CScnObj,PFPCQ23bcs7CScnObjPCQ23bcs7CScnObj_i>__3stdFPPQ23bcs7CScnObjPPQ23bcs7CScnObjPFPCQ23bcs7CScnObjPCQ23bcs7CScnObj_i_v near 96.6 96.6%: register allocation in the inlined selection sort and scheduling of shuffle_range / j=last-1 only
 main sort<PPQ23bcs7CScnObj,RPFPCQ23bcs7CScnObjPCQ23bcs7CScnObj_i>__3stdFPPQ23bcs7CScnObjPPQ23bcs7CScnObjRPFPCQ23bcs7CScnObjPCQ23bcs7CScnObj_i_v near 96.6 96.6%: register allocation in the inlined selection sort and scheduling of shuffle_range / j=last-1 only
-main LoadGameGroups__Q23msw8CGameSndFRCQ33msw8CGameSnd9GAME_INFOi near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: the original is over the all-or-nothing inline budget and calls CSndGroupList ctor/Add and GetGameType out of line; ours inlines those same bodies; calls, arguments, branches and tail identical. Recorded by hand: equivalent.py has no floor exception for this ruling
-main ReloadGameSnd__Q23msw8CGameSndFv near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: the original tail-calls LoadGameSnd, ours inlines LoadGameSnd's body; nothing else differs. Recorded by hand: equivalent.py has no floor exception for this ruling
-main __ct__Q23bcs13CSndGroupListFv near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: weak copy the original emits only because LoadGameGroups calls it out of line; the header body (m_nNum = 0) is the same work and ours inlines it at every call. Recorded by hand
-main Add__Q23bcs13CSndGroupListFUls near 0.0 [real, reviewed] inline vs call (notes/decisions.md section 2), reviewer confirmed: weak copy the original emits only because LoadGameGroups calls it out of line; the header IsExist+Add body is the same work and ours inlines it at every call. Recorded by hand

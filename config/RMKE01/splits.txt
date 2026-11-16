@@ -807,7 +807,7 @@ game/msw/CCockpitPauseLayoutBase.cpp:
 	.text       start:0x8025C344 end:0x8025C3F4
 
 game/msw/CCockpitPauseRuleInfo.cpp:
-	.text       start:0x8025F47C end:0x8025FB4C
+	.text       start:0x8025F47C end:0x8025FBCC
 
 game/msw/CGamePadCheck.cpp:
 	.text       start:0x8025FBCC end:0x802616DC

@@ -220,7 +220,7 @@ main Main__Q23msw16CStgGmk_Case_MdlFf near 99.7 register allocation only (the tw
 main Main__Q23msw18CCockpitModelTelopFv near 99.2 register numbering only
 main Main__Q23msw19CItemBallShellWreckFv near 96.3 96.3%: float register numbering and instruction order in the paired-single motion block and the fade branch; same operations, constants and branches
 main Main__Q23msw19CStgGmk_Trolley_MdlFf near 99.9 register allocation of the scale quotients only
-main Main__Q23msw22CCockpitModelTelopHoldFv near 98.5 m_hEffect[i] loaded after CEffectCtrl::GetInstance instead of before (GetInstance does not write it); register numbering
+main Main__Q23msw22CCockpitModelTelopHoldFv near 98.5 [real, reviewed] reviewer confirmed: m_hEffect (0x70) loaded after GetInstance instead of before; GetInstance does not write it; register numbering
 main Main__Q23msw8CBallManFv near 99.1 register allocation only: the loop counter and the strength-reduced table offset are given each other's registers (li order swapped); same instructions, same memory accesses and branches
 main Main__Q33msw6CC_CMN10CMdlEffectFv near 96.5 instruction order and registers only: the original loads m_hEffect before the CEffectCtrl::GetInstance call (ours after; nothing between can change it), and schedules the floor-flow float adds differently
 main MakeDL__Q33bcs3G2D10CScissorDLFv unverified 83.2 83%: original keeps two dead u16 stack stores (sth of the F32ToU16 results), widens the sizes to int and truncates to 16 bits at the call instead of at the clamp assignment; otherwise scheduling and stack slots. Same values reach SetGDScissor in every case as far as read, not proven
@@ -297,8 +297,8 @@ main SearchTrgFrame__Q23bcs10CAnmMotionCFlUlf near 95.0 register choice and inst
 main SearchTrgFrame__Q23bcs15CAnmBlendMotionCFlUlf near 95.0 register choice and instruction order only
 main SeekTrg__Q23bcs13CAnmChrMotionFv near 98.5 register choice and instruction order only
 main SendEvent__Q23msw10CSignBoardFlPv near 99.2 [schedule] 99.2%: register numbering around the inlined GetLytObj and the event 0x2715 loop; autopilot regs no gain
-main SendEvent__Q23msw18CCockpitModelTelopFlPv near 96.4 m_hEffect[0] read once before the switch instead of in each case; same field, no store between
-main SendEvent__Q23msw22CCockpitModelTelopHoldFlPv near 93.9 state!=4&&state!=5 as one range check vs two compares (same truth set); m_hEffect[0] load after GetInstance; register numbering
+main SendEvent__Q23msw18CCockpitModelTelopFlPv near 96.4 [real, reviewed] reviewer confirmed: m_hEffect[0] (0x64) read before the switch instead of after GetInstance; nothing stores it between
+main SendEvent__Q23msw22CCockpitModelTelopHoldFlPv near 93.9 [real, reviewed] reviewer confirmed: two signed compares vs subi 4; cmplwi 1 select the same {4,5} for every value; m_hEffect[0] loaded after GetInstance, which does not write it
 main SendMessage___Q23msw5CGameFllll unverified 84.1 switch compare tree vs our linear chain and other branch form; not proven equal by tool
 main SetAlphaRateF__Q23bcs7CScnObjFf near 93.6 93.6%: original also stores the converted short to a second, unread stack slot; temporary at sp+0xC vs 0x8
 main SetAnimEnable__Q33bcs3G2D10CLayoutObjFli near 98.4 register allocation only: one saved register for the transform pointer

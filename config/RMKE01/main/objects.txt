@@ -5,7 +5,6 @@
 Matching game/msw/CDataWork.cpp
 Matching game/msw/CGameAccInput.cpp
 Matching game/msw/LayoutTask.cpp
-Matching game/msw/CCollDefUnit.cpp
 Equivalent game/msw/menu/Localize.cpp
 Equivalent game/msw/CNowLoading.cpp
 Equivalent game/msw/CEvNodeData.cpp
@@ -110,6 +109,9 @@ Equivalent game/msw/CStgMdl.cpp
 Matching game/msw/CStgGmk.cpp
 Equivalent game/bcs/CRsoModule.cpp flags=noauto
 Matching game/msw/ArchiveFont.cpp
+Equivalent game/msw/CCollUnit.cpp
+Equivalent game/bcs/CPadWI.cpp
+Equivalent game/bcs/G2D/CLytManager.cpp
 Equivalent game/msw/CEventNodeBase.cpp
 Equivalent game/msw/CSignBoard.cpp
 Equivalent game/msw/CCockpitResultPartyTeam.cpp

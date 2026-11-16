@@ -12,7 +12,8 @@ extern "C" {
 typedef enum _GXTexFmt {
     GX_TF_I8 = 1,
     GX_TF_RGB565 = 4,
-    GX_TF_RGB5A3 = 5
+    GX_TF_RGB5A3 = 5,
+    GX_TF_Z8 = 0x11 // (added for the DOL's game/bcs/G2D/CLytManager.cpp)
 } GXTexFmt;
 
 typedef enum _GXTexWrapMode {

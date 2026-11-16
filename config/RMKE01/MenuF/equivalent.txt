@@ -31,7 +31,7 @@ MenuF Court_RandomSelect__Q23msw11CSelectMenuFRlRl near 99.1 instruction order/r
 MenuF CreateChrMenuObj__Q33msw10SelectMenu9CCourtChrFllll13RFLDataSourcell near 99.1 incoming arguments copied to saved registers in another order
 MenuF CreateMiiFacePane__Q33msw10SelectMenu10CScoreBookFl12RFLStoreData near 96.5 [real, reviewed] reviewer confirmed: register numbering and schedule only; calls, offsets and constants the same
 MenuF CtorStateDecide__Q23msw14CTopMenuChrObjFv near 96.7 register choice only (flags word in r4 vs r0)
-MenuF CtorStateIdle__Q23msw14CTopMenuChrObjFv unverified 45.9 PlayMotion(MOT_IDLE, loop, 1.0f, 0.0f): original loads 1.0f and 0.0f before the motion null check and keeps 0.0f in one register for the compare and the frame argument; ours loads after the check and reloads 0.0f. Same call and values; below 85% only because the function is 17 instructions
+MenuF CtorStateIdle__Q23msw14CTopMenuChrObjFv unverified 45.9 reviewer confirmed no behaviour difference: same Play call and constants; only the constant loads are placed before the null check and 0.0f is reused; below the 85% floor (17 instructions)
 MenuF Cup_Loop__Q23msw11CSelectMenuFv near 98.5 [real, reviewed] reviewer confirmed: float constants loaded off one kept base instead of per-literal lis/@l, beq+b as one bne, cmpwi vs cmplwi of an lbz against 1; register swaps; calls, offsets and stores the same
 MenuF Cup_OkButton__Q23msw11CSelectMenuFv near 99.3 register allocation only (pad index and cancel flag swapped)
 MenuF DecrementDelayFrameCount__Q23msw11CSelectMenuFv near 99.1 instruction order only (diff.py), same instructions and operands otherwise; 99.1%
@@ -45,7 +45,7 @@ MenuF Entry_In__Q23msw11CSelectMenuFv near 89.9 [real, reviewed] reviewer confir
 MenuF Entry_LoopStep21__Q23msw11CSelectMenuFv near 98.1 [real, reviewed] reviewer confirmed: the same loop reads the same byte through a folded 4(rX) offset; the 0x268 load placed differently
 MenuF Entry_LoopStep22__Q23msw11CSelectMenuFv near 92.6 [real, reviewed] reviewer confirmed: register numbering and the pad-loop base (+4 folded into the lbz offset): same addresses, calls and branches
 MenuF Entry_LoopStep23__Q23msw11CSelectMenuFv near 97.8 [real, reviewed] reviewer confirmed: the same loop reads the same byte through a folded 4(rX) offset; the 0x268 load placed differently
-MenuF Entry_Loop__Q23msw11CSelectMenuFv unverified 71.7 the original inlines Entry_LoopStep22 into case 22 (and still emits it); ours calls it (explicit inline makes it inline but drops the standalone copy); plus the pad-loop address form
+MenuF Entry_Loop__Q23msw11CSelectMenuFv unverified 71.7 reviewer confirmed inline vs call: the original has Entry_LoopStep22's body inlined where ours calls it, nothing else differs; near by the 11-15 ruling, but equivalent.py's 85% floor refuses it
 MenuF Finalize__Q23msw11CSelectMenuFv unverified 98.8 written from the assembly, 98.8%; differs: memory accesses differ: 10 only in the original, 10 only in ours (field offsets, widths or signedness)
 MenuF FindChrTypeByBtnKind__Q33msw10SelectMenu8CCharSelFUsRlRl near 99.5 register choice only inside the inlined push-animation test; same instructions
 MenuF FriendCode_LoopStep__Q23msw11CSelectMenuFv near 99.3 register allocation only
@@ -57,7 +57,7 @@ MenuF GameMode_In__Q23msw11CSelectMenuFv near 98.1 register allocation only: thi
 MenuF GameMode_LoopStep1__Q23msw11CSelectMenuFv near 96.8 register allocation and order only: the camera address and the position index swap registers (r3/r7) around the table select
 MenuF GameMode_Loop__Q23msw11CSelectMenuFv near 99.9 register allocation only: the button-reset loops swap the counter and object registers, and the player-number load uses r29 for r27
 MenuF GetCharaPos__Q33msw10SelectMenu6CBgChrFl near 86.8 [real, reviewed] reviewer confirmed: found-case return is an early blr in ours, a branch to the shared return in the original; not-found returns -1 in both
-MenuF GetLayoutDrawTexture__Q33msw10SelectMenu9CNwLayoutFv unverified 89.1 the original copies the view matrix into DrawInfo with lwz/stw, ours with lfs/stfs (nw4r math::MTX34 has no union here); rest register numbering
+MenuF GetLayoutDrawTexture__Q33msw10SelectMenu9CNwLayoutFv near 96.8 [schedule] instruction order only (two stores scheduled around the flag store)
 MenuF GetLoadArchiveFileId__Q23msw11CSelectMenuFl unverified 86.2 written from the assembly, 86.2%; differs: branches differ: original {'blt': 1, 'b': 1}, ours {'bge': 1} (condition sense or control flow); length 8 vs 7 instructions
 MenuF GetMiiName__Q23msw11CSelectMenuF12RFLStoreData unverified 94.6 written from the assembly, 94.6%; differs: length 58 vs 59 instructions
 MenuF GetNextButtonKindId__Q33msw10SelectMenu8CCharSelFlUl near 94.9 [real, reviewed] reviewer confirmed: the original re-zero-extends the lhz id (clrlwi) and lays out the UP case differently; offsets, the five FindObjectByCurrentBtnKindId calls and the 0x8050 and nonzero tests the same
@@ -81,7 +81,7 @@ MenuF IsLoaded__Q23msw11CSelectMenuFl unverified 91.0 written from the assembly,
 MenuF IsReading__Q23msw11CSelectMenuFl unverified 71.8 written from the assembly, 71.8%; differs: branches differ: original {'bne': 1, 'b': 1}, ours {'beq': 1, 'b': 1} (condition sense or control flow); length 11 vs 10 instructions
 MenuF LoopPlayMenuBGM__Q23msw11CSelectMenuFl unverified 87.0 written from the assembly, 87.0%; differs: length 43 vs 42 instructions
 MenuF LoopStateActive__Q23msw14CTopMenuChrObjFv near 92.6 [real, reviewed] reviewer confirmed: in the PlayMotion helper the original hoists the 0.0f/0xb8 constant loads above the motion null check and reuses 0.0f as the last Play argument, ours loads after the check: same values, arguments and calls
-MenuF LoopStateDecide__Q23msw14CTopMenuChrObjFv unverified 77.1 PlayMotion constant loads placed after the null check (original hoists 0.0f/1.0f and reuses the register); same calls and values
+MenuF LoopStateDecide__Q23msw14CTopMenuChrObjFv unverified 77.1 reviewer confirmed no behaviour difference: same blend test, flags and Play call; constant and m_fBlend loads hoisted above the null check; below the 85% floor
 MenuF LoopStateToIdle__Q23msw14CTopMenuChrObjFv near 94.0 [real, reviewed] reviewer confirmed: only where and how often 0.0f is loaded differs (once before the null check in the original, twice after it in ours); compare, fabs, flag 0x8, Play arguments and branches the same
 MenuF Main__Q23msw11CSelectMenuFv unverified 94.0 written from the assembly, 94.0%; differs: immediates differ: original has {'0x1': 1}, ours {'0x0': 1}; branches differ: original {'beq': 20, 'blt': 4, 'bge': 3, 'bne': 18, 'b': 8, 'ble': 4}, ours {'beq': 24, 'blt': 4, 'bge': 3, 'bne': 14, 'b': 8, 'ble': 4} (condition sense or control flow)
 MenuF Main__Q23msw14CTopMenuChrObjFv near 98.6 one load of m_pMdl scheduled after the three rotation loads instead of between them; same operations
@@ -120,7 +120,7 @@ MenuF PlaterSelect_PlusMinus__Q23msw11CSelectMenuFlll near 99.8 register allocat
 MenuF PlayMenuBGM__Q23msw11CSelectMenuFl near 91.1 instruction order only (diff.py), same instructions and operands otherwise; 91.1%
 MenuF PlayMode_Loop0__Q23msw11CSelectMenuFv near 99.9 register choice only: the register holding the next mode (0xD/0xE)
 MenuF PopHistoryByState__Q23msw11CSelectMenuFUcUc unverified 97.2 written from the assembly, 97.2%; differs: immediates differ: original has {'0x284': 1}, ours -; memory accesses differ: 2 only in the original, 2 only in ours (field offsets, widths or signedness)
-MenuF PrepareDecideAnim__Q23msw11CTopMenuChrFv unverified 83.6 original re-reads the flags word and repeats the select test inside CTopMenuChrObj::PrepareDecide before setting bits 0xC; ours folds the repeated test (same result single-threaded)
+MenuF PrepareDecideAnim__Q23msw11CTopMenuChrFv unverified 83.6 reviewer confirmed no behaviour difference: the original re-tests FLAG_SELECT inside the inlined PrepareDecide after the same outer test (always true); ours folds it; below the 85% floor
 MenuF PushMenuHistory__Q23msw11CSelectMenuFUcUcUs unverified 94.0 written from the assembly, 94.0%; differs: immediates differ: original has -, ours {'0x1': 1}; memory accesses differ: 0 only in the original, 2 only in ours (field offsets, widths or signedness)
 MenuF Remove__Q33msw10SelectMenu7CCupChrFv near 94.1 [real, reviewed] reviewer confirmed: the cup handle is stored at this+0x68 either way (addi 4 then 0x64 against a direct 0x68); only the order of that store and the next load differs
 MenuF Remove__Q33msw10SelectMenu8CCharSelFv near 99.4 register choice only: the court object and the marker counter swap registers; same instructions
@@ -163,7 +163,7 @@ MenuF SetPadSign__Q33msw10SelectMenu8CCharSelFlll near 99.0 register numbering i
 MenuF SetPageNode__Q33msw10SelectMenu9CRuleInfoFPvl near 89.9 [real, reviewed] reviewer confirmed: register allocation only: the original saves r27-r31 with _savegpr_27/_restgpr_27, ours saves four registers with stw and keeps the pool base in a register; calls, constants and offsets the same
 MenuF SetPlayerDeploy__Q33msw10SelectMenu9CCharaMdlFl near 99.9 stack slots of the ResFile copy (0xc vs 0x8) and the ResAnmChr argument copy (0x8 vs 0xc) are swapped; same code and data otherwise (relcmp: the 4 slot bytes are the only MenuF difference when linked)
 MenuF SetPosChara__Q33msw10SelectMenu6CBgChrFl near 98.2 register choice only; regs search no gain
-MenuF SetRestoreBuffer__Q33msw10SelectMenu9CNwLayoutFv unverified 59.9 same calls, arguments and stores; the original keeps format/mipmap in saved registers (savegpr_26, 0x40 frame) and stores the converted width/height to stack slots, ours rematerialises the constants
+MenuF SetRestoreBuffer__Q33msw10SelectMenu9CNwLayoutFv unverified 59.9 reviewer confirmed no behaviour difference: same sizes, GX/new/delete calls and member stores; the original only adds dead u16 stack copies and keeps constants in saved registers; below the 85% floor
 MenuF SetRuleText__Q33msw10SelectMenu11CCharaLevelFl near 99.9 operand order of one commutative add
 MenuF SetScorePos__Q33msw10SelectMenu11CFriendInfoFPQ23msw9WiFiSkill near 91.4 [real, reviewed] reviewer confirmed: same float and word copies into a local never read back; multiplies and divide operand-swapped with the same results; literal pool offsets shifted by 4 with no data difference; frame layout only
 MenuF SetSelectPosMdlObjId__Q33msw10SelectMenu6CBgMdlFl near 99.0 register choice only: nOldId/nNewId and the two model and animation pointers of the moves take different (saved) registers; same instructions, offsets and calls; data and relocations of the whole MenuF REL match (relcmp, Matching trial)
@@ -272,7 +272,7 @@ MenuF WiFiMiiCharSetName__Q23msw11CSelectMenuFP12RFLStoreDatal unverified 84.6 w
 MenuF WiFi_Get2PMiiName__Q23msw11CSelectMenuFv unverified 88.9 written from the assembly, 88.9%; differs: length 41 vs 39 instructions
 MenuF WifiConnectStep__Q23msw11CSelectMenuFv near 99.9 [real, reviewed] reviewer confirmed: one register (the player-data pointer) and the jump table symbol name only
 MenuF WifiConnect_Loop__Q23msw11CSelectMenuFv near 99.1 [real, reviewed] reviewer confirmed: the pad-flag clears are reordered and the inlined SetTextPaneString has swapped registers; ops, offsets and calls identical
-MenuF WifiEntry_Loop__Q23msw11CSelectMenuFv unverified 70.6 the original inlines Entry_LoopStep22 into case 22 (and still emits it); ours calls it (explicit inline makes it inline but drops the standalone copy); plus the pad-loop address form
+MenuF WifiEntry_Loop__Q23msw11CSelectMenuFv unverified 70.6 reviewer confirmed inline vs call: the original has Entry_LoopStep22's body inlined where ours calls it, nothing else differs; near by the 11-15 ruling, but equivalent.py's 85% floor refuses it
 MenuF WifiEntry_PadEntry__Q23msw11CSelectMenuFv near 97.2 [real, reviewed] reviewer confirmed: the same pad bytes are read and written through a folded base; register choice and ori/store order of the tail only
 MenuF WifiErrorCheck__Q23msw11CSelectMenuFv unverified 97.5 written from the assembly, 97.5%; differs: branches differ: original {'beq': 3, 'bne': 5, 'bdnz': 1, 'b': 4}, ours {'bne': 6, 'b': 4, 'beq': 2, 'bdnz': 1} (condition sense or control flow)
 MenuF WifiTop_In__Q23msw11CSelectMenuFv near 91.3 [real, reviewed] reviewer confirmed: same calls in the same order with the same arguments and constants; register allocation, one extra saved register and a null reused from a register only

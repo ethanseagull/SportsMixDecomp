@@ -346,7 +346,10 @@ main SetMtx__Q23msw19CStgGmk_Pinball_MdlFRCQ23bcs6FMTX34 near 98.2 register choi
 main SetPadAssignSemiAuto__Q23msw5CGameFv unverified 49.3 store scheduling and case layout differ; each case's eight values checked against the asm by simulation
 main SetParamSemiAuto__Q23msw5CGameFv unverified 79.1 switch tables differ, and the original has a dead duplicate-character loop ours omits; GameWorkReset_ made static (original called it from this static with no object)
 main SetPeriodResult___Q23msw5CGameFv unverified 52.3 52.3%: register allocation (stmw vs single saves) and address forms of the two arrays; same calls
+main SetPlayerIcon__Q23msw21CCockpitResultPartyVSFll near 99.6 [schedule] schedule/register order only
 main SetPlayerIcon__Q23msw23CCockpitResultPartyTeamFll near 88.3 [real, reviewed] reviewer confirmed: the two pure IsPadCtrl booleans computed after GetPaneName instead of before; register numbering; same calls, constants and branches
+main SetPlayerRank__Q23msw21CCockpitResultPartyVSFll near 96.5 [schedule] schedule/register order only
+main SetPlayerTime__Q23msw21CCockpitResultPartyVSFlf near 95.6 [schedule] schedule/register order only
 main SetPointLightColor__Q23msw14CEffectClusterF8_GXColor8_GXColor near 89.8 schedule only: second colour word loaded after the member-pointer lwzu/copy instead of before; same stores and calls
 main SetPos__Q23msw9CCollUnitFRCQ23bcs5FVEC3 near 89.8 [real, reviewed] reviewer: original reloads m_nFlag10 after the m_PrevPos float stores (alias caution); ours reuses the entry value; no caller points rPos into the flag, same result
 main SetResultButton__Q23msw14CCockpitResultFll near 98.5 98.5%: float register numbering in the delay computation; callee is the unnamed task constructor fn_8023D858
@@ -364,6 +367,7 @@ main SetVector3__Q33msw2vm9CVMScriptFiQ23bcs5FVEC3 unverified 74.2 schedule only
 main Set__Q23msw10CSignBoardFv near 99.8 [schedule] 99.8%: register numbering around the CreateAttachEffect/FindList/SetDelayTime block; autopilot regs no gain
 main Set__Q23msw20CCockpitMarkerIcon2DFv near 99.2 register numbering only (the pane accessor pointer lands in another register)
 main Set__Q23msw21CCockpitPauseRuleInfoFv near 98.8 [schedule] register allocation only (nKind index register)
+main Set__Q23msw21CCockpitResultPartyVSFv near 99.1 [schedule] schedule/register order only
 main Set__Q23msw22CCockpitModelTelopHoldFv near 99.8 register numbering only
 main Set__Q23msw23CCockpitResultPartyTeamFv near 99.1 [schedule] register allocation only: the inlined text-box max-value helper swaps the registers holding m_pPaneAccessor and the text box length
 main Setup__Q33msw2vm7CVMDataFv near 95.0 [real, reviewed] reviewer confirmed: the original's extra clrlwi 24 before an unsigned range compare gives the same result for any byte; register renumbering in the inlined Unscramble loop

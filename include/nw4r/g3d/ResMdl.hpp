@@ -61,6 +61,9 @@ namespace nw4r {
                 // (DOL) The material of that name; an invalid handle if
                 // there is none.
                 ResMat GetResMat(ResName name) const;
+                // (DOL fn_8040A4A0, unnamed; added for
+                // game/bcs/CMdlObj/CopiedMatAccess.cpp)
+                ResMat GetResMat(const char *pName) const;
                 // (DOL; added for VolleyF game/volley/CBallTargetMarker.cpp)
                 ResMat GetResMat(int index) const;
                 // (DOL; added for game/msw/CStgMdl.cpp)

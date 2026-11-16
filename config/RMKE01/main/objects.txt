@@ -118,5 +118,6 @@ Equivalent game/msw/CCockpitResultPartyTeam.cpp
 Equivalent game/bcs/CWorldEnv.cpp
 Equivalent game/msw/CCockpitPauseRuleInfo.cpp
 Matching game/msw/CStage09Base.cpp
+Equivalent game/bcs/CMdlObj/CopiedMatAccess.cpp
 Equivalent game/msw/TournamentWork.cpp
 Equivalent game/msw/menu.cpp

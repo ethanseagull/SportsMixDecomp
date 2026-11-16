@@ -125,3 +125,4 @@ Equivalent game/msw/menu.cpp
 Equivalent game/bcs/CMovie.cpp
 Equivalent game/msw/CCockpitResultPartyVS.cpp
 Equivalent game/msw/cockpit.cpp
+Equivalent game/msw/CStageScroll.cpp

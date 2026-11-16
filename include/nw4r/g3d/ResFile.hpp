@@ -72,6 +72,11 @@ namespace nw4r {
                 ResAnmClr GetResAnmClr(int index) const;
                 ResAnmTexSrt GetResAnmTexSrt(int index) const;
                 ResAnmTexPat GetResAnmTexPat(int index) const;
+                // (the DOL's fn_80408A60 and fn_804079D0, named after the
+                // others; added for DOL game/bcs/EF/CResource.cpp) Whether
+                // the file has models, and how many.
+                int HasResMdl() const;
+                unsigned long GetResMdlNumEntries() const;
                 int HasResAnmChr() const;
                 // (DOL; named after GetResTexNumEntries) Number of skeletal
                 // animations in the file.

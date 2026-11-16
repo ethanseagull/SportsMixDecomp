@@ -1,5 +1,6 @@
 # <module> <function> <near|unverified> <objdiff score> <why the difference is accepted>
 main AddChrGroups__Q23msw8CGameSndFRQ23bcs13CSndGroupListRCQ33msw8CGameSnd9GAME_INFOs near 99.3 99.3%: register numbering of the list pointer and group value in the inlined Add; same code otherwise
+main AddG3DResFile__Q33bcs2EF9CResourceFPCc near 96.8 [real, reviewed] reviewer confirmed: only the ResFile handle's stack store moves after the IsValid test (original stores before the alignment check and reloads); same value, same Panic and callees
 main AddTeamArtsGauge___Q23msw5CGameFlff near 91.1 [real, reviewed] reviewer confirmed: after the fix (full sound Play passes 0, 1, 0 as the original's f1/f2/f3): float register choice and fmr placement only
 main AddTeamCoin___Q23msw5CGameFll unverified 76.0 76%: register allocation (ours saves r27-r31 with _savegpr) and address recomputation; same calls and stores (inspected)
 main AddTeamGainCoin__Q23msw5CGameFll unverified 74.7 74.7%: the original recomputes the array address for the store
@@ -188,6 +189,7 @@ main LoadGameGroups__Q23msw8CGameSndFRCQ33msw8CGameSnd9GAME_INFOi near 0.0 [real
 main LoadGameSnd__Q23msw8CGameSndFv near 99.1 r3/r4 swapped for the GameWork pointer and the zero stored to m_nStage; same stores, calls and branches
 main LoadLocInfoTbl__Q23msw20CStgGmk_PylonClusterFv near 97.9 [real, reviewed] reviewer confirmed: lwzx with (i+1)<<2 vs add and lwz 4(base+i*4), same address and load
 main Load__Q23msw14TournamentWorkFPQ33msw14TournamentWork15TOURNAMENT_SAVE near 95.0 [real, reviewed] reviewer confirmed: same memory traffic; file statics of the wider TournamentWork/CTournament file addressed from one base in the original, extern here (own lis/addi each), savegpr_24 vs 25
+main Load__Q33bcs2EF9CResourceFPCc near 99.8 [schedule] operand order of one cmplw (read result vs size) only
 main LookAt__Q23msw7CStgSrtFRCQ23bcs5FVEC3f near 98.5 float register choice inside the paired-single asm of the inlined bcs::FVEC3LenSq/FVEC3Dot only; constants, calls, accesses, branches identical
 main LoopState5__Q23msw13CItemRouletteFv near 95.9 [real, reviewed] reviewer confirmed: cntlzw/srwi./beq vs bne on the same 0x4306 mask, branch forms, swapped equality operands
 main LoopStateBreak__Q23msw11CItemBananaFv near 97.9 float register numbering and instruction order only (same code as CItemShellCmn::LoopStateBreak)

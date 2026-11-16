@@ -101,7 +101,7 @@ main DrawLayout__Q23msw11CNowLoadingFv near 94.8 register choice and order only:
 main DrawOutline___Q23bcs7CMiiManFPUslll near 88.2 [real, reviewed] reviewer confirmed: row start by mullw vs a w*4 step gives the same addresses; registers, one more stmw slot, commutative add order
 main Draw__Q23msw18CGameExDemoMaskObjFv near 96.6 [real, reviewed] reviewer confirmed: lhz plus extsh equals lha; register choice and constant load order; fmuls operands swapped
 main DropCoinPickup__Q23msw12CDropCoinManFRCQ23bcs5FVEC3ffPFPCQ23msw9CDropCoinPv_vPv near 97.5 [real, reviewed] reviewer confirmed: cntlzw/srwi./beq vs bne on the same masked integer, same path for every value; float register numbering
-main Eff_CreateAttachFadeIn__Q23msw14CStgEffectSlotFlfllUlPCQ23bcs5FVEC3iiiUl near 94.1 ours keeps constant 0 in a saved GPR (one more saved, savegpr_22 vs 23) where the original reloads li 0 per use; same calls, values and accesses
+main Eff_CreateAttachFadeIn__Q23msw14CStgEffectSlotFlfllUlPCQ23bcs5FVEC3iiiUl near 94.1 [real, reviewed] reviewer confirmed: callee-saved register holding 0 instead of li r3,0 on the null path; same arguments and SetFadeinTime call
 main Eff_CreateAttach__Q23msw14CStgEffectSlotFlllPCcPCQ23bcs5FVEC3iiiUl near 99.4 schedule: register holding the ResNode pointer across the Panic check; same instructions
 main EnableRuleOptionFlag__Q23msw5CGameFUli unverified 71.9 71.9%: as SetTeamAutoSpikeJumpType, inlined four times
 main EndGoalDemo___Q23msw5CGameFv near 97.8 the IsDelete test branches the other way round (same result)
@@ -382,7 +382,7 @@ main UpdateParam__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / 
 main UpdateWavePos__Q23msw16CStgGmk_Wave_ActFf near 99.3 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main UpdateWaveTimer__Q23msw19CStgGmk_WaveClusterFv near 97.7 register allocation / instruction order only (diff.py: schedule); same calls, constants and accesses
 main Update__Q23msw11CStgSrtMoveFf near 93.5 scheduling and float registers in the paired-single maths; inlined GetRotMtx tests flag bit 2 with rlwinm. where the original has extrwi. (same bit, same branch); stack, calls, constants, offsets, branches identical
-main Update__Q33msw14CStgEffectSlot8CEffSlotFf near 92.6 same zero-constant register effect as Eff_CreateAttachFadeIn (constant 0 for the CreateAttachEffect args kept in a saved GPR and reused as GetCluster's null, original reloads li 0); otherwise same instructions
+main Update__Q33msw14CStgEffectSlot8CEffSlotFf near 95.2 [real, reviewed] reviewer confirmed: zero kept in a callee-saved register used as the null cluster instead of li 0; same calls, arguments and stores
 main UseTeamCoin___Q23msw5CGameFll unverified 78.8 78.8%: register allocation and address recomputation; same calls and stores (inspected)
 main VFunc48__Q23bcs13CAnmChrMotionFv near 99.6 register choice and instruction order only
 main VFunc88__Q23bcs10CAnmMotionCFl near 98.8 add operand order and register choice only

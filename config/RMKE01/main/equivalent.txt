@@ -81,7 +81,7 @@ main CtorStateChgCourt__Q23msw5CGameFv near 96.7 switch compiled as a linear com
 main CtorStateEntranceDemo__Q23msw5CGameFv near 99.1 switch compiled as a linear compare chain where the original builds a compare tree, and inline CFsmQueue operations expanding with other branch/register shape; same cases and calls
 main CtorStateEventDemo__Q23msw5CGameFv near 93.1 cmpw/bne in ours where the original uses subf/cntlzw/beq for the same equality test, and one register reloaded; same result
 main CtorStateGameResult__Q23msw5CGameFv near 96.7 switch compiled as a linear compare chain where the original builds a compare tree, and inline CFsmQueue operations expanding with other branch/register shape; same cases and calls
-main CtorState_BREAK__Q23msw16CStgGmk_Case_ActFv near 96.7 branch layout of the null-handle select (li 0 on its own path in the original) and store order of the scale vector; same values
+main CtorState_BREAK__Q23msw16CStgGmk_Case_ActFv near 96.7 [real, reviewed] reviewer confirmed: the select hEffect ? FindList(h) : 0 and null test laid out differently with the same result; local scale vector store order; same offsets and calls
 main CtorState_BREAK__Q23msw17CStgGmk_Pylon_ActFv near 100.0 store order of the three equal FVEC3 components (x stored last in the original); same values
 main CtorState_BREAK__Q23msw19CStgGmk_Pinball_ActFv near 94.5 null cluster set by explicit li 0 and register reuse in original; ours saves one more register
 main CtorState_MOVE__Q23msw16CStgGmk_Case_ActFv near 93.9 the CStgSrt flag store is scheduled after the vector stores in the original; stack slots of the two velocity limit vectors swapped
@@ -365,7 +365,7 @@ main Step__Q23msw14CGameSpeedCtrlFf near 99.3 switch compiled as a linear compar
 main StopAllCameraQuake__Q23msw5CGameFv near 98.1 instruction order only
 main TeamItemStartRoulette___Q23msw5CGameFll near 90.4 switch compiled as a linear compare chain where the original builds a compare tree, and inline CFsmQueue operations expanding with other branch/register shape; same cases and calls
 main TrgArtsEvent___Q23msw5CGameFl near 96.0 the returned colour temporary sits 4 bytes lower on the stack; instruction order
-main UpdateColl__Q23msw16CStgGmk_Case_ActFv near 92.7 original also stores two unused size vectors to the stack in the wall loop (dead stores), so a larger frame and one more saved GPR; register allocation; same calls, values and field accesses
+main UpdateColl__Q23msw16CStgGmk_Case_ActFv unverified 92.7 reviewer: frame 0x1e0 vs 0x190, two more frsp and extra vector stores in the original; reviewer saw the same calls, offsets and constants but could not trace every stack slot
 main UpdateColl__Q23msw17CStgGmk_Pylon_ActFv near 99.3 fmadds operand order and store order for the second unit's position
 main UpdateColl__Q23msw19CStgGmk_Pinball_ActFv near 99.4 stack slot order of atkPos and three FVEC3 temporaries
 main UpdateColl__Q23msw19CStgGmk_Trolley_ActFv near 97.1 stack slots of the SetPos temporaries and the capsule ends only (both builds drop the store of the second capsule end's x/z)

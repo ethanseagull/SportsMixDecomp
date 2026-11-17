@@ -108,3 +108,5 @@ Equivalent game/volley/unit_3B628.cpp
 Equivalent game/volley/unit_41204.cpp
 Equivalent game/volley/CNpcGhostVolley.cpp
 Equivalent game/volley/CBallVolley.cpp
+NonMatching game/volley/CChrCore.cpp
+NonMatching game/volley/CRhythmReceiveMan.cpp

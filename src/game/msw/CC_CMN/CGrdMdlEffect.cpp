@@ -1,0 +1,2 @@
+// main: game/msw/CC_CMN/CGrdMdlEffect
+// Functions are added in the original's order; see notes/decompdecomp.md.

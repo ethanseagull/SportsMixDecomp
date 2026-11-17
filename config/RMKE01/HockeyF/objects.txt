@@ -102,3 +102,15 @@ Equivalent game/hockey/unit_B0048.cpp flags=noauto
 Equivalent game/hockey/unit_EEA14.cpp
 Equivalent game/hockey/CcNinjaCloneBody.cpp
 Equivalent game/hockey/unit_E0310.cpp
+NonMatching game/hockey/CGameHockey.cpp
+NonMatching game/hockey/CBallHockey.cpp
+NonMatching game/hockey/CChrCoreHockey.cpp
+NonMatching game/hockey/unit_289F4.cpp
+NonMatching game/hockey/CcAttackObj.cpp
+NonMatching game/hockey/CChrCore.cpp
+NonMatching game/hockey/unit_57D08.cpp
+NonMatching game/hockey/CComManHockey.cpp
+NonMatching game/hockey/CComDrvHockeyGame.cpp
+NonMatching game/hockey/CComDrvHockeyKeeper.cpp
+NonMatching game/hockey/CComDrvHockeyCS.cpp
+NonMatching game/hockey/CNpcBossPackunHockeyBase.cpp

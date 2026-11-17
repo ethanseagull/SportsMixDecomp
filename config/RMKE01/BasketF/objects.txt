@@ -115,3 +115,6 @@ Equivalent game/basket/CBallBasket.cpp
 Equivalent game/basket/unit_A3AF0.cpp
 Equivalent game/basket/CNpcBossPackunBasketBase.cpp
 Equivalent game/basket/CChrCoreBasket.cpp
+NonMatching game/basket/CChrCore.cpp
+NonMatching game/basket/CHBScript.cpp
+NonMatching game/basket/CBasketScript.cpp

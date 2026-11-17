@@ -20,6 +20,9 @@ game/bcs/CAnmMotion.cpp:
 	.sdata      start:0x805BF840 end:0x805BF8A4
 	.sdata2     start:0x805C1A00 end:0x805C1A20
 
+game/auto/text_8001114C.cpp:
+	.text       start:0x8001114C end:0x80011720
+
 game/bcs/CCameraMan.cpp:
 	.text       start:0x80011720 end:0x80011818
 	.bss        start:0x804BF580 end:0x804BF680
@@ -27,14 +30,37 @@ game/bcs/CCameraMan.cpp:
 game/bcs/CCamera.cpp:
 	.text       start:0x80011818 end:0x80012B48
 
+game/auto/text_80012B48.cpp:
+	.text       start:0x80012B48 end:0x80012CB8
+
+game/auto/text_80012CB8.cpp:
+	.text       start:0x80012CB8 end:0x80012CD8
+	.ctors      start:0x8042D184 end:0x8042D188
+
 game/bcs/CCameraAnm.cpp:
 	.text       start:0x80012CD8 end:0x800140BC
+
+game/auto/text_800140BC.cpp:
+	.text       start:0x800140BC end:0x80014440
 
 game/bcs/CCameraAnmCalc.cpp:
 	.text       start:0x80014440 end:0x800145BC
 
+game/auto/text_800145BC.cpp:
+	.text       start:0x800145BC end:0x8001BC64
+
+game/auto/text_8001BC64.cpp:
+	.text       start:0x8001BC64 end:0x8001BCBC
+	.ctors      start:0x8042D188 end:0x8042D18C
+
+game/auto/text_8001BCBC.cpp:
+	.text       start:0x8001BCBC end:0x8001E510
+
 game/bcs/EF/CEffect.cpp:
 	.text       start:0x8001E510 end:0x8001FEE8
+
+game/auto/text_8001FEE8.cpp:
+	.text       start:0x8001FEE8 end:0x80020634
 
 game/bcs/EF/CResource.cpp:
 	.text       start:0x80020634 end:0x800213CC
@@ -42,20 +68,59 @@ game/bcs/EF/CResource.cpp:
 	.data       start:0x80464E68 end:0x80464E74
 	.sbss       start:0x805C082C end:0x805C0830
 
+game/auto/text_800213CC.cpp:
+	.text       start:0x800213CC end:0x80022A14
+
 game/bcs/EF/CManager.cpp:
 	.text       start:0x80022A14 end:0x80022F78
+
+game/auto/text_80022F78.cpp:
+	.text       start:0x80022F78 end:0x80024A78
+
+game/auto/text_80024A78.cpp:
+	.text       start:0x80024A78 end:0x80024A88
+	.ctors      start:0x8042D18C end:0x8042D190
+
+game/auto/text_80024A88.cpp:
+	.text       start:0x80024A88 end:0x8002A8B8
+
+game/auto/text_8002A8B8.cpp:
+	.text       start:0x8002A8B8 end:0x8002A910
+	.ctors      start:0x8042D190 end:0x8042D194
+
+game/auto/text_8002A910.cpp:
+	.text       start:0x8002A910 end:0x8002B7E4
 
 game/bcs/G2D/CTexMap.cpp:
 	.text       start:0x8002B7E4 end:0x8002B844
 
+game/auto/text_8002B844.cpp:
+	.text       start:0x8002B844 end:0x80036934
+
 game/bcs/G2D/CTextBoxDL.cpp:
 	.text       start:0x80036934 end:0x80037514
+
+game/auto/text_80037514.cpp:
+	.text       start:0x80037514 end:0x8003B6C4
+
+game/auto/text_8003B6C4.cpp:
+	.text       start:0x8003B6C4 end:0x8003B6FC
+	.ctors      start:0x8042D194 end:0x8042D198
+
+game/auto/text_8003B6FC.cpp:
+	.text       start:0x8003B6FC end:0x8003B7B0
 
 game/bcs/G2D/CPaneCtrl.cpp:
 	.text       start:0x8003B7B0 end:0x8003CE1C
 
+game/auto/text_8003CE1C.cpp:
+	.text       start:0x8003CE1C end:0x8003D030
+
 game/bcs/G2D/CPaneObj.cpp:
 	.text       start:0x8003D030 end:0x8003ECE0
+
+game/auto/text_8003ECE0.cpp:
+	.text       start:0x8003ECE0 end:0x8003F300
 
 game/bcs/G2D/CLytManager.cpp:
 	.text       start:0x8003F300 end:0x800400A4
@@ -63,9 +128,19 @@ game/bcs/G2D/CLytManager.cpp:
 	.bss        start:0x804CCB20 end:0x804CCB30
 	.sdata2     start:0x805C1CA0 end:0x805C1CE0
 
+game/auto/text_800400A4.cpp:
+	.text       start:0x800400A4 end:0x800401A0
+
 game/bcs/G2D/CLytResource.cpp:
 	.text       start:0x800401A0 end:0x80040B70
 	.sbss       start:0x805C0880 end:0x805C0884
+
+game/auto/text_80040B70.cpp:
+	.text       start:0x80040B70 end:0x80041884
+
+game/auto/text_80041884.cpp:
+	.text       start:0x80041884 end:0x80041888
+	.ctors      start:0x8042D198 end:0x8042D19C
 
 game/bcs/CScnObj.cpp:
 	.text       start:0x80041888 end:0x80044B00
@@ -74,14 +149,33 @@ game/bcs/CGDLObj.cpp:
 	.text       start:0x80044B00 end:0x80044DD8
 	.data       start:0x80466BB8 end:0x80466CC8
 
+game/auto/text_80044DD8.cpp:
+	.text       start:0x80044DD8 end:0x800456E8
+
+game/auto/text_800456E8.cpp:
+	.text       start:0x800456E8 end:0x8004570C
+	.ctors      start:0x8042D19C end:0x8042D1A0
+
+game/auto/text_8004570C.cpp:
+	.text       start:0x8004570C end:0x80045AAC
+
 game/bcs/CHBMenu.cpp:
 	.text       start:0x80045AAC end:0x80046D40
+
+game/auto/text_80046D40.cpp:
+	.text       start:0x80046D40 end:0x8004BE1C
 
 game/bcs/CListNodeBase.cpp:
 	.text       start:0x8004BE1C end:0x8004BFC0
 
+game/auto/text_8004BFC0.cpp:
+	.text       start:0x8004BFC0 end:0x8004C094
+
 game/bcs/CLoadMan.cpp:
 	.text       start:0x8004C094 end:0x8004DC9C
+
+game/auto/text_8004DC9C.cpp:
+	.text       start:0x8004DC9C end:0x80050BFC
 
 game/bcs/CMainApp.cpp:
 	.text       start:0x80050BFC end:0x80052854
@@ -93,17 +187,39 @@ game/bcs/CMainApp.cpp:
 	.sbss       start:0x805C08E0 end:0x805C0958
 	.sdata2     start:0x805C1E08 end:0x805C1E40
 
+game/auto/text_80052854.cpp:
+	.text       start:0x80052854 end:0x80054FDC
+
 game/bcs/CMdlObj.cpp:
 	.text       start:0x80054FDC end:0x8005A9AC
+
+game/auto/text_8005A9AC.cpp:
+	.text       start:0x8005A9AC end:0x8005AC80
 
 game/bcs/CMdlObj/CopiedMatAccess.cpp:
 	.text       start:0x8005AC80 end:0x8005B500
 
+game/auto/text_8005B500.cpp:
+	.text       start:0x8005B500 end:0x8005F380
+
 game/bcs/CMdlRef.cpp:
 	.text       start:0x8005F380 end:0x8005F8E4
 
+game/auto/text_8005F8E4.cpp:
+	.text       start:0x8005F8E4 end:0x8005FFA0
+
 game/bcs/CMdlShadow.cpp:
 	.text       start:0x8005FFA0 end:0x80060344
+
+game/auto/text_80060344.cpp:
+	.text       start:0x80060344 end:0x80065F88
+
+game/auto/text_80065F88.cpp:
+	.text       start:0x80065F88 end:0x80065F94
+	.ctors      start:0x8042D1A4 end:0x8042D1A8
+
+game/auto/text_80065F94.cpp:
+	.text       start:0x80065F94 end:0x8006832C
 
 game/bcs/CMiiMan.cpp:
 	.text       start:0x8006832C end:0x800695C8
@@ -111,11 +227,34 @@ game/bcs/CMiiMan.cpp:
 game/bcs/CMovie.cpp:
 	.text       start:0x800695C8 end:0x8006A458
 
+game/auto/text_8006A458.cpp:
+	.text       start:0x8006A458 end:0x800708F0
+
 game/bcs/CPadWI.cpp:
 	.text       start:0x800708F0 end:0x80071128
 
+game/auto/text_80071128.cpp:
+	.text       start:0x80071128 end:0x80071328
+
+game/auto/text_80071328.cpp:
+	.text       start:0x80071328 end:0x80071380
+	.ctors      start:0x8042D1A8 end:0x8042D1AC
+
+game/auto/text_80071380.cpp:
+	.text       start:0x80071380 end:0x80073DAC
+
 game/bcs/CRenderMan.cpp:
 	.text       start:0x80073DAC end:0x8007852C
+
+game/auto/text_8007852C.cpp:
+	.text       start:0x8007852C end:0x800785B8
+
+game/auto/text_800785B8.cpp:
+	.text       start:0x800785B8 end:0x800785D8
+	.ctors      start:0x8042D1AC end:0x8042D1B0
+
+game/auto/text_800785D8.cpp:
+	.text       start:0x800785D8 end:0x80078680
 
 game/bcs/CRsoModule.cpp:
 	.text       start:0x80078680 end:0x800789D4
@@ -123,8 +262,14 @@ game/bcs/CRsoModule.cpp:
 	.data       start:0x80468AA0 end:0x80468BC0
 	.sbss       start:0x805C0A28 end:0x805C0A2C
 
+game/auto/text_800789D4.cpp:
+	.text       start:0x800789D4 end:0x8007A560
+
 game/bcs/CSndTask.cpp:
 	.text       start:0x8007A560 end:0x8007A818
+
+game/auto/text_8007A818.cpp:
+	.text       start:0x8007A818 end:0x8007A94C
 
 game/bcs/CTask.cpp:
 	.text       start:0x8007A94C end:0x8007B774
@@ -134,22 +279,86 @@ game/bcs/CTask.cpp:
 	.sbss       start:0x805C0A68 end:0x805C0A78
 	.sdata2     start:0x805C2000 end:0x805C2018
 
+game/auto/text_8007B774.cpp:
+	.text       start:0x8007B774 end:0x8007DF9C
+
 game/bcs/CWorldEnv.cpp:
 	.text       start:0x8007DF9C end:0x8007EB64
+
+game/auto/text_8007EB64.cpp:
+	.text       start:0x8007EB64 end:0x8007F96C
+
+game/auto/text_8007F96C.cpp:
+	.text       start:0x8007F96C end:0x8007FA90
+	.ctors      start:0x8042D1B0 end:0x8042D1B4
+
+game/auto/text_8007FA90.cpp:
+	.text       start:0x8007FA90 end:0x80080844
+
+game/auto/text_80080844.cpp:
+	.text       start:0x80080844 end:0x8008086C
+	.ctors      start:0x8042D1B4 end:0x8042D1B8
+
+game/auto/text_8008086C.cpp:
+	.text       start:0x8008086C end:0x800831D4
+
+game/auto/text_800831D4.cpp:
+	.text       start:0x800831D4 end:0x80083710
+	.ctors      start:0x8042D1B8 end:0x8042D1BC
+
+game/auto/text_80083710.cpp:
+	.text       start:0x80083710 end:0x8009A434
+
+game/auto/text_8009A434.cpp:
+	.text       start:0x8009A434 end:0x8009A4BC
+	.ctors      start:0x8042D1BC end:0x8042D1C0
+
+game/auto/text_8009A4BC.cpp:
+	.text       start:0x8009A4BC end:0x800A2524
 
 game/bcs/G2D/CLayoutBase.cpp:
 	.text       start:0x800A2524 end:0x800A34B0
 	.data       start:0x80469F78 end:0x8046A000
 	.sdata2     start:0x805C2298 end:0x805C22B0
 
+game/auto/text_800A34B0.cpp:
+	.text       start:0x800A34B0 end:0x800A9F20
+
+game/auto/text_800A9F20.cpp:
+	.text       start:0x800A9F20 end:0x800A9FAC
+	.ctors      start:0x8042D1C0 end:0x8042D1C4
+
+game/auto/text_800A9FAC.cpp:
+	.text       start:0x800A9FAC end:0x800AA14C
+
 game/bcs/G2D.cpp:
 	.text       start:0x800AA14C end:0x800ADA84
+
+game/auto/text_800ADA84.cpp:
+	.text       start:0x800ADA84 end:0x800ADCF0
+
+game/auto/text_800ADCF0.cpp:
+	.text       start:0x800ADCF0 end:0x800ADD0C
+	.ctors      start:0x8042D1C4 end:0x8042D1C8
+
+game/auto/text_800ADD0C.cpp:
+	.text       start:0x800ADD0C end:0x800B10A0
 
 game/bcs/dwc/CDwc.cpp:
 	.text       start:0x800B10A0 end:0x800B1EB8
 
+game/auto/text_800B1EB8.cpp:
+	.text       start:0x800B1EB8 end:0x800B3C80
+
+game/auto/text_800B3C80.cpp:
+	.text       start:0x800B3C80 end:0x800B3C8C
+	.ctors      start:0x8042D1C8 end:0x8042D1CC
+
 game/bcs/dwc/CDwcFriend.cpp:
 	.text       start:0x800B3C8C end:0x800B4F14
+
+game/auto/text_800B4F14.cpp:
+	.text       start:0x800B4F14 end:0x800C1558
 
 game/bcs/CWifiPadBase.cpp:
 	.text       start:0x800C1558 end:0x800C16C0
@@ -161,6 +370,48 @@ game/bcs/CWifiPad.cpp:
 game/bcs/CXmlReader.cpp:
 	.text       start:0x800C2618 end:0x800C33DC
 
+game/auto/text_800C33DC.cpp:
+	.text       start:0x800C33DC end:0x800C35A8
+
+game/auto/text_800C35A8.cpp:
+	.text       start:0x800C35A8 end:0x800C3608
+	.ctors      start:0x8042D1CC end:0x8042D1D0
+
+game/auto/text_800C3608.cpp:
+	.text       start:0x800C3608 end:0x800C3614
+
+game/auto/text_800C3614.cpp:
+	.text       start:0x800C3614 end:0x800C3674
+	.ctors      start:0x8042D1D0 end:0x8042D1D4
+
+game/auto/text_800C3674.cpp:
+	.text       start:0x800C3674 end:0x800C3680
+
+game/auto/text_800C3680.cpp:
+	.text       start:0x800C3680 end:0x800C36E0
+	.ctors      start:0x8042D1D4 end:0x8042D1D8
+
+game/auto/text_800C36E0.cpp:
+	.text       start:0x800C36E0 end:0x800C36EC
+
+game/auto/text_800C36EC.cpp:
+	.text       start:0x800C36EC end:0x800C374C
+	.ctors      start:0x8042D1D8 end:0x8042D1DC
+
+game/auto/text_800C374C.cpp:
+	.text       start:0x800C374C end:0x800C3758
+
+game/auto/text_800C3758.cpp:
+	.text       start:0x800C3758 end:0x800C37B8
+	.ctors      start:0x8042D1DC end:0x8042D1E0
+
+game/auto/text_800C37B8.cpp:
+	.text       start:0x800C37B8 end:0x800C37C4
+
+game/auto/text_800C37C4.cpp:
+	.text       start:0x800C37C4 end:0x800C3824
+	.ctors      start:0x8042D1E0 end:0x8042D1E4
+
 game/msw/CMainStep.cpp:
 	.text       start:0x800C3824 end:0x800C4938
 	.data       start:0x8046A8F8 end:0x8046AB98
@@ -170,11 +421,24 @@ game/msw/CMainStep.cpp:
 game/msw/CBall.cpp:
 	.text       start:0x800C4938 end:0x800CBEA8
 
+game/auto/text_800CBEA8.cpp:
+	.text       start:0x800CBEA8 end:0x800CC6C0
+
 game/msw/CBallMan.cpp:
 	.text       start:0x800CC6C0 end:0x800CD6DC
 
 game/msw/CBallMarker.cpp:
 	.text       start:0x800CD6DC end:0x800CE904
+
+game/auto/text_800CE904.cpp:
+	.text       start:0x800CE904 end:0x800CEAC4
+
+game/auto/text_800CEAC4.cpp:
+	.text       start:0x800CEAC4 end:0x800CEAD8
+	.ctors      start:0x8042D1E4 end:0x8042D1E8
+
+game/auto/text_800CEAD8.cpp:
+	.text       start:0x800CEAD8 end:0x800CEAE0
 
 game/msw/CItemBall.cpp:
 	.text       start:0x800CEAE0 end:0x800CFCF8
@@ -184,6 +448,9 @@ game/msw/CItemBall.cpp:
 
 game/msw/CGameCamera.cpp:
 	.text       start:0x800CFCF8 end:0x800D28C8
+
+game/auto/text_800D28C8.cpp:
+	.text       start:0x800D28C8 end:0x800D2B54
 
 game/msw/CC_DATA.cpp:
 	.text       start:0x800D2B54 end:0x800D339C
@@ -198,14 +465,26 @@ game/msw/CChrOptMdlObj.cpp:
 	.data       start:0x8046C258 end:0x8046C378
 	.sdata2     start:0x805C2600 end:0x805C2610
 
+game/auto/text_800D5070.cpp:
+	.text       start:0x800D5070 end:0x800D5140
+
 game/msw/CChrCore.cpp:
 	.text       start:0x800D5140 end:0x800E96FC
+
+game/auto/text_800E96FC.cpp:
+	.text       start:0x800E96FC end:0x800EAC8C
 
 game/msw/CChrDrvPad.cpp:
 	.text       start:0x800EAC8C end:0x800EBB04
 
+game/auto/text_800EBB04.cpp:
+	.text       start:0x800EBB04 end:0x800EBBA4
+
 game/msw/CChrMan.cpp:
 	.text       start:0x800EBBA4 end:0x800EF44C
+
+game/auto/text_800EF44C.cpp:
+	.text       start:0x800EF44C end:0x800EFFDC
 
 game/msw/CChrMarker.cpp:
 	.text       start:0x800EFFDC end:0x800F29D8
@@ -220,8 +499,21 @@ game/msw/CChrMarker.cpp:
 game/msw/CChrMdlObj.cpp:
 	.text       start:0x800F29D8 end:0x800F5B9C
 
+game/auto/text_800F5B9C.cpp:
+	.text       start:0x800F5B9C end:0x800F5BE8
+
+game/auto/text_800F5BE8.cpp:
+	.text       start:0x800F5BE8 end:0x800F5CFC
+	.ctors      start:0x8042D1F0 end:0x8042D1F4
+
+game/auto/text_800F5CFC.cpp:
+	.text       start:0x800F5CFC end:0x800F6744
+
 game/msw/CCollMan.cpp:
 	.text       start:0x800F6744 end:0x800FA63C
+
+game/auto/text_800FA63C.cpp:
+	.text       start:0x800FA63C end:0x801066C8
 
 game/msw/CCollUnit.cpp:
 	.text       start:0x801066C8 end:0x801072C0
@@ -230,6 +522,9 @@ game/msw/CCollUnit.cpp:
 game/msw/CBodyCollision.cpp:
 	.text       start:0x801072C0 end:0x801084B0
 
+game/auto/text_801084B0.cpp:
+	.text       start:0x801084B0 end:0x80108510
+
 game/msw/CAtkCollision.cpp:
 	.text       start:0x80108510 end:0x8010943C
 
@@ -237,13 +532,27 @@ game/msw/CDefCollision.cpp:
 	.text       start:0x8010943C end:0x801099C4
 	.data       start:0x8046EA50 end:0x8046EA5C
 
+game/auto/text_801099C4.cpp:
+	.text       start:0x801099C4 end:0x80109A0C
+	.ctors      start:0x8042D1F4 end:0x8042D1F8
+
 game/msw/CComDrv.cpp:
 	.text       start:0x80109A0C end:0x8010CE1C
+
+game/auto/text_8010CE1C.cpp:
+	.text       start:0x8010CE1C end:0x801106D8
+
+game/auto/text_801106D8.cpp:
+	.text       start:0x801106D8 end:0x8011141C
+	.ctors      start:0x8042D1F8 end:0x8042D1FC
 
 game/msw/CEventDemoBase.cpp:
 	.text       start:0x8011141C end:0x801116E4
 	.data       start:0x8046EFC0 end:0x8046F010
 	.sbss       start:0x805C0BF0 end:0x805C0BF8
+
+game/auto/text_801116E4.cpp:
+	.text       start:0x801116E4 end:0x80111CCC
 
 game/msw/CEventModel.cpp:
 	.text       start:0x80111CCC end:0x80116308
@@ -259,6 +568,9 @@ game/msw/CEvDemoMdlChr.cpp:
 game/msw/CEventScene.cpp:
 	.text       start:0x801177F4 end:0x8011970C
 
+game/auto/text_8011970C.cpp:
+	.text       start:0x8011970C end:0x8011979C
+
 game/msw/CSceneCalc.cpp:
 	.text       start:0x8011979C end:0x80119B00
 
@@ -268,6 +580,9 @@ game/msw/CEventDemo.cpp:
 	.sbss       start:0x805C0C00 end:0x805C0C08
 	.sdata2     start:0x805C2A70 end:0x805C2A78
 
+game/auto/text_80119FAC.cpp:
+	.text       start:0x80119FAC end:0x8011AF54
+
 game/msw/EvDemo.cpp:
 	.text       start:0x8011AF54 end:0x8011D808
 	.rodata     start:0x80439860 end:0x804399C0
@@ -275,13 +590,22 @@ game/msw/EvDemo.cpp:
 	.sbss       start:0x805C0C08 end:0x805C0C10
 	.sdata2     start:0x805C2A80 end:0x805C2AC8
 
+game/auto/text_8011D808.cpp:
+	.text       start:0x8011D808 end:0x8011D850
+
 game/msw/CEffectCtrl.cpp:
 	.text       start:0x8011D850 end:0x80122334
+
+game/auto/text_80122334.cpp:
+	.text       start:0x80122334 end:0x801227AC
 
 game/msw/CEffectCluster.cpp:
 	.text       start:0x801227AC end:0x80123568
 	.data       start:0x8046F70C end:0x8046F7CC
 	.sdata      start:0x805BFBB8 end:0x805BFBC0
+
+game/auto/text_80123568.cpp:
+	.text       start:0x80123568 end:0x8012444C
 
 game/msw/CEffectTable.cpp:
 	.text       start:0x8012444C end:0x80124C20
@@ -298,8 +622,14 @@ game/msw/CDropCoinMan.cpp:
 game/msw/CItemMan.cpp:
 	.text       start:0x80126AE8 end:0x801278BC
 
+game/auto/text_801278BC.cpp:
+	.text       start:0x801278BC end:0x8012830C
+
 game/msw/CItem.cpp:
 	.text       start:0x8012830C end:0x8012C1F0
+
+game/auto/text_8012C1F0.cpp:
+	.text       start:0x8012C1F0 end:0x8012CC80
 
 game/msw/CGimmickMan.cpp:
 	.text       start:0x8012CC80 end:0x8012E240
@@ -311,8 +641,14 @@ game/msw/CGimmickMan.cpp:
 game/msw/CQPanelMan.cpp:
 	.text       start:0x8012E240 end:0x80130054
 
+game/auto/text_80130054.cpp:
+	.text       start:0x80130054 end:0x80130634
+
 game/msw/CQPanel.cpp:
 	.text       start:0x80130634 end:0x80132E30
+
+game/auto/text_80132E30.cpp:
+	.text       start:0x80132E30 end:0x8013331C
 
 game/msw/CItemBanana.cpp:
 	.text       start:0x8013331C end:0x8013394C
@@ -339,14 +675,26 @@ game/msw/CItemShellCmn.cpp:
 game/msw/CGameAccInput.cpp:
 	.text       start:0x801373DC end:0x801373E0
 
+game/auto/text_801373E0.cpp:
+	.text       start:0x801373E0 end:0x801373E8
+
 game/msw/CCockpit.cpp:
 	.text       start:0x801373E8 end:0x8013ABF4
+
+game/auto/text_8013ABF4.cpp:
+	.text       start:0x8013ABF4 end:0x8013AC4C
 
 game/msw/CCockpitTelopSwitchColor.cpp:
 	.text       start:0x8013AC4C end:0x8013B88C
 
+game/auto/text_8013B88C.cpp:
+	.text       start:0x8013B88C end:0x8013B974
+
 game/msw/CCockpitTelopStageIntro.cpp:
 	.text       start:0x8013B974 end:0x8013BA38
+
+game/auto/text_8013BA38.cpp:
+	.text       start:0x8013BA38 end:0x8013E624
 
 game/msw/CLytCtrl.cpp:
 	.text       start:0x8013E624 end:0x8013F65C
@@ -358,8 +706,14 @@ game/msw/CLytCtrl.cpp:
 game/msw/LayoutTask.cpp:
 	.text       start:0x8013F65C end:0x8013F660
 
+game/auto/text_8013F660.cpp:
+	.text       start:0x8013F660 end:0x8013F72C
+
 game/msw/CMenuLinkList.cpp:
 	.text       start:0x8013F72C end:0x8013F7C8
+
+game/auto/text_8013F7C8.cpp:
+	.text       start:0x8013F7C8 end:0x8013F838
 
 game/msw/CMenuPaneAccessor.cpp:
 	.text       start:0x8013F838 end:0x8013FDA0
@@ -368,12 +722,25 @@ game/msw/CMenuTask.cpp:
 	.text       start:0x8013FDA0 end:0x80140484
 	.data       start:0x80471600 end:0x80471618
 
+game/auto/text_80140484.cpp:
+	.text       start:0x80140484 end:0x801413A0
+
 game/msw/CMenuPad.cpp:
 	.text       start:0x801413A0 end:0x80141848
+
+game/auto/text_80141848.cpp:
+	.text       start:0x80141848 end:0x80142130
 
 game/msw/CMenuPadInfo.cpp:
 	.text       start:0x80142130 end:0x80142164
 	.sbss       start:0x805C0C40 end:0x805C0C48
+
+game/auto/text_80142164.cpp:
+	.text       start:0x80142164 end:0x801421CC
+
+game/auto/text_801421CC.cpp:
+	.text       start:0x801421CC end:0x80142284
+	.ctors      start:0x8042D200 end:0x8042D204
 
 game/msw/menu/Localize.cpp:
 	.text       start:0x80142284 end:0x80142F04
@@ -393,6 +760,16 @@ game/msw/CNowLoading.cpp:
 game/msw/dwc/CGameDwc.cpp:
 	.text       start:0x80143614 end:0x80145B40
 
+game/auto/text_80145B40.cpp:
+	.text       start:0x80145B40 end:0x80146378
+
+game/auto/text_80146378.cpp:
+	.text       start:0x80146378 end:0x8014639C
+	.ctors      start:0x8042D204 end:0x8042D208
+
+game/auto/text_8014639C.cpp:
+	.text       start:0x8014639C end:0x80146548
+
 game/msw/CGameSnd.cpp:
 	.text       start:0x80146548 end:0x8014A618
 	.rodata     start:0x8043B5B0 end:0x8043BAE0
@@ -401,32 +778,77 @@ game/msw/CGameSnd.cpp:
 	.sbss       start:0x805C0C60 end:0x805C0C70
 	.sdata2     start:0x805C31C8 end:0x805C31F0
 
+game/auto/text_8014A618.cpp:
+	.text       start:0x8014A618 end:0x8014BE64
+
 game/msw/CStgGmk_Case.cpp:
 	.text       start:0x8014BE64 end:0x80150AB4
 	.rodata     start:0x8043C750 end:0x8043C7D8
 	.data       start:0x80471DD8 end:0x804723E8
 	.sdata2     start:0x805C3218 end:0x805C3280
 
+game/auto/text_80150AB4.cpp:
+	.text       start:0x80150AB4 end:0x80150D88
+
 game/msw/CGoalMdl.cpp:
 	.text       start:0x80150D88 end:0x80151A24
+
+game/auto/text_80151A24.cpp:
+	.text       start:0x80151A24 end:0x801531D4
+
+game/auto/text_801531D4.cpp:
+	.text       start:0x801531D4 end:0x80153210
+	.ctors      start:0x8042D208 end:0x8042D20C
+
+game/auto/text_80153210.cpp:
+	.text       start:0x80153210 end:0x801553A4
 
 game/msw/CStage10Base.cpp:
 	.text       start:0x801553A4 end:0x80157C70
 
+game/auto/text_80157C70.cpp:
+	.text       start:0x80157C70 end:0x80157DF4
+
 game/msw/CStage10Base/CPanelInfoBase.cpp:
 	.text       start:0x80157DF4 end:0x8015A738
+
+game/auto/text_8015A738.cpp:
+	.text       start:0x8015A738 end:0x8015A7BC
 
 game/msw/CStage10Base/CTelopDispBase.cpp:
 	.text       start:0x8015A7BC end:0x8015AB9C
 
+game/auto/text_8015AB9C.cpp:
+	.text       start:0x8015AB9C end:0x8015FFB0
+
 game/msw/CStageMan.cpp:
 	.text       start:0x8015FFB0 end:0x80165134
+
+game/auto/text_80165134.cpp:
+	.text       start:0x80165134 end:0x80165EC0
+
+game/auto/text_80165EC0.cpp:
+	.text       start:0x80165EC0 end:0x80165EDC
+	.ctors      start:0x8042D20C end:0x8042D210
+
+game/auto/text_80165EDC.cpp:
+	.text       start:0x80165EDC end:0x8016AC7C
 
 game/msw/CStageNet.cpp:
 	.text       start:0x8016AC7C end:0x8016ACB8
 
+game/auto/text_8016ACB8.cpp:
+	.text       start:0x8016ACB8 end:0x8016B778
+
 game/msw/CStageScroll.cpp:
 	.text       start:0x8016B778 end:0x8016C304
+
+game/auto/text_8016C304.cpp:
+	.text       start:0x8016C304 end:0x8016F05C
+
+game/auto/text_8016F05C.cpp:
+	.text       start:0x8016F05C end:0x8016F538
+	.ctors      start:0x8042D210 end:0x8042D214
 
 game/msw/CStgAct.cpp:
 	.text       start:0x8016F538 end:0x8016FF0C
@@ -436,6 +858,9 @@ game/msw/CStgAct.cpp:
 game/msw/CStgDrv.cpp:
 	.text       start:0x8016FF0C end:0x8016FF68
 	.data       start:0x80474BC0 end:0x80474BE8
+
+game/auto/text_8016FF68.cpp:
+	.text       start:0x8016FF68 end:0x8016FF7C
 
 game/msw/CStgGmk.cpp:
 	.text       start:0x8016FF7C end:0x80170108
@@ -459,6 +884,9 @@ game/msw/CStgMdl.cpp:
 	.sbss       start:0x805C0CB8 end:0x805C0CD8
 	.sdata2     start:0x805C3500 end:0x805C3520
 
+game/auto/text_801730A8.cpp:
+	.text       start:0x801730A8 end:0x80173E5C
+
 game/msw/CStgObj.cpp:
 	.text       start:0x80173E5C end:0x80174694
 	.data       start:0x804753C0 end:0x80475448
@@ -468,11 +896,27 @@ game/msw/CStgSrt.cpp:
 	.data       start:0x80475448 end:0x80475488
 	.sdata2     start:0x805C3540 end:0x805C3560
 
+game/auto/text_80175B78.cpp:
+	.text       start:0x80175B78 end:0x80176058
+
 game/msw/TournamentWork.cpp:
 	.text       start:0x80176058 end:0x801768E0
 
+game/auto/text_801768E0.cpp:
+	.text       start:0x801768E0 end:0x801768EC
+
 game/msw/CTournament.cpp:
 	.text       start:0x801768EC end:0x8017B85C
+
+game/auto/text_8017B85C.cpp:
+	.text       start:0x8017B85C end:0x8017B8D0
+
+game/auto/text_8017B8D0.cpp:
+	.text       start:0x8017B8D0 end:0x8017B91C
+	.ctors      start:0x8042D218 end:0x8042D21C
+
+game/auto/text_8017B91C.cpp:
+	.text       start:0x8017B91C end:0x8017B920
 
 game/msw/CGame.cpp:
 	.text       start:0x8017B920 end:0x8018DCEC
@@ -484,8 +928,14 @@ game/msw/CGameVib.cpp:
 	.sbss       start:0x805C0CF8 end:0x805C0D00
 	.sdata2     start:0x805C3618 end:0x805C3620
 
+game/auto/text_8018E068.cpp:
+	.text       start:0x8018E068 end:0x8018E808
+
 game/msw/CLoadData.cpp:
 	.text       start:0x8018E808 end:0x801902CC
+
+game/auto/text_801902CC.cpp:
+	.text       start:0x801902CC end:0x80190CF8
 
 game/msw/CStgGmk_WaterPillar.cpp:
 	.text       start:0x80190CF8 end:0x801960B4
@@ -497,12 +947,25 @@ game/msw/CStgGmk_WaterPillar.cpp:
 game/bcs/CMusicData.cpp:
 	.text       start:0x801960B4 end:0x801965AC
 
+game/auto/text_801965AC.cpp:
+	.text       start:0x801965AC end:0x80198108
+
 game/msw/CCockpitPause.cpp:
 	.text       start:0x80198108 end:0x8019A004
+
+game/auto/text_8019A004.cpp:
+	.text       start:0x8019A004 end:0x8019AECC
 
 game/msw/CCockpitResult.cpp:
 	.text       start:0x8019AECC end:0x8019B244
 	.rodata     start:0x8043DC60 end:0x8043DC90
+
+game/auto/text_8019B244.cpp:
+	.text       start:0x8019B244 end:0x8019B260
+
+game/auto/text_8019B260.cpp:
+	.text       start:0x8019B260 end:0x8019B2C4
+	.ctors      start:0x8042D220 end:0x8042D224
 
 game/msw/menu.cpp:
 	.text       start:0x8019B2C4 end:0x8019BC7C
@@ -530,26 +993,54 @@ game/msw/CCockpitModelTelop.cpp:
 game/msw/CRadarIcon2D.cpp:
 	.text       start:0x8019DC9C end:0x8019FF6C
 
+game/auto/text_8019FF6C.cpp:
+	.text       start:0x8019FF6C end:0x801A1434
+
 game/msw/CCockpitMarkerIcon2D.cpp:
 	.text       start:0x801A1434 end:0x801A197C
 	.rodata     start:0x8043E628 end:0x8043E9B0
 	.data       start:0x80481158 end:0x804811B4
 
+game/auto/text_801A197C.cpp:
+	.text       start:0x801A197C end:0x801A2708
+
+game/auto/text_801A2708.cpp:
+	.text       start:0x801A2708 end:0x801A27E0
+	.ctors      start:0x8042D228 end:0x8042D22C
+
+game/auto/text_801A27E0.cpp:
+	.text       start:0x801A27E0 end:0x801A2800
+
 game/msw/CSignBoard.cpp:
 	.text       start:0x801A2800 end:0x801A3184
 	.rodata     start:0x8043EA48 end:0x804401B0
 
+game/auto/text_801A3184.cpp:
+	.text       start:0x801A3184 end:0x801A380C
+
 game/msw/CComMan.cpp:
 	.text       start:0x801A380C end:0x801AC8E8
+
+game/auto/text_801AC8E8.cpp:
+	.text       start:0x801AC8E8 end:0x801AC94C
 
 game/msw/CComOSG.cpp:
 	.text       start:0x801AC94C end:0x801AD690
 
+game/auto/text_801AD690.cpp:
+	.text       start:0x801AD690 end:0x801ADB14
+
 game/msw/CStage15Base.cpp:
 	.text       start:0x801ADB14 end:0x801AEC18
 
+game/auto/text_801AEC18.cpp:
+	.text       start:0x801AEC18 end:0x801AED44
+
 game/msw/CNpcBase.cpp:
 	.text       start:0x801AED44 end:0x801B0250
+
+game/auto/text_801B0250.cpp:
+	.text       start:0x801B0250 end:0x801B0324
 
 game/msw/menu/CMessage.cpp:
 	.text       start:0x801B0324 end:0x801B0A8C
@@ -560,11 +1051,20 @@ game/msw/menu/CMessage.cpp:
 	.sbss       start:0x805C0D58 end:0x805C0D60
 	.sdata2     start:0x805C46A0 end:0x805C46B0
 
+game/auto/text_801B0A8C.cpp:
+	.text       start:0x801B0A8C end:0x801B267C
+
 game/msw/CNpcBossPackun.cpp:
 	.text       start:0x801B267C end:0x801B4108
 
+game/auto/text_801B4108.cpp:
+	.text       start:0x801B4108 end:0x801B418C
+
 game/msw/CNpcBossPackun/CMudBomb.cpp:
 	.text       start:0x801B418C end:0x801B5A10
+
+game/auto/text_801B5A10.cpp:
+	.text       start:0x801B5A10 end:0x801B5DD8
 
 game/msw/CMenuPartBase.cpp:
 	.text       start:0x801B5DD8 end:0x801B7864
@@ -582,6 +1082,9 @@ game/msw/menu/CVibEff.cpp:
 game/msw/CNpcGhost.cpp:
 	.text       start:0x801B8374 end:0x801B9EE8
 
+game/auto/text_801B9EE8.cpp:
+	.text       start:0x801B9EE8 end:0x801BA114
+
 game/msw/CCockpitLayoutBase.cpp:
 	.text       start:0x801BA114 end:0x801BAB24
 	.ctors      start:0x8042D234 end:0x8042D238
@@ -589,17 +1092,36 @@ game/msw/CCockpitLayoutBase.cpp:
 	.bss        start:0x804D7410 end:0x804D7430
 	.sdata2     start:0x805C4790 end:0x805C4798
 
+game/auto/text_801BAB24.cpp:
+	.text       start:0x801BAB24 end:0x801BBE78
+
+game/auto/text_801BBE78.cpp:
+	.text       start:0x801BBE78 end:0x801BBF14
+	.ctors      start:0x8042D238 end:0x8042D23C
+
+game/auto/text_801BBF14.cpp:
+	.text       start:0x801BBF14 end:0x801BBF24
+
 game/msw/cockpit/CMissionCount.cpp:
 	.text       start:0x801BBF24 end:0x801BD93C
 	.data       start:0x80482370 end:0x80482408
 	.sdata      start:0x805BFE08 end:0x805BFE20
 	.sdata2     start:0x805C4800 end:0x805C4818
 
+game/auto/text_801BD93C.cpp:
+	.text       start:0x801BD93C end:0x801BDA44
+
 game/msw/CSave.cpp:
 	.text       start:0x801BDA44 end:0x801C11EC
 
+game/auto/text_801C11EC.cpp:
+	.text       start:0x801C11EC end:0x801C1F50
+
 game/msw/SAVE_DATA_PLAYER.cpp:
 	.text       start:0x801C1F50 end:0x801C39D4
+
+game/auto/text_801C39D4.cpp:
+	.text       start:0x801C39D4 end:0x801C4CFC
 
 game/msw/CC_CMN/CMdlEffect.cpp:
 	.text       start:0x801C4CFC end:0x801C5214
@@ -607,46 +1129,102 @@ game/msw/CC_CMN/CMdlEffect.cpp:
 game/msw/CC_CMN/CGrdMdlEffect.cpp:
 	.text       start:0x801C5214 end:0x801C5398
 
+game/auto/text_801C5398.cpp:
+	.text       start:0x801C5398 end:0x801C568C
+
 game/msw/CC_CMN/CChrParasite.cpp:
 	.text       start:0x801C568C end:0x801C574C
+
+game/auto/text_801C574C.cpp:
+	.text       start:0x801C574C end:0x801C5880
 
 game/msw/CC_CMN/LUIGI/CcOvacuumForce.cpp:
 	.text       start:0x801C5880 end:0x801C6148
 
+game/auto/text_801C6148.cpp:
+	.text       start:0x801C6148 end:0x801C7244
+
 game/msw/CC_CMN/DONKEY/CcEarthQuake.cpp:
 	.text       start:0x801C7244 end:0x801C73A8
+
+game/auto/text_801C73A8.cpp:
+	.text       start:0x801C73A8 end:0x801C7490
 
 game/msw/CC_CMN/DIDDY/CcBoomerang.cpp:
 	.text       start:0x801C7490 end:0x801C82DC
 
+game/auto/text_801C82DC.cpp:
+	.text       start:0x801C82DC end:0x801C8300
+
 game/msw/CC_CMN/KINOPIO/CcBoundMushroom.cpp:
 	.text       start:0x801C8300 end:0x801C8DD8
+
+game/auto/text_801C8DD8.cpp:
+	.text       start:0x801C8DD8 end:0x801C9574
 
 game/msw/CC_CMN/KOOPA/CcFireBall.cpp:
 	.text       start:0x801C9574 end:0x801CA1C4
 
+game/auto/text_801CA1C4.cpp:
+	.text       start:0x801CA1C4 end:0x801CA1E0
+
 game/msw/CC_CMN/KOOPAJR/CcPaintBall.cpp:
 	.text       start:0x801CA1E0 end:0x801CBAD0
 
+game/auto/text_801CBAD0.cpp:
+	.text       start:0x801CBAD0 end:0x801CBAD4
+
 game/msw/CC_CMN/SABOTEN/CcNeedle.cpp:
 	.text       start:0x801CBAD4 end:0x801CBCB0
+
+game/auto/text_801CBCB0.cpp:
+	.text       start:0x801CBCB0 end:0x801CBE54
 
 game/msw/CC_CMN/SLIME/CcSquadFactory.cpp:
 	.text       start:0x801CBE54 end:0x801CC0D4
 	.rodata     start:0x804428F0 end:0x80442998
 	.data       start:0x80483798 end:0x804837B4
 
+game/auto/text_801CC0D4.cpp:
+	.text       start:0x801CC0D4 end:0x801CC13C
+
 game/msw/CC_CMN/SLIME/CcSlimeSquad.cpp:
 	.text       start:0x801CC13C end:0x801CDB30
+
+game/auto/text_801CDB30.cpp:
+	.text       start:0x801CDB30 end:0x801D1B5C
+
+game/auto/text_801D1B5C.cpp:
+	.text       start:0x801D1B5C end:0x801D1CA8
+	.ctors      start:0x8042D23C end:0x8042D240
+
+game/auto/text_801D1CA8.cpp:
+	.text       start:0x801D1CA8 end:0x801D5FCC
 
 game/msw/CCockpit3dSetCount.cpp:
 	.text       start:0x801D5FCC end:0x801D761C
 
+game/auto/text_801D761C.cpp:
+	.text       start:0x801D761C end:0x801D8354
+
 game/msw/CCockpit3dScoreCount.cpp:
 	.text       start:0x801D8354 end:0x801DC880
 
+game/auto/text_801DC880.cpp:
+	.text       start:0x801DC880 end:0x801DD558
+
+game/auto/text_801DD558.cpp:
+	.text       start:0x801DD558 end:0x801DDA04
+	.ctors      start:0x8042D240 end:0x8042D244
+
+game/auto/text_801DDA04.cpp:
+	.text       start:0x801DDA04 end:0x801DDA34
+
 game/msw/CStage11Base.cpp:
 	.text       start:0x801DDA34 end:0x801DF228
+
+game/auto/text_801DF228.cpp:
+	.text       start:0x801DF228 end:0x801DF710
 
 game/msw/cockpit.cpp:
 	.text       start:0x801DF710 end:0x801E0130
@@ -672,8 +1250,14 @@ game/msw/CStgSeSlot.cpp:
 	.data       start:0x80485828 end:0x804858D8
 	.sdata2     start:0x805C4E18 end:0x805C4E20
 
+game/auto/text_801E9F40.cpp:
+	.text       start:0x801E9F40 end:0x801E9F48
+
 game/msw/CTmGameHandler.cpp:
 	.text       start:0x801E9F48 end:0x801EAD84
+
+game/auto/text_801EAD84.cpp:
+	.text       start:0x801EAD84 end:0x801EB004
 
 game/msw/CStage09Base.cpp:
 	.text       start:0x801EB004 end:0x801EC8D4
@@ -691,29 +1275,74 @@ game/msw/CCockpitButtonInfo.cpp:
 game/msw/CCockpitWindowInfo.cpp:
 	.text       start:0x801ED5D0 end:0x801EDA50
 
+game/auto/text_801EDA50.cpp:
+	.text       start:0x801EDA50 end:0x801EDF8C
+
 game/msw/CCockpitMenuBase.cpp:
 	.text       start:0x801EDF8C end:0x801EEA0C
 
+game/auto/text_801EEA0C.cpp:
+	.text       start:0x801EEA0C end:0x801EEB28
+
 game/msw/CCockpitMenuBaseButtonA.cpp:
 	.text       start:0x801EEB28 end:0x801EF30C
+
+game/auto/text_801EF30C.cpp:
+	.text       start:0x801EF30C end:0x801EF82C
+
+game/auto/text_801EF82C.cpp:
+	.text       start:0x801EF82C end:0x801EF868
+	.ctors      start:0x8042D248 end:0x8042D24C
+
+game/auto/text_801EF868.cpp:
+	.text       start:0x801EF868 end:0x801F702C
 
 game/msw/vm/CVMCpu.cpp:
 	.text       start:0x801F702C end:0x801FB608
 	.data       start:0x80486BD8 end:0x80487060
 	.sdata2     start:0x805C4FC0 end:0x805C4FC8
 
+game/auto/text_801FB608.cpp:
+	.text       start:0x801FB608 end:0x801FC05C
+
 game/msw/CEventNodeBase.cpp:
 	.text       start:0x801FC05C end:0x801FC90C
 
+game/auto/text_801FC90C.cpp:
+	.text       start:0x801FC90C end:0x801FD384
+
 game/msw/CEvNodeData.cpp:
 	.text       start:0x801FD384 end:0x801FD678
+
+game/auto/text_801FD678.cpp:
+	.text       start:0x801FD678 end:0x801FED30
+
+game/auto/text_801FED30.cpp:
+	.text       start:0x801FED30 end:0x801FED34
+	.ctors      start:0x8042D24C end:0x8042D250
+
+game/auto/text_801FED34.cpp:
+	.text       start:0x801FED34 end:0x801FEDD8
 
 game/msw/CEvDemoRes/_CHR_INFO.cpp:
 	.text       start:0x801FEDD8 end:0x801FEEF4
 	.rodata     start:0x80444078 end:0x80444084
 
+game/auto/text_801FEEF4.cpp:
+	.text       start:0x801FEEF4 end:0x801FEF0C
+
 game/msw/CEvDemoRes.cpp:
 	.text       start:0x801FEF0C end:0x801FFE78
+
+game/auto/text_801FFE78.cpp:
+	.text       start:0x801FFE78 end:0x80210BAC
+
+game/auto/text_80210BAC.cpp:
+	.text       start:0x80210BAC end:0x80210BC0
+	.ctors      start:0x8042D250 end:0x8042D254
+
+game/auto/text_80210BC0.cpp:
+	.text       start:0x80210BC0 end:0x802113AC
 
 game/msw/ArchiveFont.cpp:
 	.text       start:0x802113AC end:0x802115A4
@@ -733,9 +1362,15 @@ game/msw/CStgGmk_Wave.cpp:
 game/msw/CStage02Base.cpp:
 	.text       start:0x80215608 end:0x802167A0
 
+game/auto/text_802167A0.cpp:
+	.text       start:0x802167A0 end:0x80217A9C
+
 game/msw/CStage01Base.cpp:
 	.text       start:0x80217A9C end:0x80217AF0
 	.data       start:0x80488818 end:0x80488828
+
+game/auto/text_80217AF0.cpp:
+	.text       start:0x80217AF0 end:0x80217F10
 
 game/msw/CStgGmk_Pylon.cpp:
 	.text       start:0x80217F10 end:0x8021C96C
@@ -749,8 +1384,18 @@ game/msw/menu/CStateSave.cpp:
 	.data       start:0x804890C8 end:0x804890D8
 	.bss        start:0x804D7A38 end:0x804D85F8
 
+game/auto/text_8021CA0C.cpp:
+	.text       start:0x8021CA0C end:0x8021FEDC
+
 game/msw/EvDemoVs.cpp:
 	.text       start:0x8021FEDC end:0x802201D0
+
+game/auto/text_802201D0.cpp:
+	.text       start:0x802201D0 end:0x80220938
+
+game/auto/text_80220938.cpp:
+	.text       start:0x80220938 end:0x80220CA0
+	.ctors      start:0x8042D260 end:0x8042D264
 
 game/msw/CEvDemoMdlObj.cpp:
 	.text       start:0x80220CA0 end:0x802219F0
@@ -769,21 +1414,43 @@ game/msw/CStage17Base.cpp:
 	.data       start:0x80489C80 end:0x80489E40
 	.sdata2     start:0x805C52E0 end:0x805C5338
 
+game/auto/text_80228FD8.cpp:
+	.text       start:0x80228FD8 end:0x802294CC
+
 game/msw/menu/CDispTaskList.cpp:
 	.text       start:0x802294CC end:0x802299B4
 	.data       start:0x8048A2C8 end:0x8048A2E8
 	.sdata      start:0x805BFED8 end:0x805BFEDC
 	.sdata2     start:0x805C5340 end:0x805C5348
 
+game/auto/text_802299B4.cpp:
+	.text       start:0x802299B4 end:0x8022A9C4
+
 game/msw/CStgGmkClusterImpl.cpp:
 	.text       start:0x8022A9C4 end:0x8022AF18
 	.data       start:0x8048A3F0 end:0x8048A440
 
+game/auto/text_8022AF18.cpp:
+	.text       start:0x8022AF18 end:0x8022C900
+
 game/msw/CChrObstacle.cpp:
 	.text       start:0x8022C900 end:0x8022C9C8
 
+game/auto/text_8022C9C8.cpp:
+	.text       start:0x8022C9C8 end:0x80230A28
+
 game/msw/CMenuOption.cpp:
 	.text       start:0x80230A28 end:0x802319E0
+
+game/auto/text_802319E0.cpp:
+	.text       start:0x802319E0 end:0x802323DC
+
+game/auto/text_802323DC.cpp:
+	.text       start:0x802323DC end:0x80232424
+	.ctors      start:0x8042D264 end:0x8042D268
+
+game/auto/text_80232424.cpp:
+	.text       start:0x80232424 end:0x80235D40
 
 game/msw/menu/CMovieScnObj.cpp:
 	.text       start:0x80235D40 end:0x80236704
@@ -792,8 +1459,14 @@ game/msw/menu/CMovieScnObj.cpp:
 	.bss        start:0x804D8AE0 end:0x804D8C00
 	.sdata2     start:0x805C5678 end:0x805C5690
 
+game/auto/text_80236704.cpp:
+	.text       start:0x80236704 end:0x802380A4
+
 game/msw/CNpcString.cpp:
 	.text       start:0x802380A4 end:0x80239480
+
+game/auto/text_80239480.cpp:
+	.text       start:0x80239480 end:0x8023B1F4
 
 game/msw/CCockpitResultPartyTeam.cpp:
 	.text       start:0x8023B1F4 end:0x8023C340
@@ -809,8 +1482,21 @@ game/msw/CCockpitResultPartyVS.cpp:
 	.sdata      start:0x805BFF48 end:0x805BFF50
 	.sdata2     start:0x805C5870 end:0x805C59E0
 
+game/auto/text_8023D74C.cpp:
+	.text       start:0x8023D74C end:0x8023D970
+
 game/msw/CStage16Base.cpp:
 	.text       start:0x8023D970 end:0x8023EB38
+
+game/auto/text_8023EB38.cpp:
+	.text       start:0x8023EB38 end:0x8023F2B8
+
+game/auto/text_8023F2B8.cpp:
+	.text       start:0x8023F2B8 end:0x8023F30C
+	.ctors      start:0x8042D26C end:0x8042D270
+
+game/auto/text_8023F30C.cpp:
+	.text       start:0x8023F30C end:0x80249E30
 
 game/msw/CoinRes.cpp:
 	.text       start:0x80249E30 end:0x80249FE4
@@ -818,11 +1504,27 @@ game/msw/CoinRes.cpp:
 	.data       start:0x8048C910 end:0x8048C9F8
 	.sdata2     start:0x805C5B88 end:0x805C5BD0
 
+game/auto/text_80249FE4.cpp:
+	.text       start:0x80249FE4 end:0x8024A008
+
 game/msw/CUnlockFlags.cpp:
 	.text       start:0x8024A008 end:0x8024D3C0
 
+game/auto/text_8024D3C0.cpp:
+	.text       start:0x8024D3C0 end:0x80250028
+
 game/msw/Unlock.cpp:
 	.text       start:0x80250028 end:0x80250FE0
+
+game/auto/text_80250FE0.cpp:
+	.text       start:0x80250FE0 end:0x80251340
+
+game/auto/text_80251340.cpp:
+	.text       start:0x80251340 end:0x802515C8
+	.ctors      start:0x8042D270 end:0x8042D274
+
+game/auto/text_802515C8.cpp:
+	.text       start:0x802515C8 end:0x8025380C
 
 game/msw/CGameExDemoBase.cpp:
 	.text       start:0x8025380C end:0x8025599C
@@ -838,17 +1540,33 @@ game/msw/CNpcBombCannon.cpp:
 game/msw/CNameMesg.cpp:
 	.text       start:0x802567D8 end:0x80258548
 
+game/auto/text_80258548.cpp:
+	.text       start:0x80258548 end:0x80258970
+
+game/auto/text_80258970.cpp:
+	.text       start:0x80258970 end:0x802589D0
+	.ctors      start:0x8042D274 end:0x8042D278
+
 game/msw/CCockpitChrIcon2D.cpp:
 	.text       start:0x802589D0 end:0x802593A0
 
+game/auto/text_802593A0.cpp:
+	.text       start:0x802593A0 end:0x8025C344
+
 game/msw/CCockpitPauseLayoutBase.cpp:
 	.text       start:0x8025C344 end:0x8025C3F4
+
+game/auto/text_8025C3F4.cpp:
+	.text       start:0x8025C3F4 end:0x8025F47C
 
 game/msw/CCockpitPauseRuleInfo.cpp:
 	.text       start:0x8025F47C end:0x8025FBCC
 
 game/msw/CGamePadCheck.cpp:
 	.text       start:0x8025FBCC end:0x802616DC
+
+game/auto/text_802616DC.cpp:
+	.text       start:0x802616DC end:0x80261900
 
 game/msw/CCokcpitMenuDataList.cpp:
 	.text       start:0x80261900 end:0x80261D14
@@ -859,23 +1577,48 @@ game/msw/CCokcpitMenuDataList.cpp:
 game/msw/CStage04Base.cpp:
 	.text       start:0x80261D14 end:0x802623A8
 
+game/auto/text_802623A8.cpp:
+	.text       start:0x802623A8 end:0x80262D10
+
 game/msw/CStageRotBase.cpp:
 	.text       start:0x80262D10 end:0x80263688
+
+game/auto/text_80263688.cpp:
+	.text       start:0x80263688 end:0x8026368C
 
 game/msw/CStage06Base.cpp:
 	.text       start:0x8026368C end:0x802646BC
 
+game/auto/text_802646BC.cpp:
+	.text       start:0x802646BC end:0x80265CBC
+
 game/msw/CCockpitResultTime.cpp:
 	.text       start:0x80265CBC end:0x80265CF0
 	.sdata2     start:0x805C6418 end:0x805C6428
+
+game/auto/text_80265CF0.cpp:
+	.text       start:0x80265CF0 end:0x80269E04
 
 game/msw/CGameGuideMan.cpp:
 	.text       start:0x80269E04 end:0x8026A8F4
 	.rodata     start:0x804501D0 end:0x804501E0
 	.data       start:0x8048ED18 end:0x8048EEA0
 
+game/auto/text_8026A8F4.cpp:
+	.text       start:0x8026A8F4 end:0x8026F110
+
 game/msw/CDataWork.cpp:
 	.text       start:0x8026F110 end:0x8026F114
+
+game/auto/text_8026F114.cpp:
+	.text       start:0x8026F114 end:0x8026F118
+
+game/auto/text_8026F118.cpp:
+	.text       start:0x8026F118 end:0x8026F140
+	.ctors      start:0x8042D27C end:0x8042D280
+
+game/auto/text_8026F140.cpp:
+	.text       start:0x8026F140 end:0x80272840
 
 Runtime.PPCEABI.H/global_destructor_chain.c:
 	.text       start:0x8029D314 end:0x8029D374

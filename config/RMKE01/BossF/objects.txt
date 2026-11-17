@@ -63,3 +63,4 @@ Equivalent game/boss/unit_246C8.cpp
 Equivalent game/boss/GameBoss.cpp
 Equivalent game/boss/CBallBoss.cpp
 Equivalent game/boss/CNpcBehemothFiga.cpp
+NonMatching game/boss/CNpcBehemothBoss.cpp

@@ -46,6 +46,9 @@ namespace msw {
             // GetCollOwnerChrIdx).
             long GetOwnerKind() const { return m_nOwnerKind; }
             long GetUnk15() const { return m_Unk15; }
+            // (added for VolleyF game/volley/CBallVolley.cpp) The owner's team
+            // (byte 0x16, signed).
+            long GetTeamNo() const { return m_nTeamNo; }
             // (name guessed; VolleyF's CStgGmk_Pinball_Act_Volley)
             const bcs::FVEC3 &GetPos() const { return m_Pos; }
             // (name guessed; BasketF's CcSiromaMagicCircle) The other end.

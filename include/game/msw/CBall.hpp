@@ -53,7 +53,34 @@ namespace msw {
                 bcs::CMdlObj *m_pMdl;  // 0x30, the server's model (none for the jump serve)
                 long m_nOutline;       // 0x34
             };
-            struct SERVE_SHOT_ARG;
+            // (added for VolleyF game/volley/CBallVolley.cpp; field names
+            // and meanings guessed, types from the access widths) A serve
+            // (CBall::SetVolleyServeShotMode). Size 0x60 (the jump ball of
+            // CBallVolley::LoopStateJumpBall builds one on the stack).
+            struct SERVE_SHOT_ARG {
+                bcs::FVEC3 m_Pos;      // 0x00
+                long m_nUnk0C;         // 0x0C
+                long m_nUnk10;         // 0x10
+                long m_nPlayerNo;      // 0x14
+                long m_nTeamNo;        // 0x18
+                long m_nCourt;         // 0x1C
+                long m_nType;          // 0x20, the kind of serve (2 and up: jump serves)
+                long m_nUnk24;         // 0x24
+                float m_fUnk28;        // 0x28
+                long m_nSe;            // 0x2C
+                long m_nEffect;        // 0x30
+                long m_nUnk34;         // 0x34
+                float m_fUnk38;        // 0x38
+                float m_fUnk3C;        // 0x3C
+                float m_fUnk40;        // 0x40
+                float m_fUnk44;        // 0x44
+                float m_fUnk48;        // 0x48
+                float m_fUnk4C;        // 0x4C
+                float m_fUnk50;        // 0x50
+                float m_fUnk54;        // 0x54
+                float m_fUnk58;        // 0x58
+                long m_nUnk5C;         // 0x5C
+            };
             struct SPIKE_SHOT_ARG;
             struct PASS_SHOT_ARG;
             // (added for VolleyF game/volley/unit_63388.cpp; field names
@@ -349,7 +376,7 @@ namespace msw {
             virtual void GetPosAfterFrame(bcs::FVEC3 &, float) const;                               // 0x380
             virtual void GetVelAfterFrame(bcs::FVEC3 &, float) const;                               // 0x384
             virtual float GetHeightPassFrame(float, int) const;                                     // 0x388
-            virtual void Eff_CreateAttach(long, long, const bcs::FVEC3 *, unsigned long, unsigned long);// 0x38C
+            virtual unsigned long Eff_CreateAttach(long, long, const bcs::FVEC3 *, unsigned long, unsigned long);// 0x38C (returns the effect handle: VolleyF CBallVolley keeps it)
             virtual void Eff_SetSpeed(long, float);                                                 // 0x390
             virtual void Eff_SetDefaultSpeed(long);                                                 // 0x394
             virtual void Eff_SetColor(long, bcs::BCS_Color);                                        // 0x398
@@ -520,6 +547,9 @@ namespace msw {
             // DOL (name from the symbol). Stops the trail effect behind the
             // ball (VolleyF's CChrCoreVolleySiroma, once it is pulled in).
             void StopTailEffect();
+            // (DOL; added for VolleyF game/volley/CBallVolley.cpp) Turns the
+            // rainbow colour animation on or off.
+            void EnableRainbow(int bOn);
             // (names guessed) Two more bits of m_nFlag that the basket and
             // hockey ball markers read; what they stand for is not known.
             int IsFlag1() const { return m_nFlag & 0x1; }
@@ -592,7 +622,8 @@ namespace msw {
             void RotReduce_(float fRate);
             void VelReduce_(float fRate);
             void ResetVelGravity_();
-            void Eff_CreateSimple(long nEffect, const bcs::FVEC3 &rPos, unsigned long, unsigned long);
+            // (returns the effect handle: VolleyF's CBallVolley keeps it)
+            unsigned long Eff_CreateSimple(long nEffect, const bcs::FVEC3 &rPos, unsigned long, unsigned long);
             void Eff_CreateSimple(long nEffect, const bcs::FVEC3 &rPos, float, unsigned long, unsigned long);
             // (DOL) The same in effect slot nSlot (stopped with Eff_Stop).
             void Eff_CreateSimple(long nSlot, long nEffect, const bcs::FVEC3 &rPos, unsigned long, unsigned long);

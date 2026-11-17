@@ -37,6 +37,10 @@ namespace bcs {
         // colours with one store each.
         explicit BCS_Color(unsigned long rgba) : nw4r::ut::Color(rgba) {}
 
+        // (added for VolleyF game/volley/CBallVolley.cpp, whose effect
+        // colour tables hold GXColors) A GXColor, copied as one word.
+        explicit BCS_Color(const GXColor &c) : nw4r::ut::Color(*reinterpret_cast<const unsigned long *>(&c)) {}
+
         // (added for main game/msw/CBallMan.cpp, whose destructor clears its
         // colour with one word store) A packed RGBA value, stored as a word;
         // assigning a BCS_Color still copies bytes.

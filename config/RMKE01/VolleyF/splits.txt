@@ -28,11 +28,8 @@ game/volley/CBallTargetMarker.cpp:
 	.data       start:0x000005E0 end:0x00000B48
 	.bss        start:0x00000070 end:0x00000100
 
-game/volley/CChrParasiteBanana.cpp:
-	.text       start:0x0000E4E0 end:0x0000E620
-
 game/volley/CBallVolley.cpp:
-	.text       start:0x0000E620 end:0x000200FC
+	.text       start:0x0000E4E0 end:0x000200FC
 	.ctors      start:0x00000008 end:0x0000000C
 	.rodata     start:0x00000248 end:0x000014B0
 	.data       start:0x00000B48 end:0x00001C00

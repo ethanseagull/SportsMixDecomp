@@ -399,26 +399,109 @@ namespace msw {
             // (const: the table is in .rodata)
             static const ActFunc g_ActFuncMap[];
 
+            // (added for game/basket/unit_A3AF0.cpp; return types and
+            // meanings guessed from the names and the callers) The
+            // overrides of CComDrv's slots defined there.
+            virtual void Reset();
+            virtual void ClearAll();
+            virtual void UpdateInfo();
+            virtual void NormalizeCanMovePos(bcs::FVEC3 &rPos) const;
+            virtual int IsScoureWin() const;
+            virtual void GetPosTurnAroundForRunEx(bcs::FVEC3 &rPos);
+            // The home spots on offence and defence (the defence also picks
+            // the character to mark).
+            void GetOffenseAPos(bcs::FVEC3 &rPos);
+            void GetDefenseAPos(bcs::FVEC3 &rPos);
+            // The score of the driver's holding the ball, with nNum others
+            // (ppChr) about; whether the pad-driven pPlayer should mark pMark
+            // instead of the driver.
+            long CalcMyHoldBallScore(long nNum, const CChrCore **ppChr) const;
+            int ChangeMarkToPlayer(const CChrCore *pMark, const CChrCore *pPlayer) const;
+            // The direction (0 none) the Black Mage's arts shot is steered
+            // to, away from the other team.
+            float GetArtsInputToNinja() const;
+            int JudgeShootToAlleyoopDunk();
+            int JudgeItemThrow1(bcs::FVEC3 &rPos);
+            int JudgeItemThrow2(bcs::FVEC3 &rPos);
+            // JudgeShootCourseFree against the characters of nChrBits.
+            int JudgeShootCourseFree(unsigned long nChrBits) const;
+            void MsgSomeBodyShootOffense(_CHR_MSG *pMsg);
+            int MsgCheckArtsShootFree(_CHR_MSG *pMsg);
+            // Whether the course of an arts shot is free: -1 when not, else
+            // the side to curve to (0 straight).
+            long MsgCheckArtsShootFree_() const;
+
+            // What stands in the way of rPos and how to go round it: a
+            // character, a stage gimmick (stages 3, 7, 9, 11, 15), an item.
+            // The ToTarget ones return the obstacle (-1 or 0 for none); the
+            // TurnAround ones correct rPos and return the side to pass on
+            // (nDir: the side returned before; -1 for a new one).
+            long StageXX_GetChrToTarget(const bcs::FVEC3 &rPos);
+            long StageXX_GetPosTurnAroundChr(bcs::FVEC3 &rPos, long nChr, long nDir) const;
+            unsigned long Stage03_GetGimmickToTarget(const bcs::FVEC3 &rPos);
+            long Stage03_GetPosTurnAroundGimmick(bcs::FVEC3 &rPos, unsigned long nId, long nDir);
+            unsigned long Stage07_GetGimmickToTarget(const bcs::FVEC3 &rPos);
+            long Stage07_GetPosTurnAroundGimmick(bcs::FVEC3 &rPos, unsigned long nId, long nDir);
+            unsigned long Stage09_GetGimmickToTarget(const bcs::FVEC3 &rPos);
+            long Stage09_GetPosTurnAroundGimmick(bcs::FVEC3 &rPos, unsigned long nId, long nDir);
+            unsigned long Stage11_GetGimmickToTarget(const bcs::FVEC3 &rPos) const;
+            long Stage11_GetPosTurnAroundGimmick(bcs::FVEC3 &rPos, unsigned long nId, long nDir) const;
+            unsigned long Stage15_GetGimmickToTarget(const bcs::FVEC3 &rPos) const;
+            long Stage15_GetPosTurnAroundGimmick(bcs::FVEC3 &rPos, unsigned long nId, long nDir) const;
+            unsigned long Stage15_GetGimmickToTargetKaron(const bcs::FVEC3 &rPos) const;
+            long Stage15_GetPosTurnAroundGimmickKaron(bcs::FVEC3 &rPos, unsigned long nId, long nDir) const;
+            unsigned long StageXX_GetItemToTarget(const bcs::FVEC3 &rPos) const;
+            long StageXX_GetPosTurnAroundItem(bcs::FVEC3 &rPos, unsigned long nItem, long nDir) const;
+            // The side (1 or -1) to go round character nChr on the way to
+            // rPos, drawn when no side is clearly better.
+            long GetTurnAroundRotDirLotOfOneCore(long nChr, const bcs::FVEC3 &rPos) const;
+            // (defined in another unit) The script the driver runs.
+            void DeleteScript();
+            void ResetScript();
+            // (defined in another unit) The width of the course an arts
+            // shot needs.
+            float GetArtsCourseCheckWidth() const;
+            // (inline guessed: no symbol) Whether the driver may change the
+            // character it marks (m_fUnk190 ran out).
+            int IsMarkChangeable() const { return !(m_fUnk190 > 0.0f); }
+            // (guessed helper; no symbol) The third of the court along z
+            // rPos is in, from the goal attacked (0 to 2).
+            long GetCourtAreaZ(const bcs::FVEC3 &rPos) const;
+            // (guessed helpers; inlined where used, the original's names
+            // not known) Whether pChr is a character of the other team a
+            // thrown item reaches unhindered; whether GetPosTurnAround goes
+            // round pChr.
+            int IsItemThrowTarget(const CChrCore *pChr) const;
+            int IsTurnAroundChr(const CChrCore *pChr) const;
+
+
         protected:
             // 0x170 (name guessed): the character the driver marks on
             // defence; null for none.
             const CChrCore *m_pMarkChr;
-            unsigned char m_Unk174[0x17C - 0x174];
+            // (added for game/basket/unit_A3AF0.cpp; meaning not known) 0x174,
+            // set to -1 by the constructor.
+            long m_nUnk174;
+            unsigned char m_Unk178[0x17C - 0x178];
             // 0x17C (name guessed): flag bits. 0x20 and 0x40 toggle on
             // timers (m_fUnk1CC, m_fUnk1DC), 0x400 is drawn while holding
-            // the ball, 0x800 is set by message 0x18.
+            // the ball, 0x800 is set by message 0x18 (a script runs; Reset
+            // resets it), 0x1000-0x4000 are cleared by Reset.
             unsigned long m_nFlag17C;
-            unsigned char m_Unk180[0x184 - 0x180];
+            long m_nUnk180;   // 0x180 (meaning not known), cleared by Reset
             long m_nUnk184;   // 0x184, cleared with m_nUnk188 by ActInterrupt
             long m_nUnk188;   // 0x188
             float m_fUnk18C;  // 0x18C, counts up every ActInterrupt
-            float m_fUnk190;  // 0x190, a timer counted down to 0
+            // 0x190, a timer counted down to 0; while above 0 the driver keeps
+            // the character it marks (IsMarkChangeable).
+            float m_fUnk190;
             float m_fUnk194;  // 0x194, the timer of the dunk draw
-            unsigned char m_Unk198[0x1A0 - 0x198];
+            float m_fUnk198;  // 0x198 (meaning not known)
+            float m_fUnk19C;  // 0x19C (meaning not known)
             float m_fUnk1A0;  // 0x1A0, frames the ball has been held
             float m_fUnk1A4;  // 0x1A4, the timer of the alley-oop draw
             float m_fUnk1A8;  // 0x1A8, the timer of the item shot draw
-            unsigned char m_Unk1AC[0x1B0 - 0x1AC];
+            float m_fUnk1AC;  // 0x1AC (meaning not known), cleared by Reset
             float m_fUnk1B0;  // 0x1B0
             float m_fUnk1B4;  // 0x1B4, the timer of the thrown item check
             float m_fUnk1B8;  // 0x1B8, the yaw to ActCallGoRun's target
@@ -431,14 +514,32 @@ namespace msw {
             float m_fUnk1D4;  // 0x1D4, a timer counted down to 0
             float m_fUnk1D8;  // 0x1D8, the timer of the boss Packun jump shot
             float m_fUnk1DC;  // 0x1DC, the timer of flag 0x40
-            unsigned char m_Unk1E0[0x1E8 - 0x1E0];
+            unsigned char m_Unk1E0[0x1E4 - 0x1E0];
+            long m_nUnk1E4;   // 0x1E4 (meaning not known), cleared by ClearAll
             // 0x1E8 (meaning not known): with 0 MethdBKRun2 measures the
             // arrival from m_MyPos to the asked position, else from the
             // character to the corrected one.
-            long m_nUnk1E8;
-            unsigned char m_Unk1EC[0x1FC - 0x1EC];
+            // (mutable: the const turn-around helpers of
+            // game/basket/unit_A3AF0.cpp set it)
+            mutable long m_nUnk1E8;
+
+            // 0x1EC-0x1F8 (meaning not known; added for
+            // game/basket/unit_A3AF0.cpp), cleared by Reset.
+            long m_nUnk1EC;
+            float m_fUnk1F0;
+            float m_fUnk1F4;
+            float m_fUnk1F8;
             float m_fUnk1FC;  // 0x1FC, a timer (message 0x26)
-            unsigned char m_Unk200[0x688 - 0x200];
+            // 0x200 (names guessed; game/basket/unit_A3AF0.cpp): the panel
+            // grid, PANEL_W panels across and PANEL_H deep, one score byte
+            // each (GetPanelDate/SetPanelDate), and a flag per panel. Both
+            // buffers are cleared whole (0x240 bytes each).
+            signed char m_aPanelDate[0x240];
+            unsigned char m_aPanelDisable[18][4][8];
+            // 0x680, 0x684 (names guessed): the script the driver runs
+            // (ActCallScriptI, DeleteScript); the constructor clears both.
+            long m_nUnk680;
+            void *m_pScript;
     };
 }
 

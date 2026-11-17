@@ -6,6 +6,7 @@
 #include "bcs/FVEC3.hpp"
 
 namespace bcs {
+    class CAnmMotion;
     class CMdlObj;
 }
 
@@ -18,6 +19,7 @@ namespace msw {
     // msw::CNpcBossPackun's state queue starts at 0x188. Only part of its
     // virtual functions (below) and of its members are declared, so it must
     // not be instantiated or derived from with a vtable emitted yet.
+    class CAtkCollision;
     class CBall;
     class CBodyCollision;
     class CCollAtkUnit;
@@ -53,7 +55,10 @@ namespace msw {
             virtual void AttachBall(CBall *, long, float, unsigned long); // 0x40
             virtual void DetachBall();                                 // 0x44
             virtual int IsHaveBall() const { return 0; }               // 0x48 (inline, as GetThinkLevel)
-            virtual int IsHoldBall() const;                            // 0x4C
+            // (inline: BasketF's game/basket/CNpcBossPackunBasketBase.cpp,
+            // BossF's CNpcBehemothFiga.cpp and DodgeF's
+            // CGameDodgeDodgeOrDie.cpp have weak copies)
+            virtual int IsHoldBall() const { return IsHaveBall(); }    // 0x4C
             virtual int CanbeCatch() const { return 0; }               // 0x50
             // 0x54 to 0x70 (added for BasketF game/basket/CNpcGhostBasketBase.cpp;
             // names from __vt__Q23msw19CNpcGhostBasketBase, return types
@@ -94,6 +99,15 @@ namespace msw {
             long PlayGetOutline_(unsigned long) const;
             // Plays sound nId at pPos (null: at the NPC).
             void PlaySePos(long nId, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
+            // (DOL; added for BasketF game/basket/CNpcBossPackunBasketBase.cpp,
+            // return types guessed) The same at rPos; sound nId in sound
+            // slot nSlot (SE_Stop stops it); effect nEff of the NPC, made
+            // with resource nId and attached to it.
+            void PlaySePos(long nId, const bcs::FVEC3 &rPos, unsigned long, long, float, float, float);
+            void SE_PlayPos(long nSlot, long nId, const bcs::FVEC3 *pPos, unsigned long, long, float, float, float);
+            void SE_Stop(long nSlot, float fFadeFrame);
+            void Eff_CreateAttachAuto(long nEff, long nId, unsigned long);
+            void Eff_Stop(long nEff);
             // The ball the NPC carries; null when none.
             CBall *GetAttachBall() const;
             // Turns the yaw towards fRotY by fRate of the difference.
@@ -117,6 +131,10 @@ namespace msw {
             static unsigned long CallbackBodyDamage(CCollBodyUnit *pBody, const CCollAtkUnit *pAtk,
                                                     const bcs::FVEC3 &rPos, void *pArg);
             static void CallbackBallCatch(CCollBodyUnit *pBody, CBall *pBall, void *pArg);
+            // (added for BasketF game/basket/CNpcBossPackunBasketBase.cpp)
+            // The same for the attack collision.
+            static void CallbackAttackHit(const CCollAtkUnit *pAtk, const CCollBodyUnit *pBody, const bcs::FVEC3 &rPos,
+                                          unsigned long, void *pArg);
 
             // (names guessed) Read by CStageBasketHungryBossPackun::Main_ in
             // BasketF to make the goal follow the boss.
@@ -145,7 +163,12 @@ namespace msw {
             unsigned char m_Unk34[0x48 - 0x34];
             // 0x48 (name guessed): the model (what NewMdlObj_ made).
             bcs::CMdlObj *m_pMdl;
-            unsigned char m_Unk4C[0x5C - 0x4C];
+            // 0x4C, 0x50 (names guessed; added for BasketF
+            // game/basket/CNpcBossPackunBasketBase.cpp): the shadow models.
+            bcs::CMdlObj *m_pShadow;
+            bcs::CMdlObj *m_pShadow2;
+            bcs::CAnmMotion *m_pAnm;           // 0x54, the motion of m_pMdl
+            CAtkCollision *m_pAtkColl;         // 0x58, the attack collision units
             // 0x5C (name guessed): the body collision units.
             CBodyCollision *m_pBodyColl;
             bcs::FVEC3 m_vPos;   // 0x60

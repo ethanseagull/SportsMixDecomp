@@ -14,6 +14,8 @@ namespace msw {
     class CGameBasket : public CGame {
         // The ball starts the rebound camera (CBallBasket::ReboundDemoCheck_).
         friend class CBallBasket;
+        // The computer driver asks IsChandelierOn_ (game/basket/unit_A3AF0.cpp).
+        friend class CComDrvBasketGame;
 
         public:
             CGameBasket(bcs::CTask *pParent);

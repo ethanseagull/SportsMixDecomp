@@ -339,6 +339,9 @@ namespace msw {
     extern long BASKET_PRM_COMMON_HUNGRY_STRING_BALL_LIFE_MAX;
     extern long BASKET_PRM_COMMON_HUNGRY_CHR_BALL_LIFE_MIN;
     extern long BASKET_PRM_COMMON_HUNGRY_CHR_BALL_LIFE_MAX;
+    // (added for game/basket/CNpcBossPackunBasketBase.cpp) The boss's lip sync: from this many frames before the mouth closes, the open-mouth motion plays at OPEN_TO_CLOSE_SPEED.
+    extern long BASKET_PRM_COMMON_HUNGRY_LIP_PREV_CLOSE_FRAME;
+    extern float BASKET_PRM_COMMON_HUNGRY_LIP_OPEN_TO_CLOSE_SPEED;
     extern float BASKET_PRM_S70_SACLE_ORANGE;
     extern float BASKET_PRM_S70_SACLE_BLUE_APPLE;
     extern float BASKET_PRM_S70_SACLE_RED_APPLE;

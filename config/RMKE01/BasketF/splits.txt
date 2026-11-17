@@ -482,13 +482,13 @@ game/basket/CComDrvBasketGame.cpp:
 game/basket/unit_9AFD4.cpp:
 	.text       start:0x0009AFD4 end:0x000A3AF0
 	.ctors      start:0x000000C0 end:0x000000C4
-	.rodata     start:0x00007408 end:0x00007898
+	.rodata     start:0x00007408 end:0x00007508
 	.bss        start:0x000004E0 end:0x000004E8
 
 game/basket/unit_A3AF0.cpp:
 	.text       start:0x000A3AF0 end:0x000AF3BC
 	.ctors      start:0x000000C4 end:0x000000C8
-	.rodata     start:0x00007898 end:0x00007A90
+	.rodata     start:0x00007508 end:0x00007A90
 	.data       start:0x0001BAA8 end:0x0001BC70
 	.bss        start:0x000004E8 end:0x000004F0
 

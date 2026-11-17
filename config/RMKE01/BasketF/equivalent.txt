@@ -40,8 +40,12 @@ BasketF AllSetState___Q23msw29CChrManBasketHungryBossPackunFlll near 99.9 regist
 BasketF ArrowSignalCheck__Q23msw16CChrMarkerBasketFv near 99.2 99.2%: user-team/character-team registers swapped only (same as HockeyF sibling)
 BasketF Bubble_CalcCreatePos__Q23msw14CStageBasket11Fv near 98.8 register numbering only
 BasketF CalcAddSkillPoint___Q23msw11CGameBasketFv near 90.3 [real, reviewed] reviewer: same 50/10/-50 choice, compares, 0x64 clamp and constants; branch layout and registers only
+BasketF CalcAttackDir___Q23msw24CNpcBossPackunBasketBaseFv near 99.5 [real, reviewed] reviewer: bne+b vs beq to the same targets
 BasketF CalcBWLookDir___Q23msw14CChrCoreBasketCFv near 99.8 [stack] stack only (99.8%)
+BasketF CalcHoldBallScore__Q23msw17CComDrvBasketGameFlRQ23msw11MEMBER_INFO near 95.5 [real, reviewed] reviewer: bge+b vs blt (same branch), registers, one value kept in a register; same swap sort
+BasketF CalcMyHoldBallScore__Q23msw17CComDrvBasketGameCFlPPCQ23msw8CChrCore near 99.6 [real, reviewed] reviewer: registers only
 BasketF CalcPos___Q33msw11CC09_BASKET14CBoundMushroomFv near 99.4 register choice around the paired-single court-offset add
+BasketF CalcRoot___Q23msw24CNpcBossPackunBasketBaseFv unverified 83.0 83.0%: reviewer confirmed: extra frsp is an identity on an already-single value; differing stores go to a dead local vRot; frame/slots only
 BasketF CalcXZVel2__Q23msw11CBallBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3RQ23bcs5FVEC3RfRfffff near 96.8 [real, reviewed] reviewer: registers; fmsubs vs fmuls+fsubs
 BasketF CallbackBallCatch___Q23msw19CNpcGhostBasketBaseFPQ23msw13CCollBodyUnitPQ23msw5CBall near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF CallbackBodyDamage___Q23msw11CBallBasketFPCQ23msw12CCollAtkUnitRCQ23bcs5FVEC3 near 99.2 [real, reviewed] reviewer: registers and schedule; cmplwi vs cmpwi on a state never negative
@@ -63,16 +67,22 @@ BasketF CanbeSmashCut__Q23msw14CChrCoreBasketFv near 99.3 [schedule] schedule on
 BasketF CanbeSwatIt__Q23msw14CChrCoreBasketCFv near 99.3 [schedule] schedule only (99.3%)
 BasketF ChangePosition__Q33msw11CC14_BASKET14CcNinjaFactoryFlfRf near 98.5 [real, reviewed] reviewer: Only the effect-handle field load placed before vs after the GetInstance call, plus one mr; same value, getter has no side effect.
 BasketF CheckArtsChrInput__Q23msw16CChrDrvPadBasketFPCQ33msw7CChrDrv8_CHR_MSG unverified 96.0 Float constants addressed per literal as in the original (pool-off stand-in in the .cpp). Left: the original has extra field loads (likely reloads ours keeps in registers) and a few instructions more; OnMsg has an empty case 9 in its compare tree, SubOffDribble an unused compare of MethdRDB's result; MethdPass a 0x10 bigger frame; not proven harmless.
+BasketF CheckArtsShootDir__Q23msw17CComDrvBasketGameCFv near 97.8 [schedule] register allocation/order only
+BasketF CheckChangeMarkCore__Q23msw17CComDrvBasketGameCFv near 99.8 [schedule] register allocation/order only
 BasketF CheckCmd___Q23msw16CChrDrvPadBasketCFll unverified 98.5 Float constants addressed per literal as in the original (pool-off stand-in in the .cpp). Left: the original has extra field loads (likely reloads ours keeps in registers) and a few instructions more; OnMsg has an empty case 9 in its compare tree, SubOffDribble an unused compare of MethdRDB's result; MethdPass a 0x10 bigger frame; not proven harmless.
 BasketF CheckCollision____Q23msw11CBallBasketFv near 89.6 [real, reviewed] reviewer: double-negated IsDelete same test; VelReduce and switch blocks moved, same operations and calls
 BasketF CheckCurveDir___Q23msw14CBallManBasketCFfRCQ23bcs5FVEC3RCQ23bcs5FVEC3f near 87.0 stack slots of the vector temporaries and the scheduling order of the two side checks; same calls, constants and 0/4/2 result logic
+BasketF CheckFreeShootCourseToCurve__Q23msw17CComDrvBasketGameCFlPPCQ23msw8CChrCorefff unverified 74.7 74.7%: reviewer found no behavioural difference (same result logic, same IsExistTarget args); frame 0x210 vs 0x1d0, extra spills and loop counter, pointer-bump vs indexed
 BasketF CheckGoalIn___Q23msw11CBallBasketFv near 97.7 [real, reviewed] reviewer: stage-court block order and a stack slot
+BasketF CheckItemShootDir__Q23msw17CComDrvBasketGameCFfff near 87.4 [real, reviewed] reviewer: same multiset apart from 3 extra mr and 3 vector temp spills in ours; same calls, constants, branches; savegpr 22 vs 23
+BasketF CheckMoveToTargetDist__Q23msw17CComDrvBasketGameCFQ23bcs5FVEC3 near 98.9 [stack] register allocation/order only
 BasketF CheckNowTurn__Q23msw30CBallManBasketHungryBossPackunCFv near 97.3 [real, reviewed] reviewer: Original does the sum add twice (duplicate add, same value); registers only otherwise.
 BasketF CheckPassType___Q23msw14CChrCoreBasketFRCQ23bcs5FVEC3PCQ23msw8CChrCore near 98.8 [stack] stack only (98.8%)
 BasketF CheckTrg__Q23msw16CChrDrvPadBasketCFl unverified 99.4 Float constants addressed per literal as in the original (pool-off stand-in in the .cpp). Left: the original has extra field loads (likely reloads ours keeps in registers) and a few instructions more; OnMsg has an empty case 9 in its compare tree, SubOffDribble an unused compare of MethdRDB's result; MethdPass a 0x10 bigger frame; not proven harmless.
 BasketF ChrPosSetNormal___Q23msw11CGameBasketFv near 95.1 [real, reviewed] reviewer: registers (savegpr_15 vs 16, loop counters) and FVEC3 temporary stack slots; same calls, constants, bounds
 BasketF ChrPosSetResult___Q23msw11CGameBasketFv near 99.9 [schedule] schedule only (99.9%)
 BasketF ClearFunc___Q23msw16CChrDrvPadBasketFv near 98.9 Float constants addressed per literal as in the original (pool-off stand-in in the .cpp). Schedule/register order only (diff.py: schedule).
+BasketF ClearPanelDisableFlg__Q23msw17CComDrvBasketGameFv unverified 70.9 70.9%: reviewer confirmed both zero exactly 0x440..0x67F (576 bytes); original rolls a base register per 8-byte row, ours uses fixed offsets
 BasketF CockpitCheckArrowState___Q23msw11CGameBasketFv near 99.9 [schedule] schedule only (99.9%)
 BasketF CollSubCheckAll___Q23msw11CBallBasketFRQ23bcs5FVEC3RQ23bcs5FVEC3 near 97.3 [real, reviewed] reviewer: only the stage-court block order
 BasketF CollSubCheckBG___Q23msw11CBallBasketFRQ23bcs5FVEC3RQ23bcs5FVEC3 near 91.0 [real, reviewed] reviewer: >= vs not-< differs only for NaN; halfword hit flag is a local never stored
@@ -84,12 +94,14 @@ BasketF CollUpdate__Q23msw14CGoalObjBasketFv near 99.1 99.1%: operand order of o
 BasketF ConveyorUpdate__Q23msw30CStageBasketHungryBossPackun72Ff near 99.9 float register choice for the three loop-invariant constants (60, 0, 1/60)
 BasketF CreateArtsBall___Q23msw21CChrCoreBasketWaluigiFv near 98.5 saved registers r24-r30 allocated in a different order only
 BasketF CreateBallIcon__Q23msw18CRadarIcon2DBasketFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc near 99.9 [real, reviewed] reviewer: consistent r14/r15 renumbering only, s_PaneName vs ANON same table; no data hint
+BasketF CreateBossPackun___Q23msw13CChrManBasketFRCQ23bcs5FVEC3l near 98.2 [schedule] register allocation/order only; autopilot regs no gain
 BasketF CreateCharaIcon__Q23msw18CRadarIcon2DBasketFPQ33msw12CRadarIcon2D14ICON_PARAMETERlPCcPCcPCc near 99.9 [real, reviewed] reviewer: consistent r14/r15 renumbering only, s_PaneName vs ANON same table; no data hint
 BasketF CreateCountUp__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 98.7 register choice and instruction order only
 BasketF CreateCrownIcon__Q23msw22CCockpitBasketHarapekoFPQ33bcs3G2D9CPaneCtrl near 97.0 register choice only
 BasketF CreateDriver___Q23msw13CChrManBasketFv near 99.6 register allocation/instruction order only
 BasketF CreateDriver___Q23msw29CChrManBasketHungryBossPackunFv near 99.4 register allocation/instruction order only (loop pointer increments in another order)
 BasketF CreateDummyBall___Q23msw14CBallManBasketFv near 98.8 register choice only: the saved pointer and saved ball number swap registers (mr operands); GetUseEnableIndex_ kept out of line by named temporaries that emit no code (auto-inline limit)
+BasketF CreateMdlObj___Q23msw24CNpcBossPackunBasketBaseFv near 99.6 [schedule] register allocation/order only; autopilot regs no gain
 BasketF CreateMdl___Q33msw11CC05_BASKET16CcWarioSmokeUnitFRCQ23bcs5FVEC3 near 93.3 [real, reviewed] reviewer: Original has three extra dead stack stores (0x1c,0x2c,0x48); rotate/scale/object stores same values; frame size differs only.
 BasketF CreateObjImpl__Q23msw14CCockpitBasketFll near 94.2 [real, reviewed] reviewer: Extra mr copies of new result around null checks; same branches and calls; jumptable symbol name only.
 BasketF Create___Q23msw13CChrManBasketFv near 99.3 [real, reviewed] reviewer: Only loop counter registers and jumptable symbol name (ANON); no other difference.
@@ -97,12 +109,21 @@ BasketF CtorStateAirTrick__Q23msw14CChrCoreBasketFv near 95.7 [real, reviewed] r
 BasketF CtorStateAlleyoop__Q23msw14CChrCoreBasketFv near 99.8 register choice / instruction order only (inlined Fsmq head/tail loads)
 BasketF CtorStateAppear__Q23msw16CNpcStringBasketFv near 99.4 99.4: register numbering only
 BasketF CtorStateAttach__Q23msw16CBallBasketFruitFv near 99.4 float register choice for the tilt-centre and 0/1 axis constants; same loads, operations and stores
+BasketF CtorStateAttack__Q23msw24CNpcBossPackunBasketBaseFv near 100.0 [stack] register allocation/order only; autopilot regs no gain
 BasketF CtorStateBlockCut__Q23msw14CChrCoreBasketFv near 98.0 98.0: instruction schedule only (autopilot regs no gain)
 BasketF CtorStateChgOffense__Q23msw11CGameBasketFv near 99.6 [schedule] schedule only (99.6%)
 BasketF CtorStateDunk__Q23msw14CChrCoreBasketFv near 99.7 register choice / instruction order only (inlined Fsmq head/tail loads)
+BasketF CtorStateEat__Q23msw24CNpcBossPackunBasketBaseFv near 99.8 [schedule] register allocation/order only; autopilot regs no gain
+BasketF CtorStateEat__Q23msw27CNpcBossPackunBasketParty70Fv near 95.0 [stack] register allocation/order only; autopilot regs no gain
+BasketF CtorStateEndIdle__Q23msw27CNpcBossPackunBasketParty70Fv near 95.0 [stack] register allocation/order only; autopilot regs no gain
+BasketF CtorStateFears__Q23msw24CNpcBossPackunBasketBaseFv near 100.0 [stack] register allocation/order only; autopilot regs no gain
+BasketF CtorStateIdle__Q23msw24CNpcBossPackunBasketBaseFv near 100.0 [real, reviewed] reviewer: jumptable label name and FVEC3 stack slot order only
 BasketF CtorStateJumpBall__Q23msw11CBallBasketFv near 99.0 [schedule] schedule only (99.0%)
 BasketF CtorStateJumpCatch__Q23msw14CChrCoreBasketFv near 91.8 [real, reviewed] reviewer: cmpwi vs mr., schedule, fnmsubs multiplicand swap (commutative); same calls and constants.
 BasketF CtorStateJumpUpper__Q23msw19CChrCoreBasketSlimeFv near 95.5 [real, reviewed] reviewer: Pool float read as 0x4(base+8) vs 0xc(base): same address; one extra addi, load order.
+BasketF CtorStateMelt__Q23msw24CNpcBossPackunBasketBaseFv near 100.0 [stack] register allocation/order only; autopilot regs no gain
+BasketF CtorStateMudAttackCheck__Q23msw27CNpcBossPackunBasketGameManFv near 93.5 [real, reviewed] reviewer: indexed vs stepped pointer, same offsets, compares and result
+BasketF CtorStateMudAttack__Q23msw24CNpcBossPackunBasketBaseFv near 96.2 [stack] register allocation/order only; autopilot regs no gain
 BasketF CtorStateNeutral__Q23msw14CChrCoreBasketFv near 99.7 99.7: stores to m_UnkEC and m_nStatusFlag in the other order, register choice
 BasketF CtorStateNormalShoot__Q23msw11CBallBasketFv near 96.2 [schedule] schedule only (96.2%)
 BasketF CtorStateReboundDunk__Q23msw14CChrCoreBasketFv near 99.9 register choice / instruction order only (inlined Fsmq head/tail loads)
@@ -125,44 +146,67 @@ BasketF DunkRotCheck___Q23msw14CChrCoreBasketFv near 97.8 [stack] stack only (97
 BasketF EffectCoinGetCreate___Q23msw17CGimmickManBasketFRCQ23bcs5FVEC3Q33msw9DROP_COIN8CoinType near 96.9 [real, reviewed] reviewer: ANON vs named s_CoinGetRotSpeedStart (no data flag) plus fmuls schedule/register difference only.
 BasketF FuncMove___Q23msw11CBallBasketFRQ23bcs5FVEC3RQ23bcs5FVEC3ff unverified 76.5 76.5%: paired-single schedule and registers only (diff.py class schedule), same operations and constants
 BasketF GameResult_In__Q23msw14CCockpitBasketFv near 99.0 99.0%: register choice only.
+BasketF Get3PointAreaRandPos__Q23msw17CComDrvBasketGameFRQ23bcs5FVEC3ffl near 98.2 [real, reviewed] reviewer: same instructions; commutative fadds operand order, register choice, one stfs position
 BasketF GetAppendPos___Q23msw30CBallManBasketHungryBossPackunCFRlRQ23bcs5FVEC3 near 89.1 [real, reviewed] reviewer: Registers, scheduling, two FVEC3 stack slots swapped, one extra reload of AREA_X_NUM global; same arithmetic and stores.
 BasketF GetArtsCurveValue___Q23msw13CChrManBasketCFl near 99.8 [real, reviewed] reviewer: Only stack-offset of two lfs loads (0x84/0x88 vs 0x7c/0x80); no data-value difference reported.
 BasketF GetArtsEffectUnit__Q23msw19CChrCoreBasketSlimeFl near 90.9 [real, reviewed] reviewer: Same static colour bytes stored to same table; only register allocation, array base addressing (stwu vs addi) and one more saved register.
+BasketF GetArtsInputToNinja__Q23msw17CComDrvBasketGameCFv near 89.6 [real, reviewed] reviewer: {4,2,1} table same values, placed at rodata 0x464 vs 0x450 (static order); copied to a local vs lwzx indexing; same results
 BasketF GetBasketPosAfterFrame__Q23msw11CBallBasketCFRQ23bcs5FVEC3fi unverified 84.9 84.9%: paired-single scheduling, two extra ps_mr, one stack offset; reviewer saw no behaviour difference
 BasketF GetBgCollRadiusXZ__Q23msw16CBallBasketFruitCFv near 99.3 float register choice for 0.23f and the scale array
 BasketF GetBgCollRadius__Q23msw16CBallBasketFruitCFv near 99.3 float register choice for 0.23f and the scale array
+BasketF GetDefenseAPos__Q23msw17CComDrvBasketGameFRQ23bcs5FVEC3 near 93.8 [real, reviewed] reviewer: same table copy, same bit test (double cntlzw vs rlwinm.), lbzx vs lbz +-1 indexing, extra inner-loop guard, swapped arms, stack slots
 BasketF GetDir4ToBattle___Q23msw13CChrManBasketCFf near 99.8 [real, reviewed] reviewer: Constant pool offsets shifted by 8 consistently; diff.py data check finds identical values.
 BasketF GetEffectUnit__Q23msw19CChrCoreBasketYoshiFl near 89.7 [real, reviewed] reviewer: same byte values and order into same static array; only base-register addressing/regs differ
 BasketF GetFirstLookInfo_MultiPlay__Q23msw15CCameraBasketHBFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 99.7 99.7%, registers only: in the character loop the z*scale product and pos.x swap float registers
 BasketF GetFirstLookInfo_MultiPlay__Q23msw17CCameraBasketGameFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 98.8 98.8: one store scheduled one slot later, clamp fmuls commutative operand order (as HockeyF)
 BasketF GetFirstLookInfo_SinglePlay__Q23msw17CCameraBasketGameFRQ23bcs5FVEC3RQ23bcs5FVEC3RQ23bcs5FVEC3 near 99.5 99.5: register numbering only
 BasketF GetFloorFlow__Q23msw30CStageBasketHungryBossPackun72CFRQ23bcs5FVEC3RCQ23bcs5FVEC3Q33msw9CStageMan9FLOW_TYPE near 99.6 load order of the direction constant and m_fMove before the fmuls
+BasketF GetFreeAreaRect__Q23msw17CComDrvBasketGameFRfRfRfRf near 99.9 [stack] register allocation/order only
+BasketF GetFreeAreaRect__Q23msw17CComDrvBasketGameFRlRlRlRl near 99.3 [real, reviewed] reviewer: identical after register/stack normalisation
+BasketF GetHomePos__Q23msw17CComDrvBasketGameFRQ23bcs5FVEC3 near 95.5 [schedule] register allocation/order only
+BasketF GetJumpShootJumpDir__Q23msw17CComDrvBasketGameCFv near 97.4 [real, reviewed] reviewer: registers; one reload of 0x68 and folded mr/fmr, same values
 BasketF GetJustShotTimingMax___Q23msw13CChrManBasketCFPCQ23msw14CChrCoreBasket near 98.1 [real, reviewed] reviewer: Stack slots and .rodata offsets (table 0x84 vs 0x90, 5.5, lfd) differ; diff.py data check reports no value difference.
 BasketF GetJustShotTimingMax___Q23msw14CBallManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3PCQ23msw5CBall near 96.5 [real, reviewed] reviewer: the one real difference (boss state-0 early return 0 vs 999) is fixed; left: stack slots, registers, head/tail load order, as GetJustShotTimingMin
 BasketF GetJustShotTimingMin___Q23msw13CChrManBasketCFPCQ23msw14CChrCoreBasket near 98.1 [real, reviewed] reviewer: Same as Max: stack slots and pool offsets only, values equal per diff.py data check.
 BasketF GetJustShotTimingMin___Q23msw14CBallManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3PCQ23msw5CBall near 96.5 [real, reviewed] reviewer: stack slots, registers, head/tail load order, equivalent clamp branch form; early returns both 0; same constants
 BasketF GetMemBer__Q23msw17CComManBasketGameFlPPCQ23msw8CChrCorellPCQ23msw8CChrCore near 99.5 register allocation only
 BasketF GetMemberNoBadCondition__Q23msw17CComManBasketGameFlPPCQ23msw8CChrCorellPCQ23msw8CChrCore near 99.6 register allocation only
+BasketF GetMotIdx__Q23msw24CNpcBossPackunBasketBaseFv near 99.6 [real, reviewed] reviewer: abs temp register and jumptable label name only; same table and cases
 BasketF GetMoveTgtPosRand__Q23msw19CNpcGhostBasketBaseCFv near 94.2 [real, reviewed] reviewer: int table copied from same .rodata+0x88 via kept base reg; rest registers/operand order
+BasketF GetOffenseAPos__Q23msw17CComDrvBasketGameFRQ23bcs5FVEC3 near 91.7 [real, reviewed] reviewer: same calls/constants; original keeps a dead write-only anArea[] (GetCourtAreaZ result never read), ours drops it; branch shape, pointer-bump loops, savegpr 15 vs 18
+BasketF GetPanelHIdx__Q23msw17CComDrvBasketGameCFf near 99.6 [schedule] register allocation/order only
 BasketF GetPanelParam_Cycle__Q23msw14CStageBasket10CFl near 99.0 [real, reviewed] reviewer: Only ANON vs named table symbol (no data-differs flag) and fcmpu operand swap on an equality compare; same behaviour.
 BasketF GetPanelParam_Interval__Q23msw14CStageBasket10CFl near 99.0 [real, reviewed] reviewer: Only ANON vs named table symbol (no data-differs flag) and fcmpu operand swap on an equality compare; same behaviour.
 BasketF GetPanelParam_LifeRand__Q23msw14CStageBasket10CFl near 99.0 [real, reviewed] reviewer: Only ANON vs named table symbol (no data-differs flag) and fcmpu operand swap on an equality compare; same behaviour.
 BasketF GetPanelParam_Life__Q23msw14CStageBasket10CFl near 99.0 [real, reviewed] reviewer: Only ANON vs named table symbol (no data-differs flag) and fcmpu operand swap on an equality compare; same behaviour.
 BasketF GetPanelParam_Size__Q23msw14CStageBasket10CFl near 99.0 [real, reviewed] reviewer: Only ANON vs named table symbol (no data-differs flag) and fcmpu operand swap on an equality compare; same behaviour.
+BasketF GetPanelWIdx__Q23msw17CComDrvBasketGameCFf near 99.6 [schedule] register allocation/order only
 BasketF GetParam_FlashColor__Q23msw14CStageBasket06CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2 bytes); load order of the four params and register choice differ, 63.3%. 9 attempts over two models, no gain.
 BasketF GetParam_FlashColor__Q23msw14CStageBasket15CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
 BasketF GetParam_FlashColor__Q23msw14CStageBasket16CFv unverified 63.3 Same values stored (white word, then R, G, B, A/2); load order of the four params and register choice differ, 63.3%. Same unmatched shape as CStageBasket06.
 BasketF GetParam_TTOffset__Q23msw14CStageBasket17CFv near 99.2 register choice inside the inlined FVEC3LenSq zero check of BCS_Vec_Normalize
 BasketF GetPassFlyFrame__Q23msw11CBallBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3l unverified 82.3 82.3%: rate tables read via the pool base instead of their own symbols (same values), saved registers; reviewer saw no behaviour difference
+BasketF GetPosTurnAround__Q23msw17CComDrvBasketGameFRQ23bcs5FVEC3 near 99.3 [real, reviewed] reviewer: identical after register/stack/jumptable-name normalisation
 BasketF GetRotY_Pos1ToPos2XZ__Q23msw13CChrManBasketFRCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 100.0 [real, reviewed] reviewer: Single sdata2 load 0x68 vs 0x60; diff.py reports no data value difference.
 BasketF GetShootFlyFrame__Q23msw11CBallBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3l near 94.1 [real, reviewed] reviewer: level table via pool base; clamp cror form; same values
 BasketF GetShotParam___Q23msw21CItemBallBasketGShellCFRQ33msw11BALL_BASKET10SHOT_PARAM near 99.8 99.8%: fmadds operand order only.
+BasketF GetTurnAroundRotDirLotOfOneCore__Q23msw17CComDrvBasketGameCFlRCQ23bcs5FVEC3 near 99.2 [real, reviewed] reviewer: identical after register/stack normalisation
 BasketF HitCheckTrain__Q23msw17CComManBasketGameFRQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3 near 99.7 [real, reviewed] reviewer: Original reloads 0x70(r1) into a register already holding that value before storing to 0x64; redundant reload only.
 BasketF InRectAndRad___Q23msw13CChrManBasketCFRCQ23bcs5FVEC3RCQ23bcs5FVEC3RCQ23bcs5FVEC3fff near 99.9 [real, reviewed] reviewer: Stack slot swap of two temporaries and 0x68 vs 0x60 pool offset holding the same value.
+BasketF IsActCallDefenseExt__Q23msw17CComDrvBasketGameFv near 99.4 [schedule] register allocation/order only
 BasketF IsRide__Q33msw14CStageBasket1010CPanelInfoCFRCQ23bcs5FVEC3 near 94.8 94.8%: stack vector stores in a different order
+BasketF JudgeAlleyoopPassBlock__Q23msw17CComDrvBasketGameFv unverified 99.9 99.9%: diff.py says match; bytes identical, only the reloc target name differs (original reads 2.0f through a named 8-byte object lbl_4_rodata_78F0 {2,-2.5}, ours a pool literal @17929); equivalent.py cannot record class match as near
+BasketF JudgeBombShootEsp__Q23msw17CComDrvBasketGameFv near 99.1 [real, reviewed] reviewer: same sequence; registers and a temporary's stack slot
 BasketF JudgeGoalIn___Q23msw11CBallBasketFv near 96.2 [real, reviewed] reviewer: one reload of flag word 0x338 dropped
+BasketF JudgeItemThrow1__Q23msw17CComDrvBasketGameFRQ23bcs5FVEC3 near 91.9 [real, reviewed] reviewer: const vs non-const CChrCore::GetPos are the same code; target array not zero-initialised but written before read; loop shape, clrlwi forms, load order
+BasketF JudgeItemThrow2__Q23msw17CComDrvBasketGameFRQ23bcs5FVEC3 near 96.9 [real, reviewed] reviewer: registers (savegpr 25 vs 26), stack offsets, one slwi CSE
+BasketF JudgeItemThrow__Q23msw17CComDrvBasketGameFRQ23bcs5FVEC3 near 99.7 [schedule] register allocation/order only
 BasketF JudgeJumpAttack____Q23msw16CGameGuideBasketFPCQ23msw8CChrCorePCQ23msw8CChrCore near 97.7 97.7: load order of the two state-queue words and two team bytes, float registers (schedule)
 BasketF JudgeJumpBlock___Q23msw16CGameGuideBasketFPCQ23msw8CChrCorePCQ23msw5CBall near 98.9 98.9: stack slots of the distance helper temporaries, one load order
+BasketF JudgeMissCut__Q23msw17CComDrvBasketGameFv near 91.6 [real, reviewed] reviewer: double cntlzw vs rlwinm. on the same bit 0x20000; temp stack slots swapped; load order
+BasketF JudgeReboundOrReboundDunk__Q23msw17CComDrvBasketGameFv near 99.5 [real, reviewed] reviewer: registers; one swap-sort element kept in a register, same values
+BasketF JudgeShootToAlleyoopDunk__Q23msw17CComDrvBasketGameFv near 99.5 [real, reviewed] reviewer: registers and pool base symbol only
+BasketF JudgeSmashCut__Q23msw17CComDrvBasketGameFv near 99.6 [schedule] register allocation/order only
 BasketF LoopStateAerialPass__Q23msw14CChrCoreBasketFv near 96.6 [real, reviewed] reviewer: !!(flag&1) cntlzw vs clrlwi. same test; dead FsmqWrap(tail-1) remnant in inlined FsmqPushState, same stores; m_pTo reloaded with no call between; IsAnmFlipPlay mr. vs cmpwi
 BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketMarioFv near 96.5 [real, reviewed] reviewer: Flag&4 bool via extrwi vs double cntlzw same 0/1; commutative fadds, regs, stack slots, load order; no data differences.
 BasketF LoopStateAirTrick__Q23msw19CChrCoreBasketMii00Fv near 96.3 [real, reviewed] reviewer: Register renaming, stack slots, commutative fadds, (flag&4)!=0 as extrwi vs cntlzw pair (same 0/1); no data differences.
@@ -175,6 +219,7 @@ BasketF LoopStateAppear__Q33msw11CC03_BASKET19CcDaisyFlowerGardenFv near 98.5 [r
 BasketF LoopStateAppearance__Q23msw19CNpcGhostBasketBaseFv near 99.4 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateArtsShoot__Q23msw11CBallBasketFv near 96.7 [real, reviewed] reviewer: timers 20/15 as int converted at run time vs float literals of the same value; swapped 8.0/20.0 pool slots, same values
 BasketF LoopStateAttach__Q23msw11CBallBasketFv near 99.5 [schedule] schedule only (99.5%)
+BasketF LoopStateAttack__Q23msw24CNpcBossPackunBasketBaseFv near 99.1 [stack] register allocation/order only; autopilot regs no gain
 BasketF LoopStateBlockWorkLose__Q23msw14CChrCoreBasketFv near 99.9 99.9: register choice only
 BasketF LoopStateCatch__Q23msw14CChrCoreBasketFv near 96.3 [real, reviewed] reviewer: IsJump test: original double cntlzw/srwi bool then beq, ours rlwinm. beq, same condition; rest registers only.
 BasketF LoopStateCatch__Q23msw19CNpcGhostBasketBaseFv near 99.4 [real, reviewed] reviewer: one redundant unconditional b, nothing else
@@ -183,6 +228,9 @@ BasketF LoopStateDash__Q23msw14CChrCoreBasketFv near 98.9 [real, reviewed] revie
 BasketF LoopStateDisappear__Q33msw11CC15_BASKET19CcSiromaMagicCircleFv near 99.9 register numbering / order of independent loads only
 BasketF LoopStateDisappears__Q23msw19CNpcGhostBasketBaseFv near 99.8 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateDunk__Q23msw14CChrCoreBasketFv near 99.9 register choice / instruction order only (inlined Fsmq head/tail loads)
+BasketF LoopStateEatWait__Q23msw24CNpcBossPackunBasketBaseFv near 99.8 [stack] register allocation/order only; autopilot regs no gain
+BasketF LoopStateEat__Q23msw27CNpcBossPackunBasketParty70Fv near 97.9 [schedule] register allocation/order only; autopilot regs no gain
+BasketF LoopStateEndIdle__Q23msw27CNpcBossPackunBasketParty70Fv near 100.0 [stack] register allocation/order only; autopilot regs no gain
 BasketF LoopStateFall__Q23msw14CChrCoreBasketFv near 99.9 99.9: instruction order (queue head/tail load order, ps move scheduling)
 BasketF LoopStateFire__Q33msw11CC15_BASKET19CcSiromaMagicCircleFv near 99.9 register numbering / order of independent loads only
 BasketF LoopStateGameSet__Q23msw11CGameBasketFv near 99.5 [schedule] schedule only (99.5%)
@@ -191,13 +239,17 @@ BasketF LoopStateGameSetup__Q23msw11CGameBasketFv near 99.1 [registers] register
 BasketF LoopStateGameSetup__Q23msw27CGameBasketHungryBossPackunFv near 98.2 register allocation only: in the inlined bcs::CFsmQueue::FsmqNext the head+1 value and the queue size swap registers; same instructions and memory accesses
 BasketF LoopStateGetLooseBall__Q23msw19CNpcGhostBasketBaseFv near 99.1 [real, reviewed] reviewer: only a dead cmpwi of MoveRun result, no branch uses it
 BasketF LoopStateIdle__Q23msw19CNpcGhostBasketBaseFv near 99.3 register allocation only (diff.py: registers); was 100% before the 2026-11-11 merge of main's CChrCore/CNpcBase header changes
+BasketF LoopStateIdle__Q23msw24CNpcBossPackunBasketBaseFv near 98.3 [stack] register allocation/order only; autopilot regs no gain
+BasketF LoopStateIdle__Q23msw27CNpcBossPackunBasketParty70Fv near 98.4 [stack] register allocation/order only
 BasketF LoopStateItemShoot__Q23msw14CChrCoreBasketFv near 96.2 [real, reviewed] reviewer: frame 0x10 larger, vector temporaries in other stack slots, register renumbering, mr. vs cmpwi; same calls and offsets
 BasketF LoopStateJumpCatch__Q23msw14CChrCoreBasketFv near 90.6 [real, reviewed] reviewer: Register renumbering, schedule, base reg kept, cmpwi vs mr. on same value; same calls, offsets, constants.
 BasketF LoopStateJumpPass__Q23msw14CChrCoreBasketFv near 98.5 [stack] stack only (98.5%)
 BasketF LoopStateLayUp__Q23msw14CChrCoreBasketFv near 97.8 [real, reviewed] reviewer: register renaming, stack slots, fadds operand order, cntlzw bool vs rlwinm. of &4; same constants/calls
 BasketF LoopStateLoop__Q33msw11CC15_BASKET19CcSiromaMagicCircleFv near 99.2 register numbering / order of independent loads only
 BasketF LoopStateMainLoop__Q23msw11CGameBasketFv near 98.9 [real, reviewed] reviewer: shot-clock test flagAC&0x10?0:flagAC&1 branchless vs branch+reload of 0xAC with no store or call between; registers
+BasketF LoopStateMain__Q23msw27CNpcBossPackunBasketGameManFv near 97.2 [schedule] register allocation/order only; autopilot regs no gain
 BasketF LoopStateMove__Q23msw16CNpcStringBasketFv near 99.9 99.9: register numbering in the 0.0f == y compare
+BasketF LoopStateMudAttack__Q23msw24CNpcBossPackunBasketBaseFv near 99.2 [stack] register allocation/order only
 BasketF LoopStateNeutral__Q23msw14CChrCoreBasketFv near 99.9 99.9: register choice only
 BasketF LoopStateNormalShoot__Q23msw11CBallBasketFv near 99.3 [stack] stack only (99.3%)
 BasketF LoopStatePassCatch__Q23msw14CChrCoreBasketFv unverified 98.7 98.3%: registers and order, plus the original reloads the queue head and tail (0x18, 0x1C) inside the inlined FsmqGetNextState of the landing step where ours reuses them (no store in between; not reproduced)
@@ -206,6 +258,10 @@ BasketF LoopStatePass__Q23msw14CChrCoreBasketFv near 97.3 [real, reviewed] revie
 BasketF LoopStatePass__Q23msw19CNpcGhostBasketBaseFv unverified 99.3 99.3%: original calls MethdSetPassCatchJumpWaitFrame (CChrCoreBasket slot 0xA78, (FVEC3&, float)) without loading f1, so the float it passes is whatever f1 held; ours passes the pass frame.
 BasketF LoopStatePursuit__Q23msw19CNpcGhostBasketBaseFv near 99.8 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF LoopStateSizeChange__Q23msw14CChrCoreBasketFv near 99.8 99.8: FsmqGetWork tail/head load order
+BasketF LoopStateSleep__Q23msw24CNpcBossPackunBasketBaseFv near 99.8 [stack] register allocation/order only; autopilot regs no gain
+BasketF LoopStateSleep__Q23msw24CNpcBossPackunBasketGameFv near 99.7 [stack] register allocation/order only; autopilot regs no gain
+BasketF LoopStateSleep__Q23msw27CNpcBossPackunBasketGameManFv near 96.3 [schedule] register allocation/order only; autopilot regs no gain
+BasketF LoopStateSleep__Q23msw27CNpcBossPackunBasketParty70Fv near 99.7 [stack] register allocation/order only; autopilot regs no gain
 BasketF LoopStateSliding__Q23msw14CChrCoreBasketFv near 99.9 99.9: register choice, operand order inside fnmsubs/fmadds
 BasketF LoopStateSmashCut__Q23msw14CChrCoreBasketFv near 93.2 [real, reviewed] reviewer: only mr./cmpwi on the IsAnmFlipPlay result and li/lfs argument setup order differ; same constants, calls and args
 BasketF LoopStateSmashCut__Q23msw19CChrCoreBasketYoshiFv near 86.7 [real, reviewed] reviewer: one kept rodata base vs per-constant lis/@l, cmpwi vs mr., regs; no data-value diff reported
@@ -216,6 +272,8 @@ BasketF LoopStateTurnOverToShotClock__Q23msw11CGameBasketFv near 98.8 [real, rev
 BasketF LoopStateTurnOver__Q23msw11CGameBasketFv near 96.8 [real, reviewed] reviewer: frame 0x720 vs 0x680 from two extra copies of the const telop id table in inline GetTelopID_; same values
 BasketF LoopStateTurnResult__Q23msw11CGameBasketFv near 99.8 [schedule] schedule only (99.8%)
 BasketF LoopStateTurn__Q23msw14CChrCoreBasketFv near 99.8 [real, reviewed] reviewer: li 0/ori 7 vs li 7, register renumbering, and fmuls operands swapped (0x78(r31)*0x10(r30)); commutative
+BasketF LotRateCancelLayUp__Q23msw17CComDrvBasketGameFv near 99.0 [schedule] register allocation/order only
+BasketF LotRateCancelPass__Q23msw17CComDrvBasketGameFv near 98.9 [real, reviewed] reviewer: registers and one mr
 BasketF MainCamera_Normal__Q23msw15CCameraBasketHBFv near 98.5 98.5%, schedule: after the second CalcCurveBlend the two fmr come in the other order and y goes to another saved float register; m_Unk280/m_Unk110 loaded in the other order at the end; calls, constants and memory accesses identical
 BasketF MainCamera__Q23msw17CCameraBasketGameFv near 98.8 [real, reviewed] reviewer: Float register swaps and jumptable symbol names only; same constants, offsets and calls.
 BasketF MainFunc__Q23msw16CNpcStringBasketFv near 99.5 99.5: fmadds operand order and registers in the shadow update
@@ -247,6 +305,8 @@ BasketF MethdCatch__Q23msw14CChrCoreBasketFv near 93.7 [real, reviewed] reviewer
 BasketF MethdChgLeader__Q23msw14CChrCoreBasketFv near 97.9 [real, reviewed] reviewer: registers; fcmpo blt vs swapped fcmpo cror bne, same branch for ordered values
 BasketF MethdDamage__Q23msw14CChrCoreBasketFUlffflfll near 99.2 [real, reviewed] reviewer: cmpwi vs cmplwi on an equality test, duplicated li 3,0 return, registers
 BasketF MethdDash__Q23msw14CChrCoreBasketFv near 98.1 [schedule] schedule only (98.1%)
+BasketF MethdEat__Q23msw24CNpcBossPackunBasketBaseFlll near 99.9 [schedule] register allocation/order only; autopilot regs no gain
+BasketF MethdEat__Q23msw27CNpcBossPackunBasketParty70Flll near 97.7 [stack] register allocation/order only; autopilot regs no gain
 BasketF MethdFall__Q23msw14CChrCoreBasketFv near 99.0 [schedule] schedule only (99.0%)
 BasketF MethdItemShoot__Q23msw14CChrCoreBasketFf near 89.2 [real, reviewed] reviewer: same calls in order with the same argument values (addition order swapped); extrwi vs bool conversion; dead wrap remnant; FPR save and stack
 BasketF MethdJumpBlock__Q23msw14CChrCoreBasketFf near 93.7 [real, reviewed] reviewer: same ball-test predicate and kinds; JUMP_BLOCK_PARAM stack offsets, pointer-walk vs indexed loops, frsp before stfs
@@ -273,6 +333,10 @@ BasketF MovePos___Q33msw11CC09_BASKET14CBoundMushroomFf near 99.6 fmadds multipl
 BasketF MoveRun__Q23msw19CNpcGhostBasketBaseFRCQ23bcs5FVEC3ff near 98.2 order of a commutative multiply and one stack slot.
 BasketF MoveRun__Q23msw19CNpcGhostBasketBaseFRCQ23bcs5FVEC3ffff near 99.1 order of a commutative multiply and one stack slot.
 BasketF MoveTargetMarkerPos__Q23msw19CChrCoreBasketNinjaFf near 99.9 [real, reviewed] reviewer: Eight pool offsets shifted; each pair verified to hold the same float value.
+BasketF MsgCheckArtsShootFree__Q23msw17CComDrvBasketGameFPQ33msw7CChrDrv8_CHR_MSG near 98.3 [real, reviewed] reviewer: registers; bgt vs cror+bne on m_fUnk1F4 <= 0 differ only for NaN, which cannot occur
+BasketF MsgReboundStart__Q23msw17CComDrvBasketGameFPQ33msw7CChrDrv8_CHR_MSG near 99.8 [schedule] register allocation/order only
+BasketF MsgShootStart__Q23msw17CComDrvBasketGameFPQ33msw7CChrDrv8_CHR_MSG near 97.8 [real, reviewed] reviewer: stack slots, m_pChr load moved after GetUrgentGuardCore (no store between), three extra spills of the zero vector; same calls and constants
+BasketF MsgSomeBodyShootOffense__Q23msw17CComDrvBasketGameFPQ33msw7CChrDrv8_CHR_MSG near 99.8 [schedule] register allocation/order only
 BasketF NewPanel___Q23msw14CStageBasket10CFl near 99.0 99.0%: two registers swapped
 BasketF NormalVecXZ__Q23msw13CComManBasketFRQ23bcs5FVEC3RCQ23bcs5FVEC3 near 97.3 97.3%: ps_sum0 destination register in inlined FVEC3LenSq only
 BasketF NormalizeCanMovePosToBossPackun__Q23msw13CComManBasketFRQ23bcs5FVEC3PCQ23msw8CChrCore near 99.9 99.9%: two pairs of stack slots swapped (Local2World temp/scale, World2Local temp/Len copy); static-order swap of fX/fZ
@@ -296,7 +360,9 @@ BasketF Release__Q33msw11CC14_BASKET12CcNinjaCloneFv near 96.0 counter and point
 BasketF ResetOnDetach___Q23msw11CBallBasketFv near 97.5 [schedule] schedule only (97.5%)
 BasketF Reset__Q23msw16CBallBasketFruitFv near 96.4 integer register choice in the copy of the local scale array from the constant table, and the schedule of the vtable load for GetCollPushRadiusDefault
 BasketF Reset__Q23msw16CNpcStringBasketFv near 99.8 99.8: fmadds operand order and registers
+BasketF Reset__Q23msw17CComDrvBasketGameFv near 98.2 [schedule] register allocation/order only
 BasketF Reset__Q23msw19CNpcGhostBasketBaseFv near 99.7 register allocation only (diff.py: registers); was 100% before the 2026-11-11 merge of main's CChrCore/CNpcBase header changes
+BasketF Reset__Q23msw24CNpcBossPackunBasketBaseFv near 98.2 [stack] register allocation/order only; autopilot regs no gain
 BasketF ScoreInWait__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 BasketF ScoreIn__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
 BasketF ScoreOutWait__Q23msw18CCockpitBasketCoinFv near 99.0 register choice only: loop counter and pane-accessor temporary swap r27/r28
@@ -305,6 +371,7 @@ BasketF SendEvent__Q23msw19CCockpitBasketCoderFlPv near 97.1 [real, reviewed] re
 BasketF SendMessage__Q23msw14CStageBasket11Fllll near 99.8 instruction order only
 BasketF SendMessage__Q23msw19CNpcGhostBasketBaseFlllll near 99.9 register choice / schedule only (UpDateCollBody_: argument load order).
 BasketF SendMessage___Q23msw11CGameBasketFllll near 89.4 [real, reviewed] reviewer: original computes an unused clamp of m_anArtsCount[nTeam]/5 (loads and float ops, no stores or calls) before case 0x35's test; jump-table names; registers
+BasketF SetAppendParam__Q33msw24CNpcBossPackunBasketBase14CMudBombBasketFRCQ23bcs5FVEC3RCQ23bcs5FVEC3lllff unverified 78.4 78.4%: reviewer mapped every table store and offset: same values; constant load order, one extra saved FPR, frame 0x220 vs 0x200; first ps_sub negated but only measured by GetLenXZ
 BasketF SetArtsShootParam___Q23msw11CBallBasketFf near 85.7 [real, reviewed] reviewer: hand-saved registers vs _savegpr_27; same fields and calls
 BasketF SetBallScore__Q23msw22CCockpitBasketHarapekoFll near 98.6 register choice and instruction order only
 BasketF SetBound___Q23msw11CBallBasketFRCQ23bcs5FVEC3 near 96.6 [schedule] schedule only (96.6%)
@@ -333,6 +400,20 @@ BasketF Set__Q23msw19CCockpitBasketCoderFv near 99.6 register allocation only (l
 BasketF Set__Q23msw22CCockpitBasketHarapekoFv near 93.0 [real, reviewed] reviewer: Registers/savegpr count, separate s_LayoutRes/s_PaneName symbols vs one rodata base (no data flag), same calls and order.
 BasketF SetupGame__Q23msw19CCockpitBasketCoderFv near 97.3 register allocation only (loop counters and table pointers); SetVisible(bool) bit insert compiled as srwi+rlwimi instead of rlwinm+rlwimi (same flag byte result); as HockeyF
 BasketF ShotArtsBall___Q23msw21CChrCoreBasketWaluigiFl near 99.6 float register choice for the 1/60 multiply operands and one byte load into r0 vs r9
+BasketF Stage03_GetGimmickToTarget__Q23msw17CComDrvBasketGameFRCQ23bcs5FVEC3 near 99.9 [real, reviewed] reviewer: registers and stack slots only
+BasketF Stage03_GetPosTurnAroundGimmick__Q23msw17CComDrvBasketGameFRQ23bcs5FVEC3Ull near 96.8 [real, reviewed] reviewer: identical instruction multiset; vector load order, savegpr 26 vs 27
+BasketF Stage07_GetGimmickToTarget__Q23msw17CComDrvBasketGameFRCQ23bcs5FVEC3 near 98.7 [real, reviewed] reviewer: registers and stack slots only
+BasketF Stage07_GetPosTurnAroundGimmick__Q23msw17CComDrvBasketGameFRQ23bcs5FVEC3Ull near 96.6 [real, reviewed] reviewer: identical instruction multiset; vector load order, savegpr 26 vs 27
+BasketF Stage09_GetGimmickToTarget__Q23msw17CComDrvBasketGameFRCQ23bcs5FVEC3 near 98.6 [real, reviewed] reviewer: registers and stack slots only
+BasketF Stage09_GetPosTurnAroundGimmick__Q23msw17CComDrvBasketGameFRQ23bcs5FVEC3Ull near 99.6 [real, reviewed] reviewer: identical after register/stack normalisation
+BasketF Stage11_GetGimmickToTarget__Q23msw17CComDrvBasketGameCFRCQ23bcs5FVEC3 near 98.8 [real, reviewed] reviewer: registers and stack slots only
+BasketF Stage11_GetPosTurnAroundGimmick__Q23msw17CComDrvBasketGameCFRQ23bcs5FVEC3Ull near 99.5 [real, reviewed] reviewer: identical after register/stack normalisation
+BasketF Stage15_GetGimmickToTargetKaron__Q23msw17CComDrvBasketGameCFRCQ23bcs5FVEC3 near 98.8 [real, reviewed] reviewer: registers and stack slots only
+BasketF Stage15_GetPosTurnAroundGimmickKaron__Q23msw17CComDrvBasketGameCFRQ23bcs5FVEC3Ull near 99.5 [real, reviewed] reviewer: identical after register/stack normalisation
+BasketF Stage15_GetPosTurnAroundGimmick__Q23msw17CComDrvBasketGameCFRQ23bcs5FVEC3Ull near 96.0 [real, reviewed] reviewer: bge vs mfcr/cntlzw form of !(a<b), same value except NaN; registers
+BasketF StageXX_GetItemToTarget__Q23msw17CComDrvBasketGameCFRCQ23bcs5FVEC3 near 98.9 [real, reviewed] reviewer: registers and stack slots only
+BasketF StageXX_GetPosTurnAroundChr__Q23msw17CComDrvBasketGameCFRQ23bcs5FVEC3ll near 99.3 [real, reviewed] reviewer: identical after register/stack normalisation
+BasketF StageXX_GetPosTurnAroundItem__Q23msw17CComDrvBasketGameCFRQ23bcs5FVEC3Ull near 99.6 [real, reviewed] reviewer: item-position bug fixed (now reads pItem->GetPos()); rest registers and stack slots
 BasketF StartGuideTelop__Q23msw16CGameGuideBasketFlPCQ23msw8CChrCore near 99.9 [real, reviewed] reviewer: Only .rodata offsets of float constants shift uniformly by 0x14 (unread bytes); no data-value difference reported.
 BasketF StartScoreView___Q23msw13CChrManBasketFl near 95.1 [real, reviewed] reviewer: Only registers/scheduling, one reload of stack slot 0x18 just stored, extra fmr copies; no data differences.
 BasketF StopEffectGoalIn___Q23msw11CGameBasketFl near 94.6 [schedule] schedule only (94.6%)
@@ -380,7 +461,9 @@ BasketF TrgBound__Q23msw11CBallBasketFUl near 99.2 [schedule] schedule only (99.
 BasketF TrgGoalIn___Q23msw11CBallBasketFv near 87.3 [real, reviewed] reviewer: SE/effect block placed before PlayGoalInEff in ours, same calls
 BasketF TrgGoalIn___Q23msw16CBallBasketDummyFv near 99.4 [real, reviewed] reviewer: cmplwi vs cmpwi on a state never negative
 BasketF UpDataWaitBall__Q23msw30CBallManBasketHungryBossPackunFv near 99.1 99.1: register numbering of the delivery-pattern value and loop counters
+BasketF UpDateCollAtk___Q23msw24CNpcBossPackunBasketBaseFv near 97.2 [real, reviewed] reviewer: shared no-hit block duplicated inline in the DUNK case; same bit under the same condition
 BasketF UpDateCollBody___Q23msw19CNpcGhostBasketBaseFv near 92.7 register choice / schedule only (UpDateCollBody_: argument load order).
+BasketF UpDateCollBody___Q23msw24CNpcBossPackunBasketBaseFv near 99.8 [real, reviewed] reviewer: two loads swapped feeding the same cmpw; FVEC3 slots permuted, every store checked
 BasketF UpDateCross2Tap__Q23msw16CChrDrvPadBasketFv unverified 96.6 Float constants addressed per literal as in the original (pool-off stand-in in the .cpp). Left: the original has extra field loads (likely reloads ours keeps in registers) and a few instructions more; OnMsg has an empty case 9 in its compare tree, SubOffDribble an unused compare of MethdRDB's result; MethdPass a 0x10 bigger frame; not proven harmless.
 BasketF UpDateCrownDisp__Q23msw27CGameBasketHungryBossPackunFv near 98.3 register allocation only: the leading-team loop's counter, best score and team mask take other registers (and two li are scheduled differently); same logic
 BasketF UpDateGuid__Q23msw16CGameGuideBasketFv near 97.6 [real, reviewed] reviewer: Flag bit test clrlwi. vs double cntlzw same truth value; beq+b vs bne same targets; loop regs only.

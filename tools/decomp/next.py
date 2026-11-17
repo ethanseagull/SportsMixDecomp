@@ -41,7 +41,7 @@ def build_state(version):
     ok = ROOT / "build" / version / "ok"
     if not ok.exists():
         return "missing"
-    inputs = [ROOT / "configure.py"] + list((ROOT / "config" / version).glob("*/objects.txt"))
+    inputs = [ROOT / "configure.py"]
     for d in ("src", "include"):
         inputs += list((ROOT / d).rglob("*"))
     inputs += list((ROOT / "config" / version).rglob("*.txt")) + list((ROOT / "config" / version).rglob("*.yml"))
@@ -220,7 +220,7 @@ def main():
     size, fn = u.open[0] if u.open else u.todo[0]
     lib = u.module
     print(f"\nNEXT: start {u.label}: {len(u.fns)} functions, {u.code} bytes, largest {u.largest}")
-    print(f"  1. add  NonMatching {u.name}.cpp  to config/RMKE01/{lib}/objects.txt, "
+    print(f"  1. add  Object(NonMatching, \"{u.name}.cpp\")  to the {lib} library in configure.py, "
           f"create src/{u.name}.cpp")
     print(f"  2. {BUILD}  (must still pass; then tools/decomp/boundaries.py {u.name} once it compiles)")
     print(f"  3. first function: {fn} ({size} bytes)")

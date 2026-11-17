@@ -32,14 +32,9 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 def unit_status(version):
-    """{(module, unit): Matching|Equivalent|NonMatching} from every objects.txt."""
-    out = {}
-    for p in sorted((ROOT / "config" / version).glob("*/objects.txt")):
-        for line in p.read_text(encoding="utf-8").splitlines():
-            parts = line.split()
-            if len(parts) >= 2 and not line.startswith("#"):
-                out[(p.parent.name, parts[1].removesuffix(".cpp").removesuffix(".c"))] = parts[0]
-    return out
+    """{(module, unit): Matching|Equivalent|NonMatching} from configure.py's unit lists."""
+    import objects  # tools/decomp/objects.py
+    return objects.statuses(version)
 
 
 def main():

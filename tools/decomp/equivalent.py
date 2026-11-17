@@ -168,7 +168,7 @@ def main():
             sys.exit(f"{args.module} {args.function} is not in the report (rebuild it first)")
         score, has_source = got
         if not has_source:
-            sys.exit("its unit has no source registered in its module's objects.txt")
+            sys.exit("its unit has no source registered in configure.py")
         if score >= 100.0:
             sys.exit("it matches exactly; nothing to record")
         if len(args.reason.strip()) < 15:

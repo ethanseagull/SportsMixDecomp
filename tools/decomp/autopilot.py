@@ -96,7 +96,7 @@ def cmd_ports(args):
     for key, src, _, _ in todo:
         written[key] = port_unit.write_port(us, key, src, log=lambda *_: None)
     # compile each on its own so one failure does not hide the others
-    build(f"build/{VERSION}/report.json")  # re-runs configure for the new objects.txt lines
+    build(f"build/{VERSION}/report.json")  # re-runs configure for the new Object(...) lines
     failed = []
     for key in list(written):
         name = us.units[key]["name"]

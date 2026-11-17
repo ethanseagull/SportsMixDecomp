@@ -3,7 +3,7 @@
 
     python tools/decomp/mark.py game/boss/CFoo Matching [more units...]
 
-Edits the unit's line in config/<version>/<module>/objects.txt; options such
+Edits the unit's Object(...) line in configure.py; options such
 as pch= stay. The next build re-runs configure.py by itself. Run the full
 build afterwards; if the hash check fails, mark it back (hard rule 2).
 """

@@ -9,7 +9,7 @@ Once one of them has source, the others start from it.
   list                 untouched units with a sibling that has source, best first
   <unit>               show the sibling it would copy and the expected overlap
   <unit> --write       write the renamed .cpp (and any missing per-mode headers),
-                       register it NonMatching in its module's objects.txt, build
+                       register it NonMatching in configure.py, build
                        it and print tools/decomp/diff.py's verdict per function
 
 Renaming: the mode word (Tournament, Menu, Boss, Basket, Volley, Dodge, Hockey)
@@ -174,7 +174,7 @@ def write_port(us, key, src_key, log=print):
     header_closure(text, src_word, dst_word, src_dir, dst_dir, headers)
     registered = objects.add(t["name"] + ".cpp", "NonMatching", t["module"])
     if registered:
-        log(f"  registered {t['name']}.cpp NonMatching in config/{us.version}/{t['module']}/objects.txt")
+        log(f"  registered {t['name']}.cpp NonMatching in configure.py ({t['module']})")
     have = {stem(n) for n, _, _ in t["fns"]}
     # weak inlines of shared base classes (bcs::CUnivTask::GetFrameRateF) are kept
     # by whichever unit comes first; only the mode class's own functions matter

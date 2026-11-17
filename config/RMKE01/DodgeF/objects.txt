@@ -94,3 +94,6 @@ Equivalent game/dodge/unit_D8380.cpp
 Equivalent game/dodge/CComManDodgeGame.cpp
 Equivalent game/dodge/unit_3F694.cpp
 Equivalent game/dodge/CStgGmk_WaterWorks_Dodge_Act.cpp
+Equivalent game/dodge/unit_3DE18.cpp
+Equivalent game/dodge/CCockpitDodgeOrDie.cpp
+Equivalent game/dodge/CCockpitDodgeLifeGauge.cpp

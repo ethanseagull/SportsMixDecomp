@@ -1452,7 +1452,9 @@ namespace msw {
             // of a move by rParam at frame fFrame in the direction of rMove.
             int SE_IsPlay(long nSlot) const;
             void Eff_Erase(long nSlot);
-            void RotateYParam_(ROT_LERP1 &rLerp);
+            // (return type from BasketF game/basket/unit_34430.cpp, which
+            // tests it: not zero once the turn is done)
+            int RotateYParam_(ROT_LERP1 &rLerp);
             int Util_DoDirMove(const CC_DATA::CHR_PARAM::MOVE_PARAM &rParam, float fFrame, DIR_MOVE &rMove, int);
 
             // Added for BossF game/boss/unit_5FF80.cpp (the dunk and air trick
@@ -1534,6 +1536,11 @@ namespace msw {
             void Eff_SetScale(long nSlot, float fX, float fY, float fZ);
             int Util_DoMove(float fStep);
             void AnimChgSpeed(unsigned long nSlot, float fSpeed, float fFrame);
+            // (added for BasketF game/basket/unit_34430.cpp; meanings
+            // guessed) Jumps the motion of nSlot fFrame frames on with a
+            // blend of fInter frames; whether it is still blending in.
+            void AnimSkipInter(unsigned long nSlot, float fFrame, float fInter);
+            int IsAnimInter(unsigned long nSlot) const;
             void Reset();
             // The square of GetDist_ToPosXZ.
             float GetDist_ToPosXZSq(const bcs::FVEC3 &rPos) const;
@@ -1575,6 +1582,13 @@ namespace msw {
             int IsHaveLeft() const { return (m_nStatusFlag >> 2) & 1; }
             int GetFlag(unsigned long nBit) const { return (m_nStatusFlag & nBit) != 0; }
             void ResetFlag(unsigned long nBit) { m_nStatusFlag &= ~nBit; }
+            // (added for BasketF game/basket/CChrCoreBasket.cpp; names from
+            // the weak copies there) Bit 0x10000 of m_nStatusFlag (small
+            // body), the character's condition (m_nComLevel) and the player
+            // number again (the same byte as GetPlayerNo).
+            int IsStateSmallBody() const { return GetFlag(0x10000); }
+            long GetCondition() const { return m_nComLevel; }
+            long GetChrIdx() const { return m_nPlayerNo; }
             // (name guessed) See m_pParentTask.
             bcs::CTask *GetParentTask() const { return m_pParentTask; }
             // Virtual node nNode of the model (0x180 is node 0).

@@ -12,12 +12,31 @@ namespace msw {
     namespace CHR_CORE_BASKET {
         // The second parameter block of a basketball character core
         // (GetCcParam2_; __ct__Q33msw15CHR_CORE_BASKET16CC_PARAM_BASKET2Fv
-        // in BasketF).
-        //
-        // INCOMPLETE: only what the character units read; names guessed.
+        // in BasketF). Size 0x278 (NewCcParam2_ allocates 0x278 bytes);
+        // every field is written by the constructors in
+        // game/basket/CChrCoreBasket.cpp. Names guessed where given.
         class CC_PARAM_BASKET2 {
             public:
-                unsigned char m_Unk000[0x38];
+                CC_PARAM_BASKET2();
+
+                // 0x00 (name guessed): the body size class, 0 small, 1 middle, 2 large
+                // (GetBodySize); 0x04-0x1C: the move speeds of GetMoveSpeedKind's
+                // kinds 0 to 6. The rest of the m_*UnkXXX fields: names not known,
+                // types from the stores of the constructors (game/basket/CChrCoreBasket.cpp).
+                long m_nBodySize; // 0x0
+                float m_fMoveSpeedKind0; // 0x4
+                float m_fMoveSpeedKind1; // 0x8
+                float m_fMoveSpeedKind2; // 0xC
+                float m_fMoveSpeedKind3; // 0x10
+                float m_fMoveSpeedKind4; // 0x14
+                float m_fMoveSpeedKind5; // 0x18
+                float m_fMoveSpeedKind6; // 0x1C
+                float m_fUnk020; // 0x20
+                float m_fUnk024; // 0x24
+                float m_fUnk028; // 0x28
+                float m_fUnk02C; // 0x2C
+                float m_fUnk030; // 0x30
+                float m_fUnk034; // 0x34
                 // 0x38 (name guessed; game/basket/unit_581FC.cpp): the frames
                 // of the dash.
                 long m_nDashFrame;
@@ -39,13 +58,28 @@ namespace msw {
                 float m_fTrickMoveUnk54;       // 0x54
                 float m_fTrickMoveUnk58;       // 0x58
                 long m_nTrickMoveRotDeg;       // 0x5C
-                unsigned char m_Unk060[0x88 - 0x60];
+                long m_nUnk060; // 0x60
+                long m_nUnk064; // 0x64
+                float m_fUnk068; // 0x68
+                float m_fUnk06C; // 0x6C
+                float m_fUnk070; // 0x70
+                float m_fUnk074; // 0x74
+                long m_nUnk078; // 0x78
+                long m_nUnk07C; // 0x7C
+                float m_fUnk080; // 0x80
+                float m_fUnk084; // 0x84
                 // 0x88, 0x8C (names guessed; game/basket/unit_2BBEC.cpp): the
                 // frames of the jump block during which its defence
                 // collision is on.
                 long m_nJumpBlockDefStart;     // 0x88
                 long m_nJumpBlockDefEnd;       // 0x8C
-                unsigned char m_Unk090[0xAC - 0x90];
+                float m_fUnk090; // 0x90
+                float m_fUnk094; // 0x94
+                long m_nUnk098; // 0x98
+                long m_nUnk09C; // 0x9C
+                float m_fUnk0A0; // 0xA0
+                float m_fUnk0A4; // 0xA4
+                long m_nUnk0A8; // 0xA8
                 // 0xAC-0xB4, 0xD4, 0xD8 (names guessed; game/basket/CBallBasket.cpp,
                 // SetShootParam_): how a shot of this character flies (0 an
                 // arc, 1 straight, 2 curving), its speed and how far it
@@ -53,10 +87,27 @@ namespace msw {
                 long m_nShotKind;              // 0xAC
                 float m_fShotSpeed;            // 0xB0
                 float m_fShotCurve;            // 0xB4
-                unsigned char m_Unk0B8[0xD4 - 0xB8];
+                long m_nUnk0B8; // 0xB8
+                float m_fUnk0BC; // 0xBC
+                long m_nUnk0C0; // 0xC0
+                float m_fUnk0C4; // 0xC4
+                long m_nUnk0C8; // 0xC8
+                float m_fUnk0CC; // 0xCC
+                long m_nUnk0D0; // 0xD0
                 long m_nJustShotKind;          // 0xD4
                 float m_fJustShotSpeed;        // 0xD8
-                unsigned char m_Unk0DC[0x10C - 0xDC];
+                long m_nUnk0DC; // 0xDC
+                long m_nUnk0E0; // 0xE0
+                long m_nUnk0E4; // 0xE4
+                long m_nUnk0E8; // 0xE8
+                long m_nUnk0EC; // 0xEC
+                long m_nUnk0F0; // 0xF0
+                float m_fUnk0F4; // 0xF4
+                long m_nUnk0F8; // 0xF8
+                float m_fUnk0FC; // 0xFC
+                long m_nUnk100; // 0x100
+                long m_nUnk104; // 0x104
+                float m_fUnk108; // 0x108
                 // 0x10C-0x170 (names guessed; game/basket/unit_38A7C.cpp): the
                 // dunk's jump height and run-up frames, and whether its run-up
                 // is counted in loops (0: timed); the same for the rebound
@@ -69,18 +120,32 @@ namespace msw {
                 long m_bDunkLoop;              // 0x114
                 float m_fReboundDunkHeight;    // 0x118
                 long m_nReboundDunkFrame;      // 0x11C
-                unsigned char m_Unk120[0x12C - 0x120];
+                float m_fUnk120; // 0x120
+                float m_fUnk124; // 0x124
+                long m_nUnk128; // 0x128
                 long m_nAlleyoopFrame;         // 0x12C
                 long m_bAlleyoopLoop;          // 0x130
                 float m_fAlleyoopHeight;       // 0x134
-                unsigned char m_Unk138[0x15C - 0x138];
+                long m_nUnk138; // 0x138
+                long m_nUnk13C; // 0x13C
+                float m_fUnk140; // 0x140
+                float m_fUnk144; // 0x144
+                float m_fUnk148; // 0x148
+                float m_fUnk14C; // 0x14C
+                float m_fUnk150; // 0x150
+                float m_fUnk154; // 0x154
+                float m_fUnk158; // 0x158
                 float m_fLayUpSpeed;           // 0x15C
                 long m_nLayUpRotDeg;           // 0x160
                 float m_fLayUpMotSpeed;        // 0x164
                 long m_nLayUpHoldFrame;        // 0x168
                 float m_fLayUpHeight;          // 0x16C
                 long m_nLayUpJumpFrame;        // 0x170
-                unsigned char m_Unk174[0x188 - 0x174];
+                float m_fUnk174; // 0x174
+                float m_fUnk178; // 0x178
+                long m_nUnk17C; // 0x17C
+                long m_nUnk180; // 0x180
+                float m_fUnk184; // 0x184
                 // 0x188-0x1C4 (names guessed; game/basket/unit_2BBEC.cpp):
                 // the blend frames of the swat; the jump to the upper floor:
                 // its turn on the way up and how much of it the fall takes
@@ -100,12 +165,12 @@ namespace msw {
                 long m_nJumpUpperWinEnd;       // 0x1A8
                 float m_fJumpUpperHeight;      // 0x1AC
                 long m_nJumpUpperCollType;     // 0x1B0
-                unsigned char m_Unk1B4[0x1B8 - 0x1B4];
+                float m_fUnk1B4; // 0x1B4
                 float m_fJumpUpperCollHeight;  // 0x1B8
-                unsigned char m_Unk1BC[0x1C0 - 0x1BC];
+                float m_fUnk1BC; // 0x1BC
                 long m_nJumpUpperSwapCount;    // 0x1C0
                 long m_nJumpUpperTurnRate;     // 0x1C4
-                unsigned char m_Unk1C8[0x1CC - 0x1C8];
+                long m_nUnk1C8; // 0x1C8
                 // 0x1CC-0x1E4 (names guessed; game/basket/unit_2FD1C.cpp, the
                 // smash cut): two values the cut keeps as floats in its work
                 // (meaning not known), the reach of the cut, then the turn
@@ -114,7 +179,7 @@ namespace msw {
                 long m_nSmashCutUnk1CC;        // 0x1CC
                 long m_nSmashCutUnk1D0;        // 0x1D0
                 float m_fSmashCutRadius;       // 0x1D4
-                unsigned char m_Unk1D8[0x1DC - 0x1D8];
+                long m_nUnk1D8; // 0x1D8
                 long m_nSmashCutRotDeg;        // 0x1DC
                 long m_nSmashCutRotBackDeg;    // 0x1E0
                 long m_nSmashCutJumpFrame;     // 0x1E4
@@ -129,7 +194,11 @@ namespace msw {
                 long m_nSmashCutFallFrame;     // 0x1F0
                 float m_fSmashCutHeight;       // 0x1F4
                 float m_fSmashCutSpeed;        // 0x1F8
-                unsigned char m_Unk1FC[0x210 - 0x1FC];
+                float m_fUnk1FC; // 0x1FC
+                float m_fUnk200; // 0x200
+                float m_fUnk204; // 0x204
+                float m_fUnk208; // 0x208
+                float m_fUnk20C; // 0x20C
                 // 0x210: the height of Toad's trick jump
                 // (CChrCoreBasketKinopio::SubStateArtsShotSetTrickJumpParam_).
                 float m_fArtsJumpHeight;
@@ -170,6 +239,12 @@ namespace msw {
                 float m_fArtsShotBlend;        // 0x260
                 float m_fArtsShotBlendNoLoop;  // 0x264
                 float m_fArtsLandBlend;        // 0x268
+                // 0x26C, 0x270 (names guessed; GetArtsShotRefelectDisableFrame/Area in
+                // game/basket/CChrCoreBasket.cpp): how long and how near a special
+                // shot cannot be knocked away; 0x274 (meaning not known).
+                long m_nArtsShotReflectDisableFrame; // 0x26C
+                float m_fArtsShotReflectDisableArea; // 0x270
+                long m_nUnk274; // 0x274
         };
     }
 
@@ -389,9 +464,25 @@ namespace msw {
             long GetJustShotMinEndFrm() const;
             long GetJustShotMidEndFrm() const;
             long GetJustShotMaxEndFrm() const;
-            // Not zero when the trick move towards pTarget asks for the
-            // slow camera.
-            int CheckStateWorkTrickMoveSlow(float fRate, const CChrCore *pTarget);
+            // Not zero when the trick move of this character (turning to
+            // fRotY) round pTarget asks for the slow camera.
+            int CheckStateWorkTrickMoveSlow(float fRotY, const CChrCore *pTarget);
+            // (added for game/basket/CChrCoreBasket.cpp; names from the
+            // symbols, return types and meanings guessed) The work of the
+            // trick move (state 0x1E; mapped below); the collision sizes of
+            // body size class nSize and of this character's; the factor its
+            // move speed rises by while it defends and its update; the
+            // height of its body collision; its body size class
+            // (CC_PARAM_BASKET2::m_nBodySize); how near a special shot cannot
+            // be knocked away; the factor of its condition on its speed.
+            struct STATE_WORK_TRICK_MOVE;
+            const PRM_BODY_SIZE *GetPrmBodySize_(long nSize) const;
+            float GetDefenseSpeedUpRate_() const;
+            void UpDateDefenseSpeedUpRate();
+            float GetCollBodySizeY() const;
+            long GetBodySize() const;
+            float GetArtsShotRefelectDisableArea() const;
+            float CalcConditionMoveSpeedRate_() const;
             // Hides the combination icon; plays the combination's sound.
             void DispOffCombinationIcon();
             void PlayCombinationSe();
@@ -544,6 +635,23 @@ namespace msw {
             int CanbeBlockCut_(int bNow);
             long SubStateRDBGetRotFlag_(float fRotY, float fStartRotY);
             int SubStateRDBIsUpdateRotFlag_(float fRotY, float fOldRotY, float fStartRotY);
+            // (added for BasketF game/basket/unit_34430.cpp, the dribble
+            // states; return types from the callers) The standing
+            // dribble's motion; the change of hands of the running dribble
+            // and its move (returns the yaw asked for); the turn of the
+            // catch into the dribble; one bounce of the dribble posture (1
+            // once the bounces have run out); the motion play with a flag
+            // word; the catch sound and the effect of the trick move.
+            struct STATE_WORK_RDB;
+            struct STATE_WORK_AUTO_DRIBBLE_POSTURE;
+            long GetMotID_SDB(int bLeft) const;
+            void CheckRDBChangeDribble_();
+            float SubStateRDBMove_(STATE_WORK_RDB *pWork);
+            void CalcSdbCatchRotLerpParam_(const bcs::FVEC3 &rTarget, CChrCore::ROT_LERP1 &rLerp);
+            int SubStateADPCmnDribble_(STATE_WORK_AUTO_DRIBBLE_POSTURE *pWork);
+            void AnimPlayEx(unsigned long nSlot, long nMot, int bLoop, float fInter, float fFrame, unsigned long nFlag);
+            void PlaySeCatch_();
+            void PlayTrickMoveEffect(int bLeft);
             void OnChrChange();
             int IsTargetGoal3PointArea(const bcs::FVEC3 &rPos, float fMargin) const;
             // pChr answers the dunk of the air trick with a block; the
@@ -846,7 +954,7 @@ namespace msw {
             // CChrCoreBasket's own virtuals, 0xC9C to 0xD4C (return types
             // guessed: "int" for a word, "float" for f1, "void *" for a
             // pointer to a type not mapped yet).
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual const CHR_CORE_BASKET::CC_PARAM_BASKET2 *GetCcParam2_() const; // 0xCA4
             // (return type from CChrCoreBasketSaboten's: 1 when it wrote a
@@ -912,7 +1020,11 @@ namespace msw {
             // 0x588 (name guessed; game/basket/unit_581FC.cpp): while above
             // 0 the trick move may start outside a battle.
             float m_fTrickMoveWait;
-            unsigned char m_Unk58C[0x598 - 0x58C];
+            unsigned char m_Unk58C[0x594 - 0x58C];
+            // 0x594 (name guessed; game/basket/CChrCoreBasket.cpp): how much
+            // faster the character moves while it defends close to the ball
+            // holder (GetDefenseSpeedUpRate_; 0 or 0.3).
+            float m_fDefenseSpeedUpRate;
             // 0x598-0x5A0 (name guessed; game/basket/unit_25D70.cpp): the
             // gap of the second body push collision (CalcPush1GapValue);
             // the run state clears it.
@@ -1013,6 +1125,32 @@ namespace msw {
         float m_fRadius;               // 0x2C, the reach of the cut (Toad's mushroom takes it as its size)
     };
 
+    // (field names guessed; game/basket/CChrCoreBasket.cpp and, as a
+    // local struct, game/basket/unit_581FC.cpp) The work of the trick move.
+    struct CChrCoreBasket::STATE_WORK_TRICK_MOVE {
+        long m_nStep;                  // 0x00
+        // 0x04, 0x08: the characters (1 << GetChrIdx()) the slow camera
+        // was already tried for, against a block cut and against a run.
+        unsigned long m_nSlowBlockCutBit;
+        unsigned long m_nSlowRunBit;
+        unsigned long m_nFlag;         // 0x0C, bit 0: the spin goes the other way
+        float m_fRotY;                 // 0x10, the yaw the spin ends at
+        float m_fFrame;                // 0x14, the frames of the move so far
+        float m_fRemainderFrame;       // 0x18 (GetStateWorkTrickMoveRemainderFrame)
+        // 0x1C-0x3C (names guessed; game/basket/unit_34430.cpp, the trick
+        // move's states): frames to the next after-image, the turn per
+        // frame of the spin, the speed of the move (CC_PARAM_BASKET2's
+        // m_fTrickMoveUnk54) and of the turn round the defender
+        // (m_fTrickMoveUnk58), the frames ahead the turn looks, and the
+        // direction of the move.
+        float m_fIllusionWait;         // 0x1C
+        float m_fRotStep;              // 0x20
+        float m_fSpeed;                // 0x24
+        float m_fTurnSpeed;            // 0x28
+        float m_fLookFrame;            // 0x2C
+        bcs::FVEC3 m_Dir;              // 0x30
+    };
+
     // (field names guessed; only what the character units read is mapped)
     struct CChrCoreBasket::STATE_WORK_JUMP_UPPER {
         // 0x00-0x20 (names guessed; game/basket/unit_2BBEC.cpp): the step
@@ -1052,7 +1190,7 @@ namespace msw {
             virtual void LoopStateAirTrick();                          // 0x588
             virtual void DtorStateAirTrick();                          // 0x58C
             virtual void CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush); // 0xC54
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
     };
 
@@ -1062,7 +1200,7 @@ namespace msw {
         public:
             CChrCoreBasketDaisy();
             virtual ~CChrCoreBasketDaisy();
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *pWork, long); // 0xCE4
             virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
@@ -1077,7 +1215,7 @@ namespace msw {
             virtual ~CChrCoreBasketWario();
             virtual void CallbackMotTrg_AtkOn_(long, long);            // 0xC80
             virtual void CallbackMotTrg_AtkOff_(long, long);           // 0xC84
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCBC
             virtual void SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCC0
@@ -1101,7 +1239,7 @@ namespace msw {
             virtual void CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush); // 0xC54
             virtual void CallbackMotTrg_AtkOn_(long, long);            // 0xC80
             virtual void CallbackMotTrg_AtkOff_(long, long);           // 0xC84
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
     };
 
@@ -1111,7 +1249,7 @@ namespace msw {
         public:
             CChrCoreBasketKoopaJr();
             virtual ~CChrCoreBasketKoopaJr();
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
             virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *pWork, long); // 0xCE4
@@ -1139,7 +1277,7 @@ namespace msw {
             virtual void CallbackMotTrg_(const bcs::CAnmObjMotBase::MOT_TRG *pTrg); // 0xC44
             virtual void CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush); // 0xC54
             virtual void CallbackMotTrg_BodyVisible_(long bVisible, long); // 0xC7C
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
 
             // Where copy nClone stands; null without the copies or once
@@ -1195,7 +1333,7 @@ namespace msw {
             virtual int MoveTargetMarkerPos(float fRotY);              // 0x5C
             virtual void Reset_();                                     // 0x384
             virtual void LoopStateAirTrick();                          // 0x588
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
             virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF0
@@ -1218,6 +1356,8 @@ namespace msw {
             virtual void LoopStateAirTrick();                          // 0x588
             virtual void DtorStateAirTrick();                          // 0x58C
             virtual void CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush); // 0xC54
+            virtual const void *GetCcParam_() const;                       // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
     };
 
     class CChrCoreBasketMii01 : public CChrCoreBasket {
@@ -1229,6 +1369,8 @@ namespace msw {
             virtual void LoopStateAirTrick();                          // 0x588
             virtual void DtorStateAirTrick();                          // 0x58C
             virtual void CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush); // 0xC54
+            virtual const void *GetCcParam_() const;                       // 0xC9C
+            virtual void *NewCcParam2_(long) const;                    // 0xCA0
     };
 
     // Luigi: his special shot pulls the other team in with his vacuum
@@ -1243,7 +1385,7 @@ namespace msw {
             virtual void LoopStateAirTrick();                          // 0x588
             virtual void DtorStateAirTrick();                          // 0x58C
             virtual void CtorStateJumpBlock();                         // 0x5F0
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCE8
             virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xCF0
@@ -1271,7 +1413,7 @@ namespace msw {
             virtual void CtorStateJumpBlock();                         // 0x5F0
             virtual void CtorStateSmashCut();                          // 0x608
             virtual void LoopStateSmashCut();                          // 0x60C
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual void UpdateCollAtk_();                             // 0xCB0
             virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCBC
@@ -1307,7 +1449,7 @@ namespace msw {
             virtual void CtorStateSmashCut();                          // 0x608
             virtual void LoopStateSmashCut();                          // 0x60C
             virtual void DtorStateSmashCut();                          // 0x610
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
             virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCF8
@@ -1331,7 +1473,7 @@ namespace msw {
             virtual void LoopStateAirTrick();                          // 0x588
             virtual void DtorStateAirTrick();                          // 0x58C
             virtual void CallbackBodyPush_(CCollBodyUnit *pBody, CCollBodyUnit *pOther, bcs::FVEC3 *pPush); // 0xC54
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual int GetSpSetBackPos(bcs::FVEC3 &rPos) const;       // 0xCA8
 
@@ -1358,7 +1500,7 @@ namespace msw {
             virtual void CtorStateSmashCut();                          // 0x608
             virtual void LoopStateSmashCut();                          // 0x60C
             virtual void CallbackMotTrg_(const bcs::CAnmObjMotBase::MOT_TRG *pTrg); // 0xC44
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
             virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
@@ -1388,7 +1530,7 @@ namespace msw {
             virtual ~CChrCoreBasketWaluigi();
             virtual void CtorStateAirTrick();                          // 0x584
             virtual void DtorStateAirTrick();                          // 0x58C
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual float SubStateArtsShotGetTrickMotFrame_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCC4
             virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
@@ -1422,7 +1564,7 @@ namespace msw {
             virtual void CtorStateJumpUpper();                         // 0x434
             virtual void LoopStateJumpUpper();                         // 0x438
             virtual void DtorStateJumpUpper();                         // 0x43C
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
             virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *pWork); // 0xCE8
@@ -1440,7 +1582,7 @@ namespace msw {
             virtual ~CChrCoreBasketKoopa();
             virtual void CallbackMotTrg_AtkOn_(long, long);            // 0xC80
             virtual void CallbackMotTrg_AtkOff_(long, long);           // 0xC84
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual float SubStateArtsShotGetTrickMotFrame_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCC4
             virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
@@ -1461,7 +1603,7 @@ namespace msw {
         public:
             CChrCoreBasketPeach();
             virtual ~CChrCoreBasketPeach();
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0
             virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *pWork, long); // 0xCE4
@@ -1477,7 +1619,7 @@ namespace msw {
             CChrCoreBasketDiddy();
             virtual ~CChrCoreBasketDiddy();
             virtual void DtorStateAirTrick();                          // 0x58C
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual void SubStateArtsShotSetTrickJumpParam_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCBC
             virtual void SubStateArtsShotSetTrickMoveParam_(STATE_WORK_AIR_TRICK *pWork, long nStep); // 0xCC0
@@ -1544,7 +1686,7 @@ namespace msw {
             virtual void CtorStateSmashCut();                          // 0x608
             virtual void LoopStateSmashCut();                          // 0x60C
             virtual void DtorStateSmashCut();                          // 0x610
-            virtual void *GetCcParam_() const;                         // 0xC9C
+            virtual const void *GetCcParam_() const;                       // 0xC9C
             virtual void *NewCcParam2_(long) const;                    // 0xCA0
             virtual void SubStateArtsShotStartTrick_(STATE_WORK_AIR_TRICK *pWork); // 0xCB4
             virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *pWork); // 0xCD0

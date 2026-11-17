@@ -148,6 +148,10 @@ def main():
     a.add_argument("--reviewed", action="store_true",
                    help="near for a 'real' difference: a reviewer checked that the stated difference "
                         "cannot change behaviour (say 'reviewer' in the reason)")
+    a.add_argument("--weak-copy", action="store_true",
+                   help="unverified below the floor: a compiler-emitted weak copy of a header inline whose "
+                        "shape comes from our class hierarchy, not the function's own source "
+                        "(notes/decisions.md section 2); needs --unverified and 'weak copy' in the reason")
     ls = sub.add_parser("list")
     ls.add_argument("--module")
     sub.add_parser("check")
@@ -177,6 +181,12 @@ def main():
             if "reviewer" not in args.reason.lower():
                 sys.exit("--tailcall needs the reviewer's confirmation in the reason (say 'reviewer confirmed')")
             args.reason = "tail call vs framed call only: " + args.reason.strip()
+        elif args.weak_copy:
+            if not args.unverified:
+                sys.exit("--weak-copy records an unverified entry; add --unverified")
+            if "weak copy" not in args.reason.lower():
+                sys.exit("--weak-copy needs 'weak copy' in the reason, with what shapes it")
+            args.reason = "[weak copy, below floor] " + args.reason.strip()
         elif score < floor:
             hint = "" if args.unverified else f"; below {NEAR_MIN:.0f}% use --unverified"
             sys.exit(f"score is {score:.1f}%, under the {floor:.0f}% floor for '{cls}'{hint}")

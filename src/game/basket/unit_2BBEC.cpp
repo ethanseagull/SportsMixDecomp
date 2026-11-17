@@ -737,7 +737,10 @@ void msw::CChrCoreBasket::LoopStateJumpUpper()
                         bcs::FVEC3 dist = reinterpret_cast<VEC3_CREF>(pEvent->GetPos()) -
                                           reinterpret_cast<VEC3_CREF>(GetPos());
                         float fDist = bcs::BCS_Vec_GetLenXZ(dist);
-                        bcs::FVEC3 ofs(0.0f, pEvent->GetPos().y - GetPos().y, fDist);
+                        bcs::FVEC3 ofs;
+                        ofs.x = 0.0f;
+                        ofs.y = pEvent->GetPos().y - GetPos().y;
+                        ofs.z = fDist;
                         float fRate = GetWholeFrameRate();
                         Approach(m_BattleOfs, ofs, 0.1f);
 

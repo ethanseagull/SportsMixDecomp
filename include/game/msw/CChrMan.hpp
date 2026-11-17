@@ -117,9 +117,10 @@ namespace msw {
             // instance, the character nearest to rPos (the second argument is
             // a team index, -1 for any).
             static CChrCore *Util_SearchNearPosChar(const bcs::FVEC3 &rPos, long nTeam);
-            // (DOL, static; added for BasketF game/basket/unit_34430.cpp;
-            // meaning guessed from the name) The enemy nearest to player
-            // nPlayer.
+            // DOL (added for DodgeF game/dodge/unit_3DE18.cpp, also used by
+            // BasketF game/basket/unit_34430.cpp; meaning guessed from the
+            // name): Util_SearchNearPosEnemy_ on the instance, the opponent
+            // nearest to character nPlayer.
             static CChrCore *Util_SearchNearPosEnemy(long nPlayer);
 
             // The character with index `nChr` (0 to GetChrCoreNum() - 1), or

@@ -640,6 +640,12 @@ namespace msw {
             void SubStateDamageCtorDizzy_(STATE_WORK_DAMAGE *pWork);
             int SubStateDamageLoopDizzy_(STATE_WORK_DAMAGE *pWork);
             int SubStateDamageLoopTumble_(STATE_WORK_DAMAGE *pWork);
+            // (added for game/dodge/unit_3DE18.cpp; names from the symbols)
+            // Whether the pass catch is over early (the ball is held or no
+            // longer a pass); the frames the ball of a pass flies, told to
+            // the receiver (empty in DodgeF).
+            int CheckPassCatchEnd_();
+            void SendPassCatchFrame_(CChrCore *pTo, const bcs::FVEC3 &rPos, float fFrame);
 
             unsigned char m_Unk574[0x5A8 - 0x574];
             // 0x5A8 (name guessed; game/dodge/unit_3F694.cpp): the jump shot

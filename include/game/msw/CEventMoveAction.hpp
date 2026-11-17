@@ -19,6 +19,15 @@ namespace msw {
             CEventMoveAction(CEventModel *pModel) : m_pModel(pModel), m_fFrame(0.0f), m_pRoute(0), m_pPrevRoute(0)
             {
             }
+            // (added for DodgeF CEvMoveActFieldDemo) Also links the action to
+            // the model, the model owning it with bLink.
+            CEventMoveAction(CEventModel *pModel, int bLink)
+                : m_pModel(pModel), m_fFrame(0.0f), m_pRoute(0), m_pPrevRoute(0)
+            {
+                if (pModel != 0) {
+                    SetLink(bLink);
+                }
+            }
 
             // Empty: the derived destructors call nothing.
             virtual ~CEventMoveAction() {}

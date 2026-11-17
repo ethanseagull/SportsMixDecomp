@@ -1484,6 +1484,9 @@ namespace msw {
             // receiver).
             void SetTeamColorBlinkCount(float fCount);
             long PlayGetOutline_(unsigned long) const;
+            // (DOL; added for VolleyF game/volley/CBallVolley.cpp, return type
+            // guessed) The skill type of the character's parameters.
+            long GetPrmSkillType() const;
             void AddPosXZ(float fX, float fZ);
             void WSE_Play(long nSlot, long nSe, unsigned long, long);
             int IsAnimLoop(unsigned long nSlot) const;

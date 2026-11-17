@@ -53,6 +53,25 @@ namespace msw {
                 KIND_MUSHROOM = 6
             };
 
+            // States, in the order of the Ctor/Loop/Dtor triples below
+            // (names from those functions).
+            enum {
+                STATE_STOCK = 0,
+                STATE_POPUP = 1,
+                STATE_DRIFT = 2,
+                STATE_DROP = 3,
+                STATE_ATTACH = 4,
+                STATE_THROW = 5,
+                STATE_DROP_BREAK = 6,
+                STATE_BREAK = 7,
+                STATE_PRESS = 8,
+                STATE_DELETE = 9
+            };
+
+            // (name guessed) The current state (CFsm's state number);
+            // msw::CItemMan's functions read it.
+            long GetState() const { return m_nState; }
+
             // (DOL) The resource file of an item kind's models.
             // msw::CItemBallShellWreck takes model 0 of it.
             static nw4r::g3d::ResFile GetItemRsrcFile(long kind);

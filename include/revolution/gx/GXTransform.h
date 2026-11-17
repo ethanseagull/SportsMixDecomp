@@ -18,6 +18,12 @@ void GXSetProjection(const Mtx44 mtx, GXProjectionType type);
 // Added for MenuF game/menu/CBgDisplay.cpp.
 void GXSetProjection(const Mtx44 mtx, GXProjectionType type);
 
+// Added for the DOL's game/bcs/CMainApp.cpp. (GXSetViewport itself has no
+// name in the DOL yet: fn_8029C7C0.)
+void GXSetClipMode(GXClipMode mode);
+void GXSetScissor(unsigned long left, unsigned long top, unsigned long wd, unsigned long ht);
+void GXSetViewportJitter(float left, float top, float wd, float ht, float nearz, float farz, unsigned long field);
+
 #ifdef __cplusplus
 }
 #endif

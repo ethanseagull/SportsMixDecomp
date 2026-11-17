@@ -4068,7 +4068,7 @@ Stage15_GetPosTurnAroundGimmickKaron__Q23msw17CComDrvBasketGameCFRQ23bcs5FVEC3Ul
 StageXX_GetItemToTarget__Q23msw17CComDrvBasketGameCFRCQ23bcs5FVEC3 = .text:0x000AED40; // type:function size:0x1C4 scope:global
 StageXX_GetPosTurnAroundItem__Q23msw17CComDrvBasketGameCFRQ23bcs5FVEC3Ull = .text:0x000AEF04; // type:function size:0x274 scope:global
 GetTurnAroundRotDirLotOfOneCore__Q23msw17CComDrvBasketGameCFlRCQ23bcs5FVEC3 = .text:0x000AF178; // type:function size:0x230 scope:global
-fn_4_AF3A8 = .text:0x000AF3A8; // type:function size:0x14
+__sinit_\unit_A3AF0_cpp = .text:0x000AF3A8; // type:function size:0x14 scope:local
 BeforeMsgFunc__Q23msw17CComDrvBasketGameFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG = .text:0x000AF3BC; // type:function size:0x4 scope:global
 EndMsgFunc__Q23msw17CComDrvBasketGameFQ33msw7CChrDrv6MSG_IDPQ33msw7CChrDrv8_CHR_MSG = .text:0x000AF3C0; // type:function size:0x4 scope:global
 OnMain__Q23msw17CComDrvBasketGameFPQ33msw7CChrDrv8_CHR_MSG = .text:0x000AF3C4; // type:function size:0x4 scope:global
@@ -4309,7 +4309,7 @@ DtorState__Q23bcs65CStateTemplate<Q23bcs41CFsm<Q23msw27CNpcBossPackunBasketGameM
 CtorState__Q23bcs51CStateTemplate<Q23msw27CNpcBossPackunBasketGameMan>Fv = .text:0x000BCEF4; // type:function size:0x48 scope:global
 LoopState__Q23bcs51CStateTemplate<Q23msw27CNpcBossPackunBasketGameMan>Fv = .text:0x000BCF3C; // type:function size:0x48 scope:global
 DtorState__Q23bcs51CStateTemplate<Q23msw27CNpcBossPackunBasketGameMan>Fv = .text:0x000BCF84; // type:function size:0x48 scope:global
-fn_4_BCFCC = .text:0x000BCFCC; // type:function size:0x14
+__sinit_\CNpcBossPackunBasketBase_cpp = .text:0x000BCFCC; // type:function size:0x14 scope:local
 @52@__dt__Q23msw27CNpcBossPackunBasketGameManFv = .text:0x000BCFE0; // type:function size:0x8 scope:global
 @52@__dt__Q33msw24CNpcBossPackunBasketBase14CMudBombBasketFv = .text:0x000BCFE8; // type:function size:0x8 scope:global
 @392@__dt__Q23msw24CNpcBossPackunBasketBaseFv = .text:0x000BCFF0; // type:function size:0x8 scope:global

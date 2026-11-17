@@ -22,6 +22,16 @@ void OSInitMutex(OSMutex *mutex);
 void OSLockMutex(OSMutex *mutex);
 void OSUnlockMutex(OSMutex *mutex);
 
+// (added for the DOL's game/bcs/CMainApp.cpp) A counting semaphore (count
+// and waiting queue, 0x10 bytes). OSSignalSemaphore has no name in the DOL
+// yet (fn_8027CB30).
+typedef struct OSSemaphore {
+    unsigned char m_Unk00[0x10];
+} OSSemaphore;
+
+long OSWaitSemaphore(OSSemaphore *sem);
+OSThread *OSGetCurrentThread(void);
+
 #ifdef __cplusplus
 }
 #endif

@@ -311,6 +311,11 @@ namespace msw {
 
     void CItemBallBossBomb::MainFunc_()
     {
+        // Dead comparison: the original .rodata has the explosion's 4.5f
+        // before its 180.0f, most likely from a stripped
+        // GetExplosionCollSize() defined here (VolleyF has one).
+        if (m_fRate == 4.5f) {
+        }
     }
 
     // The first call only marks the bomb as shot; any later one sets it off.

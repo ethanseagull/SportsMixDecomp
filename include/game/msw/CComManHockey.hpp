@@ -12,8 +12,14 @@ namespace msw {
     // declared, and no data, so it must not be instantiated yet.
     class CComManHockey : public CComMan {
         public:
-            // A cell of the rink map (layout not mapped yet).
-            struct MAP_STATUS_DATA;
+            // A cell of the rink map: GetMapStatus copies 11 bytes of the
+            // map's 12-byte cell (meanings not known; the computer driver
+            // tests the low four bits of the first byte for 1, a blocked
+            // cell).
+            struct MAP_STATUS_DATA {
+                unsigned char m_nAttr;
+                unsigned char m_Unk01[0xB - 0x1];
+            };
 
             static CComManHockey *GetInstance();
             // Keeper of team nTeam; nSide 0 is the team's own keeper, 1 the
@@ -37,6 +43,32 @@ namespace msw {
             // frames, in the world.
             static bcs::FVEC3 GetBallWorldVelPos(const CBall *pBall, float fTime);
             static bcs::FVEC3 GetChrVelPos(const CChrCore *pChr, float fTime);
+
+            // (added for HockeyF game/hockey/unit_EEA14.cpp; meanings
+            // guessed from the names and the callers) The distance from
+            // pChr to the nearest puck (rDist), false without one; whether
+            // pChr's team has all its coins; where the boss Packun is
+            // (false without one); the grid cell (rX, rZ) of rPos on a
+            // grid of nX by nZ cells.
+            static int GetDistanceFromBalls(const CChrCore *pChr, float, float &rDist);
+            static int isTeamCoinMAX(const CChrCore *pChr);
+            int isExistBossPackun(bcs::FVEC3 &rPos);
+            static void GetGridIndex(long &rX, long &rZ, const bcs::FVEC3 &rPos, long nX, long nZ);
+            // Whether pTarget is within reach of pChr's attack (the first
+            // two or three parameters of the character's attack), or in
+            // its third attack's area; whether an enemy stands within nDeg
+            // of the line from pChr to pTarget; on which side of pChr
+            // pTarget is (rPos and nDeg as the other checks; not positive
+            // for neither).
+            static int IsExistTargetCore(const CChrCore *pChr, const CChrCore *pTarget, float, float);
+            static int IsExistInAttack3Area(const CChrCore *pChr, const CChrCore *pTarget, float, float, float);
+            static int IsExistEnemyAngle(const CChrCore *pChr, const CChrCore *pTarget, long nDeg);
+            static int IsExistToAngleLR(const CChrCore *pChr, const CChrCore *pTarget, long nDeg);
+            static long IsExistTargetLR(const CChrCore *pChr, const CChrCore *pTarget, bcs::FVEC3 pos, long nDeg);
+            // (added for HockeyF game/hockey/unit_E0310.cpp) A random number
+            // from f1 to f2; IsExistTargetCore for a position.
+            static float GetRandValueF(float f1, float f2);
+            static int IsExistTargetPos(const CChrCore *pChr, bcs::FVEC3 pos, float, float);
     };
 }
 

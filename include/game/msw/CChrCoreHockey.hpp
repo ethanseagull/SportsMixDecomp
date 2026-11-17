@@ -728,13 +728,50 @@ namespace msw {
             virtual void SubStateArtsShotFireBullet_(STATE_WORK_AIR_TRICK *, long); // 0xD0C
     };
 
+    // The ninja: his shot trick warps him in front of the goal he attacks,
+    // with two clones of himself (CC14_HOCKEY::CcNinjaCloneBody) beside
+    // him, each with a copy of the puck; the clones vanish when he shoots
+    // or when someone runs into them. Members mapped from
+    // game/hockey/CcNinjaCloneBody.cpp (names guessed).
     class CChrCoreHockeyNinja : public CChrCoreHockey {
         public:
+            enum { CLONE_NUM = 2 };
+
             CChrCoreHockeyNinja();
             virtual ~CChrCoreHockeyNinja();
+            virtual void GetSpRootPos(bcs::FVEC3 &rPos) const;         // 0x2C
+            virtual void DtorStateAirTrick();                          // 0x58C
             virtual CHR_CORE_HOCKEY::CC_PARAM_HOCKEY *NewCcParam_(long nHeap) const; // 0xCA8
+            virtual void SubStateArtsShotSetSetbackFrame_(STATE_WORK_AIR_TRICK *, long); // 0xCC4
+            virtual int SubStateArtsShotIsReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCC8
+            virtual int SubStateArtsShotIsStartArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCCC
+            virtual void SubStateArtsShotPlayTrickMotion_(STATE_WORK_AIR_TRICK *); // 0xCD0
+            virtual void SubStateArtsShotReadyArtsShot_(STATE_WORK_AIR_TRICK *); // 0xCD4
+            virtual void SubStateArtsShotPlayLoopMotion_(STATE_WORK_AIR_TRICK *); // 0xCD8
+            virtual void SubStateArtsShotPlayArtsShotMotion_(STATE_WORK_AIR_TRICK *); // 0xCE0
+            virtual void SubStateArtsShotCalcSetbackPos_(bcs::FVEC3 &); // 0xCFC
+
         protected:
-            unsigned char m_Unk76C[0x788 - 0x76C];
+            // Moves the clones out from him by fRate (0 to 1) of their way
+            // and keeps the puck's place in his hand (the second rate is not
+            // used).
+            void SetCloneBodyPosRate_(float fRate, float);
+            // (inline helpers, names guessed) Makes the clones missing at
+            // the places of pPosTbl (appearing with effect nEffect); deletes
+            // the clones and forgets them; changes the state of the clones
+            // still there.
+            void CreateClone_(const float *pPosTbl, long nEffect);
+            void DeleteClone_();
+            void ChangeStateClone_(long nState);
+
+            // 0x76C: the puck's offset from him, turned with him
+            // (SetCloneBodyPosRate_ keeps it; not read here).
+            bcs::FVEC3 m_BallOfs;
+            unsigned long m_ahClone[CLONE_NUM];    // 0x778, task ids of the clones, 0 for none
+            // 0x780 (meaning not known): an object he deletes with the
+            // clones; nothing here sets it.
+            bcs::CTask *m_pUnk780;
+            long m_nPosType;                       // 0x784, which arrangement of the three was drawn
     };
 
     // The Black Mage: his shot trick locks on to the other team and strikes

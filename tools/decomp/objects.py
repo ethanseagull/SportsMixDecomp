@@ -23,7 +23,16 @@ DIRS = {"tour": "TourF", "menu": "MenuF", "boss": "BossF", "basket": "BasketF",
         "debug": "DebugF"}
 OPTIONS = {"pch=MenuF_g3d": "PCH_MenuF_g3d", "flags=noauto": "NOAUTO"}  # objects.txt word -> configure.py name
 NAMES = {v: k for k, v in OPTIONS.items()}
-ENTRY = re.compile(r'^(\s*)Object\(\s*(\w+)\s*,\s*"([^"]+)"\s*(?:,\s*extra_cflags=(\[[^\]]*\]|\w+)\s*)?\),?\s*$')
+# The state is a word, or MatchingFor("RMKE01") as decompdecomp writes it when it links a unit (dtk-template's
+# per-version form; this project has two versions configured).
+ENTRY = re.compile(r'^(\s*)Object\(\s*(\w+(?:\([^()]*\))?)\s*,\s*"([^"]+)"\s*(?:,\s*extra_cflags=(\[[^\]]*\]|\w+)\s*)?\),?\s*$')
+STATE = re.compile(r"Object\(\s*\w+(?:\([^()]*\))?")
+
+
+def _state(word, version="RMKE01"):
+    if word.startswith("MatchingFor("):
+        return "Matching" if f'"{version}"' in word else "NonMatching"
+    return word
 INDENT = " " * 12
 
 
@@ -91,7 +100,7 @@ def read(module, version="RMKE01"):
     for line in lines[start:end]:
         m = ENTRY.match(line)
         if m:
-            out.append((m.group(2), m.group(3), _opts(m.group(4))))
+            out.append((_state(m.group(2), version), m.group(3), _opts(m.group(4))))
     return out
 
 
@@ -133,7 +142,7 @@ def set_status(unit, status, version="RMKE01"):
     for i in range(start, end):
         m = ENTRY.match(lines[i])
         if m and m.group(3) == unit:
-            lines[i] = re.sub(r"Object\(\s*\w+", f"Object({status}", lines[i], count=1)
+            lines[i] = STATE.sub(f"Object({status}", lines[i], count=1)
     _write(lines)
     return module, old
 

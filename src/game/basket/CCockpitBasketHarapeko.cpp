@@ -22,37 +22,35 @@
 
 namespace {
 
-    // The layout and its animations.
-    struct {
-        const char *pLayout;
-        const char *pAnim[23];
-    } s_LayoutRes = {
-        "BA_harapeko.brlyt",
-        {
-            "BA_harapeko_ca_00.brlan",
-            "BA_harapeko_ca_01.brlan",
-            "BA_harapeko_ca_02.brlan",
-            "BA_harapeko_ca_03.brlan",
-            "BA_harapeko_ca_04.brlan",
-            "BA_harapeko_mov_00.brlan",
-            "BA_harapeko_mov_01.brlan",
-            "BA_harapeko_mov_02.brlan",
-            "BA_harapeko_mov_03.brlan",
-            "BA_harapeko_no_00.brlan",
-            "BA_harapeko_no_01.brlan",
-            "BA_harapeko_no_02.brlan",
-            "BA_harapeko_time_00.brlan",
-            "BA_harapeko_time_01.brlan",
-            "BA_harapeko_t_00.brlan",
-            "BA_harapeko_t_01.brlan",
-            "BA_harapeko_t_02.brlan",
-            "BA_harapeko_Vis_00.brlan",
-            "BA_harapeko_Vis_01.brlan",
-            "BA_harapeko_Time_vis_00.brlan",
-            "BA_harapeko_Time_vis_01.brlan",
-            "BA_harapeko_Time_vis_02.brlan",
-            "BA_harapeko_TC_00.brlan",
-        },
+    // The layout.
+    const char *s_LayoutName = "BA_harapeko.brlyt";
+
+    // Its animations (right after the layout name: two objects, so that
+    // Set reaches them and s_PaneName from one base register).
+    const char *s_AnimName[23] = {
+        "BA_harapeko_ca_00.brlan",
+        "BA_harapeko_ca_01.brlan",
+        "BA_harapeko_ca_02.brlan",
+        "BA_harapeko_ca_03.brlan",
+        "BA_harapeko_ca_04.brlan",
+        "BA_harapeko_mov_00.brlan",
+        "BA_harapeko_mov_01.brlan",
+        "BA_harapeko_mov_02.brlan",
+        "BA_harapeko_mov_03.brlan",
+        "BA_harapeko_no_00.brlan",
+        "BA_harapeko_no_01.brlan",
+        "BA_harapeko_no_02.brlan",
+        "BA_harapeko_time_00.brlan",
+        "BA_harapeko_time_01.brlan",
+        "BA_harapeko_t_00.brlan",
+        "BA_harapeko_t_01.brlan",
+        "BA_harapeko_t_02.brlan",
+        "BA_harapeko_Vis_00.brlan",
+        "BA_harapeko_Vis_01.brlan",
+        "BA_harapeko_Time_vis_00.brlan",
+        "BA_harapeko_Time_vis_01.brlan",
+        "BA_harapeko_Time_vis_02.brlan",
+        "BA_harapeko_TC_00.brlan",
     };
 
     // Panes, by index into s_PaneName.
@@ -839,8 +837,8 @@ int msw::CCockpitBasketHarapeko::Set()
     pPaneCtrl->AddFontRefLink(pLytCtrl->GetArchiveFont(0), pLytCtrl->GetFontResourceName(0));
     pPaneCtrl->AddFontRefLink(pLytCtrl->GetArchiveFont(1), pLytCtrl->GetFontResourceName(1));
     pPaneCtrl->AddFontRefLink(pLytCtrl->GetArchiveFont(2), pLytCtrl->GetFontResourceName(2));
-    pPaneCtrl->BuildLayout(0, s_LayoutRes.pLayout);
-    pPaneCtrl->BuildAnim(0, s_LayoutRes.pAnim, 23);
+    pPaneCtrl->BuildLayout(0, s_LayoutName);
+    pPaneCtrl->BuildAnim(0, s_AnimName, 23);
     pPaneCtrl->SetSortZ(m_fSortZ);
     pPaneCtrl->SetVisible(0);
     SetPaneAccessor(pPaneCtrl, s_PaneName, PANE_NUM);
@@ -986,7 +984,7 @@ long msw::CCockpitBasketHarapeko::SetFaceIcon(bcs::G2D::CPaneCtrl *pPaneCtrl)
         nw4r::lyt::Pane *pStar = m_pPaneAccessor->GetPane(nStar);
 
         if (pStar == 0) {
-            pStar = bcs::G2D::DuplicatePane(pPaneCtrl, pStarSrc, s_PaneName[nStar], s_LayoutRes.pLayout, 0);
+            pStar = bcs::G2D::DuplicatePane(pPaneCtrl, pStarSrc, s_PaneName[nStar], s_LayoutName, 0);
             bcs::G2D::SetPaneParent(pStar, pStarParent, 1, 0);
             bcs::G2D::SetPaneSizeFromParent(pStar);
             pStar->SetTranslate(zero);
@@ -1041,7 +1039,7 @@ void msw::CCockpitBasketHarapeko::CreateCountUp(bcs::G2D::CPaneCtrl *pPaneCtrl)
 
         for (long j = 0; j < s_CountUpPaneNum; j++) {
             bcs::G2D::CPaneObj *pNullObj = bcs::G2D::DuplicatePaneObj(
-                pPaneCtrl, pNullSrc, s_PaneName[pNullPane[j]], s_LayoutRes.pLayout, 0);
+                pPaneCtrl, pNullSrc, s_PaneName[pNullPane[j]], s_LayoutName, 0);
 
             if (pNullObj == 0) {
                 continue;
@@ -1051,7 +1049,7 @@ void msw::CCockpitBasketHarapeko::CreateCountUp(bcs::G2D::CPaneCtrl *pPaneCtrl)
             pNullObj->GetPane()->SetTranslate(zero);
 
             bcs::G2D::CPaneObj *pFrameObj = bcs::G2D::DuplicatePaneObj(
-                pPaneCtrl, pFrameSrc, s_PaneName[pFramePane[j]], s_LayoutRes.pLayout, animUse);
+                pPaneCtrl, pFrameSrc, s_PaneName[pFramePane[j]], s_LayoutName, animUse);
 
             if (pFrameObj == 0) {
                 continue;
@@ -1060,7 +1058,7 @@ void msw::CCockpitBasketHarapeko::CreateCountUp(bcs::G2D::CPaneCtrl *pPaneCtrl)
             pFrameObj->GetPane()->SetVisible(true);
 
             bcs::G2D::CPaneObj *pObj = bcs::G2D::DuplicatePaneObj(
-                pPaneCtrl, pPicASrc, s_PaneName[pPicAPane[j]], s_LayoutRes.pLayout, animUse);
+                pPaneCtrl, pPicASrc, s_PaneName[pPicAPane[j]], s_LayoutName, animUse);
 
             if (pObj == 0) {
                 continue;
@@ -1069,7 +1067,7 @@ void msw::CCockpitBasketHarapeko::CreateCountUp(bcs::G2D::CPaneCtrl *pPaneCtrl)
             pObj->GetPane()->SetVisible(true);
 
             pObj = bcs::G2D::DuplicatePaneObj(pPaneCtrl, pPicBSrc, s_PaneName[pPicBPane[j]],
-                                              s_LayoutRes.pLayout, animUse);
+                                              s_LayoutName, animUse);
 
             if (pObj == 0) {
                 continue;
@@ -1078,7 +1076,7 @@ void msw::CCockpitBasketHarapeko::CreateCountUp(bcs::G2D::CPaneCtrl *pPaneCtrl)
             pObj->GetPane()->SetVisible(true);
 
             pObj = bcs::G2D::DuplicatePaneObj(pPaneCtrl, pTextSrc, s_PaneName[pTextPane[j]],
-                                              s_LayoutRes.pLayout, animUse);
+                                              s_LayoutName, animUse);
 
             if (pObj == 0) {
                 continue;
@@ -1426,7 +1424,7 @@ long msw::CCockpitBasketHarapeko::SetTeamFaceIcon(bcs::G2D::CPaneCtrl *pPaneCtrl
         nw4r::lyt::Pane *pStar = m_pPaneAccessor->GetPane(nStar);
 
         if (pStar == 0) {
-            pStar = bcs::G2D::DuplicatePane(pPaneCtrl, pStarSrc, s_PaneName[nStar], s_LayoutRes.pLayout, 0);
+            pStar = bcs::G2D::DuplicatePane(pPaneCtrl, pStarSrc, s_PaneName[nStar], s_LayoutName, 0);
             bcs::G2D::SetPaneParent(pStar, pStarParent, 1, 0);
             bcs::G2D::SetPaneSizeFromParent(pStar);
             pStar->SetTranslate(zero);
@@ -1482,7 +1480,7 @@ void msw::CCockpitBasketHarapeko::CreateCrownIcon(bcs::G2D::CPaneCtrl *pPaneCtrl
     for (long i = 0; i < nPlayerNum; i++, pPlayerPane++) {
         unsigned char nPicture = pPlayerPane->nCrownPicture;
         bcs::G2D::CPaneObj *pNullObj = bcs::G2D::DuplicatePaneObj(
-            pPaneCtrl, pNullSrc, s_PaneName[pPlayerPane->nCrownNull], s_LayoutRes.pLayout, animUse);
+            pPaneCtrl, pNullSrc, s_PaneName[pPlayerPane->nCrownNull], s_LayoutName, animUse);
 
         if (pNullObj == 0) {
             continue;
@@ -1493,7 +1491,7 @@ void msw::CCockpitBasketHarapeko::CreateCrownIcon(bcs::G2D::CPaneCtrl *pPaneCtrl
         pNullObj->GetPane()->SetAlpha(0xFF);
 
         bcs::G2D::CPaneObj *pPictureObj = bcs::G2D::DuplicatePaneObj(
-            pPaneCtrl, pPictureSrc, s_PaneName[nPicture], s_LayoutRes.pLayout, 0);
+            pPaneCtrl, pPictureSrc, s_PaneName[nPicture], s_LayoutName, 0);
 
         if (pPictureObj == 0) {
             continue;

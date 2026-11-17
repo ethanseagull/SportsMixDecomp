@@ -169,6 +169,10 @@ namespace bcs {
             // Sets the depth test of every material. (parameter names
             // guessed from GXSetZMode)
             void MatSetZModeAll(unsigned char bCompare, _GXCompare func, unsigned char bUpdate);
+            // (fn_80057688; added for HockeyF game/hockey/CcNinjaCloneBody.cpp,
+            // argument meanings guessed from GXSetDstAlpha) Sets the
+            // destination alpha of every material.
+            void MatSetDstAlphaAll(unsigned char bEnable, unsigned char nAlpha);
             // (fn_800575C4, name guessed after its neighbours
             // MatSetZModeAll and MatSetDstAlphaAll) Sets the blend mode of
             // every material (ResMatPix::GXSetBlendMode).
@@ -262,6 +266,11 @@ namespace bcs {
 
                     bool IsValid() const { return m_pMdl != 0; }
                     nw4r::g3d::ResTexObj GetResTexObj(int bMarkDirty);    // bit 0x01
+                    // (DOL fn_8005B548, unnamed; name guessed, added for
+                    // game/msw/CTrophyObj.cpp) The copy of the texture
+                    // objects when the model has one, else the resource's
+                    // own block; null without a model.
+                    nw4r::g3d::ResTexObj GetResTexObjEx();
                     // (DOL fn_8005B3E0, named here after nw4r)
                     nw4r::g3d::ResTexSrt GetResTexSrt(bool bMarkDirty);   // bit 0x04
                     // (DOL fn_8005B428, named here after nw4r)

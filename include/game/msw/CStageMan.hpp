@@ -526,6 +526,10 @@ namespace msw {
 
             static bool IsValidInstance();
             static CStageMan *GetInstance();
+            // (DOL; added for HockeyF game/hockey/CcNinjaCloneBody.cpp,
+            // meaning guessed) The kind of court of stage nStage; the hockey
+            // ninja's clones take the blue team shirt on kind 1.
+            static long GetCourtType(long nStage);
             // (added for DOL game/msw/CGame.cpp; static, meaning guessed)
             // Fades the stage's background back in.
             static void FadeIn();

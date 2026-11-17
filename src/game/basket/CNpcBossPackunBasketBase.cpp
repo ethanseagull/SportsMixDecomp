@@ -163,9 +163,9 @@ namespace msw {
         m_pMdl->OnFlag(2);
         m_pMdl->SetExBlendMode(1);
         m_pMdl->OnFlag(0x2000);
-        m_pAnm = new (0) bcs::CAnmMotion;
-        m_pAnm->Create(m_pMdl, anmFile, CC_DATA::GetNpcMdl_NodeExInfo(2), 3, 0);
-        m_pMdl->AttachAnmObj(m_pAnm, bcs::CMdlObj::ANMOBJTYPE_CHR);
+        m_pAnmMot = new (0) bcs::CAnmMotion;
+        m_pAnmMot->Create(m_pMdl, anmFile, CC_DATA::GetNpcMdl_NodeExInfo(2), 3, 0);
+        m_pMdl->AttachAnmObj(m_pAnmMot, bcs::CMdlObj::ANMOBJTYPE_CHR);
         bcs::CRenderMan::PushBack(m_pMdl, 2);
 
         // The jaws.
@@ -213,8 +213,8 @@ namespace msw {
 
     inline void CNpcBossPackunBasketBase::MotSetRate_(float fRate)
     {
-        if (m_pAnm) {
-            m_pAnm->SetRate(fRate);
+        if (m_pAnmMot) {
+            m_pAnmMot->SetRate(fRate);
         }
         if (m_pSubAnm) {
             m_pSubAnm->SetRate(fRate);
@@ -471,13 +471,13 @@ namespace msw {
             m_pMdl->OffFlag(bcs::CScnObj::FLAG_HIDE_40 | bcs::CScnObj::FLAG_HIDE_80);
             m_pMdl->SetAlphaRateF(m_fAlpha);
         }
-        if (m_pShadow2) {
+        if (m_pRef) {
             if (!bShadow) {
-                m_pShadow2->OnFlag(bcs::CScnObj::FLAG_HIDE_40 | bcs::CScnObj::FLAG_HIDE_80);
+                m_pRef->OnFlag(bcs::CScnObj::FLAG_HIDE_40 | bcs::CScnObj::FLAG_HIDE_80);
             } else {
-                m_pShadow2->OffFlag(bcs::CScnObj::FLAG_HIDE_40 | bcs::CScnObj::FLAG_HIDE_80);
+                m_pRef->OffFlag(bcs::CScnObj::FLAG_HIDE_40 | bcs::CScnObj::FLAG_HIDE_80);
             }
-            m_pShadow2->SetAlphaRateF(0.1f);
+            m_pRef->SetAlphaRateF(0.1f);
         }
         if (m_pShadow) {
             if (!bShadow) {
@@ -820,7 +820,7 @@ namespace msw {
         long nMotID = anMot[nMot];
         float fFrame = fFrameArg;
         float fBlend = fBlendArg;
-        if (m_pAnm || m_pSubAnm) {
+        if (m_pAnmMot || m_pSubAnm) {
             unsigned long nFlag = 0;
             if (fBlend < 0.0f) {
                 fBlend = fabsf(fBlend);
@@ -829,8 +829,8 @@ namespace msw {
             if (bLoop) {
                 nFlag |= 2;
             }
-            if (m_pAnm) {
-                m_pAnm->Play(nMotID, nFlag, 1.0f, fBlend, fFrame);
+            if (m_pAnmMot) {
+                m_pAnmMot->Play(nMotID, nFlag, 1.0f, fBlend, fFrame);
             }
             if (m_pSubAnm) {
                 m_pSubAnm->Play(GetSubMotID_(GetMotIdx()), nFlag, 1.0f, fBlend, fFrame);
@@ -2069,13 +2069,13 @@ namespace msw {
             }
             m_pMdl->SetAlphaRateF(m_fAlpha);
         }
-        if (m_pShadow2) {
+        if (m_pRef) {
             if (bDisp) {
-                m_pShadow2->OffFlag(bcs::CScnObj::FLAG_HIDE_40 | bcs::CScnObj::FLAG_HIDE_80);
+                m_pRef->OffFlag(bcs::CScnObj::FLAG_HIDE_40 | bcs::CScnObj::FLAG_HIDE_80);
             } else {
-                m_pShadow2->OnFlag(bcs::CScnObj::FLAG_HIDE_40 | bcs::CScnObj::FLAG_HIDE_80);
+                m_pRef->OnFlag(bcs::CScnObj::FLAG_HIDE_40 | bcs::CScnObj::FLAG_HIDE_80);
             }
-            m_pShadow2->SetAlphaRateF(0.1f);
+            m_pRef->SetAlphaRateF(0.1f);
         }
         if (m_pShadow) {
             if (bDisp) {

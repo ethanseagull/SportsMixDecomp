@@ -13,6 +13,25 @@ extern "C" {
 unsigned char SCGetAspectRatio(void);
 unsigned char SCGetLanguage(void);
 
+// (added for the DOL's game/bcs/CMainApp.cpp) The values SCGetLanguage
+// returns, the progressive scan setting (1 on) and whether parental
+// controls forbid messaging (non-zero).
+enum {
+    SC_LANG_JAPANESE,
+    SC_LANG_ENGLISH,
+    SC_LANG_GERMAN,
+    SC_LANG_FRENCH,
+    SC_LANG_SPANISH,
+    SC_LANG_ITALIAN,
+    SC_LANG_DUTCH,
+    SC_LANG_SIMP_CHINESE,
+    SC_LANG_TRAD_CHINESE,
+    SC_LANG_KOREAN
+};
+
+unsigned char SCGetProgressiveMode(void);
+int SCCheckPCMessageRestriction(void);
+
 #ifdef __cplusplus
 }
 #endif

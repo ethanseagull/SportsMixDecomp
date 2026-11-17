@@ -5,6 +5,13 @@
 
 namespace msw {
 
+    // (names guessed; game/hockey/unit_EEA14.cpp) An enemy and the team
+    // mates near enough to take it over in defence.
+    struct DEFENSE_CORE_DATA {
+        CChrCore *m_pEnemy;
+        CChrCore *m_apFriend[3];
+    };
+
     // INCOMPLETE: the three computer drivers the hockey character managers
     // make (game/hockey/CChrManHockey.cpp), all derived from CComDrvHockey
     // (their constructors call CComDrvHockey(long)). Only the constructors
@@ -14,6 +21,47 @@ namespace msw {
     // bodies so that no unit emits the vtables from this header.
     class CComDrvHockeyGame : public CComDrvHockey {
         public:
+            // (game/hockey/unit_E0310.cpp; names guessed) The work of the
+            // special defence action (ActCallSpDefense): the shooter, where
+            // to skate, and what the character's SpDefenseInit drew.
+            struct SP_DEFENSE_WORK : public ACT_WORK {
+                const CChrCore *m_pShooter; // 0x1C
+                unsigned char m_Unk20[0x24 - 0x20];
+                bcs::FVEC3 m_TargetPos;    // 0x24
+                float m_fWaitTime;         // 0x30, counted up to m_fWait
+                unsigned char m_Unk34[0x38 - 0x34];
+                // 0x38: set while no diving steal is possible, so that one
+                // lot is drawn each time it becomes possible.
+                int m_bDivingStealLot;
+                long m_nFormation;         // 0x3C, 0 formation A, 1 B
+                float m_fWait;             // 0x40, frames before B starts
+                // 0x44-0x4C: formation B's sector near the goal
+                // (GetRandomSectorPositionToGoal's ranges and angle);
+                // 0x4C is also formation A's last ActCallGoSpDefenseGoal
+                // argument.
+                float m_fSectorMin;
+                float m_fSectorMax;
+                float m_fSectorDeg;
+                // 0x50-0x58: formation A's ActCallGoSpDefenseGoal
+                // parameters (Koopa: the distance factor by the driver's
+                // rank to its goal, see GetMostNearMyGoal).
+                float m_fGoal50;
+                float m_fGoal54;
+                float m_fGoal58;
+                // 0x5C-0x64 (Ninja): which clone to block at (0, 1, or 2
+                // for the shooter itself), and the reach of the attack.
+                long m_nNinjaMode;
+                float m_fAttackDist;
+                float m_fAttackWidth;
+                bcs::FVEC3 m_EscPos;       // 0x68 (Koopa, formation B)
+                bcs::FVEC3 m_SavePos;      // 0x74, where to fall back to
+                // 0x80, 0x84 (Koopa, Siroma; meanings guessed): whether to
+                // go back to m_SavePos, and whether to keep out of the fire
+                // circle.
+                int m_bReturn;
+                int m_bAvoidFire;
+            };
+
             CComDrvHockeyGame();
             virtual ~CComDrvHockeyGame();
 
@@ -225,6 +273,107 @@ namespace msw {
             void ActCallGetStopPanel();
             void ActCallAttackBossPackun();
             void ActCallFaceoff();
+
+            // (game/hockey/unit_EEA14.cpp; meanings guessed from the names
+            // and the bodies) Questions the thinking asks about the game.
+            int IsMyTeamHoldBallWithoutKeeper();
+            int CanMoveToTarget_BlueLine(bcs::FVEC3 pos, long nKind);
+            void HockeyKeeperPosTrim(bcs::FVEC3 &rPos);
+            long SearchingForTheEenemy(bcs::FVEC3 pos, float fDis);
+            int isFriendNearTargetGoal(float fDis);
+            int isAttack2(long nAttack, const CChrCore *pTarget);
+            int CheckSwitchRangeForPad(DEFENSE_CORE_DATA &rData);
+            int ChangeDefense2(DEFENSE_CORE_DATA &rData, long &rChr, long &rHold);
+            int CheckSwitchRangeForCOM(DEFENSE_CORE_DATA &rData, long &rChr);
+            int CheckAhoShoot(const CChrCore *pChr);
+            float GetCharaTypeReachDist();
+            float GetSpJudgeWidth();
+            int isExistEnemySpArea(bcs::FVEC3 pos);
+            long GetSpShootCourse(bcs::FVEC3 pos);
+            int GetCloneNinja(bcs::FVEC3 &rPos0, bcs::FVEC3 &rPos1);
+            int isEnterMagicCircle(bcs::FVEC3 pos, bcs::FVEC3 &rEscPos);
+            int isEnterSmokeScreen();
+            int isBehindGoal(bcs::FVEC3 pos) const;
+            int isEnterFireCircle(bcs::FVEC3 pos, bcs::FVEC3 &rEscPos);
+            // (inline in game/hockey/unit_EEA14.cpp; name guessed) The
+            // enemy holding the puck, when the driver can reach it.
+            const CChrCore *GetAttackTargetCore();
+            // Defined in other files (used by game/hockey/unit_EEA14.cpp;
+            // return types guessed).
+            long GetHockeyComLvI();
+            void HockeyPosTrim(bcs::FVEC3 &rPos);
+            void GetRandomOffsetPos(float fMin, float fMax, bcs::FVEC3 &rPos);
+            void GetRandomSectorPositionToDefenseGoal(float fMin, float fMax, float fDeg, bcs::FVEC3 &rPos);
+            unsigned long GetEnableBitWithoutKeeper() const;
+            unsigned long GetTeamEnableBitWithoutKeeper(long nSide) const;
+
+            // (game/hockey/unit_E0310.cpp; names guessed) The special
+            // defence against a special shot: per character an Init that
+            // draws the parameters from the computer data and a Main run
+            // every frame, which follows formation A (skate to the goal,
+            // brake, face the shooter, chase the special puck) or B (wait,
+            // skate to a point near the goal in front of the puck holder,
+            // then the same). Both try a diving steal when one is possible.
+            // Main_WARIO passes on whether Wario is in a smoke screen.
+            void SpDefenseInit_CHR_TYPE_MARIO();
+            void SpDefenseMain_CHR_TYPE_MARIO();
+            void SpDefenseInit_CHR_TYPE_LUIGI();
+            void SpDefenseMain_CHR_TYPE_LUIGI();
+            void SpDefenseMain_FormationA_LUIGI();
+            void SpDefenseMain_FormationB_LUIGI();
+            void SpDefenseInit_CHR_TYPE_PEACH();
+            void SpDefenseMain_CHR_TYPE_PEACH();
+            void SpDefenseInit_CHR_TYPE_DAISY();
+            void SpDefenseMain_CHR_TYPE_DAISY();
+            void SpDefenseInit_CHR_TYPE_YOSHI();
+            void SpDefenseMain_CHR_TYPE_YOSHI();
+            void SpDefenseInit_CHR_TYPE_WARIO();
+            void SpDefenseMain_CHR_TYPE_WARIO();
+            void SpDefenseMain_FormationA_WARIO(long bSmoke);
+            void SpDefenseMain_FormationB_WARIO(long bSmoke);
+            void SpDefenseInit_CHR_TYPE_WALUIGI();
+            void SpDefenseMain_CHR_TYPE_WALUIGI();
+            void SpDefenseInit_CHR_TYPE_DONKEY();
+            void SpDefenseMain_CHR_TYPE_DONKEY();
+            void SpDefenseInit_CHR_TYPE_DIDDY();
+            void SpDefenseMain_CHR_TYPE_DIDDY();
+            void SpDefenseInit_CHR_TYPE_KINOPIO();
+            void SpDefenseMain_CHR_TYPE_KINOPIO();
+            void SpDefenseInit_CHR_TYPE_KOOPA();
+            void SpDefenseMain_CHR_TYPE_KOOPA();
+            void SpDefenseMain_FormationA_KOOPA();
+            void SpDefenseMain_FormationB_KOOPA();
+            void SpDefenseInit_CHR_TYPE_KOOPAJR();
+            void SpDefenseMain_CHR_TYPE_KOOPAJR();
+            void SpDefenseInit_CHR_TYPE_MOOGLE();
+            void SpDefenseMain_CHR_TYPE_MOOGLE();
+            void SpDefenseInit_CHR_TYPE_SABOTEN();
+            void SpDefenseMain_CHR_TYPE_SABOTEN();
+            void SpDefenseInit_CHR_TYPE_NINJA();
+            void SpDefenseMain_CHR_TYPE_NINJA();
+            void SpDefenseMain_FormationA_NINJA();
+            void SpDefenseMain_FormationB_NINJA();
+            void SpDefenseInit_CHR_TYPE_SIROMA();
+            void SpDefenseMain_CHR_TYPE_SIROMA();
+            void SpDefenseMain_FormationA_SIROMA();
+            void SpDefenseMain_FormationB_SIROMA();
+            void SpDefenseInit_CHR_TYPE_SLIME();
+            void SpDefenseMain_CHR_TYPE_SLIME();
+            void SpDefenseInit_CHR_TYPE_KUROMA();
+            void SpDefenseMain_CHR_TYPE_KUROMA();
+            void SpDefenseMain_FormationA();
+            void SpDefenseMain_FormationB();
+            // (inline in game/hockey/unit_E0310.cpp; names guessed) The
+            // pieces the formations share.
+            int GetHoldBallSectorPosition(float fMin, float fMax, float fDeg, bcs::FVEC3 &rPos);
+            int SpDefenseTurnToShooter(SP_DEFENSE_WORK *pWork);
+            void SpDefenseDivingSteal(SP_DEFENSE_WORK *pWork);
+            // Defined in other files (used by game/hockey/unit_E0310.cpp;
+            // meanings guessed from the names).
+            void ActCallGoSpDefenseGoal(float fWait, float, float, float, float);
+            CBall *GetSpBallCore();
+            void GetRandomSectorPositionToGoal(const CChrCore *pChr, long, float fMin, float fMax, float fDeg, bcs::FVEC3 &rPos);
+            long GetMostNearMyGoal();
 
             // (.rodata of another file) How far from the centre line the
             // blue lines are.

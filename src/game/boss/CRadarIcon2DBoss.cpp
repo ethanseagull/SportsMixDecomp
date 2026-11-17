@@ -1,13 +1,12 @@
 // msw::CRadarIcon2DBoss: the radar icons of the boss game.
 #include "game/msw/CRadarIcon2DBoss.hpp"
 
+#include "bcs/FVEC3.hpp"
 #include "bcs/G2D/CTexMap.hpp"
 #include "bcs/G2D/G2DUtil.hpp"
 #include "game/msw/CBall.hpp"
 #include "game/msw/CBallMan.hpp"
 #include "game/msw/CChrMan.hpp"
-// PENDING: these two stand in for game/msw/CChrCore.hpp and
-// game/msw/CGame.hpp until what they add is merged (see the files).
 #include "game/msw/CChrCore.hpp"
 #include "game/msw/CGame.hpp"
 
@@ -50,6 +49,10 @@ void msw::CRadarIcon2DBoss::CreateCharaIcon(ICON_PARAMETER *pParam, long nChr, c
     if (pChrCore == 0) {
         return;
     }
+
+    // Never used: the original stores the three zeros to the stack all the
+    // same (three separate slots), and every CRadarIcon2D<Game> has it.
+    bcs::FVEC3 pos(0.0f, 0.0f, 0.0f);
 
     bcs::G2D::CPaneCtrl *pPaneCtrl = GetLytObj();
     bcs::G2D::CPaneObj *pCenterObj = pPaneCtrl->GetChildPaneObj(s_PaneName.pCenter);
@@ -112,6 +115,8 @@ void msw::CRadarIcon2DBoss::CreateBallIcon(ICON_PARAMETER *pParam, long nBall, c
     if (pBall == 0) {
         return;
     }
+
+    bcs::FVEC3 pos(0.0f, 0.0f, 0.0f); // never used, as in CreateCharaIcon
 
     bcs::G2D::CPaneCtrl *pPaneCtrl = GetLytObj();
     bcs::G2D::CPaneObj *pCenterObj = pPaneCtrl->GetChildPaneObj(s_PaneName.pCenter);

@@ -65,6 +65,12 @@ namespace msw {
 
         private:
             int SetupGame();
+            // Inline helpers (names from the original's @LOCAL@ statics).
+            void GaugeBossLineAnim(long nAnim);
+            void LifeGaugeAnim(long nPlayer, long nAnim, float fSpeed, float fFrame);
+            void CoinBackAnim(long nTeam);
+            void BossLifeGaugeIn();
+            void SetSPGaugeAnim(long nAnim);
 
             long m_nPlayerNum;                           // 0x60, players per team in the layout
             long m_nLayout;                              // 0x64, see SetLifeGaugeLayout

@@ -95,6 +95,13 @@ namespace msw {
             static int IsGrdMove(const bcs::FVEC3 &rPos);
             // HockeyF's CStgGmk_Pinball_Act_Hockey::WallHitCheck compares the
             // result unsigned with 0x20 and 0x40 (a goal post hit).
+            // (DOL; added for HockeyF game/hockey/CcNinjaCloneBody.cpp,
+            // argument meanings guessed) Where the ray from rFrom along rDir
+            // meets the plane through rPoint facing rNormal, in rOut; the
+            // time along the ray (negative when the ray starts in front).
+            static float GetIntersectionTimeOfFrontPlaneAndRay(bcs::FVEC3 &rOut, const bcs::FVEC3 &rNormal,
+                                                               const bcs::FVEC3 &rPoint, const bcs::FVEC3 &rFrom,
+                                                               const bcs::FVEC3 &rDir);
             static unsigned long DetectBallGoalIn(long &rGoal, bcs::FVEC3 &rPos, bcs::FVEC3 &rNormal,
                                                   const bcs::FVEC3 &rFrom, const bcs::FVEC3 &rTo, float fRadius);
             static void SetArtsExColl(long n);
